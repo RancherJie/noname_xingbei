@@ -389,13 +389,26 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 								}
 								this.classList.add('bluebg');
 								_status.firstAct=game.me;
+								var sideList=[]
+								for(var i=0;i<game.players.length;i++){
+									sideList.push(game.players[i].side);
+								}
 								for(var i=0;i<this.link;i++){
 									_status.firstAct=_status.firstAct.previous;
 								}
 								var firstChoose=_status.firstAct;
+								var start=firstChoose;
+								for(var i=0;i<game.players.length;i++){
+									start.side=sideList.shift();
+									start=start.next;
+								}
+								
+								/*
+								var firstChoose=_status.firstAct;
 								firstChoose.next.side=!firstChoose.side;
 								firstChoose.next.next.side=!firstChoose.side;
 								firstChoose.previous.side=firstChoose.side;
+								*/
 								for(var i=0;i<game.players.length;i++){
 									if(game.players[i].side==true){
 										game.players[i].node.identity.firstChild.innerHTML='红';
