@@ -584,7 +584,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             fengNuZhuiJi:{
                 usable:1,
                 enable:'phaseUse',
-                trigger:{player:"useCardEnd"},
+                trigger:{player:"useCardAfter"},
                 filter:function(event,player){
                     if(get.type(event.card)=='gongJi'){
                         return !player.storage.yingZhan;
@@ -594,7 +594,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 content:function(player){
                     "step 0"
-					var str='是否使用发动风系攻击';
+					var str='风怒追击：是否使用发动风系攻击';
 					var next=player.gongJi('h',function(card,player,event){
                         if(get.suit(card)!='feng') return false;
                         return lib.filter.cardEnabled(card,player,'forceEnable');
@@ -603,13 +603,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						return 1;
 					}
 					next.autodelay=true;
-					"step 1"
                 }
             },
             shengJian:{
                 forced:true,
                 trigger:{player:"useCardToPlayer"},
-                group:['shengJian2','shengJian3'],
+                group:['shengJian2','shengJian3','shengJian_draw_discard'],
                 priority:1,
                 filter:function(event,player){
                     if(get.type(event.card)=='gongJi'){
@@ -622,7 +621,28 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     trigger.parent.canYingZhan=false;
                     trigger.parent.canShengGuang=false;
                     trigger.parent.canShengDun=false;
-                }
+                },
+                subSkill:{
+                    draw_discard:{
+                        forced:true,
+                        trigger:{player:'useCardEnd'},
+                        filter:function(event,player){
+                            if(event.card!=player.storage.shengJian) return false;
+                            return true;
+                        },
+                        content:function(){
+                            "step 0"
+                            var list=[0,1,2,3];
+                            player.chooseControl(list).set('prompt','剑影：摸几张牌并弃置同样的数量').set('ai',function(){return 0;});
+                            "step 1"
+                            event.number=result.control;
+                            "step 2"
+                            player.draw(event.number);
+                            "step 3"
+                            player.chooseToDiscard(event.number,true);
+                        }
+                    }
+                },
             },
             shengJian2:{//圣剑记数
                 forced:true,
@@ -640,6 +660,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         player.storage.zhuDongGongJi=1;
                     }else{
                         player.storage.zhuDongGongJi++;
+                    }
+                    if(player.storage.zhuDongGongJi==3){
+                        player.storage.shengJian=trigger.card;
                     }
                     //game.log('圣剑记数',player.storage.zhuDongGongJi);//测试用
                 }
@@ -691,13 +714,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             },
             jiFengJi2:{
                 forced:true,
-                trigger:{player:'useCardEnd'},
+                trigger:{player:'useCardAfter'},
                 filter:function(event,player){
                     return event.card.hasNature('jiFengJi')&&!player.storage.yingZhan;
                 },
                 content:function(){
                     "step 0"
-					var str='是否发动攻击';
+					var str='疾风技：是否发动攻击';
 					var next=player.gongJi('h',str);
 					next.ai=function(card){
 						return 1;
@@ -708,7 +731,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             jianYing:{
                 usable:1,
                 enable:'phaseUse',
-                trigger:{player:'useCardEnd'},
+                trigger:{player:'useCardAfter'},
                 filter:function(event,player){
                     if(get.type(event.card)=='gongJi'){
                         return !player.storage.yingZhan&&(player.canBiShaShuiJing());
@@ -720,7 +743,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 0'
                     player.removeBiShaShuiJing();
                     'step 1'
-					var str='是否发动攻击';
+					var str='剑影：是否发动攻击';
 					var next=player.gongJi('h',str);
 					next.ai=function(card){
 						return 1;
@@ -2261,15 +2284,15 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             
             //风之剑圣
             fengNuZhuiJi:'[响应]风怒追击[回合限定]',
-            fengNuZhuiJi_info:"(攻击行动结束时发动)额外+1风系攻击行动",
+            fengNuZhuiJi_info:"(攻击行动结束后发动)额外+1风系攻击行动",
             shengJian:'[被动]圣剑',
-            shengJian_info:"若你的主动攻击为本次行动阶段的第三次攻击行动，则此攻击强制命中。",
+            shengJian_info:"若你的主动攻击为本次行动阶段的第3次攻击行动，则此攻击强制命中。本次攻击行动结束时，你摸X张牌，弃X张牌（X<4）。",
             lieFengJi:"(独)[响应]烈风技",
             lieFengJi_info:"(攻击的目标拥有圣盾时发动)无视对手圣盾的效果,且此攻击对手无法应战。",
             jiFengJi:"(独)[响应]疾风技",
-            jiFengJi_info:"(作为主动攻击打出时发动)额外+1攻击行动。",
+            jiFengJi_info:"(作为主动攻击打出后发动)额外+1攻击行动。",
             jianYing:"[响应]剑影[回合限定]",
-            jianYing_info:"[水晶](攻击行动结束时发动)额外+1攻击行动。",
+            jianYing_info:"[水晶](攻击行动结束后发动)额外+1攻击行动。",
 
             //狂战士
             kuangHua:"[被动]狂化",
