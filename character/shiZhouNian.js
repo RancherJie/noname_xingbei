@@ -835,8 +835,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.chooseTarget('选择一名角色+1[治疗]',true).set('ai',function(target){
 						if(target.side==player.side&&target.zhiLiao<target.storage.zhiLiaoMax){
                             return 1;
-                        }else if(target.side==player.side&&target.zhiLiao==target.storage.zhiLiaoMax){
+                        }else if(target.side==player.side&&target.zhiLiao>=target.storage.zhiLiaoMax){
                             return 0;
+                        }else if(target.side!=player.side){
+                            return -1;
                         }else{
                             return 1;
                         }
