@@ -731,6 +731,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 
             //狂战士
             kuangHua:{
+                group:"kuangHua_1",
                 forced:true,
                 trigger:{player:'useCardToPlayer'},
 				filter:function(event){
@@ -743,7 +744,20 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				content:function(){
 					trigger.getParent().baseDamage++;
 				},
+                subSkill:{
+                    1:{
+                        forced:true,
+                        trigger:{player:'useCardToPlayered'},
+                        filter:function(event,player){
+                            return player.countCards('h')>3;
+                        },
+                        content:function(event,player){
+                            trigger.getParent().baseDamage++;
+                        }
+                    }
+                }
             },
+            
             xueYingKuangDao:{
                 trigger:{player:'useCard1'},
                 filter:function(event,player){
@@ -2257,9 +2271,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 
             //狂战士
             kuangHua:"[被动]狂化",
-            kuangHua_info:"你发动的所有攻击伤害额外+1。",
+            kuangHua_info:"你发动的所有攻击伤害额外+1；(攻击命中时②，若你的手牌数>3)本次攻击伤害额外+1。",
             xueYingKuangDao:"(独)[响应]血影狂刀",
-            xueYingKuangDao_info:"(作为主动攻击打出时发动)<br>·若命中手牌为2的对手②，本次攻击伤害额外+2；<br>·若命中手牌为3的对手②，本次攻击伤害额外+1；",
+            xueYingKuangDao_info:"(作为主动攻击打出时发动)<br>a·若命中手牌为2的对手②，本次攻击伤害额外+2；<br>b·若命中手牌为3的对手②，本次攻击伤害额外+1；",
             xueXingPaoXiao:"(独)[响应]血腥咆哮",
             xueXingPaoXiao_info:'(作为主动攻击打出时发动)若攻击的目标拥有的治疗为2，则本次攻击强制命中。',
             siLie:"撕裂",
