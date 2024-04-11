@@ -5,11 +5,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 		connect:true,
         characterSort:{
             shiZhouNian:{
-                3:['fengZhiJianSheng','kuangZhanShi','shenJianShou','fengYinShi','anShaZhe','shengNv','tianShi','moFaShaoNv'],
-                3.5:['moJianShi','shengQiangQiShi','yuanSuShi','maoXianJia','wenYiFaShi','zhongCaiZhe','jingLingSheShou','nvWuShen'],
-                4:['shenGuan','yingLingRenXing','yinYangShi','moGong','xianZhe','lingFuShi','cangYanMoNv','moQiang','xueSeJianLing','qiDaoShi','hongLianQiShi'],
-                4.5:['lingHunShuShi','yongZhe','yinYouShiRen','geDouJia','shengGong','shouLingWuShi',"jianDi"],
-                5:["yueZhiNvShen",'xueZhiWuNv','dieWuZhe'],
+                "3星":['fengZhiJianSheng','kuangZhanShi','shenJianShou','fengYinShi','anShaZhe','shengNv','tianShi','moFaShaoNv'],
+                "3.5星":['moJianShi','shengQiangQiShi','yuanSuShi','maoXianJia','wenYiFaShi','zhongCaiZhe','jingLingSheShou','nvWuShen'],
+                "4星":['shenGuan','yingLingRenXing','yinYangShi','moGong','xianZhe','lingFuShi','cangYanMoNv','moQiang','xueSeJianLing','qiDaoShi','hongLianQiShi'],
+                "4.5星":['lingHunShuShi','yongZhe','yinYouShiRen','geDouJia','shengGong','shouLingWuShi',"jianDi"],
+                "5星":["yueZhiNvShen",'xueZhiWuNv','dieWuZhe'],
             }
         },
 		character:{
@@ -2195,11 +2195,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 		
 		translate:{
             //角色排序
-            3:'3星',
-            3.5:'3.5星',
-            4:'4星',
-            4.5:'4.5星',
-            5:'5星',
+            '3星':'3星',
+            '3.5星':'3.5星',
+            '4星':'4星',
+            '4.5星':'4.5星',
+            '5星':'5星',
             //角色名字
 			fengZhiJianSheng:"风之剑圣",
             kuangZhanShi:"狂战士",
