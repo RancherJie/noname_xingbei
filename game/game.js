@@ -18963,7 +18963,7 @@
 						}
 					}
 					player.getHistory('damage').push(event);
-					event.trigger("shiJiDamage");
+					event.trigger("shiJiShangHai");
 					"step 6"
 					if(!event.unreal){
 						player.draw(num).set('type','damage').set('faShu',event.faShu);
