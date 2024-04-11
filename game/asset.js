@@ -250,7 +250,7 @@ window.noname_asset_list=[
 
 	/*splash image begin*/
 	'image/splash/style1.jpg',
-	'image/splash/style2.jpg',,
+	'image/splash/style2.jpg',
 	'image/splash/style1/connect.jpg',
 	'image/splash/style2/connect.jpg',
 	/*splash image end*/
