@@ -1104,7 +1104,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 group:['faShuJiDang_1','faShuJiDang_2'],
                 subSkill:{
                     1:{
-                        trigger:{player:'useCardEnd'},
+                        trigger:{player:'useCardAfter'},
                         filter:function(event,player){
                             return get.type(event.card)=='faShu'&&player.storage.yingZhan!=true;
                         },
@@ -1113,7 +1113,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         }
                     },
                     2:{
-                        trigger:{player:'useSkillEnd'},
+                        trigger:{player:'useSkillAfter'},
                         filter:function(event){
                             var info=get.info(event.skill);
                             return info.faShu;
@@ -2326,7 +2326,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 
             //封印师
             faShuJiDang:"[响应]法术激荡",
-            faShuJiDang_info:"(法术行动结束时发动)额外+1攻击行动。",
+            faShuJiDang_info:"(法术行动结束后发动)额外+1攻击行动。",
             diZhiFengYin:"(独)[法术]地之封印",
             diZhiFengYin_info:"(将【地之封印】放置于目标对手面前)该对手获得(直到他从手中打出或展示出地系牌时强制触发)：对他造成3点法术伤害③，触发后移除此牌。",
             shuiZhiFengYin:"(独)[法术]水之封印",
