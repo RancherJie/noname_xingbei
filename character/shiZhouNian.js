@@ -54,6 +54,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 		
 		
 		skill:{
+            _shouPaiShangXian:{
+                mod:{
+                    maxHandcardBase:function(player,num){
+                        return 6;
+                    }
+                }
+            },
             _zhiLiao:{
                 trigger:{player:"zhiLiao"},
                 forced:true,
