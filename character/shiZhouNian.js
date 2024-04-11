@@ -1012,7 +1012,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 }
             },
             shuiYing:{
-                trigger:{player:'damageBegin'},
+                trigger:{player:'drawBegin'},
+                filter:function(event,player){
+                    return event.type!="teShuXingDong";
+                },
                 content:function(event,player){
                     'step 0'
                     var next=player.chooseToDiscard([0,3],true,'请选择的要弃置水系牌',function(card){
@@ -1022,6 +1025,19 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						return 1;
 					}
                     'step 1'
+                    if(result.bool){
+                        player.showCards(result.cards);
+                    }
+                    'step 2'
+                    if(player.storage.qianXing!=true) event.finish();
+                    'step 3'
+                    var next=player.chooseToDiscard(1,'请选择的要弃置法术牌',function(card){
+                        return get.type(card)=='faShu';
+                    });
+                    next.ai=function(card){
+						return 1;
+					}
+                    'step 4'
                     if(result.bool){
                         player.showCards(result.cards);
                     }
@@ -1037,16 +1053,22 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 content:function(){
                     'step 0'
                     player.removeBiShaBaoShi();
+                    var list=['是','否'];
+                    player.chooseControl(list).set('prompt','潜行：是否摸一张牌');
                     'step 1'
+                    if(result.control=='是'){
+                        player.draw();
+                    }
+                    'step 2'
                     player.link();
                     player.storage.qianXing=true;
-                    'step 2'
+                    'step 3'
                     var num=player.needsToDiscard();
                     if(num>0){
 						player.chooseToDiscard(num,true).set('useCache',true);
 						player.changeShiQi(-num);
 					}
-                    'step 3'
+                    'step 4'
                     player.addSkill('qianXing2');
                 },
                 mod:{
@@ -2320,9 +2342,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             fanShi:"[被动]反噬",
             fanShi_info:"(承受攻击伤害时发动⑥)攻击你的对手摸1长牌[强制]。",
             shuiYing:"[响应]水影",
-            shuiYing_info:"(任何人对你造成伤害时发动③)弃X张水系牌[展示]。",
+            shuiYing_info:"(除【特殊行动】外，当你摸牌前发动)弃X张水系牌[展示]；(若你处于【潜行】效果下)你可额外弃1张法术牌[展示]。",
             qianXing:"[启动]潜行",
-            qianXing_info:"[宝石][横置]持续到你的下个行动阶段开始，你的手牌上限-1；你不能成为主动攻击的目标；你的主动攻击对手无法应战且伤害额外+X，X为你剩余的【能量】数。潜行的效果结束时[重置]。",
+            qianXing_info:"[宝石]你可选择摸1张牌，[横置]持续到你的下个行动阶段开始，你的手牌上限-1；你不能成为主动攻击的目标；你的主动攻击对手无法应战且伤害额外+X，X为你剩余的【能量】数。【潜行】的效果结束时[重置]。",
 
             //封印师
             faShuJiDang:"[响应]法术激荡",
