@@ -172,7 +172,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 intro:{
 					content:'expansion',
 				},
-                trigger:{target:'useCardToTarget'},
+                trigger:{target:'useCardToPlayered'},
                 forced:true,
                 filter:function(event,player){
                     if(event.parent.canShengDun==false) return false;
@@ -192,7 +192,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             },
             _yingZhan:{
                 group:'yingZhan_weiMingZhong',
-                trigger:{target:'useCardToTarget'},
+                trigger:{target:'useCardToPlayered'},
                 forced:true,
                 filter:function(event,player){
                     if(event.parent.canYingZhan==false) return false;
@@ -245,7 +245,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             },
 
             _shengGuang:{
-                trigger:{target:'useCardToTarget'},
+                trigger:{target:'useCardToPlayered'},
                 forced:true,
                 filter:function(event,player){
                     if(event.parent.canShengGuang==false) return false;
@@ -275,7 +275,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				},
             },
             _quXiao:{
-                trigger:{target:'useCardToTarget'},
+                trigger:{target:'useCardToPlayered'},
                 forced:true,
                 filter:function(event,player){
                     if(player.hasExpansions('_shengDun')) return false;//有圣盾不触发
@@ -293,7 +293,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 
             _moDan:{
                 group:['moDan2','moDan3'],
-                trigger:{target:'useCardToTarget'},
+                trigger:{target:'useCardToPlayered'},
                 forced:true,
                 filter:function(event,player){
                     if(event.card.name=='moDan'){
@@ -770,7 +770,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 subSkill:{
                     1:{
                         forced:true,
-                        trigger:{player:'useCardToPlayered'},
+                        trigger:{player:'useCardToTargeted'},
                         filter:function(event,player){
                             return player.countCards('h')>3;
                         },
@@ -792,7 +792,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             },
             xueYingKuangDao2:{
                 forced:true,
-                trigger:{player:"useCardToPlayered"},
+                trigger:{player:"useCardToTargeted"},
                 filter:function(event,player){
                     return event.card.hasNature('xueYingKuangDao')&&!player.storage.yingZhan;
                 },
@@ -831,7 +831,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 }
             },
             siLie:{
-                trigger:{player:'useCardToPlayered'},
+                trigger:{player:'useCardToTargeted'},
                 filter:function(event,player){
                     if(get.type(event.card)=='gongJi'){
                         return player.canBiShaBaoShi();
@@ -1063,7 +1063,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 subSkill:{
                     shangHai:{
                         forced:true,
-                        trigger:{player:"useCardToPlayered"},
+                        trigger:{player:"useCardToTargeted"},
                         filter:function(event,player){
                             return !player.storage.yingZhan;
                         },
