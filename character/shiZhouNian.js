@@ -1,10 +1,10 @@
 'use strict';
 game.import('character',function(lib,game,ui,get,ai,_status){
 	return {
-		name:'xingbei',
+		name:'shiZhouNian',
 		connect:true,
         characterSort:{
-            xingbei:{
+            shiZhouNian:{
                 3:['fengZhiJianSheng','kuangZhanShi','shenJianShou','fengYinShi','anShaZhe','shengNv','tianShi','moFaShaoNv'],
                 3.5:['moJianShi','shengQiangQiShi','yuanSuShi','maoXianJia','wenYiFaShi','zhongCaiZhe','jingLingSheShou','nvWuShen'],
                 4:['shenGuan','yingLingRenXing','yinYangShi','moGong','xianZhe','lingFuShi','cangYanMoNv','moQiang','xueSeJianLing','qiDaoShi','hongLianQiShi'],

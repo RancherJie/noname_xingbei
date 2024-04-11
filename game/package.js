@@ -1,7 +1,7 @@
 window.noname_package={
 	character:{
 		//standard:'标准',
-		xingbei:"星杯传说",
+		shiZhouNian:"十周年",
 		//yiDuanYeHuo:"异端业火",
 	},
 	card:{

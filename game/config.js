@@ -129,7 +129,7 @@ window.config={
 	sort:'type_sort',
 
 	cards:['xingbei'],
-	characters:['xingbei'],
+	characters:['shiZhouNian'],
 	connect_characters:['yiDuanYeHuo'],
 	connect_cards:[],
 	plays:[], 

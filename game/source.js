@@ -2,7 +2,7 @@ window.noname_source_list=[
 	'LICENSE',
 	'card/xingbei.js',
 	'character/rank.js',
-	'character/xingbei.js',
+	'character/shiZhouNian.js',
 	'font/motoyamaru.woff2',
 	'font/suits.woff2',
 	'game/asset.js',
