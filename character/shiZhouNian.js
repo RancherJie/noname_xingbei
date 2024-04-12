@@ -725,6 +725,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						return 1;
 					}
 					next.autodelay=true;
+                    "step 1"
+                    player.removeSkill('jiFengJi2');
                 }
             },
             jianYing:{
