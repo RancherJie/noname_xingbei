@@ -599,7 +599,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					'step 3'
 					for(var i=0;i<game.players.length;i++){
 						game.players[i].storage.nengLiang_max=3;
-						game.players[i].storage.yingZhan=false;
+						game.players[i].storage.moDan=false;
 						game.players[i].storage.zhiLiaoMax=2;
 						game.players[i].storage.zhongDu=[];
 					}
@@ -1813,7 +1813,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					}
 					for(var i=0;i<game.players.length;i++){
 						game.players[i].storage.nengLiang_max=3;
-						game.players[i].storage.yingZhan=false;
+						game.players[i].storage.moDan=false;
 						game.players[i].storage.zhiLiaoMax=2;
 						game.players[i].storage.zhongDu=[];
 					}

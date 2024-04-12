@@ -313,7 +313,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
 				content:function(){
 					"step 0"
-                    player.storage.yingZhan=true;//回合外判断使用法术
+                    player.storage.moDan=true;//回合外判断使用法术
 					var str='是否使用魔弹'; 
 					var next=player.chooseToUse('h',function(card,player,event){
 						if(card.name!=get.name(trigger.card)) return false;
@@ -335,7 +335,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             game.moDan--;
                         });
                     }
-                    player.storage.yingZhan=false;
+                    player.storage.moDan=false;
 				},
 				ai:{
 					result:{
@@ -343,30 +343,30 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					},
 				}
 			},
-            moDan2:{//第一个使用魔弹的角色增加应战标志
+            moDan2:{//第一个使用魔弹的角色增加魔弹标记
                 trigger:{player:'useCard'},
                 filter:function(event,player){
-                    if(player.storage.yingZhan==false&&event.card.name=='moDan'){
+                    if(player.storage.moDan==false&&event.card.name=='moDan'){
                         return true;
                     }else{
                         return false;
                     }
                 },
                 content:function(){
-                    player.storage.yingZhan=true;
+                    player.storage.moDan=true;
                 }
             },
-            moDan3:{//第一个使用魔弹的角色删除应战标志
+            moDan3:{//第一个使用魔弹的角色删除魔弹标记
                 trigger:{player:'useCardEnd'},
                 filter:function(event,player){
-                    if(player.storage.yingZhan==true&&event.card.name=='moDan'){
+                    if(player.storage.moDan==true&&event.card.name=='moDan'){
                         return true;
                     }else{
                         return false;
                     }
                 },
                 content:function(){
-                    player.storage.yingZhan=false;
+                    player.storage.moDan=false;
                 }
             },
             _gouMai:{
@@ -2219,13 +2219,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     game.broadcastAll(function(){
                         game.moDan_shunShiZhen=true;
                     });
-                    player.storage.yingZhan=true;
+                    player.storage.moDan=true;
                     'step 1'
                     player.chooseToUse(function(card){
                         return card.name=='moDan';
                     });
                     'step 2'
-                    player.storage.yingZhan=false;
+                    player.storage.moDan=false;
                     if(!result.bool){
                         game.broadcastAll(function(){
                             game.moDan_shunShiZhen=false;
