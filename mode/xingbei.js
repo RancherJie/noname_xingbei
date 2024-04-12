@@ -2992,6 +2992,9 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						this.removeMark('_tiLian_'+color,-num)
 					}
 				},
+				countNengLiang:function(color){
+					return this.countMark('_tiLian_'+color);
+				},
 				dieAfter2:function(source){
 					if(_status.connectMode&&_status.mode!='guandu'){
 						if(_status.mode=='1v1'||_status.mode=='3v3') return;
