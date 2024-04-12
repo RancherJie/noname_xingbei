@@ -2984,6 +2984,14 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				removeBiShaBaoShi:function(){
 					this.removeMark('_tiLian_r');
 				},
+				changeNengLiang:function(color,num){
+					if(typeof num!='number'||!num) num=1;
+					if(num>0){
+						this.addMark('_tiLian_'+color,num)
+					}else if(num<0){
+						this.removeMark('_tiLian_'+color,-num)
+					}
+				},
 				dieAfter2:function(source){
 					if(_status.connectMode&&_status.mode!='guandu'){
 						if(_status.mode=='1v1'||_status.mode=='3v3') return;
