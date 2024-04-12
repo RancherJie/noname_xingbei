@@ -583,7 +583,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             //风之剑圣
             fengNuZhuiJi:{
                 usable:1,
-                enable:'phaseUse',
                 trigger:{player:"useCardAfter"},
                 filter:function(event,player){
                     if(get.type(event.card)=='gongJi'){
