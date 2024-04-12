@@ -191,7 +191,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 }
             },
             _yingZhan:{
-                group:'yingZhan_weiMingZhong',
                 trigger:{target:'useCardToPlayered'},
                 forced:true,
                 filter:function(event,player){
@@ -206,7 +205,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 }, 
                 content:function(){
                     'step 0'
-                    player.storage.yingZhan=true;
                     event.source=trigger.player;
 					var next=player.gongJi('h');
                     next.set('filterCard',function(card,player,event){
@@ -222,25 +220,36 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     });
                     next.set('trigger_card',trigger.card);
                     next.set('trigger_player',event.source);
+                    next.set('yingZhan',true);
                     'step 1'
                     if(result.bool){
                         //game.log(player.name,'应战完毕');//调试用
                         trigger.getParent().targets.remove(player);
                         trigger.cancel();
                     }
-                    player.storage.yingZhan=false;
                 }
             },
-            yingZhan_weiMingZhong:{
+            _yingZhan_weiMingZhong:{
                 trigger:{player:'useCard'},
                 forced:true,
                 filter:function(event,player){
-                    return event.parent.parent.name=='yingZhan';
+                    return event.parent.parent.name=='_yingZhan';
                 },
                 content:function(){
                     event.source=trigger.parent.parent.source;
                     event.player=trigger.parent.player;
                     event.trigger('gongJiUnhirt');
+                }
+            },
+            _yingZhan_sheZhi:{
+                trigger:{player:'useCard1'},
+                forced:true,
+                priority:99,
+                filter:function(event,player){
+                    return event.parent.parent.name=='_yingZhan';
+                },
+                content:function(){
+                    trigger.yingZhan=true;
                 }
             },
 
@@ -572,12 +581,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					}
 				},
 				content:function(event,player){
-					if(player.storage.yingZhan==true){
+					if(trigger.parent.parent.yingZhan==true){
 						player.changeZhanJi('b',1)
-						//player.storage.yingZhan=false;
-					}else if(player.storage.yingZhan==false)(
+					}else{
 						player.changeZhanJi('r',1)
-					)
+                    }
 				},
 			},
             //风之剑圣
@@ -585,8 +593,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 usable:1,
                 trigger:{player:"useCardAfter"},
                 filter:function(event,player){
+                    if(event.yingZhan==true) return false;
                     if(get.type(event.card)=='gongJi'){
-                        return !player.storage.yingZhan;
+                        return true;
                     }else{
                         return false;
                     }
@@ -648,8 +657,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 priority:2,
                 trigger:{player:"useCardToPlayer"},
                 filter:function(event,player){
+                    if(event.yingZhan==true) return false;
                     if(get.type(event.card)=='gongJi'){
-                        return !player.storage.yingZhan;
+                        return true;
                     }else{
                         return false;
                     }
@@ -705,17 +715,18 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             jiFengJi:{
                 trigger:{player:"useCard1"},
                 filter:function(event,player){
-                    return event.card.hasNature('jiFengJi')&&!player.storage.yingZhan;
+                    if(event.yingZhan==true) return false;
+                    return event.card.hasNature('jiFengJi');
                 },
                 content:function(event,target){
-                    player.addTempSkill('jiFengJi2',{player:['useCardBefore','phaseEnd']});
+                    player.addSkill('jiFengJi2');
                 }
             },
             jiFengJi2:{
                 forced:true,
                 trigger:{player:'useCardAfter'},
                 filter:function(event,player){
-                    return event.card.hasNature('jiFengJi')&&!player.storage.yingZhan;
+                    return event.card.hasNature('jiFengJi');
                 },
                 content:function(){
                     "step 0"
@@ -734,8 +745,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 enable:'phaseUse',
                 trigger:{player:'useCardAfter'},
                 filter:function(event,player){
+                    if(event.yingZhan==true) return false;
                     if(get.type(event.card)=='gongJi'){
-                        return !player.storage.yingZhan&&(player.canBiShaShuiJing());
+                        return player.canBiShaShuiJing();
                     }else{
                         return false;
                     }
@@ -785,7 +797,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             xueYingKuangDao:{
                 trigger:{player:'useCard1'},
                 filter:function(event,player){
-                    return event.card.hasNature('xueYingKuangDao')&&!player.storage.yingZhan;
+                    if(event.yingZhan==true) return false;
+                    return event.card.hasNature('xueYingKuangDao');
                 },
                 content:function(){
                     player.addTempSkill('xueYingKuangDao2',{player:['useCardBefore','phaseEnd']});
@@ -795,7 +808,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 forced:true,
                 trigger:{player:"useCardToTargeted"},
                 filter:function(event,player){
-                    return event.card.hasNature('xueYingKuangDao')&&!player.storage.yingZhan;
+                    return event.card.hasNature('xueYingKuangDao');
                 },
                 content:function(){
                     var target=trigger.target;
@@ -810,7 +823,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             xueXingPaoXiao:{
                 trigger:{player:'useCard1'},
                 filter:function(event,player){
-                    return event.card.hasNature('xueXingPaoXiao')&&!player.storage.yingZhan;
+                    if(event.yingZhan==true) return false;
+                    return event.card.hasNature('xueXingPaoXiao');
                 },
                 content:function(){
                     player.addTempSkill('xueXingPaoXiao2',{player:['useCardBefore','phaseEnd']});
@@ -820,7 +834,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 forced:true,
                 trigger:{player:'useCardToPlayer'},
                 filter:function(event,player){
-                    return event.card.hasNature('xueXingPaoXiao')&&!player.storage.yingZhan;
+                    return event.card.hasNature('xueXingPaoXiao');
                 },
                 content:function(){
                     var target=trigger.target;
@@ -916,7 +930,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				viewAsFilter:function(player){
                     return player.countCards('h',function(card){
                         return card.hasNature('zhiLiaoShu');
-                    })&&player.storage.yingZhan==false;
+                    })&&_status.currentPhase==player;
 				},
 				prompt:'打出一张治疗术',
                 mod:{
@@ -950,7 +964,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				viewAsFilter:function(player){
                     return player.countCards('h',function(card){
                         return card.hasNature('zhiYuZhiGuang');
-                    })&&player.storage.yingZhan==false;
+                    })&&_status.currentPhase==player;
 				},
 				prompt:'打出一张治愈之光',
                 mod:{
@@ -998,7 +1012,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 usable:1,
                 enable:['chooseToUse','faShu'],
                 filter:function(event,player){
-                    return player.storage.yingZhan==false&&player.canBiShaShuiJing();
+                    return _status.currentPhase==player&&player.canBiShaShuiJing();
                 },
                 content:function(event,player){
                     'step 0'
@@ -1105,12 +1119,18 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 4'
                     player.addSkill('qianXing2');
                 },
+                ai:{
+                    order:10,
+                    result:{
+                        player:5,
+                    }
+                },
                 mod:{
                     maxHandcard:function(player,num){
                         if(player.storage.qianXing==true) return num-1;
                     },
                     targetEnabled:function(card,player,target){
-                        if(get.type(card)=='gongJi'&&!player.storage.yingZhan&&target.storage.qianXing==true) return false;
+                        if(get.type(card)=='gongJi'&&target.storage.qianXing==true) return false;
                     }
                 },
             },
@@ -1121,7 +1141,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         forced:true,
                         trigger:{player:"useCardToTargeted"},
                         filter:function(event,player){
-                            return !player.storage.yingZhan;
+                            if(event.yingZhan==true) return false;
+                            return true;
                         },
                         content:function(){
                             var num=player.countMark('_tiLian_r')+player.countMark('_tiLian_b');
@@ -1132,7 +1153,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         forced:true,
                         trigger:{player:'useCardToPlayer'},
                         filter:function(event,player){
-                            return !player.storage.yingZhan;
+                            if(get.type(event.card)=='gongJi') return true;
                         },
                         content:function(){
                             trigger.parent.canYingZhan=false;
@@ -1162,7 +1183,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     1:{
                         trigger:{player:'useCardAfter'},
                         filter:function(event,player){
-                            return get.type(event.card)=='faShu'&&player.storage.yingZhan!=true;
+                            if(event.yingZhan==true) return false;
+                            return get.type(event.card)=='faShu';
                         },
                         content:function(){
                             player.gongJi();
@@ -1191,7 +1213,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				viewAsFilter:function(player){
                     return player.countCards('h',function(card){
                         return card.hasNature('diZhiFengYin');
-                    })&&player.storage.yingZhan==false;
+                    })&&_status.currentPhase==player;
 				},
 				prompt:'打出一张地之封印',
                 mod:{
@@ -1262,7 +1284,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				viewAsFilter:function(player){
                     return player.countCards('h',function(card){
                         return card.hasNature('shuiZhiFengYin');
-                    })&&player.storage.yingZhan==false;
+                    })&&_status.currentPhase==player;
 				},
 				prompt:'打出一张水之封印',
                 mod:{
@@ -1333,7 +1355,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				viewAsFilter:function(player){
                     return player.countCards('h',function(card){
                         return card.hasNature('huoZhiFengYin');
-                    })&&player.storage.yingZhan==false;
+                    })&&_status.currentPhase==player;
 				},
 				prompt:'打出一张火之封印',
                 mod:{
@@ -1404,7 +1426,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				viewAsFilter:function(player){
                     return player.countCards('h',function(card){
                         return card.hasNature('fengZhiFengYin');
-                    })&&player.storage.yingZhan==false;
+                    })&&_status.currentPhase==player;
 				},
 				prompt:'打出一张风之封印',
                 mod:{
@@ -1476,7 +1498,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				viewAsFilter:function(player){
                     return player.countCards('h',function(card){
                         return card.hasNature('leiZhiFengYin');
-                    })&&player.storage.yingZhan==false;
+                    })&&_status.currentPhase==player;
 				},
 				prompt:'打出一张雷之封印',
                 mod:{
@@ -1540,7 +1562,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 faShu:true,
                 enable:['chooseToUse','faShu'],
                 filter:function(event,player){
-                    if(player.storage.yingZhan!=false) return false;
+                    if(_status.currentPhase!=player) return false;
                     if(!player.canBiShaShuiJing()){
                         return false;
                     }
@@ -1612,7 +1634,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 faShu:true,
                 enable:['chooseToUse','faShu'],
                 filter:function(event,player){
-                    if(player.storage.yingZhan!=false) return false;
+                    if(_status.currentPhase!=player) return false;
                     if(!player.canBiShaShuiJing()){
                         return false;
                     }
@@ -1678,7 +1700,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 faShu:true,
                 enable:['chooseToUse','faShu'],
                 filter:function(event,player){
-                    if(player.storage.yingZhan!=false){
+                    if(_status.currentPhase!=player){
                         return false;
                     }
                     if(!player.countCards('h',function(card){
@@ -1769,7 +1791,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 filter:function(event,player){
                     return player.countCards('h',function(card){
                         return get.suit(card)=='shui';
-                    })&&player.storage.yingZhan==false;
+                    })&&_status.currentPhase==player;
                 },
                 content:function(){
                     'step 0'
@@ -1892,7 +1914,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				viewAsFilter:function(player){
                     return player.countCards('h',function(card){
                         return card.hasNature('tianShiZhiQiang');
-                    })&&player.storage.yingZhan==false;
+                    })&&_status.currentPhase==player;
 				},
             },
             tianShiZhiGe:{
@@ -2029,8 +2051,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             guanChuanSheJi:{
                 trigger:{source:"gongJiUnhirt"},
                 filter:function(event,player){
+                    if(event.yingZhan==true) return false;
                     if(player.countCards(card=>card.type=='faShu')){
-                        return true&&player.storage.yingZhan==false;
+                        return true;
                     }
                 },
                 content:function(){
@@ -2056,7 +2079,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				viewAsFilter:function(player){
                     return player.countCards('h',function(card){
                         return card.hasNature('shanGuangXianJing');
-                    })&&player.storage.yingZhan==false;
+                    })&&_status.currentPhase==player;
 				},
 				prompt:'打出一张闪光陷阱',
                 mod:{
@@ -2103,7 +2126,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 faShu:true,
                 enable:['chooseToUse','faShu'],
                 filter:function(event,player){
-                    return player.canBiShaShuiJing()&&player.storage.yingZhan==false;
+                    return player.canBiShaShuiJing()&&_status.currentPhase==player;
                 },
                 content:function(){
                     'step 0'
@@ -2121,7 +2144,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 faShu:true,
                 enable:['chooseToUse','faShu'],
                 filter:function(event,player){
-                    return player.countCards('h',card=>get.type(card)=='faShu')&&player.storage.yingZhan==false;
+                    return player.countCards('h',card=>get.type(card)=='faShu')&&_status.currentPhase==player;
                 },
                 content:function(player){
                     'step 0'
@@ -2229,7 +2252,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 faShu:true,
                 enable:['chooseToUse','faShu'],
                 filter:function(event,player){
-                    return player.canBiShaBaoShi()&&player.storage.yingZhan==false;
+                    return player.canBiShaBaoShi()&&_status.currentPhase==player;
                 },
                 content:function(player){
                     'step 0'
