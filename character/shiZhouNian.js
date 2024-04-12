@@ -848,10 +848,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 
             //圣女
             bingShuangDaoYan:{
+                group:'bingShuangDaoYan_shengGuang',
                 forced:true,
                 trigger:{player:['useCardBegin']},
                 filter:function(event){
-                    return get.type(event.card)=='gongJi'&&get.suit(event.card)=='shui';
+                    return get.suit(event.card)=='shui';
                 },
                 content:function(){
                     'step 0'
@@ -872,6 +873,35 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						player.line(target,'blue');
 						target.changeZhiLiao();
 					}
+                },
+                subSkill:{
+                    shengGuang:{
+                        forced:true,
+                        trigger:{player:'respondAfter'},
+                        filter:function(event,player){
+                            return get.name(event.card)=='shengGuang';
+                        },
+                        content:function(){
+                            'step 0'
+                            player.chooseTarget('选择一名角色+1[治疗]',true).set('ai',function(target){
+                                if(target.side==player.side&&target.zhiLiao<target.storage.zhiLiaoMax){
+                                    return 1;
+                                }else if(target.side==player.side&&target.zhiLiao>=target.storage.zhiLiaoMax){
+                                    return 0;
+                                }else if(target.side!=player.side){
+                                    return -1;
+                                }else{
+                                    return 1;
+                                }
+                            });
+                            'step 1'
+                            if(result.bool){
+                                var target=result.targets[0];
+                                player.line(target,'blue');
+                                target.changeZhiLiao();
+                            }
+                        },
+                    }
                 }
             },
             zhiLiaoShu:{
@@ -948,12 +978,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 qiDong:true,
                 enable:'phaseUse',
                 filter:function(event,player){
-                    return player.canBiShaBaoShi()&&(player.storage.lianMin!=true);
+                    return player.canBiShaBaoShi();
                 },
                 content:function(){
                     player.removeBiShaBaoShi();
                     player.link();
                     player.storage.lianMin=true;
+                    player.changeNengLiang('b');
                 },
                 mod:{
                     maxHandcard:function(player,num){
@@ -978,8 +1009,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.chooseTarget('选择一名角色+1[治疗]',true).set('ai',function(target){
 						if(target.side==player.side&&target.zhiLiao<target.storage.zhiLiaoMax){
                             return 1;
-                        }else if(target.side==player.side&&target.zhiLiao==target.storage.zhiLiaoMax){
+                        }else if(target.side==player.side&&target.zhiLiao>=target.storage.zhiLiaoMax){
                             return 0;
+                        }else if(target.side!=player.side){
+                            return -1;
                         }else{
                             return 1;
                         }
@@ -2328,13 +2361,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 
             //圣女
             bingShuangDaoYan:"[被动]冰霜祷言",
-            bingShuangDaoYan_info:"(每当你使用水系攻击时发动①)目标角色+1[治疗]。",
+            bingShuangDaoYan_info:"(每当你使用水系牌或【圣光】时发动时发动)目标角色+1[治疗]。",
             zhiLiaoShu:"[法术]治疗术",
             zhiLiaoShu_info:"目标角色+2[治疗]。",
             zhiYuZhiGuang:"[法术]治愈之光",
             zhiYuZhiGuang_info:"指定最多3名角色各+1[治疗]。",
             lianMin:"[启动]怜悯[持续]",
-            lianMin_info:"[宝石][横置]你的手牌上限恒定为7[持续]。",
+            lianMin_info:"[宝石][横置]你的手牌上限恒定为7[持续]，你+1[水晶]。",
             shengLiao:"[法术]圣疗[回合限定]",
             shengLiao_info:"[水晶]任意分配3[治疗]给1~3名角色，额外+1攻击行动或法术行动。",
 
