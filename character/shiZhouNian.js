@@ -2270,6 +2270,14 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                 }
             },
+
+            //女武神
+            shenShengZhuiJi:{},
+            zhiXuZhiYin:{},
+            hePingXingZhe:{},
+            junShenWeiGuan:{},
+            yingLingZhaoHuan:{},
+
 		},
 		
 		translate:{
@@ -2377,7 +2385,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             kuangHua:"[被动]狂化",
             kuangHua_info:"你发动的所有攻击伤害额外+1；(攻击命中时②，若你的手牌数>3)本次攻击伤害额外+1。",
             xueYingKuangDao:"(独)[响应]血影狂刀",
-            xueYingKuangDao_info:"(作为主动攻击打出时发动)<br>a·若命中手牌为2的对手②，本次攻击伤害额外+2；<br>b·若命中手牌为3的对手②，本次攻击伤害额外+1；",
+            xueYingKuangDao_info:"(作为主动攻击打出时发动)<br>·若命中手牌为2的对手②，本次攻击伤害额外+2；<br>·若命中手牌为3的对手②，本次攻击伤害额外+1。",
             xueXingPaoXiao:"(独)[响应]血腥咆哮",
             xueXingPaoXiao_info:'(作为主动攻击打出时发动)若攻击的目标拥有的治疗为2，则本次攻击强制命中。',
             siLie:"撕裂",
@@ -2458,6 +2466,17 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             huiMieFengBao:'[法术]毁灭风暴',
             huiMieFengBao_info:'[宝石]对2名目标对手各造成2点法术伤害③。',
 
+            //女武神
+            shenShengZhuiJi:"[响应]神圣追击",
+            shenShengZhuiJi_info:"(攻击或法术行动结束后，移除你的1[治疗])额外+1攻击行动。",
+            zhiXuZhiYin:"[法术]秩序之印",
+            zhiXuZhiYin_info:"(摸2张牌[强制])你加+1[治疗]并+1[水晶]。",
+            hePingXingZhe:"[被动]和平行者",
+            hePingXingZhe_info:"(发动【英灵召唤】后强制触发[强制])[横置]，转入【英灵形态】；(每当你执行主动攻击时发动①)[重置]脱离【英灵形态】。",
+            junShenWeiGuan:"[被动]军神威光",
+            junShenWeiGuan_info:"",
+            yingLingZhaoHuan:"[响应]英灵召唤",
+            yingLingZhaoHuan_info:"",
 		},
 	};
 });
