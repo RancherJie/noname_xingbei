@@ -37,7 +37,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             //lingHunShuShi:['female','huan',6,['jianxiong'],],
             //xueZhiWuNv:['female','xue',6,['jianxiong'],],
             //dieWuZhe:['female','yong',6,['jianxiong'],],
-            //nvWuShen:['female','sheng',6,['jianxiong'],],
+            nvWuShen:['female','sheng','3/4',['shenShengZhuiJi','zhiXuZhiYin','hePingXingZhe','junShenWeiGuan','yingLingZhaoHuan'],],
             //moGong:['female','huan',6,['jianxiong'],],
             //hongLianQiShi:['female','xue',6,['jianxiong'],],
             //yingLingRenXing:['female','yong',6,['jianxiong'],],
@@ -2272,11 +2272,148 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             },
 
             //女武神
-            shenShengZhuiJi:{},
-            zhiXuZhiYin:{},
-            hePingXingZhe:{},
-            junShenWeiGuan:{},
-            yingLingZhaoHuan:{},
+            shenShengZhuiJi:{
+                group:['shenShengZhuiJi_1','shenShengZhuiJi_2'],
+                subSkill:{
+                    1:{
+                        trigger:{player:'usCardAfter'},
+                        filter:function(event,player){
+                            if(get.type(event.card)=='gongJi'){
+                                if(event.yingZhan==true) return false;
+                            }else if(get.type(event.card)=='faShu'){
+                                if(_status.currentPhase!=player) return false;
+                            }
+                            return player.zhiLiao>=1;
+                        },
+                        content:function(){
+                            player.changeZhiLiao(-1);
+                            player.gongJi();
+                        }
+                    },
+                    2:{
+                        trigger:{player:'useSkillAfter'},
+                        filter:function(event,player){
+                            var info=get.info(event.skill);
+                            return info.faShu&&player.zhiLiao>=1;
+                        },
+                        content:function(player){
+                            player.changeZhiLiao(-1);
+                            player.gongJi()
+                        }
+                    },
+                }
+            },
+            zhiXuZhiYin:{
+                faShu:true,
+                enable:['chooseToUse','faShu'],
+                content:function(){
+                    'step 0'
+                    player.draw(2);
+                    'step 1'
+                    player.changeZhiLiao(1);
+                    player.changeNengLiang('b');
+                }
+            },
+            hePingXingZhe:{
+                group:'hePingXingZhe_chongZhi',
+                forced:true,
+                trigger:{player:"yingLingZhaoHuan"},
+                content:function(){
+                    player.storage.yingLingXingTai=true;
+                    player.link();
+                },
+                subSkill:{
+                    chongZhi:{
+                        forced:true,
+                        trigger:{player:'useCardToPlayer'},
+                        priority:99,
+                        filter:function(event,player){
+                            if(!player.isLinked()) return false;
+                            if(get.type(event.card)!= 'gongJi') return false;
+                            if(event.parent.yingZhan==true) return false;
+                            return true;
+                        },
+                        content:function(){
+                            if(player.isLinked()){
+                                player.link();
+                                player.storage.yingLingXingTai=false;
+                            }
+                            
+                        }
+                    }
+                }
+            },
+            junShenWeiGuan:{
+                forced:true,
+                trigger:{player:'phaseBegin'},
+                filter:function(event,player){
+                    return player.storage.yingLingXingTai==true;
+                },
+                content:function(){
+                    'step 0'
+                    var list=['你+1[治疗]，[重置]脱离【英灵形态】','(移除我方【战绩区】X个星石，X<3)目标角色+X[治疗]'];
+                    player.chooseControl(list).set('prompt','军光神威：选择一项');
+                    'step 1'
+                    if(result.index==0){
+                        player.changeZhiLiao(1);
+                        if(player.isLinked()){
+                            player.link();
+                            player.storage.yingLingXingTai=false;
+                        }
+                        event.finish();
+                    }else if(result.index==1){
+                        if(player.side==true){
+                            var list=game.hongZhanJi;
+                        }else{
+                            var list=game.lanZhanJi;
+                        }
+                        var next=player.chooseButton([
+                            '移除X个星石，X<3',
+                            [list,'tdnodes'],
+                        ]);
+                        next.set('forced',true);
+                        next.set('selectButton',[0,2]);
+                    }
+                    'step 2'
+                    event.number=result.links.length;
+                    var number=event.number;
+                    for(var i=0;i<result.links.length;i++){
+						if(result.links[i]=='宝石'){
+							player.changeZhanJi('r',-1);
+						}else if(result.links[i]=='水晶'){
+							player.changeZhanJi('b',-1);
+						}
+					}
+                    player.chooseTarget(1,true,'选择一个目标角色+'+number+'[治疗]');
+                    'step 3'
+                    result.targets[0].changeZhiLiao(event.number);
+                }
+            },
+            yingLingZhaoHuan:{
+                trigger:{player:'useCardToTargeted'},
+                filter:function(event,player){
+                    if(get.type(event.card)!='gongJi') return false;
+                    return player.canBiShaShuiJing();
+                },
+                content:function(){
+                    'step 0'
+                    player.removeBiShaShuiJing();
+                    'step 1'
+                    trigger.parent.baseDamage+=1;
+                    'step 2'
+                    player.chooseToDiscard(1,'英灵召唤：弃置1张法术牌[展示]，本次攻击伤害额外+1',function(card){
+                        return get.type(card)=='faShu';
+                    });
+                    'step 3'
+                    if(result.bool){
+                        player.showCards(result.cards);
+                        trigger.parent.baseDamage+=1;
+                    }
+                    'step 4'
+                    event.player=player;
+                    event.trigger('yingLingZhaoHuan')
+                }
+            },
 
 		},
 		
@@ -2474,9 +2611,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             hePingXingZhe:"[被动]和平行者",
             hePingXingZhe_info:"(发动【英灵召唤】后强制触发[强制])[横置]，转入【英灵形态】；(每当你执行主动攻击时发动①)[重置]脱离【英灵形态】。",
             junShenWeiGuan:"[被动]军神威光",
-            junShenWeiGuan_info:"",
+            junShenWeiGuan_info:"(回合开始时，若你处于【英灵形态】)选择以下1项发动：<br>·你+1[治疗]，[重置]脱离【英灵形态】；<br>·(移除我方【战绩区】X个星石，X<3)目标角色+X[治疗]。",
             yingLingZhaoHuan:"[响应]英灵召唤",
-            yingLingZhaoHuan_info:"",
+            yingLingZhaoHuan_info:"[水晶](攻击命中时发动②)本次攻击伤害额外+1，(若你额外弃置1张法术牌[展示])本次攻击伤害额外+1。",
 		},
 	};
 });
