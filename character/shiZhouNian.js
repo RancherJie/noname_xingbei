@@ -657,7 +657,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 priority:2,
                 trigger:{player:"useCardToPlayer"},
                 filter:function(event,player){
-                    if(event.yingZhan==true) return false;
+                    if(event.parent.yingZhan==true) return false;
                     if(get.type(event.card)=='gongJi'){
                         return true;
                     }else{
@@ -1141,7 +1141,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         forced:true,
                         trigger:{player:"useCardToTargeted"},
                         filter:function(event,player){
-                            if(event.yingZhan==true) return false;
+                            if(event.parent.yingZhan==true) return false;
                             return true;
                         },
                         content:function(){
