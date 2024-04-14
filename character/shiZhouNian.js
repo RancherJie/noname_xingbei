@@ -23,7 +23,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             moFaShaoNv:['female','yong',3,['moBaoChongJi','moDanZhangWo','moDanRongHe','huiMieFengBao'],],
             //moJianShi:['female','huan',6,['jianxiong'],],
             //shengQiangQiShi:['female','sheng',6,['jianxiong'],],
-            //yuanSuShi:['male','yong',6,['jianxiong'],],
+            yuanSuShi:['male','yong','3/4',['yuanSuXiShou','yuanSuDianRan','yunShi','bingDong','huoQou','fengRen','leiJi','yueGuang','yuanSu'],],
             //maoXianJia:['female','huan',6,['jianxiong'],],
             //wenYiFaShi:['male','huan',6,['jianxiong'],],
             //zhongCaiZhe:['female','xue',6,['jianxiong'],],
@@ -2416,6 +2416,392 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 }
             },
 
+            //元素师
+            yuanSuXiShou:{
+                trigger:{source:'damageBegin'},
+                filter:function(event,player){
+                    if(player.countMark('yuanSu')>=3) return false;
+                    if(event.faShu!=true) return false;
+                    if(player.storage.yuanSuDianRan==true) return false;
+                    return true;
+                },
+                content:function(){
+                    player.addMark('yuanSu');
+                }
+            },
+            yuanSuDianRan:{
+                faShu:true,
+                enable:['chooseToUse','faShu'],
+                filter:function(event,player){
+                    return player.countMark('yuanSu')>=3&&_status.currentPhase==player;
+                },
+                content:function(){
+                    'step 0'
+                    player.storage.yuanSuDianRan=true;
+                    player.removeMark('yuanSu',3);
+                    'step 1'
+                    player.chooseTarget(1,'元素点燃：选择1名目标角色造成2点法术伤害',true);
+                    'step 2'
+                    if(result.bool){
+                        var target=result.targets[0];
+                        var next=target.damage(2,player);
+                        next.faShu=true;
+                    }
+                    'step 3'
+                    player.faShu('元素点燃：法术行动');
+                    player.storage.yuanSuDianRan=false;
+                }
+            },
+            yunShi:{
+                faShu:true,
+                enable:['chooseToUse','faShu'],
+				filterCard:function(card){
+                    return card.hasNature('yunShi');
+				},
+				position:'h',
+				viewAs:{name:'faShu',nature:'yunShi'},
+				viewAsFilter:function(player){
+                    return player.countCards('h',function(card){
+                        return card.hasNature('yunShi');
+                    })&&_status.currentPhase==player;
+				},
+				prompt:'对目标角色造成1点法术伤害③，额外+1法术行动',
+                mod:{
+					selectTarget:function(card,player,range){
+                        if(card.name=='faShu'&&card.hasNature('yunShi')){
+                            range[0]=1;
+                            range[1]=1;
+                        }
+					}
+				},
+                group:['yunShi1','yunShi2','yunShi3'],
+            },
+            yunShi1:{
+                forced:true,
+                trigger:{player:"useCard1"},
+                filter:function(event,player){
+                    return event.card.name=='faShu'&&event.card.hasNature('yunShi');
+                },
+                content:function(){
+                    'step 0'
+                    player.chooseToDiscard(1,'陨石：弃置一张地系牌[展示]本次伤害额外+1。',function(card){
+                        return get.suit(card)=='di';
+                    });
+                    'step 1'
+                    if(result.bool){
+                        player.showCards(result.cards);
+                        player.storage.yunShi=true;
+                    }
+                }
+            },
+            yunShi2:{
+                forced:true,
+                trigger:{player:"useCardToTargeted"},
+                filter:function(event,player){
+                    return event.card.name=='faShu'&&event.card.hasNature('yunShi');
+                },
+                content:function(){
+                    var num=1;
+                    if(player.storage.yunShi==true){
+                        num+=1;
+                        player.storage.yunShi=false;
+                    }
+                    trigger.targets[0].damage(num,player).set('faShu',true);
+                }
+            },
+            yunShi3:{
+                trigger:{player:'useCardAfter'},
+                forced:true,
+                filter:function(event,player){
+                    return event.card.name=='faShu'&&event.card.hasNature('yunShi');
+                },
+                content:function(){
+                    player.faShu('陨石：法术行动');
+                }
+            },
+            bingDong:{
+                faShu:true,
+                enable:['chooseToUse','faShu'],
+				filterCard:function(card){
+                    return card.hasNature('bingDong');
+				},
+				position:'h',
+				viewAs:{name:'faShu',nature:'bingDong'},
+				viewAsFilter:function(player){
+                    return player.countCards('h',function(card){
+                        return card.hasNature('bingDong');
+                    })&&_status.currentPhase==player;
+				},
+				prompt:'对目标角色造成1点法术伤害③，并指定1名角色+1[治疗]',
+                mod:{
+					selectTarget:function(card,player,range){
+                        if(card.name=='faShu'&&card.hasNature('bingDong')){
+                            range[0]=1;
+                            range[1]=1;
+                        }
+					}
+				},
+                group:['bingDong1','bingDong2'],
+            },
+            bingDong1:{
+                forced:true,
+                trigger:{player:"useCard1"},
+                filter:function(event,player){
+                    return event.card.name=='faShu'&&event.card.hasNature('bingDong');
+                },
+                content:function(){
+                    'step 0'
+                    player.chooseToDiscard(1,'冰冻：弃置一张水系牌[展示]本次伤害额外+1。',function(card){
+                        return get.suit(card)=='shui';
+                    });
+                    'step 1'
+                    if(result.bool){
+                        player.showCards(result.cards);
+                        player.storage.bingDong=true;
+                    }
+                }
+            },
+            bingDong2:{
+                forced:true,
+                trigger:{player:"useCardToTargeted"},
+                filter:function(event,player){
+                    return event.card.name=='faShu'&&event.card.hasNature('bingDong');
+                },
+                content:function(){
+                    'step 0'
+                    var num=1;
+                    if(player.storage.bingDong==true){
+                        num+=1;
+                        player.storage.bingDong=false;
+                    }
+                    trigger.targets[0].damage(num,player).set('faShu',true);
+                    'step 1'
+                    player.chooseTarget(1,'冰冻：选择1名角色+1[治疗]',true);
+                    'step 2'
+                    if(result.bool){
+                        result.targets[0].changeZhiLiao(1);
+                    }
+                }
+            },
+            huoQou:{
+                faShu:true,
+                enable:['chooseToUse','faShu'],
+				filterCard:function(card){
+                    return card.hasNature('huoQou');
+				},
+				position:'h',
+				viewAs:{name:'faShu',nature:'huoQou'},
+				viewAsFilter:function(player){
+                    return player.countCards('h',function(card){
+                        return card.hasNature('huoQou');
+                    })&&_status.currentPhase==player;
+				},
+				prompt:'对目标角色造成2点法术伤害③',
+                mod:{
+					selectTarget:function(card,player,range){
+                        if(card.name=='faShu'&&card.hasNature('huoQou')){
+                            range[0]=1;
+                            range[1]=1;
+                        }
+					}
+				},
+                group:['huoQou1','huoQou2'],
+            },
+            huoQou1:{
+                forced:true,
+                trigger:{player:"useCard1"},
+                filter:function(event,player){
+                    return event.card.name=='faShu'&&event.card.hasNature('huoQou');
+                },
+                content:function(){
+                    'step 0'
+                    player.chooseToDiscard(1,'火球：弃置一张火系牌[展示]本次伤害额外+1。',function(card){
+                        return get.suit(card)=='huo';
+                    });
+                    'step 1'
+                    if(result.bool){
+                        player.showCards(result.cards);
+                        player.storage.huoQou=true;
+                    }
+                }
+            },
+            huoQou2:{
+                forced:true,
+                trigger:{player:"useCardToTargeted"},
+                filter:function(event,player){
+                    return event.card.name=='faShu'&&event.card.hasNature('huoQou');
+                },
+                content:function(){
+                    var num=2;
+                    if(player.storage.huoQou==true){
+                        num+=1;
+                        player.storage.huoQou=false;
+                    }
+                    trigger.targets[0].damage(num,player).set('faShu',true);
+                }
+            },
+            fengRen:{
+                faShu:true,
+                enable:['chooseToUse','faShu'],
+				filterCard:function(card){
+                    return card.hasNature('fengRen');
+				},
+				position:'h',
+				viewAs:{name:'faShu',nature:'fengRen'},
+				viewAsFilter:function(player){
+                    return player.countCards('h',function(card){
+                        return card.hasNature('fengRen');
+                    })&&_status.currentPhase==player;
+				},
+				prompt:'对目标角色造成1点法术伤害③，额外+1攻击行动',
+                mod:{
+					selectTarget:function(card,player,range){
+                        if(card.name=='faShu'&&card.hasNature('fengRen')){
+                            range[0]=1;
+                            range[1]=1;
+                        }
+					}
+				},
+                group:['fengRen1','fengRen2','fengRen3'],
+            },
+            fengRen1:{
+                forced:true,
+                trigger:{player:"useCard1"},
+                filter:function(event,player){
+                    return event.card.name=='faShu'&&event.card.hasNature('fengRen');
+                },
+                content:function(){
+                    'step 0'
+                    player.chooseToDiscard(1,'风刃：弃置一张风系牌[展示]本次伤害额外+1。',function(card){
+                        return get.suit(card)=='feng';
+                    });
+                    'step 1'
+                    if(result.bool){
+                        player.showCards(result.cards);
+                        player.storage.fengRen=true;
+                    }
+                }
+            },
+            fengRen2:{
+                forced:true,
+                trigger:{player:"useCardToTargeted"},
+                filter:function(event,player){
+                    return event.card.name=='faShu'&&event.card.hasNature('fengRen');
+                },
+                content:function(){
+                    var num=1;
+                    if(player.storage.fengRen==true){
+                        num+=1;
+                        player.storage.fengRen=false;
+                    }
+                    trigger.targets[0].damage(num,player).set('faShu',true);
+                }
+            },
+            fengRen3:{
+                trigger:{player:'useCardAfter'},
+                forced:true,
+                filter:function(event,player){
+                    return event.card.name=='faShu'&&event.card.hasNature('fengRen');
+                },
+                content:function(){
+                    player.gongJi('风刃：攻击行动');
+                }
+            },
+            leiJi:{
+                faShu:true,
+                enable:['chooseToUse','faShu'],
+				filterCard:function(card){
+                    return card.hasNature('leiJi');
+				},
+				position:'h',
+				viewAs:{name:'faShu',nature:'leiJi'},
+				viewAsFilter:function(player){
+                    return player.countCards('h',function(card){
+                        return card.hasNature('leiJi');
+                    })&&_status.currentPhase==player;
+				},
+				prompt:'打出一张雷击',
+                mod:{
+					selectTarget:function(card,player,range){
+                        if(card.name=='faShu'&&card.hasNature('leiJi')){
+                            range[0]=1;
+                            range[1]=1;
+                        }
+					}
+				},
+                group:['leiJi1','leiJi2'],
+            },
+            leiJi1:{
+                forced:true,
+                trigger:{player:"useCard1"},
+                filter:function(event,player){
+                    return event.card.name=='faShu'&&event.card.hasNature('leiJi');
+                },
+                content:function(){
+                    'step 0'
+                    player.chooseToDiscard(1,'雷击：弃置一张雷系牌[展示]本次伤害额外+1。',function(card){
+                        return get.suit(card)=='lei';
+                    });
+                    'step 1'
+                    if(result.bool){
+                        player.showCards(result.cards);
+                        player.storage.leiJi=true;
+                    }
+                }
+            },
+            leiJi2:{
+                forced:true,
+                trigger:{player:"useCardToTargeted"},
+                filter:function(event,player){
+                    return event.card.name=='faShu'&&event.card.hasNature('leiJi');
+                },
+                content:function(){
+                    var num=1;
+                    if(player.storage.leiJi==true){
+                        num+=1;
+                        player.storage.leiJi=false;
+                    }
+                    trigger.targets[0].damage(num,player).set('faShu',true);
+                    if(player.side==true){
+                        if(game.hongZhanJi.length<5){
+                            player.changeZhanJi('r',1);
+                        }
+                    }else if(player.side==false){
+                        if(game.lanZhanJi.length<5){
+                            player.changeZhanJi('b',1);
+                        }
+                    }
+                }
+            },
+            yueGuang:{
+                faShu:true,
+                enable:['chooseToUse','faShu'],
+                filter:function(event,player){
+                    return _status.currentPhase==player&&player.canBiShaShuiJing();
+                },
+                content:function(){
+                    'step 0'
+                    player.removeBiShaShuiJing();
+                    'step 1'
+                    var num=player.countNengLiang('r')+player.countNengLiang('b')+1;
+                    event.num=num;
+                    player.chooseTarget(1,'月光：选择1名角色造成'+num+'点法术伤害',true);
+                    'step 2'
+                    if(result.bool){
+                        var target=result.targets[0];
+                        var next=target.damage(event.num,player);
+                        next.faShu=true;
+                    }
+                }
+            },
+            yuanSu:{
+                intro:{
+                    name:'元素',
+                    content:'mark',
+                },
+                markimage:'image/card/hong.png',
+            }
+
 		},
 		
 		translate:{
@@ -2615,6 +3001,26 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             junShenWeiGuan_info:"(回合开始时，若你处于【英灵形态】)选择以下1项发动：<br>·你+1[治疗]，[重置]脱离【英灵形态】；<br>·(移除我方【战绩区】X个星石，X<3)目标角色+X[治疗]。",
             yingLingZhaoHuan:"[响应]英灵召唤",
             yingLingZhaoHuan_info:"[水晶](攻击命中时发动②)本次攻击伤害额外+1，(若你额外弃置1张法术牌[展示])本次攻击伤害额外+1。",
+
+            //元素师
+            yuanSuXiShou:'[响应]元素吸收',
+            yuanSuXiShou_info:'(对目标角色造成法术伤害时发动③)你+1【元素】。',
+            yuanSuDianRan:'[法术]元素点燃',
+            yuanSuDianRan_info:'(移除3点【元素】)对目标角色造成2点法术伤害③，额外+1法术行动；不能与【元素吸收】同时发动。',
+            yunShi:'(独)[法术]陨石',
+            yunShi_info:'对目标角色造成1点法术伤害③，额外+1法术行动；(若你额外弃1张地系牌[展示]①)本次伤害额外+1。',
+            bingDong:'(独)[法术]冰冻',
+            bingDong_info:'对目标角色造成1点法术伤害③，并指定1名角色+1[治疗](若你额外弃1张水系牌[展示]①)本次伤害额外+1。',
+            huoQou:'(独)[法术]火球',
+            huoQou_info:'对目标角色造成2点法术伤害③，(若你额外弃1张火系牌[展示]①)，本次伤害额外+1。',
+            fengRen:'(独)[法术]风刃',
+            fengRen_info:'对目标角色造成1点法术伤害③，额外+1攻击行动；(若你额外弃1张风系牌[展示]①)本次伤害额外+1。',
+            leiJi:'(独)[法术]雷击',
+            leiJi_info:'对目标角色造成1点法术伤害③，我方【战绩区】+1[宝石]；(若你额外弃1张雷系牌[展示]①)本次伤害额外+1。',
+            yueGuang:'[法术]月光',
+            yueGuang_info:'[宝石]对目标角色造成(X+1)点法术伤害③，X为你剩余的【能量】数。',
+            yuanSu:'元素',
+            yuanSu_info:'【元素】为元素师专有指示物，上限为3。',
 		},
 	};
 });
