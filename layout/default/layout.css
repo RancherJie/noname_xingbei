@@ -1932,7 +1932,7 @@ div:not(.handcards)>.card>.info>span,
 .caption>div>div {
 	font-size: 16px;
 	position: relative;
-	width: calc(100% - 70px);
+	width: calc(100%);
 	vertical-align: top;
 	margin: 0;
 	padding: 0;
