@@ -2153,7 +2153,15 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     });
                     'step 1'
                     player.showCards(result.cards);
-                    player.changeZhanJi('r',1);
+                    if(player.side==true){
+                        if(game.hongZhanJi.length<5){
+                            player.changeZhanJi('r',1);
+                        }
+                    }else if(player.side==false){
+                        if(game.lanZhanJi.length<5){
+                            player.changeZhanJi('r',1);
+                        }
+                    }
                     player.chooseTarget(2,'选择2名目标对手',true,function(card,player,target){
                         if(target.side!=player.side){
                             return true;
