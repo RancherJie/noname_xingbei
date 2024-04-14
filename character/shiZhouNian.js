@@ -440,13 +440,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					]);
 					next.set('forced',true);
 					next.set('selectButton',3);
-					next.set('filterButton',function(button){
-						if(button.link==0){
-							return _status.event.bool1;
-						};
-						return true;
-					});
-					//next.set('bool1',lib.skill.xinbenxi.filterx(trigger,player));
 					next.set('ai',function(button){
 						switch(button.link){
 							case 0:{
