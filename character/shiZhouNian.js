@@ -591,7 +591,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 content:function(player){
                     "step 0"
-					var str='风怒追击：是否使用发动风系攻击';
+					var str='风怒追击：风系攻击行动';
 					var next=player.gongJi('h',function(card,player,event){
                         if(get.suit(card)!='feng') return false;
                         return lib.filter.cardEnabled(card,player,'forceEnable');
@@ -630,7 +630,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         content:function(){
                             "step 0"
                             var list=[0,1,2,3];
-                            player.chooseControl(list).set('prompt','剑影：摸几张牌并弃置同样的数量').set('ai',function(){return 0;});
+                            player.chooseControl(list).set('prompt','剑影：摸X张牌并弃置X张牌').set('ai',function(){return 0;});
                             "step 1"
                             event.number=result.control;
                             "step 2"
@@ -720,7 +720,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 content:function(){
                     "step 0"
                     player.removeSkill('jiFengJi2');
-					var str='疾风技：是否发动攻击';
+					var str='疾风技：攻击行动';
 					var next=player.gongJi('h',str);
 					next.ai=function(card){
 						return 1;
@@ -745,7 +745,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 0'
                     player.removeBiShaShuiJing();
                     'step 1'
-					var str='剑影：是否发动攻击';
+					var str='剑影：攻击行动';
 					var next=player.gongJi('h',str);
 					next.ai=function(card){
 						return 1;
@@ -860,7 +860,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 content:function(){
                     'step 0'
-                    player.chooseTarget('选择一名角色+1[治疗]',true).set('ai',function(target){
+                    player.chooseTarget('冰霜祷言：选择一名角色+1[治疗]',true).set('ai',function(target){
 						if(target.side==player.side&&target.zhiLiao<target.storage.zhiLiaoMax){
                             return 1;
                         }else if(target.side==player.side&&target.zhiLiao>=target.storage.zhiLiaoMax){
@@ -887,7 +887,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         },
                         content:function(){
                             'step 0'
-                            player.chooseTarget('选择一名角色+1[治疗]',true).set('ai',function(target){
+                            player.chooseTarget('冰霜祷言：选择一名角色+1[治疗]',true).set('ai',function(target){
                                 if(target.side==player.side&&target.zhiLiao<target.storage.zhiLiaoMax){
                                     return 1;
                                 }else if(target.side==player.side&&target.zhiLiao>=target.storage.zhiLiaoMax){
@@ -921,7 +921,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         return card.hasNature('zhiLiaoShu');
                     })&&_status.currentPhase==player;
 				},
-				prompt:'打出一张治疗术',
+				prompt:'目标角色+2[治疗]。',
                 mod:{
 					selectTarget:function(card,player,range){
                         if(card.name=='faShu'&&card.hasNature('zhiLiaoShu')){
@@ -955,7 +955,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         return card.hasNature('zhiYuZhiGuang');
                     })&&_status.currentPhase==player;
 				},
-				prompt:'打出一张治愈之光',
+				prompt:'指定最多3名角色各+1[治疗]。',
                 mod:{
 					selectTarget:function(card,player,range){
                         if(card.name=='faShu'&&card.hasNature('zhiYuZhiGuang')){
@@ -1010,7 +1010,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     if(typeof player.storage.shengLiao!='number'){
                         player.storage.shengLiao=0;
                     }
-                    player.chooseTarget('选择一名角色+1[治疗]',true).set('ai',function(target){
+                    player.chooseTarget('圣疗：选择一名角色+1[治疗]',true).set('ai',function(target){
 						if(target.side==player.side&&target.zhiLiao<target.storage.zhiLiaoMax){
                             return 1;
                         }else if(target.side==player.side&&target.zhiLiao>=target.storage.zhiLiaoMax){
@@ -1055,7 +1055,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 content:function(event,player){
                     'step 0'
-                    var next=player.chooseToDiscard([0,3],true,'请选择的要弃置水系牌',function(card){
+                    var next=player.chooseToDiscard([0,3],true,'水影：选择要弃置的水系牌',function(card){
                         return get.suit(card)=='shui';
                     });
                     next.ai=function(card){
@@ -1068,7 +1068,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 2'
                     if(player.storage.qianXing!=true) event.finish();
                     'step 3'
-                    var next=player.chooseToDiscard(1,'请选择的要弃置法术牌',function(card){
+                    var next=player.chooseToDiscard(1,'水影：选择要弃置的法术牌',function(card){
                         return get.type(card)=='faShu';
                     });
                     next.ai=function(card){
@@ -1176,7 +1176,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             return get.type(event.card)=='faShu';
                         },
                         content:function(){
-                            player.gongJi();
+                            player.gongJi('法术激荡：攻击行动');
                         }
                     },
                     2:{
@@ -1186,7 +1186,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             return info.faShu;
                         },
                         content:function(player){
-                            player.gongJi()
+                            player.gongJi('法术激荡：攻击行动')
                         }
                     },
                 },
@@ -1204,7 +1204,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         return card.hasNature('diZhiFengYin');
                     })&&_status.currentPhase==player;
 				},
-				prompt:'打出一张地之封印',
+				prompt:'该对手获得(直到他从手中打出或展示出地系牌时强制触发)：对他造成3点法术伤害③，触发后移除此牌。',
                 mod:{
 					selectTarget:function(card,player,range){
                         if(card.name=='faShu'&&card.hasNature('diZhiFengYin')){
@@ -1275,7 +1275,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         return card.hasNature('shuiZhiFengYin');
                     })&&_status.currentPhase==player;
 				},
-				prompt:'打出一张水之封印',
+				prompt:'该对手获得(直到他从手中打出或展示出水系牌时强制触发)：对他造成3点法术伤害③，触发后移除此牌。',
                 mod:{
 					selectTarget:function(card,player,range){
                         if(card.name=='faShu'&&card.hasNature('shuiZhiFengYin')){
@@ -1346,7 +1346,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         return card.hasNature('huoZhiFengYin');
                     })&&_status.currentPhase==player;
 				},
-				prompt:'打出一张火之封印',
+				prompt:'该对手获得(直到他从手中打出或展示出火系牌时强制触发)：对他造成3点法术伤害③，触发后移除此牌。',
                 mod:{
 					selectTarget:function(card,player,range){
                         if(card.name=='faShu'&&card.hasNature('huoZhiFengYin')){
@@ -1417,7 +1417,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         return card.hasNature('fengZhiFengYin');
                     })&&_status.currentPhase==player;
 				},
-				prompt:'打出一张风之封印',
+				prompt:'该对手获得(直到他从手中打出或展示出风系牌时强制触发)：对他造成3点法术伤害③，触发后移除此牌。',
                 mod:{
 					selectTarget:function(card,player,range){
                         if(card.name=='faShu'&&card.hasNature('fengZhiFengYin')){
@@ -1489,7 +1489,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         return card.hasNature('leiZhiFengYin');
                     })&&_status.currentPhase==player;
 				},
-				prompt:'打出一张雷之封印',
+				prompt:'该对手获得(直到他从手中打出或展示出雷系牌时强制触发)：对他造成3点法术伤害③，触发后移除此牌。',
                 mod:{
 					selectTarget:function(card,player,range){
                         if(card.name=='faShu'&&card.hasNature('leiZhiFengYin')){
@@ -1561,7 +1561,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 0'
                     player.removeBiShaShuiJing();
                     'step 1'
-                    player.chooseTarget(true,'选择【五系束缚】的目标对手',function(card,player,target){
+                    player.chooseTarget(true,'五系束缚：选择【五系束缚】的目标对手',function(card,player,target){
                         if(target.side!=player.side){
                             return true;
                         }});
@@ -1642,7 +1642,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 0'
                     player.removeBiShaShuiJing();
                     'step 1'
-                    player.chooseTarget('选择1个有基础效果的目标角色',function(card,player,target){
+                    player.chooseTarget('封印破碎：选择1个有基础效果的目标角色',function(card,player,target){
                         for(var xiaoGuoList in game.jiChuXiaoGuo){
                             for(var xiaoGuo of game.jiChuXiaoGuo[xiaoGuoList]){
                                 if(target.hasExpansions(xiaoGuo)){
@@ -1663,11 +1663,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                 }
                             }
                         }
-                        player.chooseControl(list).set('prompt','选择要移的除基础效果');
+                        player.chooseControl(list).set('prompt','选择要获得的基础效果');
                     }
                     'step 3'
                     if(result.control=='zhongDu'){
-                        player.chooseCardButton(target.getExpansions('zhongDu'),true,'选择要移除的中毒')
+                        player.chooseCardButton(target.getExpansions('zhongDu'),true,'选择要获得的中毒')
                     }else{
                         player.gain(target.getExpansions(result.control));
                         if(!game.jiChuXiaoGuo.pai.includes(result.control)){
@@ -1710,7 +1710,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 content:function(){
                     'step 0'
-                    player.chooseToDiscard('h','弃置1张风系牌',true,function(card){
+                    player.chooseToDiscard('h','风之洁净：弃置1张风系牌',true,function(card){
                         return get.suit(card)=='feng';
                     })
                     'step 1'
@@ -1730,7 +1730,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         event.finish();
                     }
                     if(result.bool){
-                        player.chooseTarget('选择1个有基础效果的目标角色',function(card,player,target){
+                        player.chooseTarget('风之洁净：选择1个有基础效果的目标角色',function(card,player,target){
                             for(var xiaoGuoList in game.jiChuXiaoGuo){
                                 for(var xiaoGuo of game.jiChuXiaoGuo[xiaoGuoList]){
                                     if(target.hasExpansions(xiaoGuo)){
@@ -1752,7 +1752,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                 }
                             }
                         }
-                        player.chooseControl(list).set('prompt','选择要移的除基础效果');
+                        player.chooseControl(list).set('prompt','选择要移除的基础效果');
                     }
                     'step 3'
                     if(result.control=='zhongDu'){
@@ -1784,7 +1784,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 content:function(){
                     'step 0'
-                    player.chooseToDiscard('h','弃置1张水系牌',true,function(card){
+                    player.chooseToDiscard('h','天使祝福：弃置1张水系牌',true,function(card){
                         return get.suit(card)=='shui';
                     })
                     'step 1'
@@ -1848,7 +1848,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         forced:true,
                         content:function(){
                             'step 0'
-                            player.chooseTarget('选择一名角色+1[治疗]',true).set('ai',function(target){
+                            player.chooseTarget('天使羁绊：选择一名角色+1[治疗]',true).set('ai',function(target){
                                 if(target.side==player.side&&target.zhiLiao<target.storage.zhiLiaoMax){
                                     return 1;
                                 }else if(target.side==player.side&&target.zhiLiao==target.storage.zhiLiaoMax){
@@ -1873,7 +1873,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         forced:true,
                         content:function(){
                             'step 0'
-                            player.chooseTarget('选择一名角色+1[治疗]',true).set('ai',function(target){
+                            player.chooseTarget('天使羁绊：选择一名角色+1[治疗]',true).set('ai',function(target){
                                 if(target.side==player.side&&target.zhiLiao<target.storage.zhiLiaoMax){
                                     return 1;
                                 }else if(target.side==player.side&&target.zhiLiao==target.storage.zhiLiaoMax){
@@ -1927,7 +1927,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 0'
                     player.removeBiShaShuiJing();
                     'step 1'
-                    player.chooseTarget('选择1个有基础效果的目标角色',function(card,player,target){
+                    player.chooseTarget('天使之歌：选择1个有基础效果的目标角色',function(card,player,target){
                         for(var xiaoGuoList in game.jiChuXiaoGuo){
                             for(var xiaoGuo of game.jiChuXiaoGuo[xiaoGuoList]){
                                 if(target.hasExpansions(xiaoGuo)){
@@ -1948,7 +1948,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                 }
                             }
                         }
-                        player.chooseControl(list).set('prompt','选择要移的除基础效果');
+                        player.chooseControl(list).set('prompt','选择要移除的基础效果');
                     }
                     'step 3'
                     if(result.control=='zhongDu'){
@@ -2000,7 +2000,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         list.push('水晶');
                     }
                     var next=player.chooseButton([
-						'使用多少星石来抵挡等量的士气下降',
+						'神之庇护使用多少星石来抵挡等量的士气下降',
 						[list,'tdnodes'],
 					]);
 					next.set('forced',true);
@@ -2047,7 +2047,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 content:function(){
                     'step 0'
-                    player.chooseToDiscard(1,true,'弃置1张法术牌',function(card){
+                    player.chooseToDiscard(1,true,'贯穿射击：弃置1张法术牌',function(card){
                         return get.type(card)=='faShu';
                     })
                     'step 1'
@@ -2070,7 +2070,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         return card.hasNature('shanGuangXianJing');
                     })&&_status.currentPhase==player;
 				},
-				prompt:'打出一张闪光陷阱',
+				prompt:'对目标角色造成2点法术伤害③',
                 mod:{
 					selectTarget:function(card,player,range){
                         if(card.name=='faShu'&&card.hasNature('shanGuangXianJing')){
@@ -2121,10 +2121,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 0'
                     player.removeBiShaShuiJing();
                     'step 1'
-                    player.chooseTarget(1,true,'选择【狙击】的目标角色');
+                    player.chooseTarget(1,true,'狙击：目标角色手牌补到5张[强制]，额外+1攻击行动');
                     'step 2'
                     result.targets[0].drawTo(5);
-                    player.gongJi();
+                    player.gongJi('狙击：攻击行动');
                 }
             },
             
@@ -2137,7 +2137,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 content:function(player){
                     'step 0'
-                    player.chooseToDiscard(1,'弃置1张法术牌',true,function(card){
+                    player.chooseToDiscard(1,'魔爆冲击：弃置1张法术牌',true,function(card){
                         return get.type(card)=='faShu';
                     });
                     'step 1'
@@ -2255,7 +2255,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 0'
                     player.removeBiShaBaoShi();
                     'step 1'
-                    player.chooseTarget(2,'选择2名目标对手',true,function(card,player,target){
+                    player.chooseTarget(2,'毁灭风暴：对2名目标对手各造成2点法术伤害③',true,function(card,player,target){
                         if(target.side!=player.side){
                             return true;
                         };
@@ -2284,7 +2284,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         },
                         content:function(){
                             player.changeZhiLiao(-1);
-                            player.gongJi();
+                            player.gongJi('神圣追击：攻击行动');
                         }
                     },
                     2:{
@@ -2295,7 +2295,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         },
                         content:function(player){
                             player.changeZhiLiao(-1);
-                            player.gongJi()
+                            player.gongJi('神圣追击：攻击行动')
                         }
                     },
                 }
