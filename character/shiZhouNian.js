@@ -945,7 +945,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             },
             zhiLiaoShu2:{
                 forced:true,
-                trigger:{player:"useCard1"},
+                trigger:{player:"useCardToTargeted"},
                 filter:function(event,player){
                     return event.card.name=='faShu'&&event.card.hasNature('zhiLiaoShu');
                 },
@@ -979,7 +979,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             },
             zhiYuZhiGuang2:{
                 forced:true,
-                trigger:{player:"useCard1"},
+                trigger:{player:"useCardToTargeted"},
                 filter:function(event,player){
                     return event.card.name=='faShu'&&event.card.hasNature('zhiYuZhiGuang');
                 },
@@ -1257,7 +1257,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             },
             diZhiFengYin_zhiXing:{
                 forced:true,
-                trigger:{player:"faShuEnd"},
+                trigger:{player:"useCardToTargeted"},
                 filter:function(event){
                     return event.card.name=='faShu'&&event.card.hasNature('diZhiFengYin');
                 },
@@ -1328,7 +1328,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             },
             shuiZhiFengYin_zhiXing:{
                 forced:true,
-                trigger:{player:"faShuEnd"},
+                trigger:{player:"useCardToTargeted"},
                 filter:function(event){
                     return event.card.name=='faShu'&&event.card.hasNature('shuiZhiFengYin');
                 },
@@ -1399,7 +1399,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             },
             huoZhiFengYin_zhiXing:{
                 forced:true,
-                trigger:{player:"faShuEnd"},
+                trigger:{player:"useCardToTargeted"},
                 filter:function(event){
                     return event.card.name=='faShu'&&event.card.hasNature('huoZhiFengYin');
                 },
@@ -1470,7 +1470,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             },
             fengZhiFengYin_zhiXing:{
                 forced:true,
-                trigger:{player:"faShuEnd"},
+                trigger:{player:"useCardToTargeted"},
                 filter:function(event){
                     return event.card.name=='faShu'&&event.card.hasNature('fengZhiFengYin');
                 },
@@ -1542,7 +1542,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             },
             leiZhiFengYin_zhiXing:{
                 forced:true,
-                trigger:{player:"faShuEnd"},
+                trigger:{player:"useCardToTargeted"},
                 filter:function(event){
                     return event.card.name=='faShu'&&event.card.hasNature('leiZhiFengYin');
                 },
@@ -2094,7 +2094,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             },
             shanGuangXianJing_zhiXing:{
                 forced:true,
-                trigger:{player:"faShuEnd"},
+                trigger:{player:"useCardToTargeted"},
                 filter:function(event){
                     return event.card.name=='faShu'&&event.card.hasNature('shanGuangXianJing');
                 },
