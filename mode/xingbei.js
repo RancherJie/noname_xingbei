@@ -2638,23 +2638,8 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 		
 
 		translate:{
-			zhu:'主',
-			zhong:'忠',
-			truezhu:"帅",
-			falsezhu:"将",
-			trueZhu:"帅",
-			falseZhu:"将",
-			trueZhong:"兵",
-			falseZhong:"卒",
 			trueColor:"zhu",
 			falseColor:"wei",
-			versus_zhu_config:'启用主将',
-			versus_only_zhu_config:'只当主将',
-			versus_main_zhu_config:'主将死亡后结束',
-			versus_assign_enemy_config:'指定对手',
-			versus_cross_seat_config:'交叉座位',
-			versus_random_seat_config:'随机座位',
-			versus_noreplace_end_config:'无替补时结束',
 			versus_single_control_config:'单人控制',
 
 			//公共技能
