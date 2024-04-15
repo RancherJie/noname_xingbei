@@ -5029,6 +5029,17 @@ div[data-decoration="bronze"]::after{
 	border-radius: 16px;
 }
 
+.tiaoJian {
+    color: rgb(134, 87, 1); 
+}
+.hong {
+	color: rgb(160, 72, 36); 
+}
+.lan {
+	color: rgb(0, 133, 160);
+}
+
+
 /*--------动画--------*/
 @keyframes shadow_thunder {
 	0% {
