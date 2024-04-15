@@ -691,7 +691,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
             'weiLiCiFu|yunShi':"威力赐福<br>陨石",
             'xunJieCiFu|yunShi':"迅捷赐福<br>陨石",
             'diZhiFengYin|lingHunZhenBao':"地之封印<br>灵魂震爆",
-            'zhiLiaoShu':"治疗术",
+            'zhiLiaoShu|':"治疗术",
             'diZhiFengYin|lingHunFuYu':"地之封印<br>灵魂赋予",
 		},
 		list:[
