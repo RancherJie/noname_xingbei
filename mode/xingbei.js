@@ -2656,17 +2656,544 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 			versus_random_seat_config:'随机座位',
 			versus_noreplace_end_config:'无替补时结束',
 			versus_single_control_config:'单人控制',
-			seat_order_config:'座位排列',
-			versus_first_less_config:'先手少摸牌',
-			versus_reward_config:'杀敌摸牌',
-			versus_punish_config:'杀死队友',
-			versus_number_config:'对阵人数',
-			replace_number_config:'替补人数',
-			choice_config:'候选人数',
-			mode_versus_character_config:'剑阁角色',
-			mode_versus_card_config:'同舟共济',
-		},
 
+			//公共技能
+            _xuRuo:"虚弱",
+            _zhongDu:"中毒",
+            _shengDun:"圣盾",
+            _shengGuang:"圣光",
+            _yingZhan:"应战",
+            _moDan:"魔弹",
+            _heCheng:"合成",
+            _gouMai:"购买",
+            _tiLian:"提炼",
+            _gongJiXingShi:"攻击星石",
+            _quXiao:'取消',
+		},
+		skill:{
+			_shouPaiShangXian:{
+                mod:{
+                    maxHandcardBase:function(player,num){
+                        return 6;
+                    }
+                }
+            },
+            _zhiLiao:{
+                trigger:{player:"zhiLiao"},
+                forced:true,
+                priority:1,
+                filter:function(event,player){
+                    if(event.zhiLiao==false) return false;
+                    if(player.zhiLiao<=0) return false;
+                    return true;
+                },
+                content:function(){
+                    "step 0"
+                    var num=trigger.num;
+                    var list=[];
+                    for(var i=0;i<=player.zhiLiao;i++){
+                        if(i>num) break;
+                        list.push(i);
+                    }
+                    player.chooseControl(list).set('prompt','使用的治疗数量').set('ai',function(){return list.length-1;});
+					"step 1"
+					var zhiLiaonum=result.control;
+					if(zhiLiaonum>0){
+						trigger.num-=zhiLiaonum;
+						game.log(player,'的治疗抵挡了'+zhiLiaonum+'点伤害');
+						player.changeZhiLiao(-zhiLiaonum).type='damage';
+					}
+                }
+            },
+            _faShu:{
+                mod:{
+                    cardEnabled:function(card){
+                        if(_status.event.name=='faShu'){
+                            if(get.type(card)!='faShu') return false;
+                        }
+                    }
+                },
+            },
+            _gongJi:{
+                mod:{
+                    cardEnabled:function(card){
+                        if(_status.event.name=='gongJi'){
+                            if(get.type(card)!='gongJi') return false;
+                        }
+                    }    
+                }
+            },
+            _qiDong:{
+                forced:true,
+                trigger:{player:'useSkillAfter'},
+                filter:function(event){
+                    var info=get.info(event.skill);
+                    return info.qiDong;
+                },
+                content:function(){
+                    player.chooseToUse();
+                }
+            },
+
+            _xuRuo:{
+                priority:1,//优先级大的先执行
+                trigger:{player:'phaseUseBefore'},
+                forced:true,
+                //marktext:"虚",
+                markimage:'image/card/xuRuo.png',
+                intro:{
+					content:'expansion',
+				},
+                filter:function(event,player){
+                    return player.hasExpansions('_xuRuo');
+                },
+                content:function(event,player){
+                    'step 0'
+                    var list=['摸三张牌','跳过行动阶段'];
+                    player.chooseControl().set('choiceList',list).set('prompt','虚弱：选择一项').set('ai',function(){
+                        if(player.countCards('h')+3<=player.getHandcardLimit()) return 0;
+                        return 1;
+                    });
+                    'step 1'
+					if(result.index==1){
+						trigger.cancel();
+					}else if(result.index==0){
+						player.draw(3);
+					}
+                    player.loseToDiscardpile(player.getExpansions('_xuRuo'));
+                },
+            },
+            _zhongDu:{
+                priority:3,
+                //marktext:"毒",
+                markimage:'image/card/zhongDu.png',
+                intro:{
+					content:'expansion',
+					markcount:'expansion',
+				},
+                trigger:{player:'phaseUseBefore'},
+                forced:true,
+                filter:function(event,player){
+                    return player.hasExpansions('_zhongDu');
+                },
+                content:function(event){
+                    var target;
+                    while(player.storage.zhongDu.length){
+                        target=player.storage.zhongDu.pop();
+                        var next=player.damage(target);
+                        next.faShu=true;
+                    }
+                    player.loseToDiscardpile(player.getExpansions('_zhongDu'));
+                }
+            },
+            _shengDun:{
+                //marktext:"盾",
+                markimage:'image/card/shengDun.png',
+                intro:{
+					content:'expansion',
+				},
+                trigger:{target:'useCardToPlayered'},
+                forced:true,
+                filter:function(event,player){
+                    if(event.parent.canShengDun==false) return false;
+                    if(get.type(event.card)=='gongJi'||event.card.name=='moDan'){
+                        return player.hasExpansions('_shengDun');
+                    }
+                },
+                content:function(){
+                    player.loseToDiscardpile(player.getExpansions('_shengDun'));
+                    trigger.getParent().targets.remove(player);
+                    if(get.type(card)=='gongJi'){
+                        event.source=trigger.player;
+                        event.trigger('gongJiUnhirt');
+                    }else if(trigger.card.name=='moDan') game.resetMoDan();
+                    trigger.cancel();
+                }
+            },
+            _yingZhan:{
+                trigger:{target:'useCardToPlayered'},
+                forced:true,
+                filter:function(event,player){
+                    if(event.parent.canYingZhan==false) return false;
+                    if(get.type(event.card)=='gongJi'){
+                        if(get.name(event.card)=='anMie'){
+                            return false;
+                        }else{
+                            return true;
+                        }
+                    }
+                }, 
+                content:function(){
+                    'step 0'
+                    event.source=trigger.player;
+					var next=player.gongJi('h');
+                    next.set('filterCard',function(card,player,event){
+                        if(card.name!='anMie'&&card.name!=get.name(_status.event.trigger_card)) return false;
+						return lib.filter.cardEnabled(card,player,'forceEnable');
+					});
+                    next.set('ai',function(card){
+                        return 1;
+                    });
+                    next.set('prompt','是否使用一张同元素攻击牌或者暗灭');
+                    next.set('filterTarget',function(card,player,target){
+                        return target!=_status.event.trigger_player&&target.side!=player.side;
+                    });
+                    next.set('trigger_card',trigger.card);
+                    next.set('trigger_player',event.source);
+                    next.set('yingZhan',true);
+                    'step 1'
+                    if(result.bool){
+                        //game.log(player.name,'应战完毕');//调试用
+                        trigger.getParent().targets.remove(player);
+                        trigger.cancel();
+                    }
+                }
+            },
+            _yingZhan_weiMingZhong:{
+                trigger:{player:'useCard'},
+                forced:true,
+                filter:function(event,player){
+                    return event.parent.parent.name=='_yingZhan';
+                },
+                content:function(){
+                    event.source=trigger.parent.parent.source;
+                    event.player=trigger.parent.player;
+                    event.trigger('gongJiUnhirt');
+                }
+            },
+            _yingZhan_sheZhi:{
+                trigger:{player:'useCard1'},
+                forced:true,
+                priority:99,
+                filter:function(event,player){
+                    return event.parent.parent.name=='_yingZhan';
+                },
+                content:function(){
+                    trigger.yingZhan=true;
+                }
+            },
+
+            _shengGuang:{
+                trigger:{target:'useCardToPlayered'},
+                forced:true,
+                filter:function(event,player){
+                    if(event.parent.canShengGuang==false) return false;
+                    if(get.type(event.card)=='gongJi'||event.card.name=='moDan'){
+                        return true;
+                    }
+                },
+                content:function(){
+					"step 0"
+					var str='是否使用圣光';
+					var next=player.chooseToRespond('h',str).set('filterCard',function(card,player,event){
+						if(card.name!="shengGuang") return false;
+                        return lib.filter.cardEnabled(card,player,'forceEnable');
+					},str);
+					next.ai=function(card){
+						return 1;
+					};
+					"step 1"
+					if(result.bool){
+                        trigger.getParent().targets.remove(player);
+						if(get.type(card)=='gongJi'){
+                            event.source=trigger.player;
+                            event.trigger('gongJiUnhirt');
+                        }else if(trigger.card.name=='moDan') game.resetMoDan();
+                        trigger.cancel();
+					}
+				},
+            },
+			
+            _moDan:{
+                group:['moDan2','moDan3'],
+                trigger:{target:'useCardToPlayered'},
+                forced:true,
+                filter:function(event,player){
+                    if(event.card.name=='moDan'){
+                        return true;
+                    }else{
+                        return false;
+                    }
+                },
+				content:function(){
+					"step 0"
+                    player.storage.moDan=true;//回合外判断使用法术
+					var str='是否使用魔弹'; 
+					var next=player.chooseToUse('h',function(card,player,event){
+						if(card.name!=get.name(trigger.card)) return false;
+                        return lib.filter.cardEnabled(card,player,'forceEnable');
+					},str);
+					next.ai=function(card){
+						return 1;
+					}
+					next.autodelay=true; 
+                    game.broadcastAll(function(){
+                        game.moDan++;
+                    });
+					"step 1"
+					if(result.bool){
+                        trigger.getParent().targets.remove(player);
+                        trigger.cancel();
+					}else{
+                        game.broadcastAll(function(){
+                            game.moDan--;
+                        });
+                    }
+                    player.storage.moDan=false;
+				},
+				ai:{
+					result:{
+						player:2,
+					},
+				}
+			},
+            moDan2:{//第一个使用魔弹的角色增加魔弹标记
+                trigger:{player:'useCard'},
+                filter:function(event,player){
+                    if(player.storage.moDan==false&&event.card.name=='moDan'){
+                        return true;
+                    }else{
+                        return false;
+                    }
+                },
+                content:function(){
+                    player.storage.moDan=true;
+                }
+            },
+            moDan3:{//第一个使用魔弹的角色删除魔弹标记
+                trigger:{player:'useCardEnd'},
+                filter:function(event,player){
+                    if(player.storage.moDan==true&&event.card.name=='moDan'){
+                        return true;
+                    }else{
+                        return false;
+                    }
+                },
+                content:function(){
+                    player.storage.moDan=false;
+                }
+            },
+			_quXiao:{
+                trigger:{target:'useCardToPlayered'},
+                forced:true,
+                filter:function(event,player){
+                    if(player.hasExpansions('_shengDun')) return false;//有圣盾不触发
+                    if(event.parent.canYingZhan==false&&event.parent.canShengDun==false&&event.parent.canShengGuang==false) return false;//强制命中不触发
+                    if(event.parent.canYingZhan==false&&event.parent.canShengGuang==false&&!player.hasExpansions('_shengDun')) return false;//无法应战无法圣光无圣盾不触发
+                    if(get.type(event.card)=='gongJi'||event.card.name=='moDan'){
+                        return true;
+                    }
+                },
+                content:function(){
+                    trigger.cancel(); 
+                }
+            },
+            _gouMai:{
+				enable:'phaseUse',
+				usable:1,
+				filter:function(event,player){
+					return player.countCards('h')+3<=player.getHandcardLimit();
+				},
+				content:function(event,player){
+					var list=['宝石','水晶']
+					player.draw(3).set('type','teShuXingDong');
+					if(player.side==true){
+						if(game.hongZhanJi.length<=3){
+							player.changeZhanJi('r',1);
+							player.changeZhanJi('b',1);
+						}else if(game.hongZhanJi.length==4){
+							player.chooseControl(list,function(event,player){
+								return '宝石';
+							}).set('prompt','选择获得的星石');
+							if(result.control=='宝石'){
+								player.changeZhanJi('r',1);
+							}else{
+								player.changeZhanJi('b',1);
+							}
+						}
+					}else if(player.side==false){
+						if(game.lanZhanJi.length<=3){
+							player.changeZhanJi('r',1);
+							player.changeZhanJi('b',1);
+						}else if(game.lanZhanJi.length==4){
+							player.chooseControl(list,function(event,player){
+								return '宝石';
+							}).set('prompt','选择获得的星石');
+							if(result.control=='宝石'){
+								player.changeZhanJi('r',1);
+							}else{
+								player.changeZhanJi('b',1);
+							}
+						}
+					}
+					
+				},
+				ai:{
+					order:5,
+					result:{
+						player:2,
+					},
+					maixie:true,
+				}
+			},
+			_heCheng:{
+				enable:'phaseUse',
+				usable:1,
+				filter:function(event,player){
+					if(player.side==true){
+						return game.hongZhanJi.length>=3&&player.countCards('h')+3<=player.getHandcardLimit();
+					}else if(player.side==false){
+						return game.lanZhanJi.length>=3&&player.countCards('h')+3<=player.getHandcardLimit();
+					}
+				},
+				content:function(event,player){
+					"step 0"
+					if(player.side==true){
+						var list=game.hongZhanJi;
+					}else{
+						var list=game.lanZhanJi;
+					}
+					var next=player.chooseButton([
+						'合成请选择三个星石',
+						[list,'tdnodes'],
+					]);
+					next.set('forced',true);
+					next.set('selectButton',3);
+					next.set('ai',function(button){
+						switch(button.link){
+							case 0:{
+								return 1;
+							}
+							case 1:{
+								return 1;
+							}
+							case 2:{
+								return 1;;
+							}
+						}
+					});
+					"step 1"
+					for(var i=0;i<result.links.length;i++){
+						if(result.links[i]=='宝石'){
+							player.changeZhanJi('r',-1);
+						}else if(result.links[i]=='水晶'){
+							player.changeZhanJi('b',-1);
+						}
+					}
+					player.draw(3).set('type','teShuXingDong');
+					player.changeXingBei(1);
+					if(!result.links.contains(0)) event.finish();
+				},
+				ai:{
+					order:50,
+					result:{
+						player:function(player){
+                            if(player.side){
+                                if(game.hongZhanJi.length>=3){
+                                    return 3;
+                                }
+                            }else{
+                                if(game.lanZhanJi.length>=3){
+                                    return 3;
+                                }
+                            }
+                        },
+					},
+					maixie:true,
+				}
+			},
+			_tiLian:{
+				subSkill:{
+					r:{
+						//marktext:'石',
+						intro:{
+							name:'宝石',
+							content:'mark',
+						},
+                        markimage:'image/card/r.png',
+					},
+					b:{
+						//marktext:'晶',
+						intro:{
+							name:'水晶',
+							content:'mark',
+						},
+                        markimage:'image/card/b.png',
+					},
+				},
+				enable:'phaseUse',
+				usable:1,
+
+				filter:function(event,player){
+                    var nengLiang_num=player.countMark('_tiLian_r')+player.countMark('_tiLian_b');
+                    var empty_nengliang=player.storage.nengLiang_max-nengLiang_num;
+					if(player.side==true){
+						return game.hongZhanJi.length>=1&&empty_nengliang>=1;
+					}else if(player.side==false){
+						return game.lanZhanJi.length>=1&&empty_nengliang>=1;
+					}
+				},
+				content:function(event,player){
+                    var nengLiang_num=player.countMark('_tiLian_r')+player.countMark('_tiLian_b');
+					if(player.storage.nengLiang_max-nengLiang_num==1){
+						var num=1;
+					}else if(player.storage.nengLiang_max-nengLiang_num>=2){
+						var num=2;
+					}
+					"step 0"
+					if(player.side==true){
+						var list=game.hongZhanJi;
+					}else{
+						var list=game.lanZhanJi;
+					}
+					var next=player.chooseButton([
+						'请选择提炼的星石',
+						[list,'tdnodes'],
+					]);
+					next.set('forced',true);
+					next.set('selectButton',[1,num]);
+					next.set('ai',function(button){
+						switch(button.link){
+							case 0:{
+								return 1;
+							}
+							case 1:{
+								return 1;
+							}
+						}
+					});
+					"step 1"
+					for(var i=0;i<result.links.length;i++){
+						if(result.links[i]=='宝石'){
+							player.addMark('_tiLian_r');
+							player.changeZhanJi('r',-1);
+						}else if(result.links[i]=='水晶'){
+							player.addMark('_tiLian_b');
+							player.changeZhanJi('b',-1);
+						}
+					}
+					
+				},
+			},
+			_gongJiXingShi:{//攻击获得星石
+				trigger:{source:'damageBegin1'},
+				forced:true,
+				filter:function(event,player){
+					if(player.side==true){
+						return game.hongZhanJi.length<5&&get.type(event.card)=="gongJi";
+					}else if(player.side==false){
+						return game.lanZhanJi.length<5&&get.type(event.card)=="gongJi";
+					}
+				},
+				content:function(event,player){
+					if(trigger.parent.parent.yingZhan==true){
+						player.changeZhanJi('b',1)
+					}else{
+						player.changeZhanJi('r',1)
+                    }
+				},
+			},
+		},
 		element:{
 			content:{
 				removeBiShaShuiJing:function(){
