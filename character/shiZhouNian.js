@@ -1477,7 +1477,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         list.push('水晶');
                     }
                     var next=player.chooseButton([
-						'神之庇护使用多少星石来抵挡等量的士气下降',
+						'神之庇护：使用多少星石来抵挡等量的士气下降',
 						[list,'tdnodes'],
 					]);
 					next.set('forced',true);
