@@ -1739,7 +1739,7 @@ div:not(.handcards)>.card>.info>span,
 }
 #window>.dialog.popped {
 	z-index: 5;
-	width: 220px;
+	width: 400px;
 	background: rgba(0,0,0,0.2);
 	box-shadow: rgba(0, 0, 0, 0.3) 0 0 0 1px;
 	border-radius: 6px;
