@@ -2330,29 +2330,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             yuanChuZhiGong:"原初之弓",
 
 
-            //牌可转化的技能
-            'xueYingKuangDao|xueZhiBeiMing':"血影狂刀<br>血之悲鸣",
-            'jiFengJi|shanGuangXianJing':"疾风技<br>闪光陷阱",
-            'weiLiCiFu|bingDong':"威力赐福<br>冰冻",
-            'zhiYuZhiGuang|tianShiZhiQiang':"治愈之光<br>天使之墙",
-            'shuiZhiFengYin|lingHunFuYu':"水之封印<br>灵魂赋予",
-            'shuiZhiFengYin|lingHunZhenBao':"水之封印<br>灵魂震爆",
-            'huoZhiFengYin|lingHunZhenBao':"火之封印<br>灵魂震爆",
-            'xueXingPaoXiao|xueZhiBeiMing':"血腥咆哮<br>血之悲鸣",
-            'jiFengJi|shanGuangXianJing':"疾风技<br>闪光陷阱",
-            'weiLiCiFu|huoQou':"威力赐福<br>火球",
-            'zhiLiaoShu|tianShiZhiQiang':'治疗术<br>天使之墙',
-            'fengZhiFengYin|lingHunFuYu':"风之封印<br>灵魂赋予",
-            'lieFengJi|jingZhunSheJi':"烈风技<br>精准射击",
-            'jiFengJi|jingZhunSheJi':"疾风技<br>精准射击",
-            'xunJieCiFu|fengRen':"迅捷赐福<br>风刃",
-            'leiZhiFengYin|linHunZhenBao':"雷之封印<br>灵魂震爆",
-            'xunJieCiFu|leiJi':"迅捷赐福<br>雷击",
-            'weiLiCiFu|yunShi':"威力赐福<br>陨石",
-            'xunJieCiFu|yunShi':"迅捷赐福<br>陨石",
-            'diZhiFengYin|lingHunZhenBao':"地之封印<br>灵魂震爆",
-            'zhiLiaoShu':"治疗术",
-            'diZhiFengYin|lingHunFuYu':"地之封印<br>灵魂赋予",
+            
             
             //风之剑圣
             fengNuZhuiJi:'[响应]风怒追击[回合限定]',

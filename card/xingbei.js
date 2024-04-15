@@ -668,8 +668,31 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 			moDan:"魔弹",
 			moDan_info:"（将此牌传递给右手边最近的一名对手）若命中，对他造成2点法术伤害；对方可以选择打出一张【魔弹】将此效果传递下去，若如此做，则对他视为未命中且视为【魔弹】的传递者为他。每传递一次伤害额外+1。在同一轮传递中每一名角色只能参与一次。【魔弹】可以被【圣光】或【圣盾】抵挡，效果会因此终止。",
 
-			faShu:"法术",
-			faShu_info:"独有法术专用"
+			faShu_info:"独有法术专用",
+
+			//牌可转化的技能
+            'xueYingKuangDao|xueZhiBeiMing':"血影狂刀<br>血之悲鸣",
+            'jiFengJi|shanGuangXianJing':"疾风技<br>闪光陷阱",
+            'weiLiCiFu|bingDong':"威力赐福<br>冰冻",
+            'zhiYuZhiGuang|tianShiZhiQiang':"治愈之光<br>天使之墙",
+            'shuiZhiFengYin|lingHunFuYu':"水之封印<br>灵魂赋予",
+            'shuiZhiFengYin|lingHunZhenBao':"水之封印<br>灵魂震爆",
+            'huoZhiFengYin|lingHunZhenBao':"火之封印<br>灵魂震爆",
+            'xueXingPaoXiao|xueZhiBeiMing':"血腥咆哮<br>血之悲鸣",
+            'jiFengJi|shanGuangXianJing':"疾风技<br>闪光陷阱",
+            'weiLiCiFu|huoQou':"威力赐福<br>火球",
+            'zhiLiaoShu|tianShiZhiQiang':'治疗术<br>天使之墙',
+            'fengZhiFengYin|lingHunFuYu':"风之封印<br>灵魂赋予",
+            'lieFengJi|jingZhunSheJi':"烈风技<br>精准射击",
+            'jiFengJi|jingZhunSheJi':"疾风技<br>精准射击",
+            'xunJieCiFu|fengRen':"迅捷赐福<br>风刃",
+            'leiZhiFengYin|linHunZhenBao':"雷之封印<br>灵魂震爆",
+            'xunJieCiFu|leiJi':"迅捷赐福<br>雷击",
+            'weiLiCiFu|yunShi':"威力赐福<br>陨石",
+            'xunJieCiFu|yunShi':"迅捷赐福<br>陨石",
+            'diZhiFengYin|lingHunZhenBao':"地之封印<br>灵魂震爆",
+            'zhiLiaoShu':"治疗术",
+            'diZhiFengYin|lingHunFuYu':"地之封印<br>灵魂赋予",
 		},
 		list:[
 			["an",'sheng',"anMie"],
