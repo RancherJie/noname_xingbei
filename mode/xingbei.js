@@ -2786,10 +2786,12 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
                     }
                 },
                 content:function(){
+					'step 0'
                     player.loseToDiscardpile(player.getExpansions('_shengDun'));
                     trigger.getParent().targets.remove(player);
-                    if(get.type(card)=='gongJi'){
-                        event.source=trigger.player;
+					'step 1'
+                    if(get.type(trigger.card)=='gongJi'){
+						event.source=trigger.player;
                         event.trigger('gongJiUnhirt');
                     }else if(trigger.card.name=='moDan') game.resetMoDan();
                     trigger.cancel();
@@ -2843,6 +2845,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
                 content:function(){
                     event.source=trigger.parent.parent.source;
                     event.player=trigger.parent.player;
+					event.yingZhan=trigger.yingZhan;
                     event.trigger('gongJiUnhirt');
                 }
             },
@@ -2880,15 +2883,15 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					"step 1"
 					if(result.bool){
                         trigger.getParent().targets.remove(player);
-						if(get.type(card)=='gongJi'){
-                            event.source=trigger.player;
+						if(get.type(trigger.card)=='gongJi'){
+							event.source=trigger.player;
                             event.trigger('gongJiUnhirt');
                         }else if(trigger.card.name=='moDan') game.resetMoDan();
                         trigger.cancel();
 					}
 				},
             },
-			
+
             _moDan:{
                 group:['moDan2','moDan3'],
                 trigger:{target:'useCardToPlayered'},
