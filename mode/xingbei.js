@@ -3164,8 +3164,9 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				},
 			},
 			_gongJiXingShi:{//攻击获得星石
-				trigger:{source:'damageBegin1'},
+				trigger:{source:'useCardToTargeted'},
 				forced:true,
+				firstDo:true,
 				filter:function(event,player){
 					if(player.side==true){
 						return game.hongZhanJi.length<5&&get.type(event.card)=="gongJi";
@@ -3174,7 +3175,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					}
 				},
 				content:function(event,player){
-					if(trigger.parent.parent.yingZhan==true){
+					if(trigger.parent.yingZhan==true){
 						player.changeZhanJi('b',1)
 					}else{
 						player.changeZhanJi('r',1)
