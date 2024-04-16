@@ -1449,7 +1449,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 }
             },
             shenZhiBiHu:{
-                trigger:{global:'changeShiQiBegin'},
+                trigger:{global:'changeShiQi1'},
                 filter:function(event,player){
                     if(event.side!=player.side){
                         return false;

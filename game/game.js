@@ -41126,6 +41126,11 @@
 			});
 		},
 		changeShiQi:function(num,side){
+			'step 0'
+			evnet.trigger('changeShiQi1');
+			'step 1'
+			evnet.trigger('changeShiQi2');
+			'step 2'
 			if(side==true){
 				game.hongShiQi+=num;
 				game.log('<span style="color:red;">红方</span>士气变为',game.hongShiQi);
