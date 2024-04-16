@@ -15001,6 +15001,17 @@
 						event.done.discarder=player;
 					}
 					if(event.dialog&&event.dialog.close) event.dialog.close();
+					"step 5"
+					if(event.baoPai==true){
+						var next=player.changeShiQi(-event.result.cards.length).set('baoPai',true);
+						if(event.yuanYin=='shangHai'){
+							next.set('yuanYin','shangHai');
+						}
+						if(event.faShu){
+							next.set('faShu',event.faShu)
+						}
+					}
+					
 				},
 				gaincardMultiple:function(){
 					'step 0'
@@ -18513,14 +18524,7 @@
 					game.delayx();
 					var num=player.needsToDiscard();
 					if(num>0){
-						player.chooseToDiscard(num,true).set('useCache',true);
-						var next=player.changeShiQi(-num);
-						if(event.type=='damage'){
-							next.set('type','damage')
-						}
-						if(event.faShu===true){
-							next.set('faShu',event.faShu)
-						}
+						player.chooseToDiscard(num,true).set('useCache',true).set('baoPai',true).set('yuanYin','shangHai').set('faShu',event.faShu);
 					}
 					if(event.updatePile) game.updateRoundNumber();
 				},

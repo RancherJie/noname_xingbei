@@ -1457,7 +1457,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     if(!player.canBiShaShuiJing()){
                         return false;
                     }
-                    if(event.type!='damage'){
+                    if(event.yuanYin!='shangHai'){
                         return false;
                     }
                     if(event.faShu!=true){
