@@ -528,7 +528,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             shuiYing:{
                 trigger:{player:'drawBegin'},
                 filter:function(event,player){
-                    return event.type!="teShuXingDong";
+                    return event.yuanYin!="teShuXingDong";
                 },
                 content:function(event,player){
                     'step 0'

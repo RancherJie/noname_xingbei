@@ -2984,7 +2984,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				},
 				content:function(event,player){
 					var list=['宝石','水晶']
-					player.draw(3).set('type','teShuXingDong');
+					player.draw(3).set('yuanYin','teShuXingDong');
 					if(player.side==true){
 						if(game.hongZhanJi.length<=3){
 							player.changeZhanJi('r',1);
@@ -3068,7 +3068,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 							player.changeZhanJi('b',-1);
 						}
 					}
-					player.draw(3).set('type','teShuXingDong');
+					player.draw(3).set('yuanYin','teShuXingDong');
 					player.changeXingBei(1);
 					if(!result.links.contains(0)) event.finish();
 				},
