@@ -2815,7 +2815,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
                     event.source=trigger.player;
 					var next=player.gongJi('h');
                     next.set('filterCard',function(card,player,event){
-                        if(card.name!='anMie'&&card.name!=get.name(_status.event.trigger_card)) return false;
+                        if(card.name!='anMie'&&get.suit(card)!=get.suit(_status.event.trigger_card)) return false;
 						return lib.filter.cardEnabled(card,player,'forceEnable');
 					});
                     next.set('ai',function(card){
