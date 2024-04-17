@@ -1519,8 +1519,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 trigger:{source:"gongJiWeiMingZhong"},
                 filter:function(event,player){
                     if(event.yingZhan==true) return false;
-                    if(player.countCards(card=>card.type=='faShu')){
+                    if(player.countCards('h',card=>card.type=='faShu')){
                         return true;
+                    }else{
+                        return false;
                     }
                 },
                 content:function(){
