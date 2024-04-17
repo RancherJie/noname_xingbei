@@ -3164,7 +3164,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				},
 			},
 			_gongJiXingShi:{//攻击获得星石
-				trigger:{source:'useCardToTargeted'},
+				trigger:{player:'useCardToTargeted'},
 				forced:true,
 				firstDo:true,
 				filter:function(event,player){
