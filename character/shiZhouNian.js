@@ -153,7 +153,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 }
             },
             lieFengJi:{
-                trigger:{player:"useCard1"},
+                trigger:{player:"useCard"},
                 filter:function(event,target){
                     if(event.card.hasNature('lieFengJi')){
                         return target.hasExpansions('shengDun');
@@ -179,7 +179,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 }
             },
             jiFengJi:{
-                trigger:{player:"useCard1"},
+                trigger:{player:"useCard"},
                 filter:function(event,player){
                     if(event.yingZhan==true) return false;
                     return event.card.hasNature('jiFengJi');
@@ -261,7 +261,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             },
             
             xueYingKuangDao:{
-                trigger:{player:'useCard1'},
+                trigger:{player:'useCard'},
                 filter:function(event,player){
                     if(event.yingZhan==true) return false;
                     return event.card.hasNature('xueYingKuangDao');
@@ -287,7 +287,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 }
             },
             xueXingPaoXiao:{
-                trigger:{player:'useCard1'},
+                trigger:{player:'useCard'},
                 filter:function(event,player){
                     if(event.yingZhan==true) return false;
                     return event.card.hasNature('xueXingPaoXiao');
@@ -331,7 +331,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             bingShuangDaoYan:{
                 group:'bingShuangDaoYan_shengGuang',
                 forced:true,
-                trigger:{player:['useCardBegin']},
+                trigger:{player:['useCard']},
                 filter:function(event){
                     return get.suit(event.card)=='shui';
                 },
@@ -1344,7 +1344,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         }
                     },
                     2:{
-                        trigger:{player:'useCard1'},
+                        trigger:{player:'useCard'},
                         filter:function(event){
                             return event.card.name=='shengDun';
                         },
@@ -1571,7 +1571,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
             },
             jingZhunSheJi:{
-                trigger:{player:'useCard1'},
+                trigger:{player:'useCard'},
                 filter:function(event,player){
                     return event.card.hasNature('jingZhunSheJi');
                 },
