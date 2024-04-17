@@ -2792,7 +2792,8 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					'step 1'
                     if(get.type(trigger.card)=='gongJi'){
 						event.source=trigger.player;
-                        event.trigger('gongJiUnhirt');
+						event.yingZhan=trigger.parent.yingZhan;
+                        event.trigger('gongJiWeiMingZhong');
                     }else if(trigger.card.name=='moDan') game.resetMoDan();
                     trigger.cancel();
                 }
@@ -2813,6 +2814,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
                 content:function(){
                     'step 0'
                     event.source=trigger.player;
+					event.yingZhan=trigger.parent.yingZhan;
 					var next=player.gongJi('h');
                     next.set('filterCard',function(card,player,event){
                         if(card.name!='anMie'&&get.suit(card)!=get.suit(_status.event.trigger_card)) return false;
@@ -2837,27 +2839,21 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
                 }
             },
             _yingZhan_weiMingZhong:{
-                trigger:{player:'useCard'},
-                forced:true,
-                filter:function(event,player){
-                    return event.parent.parent.name=='_yingZhan';
-                },
-                content:function(){
-                    event.source=trigger.parent.parent.source;
-                    event.player=trigger.parent.player;
-					event.yingZhan=trigger.yingZhan;
-                    event.trigger('gongJiUnhirt');
-                }
-            },
-            _yingZhan_sheZhi:{
                 trigger:{player:'useCard1'},
                 forced:true,
-                priority:99,
+				firstDo:true,
                 filter:function(event,player){
                     return event.parent.parent.name=='_yingZhan';
                 },
                 content:function(){
-                    trigger.yingZhan=true;
+					'step 0'
+					trigger.yingZhan=true;
+					event.yingZhan=trigger.parent.parent.yingZhan;
+					'step 1'
+                    event.source=trigger.parent.parent.source;
+                    event.player=trigger.parent.player;
+					'step 2'
+                    event.trigger('gongJiWeiMingZhong');
                 }
             },
 
@@ -2885,7 +2881,8 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
                         trigger.getParent().targets.remove(player);
 						if(get.type(trigger.card)=='gongJi'){
 							event.source=trigger.player;
-                            event.trigger('gongJiUnhirt');
+							event.yingZhan=trigger.parent.yingZhan;
+                            event.trigger('gongJiWeiMingZhong');
                         }else if(trigger.card.name=='moDan') game.resetMoDan();
                         trigger.cancel();
 					}

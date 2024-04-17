@@ -1516,7 +1516,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 }
             },
             guanChuanSheJi:{
-                trigger:{source:"gongJiUnhirt"},
+                trigger:{source:"gongJiWeiMingZhong"},
                 filter:function(event,player){
                     if(event.yingZhan==true) return false;
                     if(player.countCards(card=>card.type=='faShu')){
