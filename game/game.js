@@ -17506,9 +17506,9 @@
 					}
 					event.trigger('useCard1');
 					"step 1"
-					event.trigger('yingbian');
-					"step 2"
 					event.trigger('useCard2');
+					"step 2"
+					event.trigger('useCard3');
 					"step 3"
 					event.trigger('useCard');
 					event._oncancel=function(){
