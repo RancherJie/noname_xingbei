@@ -704,7 +704,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         intro:{
                             content:'expansion',
                         },
-                        trigger:{player:['useCard2','showCardsBegin']},
+                        trigger:{player:['useCard2','showCardsEnd']},
                         filter:function(event,player){
                             if(!player.hasExpansions('diZhiFengYin_xiaoGuo')){
                                 return false
@@ -775,7 +775,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         intro:{
                             content:'expansion',
                         },
-                        trigger:{player:['useCard2','showCardsBegin']},
+                        trigger:{player:['useCard2','showCardsEnd']},
                         filter:function(event,player){
                             if(!player.hasExpansions('shuiZhiFengYin_xiaoGuo')){
                                 return false
@@ -846,7 +846,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         intro:{
                             content:'expansion',
                         },
-                        trigger:{player:['useCard2','showCardsBegin']},
+                        trigger:{player:['useCard2','showCardsEnd']},
                         filter:function(event,player){
                             if(!player.hasExpansions('huoZhiFengYin_xiaoGuo')){
                                 return false
@@ -917,7 +917,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         intro:{
                             content:'expansion',
                         },
-                        trigger:{player:['useCard2','showCardsBegin']},
+                        trigger:{player:['useCard2','showCardsEnd']},
                         filter:function(event,player){
                             if(!player.hasExpansions('fengZhiFengYin_xiaoGuo')){
                                 return false
@@ -989,7 +989,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         intro:{
                             content:'expansion',
                         },
-                        trigger:{player:['useCard2','showCardsBegin']},
+                        trigger:{player:['useCard2','showCardsEnd']},
                         filter:function(event,player){
                             if(!player.hasExpansions('leiZhiFengYin_xiaoGuo')){
                                 return false
