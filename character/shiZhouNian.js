@@ -1893,7 +1893,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 1'
                     trigger.parent.baseDamage+=1;
                     'step 2'
-                    player.chooseToDiscard(1,'英灵召唤：弃置1张法术牌[展示]，本次攻击伤害额外+1',function(card){
+                    player.chooseToDiscard(1,'英灵召唤：弃置1张法术牌[展示]，目标角色+1[治疗]',function(card){
                         return get.type(card)=='faShu';
                     });
                     'step 3'
