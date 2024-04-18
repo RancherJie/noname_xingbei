@@ -18978,6 +18978,10 @@
 					player.getHistory('damage').push(event);
 					event.trigger("shiJiShangHai");
 					"step 6"
+					event.trigger('jiangYaoChengShou1');
+					"step 7"
+					event.trigger('jiangYaoChengShou2');
+					"step 8"
 					if(!event.unreal){
 						player.draw(num).set('type','damage').set('faShu',event.faShu);
 						/*
@@ -19004,7 +19008,7 @@
 						var numx=Math.max(0,num-player.zhiLiao);
 						player.$damagepop(-numx,natures[0]);
 					}
-					if(event.unreal) event.goto(7)
+					if(event.unreal) event.goto(9)
 					if(!event.notrigger){
 						event.trigger('damage');
 						/*
@@ -19016,7 +19020,7 @@
 							event.trigger('damage');
 						}*/ 
 					}
-					"step 7"
+					"step 9"
 					if(player.hp<=0&&player.isAlive()&&!event.nodying){
 						game.delayx();
 						event._dyinged=true;
@@ -19062,7 +19066,7 @@
 							}
 						}
 					}
-					"step 7"
+					"step 10"
 					game.resetMoDan();
 					if(!event.notrigger) event.trigger('damageSource');
 					
