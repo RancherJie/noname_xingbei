@@ -17577,6 +17577,9 @@
 						next.directHit=event.directHit;
 						next.customArgs=event.customArgs;
 						if(event.forceDie) next.forceDie=true;
+						if(event.yingZhan) next.yingZhan=true;
+						//xingBie
+						if(event.yingZhan) next.yingZhan=true;
 						event.redo();
 					}
 					"step 6"
@@ -17601,6 +17604,8 @@
 						next.directHit=event.directHit;
 						next.customArgs=event.customArgs;
 						if(event.forceDie) next.forceDie=true;
+						//xingBei
+						if(event.yingZhan) next.yingZhan=true;
 						event.redo();
 					}
 					"step 7"
@@ -17638,6 +17643,8 @@
 						next.directHit=event.directHit;
 						next.customArgs=event.customArgs;
 						if(event.forceDie) next.forceDie=true;
+						//xingBei
+						if(event.yingZhan) next.yingZhan=true;
 						event.redo();
 					}
 					"step 9"
@@ -17665,6 +17672,8 @@
 						if(targets.length==event.triggeredTargets4.length){
 							event.sortTarget();
 						}
+						//xingBei
+						if(event.yingZhan) next.yingZhan=true;
 						event.redo();
 					}
 					"step 10"
