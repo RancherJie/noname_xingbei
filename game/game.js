@@ -11139,6 +11139,15 @@
 
 				},
 				changeShiQi:function(){
+					'step 0'
+					event.trigger('changeShiQi1');
+					'step 1'
+					event.trigger('changeShiQi2');
+					'step 2'
+					event.trigger('changeShiQi3');
+					'step 3'
+					event.trigger('changeShiQi4');
+					'step 4'
 					num=event.num;
 					side=event.side;
 					if(side==true){
@@ -41127,12 +41136,14 @@
 		},
 		changeShiQi:function(num,side){
 			'step 0'
-			evnet.trigger('changeShiQi1');
+			event.trigger('changeShiQi1');
 			'step 1'
-			evnet.trigger('changeShiQi2');
+			event.trigger('changeShiQi2');
 			'step 2'
-			evnet.trigger('changeShiQi3');
+			event.trigger('changeShiQi3');
 			'step 3'
+			event.trigger('changeShiQi4');
+			'step 4'
 			if(side==true){
 				game.hongShiQi+=num;
 				game.log('<span style="color:red;">红方</span>士气变为',game.hongShiQi);
