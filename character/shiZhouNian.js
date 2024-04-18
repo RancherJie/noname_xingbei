@@ -709,6 +709,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             if(!player.hasExpansions('diZhiFengYin_xiaoGuo')){
                                 return false
                             }
+                            if(event.name=='showCards'){
+                                if(event.gaiPai==true) return false;
+                            }
                             for(var card of event.cards){
                                 return get.suit(card)=='di'&&player.hasExpansions('diZhiFengYin_xiaoGuo');
                             }
@@ -779,6 +782,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         filter:function(event,player){
                             if(!player.hasExpansions('shuiZhiFengYin_xiaoGuo')){
                                 return false
+                            }
+                            if(event.name=='showCards'){
+                                if(event.gaiPai==true) return false;
                             }
                             for(var card of event.cards){
                                 return get.suit(card)=='shui'&&player.hasExpansions('shuiZhiFengYin_xiaoGuo');
@@ -851,6 +857,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             if(!player.hasExpansions('huoZhiFengYin_xiaoGuo')){
                                 return false
                             }
+                            if(event.name=='showCards'){
+                                if(event.gaiPai==true) return false;
+                            }
                             for(var card of event.cards){
                                 return get.suit(card)=='huo'&&player.hasExpansions('huoZhiFengYin_xiaoGuo');
                             }
@@ -921,6 +930,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         filter:function(event,player){
                             if(!player.hasExpansions('fengZhiFengYin_xiaoGuo')){
                                 return false
+                            }
+                            if(event.name=='showCards'){
+                                if(event.gaiPai==true) return false;
                             }
                             for(var card of event.cards){
                                 return get.suit(card)=='feng'&&player.hasExpansions('fengZhiFengYin_xiaoGuo');
@@ -993,6 +1005,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         filter:function(event,player){
                             if(!player.hasExpansions('leiZhiFengYin_xiaoGuo')){
                                 return false
+                            }
+                            if(event.name=='showCards'){
+                                if(event.gaiPai==true) return false;
                             }
                             for(var card of event.cards){
                                 return get.suit(card)=='lei'&&player.hasExpansions('leiZhiFengYin_xiaoGuo');
