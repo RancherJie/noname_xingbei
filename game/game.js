@@ -26801,7 +26801,7 @@
 					return (range);
 				},
 				getHandcardLimit:function(){
-					var num=Math.max(this.hp,0);
+					var num=game.handcardLimit;
 					num=game.checkMod(this,num,'maxHandcardBase',this);
 					num=game.checkMod(this,num,'maxHandcard',this);
 					num=game.checkMod(this,num,'maxHandcardFinal',this);
@@ -41297,6 +41297,7 @@
 			fengYinShi:['diZhiFengYin_xiaoGuo','shuiZhiFengYin_xiaoGuo','huoZhiFengYin_xiaoGuo','fengZhiFengYin_xiaoGuo','leiZhiFengYin_xiaoGuo'],
 			pai:['_shengDun','_xuRuo','_zhongDu'],
 		},
+		handcardLimit:6,
 	};
 	window['b'+'ann'+'e'+'dE'+'x'+'ten'+'s'+'i'+'o'+'ns']=['\u4fa0\u4e49','\u5168\u6559\u7a0b'];
 	const ui={

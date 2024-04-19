@@ -2656,13 +2656,6 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
             _quXiao:'取消',
 		},
 		skill:{
-			_shouPaiShangXian:{
-                mod:{
-                    maxHandcardBase:function(player,num){
-                        return 6;
-                    }
-                }
-            },
             _zhiLiao:{
                 trigger:{player:"zhiLiao"},
                 forced:true,
