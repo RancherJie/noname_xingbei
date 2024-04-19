@@ -29303,7 +29303,7 @@
 					}
 					if(typeof info.init=='function') info.init();
 					this.node.range.innerHTML='';
-					if(get.type(this)=='gongJi'){
+					if(this.nature){
 						this.node.range.innerHTML=get.translation(this.nature);
 					}
 					switch(get.subtype(this)){
