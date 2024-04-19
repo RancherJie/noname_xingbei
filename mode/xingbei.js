@@ -3508,6 +3508,21 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				countNengLiang:function(color){
 					return this.countMark('_tiLian_'+color);
 				},
+				damageFaShu:function(){
+					var num,source;
+					for(var i=0;i<arguments.length;i++){
+						if(typeof arguments[i]=='number'){
+							num=arguments[i];
+						}
+						else if(get.itemtype(arguments[i])=='player'){
+							source=arguments[i];
+						}
+					}
+					if(typeof num!='number'||!num) num=1;
+					if(get.itemtype(source)!='player') source=this;
+					this.damage(num,source).set('faShu',true);
+				},
+
 				dieAfter2:function(source){
 					if(_status.connectMode&&_status.mode!='guandu'){
 						if(_status.mode=='1v1'||_status.mode=='3v3') return;
