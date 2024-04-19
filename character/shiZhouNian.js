@@ -468,7 +468,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.changeNengLiang('b');
                 },
                 mod:{
-                    maxHandcard:function(player,num){
+                    maxHandcardFinal:function(player,num){
                         if(player.storage.lianMin==true) return 7
                     }
                 }
@@ -592,7 +592,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                 },
                 mod:{
-                    maxHandcard:function(player,num){
+                    maxHandcardBase:function(player,num){
                         if(player.storage.qianXing==true) return num-1;
                     },
                     targetEnabled:function(card,player,target){
