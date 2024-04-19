@@ -17930,6 +17930,7 @@
 							case 'give2':player.$give(cards.length,targets[0]);break;
 							case 'throw':if(losecard) losecard.visible=true;player.$throw(cards);break;
 							case 'throw2':player.$throw(cards.length);break;
+							case 'useCard':player.useCard(cards);break;
 							default:info.prepare(cards,player,targets);
 						}
 					}
