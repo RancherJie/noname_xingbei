@@ -47,7 +47,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             //jingLingSheShou:['female','ji',6,['jianxiong'],],
             //yinYangShi:['female','huan',6,['jianxiong'],],
             //xueSeJianLing:['female','xue',6,['jianxiong'],],
-            //yueZhiNvShen:['female','sheng',6,['jianxiong'],],
+            yueZhiNvShen:['female','sheng',5,['xingYuebiHu','anYueZuZhou','meiDuShaZhiYan','yueZhiLunHui','yueDu','anYueZhan','cangBaiZhiYue','xinYue','shiHua','anYue'],],
             //shouLingWuShi:['female','ji',6,['jianxiong'],],
             //shengGong:['male','sheng',6,['jianxiong'],],
 		},
@@ -2295,8 +2295,279 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     content:'mark',
                 },
                 markimage:'image/card/hong.png',
-            }
+            },
 
+            //月之女神
+            xingYuebiHu:{
+                trigger:{global:'changeShiQi2'},
+                filter:function(event,player){
+                    if(event.side!=player.side) return false;
+                    if(event.num>=0) return false;
+                    if(event.yuanYin!='damage') return false;
+                    if(!event.parent.result.cards) return false;
+                    return true;
+                },
+                content:function(){
+                    'step 0'
+                    if(!player.isLinked()){
+                        player.link();
+                        player.storage.anYueXingTai=true;
+                    }
+                    'step 1'
+                    var cards=trigger.parent.result.cards;
+                    if(cards){
+                        player.addToExpansion('giveAuto',trigger.parent.result.cards).gaintag.add('anYue');
+                    }
+                    'step 2'
+                    trigger.cancel();
+                }
+            },
+            anYueZuZhou:{
+                trigger:{player:'yiChuAnYue'},
+                forced:true,
+                content:function(){
+                    'step 0'
+                    player.changeShiQi(-1);
+                    'step 1'
+                    if(player.getExpansions('anYue').length==0){
+                        if(player.isLinked()){
+                            player.link();
+                            player.storage.anYueXingTai=false;
+                        }
+                    }
+                }
+            },
+            meiDuShaZhiYan:{
+                trigger:{global:'useCard'},
+                lastDo:true,
+                filter:function(event,player){
+                    if(event.player.side==player.side) return false;
+                    if(!event.card) return false;
+                    if(get.type(event.card)!='gongJi') return false;
+                    var anYue=player.getExpansions('anYue');
+                    for(var i=0;i<anYue.length;i++){
+                        if(get.suit(anYue[i])==get.suit(event.card)) return true;
+                    }
+                    return false;
+                },
+                content:function(){
+                    'step 0'
+                    var anYue=player.getExpansions('anYue');
+                    var cards=[];
+                    for(var i=0;i<anYue.length;i++){
+                        if(get.suit(anYue[i])==get.suit(trigger.card)) cards.push(anYue[i]);
+                    }
+                    player.chooseCardButton(cards,true,'移除1个与攻击牌系别相应的系别的【暗月】[展示]');
+                    'step 1'
+                    var card=result.links[0];
+                    event.card=card;
+                    player.loseToDiscardpile(card);
+                    player.showCards(card).set('gaiPai',true);
+                    event.trigger('yiChuAnYue');
+                    'step 2'
+                    player.changeZhiLiao(1);
+                    if(player.countMark('shiHua')<3){
+                        player.addMark('shiHua');
+                    }
+                    'step 3'
+                    if(event.card.type=='faShu'){
+                        if(player.countCards('h')>0){
+                            player.chooseToDiscard('h',true);
+                        }
+                    }
+                    'step 4'
+                    player.chooseTarget(1,'暗月：目标对手造成1点法术伤害③',true,function(card,player,target){
+                        return target.side!=player.side;
+                    });
+                    'step 5'
+                    if(result.bool){
+                        result.targets[0].damage(1,player).set('faShu',true);
+                    }
+                }
+
+            },
+            yueZhiLunHui:{
+                trigger:{player:'phaseEnd'},
+                filter:function(event,player){
+                    return player.zhiLiao>0||player.getExpansions('anYue').length>0;
+                },
+                content:function(){
+                    'step 0'
+                    var list=[];
+                    if(player.zhiLiao>0){
+                        list.push("<span class='tiaoJian'>(移除你的1[治疗])</span>你+1<span class='hong'>【</span>新月<span class='hong'>】</span>");
+                    }
+                    if(player.getExpansions('anYue').length>0){
+                        list.push('<span class="tiaoJian">(移除1个【暗月】)</span>目标角色+1[治疗]');
+                    }
+                    player.chooseControl(list).set('prompt',"选择以下一项发动");
+                    'step 1'
+                    if(result.control=='<span class="tiaoJian">(移除1个【暗月】)</span>目标角色+1[治疗]'){
+                        event.goto(2);
+                    }else if(result.control=="<span class='tiaoJian'>(移除你的1[治疗])</span>你+1<span class='hong'>【</span>新月<span class='hong'>】</span>"){
+                        event.goto(6);
+                    }
+                    'step 2'
+                    var anYue=player.getExpansions('anYue');
+                    player.chooseCardButton(anYue,true,'移除1个【暗月】目标角色+1[治疗]');
+                    'step 3'
+                    var card=result.links[0];
+                    event.card=card;
+                    player.loseToDiscardpile(card);
+                    event.trigger('yiChuAnYue');
+                    'step 4'
+                    player.chooseTarget(1,'目标角色+1[治疗]',true);
+                    'step 5'
+                    if(result.bool){
+                        result.targets[0].changeZhiLiao(1);
+                    }
+                    event.finish();
+                    'step 6'
+                    player.changeZhiLiao(-1);
+                    if(player.countMark('xinYue')<2){
+                        player.addMark('xinYue');
+                    }
+                    event.finish();
+                }
+            },
+            yueDu:{
+                usable:1,
+                trigger:{source:'damageAfter'},
+                filter:function(event,player){
+                    return event.faShu==true&&player.zhiLiao>0;
+                },
+                content:function(){
+                    'step 0'
+                    player.changeZhiLiao(-1);
+                    'step 1'
+                    player.chooseTarget(1,true,'对目标对手造成1点法术伤害③',function(card,player,target){
+                        return target.side!=player.side;
+                    });
+                    'step 2'
+                    if(result.bool){
+                        result.targets[0].damage(1,player).set('faShu',true);
+                    }
+                }
+            },
+            anYueZhan:{
+                trigger:{player:'useCardToTargeted'},
+                filter:function(event,player){
+                    return player.storage.anYueXingTai==true&&player.canBiShaShuiJing()&&player.getExpansions('anYue').length>=0&&get.type(event.card)=='gongJi';
+                },
+                content:function(){
+                    'step 0'
+                    player.removeBiShaShuiJing();
+                    'step 1'
+                    var cards=player.getExpansions('anYue');
+                    player.chooseCardButton(cards,true,'移除X个【暗月】(x<3)本次攻击伤害额外+X',[0,2]);
+                    'step 2'
+                    if(result.links.length>0){
+                        event.num=result.links.length;
+                        player.loseToDiscardpile(result.links);
+                        event.trigger('yiChuAnYue');
+                    }else{
+                        event.finish();
+                    }
+                    'step 3'
+                    trigger.parent.baseDamage+=event.num;
+                }
+            },
+            cangBaiZhiYue:{
+                faShu:true,
+                enable:['chooseToUse','faShu'],
+                filter:function(event,player){
+                    return player.canBiShaBaoShi();
+                },
+                content:function(){
+                    'step 0'
+                    player.removeBiShaBaoShi();
+                    'step 1'
+                    var list=["移除X点<span class='hong'>【</span>新月<span class='hong'>】</span>，你+1点<span class='lan'>【</span>石化<span class='lan'>】</span>，弃1张牌，对目标对手造成(X+1)点法术伤害③"];
+                    if(player.countMark('shiHua')>=3){
+                        list.unshift('<span class="tiaoJian">(移除3个【石化】)</span>你的下次主动攻击对手无法应战，额外+1攻击行动。你额外获得一个回合');
+                    }
+                    player.chooseControl(list).set('prompt','选择以下一项发动');
+                    'step 2'
+                    if(result.control=='<span class="tiaoJian">(移除3个【石化】)</span>你的下次主动攻击对手无法应战，额外+1攻击行动。你额外获得一个回合'){
+                        event.goto(3);
+                    }else if(result.control=="移除X点<span class='hong'>【</span>新月<span class='hong'>】</span>，你+1点<span class='lan'>【</span>石化<span class='lan'>】</span>，弃1张牌，对目标对手造成(X+1)点法术伤害③"){
+                        event.goto(6);
+                    }
+                    'step 3'
+                    player.removeMark('shiHua',3);
+                    player.addSkill('cangBaiZhiYue1');
+                    player.gongJi('攻击行动');
+                    'step 4'
+                    player.insertPhase();
+                    'step 5'
+                    event.finish();
+                    
+                    'step 6'
+                    var list=[];
+                    var num=player.countMark('xinYue');
+                    for(var i=0;i<=num;i++){
+                        list.push(i);
+                    }
+                    player.chooseControl(list).set('prompt',"移除X点<span class='hong'>【</span>新月<span class='hong'>】</span>，你+1点<span class='lan'>【</span>石化<span class='lan'>】</span>，弃1张牌，对目标对手造成(X+1)点法术伤害③").set('ai',function(){return list.length-1;});
+					"step 7"
+					var num=result.control;
+                    event.num=num;
+					if(num>0){
+						player.removeMark('xinYue',num);
+					}
+                    player.addMark('shiHua');
+                    if(player.countCards('h')>0){
+                        player.chooseToDiscard(1,'h',true);
+                    }
+                    'step 8'
+                    player.chooseTarget(1,'对目标对手造成('+event.num+'+1)点法术伤害③',true,function(card,player,target){
+                        return target.side!=player.side;
+                    });
+                    'step 9'
+                    if(result.bool){
+                        result.targets[0].damage(event.num+1,player).set('faShu',true);
+                    }
+                },
+                 
+            },
+            cangBaiZhiYue1:{
+                trigger:{player:'useCardToPlayer'},
+                forced:true,
+                filter:function(event,player){
+                    return event.parent.yingZhan!=true&&get.type(event.card)=="gongJi";
+                },
+                content:function(){
+                    'step 0'
+                    trigger.parent.canYingZhan=false;
+                    'step 1'
+                    player.removeSkill('cangBaiZhiYue1');
+                }
+            },
+            xinYue:{
+                intro:{
+                    name:'新月',
+                    content:'mark',
+                },
+                markimage:'image/card/hong.png',
+            },
+            shiHua:{
+                intro:{
+                    name:'石化',
+                    content:'mark',
+                },
+                markimage:'image/card/lan.png',
+            },
+            anYue:{
+                intro:{
+                    name:'暗月',
+                    markcount:'expansion',
+                    mark:function(dialog,storage,player){
+						var cards=player.getExpansions('anYue');
+						if(player.isUnderControl(true)) dialog.addAuto(cards);
+						else return '共有'+get.cnNumber(cards.length)+'张牌';
+					},
+                },
+            },
 		},
 		
 		translate:{
@@ -2482,6 +2753,30 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             yueGuang_info:'[宝石]对目标角色造成(X+1)点法术伤害③，X为你剩余的【能量】数。',
             yuanSu:'元素',
             yuanSu_info:'</span><span class="hong">【</span>元素<span class="hong">】</span>为元素师专有指示物，上限为3。',
+
+            //月之女神
+            xingYuebiHu:"[响应]新月庇护[持续]",
+            xingYuebiHu_info:"<span class='tiaoJian'>(我方角色因承受伤害造成手牌数超过手牌上限，导致士气即将下降时)</span>[横置]转为【暗月形态】，将因此而造成的弃牌面朝下放置于角色旁，作为【暗月】。本次士气不会下降。",
+            anYueZuZhou:"[被动]暗月诅咒",
+            anYueZuZhou_info:"<span class='tiaoJian'>(你每次移除【暗月】)</span>我方士气-1；<span class='tiaoJian'>(你的【暗月】数为0时)</span>[重置]脱离暗【暗月形态】。",
+            meiDuShaZhiYan:"[响应]美杜莎之眼",
+            meiDuShaZhiYan_info:"<span class='tiaoJian'>(目标对手攻击时①，移除1个与攻击牌系别相应的系别的【暗月】[展示])</span>你+1[治疗]，你+1<span class='lan'>【</span>石化<span class='lan'>】</span>。<span class='tiaoJian'>(若该【暗月】为法术牌)</span>你弃1张牌，对目标对手造成1点法术伤害③。",
+            yueZhiLunHui:"[响应]月之轮回",
+            yueZhiLunHui_info:"<span class='tiaoJian'>(你的回合结束时)</span>选择以下一项发动：<br>·<span class='tiaoJian'>(移除1个【暗月】)</span>目标角色+1[治疗]；<br>·<span class='tiaoJian'>(移除你的1[治疗])</span>你+1<span class='hong'>【</span>新月<span class='hong'>】</span>。",
+            yueDu:"[响应]月渎[回合限定]",
+            yueDu_info:"<span class='tiaoJian'>(目标角色承受你造成的法术伤害⑥后，移除你的1[治疗])</span>对目标对手造成1点法术伤害③。",
+            anYueZhan:"[响应]暗月斩",
+            anYueZhan_info:"[水晶]<span class='tiaoJian'>(仅【暗月形态】下可发动，主动攻击命中时②，移除X个【暗月】(x<3))</span>本次攻击伤害额外+X。",
+            cangBaiZhiYue:"[法术]苍白之月",
+            cangBaiZhiYue_info:"[宝石]选择以下一项发动：<br>·<span class='tiaoJian'>(移除3点</span><span class='lan'>【</span>石化<span class='lan'>】</span><span class='tiaoJian'>)</span>你的下次主动攻击对手无法应战，额外+1攻击行动。你额外获得一个回合；<br>·移除X点<span class='hong'>【</span>新月<span class='hong'>】</span>，你+1点<span class='lan'>【</span>石化<span class='lan'>】</span>，弃1张牌，对目标对手造成(X+1)点法术伤害③。",
+            xinYue:"新月",
+            xinYue_info:"<span class='hong'>【</span>新月<span class='hong'>】</span>为月之女神专有指示物，上限为2。",
+            shiHua:"石化",
+            shiHua_info:"<span class='lan'>【</span>石化<span class='lan'>】</span>为月之女神专有指示物，上限为3。",
+            anYue:"暗月",
+            anYue_info:"【暗月】为月之女神专用盖牌，无上限。",
+            
+
 		},
 	};
 });
