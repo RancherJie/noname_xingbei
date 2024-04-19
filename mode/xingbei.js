@@ -598,7 +598,6 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					}
 					'step 3'
 					for(var i=0;i<game.players.length;i++){
-						game.players[i].storage.nengLiang_max=3;
 						game.players[i].storage.moDan=false;
 						game.players[i].storage.zhongDu=[];
 					}
@@ -1811,7 +1810,6 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						game.pause();
 					}
 					for(var i=0;i<game.players.length;i++){
-						game.players[i].storage.nengLiang_max=3;
 						game.players[i].storage.moDan=false;
 						game.players[i].storage.zhongDu=[];
 					}
@@ -3102,7 +3100,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 
 				filter:function(event,player){
                     var nengLiang_num=player.countMark('_tiLian_r')+player.countMark('_tiLian_b');
-                    var empty_nengliang=player.storage.nengLiang_max-nengLiang_num;
+                    var empty_nengliang=player.getNengLiangLimit()-nengLiang_num;
 					if(player.side==true){
 						return game.hongZhanJi.length>=1&&empty_nengliang>=1;
 					}else if(player.side==false){
@@ -3111,9 +3109,9 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				},
 				content:function(event,player){
                     var nengLiang_num=player.countMark('_tiLian_r')+player.countMark('_tiLian_b');
-					if(player.storage.nengLiang_max-nengLiang_num==1){
+					if(player.getNengLiangLimit()-nengLiang_num==1){
 						var num=1;
-					}else if(player.storage.nengLiang_max-nengLiang_num>=2){
+					}else if(player.getNengLiangLimit()-nengLiang_num>=2){
 						var num=2;
 					}
 					"step 0"

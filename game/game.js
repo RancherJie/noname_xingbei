@@ -19778,6 +19778,11 @@
 					num=game.checkMod(this,num,'maxZhiLiao',this);
 					return Math.max(0,num);
 				},
+				getNengLiangLimit:function(){
+					var num=game.nengLiangMax;
+					num=game.checkMod(this,num,'maxNengLiang',this);
+					return Math.max(0,num);
+				},
 
 				when:function(){
 					if(!_status.postReconnect.player_when) _status.postReconnect.player_when=[
@@ -41304,6 +41309,7 @@
 		},
 		handcardLimit:6,
 		zhiLiaoMax:2,
+		nengLiangMax:3,
 	};
 	window['b'+'ann'+'e'+'dE'+'x'+'ten'+'s'+'i'+'o'+'ns']=['\u4fa0\u4e49','\u5168\u6559\u7a0b'];
 	const ui={
