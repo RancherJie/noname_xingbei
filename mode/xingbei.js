@@ -3522,6 +3522,30 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					if(get.itemtype(source)!='player') source=this;
 					this.damage(num,source).set('faShu',true);
 				},
+				addZhiShiWu:function(zhiShuWu,num){
+					if(typeof num!='number'||!num) num=1;
+					var info=get.info(zhiShuWu);
+					var max;
+					if(info&&info.intro&&info.intro.max){
+						max=info.intro.max;
+					}else{
+						max=Infinity;
+					}
+					var current=this.countMark(zhiShuWu);
+					if(current+num>max){
+						num=max-current;
+					}
+					if(num>0){
+						this.addMark(zhiShuWu,num);
+					}
+				},
+				countZhiShiWu:function(zhiShuWu){
+					return this.countMark(zhiShuWu);
+				},
+				removeZhiShiWu:function(zhiShuWu,num){
+					if(typeof num!='number'||!num) num=1;
+					this.removeMark(zhiShuWu,num);
+				},
 
 				dieAfter2:function(source){
 					if(_status.connectMode&&_status.mode!='guandu'){
