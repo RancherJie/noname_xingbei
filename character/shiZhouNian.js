@@ -1177,7 +1177,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 }
             },
 
-            //守护天使
+            //天使
             fengZhiJieJing:{
                 faShu:true,
                 enable:['chooseToUse','faShu'],
@@ -1343,11 +1343,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             'step 0'
                             player.chooseTarget('天使羁绊：选择一名角色+1[治疗]',true).set('ai',function(target){
                                 if(target.side==player.side&&target.zhiLiao<target.getZhiLiaoLimit()){
-                                    return 1;
+                                    return 2;
                                 }else if(target.side==player.side&&target.zhiLiao==target.getZhiLiaoLimit()){
-                                    return 0;
-                                }else{
                                     return 1;
+                                }else{
+                                    return -1;
                                 }
                             });
                             'step 1'
@@ -1368,11 +1368,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             'step 0'
                             player.chooseTarget('天使羁绊：选择一名角色+1[治疗]',true).set('ai',function(target){
                                 if(target.side==player.side&&target.zhiLiao<target.getZhiLiaoLimit()){
-                                    return 1;
+                                    return 2;
                                 }else if(target.side==player.side&&target.zhiLiao==target.getZhiLiaoLimit()){
-                                    return 0;
-                                }else{
                                     return 1;
+                                }else{
+                                    return -1;
                                 }
                             });
                             'step 1'
@@ -1400,7 +1400,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				},
             },
             tianShiZhiGe:{
-                enable:['phaseUse'],
+                trigger:{player:'phaseBegin'},
                 filter:function(event,player){
                     if(!player.canBiShaShuiJing()){
                         return false;
@@ -2699,7 +2699,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             tianShiZhiQiang:"(独)[法术]天使之墙",
             tianShiZhiQiang_info:"可作为【圣盾】使用。",
             tianShiZhiGe:"[响应]天使之歌(回合限定)",
-            tianShiZhiGe_info:"[水晶]<span class='tiaoJian'>(在你的回合内发动)</span>移除场上任意一个基础效果。",
+            tianShiZhiGe_info:"[水晶]<span class='tiaoJian'>(在你的回合开始前发动)</span>移除场上任意一个基础效果。",
             shenZhiBiHu:"[响应]神之庇护",
             shenZhiBiHu_info:"X[水晶]为我方抵御X点因法术伤害而造成的士气下降。",
 
