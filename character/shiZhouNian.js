@@ -1843,8 +1843,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 content:function(){
                     'step 0'
-                    var list=['你+1[治疗]，[重置]脱离【英灵形态】','(移除我方【战绩区】X个星石，X<3)目标角色+X[治疗]'];
-                    player.chooseControl(list).set('prompt','军光神威：选择一项');
+                    var choiceList=['你+1[治疗]，[重置]脱离【英灵形态】','(移除我方【战绩区】X个星石，X<3)目标角色+X[治疗]'];
+                    var choices=['选择一','选项二'];
+                    player.chooseControl(choices).set('prompt','军光神威：选择一项').set('choiceList',choiceList);
                     'step 1'
                     if(result.index==0){
                         player.changeZhiLiao(1);
@@ -2393,18 +2394,19 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 content:function(){
                     'step 0'
-                    var list=[];
-                    if(player.zhiLiao>0){
-                        list.push("<span class='tiaoJian'>(移除你的1[治疗])</span>你+1<span class='hong'>【</span>新月<span class='hong'>】</span>");
-                    }
+                    var choices=[];
+                    var choiceList=['<span class="tiaoJian">(移除1个【暗月】)</span>目标角色+1[治疗]',"<span class='tiaoJian'>(移除你的1[治疗])</span>你+1<span class='hong'>【</span>新月<span class='hong'>】</span>"];
                     if(player.getExpansions('anYue').length>0){
-                        list.push('<span class="tiaoJian">(移除1个【暗月】)</span>目标角色+1[治疗]');
+                        choices.push('选项一');
                     }
-                    player.chooseControl(list).set('prompt',"选择以下一项发动");
+                    if(player.zhiLiao>0){
+                        choices.push("选项二");
+                    }
+                    player.chooseControl(choices).set('prompt',"月之轮回：选择以下一项发动").set('choiceList',choiceList);
                     'step 1'
-                    if(result.control=='<span class="tiaoJian">(移除1个【暗月】)</span>目标角色+1[治疗]'){
+                    if(result.control=='选项一'){
                         event.goto(2);
-                    }else if(result.control=="<span class='tiaoJian'>(移除你的1[治疗])</span>你+1<span class='hong'>【</span>新月<span class='hong'>】</span>"){
+                    }else if(result.control=="选项二"){
                         event.goto(6);
                     }
                     'step 2'
@@ -2459,7 +2461,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.removeBiShaShuiJing();
                     'step 1'
                     var cards=player.getExpansions('anYue');
-                    player.chooseCardButton(cards,true,'移除X个【暗月】(x<3)本次攻击伤害额外+X',[0,2]);
+                    player.chooseCardButton(cards,true,'暗月斩：移除X个【暗月】(x<3)本次攻击伤害额外+X',[0,2]);
                     'step 2'
                     if(result.links.length>0){
                         event.num=result.links.length;
@@ -2482,15 +2484,16 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 0'
                     player.removeBiShaBaoShi();
                     'step 1'
-                    var list=["移除X点<span class='hong'>【</span>新月<span class='hong'>】</span>，你+1点<span class='lan'>【</span>石化<span class='lan'>】</span>，弃1张牌，对目标对手造成(X+1)点法术伤害③"];
+                    var choiceList=['<span class="tiaoJian">(移除3个【石化】)</span>你的下次主动攻击对手无法应战，额外+1攻击行动。你额外获得一个回合',"移除X点<span class='hong'>【</span>新月<span class='hong'>】</span>，你+1点<span class='lan'>【</span>石化<span class='lan'>】</span>，弃1张牌，对目标对手造成(X+1)点法术伤害③"];
+                    var choices=['选项二']
                     if(player.countMark('shiHua')>=3){
-                        list.unshift('<span class="tiaoJian">(移除3个【石化】)</span>你的下次主动攻击对手无法应战，额外+1攻击行动。你额外获得一个回合');
+                        choices.unshift('选项一');
                     }
-                    player.chooseControl(list).set('prompt','选择以下一项发动');
+                    player.chooseControl(choices).set('prompt','苍白之月：选择以下一项发动').set('choiceList',choiceList);
                     'step 2'
-                    if(result.control=='<span class="tiaoJian">(移除3个【石化】)</span>你的下次主动攻击对手无法应战，额外+1攻击行动。你额外获得一个回合'){
+                    if(result.control=='选项一'){
                         event.goto(3);
-                    }else if(result.control=="移除X点<span class='hong'>【</span>新月<span class='hong'>】</span>，你+1点<span class='lan'>【</span>石化<span class='lan'>】</span>，弃1张牌，对目标对手造成(X+1)点法术伤害③"){
+                    }else if(result.control=="选项二"){
                         event.goto(6);
                     }
                     'step 3'
