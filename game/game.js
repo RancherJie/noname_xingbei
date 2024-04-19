@@ -19757,6 +19757,22 @@
 					next.setContent('changeXingBei');
 					return next;
 				},
+				showGaiPai:function(cards,str){
+					var next=game.createEvent('showGaiPai');
+					next.player=this;
+					next.str=str;
+					if(typeof cards=='string'){
+						str=cards;
+						cards=next.str;
+						next.str=str;
+					}
+					if(get.itemtype(cards)=='card') next.cards=[cards];
+					else if(get.itemtype(cards)=='cards') next.cards=cards.slice(0);
+					else _status.event.next.remove(next);
+					next.setContent('showCards');
+					next._args=Array.from(arguments);
+					return next;
+				},
 
 				when:function(){
 					if(!_status.postReconnect.player_when) _status.postReconnect.player_when=[
