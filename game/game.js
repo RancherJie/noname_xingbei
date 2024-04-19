@@ -15013,8 +15013,8 @@
 					"step 5"
 					if(event.baoPai==true){
 						var next=player.changeShiQi(-event.result.cards.length).set('baoPai',true);
-						if(event.yuanYin=='shangHai'){
-							next.set('yuanYin','shangHai');
+						if(event.yuanYin=='damage'){
+							next.set('yuanYin','damage');
 						}
 						if(event.faShu){
 							next.set('faShu',event.faShu)
