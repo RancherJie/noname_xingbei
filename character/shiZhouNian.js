@@ -233,9 +233,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 
             //狂战士
             kuangHua:{
-                group:"kuangHua_1",
                 forced:true,
-                trigger:{player:'useCardToPlayer'},
+                trigger:{player:'useCardToTargeted'},
 				filter:function(event){
 					if(event.card&&get.type(event.card)=='gongJi'){
 						return true;
@@ -245,19 +244,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				forced:true,
 				content:function(){
 					trigger.getParent().baseDamage++;
-				},
-                subSkill:{
-                    1:{
-                        forced:true,
-                        trigger:{player:'useCardToTargeted'},
-                        filter:function(event,player){
-                            return player.countCards('h')>3;
-                        },
-                        content:function(event,player){
-                            trigger.getParent().baseDamage++;
-                        }
+                    if(player.countCards('h')>3){
+                        trigger.getParent().baseDamage++;
                     }
-                }
+				},
             },
             
             xueYingKuangDao:{
