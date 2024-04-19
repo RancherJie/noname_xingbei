@@ -19773,6 +19773,11 @@
 					next._args=Array.from(arguments);
 					return next;
 				},
+				getZhiLiaoLimit:function(){
+					var num=game.zhiLiaoMax;
+					num=game.checkMod(this,num,'maxZhiLiao',this);
+					return Math.max(0,num);
+				},
 
 				when:function(){
 					if(!_status.postReconnect.player_when) _status.postReconnect.player_when=[
@@ -24608,7 +24613,7 @@
 					if(typeof limit=='number'){
 						var limit=limit;
 					}else{
-						var limit=this.storage.zhiLiaoMax;
+						var limit=this.getZhiLiaoLimit();
 					}
 					if(num>0&&this.zhiLiao+num>parseInt(limit)){
 						var numx=parseInt(limit)-this.zhiLiao;
@@ -41298,6 +41303,7 @@
 			pai:['_shengDun','_xuRuo','_zhongDu'],
 		},
 		handcardLimit:6,
+		zhiLiaoMax:2,
 	};
 	window['b'+'ann'+'e'+'dE'+'x'+'ten'+'s'+'i'+'o'+'ns']=['\u4fa0\u4e49','\u5168\u6559\u7a0b'];
 	const ui={

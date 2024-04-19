@@ -338,9 +338,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 content:function(){
                     'step 0'
                     player.chooseTarget('冰霜祷言：选择一名角色+1[治疗]',true).set('ai',function(target){
-						if(target.side==player.side&&target.zhiLiao<target.storage.zhiLiaoMax){
+						if(target.side==player.side&&target.zhiLiao<target.getZhiLiaoLimit()){
                             return 1;
-                        }else if(target.side==player.side&&target.zhiLiao>=target.storage.zhiLiaoMax){
+                        }else if(target.side==player.side&&target.zhiLiao>=target.getZhiLiaoLimit()){
                             return 0;
                         }else if(target.side!=player.side){
                             return -1;
@@ -365,9 +365,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         content:function(){
                             'step 0'
                             player.chooseTarget('冰霜祷言：选择一名角色+1[治疗]',true).set('ai',function(target){
-                                if(target.side==player.side&&target.zhiLiao<target.storage.zhiLiaoMax){
+                                if(target.side==player.side&&target.zhiLiao<target.getZhiLiaoLimit()){
                                     return 1;
-                                }else if(target.side==player.side&&target.zhiLiao>=target.storage.zhiLiaoMax){
+                                }else if(target.side==player.side&&target.zhiLiao>=target.getZhiLiaoLimit()){
                                     return 0;
                                 }else if(target.side!=player.side){
                                     return -1;
@@ -488,9 +488,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         player.storage.shengLiao=0;
                     }
                     player.chooseTarget('圣疗：选择一名角色+1[治疗]',true).set('ai',function(target){
-						if(target.side==player.side&&target.zhiLiao<target.storage.zhiLiaoMax){
+						if(target.side==player.side&&target.zhiLiao<target.getZhiLiaoLimit()){
                             return 1;
-                        }else if(target.side==player.side&&target.zhiLiao>=target.storage.zhiLiaoMax){
+                        }else if(target.side==player.side&&target.zhiLiao>=target.getZhiLiaoLimit()){
                             return 0;
                         }else if(target.side!=player.side){
                             return -1;
@@ -1342,9 +1342,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         content:function(){
                             'step 0'
                             player.chooseTarget('天使羁绊：选择一名角色+1[治疗]',true).set('ai',function(target){
-                                if(target.side==player.side&&target.zhiLiao<target.storage.zhiLiaoMax){
+                                if(target.side==player.side&&target.zhiLiao<target.getZhiLiaoLimit()){
                                     return 1;
-                                }else if(target.side==player.side&&target.zhiLiao==target.storage.zhiLiaoMax){
+                                }else if(target.side==player.side&&target.zhiLiao==target.getZhiLiaoLimit()){
                                     return 0;
                                 }else{
                                     return 1;
@@ -1367,9 +1367,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         content:function(){
                             'step 0'
                             player.chooseTarget('天使羁绊：选择一名角色+1[治疗]',true).set('ai',function(target){
-                                if(target.side==player.side&&target.zhiLiao<target.storage.zhiLiaoMax){
+                                if(target.side==player.side&&target.zhiLiao<target.getZhiLiaoLimit()){
                                     return 1;
-                                }else if(target.side==player.side&&target.zhiLiao==target.storage.zhiLiaoMax){
+                                }else if(target.side==player.side&&target.zhiLiao==target.getZhiLiaoLimit()){
                                     return 0;
                                 }else{
                                     return 1;
