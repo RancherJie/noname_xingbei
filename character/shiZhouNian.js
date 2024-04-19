@@ -381,31 +381,19 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     return card.hasNature('zhiLiaoShu');
 				},
 				position:'h',
-				viewAs:{name:'faShu',nature:'zhiLiaoShu'},
-				viewAsFilter:function(player){
+				//viewAs:{name:'faShu',nature:'zhiLiaoShu'},
+				filter:function(event,player){
                     return player.countCards('h',function(card){
                         return card.hasNature('zhiLiaoShu');
                     })&&_status.currentPhase==player;
 				},
 				prompt:'目标角色+2[治疗]。',
-                mod:{
-					selectTarget:function(card,player,range){
-                        if(card.name=='faShu'&&card.hasNature('zhiLiaoShu')){
-                            range[0]=1;
-                            range[1]=1;
-                        }
-					}
-				},
-                group:['zhiLiaoShu2'],
-            },
-            zhiLiaoShu2:{
-                forced:true,
-                trigger:{player:"useCardToTargeted"},
-                filter:function(event,player){
-                    return event.card.name=='faShu'&&event.card.hasNature('zhiLiaoShu');
-                },
-                content:function(trigger){
-                    trigger.targets[0].changeZhiLiao(2);
+                filterTarget:true,
+                selectTarget:1,
+                discard:false,
+                prepare:'useCard',
+                content:function(){
+                    target.changeZhiLiao(2);
                 }
             },
             zhiYuZhiGuang:{
@@ -415,33 +403,18 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     return card.hasNature('zhiYuZhiGuang');
 				},
 				position:'h',
-				viewAs:{name:'faShu',nature:'zhiYuZhiGuang'},
-				viewAsFilter:function(player){
+				filter:function(event,player){
                     return player.countCards('h',function(card){
                         return card.hasNature('zhiYuZhiGuang');
                     })&&_status.currentPhase==player;
 				},
 				prompt:'指定最多3名角色各+1[治疗]。',
-                mod:{
-					selectTarget:function(card,player,range){
-                        if(card.name=='faShu'&&card.hasNature('zhiYuZhiGuang')){
-                            range[0]=1;
-                            range[1]=3;
-                        }
-					}
-				},
-                group:['zhiYuZhiGuang2'],
-            },
-            zhiYuZhiGuang2:{
-                forced:true,
-                trigger:{player:"useCardToTargeted"},
-                filter:function(event,player){
-                    return event.card.name=='faShu'&&event.card.hasNature('zhiYuZhiGuang');
-                },
-                content:function(trigger){
-                    for(var target of trigger.targets){
-                        target.changeZhiLiao(1);
-                    }
+                filterTarget:true,
+                selectTarget:[1,3],
+                discard:false,
+                prepare:'useCard',
+                content:function(){
+                    target.changeZhiLiao(1);
                 }
             },
             lianMin:{
@@ -469,37 +442,39 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 filter:function(event,player){
                     return _status.currentPhase==player&&player.canBiShaShuiJing();
                 },
-                content:function(event,player){
-                    'step 0'
+                selectTarget:[1,3],
+                filterTarget:true,
+                contentBefore:function(){
                     player.removeBiShaShuiJing();
-                    'step 1'
-                    if(typeof player.storage.shengLiao!='number'){
-                        player.storage.shengLiao=0;
+                },
+                content:function(){
+                    'step 0'
+                    if(targets.length==1){
+                        target.changeZhiLiao(3);
+                        event.finish();
+                    }else if(targets.length==3||player.storage.shengLiao==2){
+                        target.changeZhiLiao(1);
+                        event.finish();
+                    }else if(player.storage.shengLiao==1){
+                        target.changeZhiLiao(2);
+                        event.finish();
+                    }else{
+                        var list=['1','2'];
+                        var name=get.translation(target)
+                        player.chooseControl(list).set('prompt',name+'获得1[治疗]或2[治疗]');
                     }
-                    player.chooseTarget('圣疗：选择一名角色+1[治疗]',true).set('ai',function(target){
-						if(target.side==player.side&&target.zhiLiao<target.getZhiLiaoLimit()){
-                            return 1;
-                        }else if(target.side==player.side&&target.zhiLiao>=target.getZhiLiaoLimit()){
-                            return 0;
-                        }else if(target.side!=player.side){
-                            return -1;
-                        }else{
-                            return 1;
-                        }
-					});
-                    'step 2'
-					if(result.bool){
-						var target=result.targets[0];
-						player.line(target,'blue');
-						target.changeZhiLiao();
-                        player.storage.shengLiao+=1;
-                        if(player.storage.shengLiao<=2){
-                            event.goto(1);
-                        }
-					}
-                    'step 3'
-                    player.storage.shengLiao=0
-                    var next=player.chooseToUse();
+                    'step 1'
+                    if(result.control=='1'){
+                        target.changeZhiLiao(1);
+                        player.storage.shengLiao=1;
+                    }else if(result.control=='2'){
+                        target.changeZhiLiao(2);
+                        player.storage.shengLiao=2;
+                    }
+                },
+                contentAfter:function(){
+                    player.storage.shengLiao=0;
+                    player.chooseToUse();
                 }
             },
 
