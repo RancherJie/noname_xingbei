@@ -208,7 +208,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             },
             jianYing:{
                 usable:1,
-                enable:'phaseUse',
                 trigger:{player:'useCardAfter'},
                 filter:function(event,player){
                     if(event.yingZhan==true) return false;
