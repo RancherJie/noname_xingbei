@@ -17931,6 +17931,7 @@
 							case 'throw':if(losecard) losecard.visible=true;player.$throw(cards);break;
 							case 'throw2':player.$throw(cards.length);break;
 							case 'useCard':player.useCard(cards);break;
+							case 'showCards':player.showCards(cards);break;
 							default:info.prepare(cards,player,targets);
 						}
 					}
