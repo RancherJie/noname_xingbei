@@ -809,15 +809,15 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 
 			["guang",'huan',"shengGuang"],
 			["guang",'huan',"shengGuang"],
-			["guang",'sheng',"shengGuang",'zhiYuZhiGuang'],
+			["guang",'sheng',"shengGuang",'zhiYuZhiGuang|'],
 			["guang",'xue',"shengGuang"],
 			["guang",'xue',"shengGuang"],
 			["guang",'xue',"shengGuang"],
 			["guang",'ji',"shengGuang"],
 			["guang",'ji',"shengGuang"],
 			["guang",'ji',"shengGuang"],
-			["guang",'sheng',"shengGuang",'zhiLiaoShu'],
-			["guang",'sheng',"shengGuang",'zhiLiaoShu'],
+			["guang",'sheng',"shengGuang",'zhiLiaoShu|'],
+			["guang",'sheng',"shengGuang",'zhiLiaoShu|'],
 
 			['shui','yong',"xuRuo"],
 			['shui','xue',"xuRuo"],
