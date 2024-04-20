@@ -1075,55 +1075,35 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                     return false;
                 },
+                filterCard:function(card){
+                    return get.suit(card)=='feng';
+                },
+                selectCard:1,
+                selectTarget:1,
+                filterTarget:function(card,player,target){
+                    for(var xiaoGuoList in game.jiChuXiaoGuo){
+                        for(var xiaoGuo of game.jiChuXiaoGuo[xiaoGuoList]){
+                            if(target.hasExpansions(xiaoGuo)){
+                                return true;
+                            }
+                        }
+                    }
+                },
+                prepare:'showCards',
                 content:function(){
                     'step 0'
-                    player.chooseToDiscard('h','风之洁净：弃置1张风系牌',true,function(card){
-                        return get.suit(card)=='feng';
-                    })
+                    var list=[];
+                    for(var xiaoGuoList in game.jiChuXiaoGuo){
+                        for(var xiaoGuo of game.jiChuXiaoGuo[xiaoGuoList]){
+                            if(target.hasExpansions(xiaoGuo)){
+                                list.push(xiaoGuo);
+                            }
+                        }
+                    }
+                    player.chooseControl(list).set('prompt','选择要移除的基础效果');
                     'step 1'
-                    player.showCards(result.cards);
-                    if(!function(){
-                        for(var p of game.players){
-                            for(var xiaoGuoList in game.jiChuXiaoGuo){
-                                for(var xiaoGuo of game.jiChuXiaoGuo[xiaoGuoList]){
-                                    if(p.hasExpansions(xiaoGuo)){
-                                        return true;
-                                    }
-                                }
-                            }
-                        }
-                        return false;
-                    }){
-                        event.finish();
-                    }
-                    if(result.bool){
-                        player.chooseTarget('风之洁净：选择1个有基础效果的目标角色',function(card,player,target){
-                            for(var xiaoGuoList in game.jiChuXiaoGuo){
-                                for(var xiaoGuo of game.jiChuXiaoGuo[xiaoGuoList]){
-                                    if(target.hasExpansions(xiaoGuo)){
-                                        return true;
-                                    }
-                                }
-                            }
-                        },true);
-                    }
-                    'step 2'
-                    if(result.bool){
-                        event.target=result.targets[0];
-                        var target=event.target;
-                        var list=[];
-                        for(var xiaoGuoList in game.jiChuXiaoGuo){
-                            for(var xiaoGuo of game.jiChuXiaoGuo[xiaoGuoList]){
-                                if(target.hasExpansions(xiaoGuo)){
-                                    list.push(xiaoGuo);
-                                }
-                            }
-                        }
-                        player.chooseControl(list).set('prompt','选择要移除的基础效果');
-                    }
-                    'step 3'
-                    if(result.control=='zhongDu'){
-                        player.chooseCardButton(target.getExpansions('zhongDu'),true,'选择要移除的中毒')
+                    if(result.control=='_zhongDu'){
+                        player.chooseCardButton(target.getExpansions('_zhongDu'),true,'选择要移除的中毒')
                     }else{
                         target.loseToDiscardpile(target.getExpansions(result.control));
                         if(!game.jiChuXiaoGuo.pai.includes(result.control)){
@@ -1132,9 +1112,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         event.trigger('yiChuJiChuXiaoGuo');
                         event.finish();
                     }
-                    'step 4'
+                    'step 2'
                     var card=result.links[0];
-                    var list=target.getExpansions('zhongDu');
+                    var list=target.getExpansions('_zhongDu');
                     var index=list.indexOf(card);
                     target.storage.zhongDu.splice(index, 1);
                     target.loseToDiscardpile(card);
@@ -1149,62 +1129,32 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         return get.suit(card)=='shui';
                     })&&_status.currentPhase==player;
                 },
+                filterCard:function(card){
+                    return get.suit(card)=='shui';
+                },
+                selectCard:1,
+                selectTarget:[1,2],
+                filterTarget:true,
+                prepare:'showCards',
                 content:function(){
                     'step 0'
-                    player.chooseToDiscard('h','天使祝福：弃置1张水系牌',true,function(card){
-                        return get.suit(card)=='shui';
-                    })
-                    'step 1'
-                    if(result.bool){
-                        player.showCards(result.cards);
-                        player.chooseTarget([1,2],'选择要给你牌的目标角色',true);
-                    }
-                    'step 2'
-                    if(result.bool){
-                        player.storage.tianShiZhuFu=result.targets.sortBySeat();
-                        if(player.storage.tianShiZhuFu.length==1){
-                            event.goto(3);
-                        }else if(player.storage.tianShiZhuFu.length==2){
-                            event.goto(5);
+                    if(targets.length==1){
+                        if(target.countCards('h')>=2){
+                            target.chooseCard('交给守护天使2张牌',true,2);
+                        }else if(target.countCards('h')==1){
+                            target.chooseCard('交给守护天使1张牌',true,1);
+                        }else if(target.countCards('h')==0){
+                            event.finish();
                         }
-                    }else{
-                        event.finish();
+                    }else if(targets.length==2){
+                        if(target.countCards('h')>=1){
+                            target.chooseCard('交给守护天使1张牌',true,1);
+                        }else{
+                            event.finish();
+                        }
                     }
-                    'step 3'
-                    var target=player.storage.tianShiZhuFu[0];
-                    if(target.countCards('h')>=2){
-                        target.chooseCard('交给守护天使2张牌',true,2);
-                    }else if(target.countCards('h')==1){
-                        target.chooseCard('交给守护天使1张牌',true,1);
-                    }else{
-                        event.finish();
-                    }
-                    'step 4'
-                    var target=player.storage.tianShiZhuFu[0];
+                    'step 1'
                     target.give(result.cards,player,'give');
-                    event.finish();
-
-                    'step 5'
-                    var target=player.storage.tianShiZhuFu[0];
-                    if(target.countCards('h')>=1){
-                        target.chooseCard('交给守护天使1张牌',true,1);
-                    }else{
-                        event.goto(7);
-                    }
-                    'step 6'
-                    var target=player.storage.tianShiZhuFu[0];
-                    target.give(result.cards,player,'give');
-                    'step 7'
-                    var target=player.storage.tianShiZhuFu[1];
-                    if(target.countCards('h')>=1){
-                        target.chooseCard('交给守护天使1张牌',true,1);
-                    }else{
-                        event.finish();
-                    }
-                    'step 8'
-                    var target=player.storage.tianShiZhuFu[1];
-                    target.give(result.cards,player,'give');
-                    event.finish();
                 }
             },
             tianShiJiBan:{
