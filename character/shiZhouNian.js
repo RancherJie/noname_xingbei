@@ -651,6 +651,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     return target.side!=player.side&&!target.hasExpansions('diZhiFengYin_xiaoGuo')
                 },
                 prepare:'useCard',
+                discard:false,
                 content:function(){
                     'step 0'
                     if(!target.hasSkill('diZhiFengYin_xiaoGuo')){
@@ -705,6 +706,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     return target.side!=player.side&&!target.hasExpansions('shuiZhiFengYin_xiaoGuo')
                 },
                 prepare:'useCard',
+                discard:false,
                 content:function(){
                     'step 0'
                     if(!target.hasSkill('shuiZhiFengYin_xiaoGuo')){
@@ -759,6 +761,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     return target.side!=player.side&&!target.hasExpansions('huoZhiFengYin_xiaoGuo')
                 },
                 prepare:'useCard',
+                discard:false,
                 content:function(){
                     'step 0'
                     if(!target.hasSkill('huoZhiFengYin_xiaoGuo')){
@@ -813,6 +816,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     return target.side!=player.side&&!target.hasExpansions('fengZhiFengYin_xiaoGuo')
                 },
                 prepare:'useCard',
+                discard:false,
                 content:function(){
                     'step 0'
                     if(!target.hasSkill('fengZhiFengYin_xiaoGuo')){
@@ -867,6 +871,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     return target.side!=player.side&&!target.hasExpansions('leiZhiFengYin_xiaoGuo')
                 },
                 prepare:'useCard',
+                discard:false,
                 content:function(){
                     'step 0'
                     if(!target.hasSkill('leiZhiFengYin_xiaoGuo')){
