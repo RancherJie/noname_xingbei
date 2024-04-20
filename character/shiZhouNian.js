@@ -645,7 +645,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         return card.hasNature('diZhiFengYin');
                     })&&_status.currentPhase==player;
 				},
-				prompt:'该对手获得(直到他从手中打出或展示出地系牌时强制触发)：对他造成3点法术伤害③，触发后移除此牌。',
                 selectTarget:1,
                 filterTarget:function(card,player,target){
                     return target.side!=player.side&&!target.hasExpansions('diZhiFengYin_xiaoGuo')
@@ -703,7 +702,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         return card.hasNature('shuiZhiFengYin');
                     })&&_status.currentPhase==player;
 				},
-				prompt:'该对手获得(直到他从手中打出或展示出水系牌时强制触发)：对他造成3点法术伤害③，触发后移除此牌。',
                 selectTarget:1,
                 filterTarget:function(card,player,target){
                     return target.side!=player.side&&!target.hasExpansions('shuiZhiFengYin_xiaoGuo')
@@ -761,7 +759,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         return card.hasNature('huoZhiFengYin');
                     })&&_status.currentPhase==player;
 				},
-				prompt:'该对手获得(直到他从手中打出或展示出火系牌时强制触发)：对他造成3点法术伤害③，触发后移除此牌。',
                 selectTarget:1,
                 filterTarget:function(card,player,target){
                     return target.side!=player.side&&!target.hasExpansions('huoZhiFengYin_xiaoGuo')
@@ -819,7 +816,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         return card.hasNature('fengZhiFengYin');
                     })&&_status.currentPhase==player;
 				},
-				prompt:'该对手获得(直到他从手中打出或展示出风系牌时强制触发)：对他造成3点法术伤害③，触发后移除此牌。',
                 selectTarget:1,
                 filterTarget:function(card,player,target){
                     return target.side!=player.side&&!target.hasExpansions('fengZhiFengYin_xiaoGuo')
@@ -877,7 +873,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         return card.hasNature('leiZhiFengYin');
                     })&&_status.currentPhase==player;
 				},
-				prompt:'该对手获得(直到他从手中打出或展示出雷系牌时强制触发)：对他造成3点法术伤害③，触发后移除此牌。',
                 selectTarget:1,
                 filterTarget:function(card,player,target){
                     return target.side!=player.side&&!target.hasExpansions('leiZhiFengYin_xiaoGuo')
