@@ -640,7 +640,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     return card.hasNature('diZhiFengYin');
 				},
 				position:'h',
-				filter:function(player){
+				filter:function(event,player){
                     return player.countCards('h',function(card){
                         return card.hasNature('diZhiFengYin');
                     })&&_status.currentPhase==player;
@@ -659,7 +659,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                     'step 1'
                     target.storage.fengYin=player;
-                    target.addToExpansion(card,'gain2',player).gaintag.add('diZhiFengYin_xiaoGuo');
+                    target.addToExpansion(cards,'gain2',player).gaintag.add('diZhiFengYin_xiaoGuo');
                 },
                 subSkill:{
                     xiaoGuo:{
@@ -676,8 +676,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                 if(event.gaiPai==true) return false;
                             }
                             for(var card of event.cards){
-                                return get.suit(card)=='di'&&player.hasExpansions('diZhiFengYin_xiaoGuo');
+                                if(get.suit(card)=='di'){
+                                    return true;
+                                }
                             }
+                            return false;
                         },
                         content:function(player){
                             var next=player.damage(player.storage.fengYin,3);
@@ -695,7 +698,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     return card.hasNature('shuiZhiFengYin');
 				},
 				position:'h',
-				filter:function(player){
+				filter:function(event,player){
                     return player.countCards('h',function(card){
                         return card.hasNature('shuiZhiFengYin');
                     })&&_status.currentPhase==player;
@@ -714,7 +717,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                     'step 1'
                     target.storage.fengYin=player;
-                    target.addToExpansion(card,'gain2',player).gaintag.add('shuiZhiFengYin_xiaoGuo');
+                    target.addToExpansion(cards,'gain2',player).gaintag.add('shuiZhiFengYin_xiaoGuo');
                 },
                 subSkill:{
                     xiaoGuo:{
@@ -731,8 +734,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                 if(event.gaiPai==true) return false;
                             }
                             for(var card of event.cards){
-                                return get.suit(card)=='shui'&&player.hasExpansions('shuiZhiFengYin_xiaoGuo');
+                                if(get.suit(card)=='shui'){
+                                    return true;
+                                };
                             }
+                            return false;
                         },
                         content:function(player){
                             var next=player.damage(player.storage.fengYin,3);
@@ -750,7 +756,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     return card.hasNature('huoZhiFengYin');
 				},
 				position:'h',
-				filter:function(player){
+				filter:function(event,player){
                     return player.countCards('h',function(card){
                         return card.hasNature('huoZhiFengYin');
                     })&&_status.currentPhase==player;
@@ -769,7 +775,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                     'step 1'
                     target.storage.fengYin=player;
-                    target.addToExpansion(card,'gain2',player).gaintag.add('huoZhiFengYin_xiaoGuo');
+                    target.addToExpansion(cards,'gain2',player).gaintag.add('huoZhiFengYin_xiaoGuo');
                 },
                 subSkill:{
                     xiaoGuo:{
@@ -786,8 +792,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                 if(event.gaiPai==true) return false;
                             }
                             for(var card of event.cards){
-                                return get.suit(card)=='huo'&&player.hasExpansions('huoZhiFengYin_xiaoGuo');
+                                if(get.suit(card)=='huo'){
+                                    return true;
+                                };
                             }
+                            return false;
                         },
                         content:function(player){
                             var next=player.damage(player.storage.fengYin,3);
@@ -805,7 +814,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     return card.hasNature('fengZhiFengYin');
 				},
 				position:'h',
-				filter:function(player){
+				filter:function(event,player){
                     return player.countCards('h',function(card){
                         return card.hasNature('fengZhiFengYin');
                     })&&_status.currentPhase==player;
@@ -824,7 +833,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                     'step 1'
                     target.storage.fengYin=player;
-                    target.addToExpansion(card,'gain2',player).gaintag.add('fengZhiFengYin_xiaoGuo');
+                    target.addToExpansion(cards,'gain2',player).gaintag.add('fengZhiFengYin_xiaoGuo');
                 },
                 subSkill:{
                     xiaoGuo:{
@@ -841,8 +850,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                 if(event.gaiPai==true) return false;
                             }
                             for(var card of event.cards){
-                                return get.suit(card)=='feng'&&player.hasExpansions('fengZhiFengYin_xiaoGuo');
+                                if(get.suit(card)=='feng'){
+                                    return true;
+                                };
                             }
+                            return false;
                         },
                         content:function(player){
                             var next=player.damage(player.storage.fengYin,3);
@@ -860,7 +872,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     return card.hasNature('leiZhiFengYin');
 				},
 				position:'h',
-				filter:function(player){
+				filter:function(event,player){
                     return player.countCards('h',function(card){
                         return card.hasNature('leiZhiFengYin');
                     })&&_status.currentPhase==player;
@@ -879,7 +891,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                     'step 1'
                     target.storage.fengYin=player;
-                    target.addToExpansion(card,'gain2',player).gaintag.add('leiZhiFengYin_xiaoGuo');
+                    target.addToExpansion(cards,'gain2',player).gaintag.add('leiZhiFengYin_xiaoGuo');
                 },
                 subSkill:{
                     xiaoGuo:{
@@ -896,8 +908,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                 if(event.gaiPai==true) return false;
                             }
                             for(var card of event.cards){
-                                return get.suit(card)=='lei'&&player.hasExpansions('leiZhiFengYin_xiaoGuo');
+                                if(get.suit(card)=='lei'){
+                                    return true;
+                                };
                             }
+                            return false;
                         },
                         content:function(player){
                             var next=player.damage(player.storage.fengYin,3);
