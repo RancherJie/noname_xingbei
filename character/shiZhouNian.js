@@ -1377,34 +1377,19 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				filterCard:function(card){
                     return card.hasNature('shanGuangXianJing');
 				},
+                selectCard:1,
 				position:'h',
-				viewAs:{name:'faShu',nature:'shanGuangXianJing'},
-				viewAsFilter:function(player){
+				filter:function(event,player){
                     return player.countCards('h',function(card){
                         return card.hasNature('shanGuangXianJing');
                     })&&_status.currentPhase==player;
 				},
-				prompt:'对目标角色造成2点法术伤害③',
-                mod:{
-					selectTarget:function(card,player,range){
-                        if(card.name=='faShu'&&card.hasNature('shanGuangXianJing')){
-                            range[0]=1;
-                            range[1]=1;
-                        }
-					},
-				},
-                group:['shanGuangXianJing_zhiXing'],
-            },
-            shanGuangXianJing_zhiXing:{
-                forced:true,
-                trigger:{player:"useCardToTargeted"},
-                filter:function(event){
-                    return event.card.name=='faShu'&&event.card.hasNature('shanGuangXianJing');
-                },
-                content:function(trigger){
-                    var next=trigger.target.damage(2,player);
-                    next.faShu=true;
-                },
+                selectTarget:1,
+                filterTarget:true,
+                useCard:true,
+                content:function(){
+                    target.damageFaShu(2,player);
+                }
             },
             jingZhunSheJi:{
                 trigger:{player:'useCard'},
@@ -1431,13 +1416,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 filter:function(event,player){
                     return player.canBiShaShuiJing()&&_status.currentPhase==player;
                 },
+                selectTarget:1,
+                filterTarget:true,
                 content:function(){
                     'step 0'
                     player.removeBiShaShuiJing();
                     'step 1'
-                    player.chooseTarget(1,true,'狙击：目标角色手牌补到5张[强制]，额外+1攻击行动');
-                    'step 2'
-                    result.targets[0].drawTo(5);
+                    target.drawTo(5);
                     player.gongJi('狙击：攻击行动');
                 }
             },
