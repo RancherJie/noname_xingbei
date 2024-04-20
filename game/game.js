@@ -17835,7 +17835,7 @@
 					game.trySkillAudio(event.skill,player);
 					var checkShow=player.checkShow(event.skill);
 					if(info.useCard&&!info.viewAs){
-						playre.useCard(cards);
+						player.useCard(cards);
 					}else if(info.discard!=false&&info.lose!=false&&!info.viewAs){
 						player.discard(cards).delay=false;
 						if(lib.config.low_performance){
