@@ -809,7 +809,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 
 			["guang",'huan',"shengGuang"],
 			["guang",'huan',"shengGuang"],
-			["guang",'sheng',"shengGuang",'zhiYuZhiGuang|'],
+			["guang",'sheng',"shengGuang",'zhiLiaoShu|'],
 			["guang",'xue',"shengGuang"],
 			["guang",'xue',"shengGuang"],
 			["guang",'xue',"shengGuang"],
