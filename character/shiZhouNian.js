@@ -640,28 +640,26 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     return card.hasNature('diZhiFengYin');
 				},
 				position:'h',
-				viewAs:{name:'faShu',nature:'diZhiFengYin'},
-				viewAsFilter:function(player){
+				filter:function(player){
                     return player.countCards('h',function(card){
                         return card.hasNature('diZhiFengYin');
                     })&&_status.currentPhase==player;
 				},
 				prompt:'该对手获得(直到他从手中打出或展示出地系牌时强制触发)：对他造成3点法术伤害③，触发后移除此牌。',
-                mod:{
-					selectTarget:function(card,player,range){
-                        if(card.name=='faShu'&&card.hasNature('diZhiFengYin')){
-                            range[0]=1;
-                            range[1]=1;
-                        }
-					},
-					playerEnabled:function (card,player,target){
-                        if(card.name=='faShu'&&card.hasNature('diZhiFengYin')&&(target.side==player.side||target.hasExpansions('diZhiFengYin_xiaoGuo'))){
-                            return false;
-                        }
+                selectTarget:1,
+                filterTarget:function(card,player,target){
+                    return target.side!=player.side&&!target.hasExpansions('diZhiFengYin_xiaoGuo')
+                },
+                prepare:'useCard',
+                content:function(){
+                    'step 0'
+                    if(!target.hasSkill('diZhiFengYin_xiaoGuo')){
+                        target.addSkill('diZhiFengYin_xiaoGuo');
                     }
-
-				},
-                group:['diZhiFengYin_zhiXing'],
+                    'step 1'
+                    target.storage.fengYin=player;
+                    target.addToExpansion(card,'gain2',player).gaintag.add('diZhiFengYin_xiaoGuo');
+                },
                 subSkill:{
                     xiaoGuo:{
                         marktext:"地",
@@ -689,24 +687,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     },
                 }
             },
-            diZhiFengYin_zhiXing:{
-                forced:true,
-                trigger:{player:"useCardToTargeted"},
-                filter:function(event){
-                    return event.card.name=='faShu'&&event.card.hasNature('diZhiFengYin');
-                },
-                content:function(trigger){
-                    'step 0'
-                    var target=trigger.targets[0];
-                    if(!target.hasSkill('diZhiFengYin_xiaoGuo')){
-                        target.addSkill('diZhiFengYin_xiaoGuo');
-                    }
-                    'step 1'
-                    var target=trigger.targets[0];
-                    target.storage.fengYin=player;
-                    target.addToExpansion(trigger.cards,'gain2',player).gaintag.add('diZhiFengYin_xiaoGuo');
-                },
-            },
             shuiZhiFengYin:{
                 faShu:true,
                 enable:['chooseToUse','faShu'],
@@ -714,28 +694,26 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     return card.hasNature('shuiZhiFengYin');
 				},
 				position:'h',
-				viewAs:{name:'faShu',nature:'shuiZhiFengYin'},
-				viewAsFilter:function(player){
+				filter:function(player){
                     return player.countCards('h',function(card){
                         return card.hasNature('shuiZhiFengYin');
                     })&&_status.currentPhase==player;
 				},
 				prompt:'该对手获得(直到他从手中打出或展示出水系牌时强制触发)：对他造成3点法术伤害③，触发后移除此牌。',
-                mod:{
-					selectTarget:function(card,player,range){
-                        if(card.name=='faShu'&&card.hasNature('shuiZhiFengYin')){
-                            range[0]=1;
-                            range[1]=1;
-                        }
-					},
-					playerEnabled:function (card,player,target){
-                        if(card.name=='faShu'&&card.hasNature('shuiZhiFengYin')&&(target.side==player.side||target.hasExpansions('shuiZhiFengYin_xiaoGuo'))){
-                            return false;
-                        }
+                selectTarget:1,
+                filterTarget:function(card,player,target){
+                    return target.side!=player.side&&!target.hasExpansions('shuiZhiFengYin_xiaoGuo')
+                },
+                prepare:'useCard',
+                content:function(){
+                    'step 0'
+                    if(!target.hasSkill('shuiZhiFengYin_xiaoGuo')){
+                        target.addSkill('shuiZhiFengYin_xiaoGuo');
                     }
-
-				},
-                group:['shuiZhiFengYin_zhiXing'],
+                    'step 1'
+                    target.storage.fengYin=player;
+                    target.addToExpansion(card,'gain2',player).gaintag.add('shuiZhiFengYin_xiaoGuo');
+                },
                 subSkill:{
                     xiaoGuo:{
                         marktext:"水",
@@ -763,24 +741,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     },
                 }
             },
-            shuiZhiFengYin_zhiXing:{
-                forced:true,
-                trigger:{player:"useCardToTargeted"},
-                filter:function(event){
-                    return event.card.name=='faShu'&&event.card.hasNature('shuiZhiFengYin');
-                },
-                content:function(trigger){
-                    'step 0'
-                    var target=trigger.targets[0];
-                    if(!target.hasSkill('shuiZhiFengYin_xiaoGuo')){
-                        target.addSkill('shuiZhiFengYin_xiaoGuo');
-                    }
-                    'step 1'
-                    var target=trigger.targets[0];
-                    target.storage.fengYin=player;
-                    target.addToExpansion(trigger.cards,'gain2',player).gaintag.add('shuiZhiFengYin_xiaoGuo');
-                },
-            },
             huoZhiFengYin:{
                 faShu:true,
                 enable:['chooseToUse','faShu'],
@@ -788,28 +748,26 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     return card.hasNature('huoZhiFengYin');
 				},
 				position:'h',
-				viewAs:{name:'faShu',nature:'huoZhiFengYin'},
-				viewAsFilter:function(player){
+				filter:function(player){
                     return player.countCards('h',function(card){
                         return card.hasNature('huoZhiFengYin');
                     })&&_status.currentPhase==player;
 				},
 				prompt:'该对手获得(直到他从手中打出或展示出火系牌时强制触发)：对他造成3点法术伤害③，触发后移除此牌。',
-                mod:{
-					selectTarget:function(card,player,range){
-                        if(card.name=='faShu'&&card.hasNature('huoZhiFengYin')){
-                            range[0]=1;
-                            range[1]=1;
-                        }
-					},
-					playerEnabled:function (card,player,target){
-                        if(card.name=='faShu'&&card.hasNature('huoZhiFengYin')&&(target.side==player.side||target.hasExpansions('huoZhiFengYin_xiaoGuo'))){
-                            return false;
-                        }
+                selectTarget:1,
+                filterTarget:function(card,player,target){
+                    return target.side!=player.side&&!target.hasExpansions('huoZhiFengYin_xiaoGuo')
+                },
+                prepare:'useCard',
+                content:function(){
+                    'step 0'
+                    if(!target.hasSkill('huoZhiFengYin_xiaoGuo')){
+                        target.addSkill('huoZhiFengYin_xiaoGuo');
                     }
-
-				},
-                group:['huoZhiFengYin_zhiXing'],
+                    'step 1'
+                    target.storage.fengYin=player;
+                    target.addToExpansion(card,'gain2',player).gaintag.add('huoZhiFengYin_xiaoGuo');
+                },
                 subSkill:{
                     xiaoGuo:{
                         marktext:"火",
@@ -837,24 +795,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     },
                 }
             },
-            huoZhiFengYin_zhiXing:{
-                forced:true,
-                trigger:{player:"useCardToTargeted"},
-                filter:function(event){
-                    return event.card.name=='faShu'&&event.card.hasNature('huoZhiFengYin');
-                },
-                content:function(trigger){
-                    'step 0'
-                    var target=trigger.targets[0];
-                    if(!target.hasSkill('huoZhiFengYin_xiaoGuo')){
-                        target.addSkill('huoZhiFengYin_xiaoGuo');
-                    }
-                    'step 1'
-                    var target=trigger.targets[0];
-                    target.storage.fengYin=player;
-                    target.addToExpansion(trigger.cards,'gain2',player).gaintag.add('huoZhiFengYin_xiaoGuo');
-                },
-            },
             fengZhiFengYin:{
                 faShu:true,
                 enable:['chooseToUse','faShu'],
@@ -862,28 +802,26 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     return card.hasNature('fengZhiFengYin');
 				},
 				position:'h',
-				viewAs:{name:'faShu',nature:'fengZhiFengYin'},
-				viewAsFilter:function(player){
+				filter:function(player){
                     return player.countCards('h',function(card){
                         return card.hasNature('fengZhiFengYin');
                     })&&_status.currentPhase==player;
 				},
 				prompt:'该对手获得(直到他从手中打出或展示出风系牌时强制触发)：对他造成3点法术伤害③，触发后移除此牌。',
-                mod:{
-					selectTarget:function(card,player,range){
-                        if(card.name=='faShu'&&card.hasNature('fengZhiFengYin')){
-                            range[0]=1;
-                            range[1]=1;
-                        }
-					},
-					playerEnabled:function (card,player,target){
-                        if(card.name=='faShu'&&card.hasNature('fengZhiFengYin')&&(target.side==player.side||target.hasExpansions('fengZhiFengYin_xiaoGuo'))){
-                            return false;
-                        }
+                selectTarget:1,
+                filterTarget:function(card,player,target){
+                    return target.side!=player.side&&!target.hasExpansions('fengZhiFengYin_xiaoGuo')
+                },
+                prepare:'useCard',
+                content:function(){
+                    'step 0'
+                    if(!target.hasSkill('fengZhiFengYin_xiaoGuo')){
+                        target.addSkill('fengZhiFengYin_xiaoGuo');
                     }
-
-				},
-                group:['fengZhiFengYin_zhiXing'],
+                    'step 1'
+                    target.storage.fengYin=player;
+                    target.addToExpansion(card,'gain2',player).gaintag.add('fengZhiFengYin_xiaoGuo');
+                },
                 subSkill:{
                     xiaoGuo:{
                         marktext:"风",
@@ -911,25 +849,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     },
                 }
             },
-            fengZhiFengYin_zhiXing:{
-                forced:true,
-                trigger:{player:"useCardToTargeted"},
-                filter:function(event){
-                    return event.card.name=='faShu'&&event.card.hasNature('fengZhiFengYin');
-                },
-                content:function(trigger){
-                    'step 0'
-                    var target=trigger.targets[0];
-                    if(!target.hasSkill('fengZhiFengYin_xiaoGuo')){
-                        target.addSkill('fengZhiFengYin_xiaoGuo');
-                    }
-                    'step 1'
-                    var target=trigger.targets[0];
-                    target.storage.fengYin=player;
-                    target.addToExpansion(trigger.cards,'gain2',player).gaintag.add('fengZhiFengYin_xiaoGuo');
-
-                },
-            },
             leiZhiFengYin:{
                 faShu:true,
                 enable:['chooseToUse','faShu'],
@@ -937,28 +856,26 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     return card.hasNature('leiZhiFengYin');
 				},
 				position:'h',
-				viewAs:{name:'faShu',nature:'leiZhiFengYin'},
-				viewAsFilter:function(player){
+				filter:function(player){
                     return player.countCards('h',function(card){
                         return card.hasNature('leiZhiFengYin');
                     })&&_status.currentPhase==player;
 				},
 				prompt:'该对手获得(直到他从手中打出或展示出雷系牌时强制触发)：对他造成3点法术伤害③，触发后移除此牌。',
-                mod:{
-					selectTarget:function(card,player,range){
-                        if(card.name=='faShu'&&card.hasNature('leiZhiFengYin')){
-                            range[0]=1;
-                            range[1]=1;
-                        }
-					},
-					playerEnabled:function (card,player,target){
-                        if(card.name=='faShu'&&card.hasNature('leiZhiFengYin')&&(target.side==player.side||target.hasExpansions('leiZhiFengYin_xiaoGuo'))){
-                            return false;
-                        }
+                selectTarget:1,
+                filterTarget:function(card,player,target){
+                    return target.side!=player.side&&!target.hasExpansions('leiZhiFengYin_xiaoGuo')
+                },
+                prepare:'useCard',
+                content:function(){
+                    'step 0'
+                    if(!target.hasSkill('leiZhiFengYin_xiaoGuo')){
+                        target.addSkill('leiZhiFengYin_xiaoGuo');
                     }
-
-				},
-                group:['leiZhiFengYin_zhiXing'],
+                    'step 1'
+                    target.storage.fengYin=player;
+                    target.addToExpansion(card,'gain2',player).gaintag.add('leiZhiFengYin_xiaoGuo');
+                },
                 subSkill:{
                     xiaoGuo:{
                         marktext:"雷",
@@ -986,24 +903,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     },
                 }
             },
-            leiZhiFengYin_zhiXing:{
-                forced:true,
-                trigger:{player:"useCardToTargeted"},
-                filter:function(event){
-                    return event.card.name=='faShu'&&event.card.hasNature('leiZhiFengYin');
-                },
-                content:function(trigger){
-                    'step 0'
-                    var target=trigger.targets[0];
-                    if(!target.hasSkill('leiZhiFengYin_xiaoGuo')){
-                        target.addSkill('leiZhiFengYin_xiaoGuo');
-                    }
-                    'step 1'
-                    var target=trigger.targets[0];
-                    target.storage.fengYin=player;
-                    target.addToExpansion(trigger.cards,'gain2',player).gaintag.add('leiZhiFengYin_xiaoGuo');
-                },
-            },
             wuXiShuFu:{
                 faShu:true,
                 enable:['chooseToUse','faShu'],
@@ -1014,21 +913,16 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                     return true;
                 },
+                selectTarget:1,
+                filterTarget:function(card,player,target){
+                    return target.side!=player.side;
+                },
                 content:function(){
                     'step 0'
                     player.removeBiShaShuiJing();
                     'step 1'
-                    player.chooseTarget(true,'五系束缚：选择【五系束缚】的目标对手',function(card,player,target){
-                        if(target.side!=player.side){
-                            return true;
-                        }});
-                    'step 2'
-                    if(result.bool){
-						var target=result.targets[0];
-						player.line(target,'blue');
-                        target.addSkill('wuXiShuFu_xiaoGuo')
-						target.addMark('wuXiShuFu_xiaoGuo');
-					}
+                    target.addSkill('wuXiShuFu_xiaoGuo')
+					target.addMark('wuXiShuFu_xiaoGuo');
                 },
                 subSkill:{
                     xiaoGuo:{
@@ -1057,7 +951,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                 }
                             }
                             var list=[`摸2+${x}张牌`,'跳过行动阶段'];
-                            if(player.hasExpansions('xuRuo')){
+                            if(player.hasExpansions('_xuRuo')){
                                 list[0]=`摸2+3+${x}张牌`;
                             }
                             player.chooseControl().set('choiceList',list).set('prompt','五系束缚：选择一项').set('ai',function(){return 1;});
@@ -1095,36 +989,32 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                     return false;
                 },
+                filterTarget:function(card,player,target){
+                    for(var xiaoGuoList in game.jiChuXiaoGuo){
+                        for(var xiaoGuo of game.jiChuXiaoGuo[xiaoGuoList]){
+                            if(target.hasExpansions(xiaoGuo)){
+                                return true;
+                            }
+                        }
+                    }
+                },
+                selectTarget:1,
                 content:function(player,event){
                     'step 0'
                     player.removeBiShaShuiJing();
                     'step 1'
-                    player.chooseTarget('封印破碎：选择1个有基础效果的目标角色',function(card,player,target){
-                        for(var xiaoGuoList in game.jiChuXiaoGuo){
-                            for(var xiaoGuo of game.jiChuXiaoGuo[xiaoGuoList]){
-                                if(target.hasExpansions(xiaoGuo)){
-                                    return true;
-                                }
+                    var list=[];
+                    for(var xiaoGuoList in game.jiChuXiaoGuo){
+                        for(var xiaoGuo of game.jiChuXiaoGuo[xiaoGuoList]){
+                            if(target.hasExpansions(xiaoGuo)){
+                                list.push(xiaoGuo);
                             }
                         }
-                    },true);
-                    'step 2'
-                    if(result.bool){
-                        var target=result.targets[0];
-                        event.target=target;
-                        var list=[];
-                        for(var xiaoGuoList in game.jiChuXiaoGuo){
-                            for(var xiaoGuo of game.jiChuXiaoGuo[xiaoGuoList]){
-                                if(target.hasExpansions(xiaoGuo)){
-                                    list.push(xiaoGuo);
-                                }
-                            }
-                        }
-                        player.chooseControl(list).set('prompt','选择要获得的基础效果');
                     }
-                    'step 3'
-                    if(result.control=='zhongDu'){
-                        player.chooseCardButton(target.getExpansions('zhongDu'),true,'选择要获得的中毒')
+                    player.chooseControl(list).set('prompt','选择要获得的基础效果');
+                    'step 2'
+                    if(result.control=='_zhongDu'){
+                        player.chooseCardButton(target.getExpansions('_zhongDu'),true,'选择要获得的中毒')
                     }else{
                         player.gain(target.getExpansions(result.control));
                         if(!game.jiChuXiaoGuo.pai.includes(result.control)){
@@ -1132,9 +1022,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         }
                         event.finish();
                     }
-                    'step 4'
+                    'step 3'
                     var card=result.links[0];
-                    var list=target.getExpansions('zhongDu');
+                    var list=target.getExpansions('_zhongDu');
                     var index=list.indexOf(card);
                     target.storage.zhongDu.splice(index, 1);
                     player.gain(card);
