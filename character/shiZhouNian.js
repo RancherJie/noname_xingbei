@@ -1434,13 +1434,16 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 filter:function(event,player){
                     return player.countCards('h',card=>get.type(card)=='faShu')&&_status.currentPhase==player;
                 },
-                content:function(player){
-                    'step 0'
-                    player.chooseToDiscard(1,'魔爆冲击：弃置1张法术牌',true,function(card){
-                        return get.type(card)=='faShu';
-                    });
-                    'step 1'
-                    player.showCards(result.cards);
+                selectTarget:2,
+                filterTarget:function(card,player,target){
+                    return target.side!=player.side;
+                },
+                selectCard:1,
+                filterCard:function(card){
+                    return get.type(card)=='faShu';
+                },
+                prepare:'showCards',
+                contentBefore:function(){
                     if(player.side==true){
                         if(game.hongZhanJi.length<5){
                             player.changeZhanJi('r',1);
@@ -1450,15 +1453,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             player.changeZhanJi('r',1);
                         }
                     }
-                    player.chooseTarget(2,'选择2名目标对手',true,function(card,player,target){
-                        if(target.side!=player.side){
-                            return true;
-                        };
-                    });
-                    'step 2'
-                    player.storage.moBaoChongJi=result.targets.sortBySeat();
+                },
+                content:function(){
                     'step 3'
-                    var target=player.storage.moBaoChongJi[0];
                     target.chooseToDiscard(1,function(card){
                         return get.type(card)=='faShu';
                     }).set('ai',function(){
@@ -1466,29 +1463,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     })
                     'step 4'
                     if(result.bool){
-                        var target=player.storage.moBaoChongJi[0];
                         target.showCards(result.cards);
                     }else{
-                        var target=player.storage.moBaoChongJi[0];
-                        var next=target.damage(2,player);
-                        next.faShu=true;
-                        if(player.countCards('h')>=1){
-                            player.chooseToDiscard(1,true);
-                        }
-                    }
-                    'setp 5'
-                    var target=player.storage.moBaoChongJi[1];
-                    target.chooseToDiscard(1,function(card){
-                        return get.type(card)=='faShu';
-                    }).set('ai',function(){
-                        return 1 ;
-                    })
-                    'step 6'
-                    if(result.bool){
-                        var target=player.storage.moBaoChongJi[1];
-                        target.showCards(result.cards);
-                    }else{
-                        var target=player.storage.moBaoChongJi[1];
                         var next=target.damage(2,player);
                         next.faShu=true;
                         if(player.countCards('h')>=1){
@@ -1542,7 +1518,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         return get.suit(card)=='di'||get.suit(card)=='huo';
                     });
 				},
-				prompt:'将地系或火系牌当作【魔弹】',
             },
             huiMieFengBao:{
                 faShu:true,
@@ -1550,20 +1525,16 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 filter:function(event,player){
                     return player.canBiShaBaoShi()&&_status.currentPhase==player;
                 },
-                content:function(player){
-                    'step 0'
+                selectTarget:2,
+                filterTarget:function(card,player,target){
+                    return target.side!=player.side;
+                },
+                contentBefore:function(){
                     player.removeBiShaBaoShi();
-                    'step 1'
-                    player.chooseTarget(2,'毁灭风暴：对2名目标对手各造成2点法术伤害③',true,function(card,player,target){
-                        if(target.side!=player.side){
-                            return true;
-                        };
-                    });
-                    'step 2'
-                    for(var target of result.targets.sortBySeat()){
-                        var next=target.damage(2,player);
-                        next.faShu=true;
-                    }
+                },
+                content:function(){
+                    var next=target.damage(2,player);
+                    next.faShu=true;
                 }
             },
 
