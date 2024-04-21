@@ -615,7 +615,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         trigger:{player:'useCardAfter'},
                         filter:function(event,player){
                             if(event.yingZhan==true) return false;
-                            return get.type(event.card)=='faShu';
+                            return get.type(event.card)=='faShu'&&_status.currentPhase==player;
                         },
                         content:function(){
                             player.gongJi('法术激荡：攻击行动');
