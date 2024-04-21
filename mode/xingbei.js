@@ -2973,38 +2973,44 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					return player.countCards('h')+3<=player.getHandcardLimit();
 				},
 				content:function(event,player){
-					var list=['宝石','水晶']
+					'step 0'
 					player.draw(3).set('yuanYin','teShuXingDong');
-					if(player.side==true){
+					event.trigger('gouMai');
+					'step 1'
+					var side=player.side;
+					var num=0;
+					if(side==true){
 						if(game.hongZhanJi.length<=3){
-							player.changeZhanJi('r',1);
-							player.changeZhanJi('b',1);
-						}else if(game.hongZhanJi.length==4){
-							player.chooseControl(list,function(event,player){
-								return '宝石';
-							}).set('prompt','选择获得的星石');
-							if(result.control=='宝石'){
-								player.changeZhanJi('r',1);
-							}else{
-								player.changeZhanJi('b',1);
-							}
+							num=2;
+						}else if(game.hongZhanJi.length==5){
+							num=0;
+						}else{
+							num=1;
 						}
-					}else if(player.side==false){
+					}else if(side==false){
 						if(game.lanZhanJi.length<=3){
-							player.changeZhanJi('r',1);
-							player.changeZhanJi('b',1);
-						}else if(game.lanZhanJi.length==4){
-							player.chooseControl(list,function(event,player){
-								return '宝石';
-							}).set('prompt','选择获得的星石');
-							if(result.control=='宝石'){
-								player.changeZhanJi('r',1);
-							}else{
-								player.changeZhanJi('b',1);
-							}
+							num=2;
+						}else if(game.lanZhanJi.length==5){
+							num=0;
+						}else{
+							num=1;
 						}
 					}
-					
+					if(num==0){
+						event.finish();
+					}else if(num==2){
+						player.addZhanJi('r',1);
+						player.addZhanJi('b',1);
+					}else if(num==1){
+						var list=['宝石','水晶'];
+						player.chooseControl(list).set('prompt','选择获得的星石').set('ai',function(){return 0;});
+					}
+					'step 2'
+					if(result.control=='宝石'){
+						player.addZhanJi('r',1);
+					}else if(result.control=='水晶'){
+						player.addZhanJi('b',1);
+					}
 				},
 				ai:{
 					order:5,
