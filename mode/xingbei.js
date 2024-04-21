@@ -2650,6 +2650,8 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
             _tiLian:"提炼",
             _gongJiXingShi:"攻击星石",
             _quXiao:'取消',
+
+			_tiLian_backup:'提炼'
 		},
 		skill:{
             _zhiLiao:{
@@ -3097,7 +3099,6 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				},
 				enable:'phaseUse',
 				usable:1,
-
 				filter:function(event,player){
                     var nengLiang_num=player.countMark('_tiLian_r')+player.countMark('_tiLian_b');
                     var empty_nengliang=player.getNengLiangLimit()-nengLiang_num;
@@ -3107,46 +3108,48 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						return game.lanZhanJi.length>=1&&empty_nengliang>=1;
 					}
 				},
-				content:function(event,player){
-                    var nengLiang_num=player.countMark('_tiLian_r')+player.countMark('_tiLian_b');
-					if(player.getNengLiangLimit()-nengLiang_num==1){
-						var num=1;
-					}else if(player.getNengLiangLimit()-nengLiang_num>=2){
-						var num=2;
-					}
-					"step 0"
-					if(player.side==true){
-						var list=game.hongZhanJi;
-					}else{
-						var list=game.lanZhanJi;
-					}
-					var next=player.chooseButton([
-						'请选择提炼的星石',
-						[list,'tdnodes'],
-					]);
-					next.set('forced',true);
-					next.set('selectButton',[1,num]);
-					next.set('ai',function(button){
-						switch(button.link){
-							case 0:{
-								return 1;
-							}
-							case 1:{
-								return 1;
-							}
+				chooseButton:{
+					dialog:function(event,player){
+						var dialog=ui.create.dialog('提炼：选择星石','hidden');
+						if(player.side==true){
+							var list=game.hongZhanJi;
+						}else if(player.side==false){
+							var list=game.lanZhanJi;
 						}
-					});
-					"step 1"
-					for(var i=0;i<result.links.length;i++){
-						if(result.links[i]=='宝石'){
-							player.addMark('_tiLian_r');
-							player.changeZhanJi('r',-1);
-						}else if(result.links[i]=='水晶'){
-							player.addMark('_tiLian_b');
-							player.changeZhanJi('b',-1);
+						dialog.add([list,'tdnodes']);
+						return dialog;
+						
+					},
+					backup:function(links,player){
+						return{
+							links:links,
+							content:function(){
+								'step 0'
+								event.links=lib.skill._tiLian_backup.links;
+								event.trigger('tiLian');
+								'step 1'
+								for(var i=0;i<event.links.length;i++){
+									if(event.links[i]=='宝石'){
+										player.addMark('_tiLian_r');
+										player.changeZhanJi('r',-1);
+									}else if(event.links[i]=='水晶'){
+										player.addMark('_tiLian_b');
+										player.changeZhanJi('b',-1);
+									}
+								}
+							},
 						}
-					}
-					
+					},
+					select:function(){
+						var player=_status.event.player;
+						var nengLiang_num=player.countMark('_tiLian_r')+player.countMark('_tiLian_b');
+						if(player.getNengLiangLimit()-nengLiang_num==1){
+							var range=[1,1];
+						}else if(player.getNengLiangLimit()-nengLiang_num>=2){
+							var range=[1,2];
+						}
+						return range;
+					},
 				},
 			},
 			_gongJiXingShi:{//攻击获得星石
