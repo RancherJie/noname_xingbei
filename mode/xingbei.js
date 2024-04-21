@@ -3535,6 +3535,30 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					if(typeof num!='number'||!num) num=1;
 					this.removeMark(zhiShuWu,num);
 				},
+				addZhanJi:function(color,num){
+					if(typeof num!='number'||!num) num=1;
+					if(this.side==true){
+						if(!(game.hongZhanJi.length+num<=5)){
+							num=5-game.hongZhanJi.length;
+						}
+					}else if(this.side==false){
+						if(!(game.lanZhanJi.length+num<=5)){
+							num=5-game.lanZhanJi.length;
+						}
+					}
+					if(num>0){
+						this.changeZhanJi(color,num);
+					}
+				},
+				removeZhanJi:function(color,num){
+					if(typeof num!='number'||!num) num=-1;
+					if(num>0) num=-num;
+					if(this.side==true){
+						this.changeZhanJi(color,num);
+					}else if(this.side==false){
+						this.changeZhanJi(color,num);
+					}
+				},
 
 				dieAfter2:function(source){
 					if(_status.connectMode&&_status.mode!='guandu'){
