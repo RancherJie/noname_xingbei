@@ -2651,7 +2651,9 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
             _gongJiXingShi:"攻击星石",
             _quXiao:'取消',
 
-			_tiLian_backup:'提炼'
+			_tiLian_backup:'提炼',
+			_heCheng_backup:'合成',
+			
 		},
 		skill:{
             _zhiLiao:{
@@ -3022,43 +3024,49 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						return game.lanZhanJi.length>=3&&player.countCards('h')+3<=player.getHandcardLimit();
 					}
 				},
-				content:function(event,player){
-					"step 0"
-					if(player.side==true){
-						var list=game.hongZhanJi;
-					}else{
-						var list=game.lanZhanJi;
-					}
-					var next=player.chooseButton([
-						'合成请选择三个星石',
-						[list,'tdnodes'],
-					]);
-					next.set('forced',true);
-					next.set('selectButton',3);
-					next.set('ai',function(button){
+				chooseButton:{
+					dialog:function(event,player){
+						var dialog=ui.create.dialog('合成：选择星石','hidden');
+						if(player.side==true){
+							var list=game.hongZhanJi;
+						}else if(player.side==false){
+							var list=game.lanZhanJi;
+						}
+						dialog.add([list,'tdnodes']);
+						return dialog;
+					},
+					backup:function(links,player){
+						return{
+							links:links,
+							content:function(){
+								'step 0'
+								event.links=lib.skill._heCheng_backup.links;
+								event.trigger('heCheng');
+								'step 1'
+								player.draw(3).set('yuanYin','teShuXingDong');
+								'step 2'
+								for(var i=0;i<event.links.length;i++){
+									if(event.links[i]=='宝石'){
+										player.changeZhanJi('r',-1);
+									}else if(event.links[i]=='水晶'){
+										player.changeZhanJi('b',-1);
+									}
+								}
+								player.changeXingBei(1);
+							},
+						}
+					},
+					select:3,
+					check:function(button,player){
 						switch(button.link){
-							case 0:{
+							case '水晶':{
+								return 2;
+							}
+							case '宝石':{
 								return 1;
 							}
-							case 1:{
-								return 1;
-							}
-							case 2:{
-								return 1;;
-							}
-						}
-					});
-					"step 1"
-					for(var i=0;i<result.links.length;i++){
-						if(result.links[i]=='宝石'){
-							player.changeZhanJi('r',-1);
-						}else if(result.links[i]=='水晶'){
-							player.changeZhanJi('b',-1);
 						}
 					}
-					player.draw(3).set('yuanYin','teShuXingDong');
-					player.changeXingBei(1);
-					if(!result.links.contains(0)) event.finish();
 				},
 				ai:{
 					order:50,
