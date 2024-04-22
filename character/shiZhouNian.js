@@ -1570,10 +1570,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             zhiXuZhiYin:{
                 faShu:true,
                 enable:['chooseToUse','faShu'],
-                selectTarget:1,
-                filterTarget:function(card,player,target){
-                    return player==target;
-                },
                 content:function(){
                     'step 0'
                     player.draw(2);
