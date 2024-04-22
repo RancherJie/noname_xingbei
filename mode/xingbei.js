@@ -2709,7 +2709,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
                     return info.qiDong;
                 },
                 content:function(){
-                    player.chooseToUse();
+                    player.chooseToUse(true);
                 }
             },
 
