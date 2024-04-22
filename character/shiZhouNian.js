@@ -426,12 +426,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 content:function(){
                     player.removeBiShaBaoShi();
                     player.link();
-                    player.storage.lianMin=true;
                     player.changeNengLiang('b');
                 },
                 mod:{
                     maxHandcardFinal:function(player,num){
-                        if(player.storage.lianMin==true) return 7
+                        if(player.isLinked()) return 7
                     }
                 }
             },
@@ -507,7 +506,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         player.showCards(result.cards);
                     }
                     'step 2'
-                    if(player.storage.qianXing!=true) event.finish();
+                    if(!player.isLinked()) event.finish();
                     'step 3'
                     var next=player.chooseToDiscard(1,'水影：选择要弃置的法术牌',function(card){
                         return get.type(card)=='faShu';
@@ -526,7 +525,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 qiDong:true,
                 enable:"phaseUse",
                 filter:function(event,player){
-                    return player.canBiShaBaoShi()&&player.storage.qianXing!=true;
+                    return player.canBiShaBaoShi()&&(!player.isLinked());
                 },
                 content:function(){
                     'step 0'
@@ -539,7 +538,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                     'step 2'
                     player.link();
-                    player.storage.qianXing=true;
                     'step 3'
                     var num=player.needsToDiscard();
                     if(num>0){
@@ -557,10 +555,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 mod:{
                     maxHandcardBase:function(player,num){
-                        if(player.storage.qianXing==true) return num-1;
+                        if(player.isLinked()) return num-1;
                     },
                     targetEnabled:function(card,player,target){
-                        if(get.type(card)=='gongJi'&&target.storage.qianXing==true) return false;
+                        if(get.type(card)=='gongJi'&&target.isLinked()) return false;
                     }
                 },
             },
@@ -594,12 +592,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         forced:true,
                         trigger:{player:'phaseUseBegin'},
                         filter:function(event,player){
-                            return player.storage.qianXing;
+                            return player.isLinked();
                         },
                         content:function(){
                             'step 0'
                             player.link();
-                            player.storage.qianXing=false;
                             'step 1'
                             player.removeSkill('qianXing2');
                         }
@@ -1607,7 +1604,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         content:function(){
                             if(player.isLinked()){
                                 player.link();
-                                player.storage.yingLingXingTai=false;
                             }
                             
                         }
@@ -1618,7 +1614,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 forced:true,
                 trigger:{player:'phaseBegin'},
                 filter:function(event,player){
-                    return player.storage.yingLingXingTai==true;
+                    return player.isLinked();
                 },
                 content:function(){
                     'step 0'
@@ -1630,7 +1626,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         player.changeZhiLiao(1);
                         if(player.isLinked()){
                             player.link();
-                            player.storage.yingLingXingTai=false;
                         }
                         event.finish();
                     }else if(result.index==1){
@@ -2007,7 +2002,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 0'
                     if(!player.isLinked()){
                         player.link();
-                        player.storage.anYueXingTai=true;
                     }
                     'step 1'
                     var cards=trigger.parent.result.cards;
@@ -2028,7 +2022,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     if(player.getExpansions('anYue').length==0){
                         if(player.isLinked()){
                             player.link();
-                            player.storage.anYueXingTai=false;
                         }
                     }
                 }
@@ -2149,7 +2142,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             anYueZhan:{
                 trigger:{player:'useCardToTargeted'},
                 filter:function(event,player){
-                    return player.storage.anYueXingTai==true&&player.canBiShaShuiJing()&&player.getExpansions('anYue').length>=0&&get.type(event.card)=='gongJi';
+                    return player.isLinked()&&player.canBiShaShuiJing()&&player.getExpansions('anYue').length>=0&&get.type(event.card)=='gongJi';
                 },
                 content:function(){
                     'step 0'
