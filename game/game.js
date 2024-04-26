@@ -32204,6 +32204,7 @@
 					},trigger.discardid);
 				}
 			},
+			/*
 			_save:{
 				//trigger:{source:'dying2',player:'dying2'},
 				priority:5,
@@ -32295,6 +32296,7 @@
 					}
 				}
 			},
+			*/
 			_ismin:{
 				mod:{
 					cardEnabled:function(card,player){
@@ -32304,6 +32306,7 @@
 					}
 				}
 			},
+			/*
 			_recasting:{
 				enable:'phaseUse',
 				logv:false,
@@ -32353,6 +32356,8 @@
 					}
 				}
 			},
+			*/
+			/*
 			_lianhuan:{
 				trigger:{player:'damageAfter'},
 				filter:function(event,player){
@@ -32399,9 +32404,11 @@
 					if(trigger.getParent().notLink()) trigger.getParent().lianhuanable=true;
 				}
 			},
+			*/
 			/**
 			 * @deprecated
 			 */
+			/*
 			_chongzhu:{
 				get filter(){
 					return lib.skill._recasting.filter;
@@ -32427,7 +32434,7 @@
 				set ai(ai){
 					lib.skill._recasting.ai=ai;
 				}
-			}
+			}*/
 		},
 		character:{},
 		perfectPair:{},
