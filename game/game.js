@@ -31716,6 +31716,7 @@
 					},
 				},
 			},
+			/*
 			_showHiddenCharacter:{
 				trigger:{player:['changeHp','phaseBeginStart','loseMaxHpBegin','gainMaxHpBegin']},
 				firstDo:true,
@@ -31729,7 +31730,8 @@
 					player.showCharacter(2);
 					player.removeSkill('g_hidden_ai');
 				},
-			},
+			},*/
+			/*
 			_kamisha:{
 				trigger:{source:'damageBegin2'},
 				//forced:true,
@@ -31752,7 +31754,7 @@
 					trigger.cancel();
 					trigger.player.loseMaxHp(trigger.num).source=player;
 				},
-			},
+			},*/
 			aozhan:{
 				charlotte:true,
 				mod:{
