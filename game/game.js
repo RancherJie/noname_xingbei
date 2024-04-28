@@ -22313,6 +22313,60 @@
 					next._args=Array.from(arguments);
 					return next;
 				},
+				gongJiHeFaShu:function(use){
+					var next=game.createEvent('gongJi');
+					next.player=this;
+					if(arguments.length==1&&get.objtype(arguments[0])=='object'){
+						for(var i in use){
+							next[i]=use[i];
+						}
+					}
+					else{
+						for(var i=0;i<arguments.length;i++){
+							if(typeof arguments[i]=='number'||get.itemtype(arguments[i])=='select'){
+								next.selectTarget=arguments[i];
+							}
+							else if((typeof arguments[i]=='object'&&arguments[i])||typeof arguments[i]=='function'){
+								if(get.itemtype(arguments[i])=='player'||next.filterCard){
+									next.filterTarget=arguments[i];
+								}
+								else next.filterCard=arguments[i];
+							}
+							else if(typeof arguments[i]=='boolean'){
+								next.forced=arguments[i];
+							}
+							else if(typeof arguments[i]=='string'){
+								next.prompt=arguments[i];
+							}
+						}
+					}
+					if(typeof next.filterCard=='object'){
+						next.filterCard=get.filter(next.filterCard);
+					}
+					if(typeof next.filterTarget=='object'){
+						next.filterTarget=get.filter(next.filterTarget,2);
+					}
+					if(next.filterCard==undefined){
+						next.filterCard=lib.filter.filterCard;
+					}
+					if(next.selectCard==undefined){
+						next.selectCard=[1,1];
+					}
+					if(next.filterTarget==undefined){
+						next.filterTarget=lib.filter.filterTarget;
+					}
+					if(next.selectTarget==undefined){
+						next.selectTarget=lib.filter.selectTarget;
+					}
+					if(next.position==undefined){
+						next.position='hs';
+					}
+					if(next.ai1==undefined) next.ai1=get.order;
+					if(next.ai2==undefined) next.ai2=get.effect_use;
+					next.setContent('chooseToUse');
+					next._args=Array.from(arguments);
+					return next;
+				},
 				chooseToRespond:function(){
 					var next=game.createEvent('chooseToRespond');
 					next.player=this;
