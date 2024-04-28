@@ -426,7 +426,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 content:function(){
                     player.removeBiShaBaoShi();
                     if(!player.isLinked()) player.link();
-                    player.changeNengLiang('b');
+                    player.addNengLiang('b');
                 },
                 mod:{
                     maxHandcardFinal:function(player,num){
@@ -1574,7 +1574,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.draw(2);
                     'step 1'
                     player.changeZhiLiao(1);
-                    player.changeNengLiang('b');
+                    player.addNengLiang('b');
                 }
             },
             hePingXingZhe:{
