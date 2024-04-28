@@ -2967,7 +2967,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
                 }
             },
             _gouMai:{
-				enable:'chooseToUse',
+				enable:'phaseUse',
 				type:'teShu',
 				filter:function(event,player){
 					return player.countCards('h')+3<=player.getHandcardLimit();
@@ -3021,7 +3021,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				}
 			},
 			_heCheng:{
-				enable:'chooseToUse',
+				enable:'phaseUse',
 				type:'teShu',
 				filter:function(event,player){
 					if(player.side==true){
@@ -3111,7 +3111,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
                         markimage:'image/card/b.png',
 					},
 				},
-				enable:'chooseToUse',
+				enable:'phaseUse',
 				type:'teShu',
 				filter:function(event,player){
                     var nengLiang_num=player.countMark('_tiLian_r')+player.countMark('_tiLian_b');
