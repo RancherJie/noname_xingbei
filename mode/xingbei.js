@@ -2967,8 +2967,8 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
                 }
             },
             _gouMai:{
-				enable:'phaseUse',
-				usable:1,
+				enable:'chooseToUse',
+				type:'teShu',
 				filter:function(event,player){
 					return player.countCards('h')+3<=player.getHandcardLimit();
 				},
@@ -3021,8 +3021,8 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				}
 			},
 			_heCheng:{
-				enable:'phaseUse',
-				usable:1,
+				enable:'chooseToUse',
+				type:'teShu',
 				filter:function(event,player){
 					if(player.side==true){
 						return game.hongZhanJi.length>=3&&player.countCards('h')+3<=player.getHandcardLimit();
@@ -3111,8 +3111,8 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
                         markimage:'image/card/b.png',
 					},
 				},
-				enable:'phaseUse',
-				usable:1,
+				enable:'chooseToUse',
+				type:'teShu',
 				filter:function(event,player){
                     var nengLiang_num=player.countMark('_tiLian_r')+player.countMark('_tiLian_b');
                     var empty_nengliang=player.getNengLiangLimit()-nengLiang_num;
