@@ -2712,6 +2712,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
                     }    
                 }
             },
+			/*
             _qiDong:{
                 forced:true,
                 trigger:{player:'useSkillAfter'},
@@ -2722,7 +2723,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
                 content:function(){
                     player.chooseToUse(true);
                 }
-            },
+            },*/
 
             _xuRuo:{
                 priority:1,//优先级大的先执行
