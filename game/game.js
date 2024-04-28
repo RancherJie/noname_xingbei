@@ -13822,6 +13822,8 @@
 					if(!event.logged){
 						game.log(player,'进入了行动阶段');
 						event.logged=true;
+					}
+					if(!event.flag){
 						event.flag=false;
 					}
 					if(player.storage.all>0){
@@ -13835,8 +13837,8 @@
 						if(!lib.config.show_phaseuse_prompt){
 							next.set('prompt',false);
 						}
-						if(event.flag==false){
-							//next.set('type','phase');
+						if(!event.flag){
+							next.set('type','phase');
 							event.flag=true;
 						}
 						
