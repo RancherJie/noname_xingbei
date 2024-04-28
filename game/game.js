@@ -16969,10 +16969,10 @@
 					}
 
 					//xingBei
-					if(event.parent&&!action){
-						var action=event.parent.action;					
+					if(event.parent&&!event.action){
+						event.action=event.parent.action;					
 					}
-					if(action){
+					if(event.action){
 						var type=get.type(card);
 						if(type=='faShu'){
 							if(player.storage.faShu>0){
