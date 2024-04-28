@@ -26,7 +26,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             yuanSuShi:['male','yong','3/4',['yuanSuXiShou','yuanSuDianRan','yunShi','bingDong','huoQou','fengRen','leiJi','yueGuang','yuanSu'],],
             //maoXianJia:['female','huan',6,['jianxiong'],],
             //wenYiFaShi:['male','huan',6,['jianxiong'],],
-            //zhongCaiZhe:['female','xue',6,['jianxiong'],],
+            zhongCaiZhe:['female','xue','3/4',['zhongCaiFaZe','yiShiZhongDuan','moRiShenPan','shenPanLangChao','zhongCaiYiShi','panJueTianPing','shenPan'],],
             //shenGuan:['female','sheng',6,['jianxiong'],],
             //qiDaoShi:['female','yong',6,['jianxiong'],],
             //xianZhe:['male','yong',6,['jianxiong'],],
@@ -2265,6 +2265,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             },
             yiShiZhongDuan:{
                 qiDong:true,
+                enable:'phaseUse',
                 filter:function(event,player){
                     return player.isLinked();
                 },
@@ -2274,7 +2275,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 }
             },
             moRiShenPan:{
-                faShu:true,
+                type:'faShu',
                 enable:['chooseToUse','faShu'],
                 filter:function(event,player){
                     player.countZhiShiWu('shenPan')>0;
@@ -2315,10 +2316,41 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             zhongCaiYiShi:{
                 qiDong:true,
                 enable:'phaseUse',
-
+                filter:function(event,player){
+                    return player.canBiShaBaoShi();
+                },
+                content:function(){
+                    'step 0'
+                    player.removeBiShaBaoShi();
+                    'step 1'
+                    player.hengZhi();
+                    'step 2'
+                    var num=player.needsToDiscard();
+                    if(num>0){
+						player.chooseToDiscard(num,true).set('useCache',true).set('baoPai',true);
+					}
+                },
+                mod:{
+                    maxHandcardFinal:function(player,num){
+                        if(player.isLinked()) return 5;
+                    }
+                },
+                group:'zhongCaiYiShi_shenPan',
+                subSkill:{
+                    shenPan:{
+                        trigger:{player:'phaseBegin'},
+                        forced:true,
+                        filter:function(event,player){
+                            return player.isLinked();
+                        },
+                        content:function(){
+                            player.addZhiShiWu('shenPan',1);
+                        }
+                    }
+                }
             },
             panJueTianPing:{
-                faShu:true,
+                type:'faShu',
                 enable:['chooseToUse','faShu'],
                 filter:function(event,player){
                     return player.canBiShaShuiJing();
@@ -2331,10 +2363,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     var list=['弃掉所有手牌','将你的手牌补到上限[强制]，我方战绩区+1[宝石]'];
                     player.chooseControl().set('prompt','判决天平：选择一项').set('choiceList',list);
                     'step 2'
-                    if(result.control=='弃掉所有手牌'){
+                    if(result.control=='选项一'){
                         player.discard(player.getCards());
                     }
-                    else if(result.control=='将你的手牌补到上限[强制]，我方战绩区+1[宝石]'){
+                    else if(result.control=='选项二'){
                         var num=player.getHandcardLimit();
                         player.drawTo(num);
                         player.addZhanJi('r',1);
