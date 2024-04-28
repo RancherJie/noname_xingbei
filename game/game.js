@@ -20598,7 +20598,7 @@
 					
 					this.node.avatar.show();
 					this.node.count.show();
-					this.node.equips.show();
+					//this.node.equips.show();
 					this.name=character;
 					this.name1=character;
 					this.sex=info[0];
