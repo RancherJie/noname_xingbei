@@ -2026,7 +2026,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 lastDo:true,
                 filter:function(event,player){
                     if(event.player.side==player.side) return false;
-                    if(!event.card) return false;
+                    if(get.itemtype(event.cards)!='cards') return false;
                     if(get.type(event.card)!='gongJi') return false;
                     var anYue=player.getExpansions('anYue');
                     for(var i=0;i<anYue.length;i++){
