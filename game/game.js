@@ -58702,9 +58702,9 @@
 					table=document.createElement('table');
 					tr=document.createElement('tr');
 					table.appendChild(tr);
-					td=document.createElement('td');
-					td.innerHTML='距离';
-					tr.appendChild(td);
+					//td=document.createElement('td');
+					//td.innerHTML='距离';
+					//tr.appendChild(td);
 					td=document.createElement('td');
 					td.innerHTML='手牌';
 					tr.appendChild(td);
@@ -58717,6 +58717,7 @@
 
 					tr=document.createElement('tr');
 					table.appendChild(tr);
+					/*
 					td=document.createElement('td');
 					if(node==game.me||!game.me||!game.me.isIn()){
 						td.innerHTML='-';
@@ -58732,8 +58733,9 @@
 						}
 					}
 					tr.appendChild(td);
+					*/
 					td=document.createElement('td');
-					td.innerHTML=node.countCards('h');
+					td.innerHTML=node.countCards('h')+'/'+node.getHandcardLimit();
 					tr.appendChild(td);
 					td=document.createElement('td');
 					td.innerHTML=node.phaseNumber;
