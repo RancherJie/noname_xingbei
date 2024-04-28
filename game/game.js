@@ -17445,10 +17445,10 @@
 					}
 
 					//xingBei
-					if(event.parent&&!action){
-						var action=event.parent.action;
+					if(event.parent&&!event.action){
+						event.action=event.parent.action;
 					}
-					if(action){
+					if(event.action){
 						var type=get.info(event.skill).type;
 						if(type=='teShu'){
 							player.storage.all--;
