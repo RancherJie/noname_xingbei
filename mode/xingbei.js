@@ -3055,6 +3055,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					backup:function(links,player){
 						return{
 							links:links,
+							type:'teShu',
 							content:function(){
 								'step 0'
 								event.links=lib.skill._heCheng_backup.links;
@@ -3148,6 +3149,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					backup:function(links,player){
 						return{
 							links:links,
+							type:'teShu',
 							content:function(){
 								'step 0'
 								event.links=lib.skill._tiLian_backup.links;
