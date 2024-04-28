@@ -3586,7 +3586,13 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				},
 				removeZhiShiWu:function(zhiShuWu,num){
 					if(typeof num!='number'||!num) num=1;
-					this.removeMark(zhiShuWu,num);
+					var current=this.countMark(zhiShuWu);
+					if(current+num<0){
+						num=-current;
+					}
+					if(num<0){
+						this.removeMark(zhiShuWu,-num);
+					}
 				},
 				addZhanJi:function(color,num){
 					if(typeof num!='number'||!num) num=1;
