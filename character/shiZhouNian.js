@@ -425,7 +425,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 content:function(){
                     player.removeBiShaBaoShi();
-                    player.link();
+                    if(!player.isLinked()) player.link();
                     player.changeNengLiang('b');
                 },
                 mod:{
@@ -525,7 +525,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 qiDong:true,
                 enable:"phaseUse",
                 filter:function(event,player){
-                    return player.canBiShaBaoShi()&&(!player.isLinked());
+                    return player.canBiShaBaoShi();
                 },
                 content:function(){
                     'step 0'
@@ -537,7 +537,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         player.draw();
                     }
                     'step 2'
-                    player.link();
+                    if(!player.isLinked()) player.link();
                     'step 3'
                     var num=player.needsToDiscard();
                     if(num>0){
@@ -596,7 +596,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         },
                         content:function(){
                             'step 0'
-                            player.link();
+                            if(player.isLinked()) player.link();
                             'step 1'
                             player.removeSkill('qianXing2');
                         }
@@ -1584,7 +1584,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 trigger:{player:"yingLingZhaoHuan"},
                 content:function(){
                     player.storage.yingLingXingTai=true;
-                    player.link();
+                    if(!player.isLinked()) player.link();
                 },
                 subSkill:{
                     chongZhi:{
