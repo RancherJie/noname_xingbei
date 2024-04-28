@@ -24,7 +24,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             //moJianShi:['female','huan',6,['jianxiong'],],
             //shengQiangQiShi:['female','sheng',6,['jianxiong'],],
             yuanSuShi:['male','yong','3/4',['yuanSuXiShou','yuanSuDianRan','yunShi','bingDong','huoQou','fengRen','leiJi','yueGuang','yuanSu'],],
-            //maoXianJia:['female','huan',6,['jianxiong'],],
+            maoXianJia:['female','huan','3/4',['qiZha','qiangYun','diXiaFaZe','maoXianJiaTianTang','touTianHuanRi'],],
             //wenYiFaShi:['male','huan',6,['jianxiong'],],
             zhongCaiZhe:['female','xue','3/4',['zhongCaiFaZe','yiShiZhongDuan','moRiShenPan','shenPanLangChao','zhongCaiYiShi','panJueTianPing','shenPan'],],
             //shenGuan:['female','sheng',6,['jianxiong'],],
@@ -2382,6 +2382,211 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 markimage:'image/card/lan.png',
             },
 
+            //冒险家
+            qiZha:{
+                enable:['chooseToUse','gongJi'],
+                filter:function(event,player){
+                    if(_status.event.player!=player) return false;
+                    var dict={};
+                    var hs=player.getCards('h');
+                    for(var i=0;i<hs.length;i++){
+                        var type=get.suit(hs[i]);
+                        if(!dict[type]) dict[type]=0;
+                        dict[type]++;
+                    }
+                    for(var i in dict){
+                        if(dict[i]>1){
+                            return true;
+                        }
+                    }
+                    return false;
+                },
+                selectCard:[2,3],
+                prepare:'showCards',
+                filterCard:function(card){
+                    if(!ui.selected.cards.length){
+                        return true;
+                    }
+                    var suit=get.suit(card);
+                    if(get.suit(ui.selected.cards[0])!=suit){
+                        return false;
+                    }
+                    return true;
+                },
+                complexCard:true,
+                content:function(){
+                    'step 0'
+                    var length=cards.length;
+                    var list=['shui','huo','feng','lei','di'];
+                    if(length==2){
+                        var next=player.chooseControl(list).set('prompt','选择攻击系别');
+                    }else if(length==3){
+                        event.goto(2);
+                    }
+                    'step 1'
+                    var suit=result.control;
+                    var name;
+                    switch(suit){
+                        case'shui':name='shuiLianZhan';break;
+                        case 'huo':name='huoYanZhan';break;
+                        case 'feng':name='fengShenZhan';break;
+                        case 'lei':name='leiGuangZhan';break;
+                        case 'di':name='diLieZhan';break;
+                    }
+                    var card={name:name,suit:suit,isCard:true};
+                    player.chooseUseTarget(card,true).set('action',true);
+                    event.finish();
+                    'step 2'
+                    var card={name:'anMie',suit:'an',isCard:true};
+                    player.chooseUseTarget(card,true).set('action',true);
+                    event.finish();
+                },
+                
+            },
+            qiangYun:{
+                trigger:{player:'useSkill'},
+                filter:function(event,player){
+                    return event.skill=='qiZha';
+                },
+                forced:true,
+                content:function(){
+                    player.addNengLiang('b');
+                }
+            },
+            diXiaFaZe:{
+                trigger:{player:'gouMai'},
+                forced:true,
+                content:function(){
+                    player.addZhanJi('r',2);
+                    trigger.finish();
+                }
+            },
+            maoXianJiaTianTang:{
+                enable:'phaseUse',
+                type:'teShu',
+                filter:function(event,player){
+                    var side=player.side
+                    if(side==true){
+                        if(game.hongZhanJi.length==0) return false;
+                    }else if(side==false){
+                        if(game.lanZhanJi.length==0) return false;
+                    }
+                    for(var i=0;i<game.players.length;i++){
+                        if(side!=game.players[i].side) continue;
+                        if(game.players[i].countNengLiangAll()<game.players[i].getNengLiangLimit()){
+                            return true;
+                        }
+                    }
+                },
+                selectTarget:1,
+                filterTarget:function(card,player,target){
+                    return player.side==target.side&&target.countNengLiangAll()<target.getNengLiangLimit();
+                },
+                content:function(){
+                    'step 0'
+                    var num=target.getNengLiangLimit()-target.countNengLiangAll();
+                    if(player.side==true){
+                        var list=game.hongZhanJi;
+                    }else if(player.side==false){
+                        var list=game.lanZhanJi;
+                    }
+					var next=player.chooseButton([
+                        '选择提炼的星石',
+                        [list,'tdnodes'],
+                    ]);
+                    next.set('forced',true);
+                    next.set('selectButton',[1,num]);
+                    'step 1'
+                    for(var i=0;i<result.links.length;i++){
+						if(result.links[i]=='宝石'){
+							target.addMark('_tiLian_r');
+							player.changeZhanJi('r',-1);
+						}else if(result.links[i]=='水晶'){
+							target.addMark('_tiLian_b');
+							player.changeZhanJi('b',-1);
+                        }
+                    }
+                    'step 2'
+                    if(player.countNengLiangAll()>0){
+                        if(player.canBiShaShuiJing()){
+                            player.removeBiShaShuiJing();
+                        }
+                    }
+                }
+            },
+            touTianHuanRi:{
+                type:'faShu',
+                usable:1,
+                enable:['chooseToUse','faShu'],
+                filter:function(event,player){
+                    return player.canBiShaShuiJing();
+                },
+                chooseButton:{
+                    dialog:function(event,player){
+                        var dialog=ui.create.dialog('偷天换日','hidden');
+                        var list=[['tou','将对方【战绩区】的1[宝石]转移到我方【战绩区】'],['huan','将我方【战绩区】的[水晶]全部转换为[宝石]']]
+						dialog.add([list,'textbutton']);
+						return dialog;
+                    },
+                    filter:function(button,player){
+                        var link=button.link;
+                        if(link=='tou'){
+                            if(player.side==true){
+                                return game.lanZhanJi.includes('宝石');
+                            }else if(player.side==false){
+                                return game.hongZhanJi.includes('宝石');
+                            }
+                        }
+                        if(link=='huan'){
+                            return true;
+                        }
+                    },
+                    backup:function(links,player){
+                        player.removeBiShaShuiJing();
+                        if(links[0]=='tou'){
+                            var next=get.copy(lib.skill['touTianHuanRi_tou']);
+                        }else if(links[0]=='huan'){
+                            var next=get.copy(lib.skill['touTianHuanRi_huan']);
+                        }
+						return next;
+					},
+                },
+                subSkill:{
+                    tou:{
+                        type:'faShu',
+                        content:function(){
+                            'step 0'
+                            var side=player.side;
+                            player.changeZhanJi('r',-1,!side)
+                            player.addZhanJi('r',1);
+                            'step 1'
+                            player.storage.all++;
+                        }
+                    },
+                    huan:{
+                        type:'faShu',
+                        content:function(){
+                            'step 0'
+                            if(player.side==true){
+                                var list=game.hongZhanJi.slice();
+                            }else if(player.side==false){
+                                var list=game.lanZhanJi.slice();
+                            }
+                            for(var i=0;i<list.length;i++){
+                                if(list[i]=='水晶'){
+                                    player.removeZhanJi('b',1);
+                                    player.addZhanJi('r',1);
+                                }
+                            }
+                            'step 1'
+                            player.storage.all++;
+                        }
+                    }
+                }
+
+            },
+            
+            
 		},
 		
 		translate:{
@@ -2606,6 +2811,18 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             shenPan:"审判",
             shenPan_info:"<span class='hong'>【</span>审判<span class='hong'>】</span>为仲裁者专有指示物，上限为4。",
 
+            //冒险家
+            qiZha:"[响应]欺诈",
+            qiZha_info:"<span class='tiaoJian'>(弃2张同系牌[展示])</span>视为一次除暗系以外的任意系的主动攻击，该系由你决定；或<span class='tiaoJian'>(弃3张同系牌[展示])</span>视为一次暗系的主动攻击。",
+            qiangYun:"[被动]强运",
+            qiangYun_info:"<span class='tiaoJian'>(当你发动【欺诈】时)</span>你+1[水晶]。",
+            diXiaFaZe:"[被动]地下法则",
+            diXiaFaZe_info:"<span class='tiaoJian'>(你执行【购买】时)</span>改为【战绩区】+2【水晶】。",
+            maoXianJiaTianTang:"[响应]冒险者天堂",
+            maoXianJiaTianTang_info:"你执行【提炼】时，将提炼出的[宝石]和[水晶]全部交给目标队友。然后移除你的1[能量]",
+            touTianHuanRi:"[法术]偷天换日[回合限定]",
+            touTianHuanRi_backup:"[法术]偷天换日[回合限定]",
+            touTianHuanRi_info:"[水晶]将对方【战绩区】的1[宝石]转移到我方【战绩区】，或将我方【战绩区】的[水晶]全部转换为[宝石]，额外+1攻击行动或法术行动。",
 
 		},
 	};
