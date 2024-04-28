@@ -3525,6 +3525,28 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						this.removeMark('_tiLian_'+color,-num)
 					}
 				},
+				addNengLiang:function(color,num){
+					if(typeof num!='number'||!num) num=1;
+					var max=this.getNengLiangLimit();
+					var current=this.countNengLiang('r')+this.countNengLiang('b');
+					if(current+num>max){
+						num=max-current;
+					}
+					if(num>0){
+						this.addMark('_tiLian_'+color,num)
+					}
+				},
+				removeNengLiang:function(color,num){
+					if(typeof num!='number'||!num) num=-1;
+					if(num>0) num=-num;
+					var current=this.countNengLiang(color);
+					if(current+num<0){
+						num=-current;
+					}
+					if(num<0){
+						this.removeMark('_tiLian_'+color,-num)
+					}
+				},
 				countNengLiang:function(color){
 					return this.countMark('_tiLian_'+color);
 				},
