@@ -3592,6 +3592,11 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						this.link();
 					}
 				},
+				hengZhi:function(){
+					if(!this.isLinked()){
+						this.link();
+					}
+				},
 
 				dieAfter2:function(source){
 					if(_status.connectMode&&_status.mode!='guandu'){
