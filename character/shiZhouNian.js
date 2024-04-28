@@ -541,8 +541,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 3'
                     var num=player.needsToDiscard();
                     if(num>0){
-						player.chooseToDiscard(num,true).set('useCache',true);
-						player.changeShiQi(-num);
+						player.chooseToDiscard(num,true).set('useCache',true).set('baoPai',true);
 					}
                     'step 4'
                     player.addSkill('qianXing2');
