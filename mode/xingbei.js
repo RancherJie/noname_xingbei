@@ -3550,6 +3550,9 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				countNengLiang:function(color){
 					return this.countMark('_tiLian_'+color);
 				},
+				countNengLiangAll:function(){
+					return this.countMark('_tiLian_r')+this.countMark('_tiLian_b');
+				},
 				damageFaShu:function(){
 					var num,source;
 					for(var i=0;i<arguments.length;i++){
