@@ -2656,6 +2656,17 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 			
 		},
 		skill:{
+			_chongZhiAction:{
+				trigger:{player:'phaseBegin'},
+				forced:true,
+				firstDo:true,
+				content:function(){
+					player.storage.all=1;
+					player.storage.faShu=0;
+					player.storage.gongJi=0;
+				}
+			},
+
             _zhiLiao:{
                 trigger:{player:"zhiLiao"},
                 forced:true,

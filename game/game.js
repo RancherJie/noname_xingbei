@@ -13822,15 +13822,28 @@
 					if(!event.logged){
 						game.log(player,'进入了行动阶段');
 						event.logged=true;
+						event.flag=false;
 					}
-					var next=player.chooseToUse();
-					if(!lib.config.show_phaseuse_prompt){
-						next.set('prompt',false);
+					if(player.storage.all>0){
+						var next=player.chooseToUse().set('action',true);
+					}else if(player.storage.faShu>0){
+						var next=player.faShu().set('action',true);
+					}else if(player.storage.gongJi>0){
+						var next=player.gongJi().set('action',true);
 					}
-					next.set('type','phase');
+					if(next){
+						if(!lib.config.show_phaseuse_prompt){
+							next.set('prompt',false);
+						}
+						if(event.flag==false){
+							//next.set('type','phase');
+							event.flag=true;
+						}
+						
+					}
 					"step 1"
-					if(result.bool&&!event.skipped){
-						//event.goto(0);
+					if(result.bool&&!event.skipped&&(player.storage.all>0||player.storage.gongJi>0||player.storage.faShu>0)){
+						event.goto(0);
 					}
 					game.broadcastAll(function(){
 						if(ui.tempnowuxie){
@@ -16952,6 +16965,28 @@
 							}
 						}
 					}
+
+					//xingBei
+					if(event.parent&&!action){
+						var action=event.parent.action;					
+					}
+					if(action){
+						var type=get.type(card);
+						if(type=='faShu'){
+							if(player.storage.faShu>0){
+								player.storage.faShu--;
+							}else if(player.storage.all>0){
+								player.storage.all--;
+							}
+						}else if(type=='gongJi'){
+							if(player.storage.gongJi>0){
+								player.storage.gongJi--;
+							}else if(player.storage.all>0){
+								player.storage.all--;
+							}
+						}
+					}
+
 					if(targets.length){
 						var str=(targets.length==1&&targets[0]==player)?'#b自己':targets;
 						if(cards.length&&!card.isCard){
@@ -17408,6 +17443,30 @@
 					else{
 						player.stat[player.stat.length-1].allSkills++;
 					}
+
+					//xingBei
+					if(event.parent&&!action){
+						var action=event.parent.action;
+					}
+					if(action){
+						var type=get.info(event.skill).type;
+						if(type=='teShu'){
+							player.storage.all--;
+						}else if(type=='faShu'){
+							if(player.storage.faShu>0){
+								player.storage.faShu--;
+							}else if(player.storage.all>0){
+								player.storage.all--;
+							}
+						}else if(type=='gongJi'){
+							if(player.storage.gongJi>0){
+								player.storage.gongJi--;
+							}else if(player.storage.all>0){
+								player.storage.all--;
+							}
+						}
+					}
+
 					if(info.prepare){
 						switch(info.prepare){
 							case 'give':if(losecard) losecard.visible=true;player.$give(cards,targets[0]);break;
