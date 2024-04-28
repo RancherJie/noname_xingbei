@@ -2255,6 +2255,102 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					},
                 },
             },
+
+            //仲裁者
+            zhongCaiFaZe:{
+                trigger:{global:"enterGame"},
+                forced:true,
+                content:function(){
+                    player.changeNengLiang('b',2);
+                }
+            },
+            yiShiZhongDuan:{
+                qiDong:true,
+                filter:function(event,player){
+                    return player.isLinked();
+                },
+                content:function(){
+                    player.link();
+                    player.addZhanJi('r',1)
+                }
+            },
+            moRiShenPan:{
+                faShu:true,
+                enable:['chooseToUse','faShu'],
+                filter:function(event,player){
+                    player.countZhiShiWu('shenPan')>0;
+                },
+                selectTarget:1,
+                filterTarget:true,
+                content:function(){
+                    'step 0'
+                    event.num=player.countZhiShiWu('shenPan');
+                    'step 1'
+                    player.removeZhiShiWu('shenPan',event.num);
+                    target.damageFaShu(event.num,player);
+                },
+                group:'moRiShenPan_biXu',
+                subSkill:{
+                    biXu:{
+                        trigger:{player:'phaseUseBegin'},
+                        forced:true,
+                        filter:function(event,player){
+                            return player.countZhiShiWu('shenPan')>=get.info('shenPan').intro.max;
+                        },
+                        content:function(){
+                            'step 0'
+                            player.chooseTarget('末日审判：选择一个目标',true);
+                            'step 1'
+                            player.useSkill('moRiShenPan',result.targets).set('action',true);
+                        }
+                    }
+                }
+            },
+            shenPanLangChao:{
+                forced:true,
+                trigger:{player:'damageEnd'},
+                content:function(){
+                    player.addZhiShiWu('shenPan',1);
+                },
+            },
+            zhongCaiYiShi:{
+                qiDong:true,
+                enable:'phaseUse',
+
+            },
+            panJueTianPing:{
+                faShu:true,
+                enable:['chooseToUse','faShu'],
+                filter:function(event,player){
+                    return player.canBiShaShuiJing();
+                },
+                content:function(){
+                    'step 0'
+                    player.removeBiShaShuiJing();
+                    'step 1'
+                    player.addZhiShiWu('shenPan',1);
+                    var list=['弃掉所有手牌','将你的手牌补到上限[强制]，我方战绩区+1[宝石]'];
+                    player.chooseControl().set('prompt','判决天平：选择一项').set('choiceList',list);
+                    'step 2'
+                    if(result.control=='弃掉所有手牌'){
+                        player.discard(player.getCards());
+                    }
+                    else if(result.control=='将你的手牌补到上限[强制]，我方战绩区+1[宝石]'){
+                        var num=player.getHandcardLimit();
+                        player.drawTo(num);
+                        player.addZhanJi('r',1);
+                    }
+                }
+            },
+            shenPan:{
+                intro:{
+                    name:'审判',
+                    content:'mark',
+                    max:4,
+                },
+                markimage:'image/card/lan.png',
+            },
+
 		},
 		
 		translate:{
@@ -2463,6 +2559,22 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             anYue:"暗月",
             anYue_info:"【暗月】为月之女神专用盖牌，无上限。",
             
+            //仲裁者
+            zhongCaiFaZe:"[被动]仲裁法则",
+            zhongCaiFaZe_info:"游戏初始时。你加+2[水晶]。",
+            yiShiZhongDuan:"[启动]仪式中断",
+            yiShiZhongDuan_info:"<span class='tiaoJian'>(仅【审判形态】下发动)</span>[重置]脱离【审判形态】，我方【战绩区】+1[宝石]。",
+            moRiShenPan:"[法术]末日审判",
+            moRiShenPan_info:"<span class='tiaoJian'>(移除所有</span><span class='hong'>【</span>审判<span class='hong'>】</span><span class='tiaoJian'>)</span>对目标角色造成等量的法术伤害③；在记得行动阶段开始时，若你的<span class='hong'>【</span>审判<span class='hong'>】</span>已达到上限，该行动阶段你必须发动【末日审判】。",
+            shenPanLangChao:"[被动]审判浪潮",
+            shenPanLangChao_info:"<span class='tiaoJian'>(你每承受一次伤害⑥)</span>你+1<span class='hong'>【</span>审判<span class='hong'>】</span>。",
+            zhongCaiYiShi:"[启动]仲裁仪式[持续]",
+            zhongCaiYiShi_info:"[宝石][横置]转为【审判形态】，你的手牌上限恒定为5[恒定]；每次你的回合开始时，你+1<span class='hong'>【</span>审判<span class='hong'>】</span>。",
+            panJueTianPing:"[法术]判决天平",
+            panJueTianPing_info:"[水晶]你+1<span class='hong'>【</span>审判<span class='hong'>】</span>，再选择一下一项发动：<br>·弃掉所有手牌。<br>·将你的手牌补到上限[强制]，我方战绩区+1[宝石]。",
+            shenPan:"审判",
+            shenPan_info:"<span class='hong'>【</span>审判<span class='hong'>】</span>为仲裁者专有指示物，上限为4。",
+
 
 		},
 	};
