@@ -13829,9 +13829,9 @@
 					if(player.storage.all>0){
 						var next=player.chooseToUse().set('action',true);
 					}else if(player.storage.faShu>0){
-						var next=player.faShu().set('action',true);
+						var next=player.faShu().set('action',true).set('prompt','法术行动');
 					}else if(player.storage.gongJi>0){
-						var next=player.gongJi().set('action',true);
+						var next=player.gongJi().set('action',true).set('prompt','攻击行动');
 					}
 					if(next){
 						if(!lib.config.show_phaseuse_prompt){
