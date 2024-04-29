@@ -2414,6 +2414,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     return true;
                 },
                 complexCard:true,
+                selectTarget:1,
+                filterTarget:function(card,player,target){
+                    var cardx={name:'anMie'};
+                    return player.canUse(cardx,target);
+                },
                 content:function(){
                     'step 0'
                     var length=cards.length;
@@ -2434,11 +2439,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         case 'di':name='diLieZhan';break;
                     }
                     var card={name:name,suit:suit,isCard:true};
-                    player.chooseUseTarget(card,true).set('action',true);
+                    player.useCard(card,target).set('action',true);
                     event.finish();
                     'step 2'
                     var card={name:'anMie',suit:'an',isCard:true};
-                    player.chooseUseTarget(card,true).set('action',true);
+                    player.useCard(card,target).set('action',true);
                     event.finish();
                 },
                 
