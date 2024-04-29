@@ -2852,15 +2852,24 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
                 },
                 content:function(){
 					'step 0'
-					trigger.yingZhan=true;
-					event.yingZhan=trigger.parent.parent.yingZhan;
-					'step 1'
                     event.source=trigger.parent.parent.source;
                     event.player=trigger.parent.player;
-					'step 2'
+					'step 1'
                     event.trigger('gongJiWeiMingZhong');
                 }
             },
+			_yingZhan_sheZhi:{
+				trigger:{player:'useCardBefore'},
+                forced:true,
+				firstDo:true,
+                filter:function(event,player){
+                    return event.parent.parent.name=='_yingZhan';
+                },
+				content:function(){
+					trigger.yingZhan=true;
+					event.yingZhan=trigger.parent.parent.yingZhan;
+				}
+			},
 
             _shengGuang:{
                 trigger:{target:'useCardToPlayered'},
