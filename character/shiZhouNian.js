@@ -22,7 +22,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             tianShi:['female','sheng',3,['fengZhiJieJing','tianShiZhuFu','tianShiJiBan','tianShiZhiQiang','tianShiZhiGe','shenZhiBiHu'],],
             moFaShaoNv:['female','yong',3,['moBaoChongJi','moDanZhangWo','moDanRongHe','huiMieFengBao'],],
             //moJianShi:['female','huan',6,['jianxiong'],],
-            //shengQiangQiShi:['female','sheng',6,['jianxiong'],],
+            shengQiangQiShi:['female','sheng','3/4',['shengShengQiShi','huiYao','chengJie','shengJi','tianQiang','diQiang','shengGuangQiYu'],],
             yuanSuShi:['male','yong','3/4',['yuanSuXiShou','yuanSuDianRan','yunShi','bingDong','huoQou','fengRen','leiJi','yueGuang','yuanSu'],],
             maoXianJia:['female','huan','3/4',['qiZha','qiangYun','diXiaFaZe','maoXianJiaTianTang','touTianHuanRi'],],
             //wenYiFaShi:['male','huan',6,['jianxiong'],],
@@ -2591,7 +2591,159 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 
             },
             
-            
+            //圣枪骑士
+            shengShengQiShi:{
+                mod:{
+                    maxZhiLiao:function(player,num){
+                        var side=player.side;
+                        if(side==true){
+                            if(game.hongXingBei>=game.lanXingBei) return num+1;
+                        }else if(side==false){
+                            if(game.lanXingBei>=game.hongXingBei) return num+1;
+                        }
+                    }
+                }
+            },
+            huiYao:{
+                type:'faShu',
+                enable:['chooseToUse','faShu'],
+                filter:function(event,player){
+                    return player.countCards('h',card=>get.suit(card)=='shui');
+                },
+                selectCard:1,
+                filterCard:function(card){
+                    return get.suit(card)=='shui';
+                },
+                prepare:'showCards',
+                selectTarget:-1,
+                filterTarget:true,
+                content:function(){
+                    target.changeZhiLiao(1);
+                },
+                contentAfter:function(){
+                    player.storage.gongJi++;
+                }
+            },
+            chengJie:{
+                type:'faShu',
+                enable:['chooseToUse','faShu'],
+                filter:function(event,player){
+                    if(!player.countCards('h',card=>get.type(card)=='faShu')) return false;
+                    var players=game.players;
+                    for(var i=0;i<players.length;i++){
+                        if(players[i]==player) continue;
+                        if(players[i].zhiLiao) return true;
+                    }
+                    return false;
+                },
+                selectCard:1,
+                filterCard:function(card){
+                    return get.type(card)=='faShu';
+                },
+                prepare:'showCards',
+                selectTarget:-1,
+				filterTarget:function(card,player,target){
+					return target!=player;
+				},
+                content:function(){
+                    if(target.zhiLiao){
+                        target.changeZhiLiao(-1);
+                        player.changeZhiLiao(1);
+                    } 
+                },
+                contentAfter:function(){
+                    player.storage.gongJi++;
+                }
+            },
+            shengJi:{
+                trigger:{player:'useCardToTargeted'},
+                forced:true,
+                filter:function(event,player){
+                    return get.type(event.card)=="gongJi"&&event.parent.shengJi!=false;
+                },
+                content:function(){
+                    player.changeZhiLiao();
+                }
+            },
+            tianQiang:{
+                trigger:{player:'useCardBefore'},
+                filter:function(event,player){
+                    return get.type(event.card)=="gongJi"&&event.yingZhan!=true&&player.storage.tianQiang!=false&&player.zhiLiao>=2;
+                },
+                content:function(){
+                    'step 0'
+                    trigger.shengJi=false;
+                    player.changeZhiLiao(-2);
+                    'step 1'
+                    player.addSkill('tianQiang_x');
+                },
+                subSkill:{
+                    x:{
+                        trigger:{player:'useCardToPlayer'},
+                        forced:true,
+                        content:function(){
+                            'step 0'
+                            trigger.parent.canYingZhan=false;
+                            'step 1'
+                            player.removeSkill('tianQiang_x')
+                        }
+                    },
+                }
+
+            },
+            diQiang:{
+                trigger:{player:'useCardToTargeted'},
+                firstDo:true,
+                filter:function(event,player){
+                    return get.type(event.card)=="gongJi"&&get.type(event.card)=="gongJi"&&event.parent.yingZhan!=true;
+                },
+                content:function(){
+                    'step 0'
+                    trigger.parent.shengJi=false;
+                    'step 1'
+                    var lsit=[];
+                    var num=4;
+                    for(var i=0;i<=player.zhiLiao;i++){
+                        if(i<=num){
+                            lsit.push(i);
+                        }
+                    }
+                    player.chooseControl(lsit).set('prompt','选择移除的[治疗]数量').set('ai',function(player){
+                        return list.length-1;
+                    });
+                    'step 2'
+                    var zhiLiaonum=result.control;
+					if(zhiLiaonum>0){
+						trigger.getParent().baseDamage+=zhiLiaonum;
+						player.changeZhiLiao(-zhiLiaonum);
+					}
+                }
+            },
+            shengGuangQiYu:{
+                type:'faShu',
+                enable:['chooseToUse','faShu'],
+                filter:function(event,player){
+                    return player.canBiShaBaoShi();
+                },
+                content:function(){
+                    'step 0'
+                    player.removeBiShaBaoShi();
+                    'step 1'
+                    player.changeZhiLiao(2,5);
+                    player.storage.tianQiang=false;
+                    'step 2'
+                    player.storage.gongJi++;
+                },
+                group:'shengGuangQiYu_tianQiang',
+            },
+            shengGuangQiYu_tianQiang:{
+                trigger:{player:'phaseEnd'},
+                forced:true,
+                content:function(){
+                    player.storage.tianQiang=true;
+                }
+            }
+
 		},
 		
 		translate:{
@@ -2829,6 +2981,22 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             touTianHuanRi_backup:"[法术]偷天换日[回合限定]",
             touTianHuanRi_info:"[水晶]将对方【战绩区】的1[宝石]转移到我方【战绩区】，或将我方【战绩区】的[水晶]全部转换为[宝石]，额外+1攻击行动或法术行动。",
 
+            //圣枪骑士
+            shengShengQiShi:"[被动]神圣启示",
+            shengShengQiShi_info:"<span class='tiaoJian'>(我方[星杯区]的[星杯]数不小于对方时)</span>你的[治疗]上限+1。",
+            huiYao:"[法术]辉耀",
+            huiYao_info:"<span class='tiaoJian'>(弃1张水系牌[展示])</span>所有角色各+1[治疗]，额外+1攻击行动。",
+            chengJie:"[法术]惩戒",
+            chengJie_info:"<span class='tiaoJian'>(弃1张法术牌[展示])</span>将其他角色的1[治疗]转移给你，额外+1攻击行动。",
+            shengJi:"[被动]圣击",
+            shengJi_info:"<span class='tiaoJian'>(攻击命中后发动②)</span>你+1[治疗]。",
+            tianQiang:"[响应]天枪",
+            tianQiang_info:"<span class='tiaoJian'>(主动攻击前发动①，移除你的2[治疗])</span>本次攻击对手无法应战，不能和【圣击】同时发动。",
+            diQiang:"[响应]地枪",
+            diQiang_info:"<span class='tiaoJian'>(主动攻击命中后发动②，移除你的X[治疗])</span>本次攻击伤害额外+X，X最高为4；不能和【圣击】同时发动。",
+            shengGuangQiYu:"[法术]圣光祈愈",
+            shengGuangQiYu_info:"[宝石]无视你的[治疗]上限为你+2[治疗]，但你的[治疗]最高为5，额外+1攻击行动；本回合你不能再发动天枪。",
+            
 		},
 	};
 });
