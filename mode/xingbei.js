@@ -2883,10 +2883,10 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
                 content:function(){
 					"step 0"
 					var str='使用圣光抵挡攻击';
-					var next=player.chooseToUse(str).set('filterCard',function(card,player,event){
+					var next=player.chooseToUse_qiTa(str).set('filterCard',function(card,player,event){
 						if(card.name!="shengGuang") return false;
                         return lib.filter.cardEnabled(card,player,'forceEnable');
-					},str);
+					});
 					next.ai=function(card){
 						return 1;
 					};
@@ -2918,10 +2918,10 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					"step 0"
                     player.storage.moDan=true;//回合外判断使用法术
 					var str='是否使用魔弹'; 
-					var next=player.chooseToUse('h',function(card,player,event){
+					var next=player.chooseToUse_qiTa('h',function(card,player,event){
 						if(card.name!=get.name(trigger.card)) return false;
                         return lib.filter.cardEnabled(card,player,'forceEnable');
-					},str);
+					});
 					next.ai=function(card){
 						return 1;
 					}
