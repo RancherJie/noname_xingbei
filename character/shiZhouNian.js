@@ -2355,7 +2355,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             qiZha:{
                 enable:['chooseToUse','gongJi'],
                 filter:function(event,player){
-                    if(trigger.yingZhan==true) return false;
+                    if(event.yingZhan==true) return false;
                     var dict={};
                     var hs=player.getCards('h');
                     for(var i=0;i<hs.length;i++){
