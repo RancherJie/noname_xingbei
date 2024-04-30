@@ -2792,7 +2792,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         }
                     },
                     feng:{
-                        trigger:{player:'useCardAfeter'},
+                        trigger:{player:'useCardAfter'},
                         forced:true,
                         filter:function(event,player){
                             return event.card==player.storage.yuanSuSheJi;
