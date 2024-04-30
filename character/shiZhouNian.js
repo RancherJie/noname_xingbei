@@ -1581,6 +1581,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 group:'hePingXingZhe_chongZhi',
                 forced:true,
                 trigger:{player:"yingLingZhaoHuan"},
+                filter:function(event,player){
+                    return !plyaer.isLinked();
+                },
                 content:function(){
                     player.storage.yingLingXingTai=true;
                     if(!player.isLinked()) player.link();
@@ -1987,6 +1990,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             xingYuebiHu:{
                 trigger:{global:'changeShiQi2'},
                 filter:function(event,player){
+                    if(player.isLinked()) return false;
                     if(event.side!=player.side) return false;
                     if(event.num>=0) return false;
                     if(event.yuanYin!='damage') return false;
@@ -2317,7 +2321,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 qiDong:true,
                 enable:'phaseUse',
                 filter:function(event,player){
-                    return player.canBiShaBaoShi();
+                    return player.canBiShaBaoShi()&&!player.isLinked();
                 },
                 content:function(){
                     'step 0'
