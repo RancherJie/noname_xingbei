@@ -2885,7 +2885,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					var str='使用圣光抵挡攻击';
 					var next=player.chooseToUse(str).set('filterCard',function(card,player,event){
 						if(card.name!="shengGuang") return false;
-                        return lib.filter.cardUsable(card,player,'forceEnable');
+                        return lib.filter.cardEnabled(card,player,'forceEnable');
 					},str);
 					next.ai=function(card){
 						return 1;
