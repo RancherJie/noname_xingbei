@@ -2254,7 +2254,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     mark:function(dialog,storage,player){
 						var cards=player.getExpansions('anYue');
 						if(player.isUnderControl(true)) dialog.addAuto(cards);
-						else return '共有'+get.cnNumber(cards.length)+'张牌';
+						else return '共有'+cards.length+'张牌';
 					},
                 },
             },
