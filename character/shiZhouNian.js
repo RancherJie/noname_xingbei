@@ -1987,7 +1987,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             },
 
             //月之女神
-            xingYuebiHu:{
+            xinYueBiHu:{
                 trigger:{global:'changeShiQi2'},
                 filter:function(event,player){
                     if(player.isLinked()) return false;
@@ -2935,8 +2935,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             yuanSu_info:'</span><span class="hong">【</span>元素<span class="hong">】</span>为元素师专有指示物，上限为3。',
 
             //月之女神
-            xingYuebiHu:"[响应]新月庇护[持续]",
-            xingYuebiHu_info:"<span class='tiaoJian'>(我方角色因承受伤害造成手牌数超过手牌上限，导致士气即将下降时)</span>[横置]转为【暗月形态】，将因此而造成的弃牌面朝下放置于角色旁，作为【暗月】。本次士气不会下降。",
+            xinYueBiHu:"[响应]新月庇护[持续]",
+            xinYueBiHu_info:"<span class='tiaoJian'>(我方角色因承受伤害造成手牌数超过手牌上限，导致士气即将下降时)</span>[横置]转为【暗月形态】，将因此而造成的弃牌面朝下放置于角色旁，作为【暗月】。本次士气不会下降。",
             anYueZuZhou:"[被动]暗月诅咒",
             anYueZuZhou_info:"<span class='tiaoJian'>(你每次移除【暗月】)</span>我方士气-1；<span class='tiaoJian'>(你的【暗月】数为0时)</span>[重置]脱离暗【暗月形态】。",
             meiDuShaZhiYan:"[响应]美杜莎之眼",
