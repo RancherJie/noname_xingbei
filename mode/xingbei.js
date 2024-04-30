@@ -2882,10 +2882,10 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
                 },
                 content:function(){
 					"step 0"
-					var str='是否使用圣光';
-					var next=player.chooseToRespond('h',str).set('filterCard',function(card,player,event){
+					var str='使用圣光抵挡攻击';
+					var next=player.chooseToUse(str).set('filterCard',function(card,player,event){
 						if(card.name!="shengGuang") return false;
-                        return lib.filter.cardEnabled(card,player,'forceEnable');
+                        return lib.filter.cardUsable(card,player,'forceEnable');
 					},str);
 					next.ai=function(card){
 						return 1;

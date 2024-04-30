@@ -318,11 +318,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 
             //圣女
             bingShuangDaoYan:{
-                group:'bingShuangDaoYan_shengGuang',
                 forced:true,
-                trigger:{player:['useCard']},
+                trigger:{player:'useCard'},
                 filter:function(event){
-                    return get.suit(event.card)=='shui';
+                    return get.suit(event.card)=='shui'||get.name(event.card)=='shengGuang';
                 },
                 content:function(){
                     'step 0'
@@ -344,35 +343,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						target.changeZhiLiao();
 					}
                 },
-                subSkill:{
-                    shengGuang:{
-                        forced:true,
-                        trigger:{player:'respondAfter'},
-                        filter:function(event,player){
-                            return get.name(event.card)=='shengGuang';
-                        },
-                        content:function(){
-                            'step 0'
-                            player.chooseTarget('冰霜祷言：选择一名角色+1[治疗]',true).set('ai',function(target){
-                                if(target.side==player.side&&target.zhiLiao<target.getZhiLiaoLimit()){
-                                    return 1;
-                                }else if(target.side==player.side&&target.zhiLiao>=target.getZhiLiaoLimit()){
-                                    return 0;
-                                }else if(target.side!=player.side){
-                                    return -1;
-                                }else{
-                                    return 1;
-                                }
-                            });
-                            'step 1'
-                            if(result.bool){
-                                var target=result.targets[0];
-                                player.line(target,'blue');
-                                target.changeZhiLiao();
-                            }
-                        },
-                    }
-                }
             },
             zhiLiaoShu:{
                 type:'faShu',
