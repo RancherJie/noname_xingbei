@@ -2670,15 +2670,15 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 0'
                     trigger.parent.shengJi=false;
                     'step 1'
-                    var lsit=[];
+                    var list=[];
                     var num=4;
                     for(var i=0;i<=player.zhiLiao;i++){
                         if(i<=num){
-                            lsit.push(i);
+                            list.push(i);
                         }
                     }
-                    player.chooseControl(lsit).set('prompt','选择移除的[治疗]数量').set('ai',function(player){
-                        return list.length;
+                    player.chooseControl(list).set('prompt','选择移除的[治疗]数量').set('ai',function(){
+                        return list.length-1;
                     });
                     'step 2'
                     var zhiLiaonum=result.control;
