@@ -25,7 +25,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             shengQiangQiShi:['female','sheng','3/4',['shengShengQiShi','huiYao','chengJie','shengJi','tianQiang','diQiang','shengGuangQiYu'],],
             yuanSuShi:['male','yong','3/4',['yuanSuXiShou','yuanSuDianRan','yunShi','bingDong','huoQou','fengRen','leiJi','yueGuang','yuanSu'],],
             maoXianJia:['female','huan','3/4',['qiZha','qiangYun','diXiaFaZe','maoXianJiaTianTang','touTianHuanRi'],],
-            //wenYiFaShi:['male','huan',6,['jianxiong'],],
+            wenYiFaShi:['male','huan','3/4',['buXiu','shengDu','wenYi','siWangZhiChu','juDuXinXing'],],
             zhongCaiZhe:['female','xue','3/4',['zhongCaiFaZe','yiShiZhongDuan','moRiShenPan','shenPanLangChao','zhongCaiYiShi','panJueTianPing','shenPan'],],
             //shenGuan:['female','sheng',6,['jianxiong'],],
             //qiDaoShi:['female','yong',6,['jianxiong'],],
@@ -2917,6 +2917,156 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					},
                 },
             },
+
+            //瘟疫法师
+            buXiu:{
+                group:['buXiu_1','buXiu_2'],
+                subSkill:{
+                    1:{
+                        trigger:{player:'useSkillEnd'},
+                        filter:function(event,player){
+                            if(event.skill=='siWangZhiChu_backup') return false;
+                            if(get.info(event.skill).type!='faShu') return false;
+                            return true;
+                        },
+                        content:function(){
+                            player.changeZhiLiao(1);
+                        }
+                    },
+                    2:{
+                        trigger:{player:'useCardEnd'},
+                        filter:function(event,player){
+                            if(event.parent.name!='chooseToUse'&&event.parent.name!='faShu') return false;
+                            if(get.type(event.card)!='faShu') return false;
+                            return true;
+                        },
+                        content:function(){
+                            player.changeZhiLiao(1);
+                        }
+                    }
+                }
+            },
+            shengDu:{
+                trigger:{player:'shiYongZhiLiao'},
+                filter:function(event,player){
+                    return get.type(event._trigger.card)=='gongJi';
+                },
+                forced:true,
+                content:function(){
+                    trigger.finish();
+                },
+                mod:{
+                    maxZhiLiao:function(player,num){
+                        return num+3;
+                    }
+                }
+            },
+            wenYi:{
+                type:'faShu',
+                enable:['chooseToUse','faShu'],
+                filter:function(event,player){
+                    return player.countCards('h',card=>get.suit(card)=='di');
+                },
+                prepare:'showCards',
+                selectCard:1,
+                filterCard:function(card){
+                    return get.suit(card)=='di';
+                },
+                selectTarget:-1,
+                filterTarget:function(card,player,target){
+                    return target!=player;
+                },
+                content:function(){
+                    target.damageFaShu(1,player);
+                },
+            },
+            siWangZhiChu:{
+                type:'faShu',
+                enable:['chooseToUse','faShu'],
+                filter:function(event,player){
+                    if(player.zhiLiao<2) return false;
+                    var dict={};
+                    var hs=player.getCards('h');
+                    for(var i=0;i<hs.length;i++){
+                        var type=get.suit(hs[i]);
+                        if(!dict[type]) dict[type]=0;
+                        dict[type]++;
+                    }
+                    for(var i in dict){
+                        if(dict[i]>1){
+                            return true;
+                        }
+                    }
+                    return false;
+                },
+                chooseButton:{
+                    dialog:function(event,player){
+						var dialog=ui.create.dialog('死亡之触：移除a点[治疗]','hidden');
+                        var list=[];
+                        for(var i=0;i<=player.zhiLiao;i++){
+                            if(i<2) continue;
+                            list.push(i);
+                        }
+						dialog.add([list,'tdnodes']);
+						return dialog;
+					},
+                    backup:function(links,player){
+						return{
+							links:links,
+							type:'faShu',
+                            selectTarget:1,
+                            filterTarget:true,
+                            selectCard:[2,Infinity],
+                            prepare:'showCards',
+                            filterCard:function(card){
+                                if(!ui.selected.cards.length){
+                                    return true;
+                                }
+                                var suit=get.suit(card);
+                                if(get.suit(ui.selected.cards[0])!=suit){
+                                    return false;
+                                }
+                                return true;
+                            },
+                            complexCard:true,
+							content:function(){
+								'step 0'
+								event.links=lib.skill.siWangZhiChu_backup.links;
+                                event.a=event.links[0];
+                                event.b=cards.length;
+                                player.changeZhiLiao(-event.a);
+                                'step 1'
+                                target.damageFaShu(event.a+event.b-3,player);
+							},
+						}
+					},
+                    prompt:function(links,player){
+						return '弃置b张同系牌[展示]至少2张，对目标角色造成(a+b-3)点伤害。';
+					},
+                }
+            },
+            juDuXinXing:{
+                type:'faShu',
+                enable:['chooseToUse','faShu'],
+                filter:function(event,player){
+                    return player.canBiShaBaoShi();
+                },
+                selectTarget:-1,
+                filterTarget:function(card,player,target){
+                    return target!=player;
+                },
+                contentBefore:function(){
+                    player.removeBiShaBaoShi();
+                },
+                content:function(){
+                    target.damageFaShu(2,player);
+                },
+                contentAfter:function(){
+                    player.changeZhiLiao(1);
+                }
+            },
+            
+
 		},
 		
 		translate:{
@@ -3182,6 +3332,18 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             zhuFu:"祝福",
             zhuFu_info:"【祝福】为精灵射手专有盖牌，上限为3。",
 
+            //瘟疫法师
+            buXiu:"[响应]不朽",
+            buXiu_info:"<span class='tiaoJian'>(法术行动结束时发动)</span>你+1[治疗]。",
+            shengDu:"[被动]圣渎",
+            shengDu_info:"你的[治疗]不能抵御攻击伤害，你的[治疗]上限+3。",
+            wenYi:"[法术]瘟疫",
+            wenYi_info:"<span class='tiaoJian'>(弃1张地系牌[展示])</span>对所有其他角色各造成1点法术伤害③。",
+            siWangZhiChu:"[法术]死亡之触",
+            siWangZhiChu_info:"<span class='tiaoJian'>(移除你的a[治疗]并弃b张同系牌，a，b的数值由你决定，但每项最少为2)</span>对目标角色造成(a+b-3)点伤害③，不能和【不朽】同时发动。",
+            siWangZhiChu_backup:"[法术]死亡之触",
+            juDuXinXing:"[法术]剧毒新星",
+            juDuXinXing_info:"[宝石]对其他角色各造成2点法术伤害③，你+1[治疗]。",
 		},
 	};
 });
