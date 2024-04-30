@@ -2678,6 +2678,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
                 },
                 content:function(){
                     "step 0"
+					event.plyaer=player;
 					event.trigger('shiYongZhiLiao');
 					"step 1"
                     var num=trigger.num;
