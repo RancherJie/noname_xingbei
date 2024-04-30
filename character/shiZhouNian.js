@@ -2664,7 +2664,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 trigger:{player:'useCardToTargeted'},
                 firstDo:true,
                 filter:function(event,player){
-                    return get.type(event.card)=="gongJi"&&get.type(event.card)=="gongJi"&&event.parent.yingZhan!=true;
+                    return get.type(event.card)=="gongJi"&&event.parent.yingZhan!=true;
                 },
                 content:function(){
                     'step 0'
@@ -2678,7 +2678,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         }
                     }
                     player.chooseControl(lsit).set('prompt','选择移除的[治疗]数量').set('ai',function(player){
-                        return list.length-1;
+                        return list.length;
                     });
                     'step 2'
                     var zhiLiaonum=result.control;
