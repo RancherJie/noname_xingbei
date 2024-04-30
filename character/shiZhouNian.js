@@ -355,7 +355,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				filter:function(event,player){
                     return player.countCards('h',function(card){
                         return card.hasNature('zhiLiaoShu');
-                    })&&_status.currentPhase==player;
+                    });
 				},
 				prompt:'目标角色+2[治疗]。',
                 filterTarget:true,
@@ -376,7 +376,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				filter:function(event,player){
                     return player.countCards('h',function(card){
                         return card.hasNature('zhiYuZhiGuang');
-                    })&&_status.currentPhase==player;
+                    });
 				},
 				prompt:'指定最多3名角色各+1[治疗]。',
                 filterTarget:true,
@@ -409,7 +409,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 usable:1,
                 enable:['chooseToUse','faShu'],
                 filter:function(event,player){
-                    return _status.currentPhase==player&&player.canBiShaShuiJing();
+                    return player.canBiShaShuiJing();
                 },
                 selectTarget:[1,3],
                 filterTarget:true,
@@ -609,7 +609,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				filter:function(event,player){
                     return player.countCards('h',function(card){
                         return card.hasNature('diZhiFengYin');
-                    })&&_status.currentPhase==player;
+                    })
 				},
                 selectTarget:1,
                 filterTarget:function(card,player,target){
@@ -666,7 +666,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				filter:function(event,player){
                     return player.countCards('h',function(card){
                         return card.hasNature('shuiZhiFengYin');
-                    })&&_status.currentPhase==player;
+                    });
 				},
                 selectTarget:1,
                 filterTarget:function(card,player,target){
@@ -723,7 +723,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				filter:function(event,player){
                     return player.countCards('h',function(card){
                         return card.hasNature('huoZhiFengYin');
-                    })&&_status.currentPhase==player;
+                    });
 				},
                 selectTarget:1,
                 filterTarget:function(card,player,target){
@@ -780,7 +780,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				filter:function(event,player){
                     return player.countCards('h',function(card){
                         return card.hasNature('fengZhiFengYin');
-                    })&&_status.currentPhase==player;
+                    });
 				},
                 selectTarget:1,
                 filterTarget:function(card,player,target){
@@ -837,7 +837,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				filter:function(event,player){
                     return player.countCards('h',function(card){
                         return card.hasNature('leiZhiFengYin');
-                    })&&_status.currentPhase==player;
+                    });
 				},
                 selectTarget:1,
                 filterTarget:function(card,player,target){
@@ -888,7 +888,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 type:'faShu',
                 enable:['chooseToUse','faShu'],
                 filter:function(event,player){
-                    if(_status.currentPhase!=player) return false;
                     if(!player.canBiShaShuiJing()){
                         return false;
                     }
@@ -955,7 +954,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 type:'faShu',
                 enable:['chooseToUse','faShu'],
                 filter:function(event,player){
-                    if(_status.currentPhase!=player) return false;
                     if(!player.canBiShaShuiJing()){
                         return false;
                     }
@@ -1017,9 +1015,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 type:'faShu',
                 enable:['chooseToUse','faShu'],
                 filter:function(event,player){
-                    if(_status.currentPhase!=player){
-                        return false;
-                    }
                     if(!player.countCards('h',function(card){
                         return get.suit(card)=='feng';
                     })){
@@ -1088,7 +1083,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 filter:function(event,player){
                     return player.countCards('h',function(card){
                         return get.suit(card)=='shui';
-                    })&&_status.currentPhase==player;
+                    });
                 },
                 filterCard:function(card){
                     return get.suit(card)=='shui';
@@ -1181,7 +1176,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				viewAsFilter:function(player){
                     return player.countCards('h',function(card){
                         return card.hasNature('tianShiZhiQiang');
-                    })&&_status.currentPhase==player;
+                    });
 				},
             },
             tianShiZhiGe:{
@@ -1348,7 +1343,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				filter:function(event,player){
                     return player.countCards('h',function(card){
                         return card.hasNature('shanGuangXianJing');
-                    })&&_status.currentPhase==player;
+                    });
 				},
                 selectTarget:1,
                 filterTarget:true,
@@ -1380,7 +1375,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 type:'faShu',
                 enable:['chooseToUse','faShu'],
                 filter:function(event,player){
-                    return player.canBiShaShuiJing()&&_status.currentPhase==player;
+                    return player.canBiShaShuiJing();
                 },
                 selectTarget:1,
                 filterTarget:true,
@@ -1398,7 +1393,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 type:'faShu',
                 enable:['chooseToUse','faShu'],
                 filter:function(event,player){
-                    return player.countCards('h',card=>get.type(card)=='faShu')&&_status.currentPhase==player;
+                    return player.countCards('h',card=>get.type(card)=='faShu');
                 },
                 selectTarget:2,
                 filterTarget:function(card,player,target){
@@ -1489,7 +1484,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 type:'faShu',
                 enable:['chooseToUse','faShu'],
                 filter:function(event,player){
-                    return player.canBiShaBaoShi()&&_status.currentPhase==player;
+                    return player.canBiShaBaoShi();
                 },
                 selectTarget:2,
                 filterTarget:function(card,player,target){
@@ -1671,7 +1666,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 type:'faShu',
                 enable:['chooseToUse','faShu'],
                 filter:function(event,player){
-                    return player.countMark('yuanSu')>=3&&_status.currentPhase==player;
+                    return player.countMark('yuanSu')>=3
                 },
                 content:function(){
                     'step 0'
@@ -1723,7 +1718,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				filter:function(event,player){
                     return player.countCards('h',function(card){
                         return card.hasNature('yunShi');
-                    })&&_status.currentPhase==player;
+                    });
 				},
                 content:function(){
                     'step 0'
@@ -1769,7 +1764,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				filter:function(event,player){
                     return player.countCards('h',function(card){
                         return card.hasNature('bingDong');
-                    })&&_status.currentPhase==player;
+                    });
 				},
                 content:function(){
                     'step 0'
@@ -1819,7 +1814,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				filter:function(event,player){
                     return player.countCards('h',function(card){
                         return card.hasNature('huoQou');
-                    })&&_status.currentPhase==player;
+                    });
 				},
                 content:function(){
                     var num=2;
@@ -1862,7 +1857,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				filter:function(event,player){
                     return player.countCards('h',function(card){
                         return card.hasNature('fengRen');
-                    })&&_status.currentPhase==player;
+                    });
 				},
                 content:function(){
                     'step 0'
@@ -1908,7 +1903,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				filter:function(event,player){
                     return player.countCards('h',function(card){
                         return card.hasNature('leiJi');
-                    })&&_status.currentPhase==player;
+                    });
 				},
                 content:function(){
                     'step 0'
@@ -1933,7 +1928,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 type:'faShu',
                 enable:['chooseToUse','faShu'],
                 filter:function(event,player){
-                    return _status.currentPhase==player&&player.canBiShaShuiJing();
+                    return player.canBiShaShuiJing();
                 },
                 filterTarget:true,
                 selectTarget:1,
