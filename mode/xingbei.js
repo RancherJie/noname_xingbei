@@ -2672,6 +2672,9 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
                 forced:true,
                 priority:1,
                 filter:function(event,player){
+					for(var i=0;i<game.players.length;i++){
+						if(game.players[i].hasMark('xueQiangWeiTingYuan')) return false;
+					}
                     if(event.zhiLiao==false) return false;
                     if(player.zhiLiao<=0) return false;
                     return true;

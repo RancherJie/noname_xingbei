@@ -46,7 +46,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             //yinYouShiRen:['male','huan',6,['jianxiong'],],
             jingLingSheShou:['female','ji','3/4',['yuanSuSheJi','dongWuHuoBan','jingLingMiYi','chongWuQiangHua','zhuFu'],],
             //yinYangShi:['female','huan',6,['jianxiong'],],
-            //xueSeJianLing:['female','xue',6,['jianxiong'],],
+            xueSeJianLing:['female','xue',4,['xueSeJingJi','chiSeYiShan','xueRanQiangWei','xueQiPingZhang','xueQiangWeiTingYuan','shanHuaLunWu','xianXue'],],
             yueZhiNvShen:['female','sheng',5,['xinYueBiHu','anYueZuZhou','meiDuShaZhiYan','yueZhiLunHui','yueDu','anYueZhan','cangBaiZhiYue','xinYue','shiHua','anYue'],],
             //shouLingWuShi:['female','ji',6,['jianxiong'],],
             //shengGong:['male','sheng',6,['jianxiong'],],
@@ -3132,6 +3132,172 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 }
             },
             
+            //血色剑灵
+            xueSeJingJi:{
+                trigger:{player:'useCardToTargeted'},
+                forced:true,
+                filter:function(event,player){
+                    if(get.type(event.card)!='gongJi') return false;
+                    return true;
+                },
+                content:function(){
+                    player.addZhiShiWu('xianXue');
+                }
+            },
+            chiSeYiShan:{
+                trigger:{player:'useCardAfter'},
+                filter:function(event,player){
+                    if(event.yingZhan==true) return false;
+                    if(get.type(event.card)!='gongJi') return false;
+                    if(player.countZhiShiWu('xianXue')<1) return false;
+                    return true;
+                },
+                content:function(){
+                    player.removeZhiShiWu('xianXue');
+                    player.damageFaShu(2,player);
+                    player.storage.gongJi++;
+                }
+
+            },
+            xueRanQiangWei:{
+                type:'faShu',
+                enable:['chooseToUse','faShu'],
+                filter:function(event,player){
+                    return player.countZhiShiWu('xianXue')>=2;
+                },
+				selectTarget:1,
+                filterTarget:true,
+                contentBefore:function(){
+                    player.removeZhiShiWu('xianXue',2);
+                },
+                content:function(){
+                    'step 0'
+                    player.chooseTarget('将我方角色[能量区]的1[水晶]翻面为[宝石]',true,function(card,player,target){
+                        return player.side==target.side;
+                    })
+                    target.changeZhiLiao(-2);
+                    'step 1'
+                    if(result.bool){
+                        if(result.targets[0].countNengLiang('b')){
+                            result.targets[0].removeNengLiang('b');
+                            result.targets[0].addNengLiang('r');
+                        }
+                    }
+                },
+                contentAfter:function(){
+                    'step 0'
+                    if(player.hasMark('xueQiangWeiTingYuan')){
+                        event.flag=true;
+                        event.num=0;
+                        event.targets=game.filterPlayer();
+                    }
+                    'step 1'
+                    if(event.flag){
+                        if(event.num<event.targets.length){
+                            event.targets[event.num].damageFaShu(1,player);
+                            event.num++;
+                            event.redo();
+					    }
+                    }
+                }
+            },
+            xueQiPingZhang:{
+                trigger:{player:'damageBegin'},
+                filter:function(event,player){
+                    if(event.faShu!=true) return false;
+                    return player.countZhiShiWu('xianXue')>=1;
+                },
+                content:function(){
+                    'step 0'
+                    player.removeZhiShiWu('xianXue');
+                    trigger.num--;
+                    'step 1'
+                    player.chooseTarget('对目标对手造成1点法术伤害③',true,function(card,player,target){
+                        return target.side!=player.side;
+                    })
+                    'step 2'
+                    if(result.bool){
+                        result.targets[0].damageFaShu(1,player);
+                    }
+                }
+            },
+            xueQiangWeiTingYuan:{
+                intro:{
+                    name:'血蔷薇庭院',
+                    content:'mark',
+                },
+                markimage:'image/card/xueQiangWeiTingYuan.png',
+                trigger:{player:'phaseEnd'},
+                forced:true,
+                filter:function(event,player){
+                    return player.hasMark('xueQiangWeiTingYuan');
+                },
+                content:function(){
+                    player.removeZhiShiWu('xueQiangWeiTingYuan');
+                }
+            },
+            shanHuaLunWu:{
+                type:'qiDong',
+                enable:'phaseUse',
+                filter:function(event,player){
+                    return player.canBiShaShuiJing();
+                },
+                chooseButton:{
+                    dialog:function(event,player){
+                        var dialog=ui.create.dialog('偷天换日','hidden');
+                        var list=[['b',"[水晶]将【血蔷薇庭院】放置于场上，你+2<span class='hong'>【</span>鲜血<span class='hong'>】</span>"],['r',"[宝石]将【血蔷薇庭院】放置于场上，无视你的<span class='hong'>【</span>鲜血<span class='hong'>】</span>上限为你+2<span class='hong'>【</span>鲜血<span class='hong'>】</span>但你的<span class='hong'>【</span>鲜血<span class='hong'>】</span>数最高为4，你弃到4张牌。"]]
+						dialog.add([list,'textbutton']);
+						return dialog;
+                    },
+                    filter:function(button,player){
+                        var link=button.link;
+                        if(link=='r'){
+                           return player.canBiShaBaoShi();
+                        }else if(link=='b'){
+                            return player.canBiShaShuiJing();
+                        }
+                    },
+                    backup:function(links,player){
+                        if(links[0]=='b'){
+                            var next=get.copy(lib.skill['shanHuaLunWu_b']);
+                        }else if(links[0]=='r'){
+                            var next=get.copy(lib.skill['shanHuaLunWu_r']);
+                        }
+						return next;
+					},
+                },
+                subSkill:{
+                    b:{
+                        type:'qiDong',
+                        content:function(){
+                            player.removeBiShaShuiJing();
+                            player.addZhiShiWu('xueQiangWeiTingYuan');
+                            player.addZhiShiWu('xianXue',2);
+                        }
+                    },
+                    r:{
+                        type:'qiDong',
+                        content:function(){
+                            player.removeBiShaBaoShi();
+                            player.addZhiShiWu('xueQiangWeiTingYuan');
+                            player.addZhiShiWu('xianXue',2,4);
+                            if(player.countCards('h')>4){
+                                var num=player.countCards('h')-4;
+                                player.chooseToDiscard('h',true,num);
+                            }
+                        }
+                    }
+                }
+            },
+            xianXue:{
+                intro:{
+                    name:'鲜血',
+                    content:'mark',
+                    max:3,
+                },
+                markimage:'image/card/hong.png',
+            },
+
 		},
 		
 		translate:{
@@ -3423,6 +3589,23 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             anYingLiuXing_info:"<span class='tiaoJian'>(仅【暗影形态】下发动，弃2张法术牌[展示])</span>对目标角色造成2点法术伤害③；<span class='tiaoJian'>(若你额外移除我方【战绩区】2星石)</span>[重置]脱离[暗影型态]，你+1[宝石]。",
             huangQaunZhenChan:"[响应]黄泉震颤[回合限定]",
             huangQaunZhenChan_info:"[宝石]<span class='tiaoJian'>(主动攻击前发动①)</span>本次攻击对手不能应战，<span class='tiaoJian'>（若命中②）</span>你将手牌补至上限，然后弃2张牌。",
+
+            //血色剑灵
+            xueSeJingJi:"[被动]血色荆棘",
+            xueSeJingJi_info:"<span class='tiaoJian'>(攻击命中时②)你+1</span><span class='hong'>【</span>鲜血<span class='hong'>】</span>。",
+            chiSeYiShan:"[响应]赤色一闪",
+            chiSeYiShan_info:"<span class='tiaoJian'>(攻击行动结束后，移除1点</span><span class='hong'>【</span>鲜血<span class='hong'>】</span><span class='tiaoJian'>，对自己造成2点法术伤害③)</span>额外+1攻击行动。",
+            xueRanQiangWei:"[法术]血染蔷薇",
+            xueRanQiangWei_info:"<span class='tiaoJian'>(移除2点</span><span class='hong'>【</span>鲜血<span class='hong'>】</span><span class='tiaoJian'>)</span>移除目标角色2[治疗]，将我方角色[能量区]的1[水晶]翻面为[宝石]。<span class='tiaoJian'>(若【血蔷薇庭院】在场)</span>额外对所有角色造成1点法术伤害。",
+            xueQiPingZhang:"[响应]血气屏障",
+            xueQiPingZhang_info:"<span class='tiaoJian'>(目标角色对你造成法术伤害③时，移除1点<span class='hong'>【</span>鲜血<span class='hong'>】</span><span class='tiaoJian'>)</span>本次法术伤害-1③，对目标对手造成1点法术伤害③。",
+            xueQiangWeiTingYuan:"(专)[被动]血蔷薇庭院",
+            xueQiangWeiTingYuan_info:"<span class='tiaoJian'>(此卡在场时)</span>所有角色的[治疗]无法用于抵御伤害；<span class='tiaoJian'>(血色剑灵的回合结束时)</span>移除此卡。",
+            shanHuaLunWu:"[启动]散华轮舞",
+            shanHuaLunWu_backup:"[启动]散华轮舞",
+            shanHuaLunWu_info:"你选择以下一项发动：<br>·[水晶]将【血蔷薇庭院】放置于场上，你+2<span class='hong'>【</span>鲜血<span class='hong'>】</span>；<br>·[宝石]将【血蔷薇庭院】放置于场上，无视你的<span class='hong'>【</span>鲜血<span class='hong'>】</span>上限为你+2<span class='hong'>【</span>鲜血<span class='hong'>】</span>但你的<span class='hong'>【</span>鲜血<span class='hong'>】</span>数最高为4，你弃到4张牌。",
+            xianXue:"鲜血",
+            xianXue_info:"<span class='hong'>【</span>鲜血<span class='hong'>】</span>为血色剑灵专有指示物，上限为3。",
 
 		},
 	};
