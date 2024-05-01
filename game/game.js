@@ -18744,6 +18744,8 @@
 					player.zhiLiao+=num;
 					if(num>0){
 						game.log(player,'获得了'+get.cnNumber(num)+'点治疗');
+					}else if(num<0){
+						game.log(player,'移除了'+get.cnNumber(num)+'点治疗')
 					}
 					if(event.bool==true){
 						event.trigger('zhiLiaoYiChu');
