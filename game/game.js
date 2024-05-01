@@ -5138,11 +5138,11 @@
 					},
 					connect_choose_number:{
 						name:'候选角色数',
-						init:1,
+						init:3,
 						item:{
 							1:'1',
 							2:'2',
-							//3:'3',
+							3:'3',
 						},
 						frequent:true,
 					},
@@ -5173,11 +5173,11 @@
 					},
 					choose_number:{
 						name:'候选角色数',
-						init:1,
+						init:3,
 						item:{
 							1:'1',
 							2:'2',
-							//3:'3',
+							3:'3',
 						},
 						frequent:true,
 					},
