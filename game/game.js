@@ -13843,7 +13843,7 @@
 						}
 						if(event.qiDong){
 							next.set('type','qiDong');
-							event.flag=false;
+							event.qiDong=false;
 						}
 						
 					}
