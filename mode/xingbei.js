@@ -3608,6 +3608,8 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					}
 					if(num<0){
 						this.removeMark(zhiShuWu,-num);
+					}else if(num>0){
+						this.removeMark(zhiShuWu,num);
 					}
 				},
 				addZhanJi:function(color,num){
