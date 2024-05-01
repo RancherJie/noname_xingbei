@@ -3579,14 +3579,15 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					if(get.itemtype(source)!='player') source=this;
 					this.damage(num,source).set('faShu',true);
 				},
-				addZhiShiWu:function(zhiShuWu,num){
+				addZhiShiWu:function(zhiShuWu,num,max){
 					if(typeof num!='number'||!num) num=1;
 					var info=get.info(zhiShuWu);
-					var max;
-					if(info&&info.intro&&info.intro.max){
-						max=info.intro.max;
+					if(typeof max=='number'){
+						var max=max;
+					}else if(info&&info.intro&&info.intro.max){
+						var max=info.intro.max;
 					}else{
-						max=Infinity;
+						var max=Infinity;
 					}
 					var current=this.countMark(zhiShuWu);
 					if(current+num>max){
