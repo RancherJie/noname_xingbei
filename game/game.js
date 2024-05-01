@@ -13841,6 +13841,10 @@
 							next.set('type','phase');
 							event.flag=true;
 						}
+						if(event.qiDong){
+							next.set('type','qiDong');
+							event.flag=false;
+						}
 						
 					}
 					"step 1"
@@ -13910,7 +13914,7 @@
 						}
 					}
 					_status.noclearcountdown=true;
-					if(event.type=='phase'){
+					if(event.type=='phase'||event.type=='qiDong'){
 						if(event.isMine()){
 							event.endButton=ui.create.control('结束回合','stayleft',function(){
 								var evt=_status.event;
@@ -17455,7 +17459,7 @@
 						if(type=='teShu'){
 							player.storage.all--;
 						}else if(type=='qiDong'){
-							event.parent.parent.flag=false;
+							event.parent.parent.qiDong=true;
 						}else if(type=='faShu'){
 							if(player.storage.faShu>0){
 								player.storage.faShu--;
