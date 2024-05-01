@@ -1690,32 +1690,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 type:'faShu',
                 enable:['chooseToUse','faShu'],
 				filterCard:function(card){
-                    if(!ui.selected.cards.length){
-                        return card.hasNature('yunShi');
-                    }
-                    for(var i=0;i<ui.selected.cards.length;i++){
-                        if(ui.selected.cards[i].hasNature('yunShi')){
-                            return get.suit(card)=='di';
-                        }else{
-                            return card.hasNature('yunShi');
-                        }
-                    }
-					return false;
+                    return card.hasNature('yunShi');
 				},
-                selectCard:[1,2],
-                complexCard:true,
+                selectCard:1,
 				position:'h',
                 useCard:true,
                 selectTarget:1,
                 filterTarget:true,
-                filterOk:function(){
-                    for(var i=0;i<ui.selected.cards.length;i++){
-                        if(ui.selected.cards[i].hasNature('yunShi')){
-                            return true;
-                        }
-                    }
-                    return false;
-                },
 				filter:function(event,player){
                     return player.countCards('h',function(card){
                         return card.hasNature('yunShi');
@@ -1723,12 +1704,15 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				},
                 content:function(){
                     'step 0'
+                    plyaer.chooseToDiscard(1,card=>get.suit(card)=='di','是否额外弃1张地系牌[展示]');
+                    'step 1'
                     var num=1;
-                    if(cards.length==2){
+                    if(result.bool){
+                        player.showCards(result.cards);
                         num+=1;
                     }
                     target.damageFaShu(num,player);
-                    'step 1'
+                    'step 2'
                     player.faShu('陨石：法术行动');
                 },
             },
@@ -1736,32 +1720,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 type:'faShu',
                 enable:['chooseToUse','faShu'],
                 filterCard:function(card){
-                    if(!ui.selected.cards.length){
-                        return card.hasNature('bingDong');
-                    }
-                    for(var i=0;i<ui.selected.cards.length;i++){
-                        if(ui.selected.cards[i].hasNature('bingDong')){
-                            return get.suit(card)=='shui';
-                        }else{
-                            return card.hasNature('bingDong');
-                        }
-                    }
-					return false;
+                    return card.hasNature('bingDong');
 				},
-                selectCard:[1,2],
-                complexCard:true,
+                selectCard:1,
 				position:'h',
                 useCard:true,
                 selectTarget:1,
                 filterTarget:true,
-                filterOk:function(){
-                    for(var i=0;i<ui.selected.cards.length;i++){
-                        if(ui.selected.cards[i].hasNature('bingDong')){
-                            return true;
-                        }
-                    }
-                    return false;
-                },
 				filter:function(event,player){
                     return player.countCards('h',function(card){
                         return card.hasNature('bingDong');
@@ -1769,14 +1734,17 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				},
                 content:function(){
                     'step 0'
+                    plyaer.chooseToDiscard(1,card=>get.suit(card)=='shui','是否额外弃1张水系牌[展示]');
+                    'step 1'
                     var num=1;
-                    if(cards.length==2){
+                    if(result.bool){
+                        player.showCards(result.cards);
                         num+=1;
                     }
                     target.damage(num,player).set('faShu',true);
-                    'step 1'
-                    player.chooseTarget(1,'冰冻：选择1名角色+1[治疗]',true);
                     'step 2'
+                    player.chooseTarget(1,'冰冻：选择1名角色+1[治疗]',true);
+                    'step 3'
                     if(result.bool){
                         result.targets[0].changeZhiLiao(1);
                     }
@@ -1786,40 +1754,25 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 type:'faShu',
                 enable:['chooseToUse','faShu'],
 				filterCard:function(card){
-                    if(!ui.selected.cards.length){
-                        return card.hasNature('huoQou');
-                    }
-                    for(var i=0;i<ui.selected.cards.length;i++){
-                        if(ui.selected.cards[i].hasNature('huoQou')){
-                            return get.suit(card)=='huo';
-                        }else{
-                            return card.hasNature('huoQou');
-                        }
-                    }
-					return false;
+                    return card.hasNature('huoQou');
 				},
-                selectCard:[1,2],
-                complexCard:true,
+                selectCard:1,
 				position:'h',
                 useCard:true,
                 selectTarget:1,
                 filterTarget:true,
-                filterOk:function(){
-                    for(var i=0;i<ui.selected.cards.length;i++){
-                        if(ui.selected.cards[i].hasNature('huoQou')){
-                            return true;
-                        }
-                    }
-                    return false;
-                },
 				filter:function(event,player){
                     return player.countCards('h',function(card){
                         return card.hasNature('huoQou');
                     });
 				},
                 content:function(){
+                    'step 0'
+                    plyaer.chooseToDiscard(1,card=>get.suit(card)=='huo','是否额外弃1张火系牌[展示]');
+                    'step 1'
                     var num=2;
-                    if(cards.length==2){
+                    if(result.bool){
+                        player.showCards(result.cards);
                         num+=1;
                     }
                     target.damage(num,player).set('faShu',true);
@@ -1829,32 +1782,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 type:'faShu',
                 enable:['chooseToUse','faShu'],
 				filterCard:function(card){
-                    if(!ui.selected.cards.length){
-                        return card.hasNature('fengRen');
-                    }
-                    for(var i=0;i<ui.selected.cards.length;i++){
-                        if(ui.selected.cards[i].hasNature('fengRen')){
-                            return get.suit(card)=='feng';
-                        }else{
-                            return card.hasNature('fengRen');
-                        }
-                    }
-					return false;
+                    return card.hasNature('fengRen');
 				},
-                selectCard:[1,2],
-                complexCard:true,
+                selectCard:1,
 				position:'h',
                 useCard:true,
                 selectTarget:1,
                 filterTarget:true,
-                filterOk:function(){
-                    for(var i=0;i<ui.selected.cards.length;i++){
-                        if(ui.selected.cards[i].hasNature('fengRen')){
-                            return true;
-                        }
-                    }
-                    return false;
-                },
 				filter:function(event,player){
                     return player.countCards('h',function(card){
                         return card.hasNature('fengRen');
@@ -1862,12 +1796,15 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				},
                 content:function(){
                     'step 0'
+                    plyaer.chooseToDiscard(1,card=>get.suit(card)=='feng','是否额外弃1张风系牌[展示]');
+                    'step 1'
                     var num=1;
-                    if(cards.length==2){
+                    if(result.bool){
+                        player.showCards(result.cards);
                         num+=1;
                     }
                     target.damage(num,player).set('faShu',true);
-                    'step 1'
+                    'step 2'
                     player.gongJi('风刃：攻击行动');
                 }
             },
@@ -1875,32 +1812,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 type:'faShu',
                 enable:['chooseToUse','faShu'],
 				filterCard:function(card){
-                    if(!ui.selected.cards.length){
-                        return card.hasNature('leiJi');
-                    }
-                    for(var i=0;i<ui.selected.cards.length;i++){
-                        if(ui.selected.cards[i].hasNature('leiJi')){
-                            return get.suit(card)=='lei';
-                        }else{
-                            return card.hasNature('leiJi');
-                        }
-                    }
-					return false;
+                    return card.hasNature('leiJi');
 				},
-                selectCard:[1,2],
-                complexCard:true,
+                selectCard:1,
 				position:'h',
                 useCard:true,
                 selectTarget:1,
                 filterTarget:true,
-                filterOk:function(){
-                    for(var i=0;i<ui.selected.cards.length;i++){
-                        if(ui.selected.cards[i].hasNature('leiJi')){
-                            return true;
-                        }
-                    }
-                    return false;
-                },
 				filter:function(event,player){
                     return player.countCards('h',function(card){
                         return card.hasNature('leiJi');
@@ -1908,12 +1826,15 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				},
                 content:function(){
                     'step 0'
+                    plyaer.chooseToDiscard(1,card=>get.suit(card)=='lei','是否额外弃1张雷系牌[展示]');
+                    'step 1'
                     var num=1;
-                    if(cards.length==2){
+                    if(result.bool){
+                        player.showCards(result.cards);
                         num+=1;
                     }
                     target.damage(num,player).set('faShu',true);
-                    'step 1'
+                    'step 2'
                     if(player.side==true){
                         if(game.hongZhanJi.length<5){
                             player.changeZhanJi('r',1);
