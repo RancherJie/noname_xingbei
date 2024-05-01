@@ -388,7 +388,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 }
             },
             lianMin:{
-                qiDong:true,
+                type:'qiDong',
                 enable:'phaseUse',
                 filter:function(event,player){
                     return player.canBiShaBaoShi();
@@ -492,7 +492,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 }
             },
             qianXing:{
-                qiDong:true,
+                type:'qiDong',
                 enable:"phaseUse",
                 filter:function(event,player){
                     return player.canBiShaBaoShi();
@@ -2233,7 +2233,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 }
             },
             yiShiZhongDuan:{
-                qiDong:true,
+                type:'qiDong',
                 enable:'phaseUse',
                 filter:function(event,player){
                     return player.isLinked();
@@ -2283,7 +2283,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
             },
             zhongCaiYiShi:{
-                qiDong:true,
+                type:'qiDong',
                 enable:'phaseUse',
                 filter:function(event,player){
                     return player.canBiShaBaoShi()&&!player.isLinked();
@@ -2842,7 +2842,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 }
             },
             jingLingMiYi:{
-                qiDong:true,
+                type:'qiDong',
                 enable:'phaseUse',
                 filter:function(event,player){
                     return player.canBiShaBaoShi()&&!player.isLinked(); 

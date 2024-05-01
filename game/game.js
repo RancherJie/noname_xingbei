@@ -17454,6 +17454,8 @@
 						var type=get.info(event.skill).type;
 						if(type=='teShu'){
 							player.storage.all--;
+						}else if(type=='qiDong'){
+							event.parent.parent.flag=false;
 						}else if(type=='faShu'){
 							if(player.storage.faShu>0){
 								player.storage.faShu--;
