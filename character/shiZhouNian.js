@@ -240,7 +240,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					}
 					return false;
 				},
-				forced:true,
+				firstDo:true,
 				content:function(){
 					trigger.getParent().baseDamage++;
                     if(player.countCards('h')>3){
@@ -302,6 +302,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             },
             siLie:{
                 trigger:{player:'useCardToTargeted'},
+                lastDo:true,
                 filter:function(event,player){
                     if(get.type(event.card)=='gongJi'){
                         return player.canBiShaBaoShi();
