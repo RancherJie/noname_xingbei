@@ -2638,6 +2638,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 			falseColor:"wei",
 			versus_single_control_config:'单人控制',
 
+			_wuFaXingDong:'无法行动',
 			//公共技能
             _xuRuo:"虚弱",
             _zhongDu:"中毒",
@@ -2656,6 +2657,45 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 			
 		},
 		skill:{
+			_wuFaXingDong:{
+				enable:'wuFaXingDong',
+				type:'wuFaXingDong',
+				content:function(){
+					"step 0"
+					player.storage.wuFaXingDong={'认可':0,'否认':0};
+					event.targetsx=game.filterPlayer(i=>i!=player).sortBySeat(_status.currentPhase);
+					var name=get.translation(player.name);
+					event.contentx=[name+'无法行动',player.getCards('h').slice()];
+					event.listx=['认可','否认'];
+					"step 1"
+					var target=event.targetsx.shift();
+					target.chooseControl(event.listx).set('dialog',event.contentx).set('ai',function(){
+						return 0;
+					});
+					"step 2"
+					if(result.control=='认可'){
+						player.storage.wuFaXingDong[result.control]++;
+					}else if(result.control=='否认'){
+						player.storage.wuFaXingDong[result.control]++;
+					}
+					if(event.targetsx.length>0) event.goto(1);
+					"step 3"
+					var dict=player.storage.wuFaXingDong;
+					if(dict['认可']>=dict['否认']){
+						var num=player.getCards('h').length;
+						player.discard(player.getCards('h'));
+						player.draw(num);
+					}else{
+						if(game.players[0].side==player.side){
+							game.over(false);
+						}else{
+							game.over(true);
+						}
+					}
+				},
+			},
+
+
 			_chongZhiAction:{
 				trigger:{player:'phaseBegin'},
 				forced:true,
@@ -2664,6 +2704,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					player.storage.all=1;
 					player.storage.faShu=0;
 					player.storage.gongJi=0;
+					player.storage.canTeShu=true;
 				}
 			},
 
@@ -2997,6 +3038,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				enable:'phaseUse',
 				type:'teShu',
 				filter:function(event,player){
+					if(event.parent.canTeShu==false) return false;
 					return player.countCards('h')+3<=player.getHandcardLimit();
 				},
 				content:function(event,player){
@@ -3051,6 +3093,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				enable:'phaseUse',
 				type:'teShu',
 				filter:function(event,player){
+					if(event.parent.canTeShu==false) return false;
 					if(player.side==true){
 						return game.hongZhanJi.length>=3&&player.countCards('h')+3<=player.getHandcardLimit();
 					}else if(player.side==false){
@@ -3142,6 +3185,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				enable:'phaseUse',
 				type:'teShu',
 				filter:function(event,player){
+					if(event.parent.canTeShu==false) return false;
                     var nengLiang_num=player.countMark('_tiLian_r')+player.countMark('_tiLian_b');
                     var empty_nengliang=player.getNengLiangLimit()-nengLiang_num;
 					if(player.side==true){

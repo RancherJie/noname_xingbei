@@ -13916,6 +13916,8 @@
 					_status.noclearcountdown=true;
 					if(event.type=='phase'||event.type=='qiDong'){
 						if(event.isMine()){
+							//屏蔽回合结束
+							/*
 							event.endButton=ui.create.control('结束回合','stayleft',function(){
 								var evt=_status.event;
 								if(evt.name!='chooseToUse'||evt.type!='phase') return;
@@ -13923,7 +13925,7 @@
 									ui.click.cancel();
 								}
 								ui.click.cancel();
-							});
+							});*/
 							event.fakeforce=true;
 						}
 						else{
@@ -17460,6 +17462,9 @@
 							player.storage.all--;
 						}else if(type=='qiDong'){
 							event.parent.parent.qiDong=true;
+						}else if(type=='wuFaXingDong'){//使用无法行动时的设置
+							event.parent.parent.flag=false;
+							event.parent.parent.canTeShu=false
 						}else if(type=='faShu'){
 							if(player.storage.faShu>0){
 								player.storage.faShu--;
@@ -38654,6 +38659,7 @@
 						if(typeof info.enable=='function') enable=info.enable(event);
 						else if(Array.isArray(info.enable)) enable=info.enable.contains(event.name);
 						else if(info.enable=='phaseUse') enable=(event.type=='phase');
+						else if(info.enable=='wuFaXingDong') enable=(event.type=='phase'||event.type=='qiDong');//专门无法行动设置启用参数
 						else if(typeof info.enable=='string') enable=(info.enable==event.name);
 						if(enable){
 							if(!game.expandSkills(player.getSkills(false).concat(lib.skill.global)).contains(skills2[i])&&(info.noHidden||get.mode()!='guozhan'||player.hasSkillTag('nomingzhi',false,null,true))) enable=false;
@@ -38689,6 +38695,16 @@
 						equipskills.push(skills.splice(i--,1)[0]);
 					}
 				}
+
+				//将无法命中专门设置的技能放到装备技能列表方便显示调整
+				if(globalskills.includes("_wuFaXingDong")){
+					globalskills=globalskills.filter(function(s){
+						return s!='_wuFaXingDong';
+					});
+					equipskills.push('_wuFaXingDong');
+				}
+
+
 				if(equipskills.length){
 					ui.create.skills3(equipskills);
 				}
@@ -49795,6 +49811,10 @@
 					_status.noupdatec=true;
 				}
 				ui.skills3=ui.create.control(skills.concat([ui.click.skill]));
+				//更改无法行动位置
+				ui.skills3.style.position = 'absolute';
+				ui.skills3.style.top = '0px';
+				ui.skills3.style.left = '200px';
 				for(var i=0;i<ui.skills3.childNodes.length;i++){
 					ui.skills3.childNodes[i].innerHTML=get.skillTranslation(ui.skills3.childNodes[i].link,_status.event.player);
 				}
