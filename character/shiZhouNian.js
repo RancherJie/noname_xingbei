@@ -3244,7 +3244,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 chooseButton:{
                     dialog:function(event,player){
-                        var dialog=ui.create.dialog('偷天换日','hidden');
+                        var dialog=ui.create.dialog('散华轮舞','hidden');
                         var list=[['b',"[水晶]将【血蔷薇庭院】放置于场上，你+2<span class='hong'>【</span>鲜血<span class='hong'>】</span>"],['r',"[宝石]将【血蔷薇庭院】放置于场上，无视你的<span class='hong'>【</span>鲜血<span class='hong'>】</span>上限为你+2<span class='hong'>【</span>鲜血<span class='hong'>】</span>但你的<span class='hong'>【</span>鲜血<span class='hong'>】</span>数最高为4，你弃到4张牌。"]]
 						dialog.add([list,'textbutton']);
 						return dialog;
