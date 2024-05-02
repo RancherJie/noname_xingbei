@@ -601,7 +601,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 						var mubiao=player.getPrevious();
 						while(mubiao.side==player.side){
 							mubiao=mubiao.getPrevious();
-							if(mubiao.storage.yingZhan==true){
+							if(mubiao.storage.moDan==true){
 								mubiao=mubiao.getPrevious();
 							}
 						}
@@ -610,7 +610,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 						var mubiao=player.getNext();
 						while(mubiao.side==player.side){
 							mubiao=mubiao.getNext();
-							if(mubiao.storage.yingZhan==true){
+							if(mubiao.storage.moDan==true){
 								mubiao=mubiao.getPrevious();
 							}
 						}
