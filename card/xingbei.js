@@ -597,7 +597,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 				updateUsable:'phaseUse',
 				selectTarget:1,
 				filterTarget:function(card,player,target){
-					if(game.moDan_shunShiZhen==true){
+					if(game.moDan_shunShiZhen==true||player.hasSkill('moDanZhangWo')){
 						var mubiao=player.getPrevious();
 						while(mubiao.side==player.side){
 							mubiao=mubiao.getPrevious();
@@ -606,7 +606,8 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 							}
 						}
 						if(target==mubiao) return true;
-					}else{
+					}
+					{
 						var mubiao=player.getNext();
 						while(mubiao.side==player.side){
 							mubiao=mubiao.getNext();

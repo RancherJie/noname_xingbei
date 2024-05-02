@@ -1436,36 +1436,36 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 }
             },
             moDanZhangWo:{
-                enable:['chooseToUse','faShu'],
+                trigger:{player:'useCardBefore'},
+                forced:true,
                 filter:function(event,player){
-                    if(game.moDan_shunShiZhen==true){
-                        return false;
+                    if(player.storage.moDan==true) return false;
+                    if(get.name(event.card)!='moDan') return false;
+                    var range_l=0,range_r=0;
+                    var target=player;
+                    while(target!=event.targets[0]){
+                        target=target.getPrevious();
+                        range_l++;
                     }
-                    if(player.countCards('h',function(card){
-                        return get.name(card)=='moDan'||get.suit(card)=='di'||get.suit(card)=='huo';
-                    })){
-                        return true;
+                    target=player;
+                    while(target!=event.targets[0]){
+                        target=target.getNext();
+                        range_r++;
                     }
-                    return false;
+                    console.log(range_l,range_r);
+                    if(range_l=range_r){
+                        if(player.side==player.getNext().side){
+                            return false;
+                        }else{
+                            return true;
+                        }
+                    }
+                    return range_r>range_l;
                 },
                 content:function(){
-                    'step 0' 
                     game.broadcastAll(function(){
                         game.moDan_shunShiZhen=true;
                     });
-                    player.storage.moDan=true;
-                    'step 1'
-                    player.chooseToUse(function(card){
-                        return card.name=='moDan';
-                    });
-                    'step 2'
-                    player.storage.moDan=false;
-                    if(!result.bool){
-                        game.broadcastAll(function(){
-                            game.moDan_shunShiZhen=false;
-                        });
-                        player.chooseToUse(true);
-                    }
                 }
             },
             moDanRongHe:{
