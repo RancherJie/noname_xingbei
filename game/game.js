@@ -50596,7 +50596,14 @@
 					}
 					if(item.nature){
 						let natures=get.natureList(item.nature);
-						natures.forEach(n=>node.classList.add(n));
+						//natures.forEach(n=>node.classList.add(n));
+						//尝试
+						natures.forEach(n => {
+							if(n && n.trim() !== "") {  // 确保n不为空且不是只含空格的字符串
+								node.classList.add(n);
+							}
+						});
+
 					}
 					if(!noclick){
 						lib.setIntro(node);
