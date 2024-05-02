@@ -2901,6 +2901,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					'step 0'
                     event.source=trigger.parent.parent.source;
                     event.player=trigger.parent.player;
+					event.yingZhan=trigger.parent.parent.yingZhan;
 					'step 1'
                     event.trigger('gongJiWeiMingZhong');
                 }
@@ -2914,7 +2915,6 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
                 },
 				content:function(){
 					trigger.yingZhan=true;
-					event.yingZhan=trigger.parent.parent.yingZhan;
 				}
 			},
 
