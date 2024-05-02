@@ -74,6 +74,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         return lib.filter.cardEnabled(card,player,'forceEnable');
 					},str);
 					next.ai=function(card){
+                        if(get.suit(card)!='feng'||get.type(card)!='gongJi') return -1;
 						return 1;
 					}
 					next.autodelay=true;
