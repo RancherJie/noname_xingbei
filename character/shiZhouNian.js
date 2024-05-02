@@ -1953,7 +1953,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         player.addMark('shiHua');
                     }
                     'step 3'
-                    if(event.card.type=='faShu'){
+                    if(get.type(event.card)=='faShu'){
                         if(player.countCards('h')>0){
                             player.chooseToDiscard('h',true);
                         }
