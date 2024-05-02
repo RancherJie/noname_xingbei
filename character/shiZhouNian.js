@@ -2180,7 +2180,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 type:'faShu',
                 enable:['chooseToUse','faShu'],
                 filter:function(event,player){
-                    player.countZhiShiWu('shenPan')>0;
+                    return player.countZhiShiWu('shenPan')>0;
                 },
                 selectTarget:1,
                 filterTarget:true,
