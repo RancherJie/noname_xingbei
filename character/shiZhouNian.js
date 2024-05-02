@@ -2536,7 +2536,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     return get.type(card)=='faShu';
                 },
                 prepare:'showCards',
-                selectTarget:-1,
+                selectTarget:1,
 				filterTarget:function(card,player,target){
 					return target!=player;
 				},
