@@ -581,11 +581,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     1:{
                         trigger:{player:'useCardAfter'},
                         filter:function(event,player){
-                            if(event.yingZhan==true) return false;
-                            return get.type(event.card)=='faShu'&&_status.currentPhase==player;
+                            return get.type(event.card)=='faShu'&&event.parent.name!='chooseToUse_qiTa';
                         },
                         content:function(){
-                            player.gongJi('法术激荡：攻击行动');
+                            player.storage.gongJi++;
                         }
                     },
                     2:{
@@ -595,7 +594,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             return info.type=='faShu';
                         },
                         content:function(player){
-                            player.gongJi('法术激荡：攻击行动')
+                            player.storage.gongJi++;
                         }
                     },
                 },
