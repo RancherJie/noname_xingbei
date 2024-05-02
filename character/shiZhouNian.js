@@ -1583,7 +1583,15 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 content:function(){
                     'step 0'
                     var choiceList=['你+1[治疗]，[重置]脱离【英灵形态】','(移除我方【战绩区】X个星石，X<3)目标角色+X[治疗]'];
-                    var choices=['选择一','选项二'];
+                    var choices=['选择一'];
+                    if(player.side==true){
+                        var list=game.hongZhanJi;
+                    }else if(player.side==false){
+                        var list=game.lanZhanJi;
+                    }
+                    if(list.length>=1){
+                        choices.push('选项二');
+                    }
                     player.chooseControl(choices).set('prompt','军光神威：选择一项').set('choiceList',choiceList);
                     'step 1'
                     if(result.index==0){
@@ -1603,7 +1611,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             [list,'tdnodes'],
                         ]);
                         next.set('forced',true);
-                        next.set('selectButton',[0,2]);
+                        next.set('selectButton',[1,2]);
                     }
                     'step 2'
                     event.number=result.links.length;
