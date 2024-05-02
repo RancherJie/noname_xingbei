@@ -25,7 +25,7 @@ github：[RancherJie/noname_xingbei (github.com)](https://github.com/RancherJie/
 
 ## 启动器以及无名星杯百度网盘地址
 
-[https://pan.baidu.com/s/1D7ZYSypH5d6HAhLWs2Bpvw?pwd=dzxl](https://gitee.com/link?target=https%3A%2F%2Fpan.baidu.com%2Fs%2F1D7ZYSypH5d6HAhLWs2Bpvw%3Fpwd%3Ddzxl)
-提取码：dzxl
+https://pan.baidu.com/s/1eqUmsdqyjwmo5tnM2IIEoQ?pwd=d7rv
+提取码：d7rv
 
 ## [无名杀官网](https://gitee.com/qinkunwei/noname)
