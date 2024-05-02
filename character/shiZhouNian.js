@@ -1522,7 +1522,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     2:{
                         trigger:{player:'useSkillAfter'},
                         filter:function(event,player){
-                            console.log(event);
                             var info=get.info(event.skill);
                             return info.type=='faShu'&&player.zhiLiao>=1;
                         },
