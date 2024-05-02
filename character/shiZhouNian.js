@@ -2030,6 +2030,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             anYueZhan:{
                 trigger:{player:'useCardToTargeted'},
                 filter:function(event,player){
+                    if(event.yingZhan==true) return false;
                     return player.isLinked()&&player.canBiShaShuiJing()&&player.getExpansions('anYue').length>=0&&get.type(event.card)=='gongJi';
                 },
                 content:function(){
