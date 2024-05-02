@@ -111,7 +111,7 @@
 		versionOL:27,
 		updateURLS:{
 			gitee:'https://gitee.com/RancherJie/noname_xingbei/raw',
-			github:'https://ghproxy.com/https://raw.githubusercontent.com/RancherJie/noname_xingbei/master',
+			github:'https://raw.githubusercontent.com/RancherJie/noname_xingbei/master',
 			Proxy:'https://ghproxy.com/https://raw.githubusercontent.com/RancherJie/noname_xingbei/master',
 		},
 		updateURL:'https://gitee.com/RancherJie/noname_xingbei/raw',
