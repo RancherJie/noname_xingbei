@@ -1850,13 +1850,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 type:'faShu',
                 enable:['chooseToUse','faShu'],
                 filter:function(event,player){
-                    return player.canBiShaShuiJing();
+                    return player.canBiShaBaoShi();
                 },
                 filterTarget:true,
                 selectTarget:1,
                 content:function(){
                     'step 0'
-                    player.removeBiShaShuiJing();
+                    player.removeBiShaBaoShi();
                     'step 1'
                     var num=player.countNengLiang('r')+player.countNengLiang('b')+1;
                     event.num=num;
