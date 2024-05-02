@@ -11,6 +11,21 @@ github：[RancherJie/noname_xingbei (github.com)](https://github.com/RancherJie/
 
 ## 启动说明
 
-电脑版可搭配启动器启动，手机端必须使用启动器启动，使用启动器启动，报错更详细 [下载地址](https://pan.baidu.com/s/15YKEHPxPLnAxP54XAyvL0g)
+电脑版可搭配启动器启动，手机端必须使用启动器启动；使用启动器启动，报错更详细
+
+## 启动器下载
+
+### 【客户端】无名杀安卓（诗笺）
+
+开源地址：[nonameShijian/noname-shijian-android (github.com)](https://github.com/nonameShijian/noname-shijian-android)
+
+### 【客户端】无名杀Windows64位（棘手怀念摧毁）、【客户端】无名杀安卓（棘手怀念摧毁）
+
+开源地址：[lieren2023/noname-app-update (github.com)](https://github.com/lieren2023/noname-app-update)
+
+## 启动器以及无名星杯百度网盘地址
+
+[https://pan.baidu.com/s/1D7ZYSypH5d6HAhLWs2Bpvw?pwd=dzxl](https://gitee.com/link?target=https%3A%2F%2Fpan.baidu.com%2Fs%2F1D7ZYSypH5d6HAhLWs2Bpvw%3Fpwd%3Ddzxl)
+提取码：dzxl
 
 ## [无名杀官网](https://gitee.com/qinkunwei/noname)
