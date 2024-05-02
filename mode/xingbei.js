@@ -2704,7 +2704,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					player.storage.all=1;
 					player.storage.faShu=0;
 					player.storage.gongJi=0;
-					player.storage.canTeShu=true;
+					//player.storage.canTeShu=true;
 				}
 			},
 
