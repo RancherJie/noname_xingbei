@@ -1949,6 +1949,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         if(player.countCards('h')>0){
                             player.chooseToDiscard('h',true);
                         }
+                    }else{
+                        event.finish();
                     }
                     'step 4'
                     player.chooseTarget(1,'暗月：目标对手造成1点法术伤害③',true,function(card,player,target){
