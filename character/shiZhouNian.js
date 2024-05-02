@@ -1548,7 +1548,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 forced:true,
                 trigger:{player:"yingLingZhaoHuan"},
                 filter:function(event,player){
-                    return !plyaer.isLinked();
+                    return !player.isLinked();
                 },
                 content:function(){
                     player.storage.yingLingXingTai=true;
@@ -1704,7 +1704,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				},
                 content:function(){
                     'step 0'
-                    plyaer.chooseToDiscard(1,card=>get.suit(card)=='di','是否额外弃1张地系牌[展示]');
+                    player.chooseToDiscard(1,card=>get.suit(card)=='di','是否额外弃1张地系牌[展示]');
                     'step 1'
                     var num=1;
                     if(result.bool){
@@ -1734,7 +1734,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				},
                 content:function(){
                     'step 0'
-                    plyaer.chooseToDiscard(1,card=>get.suit(card)=='shui','是否额外弃1张水系牌[展示]');
+                    player.chooseToDiscard(1,card=>get.suit(card)=='shui','是否额外弃1张水系牌[展示]');
                     'step 1'
                     var num=1;
                     if(result.bool){
@@ -1768,7 +1768,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				},
                 content:function(){
                     'step 0'
-                    plyaer.chooseToDiscard(1,card=>get.suit(card)=='huo','是否额外弃1张火系牌[展示]');
+                    player.chooseToDiscard(1,card=>get.suit(card)=='huo','是否额外弃1张火系牌[展示]');
                     'step 1'
                     var num=2;
                     if(result.bool){
@@ -1796,7 +1796,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				},
                 content:function(){
                     'step 0'
-                    plyaer.chooseToDiscard(1,card=>get.suit(card)=='feng','是否额外弃1张风系牌[展示]');
+                    player.chooseToDiscard(1,card=>get.suit(card)=='feng','是否额外弃1张风系牌[展示]');
                     'step 1'
                     var num=1;
                     if(result.bool){
@@ -1826,7 +1826,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				},
                 content:function(){
                     'step 0'
-                    plyaer.chooseToDiscard(1,card=>get.suit(card)=='lei','是否额外弃1张雷系牌[展示]');
+                    player.chooseToDiscard(1,card=>get.suit(card)=='lei','是否额外弃1张雷系牌[展示]');
                     'step 1'
                     var num=1;
                     if(result.bool){
