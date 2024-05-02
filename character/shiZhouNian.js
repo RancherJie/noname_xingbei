@@ -2192,7 +2192,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         },
                         content:function(){
                             'step 0'
-                            player.chooseTarget('末日审判：选择一个目标',true);
+                            player.chooseTarget('末日审判：选择一个目标',true).set('ai',function(target){
+                                return target.side!=player.side;
+                            });
                             'step 1'
                             player.useSkill('moRiShenPan',result.targets).set('action',true);
                         }
