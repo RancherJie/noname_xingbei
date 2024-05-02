@@ -151,7 +151,7 @@ window.config={
 			versus_mode:'two',
 			team_sequence:'random',
 			change_choice:true,
-			choose_number:1,
+			choose_number:3,
 		},
 		identity:{
 			identity:[
