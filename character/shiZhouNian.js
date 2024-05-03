@@ -2557,6 +2557,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 prepare:'showCards',
                 selectTarget:1,
 				filterTarget:function(card,player,target){
+                    if(target.zhiLiao<1) return false;
 					return target!=player;
 				},
                 content:function(){
