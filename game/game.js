@@ -11161,6 +11161,7 @@
 						if(num>0){
 							game.log('<span style="color:red;">红方</span>士气增加',num);
 						}else{
+							num=-num;
 							game.log('<span style="color:red;">红方</span>士气减少',num);
 						}
 					}else if(side==false){
@@ -11168,6 +11169,7 @@
 						if(num>0){
 							game.log('<span style="color:blue;">蓝方</span>士气增加',num);
 						}else{
+							num=-num;
 							game.log('<span style="color:blue;">蓝方</span>士气减少',num);
 						}
 					}
@@ -18735,7 +18737,7 @@
 						event.zhiLiao=Math.min(-num,player.zhiLiao);
 						event.getParent().zhiLiao=event.zhiLiao;
 						event.num+=event.zhiLiao;
-						game.log(player,'的护甲抵挡了'+get.cnNumber(event.zhiLiao)+'点伤害');
+						game.log(player,'的护甲抵挡了'+event.zhiLiao+'点伤害');
 						player.changeZhiLiao(-event.zhiLiao).type='damage';
 					}
 					//old part
@@ -18762,9 +18764,10 @@
 				changeZhiLiao:function(){
 					player.zhiLiao+=num;
 					if(num>0){
-						game.log(player,'获得了'+get.cnNumber(num)+'点治疗');
+						game.log(player,'获得了'+num+'点治疗');
 					}else if(num<0){
-						game.log(player,'移除了'+get.cnNumber(-num)+'点治疗')
+						num=-num;
+						game.log(player,'移除了'+num+'点治疗')
 					}
 					if(event.bool==true){
 						event.trigger('zhiLiaoYiChu');
@@ -40897,6 +40900,7 @@
 				if(num>0){
 					game.log('<span style="color:red;">红方</span>士气增加',num);
 				}else{
+					num=-num;
 					game.log('<span style="color:red;">红方</span>士气减少',num);
 				}
 			}else if(side==false){
@@ -40904,6 +40908,7 @@
 				if(num>0){
 					game.log('<span style="color:blue;">蓝方</span>士气增加',num);
 				}else{
+					num=-num;
 					game.log('<span style="color:blue;">蓝方</span>士气减少',num);
 				}
 			}
@@ -40969,6 +40974,7 @@
 				if(num>0){
 					game.log('<span style="color:red;">红方</span>星杯数量增加',num);
 				}else{
+					num=-num;
 					game.log('<span style="color:red;">红方</span>星杯数量减少',num);
 				}
 				game.changeShiQi(-1,false);
@@ -40977,6 +40983,7 @@
 				if(num>0){
 					game.log('<span style="color:blue;">蓝方</span>星杯数量增加',num);
 				}else{
+					num=-num;
 					game.log('<span style="color:blue;">蓝方</span>星杯数量减少',num);
 				}
 				game.changeShiQi(-1,true);
