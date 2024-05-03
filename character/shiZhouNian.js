@@ -1452,7 +1452,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         target=target.getNext();
                         range_r++;
                     }
-                    console.log(range_l,range_r);
                     if(range_l=range_r){
                         if(player.side==player.getNext().side){
                             return false;
@@ -1460,7 +1459,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             return true;
                         }
                     }
-                    return range_r>range_l;
+                    return range_l<range_r;
                 },
                 content:function(){
                     game.broadcastAll(function(){
