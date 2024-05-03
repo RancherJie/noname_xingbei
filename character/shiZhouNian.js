@@ -1547,6 +1547,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 forced:true,
                 trigger:{player:"yingLingZhaoHuan"},
                 filter:function(event,player){
+                    if(_status.currentPhase!=player) return false;
                     return !player.isLinked();
                 },
                 content:function(){
@@ -3470,7 +3471,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             zhiXuZhiYin:"[法术]秩序之印",
             zhiXuZhiYin_info:"<span class='tiaoJian'>(摸2张牌[强制])</span>你加+1[治疗]并+1[水晶]。",
             hePingXingZhe:"[被动]和平行者",
-            hePingXingZhe_info:"<span class='tiaoJian'>(发动【英灵召唤】后强制触发[强制])</span>[横置]，转入【英灵形态】；<span class='tiaoJian'>(每当你执行主动攻击时发动①)</span>[重置]脱离【英灵形态】。",
+            hePingXingZhe_info:"<span class='tiaoJian'>(你的回合内，发动【英灵召唤】后强制触发[强制])</span>[横置]，转入【英灵形态】；<span class='tiaoJian'>(每当你执行主动攻击时发动①)</span>[重置]脱离【英灵形态】。",
             junShenWeiGuan:"[被动]军神威光",
             junShenWeiGuan_info:"<span class='tiaoJian'>(回合开始时，若你处于【英灵形态】)</span>选择以下1项发动：<br>·你+1[治疗]，[重置]脱离【英灵形态】；<br>·<span class='tiaoJian'>(移除我方【战绩区】X个星石，X<3)</span>目标角色+X[治疗]。",
             yingLingZhaoHuan:"[响应]英灵召唤",
