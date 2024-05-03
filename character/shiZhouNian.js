@@ -924,32 +924,37 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         },
                         content:function(event,player){
                             'step 0'
-                            var x=0;
+                            event.x=0;
                             for(var p of game.players){
-                                if(x>=2){
-                                    x=2;
+                                if(event.x>=2){
+                                    event.x=2;
                                     break;
                                 }
                                 for(var xiaoGuo of game.jiChuXiaoGuo.fengYinShi){
                                     if(p.hasExpansions(xiaoGuo)){
-                                        x++;
+                                        event.x++;
                                     }
                                 }
                             }
-                            var list=[`摸2+${x}张牌`,'跳过行动阶段'];
+                            var list=[`摸2+${event.x}张牌`,'跳过行动阶段'];
                             if(player.hasExpansions('_xuRuo')){
-                                list[0]=`摸2+3+${x}张牌`;
+                                list[0]=`摸2+3+${event.x}张牌`;
                             }
                             player.chooseControl().set('choiceList',list).set('prompt','五系束缚：选择一项').set('ai',function(){return 1;});
                             'step 1'
                             if(result.index==1){
                                 trigger.cancel();
                             }else if(result.index==0){
-                                player.draw(2+3+x);
+                                if(player.hasExpansions('_xuRuo')){
+                                    player.draw(2+3+event.x);
+                                }else{
+                                    player.draw(2+event.x);
+                                }
+                               
                             }
                             player.removeMark('wuXiShuFu_xiaoGuo');
-                            if(player.hasExpansions('xuRuo')){
-                                player.loseToDiscardpile(player.getExpansions('xuRuo')); 
+                            if(player.hasExpansions('_xuRuo')){
+                                player.loseToDiscardpile(player.getExpansions('_xuRuo')); 
                             }
                             player.removeSkill('wuXiShuFu_xiaoGuo');
                         },
