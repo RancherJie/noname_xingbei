@@ -1417,13 +1417,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                 },
                 content:function(){
-                    'step 3'
+                    'step 0'
                     target.chooseToDiscard(1,function(card){
                         return get.type(card)=='faShu';
                     }).set('ai',function(){
                         return 1;
                     })
-                    'step 4'
+                    'step 1'
                     if(result.bool){
                         target.showCards(result.cards);
                     }else{
