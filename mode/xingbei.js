@@ -3005,6 +3005,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 			},
             moDan2:{//第一个使用魔弹的角色增加魔弹标记
                 trigger:{player:'useCard'},
+				forced:true,
                 filter:function(event,player){
                     if(player.storage.moDan==false&&event.card.name=='moDan'){
                         return true;
@@ -3018,6 +3019,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
             },
             moDan3:{//第一个使用魔弹的角色删除魔弹标记
                 trigger:{player:'useCardEnd'},
+				forced:true,
                 filter:function(event,player){
                     if(player.storage.moDan==true&&event.card.name=='moDan'){
                         return true;
