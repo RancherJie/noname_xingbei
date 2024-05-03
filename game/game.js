@@ -3562,12 +3562,12 @@
 					},
 					pop_logv:{
 						name:'自动弹出记录',
-						init:false,
+						init:true,
 						unfrequent:true
 					},
 					show_log:{
 						name:'历史记录栏',
-						init:'off',
+						init:'left',
 						intro:'在屏幕中部显示出牌文字记录',
 						unfrequent:true,
 						item:{
