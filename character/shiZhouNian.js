@@ -634,6 +634,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             content:'expansion',
                         },
                         trigger:{player:['useCard2','showCardsEnd']},
+                        forced:true,
                         filter:function(event,player){
                             if(!player.hasExpansions('diZhiFengYin_xiaoGuo')){
                                 return false
@@ -691,6 +692,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             content:'expansion',
                         },
                         trigger:{player:['useCard2','showCardsEnd']},
+                        forced:true,
                         filter:function(event,player){
                             if(!player.hasExpansions('shuiZhiFengYin_xiaoGuo')){
                                 return false
@@ -748,6 +750,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             content:'expansion',
                         },
                         trigger:{player:['useCard2','showCardsEnd']},
+                        forced:true,
                         filter:function(event,player){
                             if(!player.hasExpansions('huoZhiFengYin_xiaoGuo')){
                                 return false
@@ -805,6 +808,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             content:'expansion',
                         },
                         trigger:{player:['useCard2','showCardsEnd']},
+                        forced:true,
                         filter:function(event,player){
                             if(!player.hasExpansions('fengZhiFengYin_xiaoGuo')){
                                 return false
@@ -862,6 +866,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             content:'expansion',
                         },
                         trigger:{player:['useCard2','showCardsEnd']},
+                        forced:true,
                         filter:function(event,player){
                             if(!player.hasExpansions('leiZhiFengYin_xiaoGuo')){
                                 return false
