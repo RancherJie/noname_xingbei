@@ -40886,15 +40886,6 @@
 			});
 		},
 		changeShiQi:function(num,side){
-			'step 0'
-			event.trigger('changeShiQi1');
-			'step 1'
-			event.trigger('changeShiQi2');
-			'step 2'
-			event.trigger('changeShiQi3');
-			'step 3'
-			event.trigger('changeShiQi4');
-			'step 4'
 			if(side==true){
 				game.hongShiQi+=num;
 				if(num>0){
