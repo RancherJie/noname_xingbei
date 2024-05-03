@@ -2039,14 +2039,14 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 trigger:{player:'useCardToTargeted'},
                 filter:function(event,player){
                     if(event.yingZhan==true) return false;
-                    return player.isLinked()&&player.canBiShaShuiJing()&&player.getExpansions('anYue').length>=0&&get.type(event.card)=='gongJi';
+                    return player.isLinked()&&player.canBiShaShuiJing()&&player.getExpansions('anYue').length>0&&get.type(event.card)=='gongJi';
                 },
                 content:function(){
                     'step 0'
                     player.removeBiShaShuiJing();
                     'step 1'
                     var cards=player.getExpansions('anYue');
-                    player.chooseCardButton(cards,true,'暗月斩：移除X个【暗月】(x<3)本次攻击伤害额外+X',[0,2]);
+                    player.chooseCardButton(cards,true,'暗月斩：移除X个【暗月】(x<3)本次攻击伤害额外+X',[1,2]);
                     'step 2'
                     if(result.links.length>0){
                         event.num=result.links.length;
