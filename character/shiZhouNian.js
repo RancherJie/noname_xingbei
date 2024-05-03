@@ -2598,6 +2598,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             diQiang:{
                 trigger:{player:'useCardToTargeted'},
                 firstDo:true,
+                check:function(event,player){
+					if(player.zhiLiao<1) return false;
+                    return true;
+				},
                 filter:function(event,player){
                     return get.type(event.card)=="gongJi"&&event.parent.yingZhan!=true;
                 },
