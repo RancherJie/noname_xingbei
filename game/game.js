@@ -18545,7 +18545,7 @@
                     },num);
 					var str=event.unreal?'视为受到了':'受到了';
 					if(source) str+='来自<span class="bluetext">'+(source==player?'自己':get.translation(source))+'</span>的';
-					str+=get.cnNumber(num)+'点';
+					str+=num+'点';
 					if(event.nature) str+=get.translation(event.nature)+'属性';
 					if(event.faShu) str+=get.translation(event.nature)+'法术';
 					str+='伤害';
