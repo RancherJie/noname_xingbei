@@ -2677,14 +2677,16 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					event.contentx=[name+'无法行动',player.getCards('h').slice()];
 					event.listx=['认可','否认'];
 					"step 1"
-					var target=event.targetsx.shift();
-					target.chooseControl(event.listx).set('dialog',event.contentx).set('ai',function(){
+					event.target=event.targetsx.shift();
+					event.target.chooseControl(event.listx).set('dialog',event.contentx).set('ai',function(){
 						return 0;
 					});
 					"step 2"
 					if(result.control=='认可'){
+						event.target.popup('认可');
 						player.storage.wuFaXingDong[result.control]++;
 					}else if(result.control=='否认'){
+						event.target.popup('否认');
 						player.storage.wuFaXingDong[result.control]++;
 					}
 					if(event.targetsx.length>0) event.goto(1);
