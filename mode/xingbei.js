@@ -2664,7 +2664,6 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					if((player.countCards('h')+3)>player.getHandcardLimit()) return false;
 					var cards=player.getCards('h');
 					for(var i=0;i<cards.length;i++){
-						console.log(cards[i].name,player.hasUseTarget(cards[i]));
 						if(player.hasUseTarget(cards[i])) return false;
 					}
 					return true;
