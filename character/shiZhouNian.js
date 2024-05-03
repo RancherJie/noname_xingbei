@@ -2598,11 +2598,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             diQiang:{
                 trigger:{player:'useCardToTargeted'},
                 firstDo:true,
-                check:function(event,player){
-					if(player.zhiLiao<1) return false;
-                    return true;
-				},
                 filter:function(event,player){
+                    if(player.zhiLiao<1) return false;
                     return get.type(event.card)=="gongJi"&&event.parent.yingZhan!=true;
                 },
                 content:function(){
@@ -2611,7 +2608,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 1'
                     var list=[];
                     var num=4;
-                    for(var i=0;i<=player.zhiLiao;i++){
+                    for(var i=1;i<=player.zhiLiao;i++){
                         if(i<=num){
                             list.push(i);
                         }
