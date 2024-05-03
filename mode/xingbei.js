@@ -2975,7 +2975,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					"step 0"
                     player.storage.moDan=true;//回合外判断使用法术
 					var str='是否使用魔弹'; 
-					var next=player.chooseToUse_qiTa('h',function(card,player,event){
+					var next=player.chooseToUse_qiTa(function(card,player,event){
 						if(card.name!=get.name(trigger.card)) return false;
                         return lib.filter.cardEnabled(card,player,'forceEnable');
 					});
