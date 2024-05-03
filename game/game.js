@@ -11159,16 +11159,16 @@
 					if(side==true){
 						game.hongShiQi+=num;
 						if(num>0){
-							game.log('<span style="color:red;">红方</span>士气增加为',game.hongShiQi);
+							game.log('<span style="color:red;">红方</span>士气增加',num);
 						}else{
-							game.log('<span style="color:red;">红方</span>士气减少为',game.hongShiQi);
+							game.log('<span style="color:red;">红方</span>士气减少',num);
 						}
 					}else if(side==false){
 						game.lanShiQi+=num;
 						if(num>0){
-							game.log('<span style="color:blue;">蓝方</span>士气增加为',game.lanShiQi);
+							game.log('<span style="color:blue;">蓝方</span>士气增加',num);
 						}else{
-							game.log('<span style="color:blue;">蓝方</span>士气减少为',game.lanShiQi);
+							game.log('<span style="color:blue;">蓝方</span>士气减少',num);
 						}
 					}
 					ui.shiQiInfo.innerHTML='士气'+'<span style="color:red;">'+game.hongShiQi+'</span>'+'/'+'<span style="color:blue;">'+game.lanShiQi+'</span>'+'|战绩'+'<span style="color:red;">'+game.hongZhanJi+'</span>'+'/'+'<span style="color:blue;">'+game.lanZhanJi+'</span>'+'|星杯'+'<span style="color:red;">'+game.hongXingBei+'</span>'+'/'+'<span style="color:blue;">'+game.lanXingBei+'</span>';
@@ -40895,16 +40895,16 @@
 			if(side==true){
 				game.hongShiQi+=num;
 				if(num>0){
-					game.log('<span style="color:red;">红方</span>士气增加为',game.hongShiQi);
+					game.log('<span style="color:red;">红方</span>士气增加',num);
 				}else{
-					game.log('<span style="color:red;">红方</span>士气减少为',game.hongShiQi);
+					game.log('<span style="color:red;">红方</span>士气减少',num);
 				}
 			}else if(side==false){
 				game.lanShiQi+=num;
 				if(num>0){
-					game.log('<span style="color:blue;">蓝方</span>士气增加为',game.lanShiQi);
+					game.log('<span style="color:blue;">蓝方</span>士气增加',num);
 				}else{
-					game.log('<span style="color:blue;">蓝方</span>士气减少为',game.lanShiQi);
+					game.log('<span style="color:blue;">蓝方</span>士气减少',num);
 				}
 			}
 			ui.shiQiInfo.innerHTML='士气'+'<span style="color:red;">'+game.hongShiQi+'</span>'+'/'+'<span style="color:blue;">'+game.lanShiQi+'</span>'+'|战绩'+'<span style="color:red;">'+game.hongZhanJi+'</span>'+'/'+'<span style="color:blue;">'+game.lanZhanJi+'</span>'+'|星杯'+'<span style="color:red;">'+game.hongXingBei+'</span>'+'/'+'<span style="color:blue;">'+game.lanXingBei+'</span>';
