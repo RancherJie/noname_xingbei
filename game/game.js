@@ -17700,11 +17700,11 @@
 					}
 					if(event.log!=false){
 						if(num>0){
-							if(event.bottom) game.log(player,'从牌堆底摸了'+get.cnNumber(num)+'张牌');
-							else game.log(player,'摸了'+get.cnNumber(num)+'张牌');
+							if(event.bottom) game.log(player,'从牌堆底摸了'+num+'张牌');
+							else game.log(player,'摸了'+num+'张牌');
 						}
 						if(event.drawDeck){
-							game.log(player,'从牌库中获得了'+get.cnNumber(event.drawDeck)+'张牌');
+							game.log(player,'从牌库中获得了'+event.drawDeck+'张牌');
 						}
 					}
 					var cards;
@@ -17722,8 +17722,8 @@
 					if(event.animate!=false){
 						if(event.visible){
 							var next=player.gain(cards,'gain2');
-							if(event.bottom) game.log(player,'从牌堆底摸了'+get.cnNumber(num)+'张牌（',cards,'）');
-							else game.log(player,'摸了'+get.cnNumber(num)+'张牌（',cards,'）');
+							if(event.bottom) game.log(player,'从牌堆底摸了'+num+'张牌（',cards,'）');
+							else game.log(player,'摸了'+num+'张牌（',cards,'）');
 						}
 						else{
 							var next=player.gain(cards,'draw');
