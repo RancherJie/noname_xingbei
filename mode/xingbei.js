@@ -2660,6 +2660,15 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 			_wuFaXingDong:{
 				enable:'wuFaXingDong',
 				type:'wuFaXingDong',
+				filter:function(event,player){
+					if((player.countCards('h')+3)>player.getHandcardLimit()) return false;
+					var cards=player.getCards('h');
+					for(var i=0;i<cards.length;i++){
+						console.log(cards[i].name,player.hasUseTarget(cards[i]));
+						if(player.hasUseTarget(cards[i])) return false;
+					}
+					return true;
+				},
 				content:function(){
 					"step 0"
 					player.storage.wuFaXingDong={'认可':0,'否认':0};
