@@ -1469,7 +1469,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 }
             },
             moDanRongHe:{
-                enable:['chooseToUse','faShu'],
+                enable:['chooseToUse','faShu','chooseToUse_qiTa'],
 				filterCard:function(card){
                     return get.suit(card)=='di'||get.suit(card)=='huo';
 				},
