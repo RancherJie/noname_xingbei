@@ -197,15 +197,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                 },
                 content:function(player){
-                    'step 0'
-                    player.removeBiShaShuiJing();
-                    'step 1'
-					var str='剑影：攻击行动';
-					var next=player.gongJi('h',str);
-					next.ai=function(card){
-						return 1;
-					}
-					next.autodelay=true;
+                    player.storage.gongJi++;
                 }
             },
 
