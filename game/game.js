@@ -11195,13 +11195,13 @@
 						if(side==true){
 							for(let i=0;i<num;i++){
 								game.hongZhanJi.push(xingShi);
+								game.log('<span style="color:red;">红方</span>战绩区增加',xingShi);
 							}
-							game.log('<span style="color:red;">红方</span>战绩区增加',xingShi);
 						}else if(side==false){
 							for(let i=0;i<num;i++){
 								game.lanZhanJi.push(xingShi);
+								game.log('<span style="color:blue;">蓝方</span>战绩区增加为',xingShi);
 							}
-							game.log('<span style="color:blue;">蓝方</span>战绩区增加为',xingShi);
 						}
 					}else if(num<0){
 						num=-num;
