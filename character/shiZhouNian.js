@@ -69,14 +69,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 content:function(player){
                     "step 0"
 					var str='风怒追击：风系攻击行动';
-					var next=player.gongJi('h',function(card,player,event){
+					var next=player.gongJi(function(card,player,event){
                         if(get.suit(card)!='feng') return false;
                         return lib.filter.cardEnabled(card,player,'forceEnable');
 					},str);
-					next.ai=function(card){
-                        if(get.suit(card)!='feng'||get.type(card)!='gongJi') return -1;
-						return 1;
-					}
 					next.autodelay=true;
                 }
             },
