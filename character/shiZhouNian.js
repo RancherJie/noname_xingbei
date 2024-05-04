@@ -182,25 +182,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     return event.card.hasNature('jiFengJi');
                 },
                 content:function(event,target){
-                    player.addSkill('jiFengJi2');
-                }
-            },
-            jiFengJi2:{
-                forced:true,
-                trigger:{player:'useCardAfter'},
-                filter:function(event,player){
-                    return event.card.hasNature('jiFengJi');
-                },
-                content:function(){
-                    "step 0"
-                    player.removeSkill('jiFengJi2');
-					var str='疾风技：攻击行动';
-					var next=player.gongJi('h',str);
-					next.ai=function(card){
-						return 1;
-					}
-					next.autodelay=true;
-                   
+                    player.storage.gongJi++;
                 }
             },
             jianYing:{
