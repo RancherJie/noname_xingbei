@@ -17018,7 +17018,15 @@
 								game.log(player,'对',str,'使用了',card,'（',cards,'，指向',event.addedTargets,'）');
 							}
 							else{
-								game.log(player,'对',str,'使用了',card,'（',cards,'）');
+								var yingZhan_str='';
+								if(get.type(card)=='gognJi'){
+									if(event.yingZhan==true){
+										yingZhan_str='，应战攻击';
+									}else{
+										yingZhan_str='，主动攻击';
+									}
+								}
+								game.log(player,'对',str,'使用了',card,'（',cards,'）',yingZhan_str);
 							}
 						}
 						else{
@@ -17026,7 +17034,16 @@
 								game.log(player,'对',str,'使用了',card,'（指向',event.addedTargets,'）');
 							}
 							else{
-								game.log(player,'对',str,'使用了',card);
+								var yingZhan_str='';
+								if(get.type(card)=='gongJi'){
+									if(event.yingZhan==true){
+										yingZhan_str='，应战攻击';
+									}else{
+										yingZhan_str='，主动攻击';
+									}
+
+								}
+								game.log(player,'对',str,'使用了',card,yingZhan_str);
 							}
 						}
 					}
