@@ -1462,7 +1462,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         target=target.getNext();
                         range_r++;
                     }
-                    if(range_l=range_r){
+                    if(range_l==range_r){
                         if(player.side==player.getNext().side){
                             return false;
                         }else{
@@ -1475,6 +1475,21 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     game.broadcastAll(function(){
                         game.moDan_shunShiZhen=true;
                     });
+                },
+                mod:{
+                    playerEnabled:function(card,player,target){
+                        if(player.storage.moDan==true) return;
+                        if(get.name(card)=='moDan'){
+                            var mubiao=player.getPrevious();
+                            while(mubiao.side==player.side){
+                                mubiao=mubiao.getPrevious();
+                                while(mubiao.storage.moDan==true){
+                                    mubiao=mubiao.getPrevious();
+                                }
+                            }
+						    if(target==mubiao) return true;
+                        }
+                    }
                 }
             },
             moDanRongHe:{

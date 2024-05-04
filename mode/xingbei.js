@@ -2643,14 +2643,14 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
             _xuRuo:"虚弱",
             _zhongDu:"中毒",
             _shengDun:"圣盾",
-            _shengGuang:"圣光",
-            _yingZhan:"应战",
-            _moDan:"魔弹",
+            //_shengGuang:"圣光",
+            //_yingZhan:"应战",
+            //_moDan:"魔弹",
             _heCheng:"合成",
             _gouMai:"购买",
             _tiLian:"提炼",
-            _gongJiXingShi:"攻击星石",
-            _quXiao:'取消',
+            //_gongJiXingShi:"攻击星石",
+            //_quXiao:'取消',
 
 			_tiLian_backup:'提炼',
 			_heCheng_backup:'合成',
@@ -2863,17 +2863,57 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
             _yingZhan:{
                 trigger:{target:'useCardToPlayered'},
                 forced:true,
+				firstDo:true,
                 filter:function(event,player){
-                    if(event.parent.canYingZhan==false) return false;
-                    if(get.type(event.card)=='gongJi'){
-                        if(get.name(event.card)=='anMie'){
-                            return false;
-                        }else{
-                            return true;
-                        }
-                    }
-                }, 
+                    if(event.parent.canYingZhan==false&&event.parent.canShengGuang==false) return false;
+					return get.type(event.card)=='gongJi' 
+                },
                 content:function(){
+					'step 0'
+					event.source=trigger.player;
+					event.yingZhan=trigger.parent.yingZhan;
+					var name=get.translation(event.source);
+					var propmt=`受到${name}的`;
+					if(event.yingZhan){
+						propmt+='应战攻击，';
+					}else{
+						propmt+='主动攻击，';
+					}
+					propmt+=get.translation(get.name(trigger.card));
+					var next=player.chooseToUse_qiTa(propmt);
+                    next.set('filterCard',function(card,player,event){
+						if(get.type(card)=='gongJi'){
+							if(trigger.parent.canYingZhan==false) return false;
+							if(card.name!='anMie'&&get.suit(card)!=get.suit(_status.event.trigger_card)) return false;
+						}else{
+							if(trigger.parent.canShengGuang==false) return false;
+							if(get.name(card)!='shengGuang') return false;
+						}
+						return lib.filter.cardEnabled(card,player,'forceEnable');
+					});
+					next.set('filterTarget',function(card,player,target){
+						if(ui.selected.cards.length){
+							if(get.type(ui.selected.cards[0])=='gongJi'){
+								return target!=_status.event.trigger_player&&target.side!=player.side;
+							}else{
+								return false;
+							}
+						}
+                    });
+					next.set('trigger_card',trigger.card);
+                    next.set('trigger_player',event.source);
+                    next.set('yingZhan',true);
+					'step 1'
+                    if(result.bool){
+                        trigger.getParent().targets.remove(player);
+						if(get.type(trigger.card)=='gongJi'){
+							if(get.name(result.used)=='shengGuang'){
+								event.trigger('gongJiWeiMingZhong');
+							}
+                        }
+                        trigger.cancel();
+                    }
+					/*
                     'step 0'
                     event.source=trigger.player;
 					event.yingZhan=trigger.parent.yingZhan;
@@ -2898,6 +2938,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
                         trigger.getParent().targets.remove(player);
                         trigger.cancel();
                     }
+					*/
                 }
             },
             _yingZhan_weiMingZhong:{
@@ -2905,7 +2946,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
                 forced:true,
 				firstDo:true,
                 filter:function(event,player){
-                    return event.parent.parent.name=='_yingZhan';
+                    return event.parent.parent.name=='_yingZhan'&&event.card.name!='shengGuang';
                 },
                 content:function(){
 					'step 0'
@@ -2921,13 +2962,13 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
                 forced:true,
 				firstDo:true,
                 filter:function(event,player){
-                    return event.parent.parent.name=='_yingZhan';
+                    return event.parent.parent.name=='_yingZhan'&&event.card.name!='shengGuang';
                 },
 				content:function(){
 					trigger.yingZhan=true;
 				}
 			},
-
+			/*
             _shengGuang:{
                 trigger:{target:'useCardToPlayered'},
                 forced:true,
@@ -2958,10 +2999,9 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
                         trigger.cancel();
 					}
 				},
-            },
+            },*/
 
             _moDan:{
-                group:['moDan2','moDan3'],
                 trigger:{target:'useCardToPlayered'},
                 forced:true,
                 filter:function(event,player){
@@ -2973,22 +3013,37 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
                 },
 				content:function(){
 					"step 0"
-                    player.storage.moDan=true;//回合外判断使用法术
-					var str='是否使用魔弹'; 
-					var next=player.chooseToUse_qiTa(function(card,player,event){
-						if(card.name!=get.name(trigger.card)) return false;
+                    player.storage.moDan=true;//是否已经被魔弹
+					
+					//所有玩家有魔弹标记重置标记
+					var num=0;
+					for(var i=0;i<game.players.length;i++){
+						if(game.players[i].storage.moDan==true){
+							num++;
+						}
+					}
+					if(num>=game.players.length){
+						for(var i=0;i<game.players.length;i++){
+							game.players[i].storage.moDan=false;
+						}
+					}
+					
+					
+					var name=get.translation(trigger.player);
+					var str='受到'+name+'的魔弹';
+					var next=player.chooseToUse_qiTa(str,function(card,player,event){
+						if(!(card.name==get.name(trigger.card)||card.name=='shengGuang')) return false;
                         return lib.filter.cardEnabled(card,player,'forceEnable');
 					});
-					next.ai=function(card){
-						return 1;
-					}
 					next.autodelay=true; 
+					
                     game.broadcastAll(function(){
                         game.moDan++;
                     });
 					"step 1"
 					if(result.bool){
                         trigger.getParent().targets.remove(player);
+						if(get.name(result.used)=='shengGuang') game.resetMoDan();
                         trigger.cancel();
 					}else{
                         game.broadcastAll(function(){
@@ -3003,11 +3058,11 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					},
 				}
 			},
-            moDan2:{//第一个使用魔弹的角色增加魔弹标记
+            _moDan1:{//第一个使用魔弹的角色增加魔弹标记
                 trigger:{player:'useCard'},
 				forced:true,
                 filter:function(event,player){
-                    if(player.storage.moDan==false&&event.card.name=='moDan'){
+                    if(player.storage.moDan!=true&&event.card.name=='moDan'){
                         return true;
                     }else{
                         return false;
@@ -3017,11 +3072,11 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
                     player.storage.moDan=true;
                 }
             },
-            moDan3:{//第一个使用魔弹的角色删除魔弹标记
+            _moDan2:{//第一个使用魔弹的角色删除魔弹标记
                 trigger:{player:'useCardEnd'},
 				forced:true,
                 filter:function(event,player){
-                    if(player.storage.moDan==true&&event.card.name=='moDan'){
+                    if(player.storage.moDan!=false&&event.card.name=='moDan'){
                         return true;
                     }else{
                         return false;
@@ -3031,6 +3086,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
                     player.storage.moDan=false;
                 }
             },
+			/*
 			_quXiao:{
                 trigger:{target:'useCardToPlayered'},
                 forced:true,
@@ -3045,7 +3101,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
                 content:function(){
                     trigger.cancel(); 
                 }
-            },
+            },*/
             _gouMai:{
 				enable:'phaseUse',
 				type:'teShu',

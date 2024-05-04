@@ -597,26 +597,24 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 				updateUsable:'phaseUse',
 				selectTarget:1,
 				filterTarget:function(card,player,target){
-					if(game.moDan_shunShiZhen==true||player.hasSkill('moDanZhangWo')){
-						var mubiao=player.getPrevious();
-						while(mubiao.side==player.side){
+					if(game.moDan_shunShiZhen==true){
+						var mubiao=player;
+						while(mubiao.storage.moDan==true||mubiao.side==player.side){
 							mubiao=mubiao.getPrevious();
-							if(mubiao.storage.moDan==true){
-								mubiao=mubiao.getPrevious();
-							}
 						}
-						if(target==mubiao) return true;
-					}
-					{
-						var mubiao=player.getNext();
-						while(mubiao.side==player.side){
+						if(target==mubiao){
+							return true;
+						}
+					}else{
+						var mubiao=player;
+						while(mubiao.storage.moDan==true||mubiao.side==player.side){
 							mubiao=mubiao.getNext();
-							if(mubiao.storage.moDan==true){
-								mubiao=mubiao.getPrevious();
-							}
 						}
-						if(target==mubiao) return true;
+						if(target==mubiao){
+							return true;
+						}
 					}
+					return false;
 				},
 				content:function(){
 					"step 0"
