@@ -2884,6 +2884,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
                     next.set('filterCard',function(card,player,event){
 						if(get.type(card)=='gongJi'){
 							if(trigger.parent.canYingZhan==false) return false;
+							if(get.suit(_status.event.trigger_card)=='an') return false;
 							if(card.name!='anMie'&&get.suit(card)!=get.suit(_status.event.trigger_card)) return false;
 						}else{
 							if(trigger.parent.canShengGuang==false) return false;
