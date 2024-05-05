@@ -3321,6 +3321,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 selectTarget:1,
                 filterTarget:function(card,player,target){
+                    if(target==player) return false;
                     return target.side==player.side;
                 },
                 content:function(){
