@@ -2385,6 +2385,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 selectTarget:1,
                 filterTarget:function(card,player,target){
+                    if(target==player) return false;
                     return player.side==target.side&&target.countNengLiangAll()<target.getNengLiangLimit();
                 },
                 content:function(){
@@ -3369,6 +3370,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 useCard:true,
                 selectTarget:1,
                 filterTarget:function(card,player,target){
+                    if(target==player) return false;
                     if(target.hasExpansions('weiLiCiFu_xiaoGuo')) return false;
                     return target.side==player.side;
                 },
@@ -3411,6 +3413,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 useCard:true,
                 selectTarget:1,
                 filterTarget:function(card,player,target){
+                    if(target==player) return false;
                     if(target.hasExpansions('xunJieCiFu_xiaoGuo')) return false;
                     return target.side==player.side;
                 },
