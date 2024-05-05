@@ -39,7 +39,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             //dieWuZhe:['female','yong',6,['jianxiong'],],
             nvWuShen:['female','sheng','3/4',['shenShengZhuiJi','zhiXuZhiYin','hePingXingZhe','junShenWeiGuan','yingLingZhaoHuan'],],
             //moGong:['female','huan',6,['jianxiong'],],
-            //hongLianQiShi:['female','xue',6,['jianxiong'],],
+            hongLianQiShi:['female','xue',4,['xingHongShengYue','xingHongXinYang','xueXingDaoYan','shaLuShengYan','reXueFeiTeng','jieJiaoJieZao','xingHongShiZi','xueYin'],],
             //yingLingRenXing:['female','yong',6,['jianxiong'],],
             //moQiang:['female','huan',6,['jianxiong'],],
             //cangYanMoNv:['female','xue',6,['jianxiong'],],
@@ -3506,6 +3506,210 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 markimage:'image/card/hong.png',
             },
 
+            //红莲骑士
+            xingHongShengYue:{
+                usable:1,
+                trigger:{player:'useCard'},
+                filter:function(event,player){
+                    if(get.type(event.card)!='gongJi') return false;
+                    if(event.yingZhan==true) return false;
+                    return true;
+                },
+                content:function(){
+                    player.changeZhiLiao(1);
+                }
+            },
+            xingHongXinYang:{
+                trigger:{player:'zhiLiao'},
+                firstDo:true,
+                forced:true,
+                filter:function(event,player){
+                    return event.source!=player;
+                },
+                content:function(){
+                    trigger.cancel();
+                },
+                mod:{
+                    maxZhiLiao:function(player,num){
+                        return num+2;
+                    }
+                }
+            },
+            xueXingDaoYan:{
+                type:'qiDong',
+                enable:'phaseUse',
+                filter:function(event,player){
+                    return player.zhiLiao>0;
+                },
+                chooseButton:{
+                    dialog:function(event,player){
+						var dialog=ui.create.dialog('血腥祷言：移除X点[治疗]，对自己造成X点法术伤害','hidden');
+                        var list=[];
+                        for(var i=1;i<=player.zhiLiao;i++){
+                            list.push(i);
+                        }
+						dialog.add([list,'tdnodes']);
+						return dialog;
+					},
+                    backup:function(links,player){
+						return{
+							links:links,
+							type:'qiDong',
+                            selectTarget:[1,2],
+                            multitarget:true,
+                            filterTarget:function(card,player,target){
+                                if(target==player) return false;
+                                return target.side==player.side;
+                            },
+							content:function(){
+								'step 0'
+                                event.links=lib.skill.xueXingDaoYan_backup.links;
+                                player.changeZhiLiao(-event.links[0]);
+                                'step 1'
+                                player.damageFaShu(event.links[0],player);
+                                'step 2'
+                                if(targets.length==1){
+                                    targets[0].changeZhiLiao(event.links[0]);
+                                    event.finish();
+                                }
+                                'step 3'
+                                event.target=result.targets[0];
+                                var list=[];
+                                for(var i=1;i<=event.links[0]-1;i++){
+                                    list.push(i);
+                                }
+                                var name=get.translation(event.target);
+                                var str=name+'获得几点治疗';
+                                player.chooseControl(list).set('prompt',str);
+                                'step 4'
+                                event.target.changeZhiLiao(result.control);
+                                event.links[0]-=result.control;
+                                'step 5'
+                                event.target=result.targets[1];
+                                event.target.changeZhiLiao(event.links[0]);
+							},
+                            contentAfter:function(){
+                                player.addZhiShiWu('xueYin');
+                            }
+						}
+					},
+                    prompt:function(links,player){
+						return '分配治疗给1~2名队友';
+					},
+                }
+            },
+            shaLuShengYan:{
+                trigger:{player:'useCardToTargeted'},
+                filter:function(event,player){
+                    if(get.type(event.card)!='gongJi') return false;
+                    if(event.yingZhan==true) return false;
+                    return player.countZhiShiWu('xueYin')>0;
+                },
+                content:function(){
+                    player.removeZhiShiWu('xueYin');
+                    player.damageFaShu(4,player);
+                    trigger.parent.baseDamage+=2;
+                }
+            },
+            reXueFeiTeng:{
+                forced:true,
+                trigger:{global:'changeShiQiEnd'},
+                filter:function(event,player){
+                    if(player.isLinked()) return false;
+                    if(event.parent.player!=player) return false;
+                    if(event.num>=0) return false;
+                    if(event.yuanYin!='damage') return false;
+                    return true;
+                },
+                content:function(){
+                    player.hengZhi();
+                },
+                group:['reXueFeiTeng_xiaoGuo','reXueFeiTeng_chongZhi'],
+                subSkill:{
+                    xiaoGuo:{
+                        trigger:{global:'changeShiQi1'},
+                        forced:true,
+                        filter:function(event,player){
+                            if(!player.isLinked()) return false;
+                            if(event.side!=player.side) return false;
+                            if(event.num>=0) return false;
+                            if(event.yuanYin!='damage') return false;
+                            return true;
+                        },
+                        content:function(){
+                            trigger.cancel();
+                        }
+                    },
+                    chongZhi:{
+                        trigger:{player:'phaseEnd'},
+                        forced:true,
+                        filter:function(event,player){
+                            return player.isLinked();
+                        },
+                        content:function(){
+                            player.chongZhi();
+                            player.changeZhiLiao(2);
+                        }
+                    }
+                }
+            },
+            jieJiaoJieZao:{
+                trigger:{player:['useCardAfter','useSkillAfter']},
+                filter:function(event,player){
+                    if(!player.canBiShaShuiJing()) return false;
+                    if(!player.isLinked()) return false;
+                    if(event.name=='useCard'){
+                        return event.parent.name!='chooseToUse_qiTa';
+                    }else if(event.name=='useSkill'){
+                        var info=get.info(event.skill);
+                        return info.type=='faShu';
+                    }
+                },
+                content:function(){
+                    'step 0'
+                    player.removeBiShaShuiJing();
+                    'step 1'
+                    player.chongZhi();
+                    'step 2'
+                    player.storage.all++;
+                }
+                
+            },
+            xingHongShiZi:{
+                type:'faShu',
+                enable:['chooseToUse','faShu'],
+                filter:function(event,player){
+                    if(!player.canBiShaShuiJing()) return false;
+                    if(player.countZhiShiWu('xueYin')<=0) return false;
+                    if(player.countCards('h',card=>get.type(card)=='faShu')<2) return false;
+                    return true;
+                },
+                selectCard:2,
+                filterCard:function(card){
+                    return get.type(card)=='faShu';
+                },
+                prepare:'showCards',
+                selectTarget:1,
+                filterTarget:true,
+                contentBefore:function(){
+                    player.removeBiShaShuiJing();
+                    player.removeZhiShiWu('xueYin');
+                },
+                content:function(){
+                    'step 0'
+                    player.damageFaShu(4,player);
+                    'step 1'
+                    target.damageFaShu(3,player);
+                }
+            },
+            xueYin:{
+                intro:{
+                    content:'mark',
+                    max:2,
+                },
+                markimage:'image/card/hong.png',
+            },
+
 		},
 		
 		translate:{
@@ -3831,6 +4035,25 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             qiDaoFuWen:"祈祷符文",
             qiDaoFuWen_info:"<span class='hong'>【</span>祈祷符文<span class='hong'>】</span>为祈祷师专有指示物，其上限为3。",
             
+            //红莲骑士
+            xingHongShengYue:"[响应]腥红圣约[回合限定]",
+            xingHongShengYue_info:"[水晶]<span class='tiaoJian'>(主动攻击时发动①)</span>你+1[治疗]。",
+            xingHongXinYang:"[被动]猩红信仰",
+            xingHongXinYang_info:"你的[治疗]只能抵御自己造成的伤害，你的治疗上限+2。",
+            xueXingDaoYan:"[启动]血腥祷言",
+            xueXingDaoYan_backup:"[启动]血腥祷言",
+            xueXingDaoYan_info:"<span class='tiaoJian'>(移除你的X[治疗]，对自己造成X点法术伤害③)</span>任意分配X[治疗]给1~2名队友，你+1<span class='hong'>【</span>血印<span class='hong'>】</span>。",
+            shaLuShengYan:"[响应]杀戮盛宴",
+            shaLuShengYan_info:"<span class='tiaoJian'>(主动攻击命中后发动②，移除1点</span><span class='hong'>【</span>血印<span class='hong'>】</span><span class='tiaoJian'>对自己造成4点法术伤害③)</span>本次攻击伤害额外+2。",
+            reXueFeiTeng:"[被动]热血沸腾",
+            reXueFeiTeng_info:"<span class='tiaoJian'>(当你因承受伤害而导致我方士气下降时强制发动[强制])</span>[横置]转发【热血沸腾状态】，该形态你因承受伤害不会导致我方士气下降[强制]。在你的回合结束阶段，若你处于此形态，[重置]并脱离此形态[强制],你+2[治疗]。",
+            jieJiaoJieZao:"[响应]戒骄戒躁",
+            jieJiaoJieZao_info:"[水晶]<span class='tiaoJian'>(仅【热血沸腾状态】下，攻击行动或结束行动结束时发动)</span>[重置]并脱离此形态，额外+1攻击行动或法术行动。",
+            xingHongShiZi:"[法术]猩红十字",
+            xingHongShiZi_info:"[宝石]<span class='tiaoJian'>(移除1点</span><span class='hong'>【</span>血印<span class='hong'>】</span><span class='tiaoJian'>弃2张法术牌[展示]，对自己造成4点法术伤害)</span>对目标角色造成3点法术伤害③。",
+            xueYin:"血印",
+            xueYin_info:"<span class='hong'>【</span>血印<span class='hong'>】</span>为红莲骑士专有指示物，其上限为2。",
+
 		},
 	};
 });
