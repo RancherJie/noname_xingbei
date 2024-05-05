@@ -18779,11 +18779,11 @@
 				},
 				changeZhiLiao:function(){
 					'step 0'
-					if(bool){
+					if(event.yiChu){
 						event.trigger('zhiLiaoYiChu');
 					}
 					'step 1'
-					if(bool){
+					if(event.yiChu){
 						event.finish();
 					}
 					'step 2'
@@ -24331,7 +24331,9 @@
 						var limit=this.getZhiLiaoLimit();
 					}
 					if(num>0&&this.zhiLiao+num>parseInt(limit)){
-						next.bool=true;
+						next.yiChu=true;
+					}else{
+						next.yiChu=false;
 					}
 					return next;
 				},
