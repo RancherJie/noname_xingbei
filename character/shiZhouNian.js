@@ -2664,13 +2664,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         str+='或移除1个【祝福】'
                     }
                     player.chooseCard('hs',true,function(card){
-                        if(card==trigger.cards[0]) return false;
+                        if(card==trigger_cards[0]) return false;
                         if(get.position(card)=='h'){
                             return get.type(card)=='faShu';
                         }else if(get.position(card)=='s'){
                             return card.hasGaintag('zhuFu');
                         }
-                    }).set('prompt',str);
+                    }).set('prompt',str).set('trigger_cards',trigger.cards);
                     'step 1'
                     if(result.bool){
                         if(get.position(result.cards[0])=='h'){
