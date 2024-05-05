@@ -2197,7 +2197,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         },
                         content:function(){
                             'step 0'
-                            player.chooseTarget('末日审判：选择一个目标',true).set('ai',function(target){
+                            player.chooseTarget('末日宣告：选择一个目标',true).set('ai',function(target){
                                 return target.side!=player.side;
                             });
                             'step 1'
@@ -3714,8 +3714,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             zhongCaiFaZe_info:"游戏初始时。你加+2[水晶]。",
             yiShiZhongDuan:"[启动]仪式中断",
             yiShiZhongDuan_info:"<span class='tiaoJian'>(仅【审判形态】下发动)</span>[重置]脱离【审判形态】，我方【战绩区】+1[宝石]。",
-            moRiShenPan:"[法术]末日审判",
-            moRiShenPan_info:"<span class='tiaoJian'>(移除所有</span><span class='hong'>【</span>审判<span class='hong'>】</span><span class='tiaoJian'>)</span>对目标角色造成等量的法术伤害③；在记得行动阶段开始时，若你的<span class='hong'>【</span>审判<span class='hong'>】</span>已达到上限，该行动阶段你必须发动【末日审判】。",
+            moRiShenPan:"[法术]末日宣告",
+            moRiShenPan_info:"<span class='tiaoJian'>(移除所有</span><span class='hong'>【</span>审判<span class='hong'>】</span><span class='tiaoJian'>)</span>对目标角色造成等量的法术伤害③；在记得行动阶段开始时，若你的<span class='hong'>【</span>审判<span class='hong'>】</span>已达到上限，该行动阶段你必须发动【末日宣告】。",
             shenPanLangChao:"[被动]审判浪潮",
             shenPanLangChao_info:"<span class='tiaoJian'>(你每承受一次伤害⑥)</span>你+1<span class='hong'>【</span>审判<span class='hong'>】</span>。",
             zhongCaiYiShi:"[启动]仲裁仪式[持续]",
