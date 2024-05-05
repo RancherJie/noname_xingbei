@@ -2723,16 +2723,12 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
                 forced:true,
                 priority:1,
                 filter:function(event,player){
-					for(var i=0;i<game.players.length;i++){
-						if(game.players[i].hasMark('xueQiangWeiTingYuan')) return false;
-					}
-                    if(event.zhiLiao==false) return false;
                     if(player.zhiLiao<=0) return false;
                     return true;
                 },
                 content:function(){
                     "step 0"
-                    var num=trigger.num;
+                    var num=trigger.parent.num;
                     var list=[];
                     for(var i=0;i<=player.zhiLiao;i++){
                         if(i>num) break;
@@ -2742,7 +2738,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					"step 1"
 					var zhiLiaonum=result.control;
 					if(zhiLiaonum>0){
-						trigger.num-=zhiLiaonum;
+						trigger.parent.num-=zhiLiaonum;
 						game.log(player,'的治疗抵挡了'+zhiLiaonum+'点伤害');
 						player.changeZhiLiao(-zhiLiaonum).type='damage';
 					}

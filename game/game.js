@@ -18555,16 +18555,18 @@
 					event.trigger('damageBegin4');
 					"step 4"
 					//检测治疗触发器是否能触发
-					var flag=false;
+					if(event.canZhiLiao!=false){
+						event.canZhiLiao=true;
+					}
 					for(var i=0;i<game.players.length;i++){
-						if(game.players[i].hasMark('xueQiangWeiTingYuan')){
-							flag=true;
-						}
-						if(flag){
+						if(event.canZhiLiao==false){
 							break;
 						}
+						if(game.players[i].hasMark('xueQiangWeiTingYuan')){
+							event.canZhiLiao=false;
+						}
 					}
-					if(!flag){
+					if(event.canZhiLiao){
 						var next=game.createEvent('zhiLiao',false);
 						next.setContent('emptyEvent');
 						next.source=source;
