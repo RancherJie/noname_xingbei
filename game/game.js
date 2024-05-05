@@ -19221,10 +19221,10 @@
 				},
 				link:function(){
 					if(player.isLinked()){
-						game.log(player,'解除连环');
+						game.log(player,'重置');
 					}
 					else{
-						game.log(player,'被连环');
+						game.log(player,'横置');
 					}
 					if(lib.config.background_audio){
 						game.playAudio('effect','link');
