@@ -41036,6 +41036,7 @@
 		moDan_shunShiZhen:false,
 		jiChuXiaoGuo:{
 			fengYinShi:['diZhiFengYin_xiaoGuo','shuiZhiFengYin_xiaoGuo','huoZhiFengYin_xiaoGuo','fengZhiFengYin_xiaoGuo','leiZhiFengYin_xiaoGuo'],
+			qiDaoShi:['weiLiCiFu_xiaoGuo','xunJieCiFu_xiaoGuo'],
 			pai:['_shengDun','_xuRuo','_zhongDu'],
 		},
 		handcardLimit:6,
