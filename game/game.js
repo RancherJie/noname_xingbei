@@ -18554,7 +18554,25 @@
 					"step 3"
 					event.trigger('damageBegin4');
 					"step 4"
-					event.trigger('zhiLiao');
+					//检测治疗触发器是否能触发
+					var flag=false;
+					for(var i=0;i<game.players.length;i++){
+						if(game.players[i].hasMark('xueQiangWeiTingYuan')){
+							flag=true;
+						}
+						if(flag){
+							break;
+						}
+					}
+					if(!flag){
+						var next=game.createEvent('zhiLiao',false);
+						next.setContent('emptyEvent');
+						next.source=source;
+						next.card=card;
+						next.cards=cards;
+						next.player=player;
+						next.skill=event.skill;
+					}
 					"step 5"
 					game.broadcastAll(function(num){
                         if(lib.config.background_audio) game.playAudio('effect','damage'+(num>2?'2':''));

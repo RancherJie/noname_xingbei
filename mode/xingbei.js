@@ -2732,9 +2732,6 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
                 },
                 content:function(){
                     "step 0"
-					event.plyaer=player;
-					event.trigger('shiYongZhiLiao');
-					"step 1"
                     var num=trigger.num;
                     var list=[];
                     for(var i=0;i<=player.zhiLiao;i++){
@@ -2742,7 +2739,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
                         list.push(i);
                     }
                     player.chooseControl(list).set('prompt','使用的治疗数量').set('ai',function(){return list.length-1;});
-					"step 2"
+					"step 1"
 					var zhiLiaonum=result.control;
 					if(zhiLiaonum>0){
 						trigger.num-=zhiLiaonum;
