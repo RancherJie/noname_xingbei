@@ -18778,6 +18778,15 @@
 					event.trigger('changeHp');
 				},
 				changeZhiLiao:function(){
+					'step 0'
+					if(bool){
+						event.trigger('zhiLiaoYiChu');
+					}
+					'step 1'
+					if(bool){
+						event.finish();
+					}
+					'step 2'
 					player.zhiLiao+=num;
 					if(num>0){
 						game.log(player,'获得了'+num+'点治疗');
@@ -24322,9 +24331,7 @@
 						var limit=this.getZhiLiaoLimit();
 					}
 					if(num>0&&this.zhiLiao+num>parseInt(limit)){
-						var numx=parseInt(limit)-this.zhiLiao;
 						next.bool=true;
-						next.num=numx;
 					}
 					return next;
 				},
