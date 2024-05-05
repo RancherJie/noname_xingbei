@@ -197,6 +197,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                 },
                 content:function(player){
+                    player.removeBiShaShuiJing();
                     player.storage.gongJi++;
                 }
             },
