@@ -3433,11 +3433,15 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         intro:{
                             content:'expansion',
                         },
-                        trigger:{player:'useCardAfter'},
+                        trigger:{player:['useCardAfter','useSkillAfter']},
                         filter:function(event,player){
                             if(!player.hasExpansions('xunJieCiFu_xiaoGuo')) return false;
-                            if(event.parent.name=='chooseToUse_qiTa') return false;
-                            return true;
+                            if(event.name=='useCard'){
+                                return event.parent.name!='chooseToUse_qiTa';
+                            }else if(event.name=='useSkill'){
+                                var info=get.info(event.skill);
+                                return info.type=='faShu';
+                            }
                         },
                         content:function(){
                             player.loseToDiscardpile(player.getExpansions('xunJieCiFu_xiaoGuo'));
