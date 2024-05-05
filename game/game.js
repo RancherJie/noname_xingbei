@@ -17135,7 +17135,6 @@
 						next.directHit=event.directHit;
 						next.customArgs=event.customArgs;
 						if(event.forceDie) next.forceDie=true;
-						if(event.yingZhan) next.yingZhan=true;
 						//xingBie
 						if(event.yingZhan) next.yingZhan=true;
 						event.redo();
