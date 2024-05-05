@@ -3466,7 +3466,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         filter:function(event,player){
                             if(!player.isLinked()) return false;
                             if(get.type(event.card)!='gongJi') return false;
-                            if(!event.targets) return false;
+                            if(event.targets.length==0) return false;
                             if(event.yingZhan==true) return false;
                             return true;
                         },
