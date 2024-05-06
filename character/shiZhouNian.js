@@ -3555,25 +3555,38 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						return{
 							links:links,
 							type:'qiDong',
-                            selectTarget:[1,2],
+                            selectTarget:function(){
+                                var links=lib.skill.xueXingDaoYan_backup.links;
+                                if(links[0]==1){
+                                    return 1;
+                                }else if(links[0]>1){
+                                    return [1,2];
+                                }
+                            },
                             multitarget:true,
+                            multiline:true,
                             filterTarget:function(card,player,target){
                                 if(target==player) return false;
                                 return target.side==player.side;
                             },
-							content:function(){
-								'step 0'
+                            contentBefore:function(){
+                                'step 0'
                                 event.links=lib.skill.xueXingDaoYan_backup.links;
                                 player.changeZhiLiao(-event.links[0]);
                                 'step 1'
                                 player.damageFaShu(event.links[0],player);
-                                'step 2'
+                            },
+							content:function(){
+								'step 0'
+                                event.links=lib.skill.xueXingDaoYan_backup.links;
+                                'step 1'
                                 if(targets.length==1){
                                     targets[0].changeZhiLiao(event.links[0]);
                                     event.finish();
                                 }
-                                'step 3'
-                                event.target=result.targets[0];
+                                'step 2'
+                                targets.sortBySeat();
+                                event.target=targets[0];
                                 var list=[];
                                 for(var i=1;i<=event.links[0]-1;i++){
                                     list.push(i);
@@ -3581,11 +3594,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                 var name=get.translation(event.target);
                                 var str=name+'获得几点治疗';
                                 player.chooseControl(list).set('prompt',str);
-                                'step 4'
+                                'step 3'
                                 event.target.changeZhiLiao(result.control);
                                 event.links[0]-=result.control;
-                                'step 5'
-                                event.target=result.targets[1];
+                                'step 4'
+                                event.target=targets[1];
                                 event.target.changeZhiLiao(event.links[0]);
 							},
                             contentAfter:function(){
@@ -3594,6 +3607,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						}
 					},
                     prompt:function(links,player){
+                        if(links[0]==1){
+                            return '分配治疗给1名队友';
+                        }
 						return '分配治疗给1~2名队友';
 					},
                 }
