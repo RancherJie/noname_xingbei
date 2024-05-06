@@ -56325,7 +56325,7 @@
 				if(game.chess) return true;
 				if(lib.config.link_style2!='rotate') return true;
 				// if(game.chess) return false;
-				if(game.layout=='long'||game.layout=='long2'||game.layout=='nova') return true;
+				if(game.layout=='long'||game.layout=='long2') return true;
 				if(player.dataset.position=='0'){
 					return ui.arena.classList.contains('oblongcard');
 				}
