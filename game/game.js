@@ -11210,17 +11210,19 @@
 								let index = game.hongZhanJi.indexOf(xingShi);  
 								if (index !== -1) {  
 									game.hongZhanJi.splice(index, 1);  
+									game.log('<span style="color:red;">红方</span>战绩区移除',xingShi);
 								}
 							}
-							game.log('<span style="color:red;">红方</span>战绩区移除',xingShi);
+							
 						}else if(side==false){
 							for(let i=0;i<num;i++){
 								let index = game.lanZhanJi.indexOf(xingShi);  
 								if (index !== -1) {  
 									game.lanZhanJi.splice(index, 1);  
+									game.log('<span style="color:blue;">蓝方</span>战绩区移除',xingShi);
 								}
 							}
-							game.log('<span style="color:blue;">蓝方</span>战绩区移除',xingShi);
+							
 						}	
 					}
 					ui.shiQiInfo.innerHTML='士气'+'<span style="color:red;">'+game.hongShiQi+'</span>'+'/'+'<span style="color:blue;">'+game.lanShiQi+'</span>'+'|战绩'+'<span style="color:red;">'+game.hongZhanJi+'</span>'+'/'+'<span style="color:blue;">'+game.lanZhanJi+'</span>'+'|星杯'+'<span style="color:red;">'+game.hongXingBei+'</span>'+'/'+'<span style="color:blue;">'+game.lanXingBei+'</span>';
