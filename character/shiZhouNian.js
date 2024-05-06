@@ -3956,7 +3956,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             qiangYun:"[被动]强运",
             qiangYun_info:"<span class='tiaoJian'>(当你发动【欺诈】时)</span>你+1[水晶]。",
             diXiaFaZe:"[被动]地下法则",
-            diXiaFaZe_info:"<span class='tiaoJian'>(你执行【购买】时)</span>改为【战绩区】+2【水晶】。",
+            diXiaFaZe_info:"<span class='tiaoJian'>(你执行【购买】时)</span>改为【战绩区】+2[宝石]。",
             maoXianJiaTianTang:"[响应]冒险者天堂",
             maoXianJiaTianTang_info:"你执行【提炼】时，将提炼出的[宝石]和[水晶]全部交给目标队友。然后移除你的1[能量]",
             touTianHuanRi:"[法术]偷天换日[回合限定]",
