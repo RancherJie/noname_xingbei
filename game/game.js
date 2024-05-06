@@ -14531,12 +14531,14 @@
 					if(event.dialog&&event.dialog.close) event.dialog.close();
 					"step 5"
 					if(event.baoPai==true){
-						var next=player.changeShiQi(-event.result.cards.length).set('baoPai',true);
-						if(event.yuanYin=='damage'){
-							next.set('yuanYin','damage');
-						}
-						if(event.faShu){
-							next.set('faShu',event.faShu)
+						if(event.shiQiXiaJiang!=false){
+							var next=player.changeShiQi(-event.result.cards.length).set('baoPai',true);
+							if(event.yuanYin=='damage'){
+								next.set('yuanYin','damage');
+							}
+							if(event.faShu){
+								next.set('faShu',event.faShu)
+							}
 						}
 					}
 					
@@ -17747,7 +17749,10 @@
 								next.set('yuanYin','damage')
 								if(event.faShu===true){
 									next.set('faShu',event.faShu)
+								}
 							}
+							if(event.shiQiXiaJiang==false){
+								next.set('shiQiXiaJiang',false);
 							}
 							
 						}
@@ -18140,6 +18145,10 @@
 								next.set('faShu',event.faShu)
 							}
 						}
+						if(event.shiQiXiaJiang==false){
+							next.set('shiQiXiaJiang',false);
+						}
+						
 					}
 					if(event.updatePile) game.updateRoundNumber();
 				},
@@ -18609,7 +18618,10 @@
 					event.trigger('jiangYaoChengShou2');
 					"step 8"
 					if(!event.unreal){
-						player.draw(num).set('yuanYin','damage').set('faShu',event.faShu);
+						var next=player.draw(num).set('yuanYin','damage').set('faShu',event.faShu);
+						if(event.shiQiXiaJiang==false){
+							next.set('shiQiXiaJiang',false);
+						}
 						/*
 						if(event.notrigger){
 							player.changeHp(-num,false)._triggered=null;
