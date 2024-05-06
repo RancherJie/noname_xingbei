@@ -2936,7 +2936,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
                 }
             },
             _yingZhan_weiMingZhong:{
-                trigger:{player:'useCard1'},
+                trigger:{player:'useCard3'},
                 forced:true,
 				firstDo:true,
                 filter:function(event,player){
