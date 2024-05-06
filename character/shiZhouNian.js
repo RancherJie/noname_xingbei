@@ -3753,6 +3753,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             zhanWenSuiJi:{
                 trigger:{player:'useCardToTargeted'},
                 filter:function(event,player){
+                    if(get.type(event.card)!='gongJi') return false;
                     if(player.countZhiShiWu('zhanWen')<1) return false;
                     if(event.yingZhan==true) return false;
                     var cards=player.getCards('h');
