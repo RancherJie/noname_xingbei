@@ -2876,11 +2876,11 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					var next=player.chooseToUse_qiTa(propmt);
                     next.set('filterCard',function(card,player,event){
 						if(get.type(card)=='gongJi'){
-							if(trigger.parent.canYingZhan==false) return false;
+							if(_status.event.canYingZhan==false) return false;
 							if(get.suit(_status.event.trigger_card)=='an') return false;
 							if(card.name!='anMie'&&get.suit(card)!=get.suit(_status.event.trigger_card)) return false;
 						}else{
-							if(trigger.parent.canShengGuang==false) return false;
+							if(_status.event.canShengGuang==false) return false;
 							if(get.name(card)!='shengGuang') return false;
 						}
 						return lib.filter.cardEnabled(card,player,'forceEnable');
@@ -2897,6 +2897,8 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					next.set('trigger_card',trigger.card);
                     next.set('trigger_player',event.source);
                     next.set('yingZhan',true);
+					next.set('canYingZhan',trigger.parent.canYingZhan);
+					next.set('canShengGuang',trigger.parent.canShengGuang);
 					'step 1'
                     if(result.bool){
                         trigger.getParent().targets.remove(player);
@@ -3026,7 +3028,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					var name=get.translation(trigger.player);
 					var str='受到'+name+'的魔弹';
 					var next=player.chooseToUse_qiTa(str,function(card,player,event){
-						if(!(card.name==get.name(trigger.card)||card.name=='shengGuang')) return false;
+						if(!(card.name=='moDan'||card.name=='shengGuang')) return false;
                         return lib.filter.cardEnabled(card,player,'forceEnable');
 					});
 					next.autodelay=true; 
