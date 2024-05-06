@@ -5,7 +5,6 @@ window.noname_update={
 		
 	],
 	files:[
-		'image/card/cardtempname_bg.png',
-		'image/card/cardtempname_bg.png',
+		
 	]
 };
