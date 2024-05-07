@@ -11223,6 +11223,8 @@
 							
 						}	
 					}
+					game.hongZhanJi.sort();
+					game.lanZhanJi.sort();
 					ui.updateShiQiInfo();
 					game.broadcast(function(hongZhanJi,lanZhanJi){
 						game.lanZhanJi=lanZhanJi;
@@ -41007,6 +41009,8 @@
 					}
 				}
 			}
+			game.hongZhanJi.sort();
+			game.lanZhanJi.sort();
 			ui.updateShiQiInfo();
 			game.broadcast(function(hongZhanJi,lanZhanJi){
 				game.hongZhanJi=hongZhanJi;
