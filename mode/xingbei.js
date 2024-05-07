@@ -604,10 +604,10 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 
 
 					if(get.is.phoneLayout()){
-						ui.shiQiInfo=ui.create.div('.touchinfo.left',ui.window);
+						ui.shiQiInfo=ui.create.div('.touchinfo.bottom-right',ui.window);
 					}
 					else{
-						ui.shiQiInfo=ui.create.div(ui.gameinfo);
+						ui.shiQiInfo=ui.create.div('.touchinfo.bottom-right',ui.window);
 					}
 					ui.shiQiInfo.innerHTML='士气'+'<span style="color:red;">'+game.hongShiQi+'</span>'+'/'+'<span style="color:blue;">'+game.lanShiQi+'</span>'+'|战绩'+'<span style="color:red;">'+game.hongZhanJi+'</span>'+'/'+'<span style="color:blue;">'+game.lanZhanJi+'</span>'+'|星杯'+'<span style="color:red;">'+game.hongXingBei+'</span>'+'/'+'<span style="color:blue;">'+game.lanXingBei+'</span>';
 
@@ -1562,10 +1562,10 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						}
 						
 						if(get.is.phoneLayout()){
-							ui.shiQiInfo=ui.create.div('.touchinfo.left',ui.window);
+							ui.shiQiInfo=ui.create.div('.touchinfo.bottom-right',ui.window);
 						}
 						else{
-							ui.shiQiInfo=ui.create.div(ui.gameinfo);
+							ui.shiQiInfo=ui.create.div('.touchinfo.bottom-right',ui.window);
 						}
 						ui.shiQiInfo.innerHTML='士气'+'<span style="color:red;">'+game.hongShiQi+'</span>'+'/'+'<span style="color:blue;">'+game.lanShiQi+'</span>'+'|战绩'+'<span style="color:red;">'+game.hongZhanJi+'</span>'+'/'+'<span style="color:blue;">'+game.lanZhanJi+'</span>'+'|星杯'+'<span style="color:red;">'+game.hongXingBei+'</span>'+'/'+'<span style="color:blue;">'+game.lanXingBei+'</span>';
 					}];
@@ -1816,10 +1816,10 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 
 					game.broadcastAll(function(){
 						if(get.is.phoneLayout()){
-							ui.shiQiInfo=ui.create.div('.touchinfo.left',ui.window);
+							ui.shiQiInfo=ui.create.div('.touchinfo.bottom-right',ui.window);
 						}
 						else{
-							ui.shiQiInfo=ui.create.div(ui.gameinfo);
+							ui.shiQiInfo=ui.create.div('.touchinfo.bottom-right',ui.window);
 						}
 						ui.shiQiInfo.innerHTML='士气'+'<span style="color:red;">'+game.hongShiQi+'</span>'+'/'+'<span style="color:blue;">'+game.lanShiQi+'</span>'+'|战绩'+'<span style="color:red;">'+game.hongZhanJi+'</span>'+'/'+'<span style="color:blue;">'+game.lanZhanJi+'</span>'+'|星杯'+'<span style="color:red;">'+game.hongXingBei+'</span>'+'/'+'<span style="color:blue;">'+game.lanXingBei+'</span>';
 					})
