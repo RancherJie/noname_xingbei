@@ -4,7 +4,7 @@ window.config={
 		gitee:'https://gitee.com/RancherJie/noname_xingbei_extension/raw/master/',
 		GitHub:'https://raw.githubusercontent.com/RancherJie/noname_xingbei_extension/master/'
 	},
-	extension_source:'Coding',
+	extension_source:'gitee',
 	forbidai:['ns_liuzhang'],
 	forbidai_user:[],
 	forbidall:[],
