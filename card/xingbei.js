@@ -59,56 +59,24 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 					target.damage(event.baseDamage+event.extraDamage);
 				},
 				ai:{
-
 					basic:{
 						useful:[5,3,1],
 						value:[5,3,1],
 					},
 					order:function(item,player){
-						if(player.hasSkillTag('presha',true,null,true)) return 10;
-						if(lib.linked.contains(get.nature(item))){
-							if(game.hasPlayer(function(current){
-								return current!=player&&current.isLinked()&&player.canUse(item,current,null,true)&&get.effect(current,item,player,player)>0&&lib.card.sha.ai.canLink(player,current,item);
-							})&&game.countPlayer(function(current){
-								return current.isLinked()&&get.damageEffect(current,player,player,get.nature(item))>0;
-							})>1) return 3.1;
-							return 3;
-						}
 						return 3.05;
 					},
 					result:{
 						target:function(player,target,card,isLink){
-							var eff=function(){
-								if(!isLink&&player.hasSkill('jiu')){
-									if(!target.hasSkillTag('filterDamage',null,{
-										player:player,
-										card:card,
-										jiu:true,
-									})){
-										if(get.attitude(player,target)>0){
-											return -7;
-										}
-										else{
-											return -4;
-										}
-									}
-									return -0.5;
-								}
-								return -1.5;
-							}();
-							if(!isLink&&target.mayHaveShan()&&!player.hasSkillTag('directHit_ai',true,{
-								target:target,
-								card:card,
-							},true)) return eff/1.2;
-							return eff;
+							if(target.side==player.side) return;
+							if(target.countCards('h')+2>target.getHandcardLimit()){
+								return -5;
+							}else if(target.countCards('h')+2>target.getHandcardLimit()-3){
+								return -3;
+							}
 						},
 					},
-					},
-					tag:{
-						respond:1,
-						respondShan:1,
 				},
-			
 			},
 			shuiLianZhan:{
 				type:"gongJi",
@@ -139,48 +107,18 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 						value:[5,3,1],
 					},
 					order:function(item,player){
-						if(player.hasSkillTag('presha',true,null,true)) return 10;
-						if(lib.linked.contains(get.nature(item))){
-							if(game.hasPlayer(function(current){
-								return current!=player&&current.isLinked()&&player.canUse(item,current,null,true)&&get.effect(current,item,player,player)>0&&lib.card.sha.ai.canLink(player,current,item);
-							})&&game.countPlayer(function(current){
-								return current.isLinked()&&get.damageEffect(current,player,player,get.nature(item))>0;
-							})>1) return 3.1;
-							return 3;
-						}
 						return 3.05;
 					},
 					result:{
 						target:function(player,target,card,isLink){
-							var eff=function(){
-								if(!isLink&&player.hasSkill('jiu')){
-									if(!target.hasSkillTag('filterDamage',null,{
-										player:player,
-										card:card,
-										jiu:true,
-									})){
-										if(get.attitude(player,target)>0){
-											return -7;
-										}
-										else{
-											return -4;
-										}
-									}
-									return -0.5;
-								}
-								return -1.5;
-							}();
-							if(!isLink&&target.mayHaveShan()&&!player.hasSkillTag('directHit_ai',true,{
-								target:target,
-								card:card,
-							},true)) return eff/1.2;
-							return eff;
+							if(target.side==player.side) return;
+							if(target.countCards('h')+2>target.getHandcardLimit()){
+								return -5;
+							}else if(target.countCards('h')+2>target.getHandcardLimit()-3){
+								return -3;
+							}
 						},
 					},
-					},
-					tag:{
-						respond:1,
-						respondShan:1,
 				},
 			},
 			huoYanZhan:{
@@ -212,48 +150,18 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 						value:[5,3,1],
 					},
 					order:function(item,player){
-						if(player.hasSkillTag('presha',true,null,true)) return 10;
-						if(lib.linked.contains(get.nature(item))){
-							if(game.hasPlayer(function(current){
-								return current!=player&&current.isLinked()&&player.canUse(item,current,null,true)&&get.effect(current,item,player,player)>0&&lib.card.sha.ai.canLink(player,current,item);
-							})&&game.countPlayer(function(current){
-								return current.isLinked()&&get.damageEffect(current,player,player,get.nature(item))>0;
-							})>1) return 3.1;
-							return 3;
-						}
 						return 3.05;
 					},
 					result:{
 						target:function(player,target,card,isLink){
-							var eff=function(){
-								if(!isLink&&player.hasSkill('jiu')){
-									if(!target.hasSkillTag('filterDamage',null,{
-										player:player,
-										card:card,
-										jiu:true,
-									})){
-										if(get.attitude(player,target)>0){
-											return -7;
-										}
-										else{
-											return -4;
-										}
-									}
-									return -0.5;
-								}
-								return -1.5;
-							}();
-							if(!isLink&&target.mayHaveShan()&&!player.hasSkillTag('directHit_ai',true,{
-								target:target,
-								card:card,
-							},true)) return eff/1.2;
-							return eff;
+							if(target.side==player.side) return;
+							if(target.countCards('h')+2>target.getHandcardLimit()){
+								return -5;
+							}else if(target.countCards('h')+2>target.getHandcardLimit()-3){
+								return -3;
+							}
 						},
 					},
-					},
-					tag:{
-						respond:1,
-						respondShan:1,
 				},
 			},
 			fengShenZhan:{
@@ -285,48 +193,18 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 						value:[5,3,1],
 					},
 					order:function(item,player){
-						if(player.hasSkillTag('presha',true,null,true)) return 10;
-						if(lib.linked.contains(get.nature(item))){
-							if(game.hasPlayer(function(current){
-								return current!=player&&current.isLinked()&&player.canUse(item,current,null,true)&&get.effect(current,item,player,player)>0&&lib.card.sha.ai.canLink(player,current,item);
-							})&&game.countPlayer(function(current){
-								return current.isLinked()&&get.damageEffect(current,player,player,get.nature(item))>0;
-							})>1) return 3.1;
-							return 3;
-						}
 						return 3.05;
 					},
 					result:{
 						target:function(player,target,card,isLink){
-							var eff=function(){
-								if(!isLink&&player.hasSkill('jiu')){
-									if(!target.hasSkillTag('filterDamage',null,{
-										player:player,
-										card:card,
-										jiu:true,
-									})){
-										if(get.attitude(player,target)>0){
-											return -7;
-										}
-										else{
-											return -4;
-										}
-									}
-									return -0.5;
-								}
-								return -1.5;
-							}();
-							if(!isLink&&target.mayHaveShan()&&!player.hasSkillTag('directHit_ai',true,{
-								target:target,
-								card:card,
-							},true)) return eff/1.2;
-							return eff;
+							if(target.side==player.side) return;
+							if(target.countCards('h')+2>target.getHandcardLimit()){
+								return -5;
+							}else if(target.countCards('h')+2>target.getHandcardLimit()-3){
+								return -3;
+							}
 						},
 					},
-					},
-					tag:{
-						respond:1,
-						respondShan:1,
 				},
 			},
 			leiGuangZhan:{
@@ -358,48 +236,18 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 						value:[5,3,1],
 					},
 					order:function(item,player){
-						if(player.hasSkillTag('presha',true,null,true)) return 10;
-						if(lib.linked.contains(get.nature(item))){
-							if(game.hasPlayer(function(current){
-								return current!=player&&current.isLinked()&&player.canUse(item,current,null,true)&&get.effect(current,item,player,player)>0&&lib.card.sha.ai.canLink(player,current,item);
-							})&&game.countPlayer(function(current){
-								return current.isLinked()&&get.damageEffect(current,player,player,get.nature(item))>0;
-							})>1) return 3.1;
-							return 3;
-						}
 						return 3.05;
 					},
 					result:{
 						target:function(player,target,card,isLink){
-							var eff=function(){
-								if(!isLink&&player.hasSkill('jiu')){
-									if(!target.hasSkillTag('filterDamage',null,{
-										player:player,
-										card:card,
-										jiu:true,
-									})){
-										if(get.attitude(player,target)>0){
-											return -7;
-										}
-										else{
-											return -4;
-										}
-									}
-									return -0.5;
-								}
-								return -1.5;
-							}();
-							if(!isLink&&target.mayHaveShan()&&!player.hasSkillTag('directHit_ai',true,{
-								target:target,
-								card:card,
-							},true)) return eff/1.2;
-							return eff;
+							if(target.side==player.side) return;
+							if(target.countCards('h')+2>target.getHandcardLimit()){
+								return -5;
+							}else if(target.countCards('h')+2>target.getHandcardLimit()-3){
+								return -3;
+							}
 						},
 					},
-					},
-					tag:{
-						respond:1,
-						respondShan:1,
 				},
 			},
 			diLieZhan:{
@@ -425,54 +273,23 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 					target.damage(event.baseDamage+event.extraDamage);
 				},
 				ai:{
-
 					basic:{
 						useful:[5,3,1],
 						value:[5,3,1],
 					},
 					order:function(item,player){
-						if(player.hasSkillTag('presha',true,null,true)) return 10;
-						if(lib.linked.contains(get.nature(item))){
-							if(game.hasPlayer(function(current){
-								return current!=player&&current.isLinked()&&player.canUse(item,current,null,true)&&get.effect(current,item,player,player)>0&&lib.card.sha.ai.canLink(player,current,item);
-							})&&game.countPlayer(function(current){
-								return current.isLinked()&&get.damageEffect(current,player,player,get.nature(item))>0;
-							})>1) return 3.1;
-							return 3;
-						}
 						return 3.05;
 					},
 					result:{
 						target:function(player,target,card,isLink){
-							var eff=function(){
-								if(!isLink&&player.hasSkill('jiu')){
-									if(!target.hasSkillTag('filterDamage',null,{
-										player:player,
-										card:card,
-										jiu:true,
-									})){
-										if(get.attitude(player,target)>0){
-											return -7;
-										}
-										else{
-											return -4;
-										}
-									}
-									return -0.5;
-								}
-								return -1.5;
-							}();
-							if(!isLink&&target.mayHaveShan()&&!player.hasSkillTag('directHit_ai',true,{
-								target:target,
-								card:card,
-							},true)) return eff/1.2;
-							return eff;
+							if(target.side==player.side) return;
+							if(target.countCards('h')+2>target.getHandcardLimit()){
+								return -5;
+							}else if(target.countCards('h')+2>target.getHandcardLimit()-3){
+								return -3;
+							}
 						},
 					},
-					},
-					tag:{
-						respond:1,
-						respondShan:1,
 				},
 			},
 			shengGuang:{
@@ -508,19 +325,32 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 
 				},
 				ai:{
-					order:10,
+					order:function(item,player){
+						for(var i=0;i<game.players.length;i++){
+							if(game.players[i].side!=player.side) return;
+							if(game.players[i].countCards('h')+3>=game.players[i].getHandcardLimit()){
+								return 5;
+							}else{
+								return 3;
+							}
+						}
+					},
 					basic:{
 						useful:[5,3,1],
 						value:[5,3,1],
 					},
 					result:{
 						target:function(player,target,card,isLink){
-							var eff=function(){
-								if(target.side==player.side){
-									return 2;
+							if(target.side!=player.side){
+								return;
+							}else{
+								if(target.countCards('h')+2>=target.getHandcardLimit()){
+									return 3;
+								}else{
+									return 1;
 								}
-							};
-							return eff;
+							}
+							
 						},
 					},
 				},
@@ -543,21 +373,29 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 
                 },
 				ai:{
+					order:function(item,player){
+						for(var i=0;i<game.players.length;i++){
+							if(game.players[i].side==player.side) return;
+							if(game.players[i].countCards('h')+3>=game.players[i].getHandcardLimit()){
+								return 5;
+							}else{
+								return 3;
+							}
+						}
+					},
 					basic:{
-						order:1,
-						useful:1,
-						value:8,
+						useful:[5,3,1],
+						value:[5,3,1],
 					},
 					result:{
 						ignoreStatus:true,
 						target:function(player,target){
-							var num=target.hp-target.countCards('h')-2;
-							if(num>-1) return -0.01;
-							if(target.hp<3) num--;
-							if(target.isTurnedOver()) num/=2;
-							var dist=get.distance(player,target,'absolute');
-							if(dist<1) dist=1;
-							return num/Math.sqrt(dist)*get.threaten(target,player);
+							if(target.side==player.side) return;
+							if(target.countCards('h')+2>=target.getHandcardLimit()){
+								return -3;
+							}else{
+								return -1;
+							}
 						}
 					},
 					tag:{
@@ -580,8 +418,25 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 					target.addToExpansion(event.cards,player,'gain2').gaintag.add('_zhongDu');
 				},
 				ai:{
+					order:function(item,player){
+						for(var i=0;i<game.players.length;i++){
+							if(game.players[i].side==player.side) return;
+							if(game.players[i].countCards('h')+1>=game.players[i].getHandcardLimit()){
+								return 2;
+							}else{
+								return 1;
+							}
+						}
+					},
+					basic:{
+						useful:[5,3,1],
+						value:[5,3,1],
+					},
 					result:{
                         target:function(target){
+							if(target.countCards('h')+1>target.getHandcardLimit()){
+								return -3;
+							}
                             if(target.countCards('h')>=3){
                                 return -2;
                             }
@@ -623,12 +478,23 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 					next.faShu=true;					
 				},
 				ai:{
-					order:2,
+					order:function(item,player){
+						if(player.side==true){
+							if(game.hongZhanJi.length>=4){
+								return 5;
+							}else{
+								return 2;
+							}
+						}else if(player.side==false){
+							if(game.lanZhanJi.length>=4){
+								return 5;
+							}else{
+								return 2;
+							}
+						}
+					},
 					result:{
 						target:-2,
-					},
-					tag:{
-						respondShan:1,
 					},
 				}	
 			},
