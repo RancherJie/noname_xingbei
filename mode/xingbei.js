@@ -3186,13 +3186,21 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 								'step 1'
 								player.draw(3).set('yuanYin','teShuXingDong');
 								'step 2'
+								var dict={};
 								for(var i=0;i<event.links.length;i++){
 									if(event.links[i]=='宝石'){
-										player.changeZhanJi('r',-1);
+										dict['r']=(dict['r']||0)+1;
 									}else if(event.links[i]=='水晶'){
-										player.changeZhanJi('b',-1);
+										dict['b']=(dict['b']||0)+1;
 									}
 								}
+								if(dict['r']>0){
+									var next=player.removeZhanJi('r',dict['r']);
+								}
+								if(dict['b']>0){
+									var next=player.removeZhanJi('b',dict['b']);
+								}
+								'step 3'
 								player.changeXingBei(1);
 							},
 						}
