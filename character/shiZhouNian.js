@@ -3174,6 +3174,14 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.removeZhiShiWu('xianXue');
                     player.damageFaShu(2,player);
                     player.storage.gongJi++;
+                },
+                check:function(event,player){
+                    if(player.side==true){
+                        var shiQi=game.hongShiQi;
+                    }else if(player.side==false){
+                        var shiQi=game.lanShiQi;
+                    }
+                    return shiQi>5;
                 }
 
             },
