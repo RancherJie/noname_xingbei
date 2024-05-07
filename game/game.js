@@ -55824,8 +55824,8 @@
 			}
 			var hongZhanJi_str='';
 			var lanZhanJi_str='';
-			var r='image/card/r.png';  // 根据颜色选择不同图片
-			var b='image/card/b.png';
+			var r=lib.assetURL+'image/card/r.png';  // 根据颜色选择不同图片
+			var b=lib.assetURL+'image/card/b.png';
 
 			var keysSorted = Object.keys(hongZhanJi).sort();  // 获取键数组并排序
 			keysSorted.forEach(function(key) {
