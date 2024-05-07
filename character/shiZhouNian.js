@@ -1928,6 +1928,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     if(event.player.side==player.side) return false;
                     if(get.itemtype(event.cards)!='cards') return false;
                     if(get.type(event.card)!='gongJi') return false;
+                    if(event.targets.length<=0) return false;
                     var anYue=player.getExpansions('anYue');
                     for(var i=0;i<anYue.length;i++){
                         if(get.suit(anYue[i])==get.suit(event.card)) return true;
