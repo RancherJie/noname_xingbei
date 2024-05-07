@@ -3202,6 +3202,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 								}
 								'step 3'
 								player.changeXingBei(1);
+								player.changeShiQi(-1,!player.side);
 							},
 						}
 					},

@@ -11123,7 +11123,6 @@
 						}else{
 							game.log('<span style="color:red;">红方</span>星杯数量减少',num);
 						}
-						game.changeShiQi(-1,false);
 					}else if(side==false){
 						game.lanXingBei+=num;
 						if(num>0){
@@ -11131,7 +11130,6 @@
 						}else{
 							game.log('<span style="color:blue;">蓝方</span>星杯数量减少',num);
 						}
-						game.changeShiQi(-1,true);
 					}
 					ui.shiQiInfo.innerHTML='士气'+'<span style="color:red;">'+game.hongShiQi+'</span>'+'/'+'<span style="color:blue;">'+game.lanShiQi+'</span>'+'|战绩'+'<span style="color:red;">'+game.hongZhanJi+'</span>'+'/'+'<span style="color:blue;">'+game.lanZhanJi+'</span>'+'|星杯'+'<span style="color:red;">'+game.hongXingBei+'</span>'+'/'+'<span style="color:blue;">'+game.lanXingBei+'</span>';
 					game.broadcast(function(hongXingBei,lanXingBei){
@@ -41027,7 +41025,6 @@
 					num=-num;
 					game.log('<span style="color:red;">红方</span>星杯数量减少',num);
 				}
-				player.changeShiQi(-1,false);
 			}else if(side==false){
 				game.lanXingBei+=num;
 				if(num>0){
@@ -41036,7 +41033,6 @@
 					num=-num;
 					game.log('<span style="color:blue;">蓝方</span>星杯数量减少',num);
 				}
-				player.changeShiQi(-1,true);
 			}
 			ui.shiQiInfo.innerHTML='士气'+'<span style="color:red;">'+game.hongShiQi+'</span>'+'/'+'<span style="color:blue;">'+game.lanShiQi+'</span>'+'|战绩'+'<span style="color:red;">'+game.hongZhanJi+'</span>'+'/'+'<span style="color:blue;">'+game.lanZhanJi+'</span>'+'|星杯'+'<span style="color:red;">'+game.hongXingBei+'</span>'+'/'+'<span style="color:blue;">'+game.lanXingBei+'</span>';
 			game.broadcast(function(hongXingBei,lanXingBei){
