@@ -3648,17 +3648,14 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 group:['reXueFeiTeng_xiaoGuo','reXueFeiTeng_chongZhi'],
                 subSkill:{
                     xiaoGuo:{
-                        trigger:{global:'changeShiQi1'},
+                        trigger:{player:'damageBegin'},
                         forced:true,
                         filter:function(event,player){
                             if(!player.isLinked()) return false;
-                            if(event.side!=player.side) return false;
-                            if(event.num>=0) return false;
-                            if(event.yuanYin!='damage') return false;
                             return true;
                         },
                         content:function(){
-                            trigger.cancel();
+                            trigger.shiQiXiaJiang=false;
                         }
                     },
                     chongZhi:{
