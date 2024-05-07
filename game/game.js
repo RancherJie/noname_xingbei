@@ -11131,11 +11131,11 @@
 							game.log('<span style="color:blue;">蓝方</span>星杯数量减少',num);
 						}
 					}
-					ui.shiQiInfo.innerHTML='士气'+'<span style="color:red;">'+game.hongShiQi+'</span>'+'/'+'<span style="color:blue;">'+game.lanShiQi+'</span>'+'|战绩'+'<span style="color:red;">'+game.hongZhanJi+'</span>'+'/'+'<span style="color:blue;">'+game.lanZhanJi+'</span>'+'|星杯'+'<span style="color:red;">'+game.hongXingBei+'</span>'+'/'+'<span style="color:blue;">'+game.lanXingBei+'</span>';
+					ui.updateShiQiInfo();
 					game.broadcast(function(hongXingBei,lanXingBei){
 						game.hongXingBei=hongXingBei;
 						game.lanXingBei=lanXingBei;
-						ui.shiQiInfo.innerHTML='士气'+'<span style="color:red;">'+game.hongShiQi+'</span>'+'/'+'<span style="color:blue;">'+game.lanShiQi+'</span>'+'|战绩'+'<span style="color:red;">'+game.hongZhanJi+'</span>'+'/'+'<span style="color:blue;">'+game.lanZhanJi+'</span>'+'|星杯'+'<span style="color:red;">'+game.hongXingBei+'</span>'+'/'+'<span style="color:blue;">'+game.lanXingBei+'</span>';
+						ui.updateShiQiInfo();
 					},game.hongXingBei,game.lanXingBei);
 
 					game.checkResult();
@@ -11171,11 +11171,11 @@
 							game.log('<span style="color:blue;">蓝方</span>士气减少',num);
 						}
 					}
-					ui.shiQiInfo.innerHTML='士气'+'<span style="color:red;">'+game.hongShiQi+'</span>'+'/'+'<span style="color:blue;">'+game.lanShiQi+'</span>'+'|战绩'+'<span style="color:red;">'+game.hongZhanJi+'</span>'+'/'+'<span style="color:blue;">'+game.lanZhanJi+'</span>'+'|星杯'+'<span style="color:red;">'+game.hongXingBei+'</span>'+'/'+'<span style="color:blue;">'+game.lanXingBei+'</span>';
+					ui.updateShiQiInfo();
 					game.broadcast(function(hongShiQi,lanShiQi){
 						game.lanShiQi=lanShiQi;
 						game.hongShiQi=hongShiQi;
-						ui.shiQiInfo.innerHTML='士气'+'<span style="color:red;">'+game.hongShiQi+'</span>'+'/'+'<span style="color:blue;">'+game.lanShiQi+'</span>'+'|战绩'+'<span style="color:red;">'+game.hongZhanJi+'</span>'+'/'+'<span style="color:blue;">'+game.lanZhanJi+'</span>'+'|星杯'+'<span style="color:red;">'+game.hongXingBei+'</span>'+'/'+'<span style="color:blue;">'+game.lanXingBei+'</span>';
+						ui.updateShiQiInfo();
 					},game.hongShiQi,game.lanShiQi);
 
 					game.checkResult();
@@ -11223,11 +11223,11 @@
 							
 						}	
 					}
-					ui.shiQiInfo.innerHTML='士气'+'<span style="color:red;">'+game.hongShiQi+'</span>'+'/'+'<span style="color:blue;">'+game.lanShiQi+'</span>'+'|战绩'+'<span style="color:red;">'+game.hongZhanJi+'</span>'+'/'+'<span style="color:blue;">'+game.lanZhanJi+'</span>'+'|星杯'+'<span style="color:red;">'+game.hongXingBei+'</span>'+'/'+'<span style="color:blue;">'+game.lanXingBei+'</span>';
+					ui.updateShiQiInfo();
 					game.broadcast(function(hongZhanJi,lanZhanJi){
 						game.lanZhanJi=lanZhanJi;
 						game.hongZhanJi=hongZhanJi;
-						ui.shiQiInfo.innerHTML='士气'+'<span style="color:red;">'+game.hongShiQi+'</span>'+'/'+'<span style="color:blue;">'+game.lanShiQi+'</span>'+'|战绩'+'<span style="color:red;">'+game.hongZhanJi+'</span>'+'/'+'<span style="color:blue;">'+game.lanZhanJi+'</span>'+'|星杯'+'<span style="color:red;">'+game.hongXingBei+'</span>'+'/'+'<span style="color:blue;">'+game.lanXingBei+'</span>';
+						ui.updateShiQiInfo();
 					},game.hongZhanJi,game.lanZhanJi);
 
 					game.checkResult();
@@ -33119,7 +33119,7 @@
 							else{
 								ui.shiQiInfo=ui.create.div('.touchinfo.bottom-right',ui.window);
 							}
-							ui.shiQiInfo.innerHTML='士气'+'<span style="color:red;">'+game.hongShiQi+'</span>'+'/'+'<span style="color:blue;">'+game.lanShiQi+'</span>'+'|战绩'+'<span style="color:red;">'+game.hongZhanJi+'</span>'+'/'+'<span style="color:blue;">'+game.lanZhanJi+'</span>'+'|星杯'+'<span style="color:red;">'+game.hongXingBei+'</span>'+'/'+'<span style="color:blue;">'+game.lanXingBei+'</span>';
+							ui.updateShiQiInfo();
 						}
 						else{
 							if(Array.isArray(onreconnect)){
@@ -40960,11 +40960,11 @@
 					game.log('<span style="color:blue;">蓝方</span>士气减少',num);
 				}
 			}
-			ui.shiQiInfo.innerHTML='士气'+'<span style="color:red;">'+game.hongShiQi+'</span>'+'/'+'<span style="color:blue;">'+game.lanShiQi+'</span>'+'|战绩'+'<span style="color:red;">'+game.hongZhanJi+'</span>'+'/'+'<span style="color:blue;">'+game.lanZhanJi+'</span>'+'|星杯'+'<span style="color:red;">'+game.hongXingBei+'</span>'+'/'+'<span style="color:blue;">'+game.lanXingBei+'</span>';
+			ui.updateShiQiInfo();
 			game.broadcast(function(hongShiQi,lanShiQi){
 				game.hongShiQi=hongShiQi;
 				game.lanShiQi=lanShiQi;
-				ui.shiQiInfo.innerHTML='士气'+'<span style="color:red;">'+game.hongShiQi+'</span>'+'/'+'<span style="color:blue;">'+lanShiQi+'</span>'+'|战绩'+'<span style="color:red;">'+hongZhanJi+'</span>'+'/'+'<span style="color:blue;">'+game.lanZhanJi+'</span>'+'|星杯'+'<span style="color:red;">'+game.hongXingBei+'</span>'+'/'+'<span style="color:blue;">'+game.lanXingBei+'</span>';
+				ui.updateShiQiInfo();
 			},game.hongShiQi,game.lanShiQi);
 
 			game.checkResult();
@@ -41007,11 +41007,11 @@
 					}
 				}
 			}
-			ui.shiQiInfo.innerHTML='士气'+'<span style="color:red;">'+game.hongShiQi+'</span>'+'/'+'<span style="color:blue;">'+game.lanShiQi+'</span>'+'|战绩'+'<span style="color:red;">'+game.hongZhanJi+'</span>'+'/'+'<span style="color:blue;">'+game.lanZhanJi+'</span>'+'|星杯'+'<span style="color:red;">'+game.hongXingBei+'</span>'+'/'+'<span style="color:blue;">'+game.lanXingBei+'</span>';
+			ui.updateShiQiInfo();
 			game.broadcast(function(hongZhanJi,lanZhanJi){
 				game.hongZhanJi=hongZhanJi;
 				game.lanZhanJi=lanZhanJi;
-				ui.shiQiInfo.innerHTML='士气'+'<span style="color:red;">'+game.hongShiQi+'</span>'+'/'+'<span style="color:blue;">'+game.lanShiQi+'</span>'+'|战绩'+'<span style="color:red;">'+game.hongZhanJi+'</span>'+'/'+'<span style="color:blue;">'+game.lanZhanJi+'</span>'+'|星杯'+'<span style="color:red;">'+game.hongXingBei+'</span>'+'/'+'<span style="color:blue;">'+game.lanXingBei+'</span>';
+				ui.updateShiQiInfo();
 			},game.hongZhanJi,game.lanZhanJi);
 
 			game.checkResult();
@@ -41034,11 +41034,11 @@
 					game.log('<span style="color:blue;">蓝方</span>星杯数量减少',num);
 				}
 			}
-			ui.shiQiInfo.innerHTML='士气'+'<span style="color:red;">'+game.hongShiQi+'</span>'+'/'+'<span style="color:blue;">'+game.lanShiQi+'</span>'+'|战绩'+'<span style="color:red;">'+game.hongZhanJi+'</span>'+'/'+'<span style="color:blue;">'+game.lanZhanJi+'</span>'+'|星杯'+'<span style="color:red;">'+game.hongXingBei+'</span>'+'/'+'<span style="color:blue;">'+game.lanXingBei+'</span>';
+			ui.updateShiQiInfo();
 			game.broadcast(function(hongXingBei,lanXingBei){
 				game.hongXingBei=hongXingBei;
 				game.lanXingBei=lanXingBei;
-				ui.shiQiInfo.innerHTML='士气'+'<span style="color:red;">'+game.hongShiQi+'</span>'+'/'+'<span style="color:blue;">'+game.lanShiQi+'</span>'+'|战绩'+'<span style="color:red;">'+game.hongZhanJi+'</span>'+'/'+'<span style="color:blue;">'+game.lanZhanJi+'</span>'+'|星杯'+'<span style="color:red;">'+game.hongXingBei+'</span>'+'/'+'<span style="color:blue;">'+game.lanXingBei+'</span>';
+				ui.updateShiQiInfo();
 			},game.hongXingBei,game.lanXingBei);
 
 			game.checkResult();
@@ -55799,6 +55799,59 @@
 			}
 			ui._recycle[key]=node;
 		},
+
+		//xingBei
+		updateShiQiInfo:function(){
+			var lanZhanJi={};
+			var hongZhanJi={};
+			for(var i=0;i<game.hongZhanJi.length;i++){
+				if(game.hongZhanJi[i]=='宝石'){
+					hongZhanJi['宝石']=(hongZhanJi['宝石']||0)+1;
+				}else if(game.hongZhanJi[i]=='水晶'){
+					hongZhanJi['水晶']=(hongZhanJi['水晶']||0)+1;
+				}
+			}
+			for(var i=0;i<game.lanZhanJi.length;i++){
+				if(game.lanZhanJi[i]=='宝石'){
+					lanZhanJi['宝石']=(lanZhanJi['宝石']||0)+1;
+				}else if(game.lanZhanJi[i]=='水晶'){
+					lanZhanJi['水晶']=(lanZhanJi['水晶']||0)+1;
+				}
+			}
+			var hongZhanJi_str='';
+			var lanZhanJi_str='';
+			var r='image/card/r.png';  // 根据颜色选择不同图片
+			var b='image/card/b.png';
+
+			var keysSorted = Object.keys(hongZhanJi).sort();  // 获取键数组并排序
+			keysSorted.forEach(function(key) {
+				let images = '';
+				for (let i = 0; i < hongZhanJi[key]; i++) {
+					let imageSrc = (key == '宝石' ? r : b);  // 根据键来决定使用哪张图片
+					images += `<img src="${imageSrc}" style="width: 20px; height: 20px;">`;
+				}
+				hongZhanJi_str += images;
+			});
+
+			var keysSorted = Object.keys(lanZhanJi).sort();  // 获取键数组并排序
+			keysSorted.forEach(function(key) {
+				let images = '';
+				for (let i = 0; i < lanZhanJi[key]; i++) {
+					let imageSrc = (key == '宝石' ? r : b);  // 根据键来决定使用哪张图片
+					images += `<img src="${imageSrc}" style="width: 20px; height: 20px;">`;
+				}
+				lanZhanJi_str += images;
+			});
+		
+
+			ui.shiQiInfo.innerHTML = '士气' +
+				'<span style="color:red;">' + game.hongShiQi + '</span>' + '/' +
+				'<span style="color:blue;">' + game.lanShiQi + '</span>' + '|战绩' +
+				hongZhanJi_str + '/' +
+				lanZhanJi_str + '|星杯' +
+				'<span style="color:red;">' + game.hongXingBei + '</span>' + '/' +
+				'<span style="color:blue;">' + game.lanXingBei + '</span>';
+		}
 	};
 	const get={
 		//Generate an object URL from the Base64-encoded octet stream
