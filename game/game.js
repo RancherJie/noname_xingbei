@@ -1291,7 +1291,7 @@
 					},
 					layout:{
 						name:'布局',
-						init:'mobile',
+						init:'nova',
 						item:{
 							//default:'旧版',
 							newlayout:'对称',
