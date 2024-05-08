@@ -438,7 +438,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 content:function(event,player){
                     'step 0'
-                    var next=player.chooseToDiscard([0,3],true,'水影：选择要弃置的水系牌',function(card){
+                    var next=player.chooseToDiscard([1,3],'水影：选择要弃置的水系牌',function(card){
                         return get.suit(card)=='shui';
                     });
                     next.ai=function(card){
@@ -447,6 +447,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 1'
                     if(result.bool){
                         player.showCards(result.cards);
+                    }else{
+                        event.finish();
                     }
                     'step 2'
                     if(!player.isLinked()) event.finish();
