@@ -18812,14 +18812,6 @@
 				},
 				changeZhiLiao:function(){
 					'step 0'
-					if(event.yiChu){
-						event.trigger('zhiLiaoYiChu');
-					}
-					'step 1'
-					if(event.yiChu){
-						event.finish();
-					}
-					'step 2'
 					player.zhiLiao+=num;
 					if(num>0){
 						game.log(player,'获得了'+num+'点治疗');
@@ -18827,11 +18819,12 @@
 						num=-num;
 						game.log(player,'移除了'+num+'点治疗')
 					}
-					if(event.bool==true){
-						event.trigger('zhiLiaoYiChu');
-					}
+					'step 1'
 					if(player.zhiLiao<0){
 						player.zhiLiao=0;
+					}
+					if(event.yiChu==true){
+						event.trigger('zhiLiaoYiChu');
 					}
 					player.update();
 				},
@@ -24364,6 +24357,11 @@
 						var limit=this.getZhiLiaoLimit();
 					}
 					if(num>0&&this.zhiLiao+num>parseInt(limit)){
+						if(this.zhiLiao>=parseInt(limit)){
+							next.num=0;
+						}else{
+							next.num=parseInt(limit)-this.zhiLiao;
+						}
 						next.yiChu=true;
 					}else{
 						next.yiChu=false;
