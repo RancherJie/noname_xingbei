@@ -18577,14 +18577,13 @@
 							event.canZhiLiao=false;
 						}
 					}
-					if(event.canZhiLiao){
+					if(event.canZhiLiao&&player.zhiLiao>0){
 						var next=game.createEvent('zhiLiao',false);
 						next.setContent('emptyEvent');
 						next.source=source;
 						next.card=card;
 						next.cards=cards;
 						next.player=player;
-						next.skill=event.skill;
 					}
 					"step 5"
 					game.broadcastAll(function(num){
