@@ -3847,6 +3847,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 filter:function(event,player){
                     if(player.countZhiShiWu('moWen')<1) return false;
                     if(event.yingZhan==true) return false;
+                    if(!player.countCards('h')>1) return false;
                     if(_status.connectMode) return true;
                     var cards=player.getCards('h');
                     var dict={};
