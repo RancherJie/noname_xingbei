@@ -436,16 +436,20 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 filter:function(event,player){
                     return event.yuanYin!="teShuXingDong";
                 },
+                direct:true,
                 content:function(event,player){
                     'step 0'
-                    var next=player.chooseToDiscard([1,3],'水影：选择要弃置的水系牌',function(card){
+                    var next=player.chooseToDiscard([1,3],function(card){
                         return get.suit(card)=='shui';
                     });
+                    next.set('prompt',get.prompt('shuiYing'));
+                    next.set('prompt2',lib.translate.shuiYing_info);
                     next.ai=function(card){
 						return 1;
 					}
                     'step 1'
                     if(result.bool){
+                        player.logSkill(event.name);
                         player.showCards(result.cards);
                     }else{
                         event.finish();
