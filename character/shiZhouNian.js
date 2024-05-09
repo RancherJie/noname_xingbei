@@ -1303,21 +1303,31 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 trigger:{source:"gongJiWeiMingZhong"},
                 filter:function(event,player){
                     if(event.yingZhan==true) return false;
+                    if(_status.connectMode) return true;
                     if(player.countCards('h',card=>get.type(card)=='faShu')>0){
                         return true;
                     }else{
                         return false;
                     }
                 },
+                direct:true,
                 content:function(){
                     'step 0'
-                    player.chooseToDiscard(1,true,'贯穿射击：弃置1张法术牌',function(card){
+                    var next=player.chooseToDiscard(1,function(card){
                         return get.type(card)=='faShu';
-                    })
+                    });
+                    next.set('prompt',get.prompt('guanChuanSheJi'));
+                    next.set('prompt2',lib.translate.guanChuanSheJi_info);
                     'step 1'
-                    player.showCards(result.cards);
-                    var next=trigger.player.damage(2,player);
-                    next.faShu=true;
+                    if(result.bool){
+                        player.logSkill(event.name,trigger.player);
+                        player.showCards(result.cards);
+                        var next=trigger.player.damage(2,player);
+                        next.faShu=true;
+                    }else{
+                        event.finish();
+                    }
+                    
                     
                 }
             },
