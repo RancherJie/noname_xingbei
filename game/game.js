@@ -18143,7 +18143,7 @@
 						var next=player.chooseToDiscard(num,true).set('useCache',true).set('baoPai',true);
 						if(event.yuanYin=='damage'){
 							next.set('yuanYin','damage');
-							if(event.fashu===true){
+							if(event.faShu===true){
 								next.set('faShu',event.faShu)
 							}
 						}
