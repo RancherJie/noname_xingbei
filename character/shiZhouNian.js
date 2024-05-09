@@ -3774,6 +3774,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     if(get.type(event.card)!='gongJi') return false;
                     if(player.countZhiShiWu('zhanWen')<1) return false;
                     if(event.yingZhan==true) return false;
+                    if(_status.connectMode) return true;
                     var cards=player.getCards('h');
                     var dict={};
                     for(var i=0;i<cards.length;i++){
@@ -3785,12 +3786,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                     return false;
                 },
+                direct:true,
                 content:function(){
                     'step 0'
-                    player.removeZhiShiWu('zhanWen');
-                    player.addZhiShiWu('moWen');
-                    'step 1'
-                    var next=player.chooseToDiscard('h',true,[2,Infinity],function(card){
+                    var next=player.chooseToDiscard('h',[2,Infinity],function(card){
                         if(!ui.selected.cards.length) return true;
                         return get.suit(card,target)==get.suit(ui.selected.cards[0],target)
                     });
@@ -3798,12 +3797,20 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     next.set('filterOK',function(){
                         return ui.selected.cards.length>1;
                     });
-                    'step 2'
+                    next.set('prompt',get.prompt('zhanWenSuiJi'));
+                    next.set('prompt2',lib.translate.zhanWenSuiJi_info);
+
+                    'step 1'
                     if(result.bool){
+                        player.logSkill(event.name,trigger.target);
+                        player.removeZhiShiWu('zhanWen');
+                        player.addZhiShiWu('moWen');
                         player.showCards(result.cards);
                         event.num=result.cards.length-1;
+                    }else{
+                        event.finish();
                     }
-                    'step 3'
+                    'step 2'
                     if(player.isLinked()){
                         var list=[];
                         for(var i=0;i<=player.countZhiShiWu('zhanWen');i++){
@@ -3811,15 +3818,15 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         }
                         player.chooseControl(list).set('prompt','额外翻转战纹数量');
                     }else{
-                        event.goto(5);
+                        event.goto(4);
                     }
-                    'step 4'
+                    'step 3'
                     if(result.control){
                         player.removeZhiShiWu('zhanWen',result.control);
                         player.addZhiShiWu('moWen',result.control);
                         event.num+=result.control;
                     }
-                    'step 5'
+                    'step 4'
                     trigger.parent.baseDamage+=event.num;
                 }
             },
