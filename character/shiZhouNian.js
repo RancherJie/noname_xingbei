@@ -3835,6 +3835,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 filter:function(event,player){
                     if(player.countZhiShiWu('moWen')<1) return false;
                     if(event.yingZhan==true) return false;
+                    if(_status.connectMode) return true;
                     var cards=player.getCards('h');
                     var dict={};
                     for(var i=0;i<cards.length;i++){
@@ -3843,11 +3844,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                     return Object.keys(dict).length>1;
                 },
+                direct:true,
                 content:function(){
                     'step 0'
-                    player.removeZhiShiWu('moWen');
-                    player.addZhiShiWu('zhanWen');
-                    var next=player.chooseToDiscard('h',true,[2,Infinity],function(card){
+                    var next=player.chooseToDiscard('h',[2,Infinity],function(card){
                         if(!ui.selected.cards.length) return true;
                         for(var i=0;i<ui.selected.cards.length;i++){
                             if(get.suit(ui.selected.cards[i])==get.suit(card)) return false;
@@ -3855,10 +3855,18 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         return true;
                     });
                     next.set('complexCard',true);
+                    next.set('prompt',get.prompt('moWenRongHe'));
+                    next.set('prompt2',lib.translate.moWenRongHe_info);
+
                     'step 1'
                     if(result.bool){
+                        player.logSkill(event.name,trigger.player);
+                        player.removeZhiShiWu('moWen');
+                        player.addZhiShiWu('zhanWen');
                         player.showCards(result.cards);
                         event.num=result.cards.length-1;
+                    }else{
+                        event.finish();
                     }
                     'step 2'
                     if(player.isLinked()){
