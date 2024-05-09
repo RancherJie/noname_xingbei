@@ -1266,7 +1266,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						[list,'tdnodes'],
 					]);
 					next.set('forced',true);
-					next.set('selectButton',[0,-trigger.num]);
+					next.set('selectButton',[1,-trigger.num]);
 					next.set('ai',function(button){
 						return 1;
 					});
