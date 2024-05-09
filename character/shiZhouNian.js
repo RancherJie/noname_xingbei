@@ -3785,6 +3785,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     if(get.type(event.card)!='gongJi') return false;
                     if(player.countZhiShiWu('zhanWen')<1) return false;
                     if(event.yingZhan==true) return false;
+                    if(!player.countCards('h')>1) return false;
                     if(_status.connectMode) return true;
                     var cards=player.getCards('h');
                     var dict={};
