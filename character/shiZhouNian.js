@@ -2684,8 +2684,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     if(event.yingZhan==true) return false;
                     if(get.type(event.card)!='gongJi') return false;
                     if(get.suit(event.card)=='an') return false;
+                    if(player.countCards('h')==0&&player.countCards('s',card=>card.hasGaintag('zhuFu'))==0) return false;
+                    if(_status.connectMode) return true;
                     return player.countCards('h',card=>get.type(card)=='faShu')>0||player.getCards('s',card=>card.hasGaintag('zhuFu')).length>0;
                 },
+                direct:true,
                 content:function(){
                     'step 0'
                     player.storage.yuanSuSheJi=trigger.card;
@@ -2693,15 +2696,18 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     if(player.getCards('s',card=>card.hasGaintag('zhuFu')).length>0){
                         str+='或移除1个【祝福】'
                     }
-                    player.chooseCard('hs',true,function(card){
+                    var next=player.chooseCard('hs',function(card){
                         if(get.position(card)=='h'){
                             return get.type(card)=='faShu';
                         }else if(get.position(card)=='s'){
                             return card.hasGaintag('zhuFu');
                         }
-                    }).set('prompt',str);
+                    });
+                    next.set('prompt',get.prompt('yuanSuSheJi'));
+                    next.set('prompt2',lib.translate.yuanSuSheJi_info);
                     'step 1'
                     if(result.bool){
+                        player.logSkill(event.name);
                         if(get.position(result.cards[0])=='h'){
                             var flag=true;
                         }
@@ -2726,13 +2732,15 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                 player.addTempSkill('yuanSuSheJi_di');
                                 break;
                         }
-                    }   
+                    }else{
+                        event.finish();
+                    }
 
                 },
                 subSkill:{
                     huo:{
                         trigger:{player:'useCard'},
-                        forced:true,
+                        direct:true,
                         filter:function(event,player){
                             return event.card==player.storage.yuanSuSheJi;
                         },
@@ -2742,7 +2750,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     },
                     shui:{
                         trigger:{player:'useCardToTargeted'},
-                        forced:true,
+                        direct:true,
                         filter:function(event,player){
                             return event.card==player.storage.yuanSuSheJi&&event.parent.yingZhan!=true;
                         },
@@ -2755,7 +2763,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     },
                     feng:{
                         trigger:{player:'useCardAfter'},
-                        forced:true,
+                        direct:true,
                         filter:function(event,player){
                             return event.card==player.storage.yuanSuSheJi;
                         },
@@ -2765,7 +2773,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     },
                     lei:{
                         trigger:{player:'useCardToPlayer'},
-                        forced:true,
+                        direct:true,
                         filter:function(event,player){
                             return event.card==player.storage.yuanSuSheJi;
                         },
@@ -2775,7 +2783,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     },
                     di:{
                         trigger:{player:'useCardToTargeted'},
-                        forced:true,
+                        direct:true,
                         filter:function(event,player){
                             return event.card==player.storage.yuanSuSheJi&&event.parent.yingZhan!=true;
                         },
