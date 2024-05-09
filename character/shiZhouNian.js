@@ -1245,7 +1245,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     if(!player.canBiShaShuiJing()){
                         return false;
                     }
-                    if(event.yuanYin!='shangHai'){
+                    if(event.yuanYin!="damage"){
                         return false;
                     }
                     if(event.faShu!=true){
@@ -1256,6 +1256,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                     return true;
                 },
+                direct:true,
                 content:function(player){
                     'step 0'
                     var list=[];
@@ -1265,27 +1266,25 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     for(var i=0;i<player.countMark('_tiLian_b');i++){
                         list.push('水晶');
                     }
-                    var next=player.chooseButton([
-						'神之庇护：使用多少星石来抵挡等量的士气下降',
-						[list,'tdnodes'],
-					]);
-					next.set('forced',true);
-					next.set('selectButton',[1,-trigger.num]);
-					next.set('ai',function(button){
-						return 1;
-					});
+                    var next=player.chooseButton(['是否发动【神之庇护】'+lib.translate.shenZhiBiHu_info,[list,'tdnodes']]);
+                    next.set('selectButton',[1,-trigger.num])
                     'step 1'
-                    var num=result.links.length;
-                    if(num>0){
-                        trigger.num+=num;
-                        for(var i=0;i<result.links.length;i++){
-                            if(result.links[i]=='宝石'){
-                                player.removeMark('_tiLian_r');
-                            }else if(result.links[i]=='水晶'){
-                                player.removeMark('_tiLian_b');
+                    if(result.bool){
+                        var num=result.links.length;
+                        player.logSkill(event.name);
+                        if(num>0){
+                            trigger.num+=num;
+                            for(var i=0;i<result.links.length;i++){
+                                if(result.links[i]=='宝石'){
+                                    player.removeMark('_tiLian_r');
+                                }else if(result.links[i]=='水晶'){
+                                    player.removeMark('_tiLian_b');
+                                }
                             }
-                        }
-                    }  
+                        }  
+                    }else{
+                        event.finish();
+                    }
                 }
             },
             
