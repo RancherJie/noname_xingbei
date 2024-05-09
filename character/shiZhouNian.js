@@ -1946,25 +1946,33 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     if(get.type(event.card)!='gongJi') return false;
                     if(event.targets.length<=0) return false;
                     var anYue=player.getExpansions('anYue');
+                    if(_status.connectMode&&anYue.length>0) return true;
                     for(var i=0;i<anYue.length;i++){
                         if(get.suit(anYue[i])==get.suit(event.card)) return true;
                     }
                     return false;
                 },
+                direct:true,
                 content:function(){
                     'step 0'
-                    var anYue=player.getExpansions('anYue');
-                    var cards=[];
-                    for(var i=0;i<anYue.length;i++){
-                        if(get.suit(anYue[i])==get.suit(trigger.card)) cards.push(anYue[i]);
-                    }
-                    player.chooseCardButton(cards,true,'移除1个与攻击牌系别相应的系别的【暗月】[展示]');
+                    var cards=player.getExpansions('anYue');
+                    var next=player.chooseCardButton(cards,'是否发动【美杜莎之眼】'+lib.translate.meiDuShaZhiYan_info);
+                    next.set('filterButton',function(button){
+                        return get.suit(button)==get.suit(_status.event.trigger_card);
+                    });
+                    next.set('trigger_card',trigger.card);
                     'step 1'
-                    var card=result.links[0];
-                    event.card=card;
-                    player.loseToDiscardpile(card);
-                    player.showCards(card).set('gaiPai',true);
-                    event.trigger('yiChuAnYue');
+                    if(result.bool){
+                        player.logSkill(event.name);
+                        var card=result.links[0];
+                        event.card=card;
+                        player.loseToDiscardpile(card);
+                        player.showCards(card).set('gaiPai',true);
+                        event.trigger('yiChuAnYue');
+                    }else{
+                        event.finish();
+                    }
+                    
                     'step 2'
                     player.changeZhiLiao(1);
                     if(player.countMark('shiHua')<3){
