@@ -88,7 +88,7 @@ window.noname_asset_list=[
 	'font/yuanli.woff2',
 	
 	/*background image begin*/
-	'image/background/ol_bg.jpg',
+	'image/background/xingBei_bg.jpg',
 	/*background image end*/
 
 	/*card image begin*/
@@ -109,6 +109,11 @@ window.noname_asset_list=[
 	'image/card/zhongDu.png',
 	'image/card/anMie.png',
 	'image/card/b.png',
+	'image/card/zhanWen.png',
+	'image/card/moWen.png',
+	'image/card/xueQiangWeiTingYuan.png',
+	'image/card/lan.png',
+	'image/card/hong.png',
 	/*card image end*/
 	
 	/*character image begin*/
@@ -253,6 +258,8 @@ window.noname_asset_list=[
 	'image/splash/style2.jpg',
 	'image/splash/style1/connect.jpg',
 	'image/splash/style2/connect.jpg',
+	'image/splash/style1/xingbei.jpg',
+	'image/splash/style2/xingbei.jpg',
 	/*splash image end*/
 
 	'theme/music/grid.png',
