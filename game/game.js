@@ -4538,7 +4538,7 @@
 			
 		},
 		mode:{
-			
+
 			xingbei:{
 				name:'星杯传说',
 				connect:{
@@ -4678,127 +4678,6 @@
 					},
 				}
 			},
-			/*
-			versus:{
-				name:'星杯传说',
-				connect:{
-					update:function(config,map){
-						
-					},
-					connect_versus_mode:{
-						name:'游戏模式',
-						init:'2v2',
-						item:{
-							//'1v1':'1v1',
-							'2v2':'2v2',
-							'3v3':'3v3',
-							//'4v4':'4v4',
-							//'guandu':'官渡',
-						},
-						frequent:true
-					},
-					connect_team_sequence:{
-						name:"队伍顺序",
-						init:"random",
-						item:{
-							'ramdom':'随机',
-							'crossed':'交叉',
-							'near':'临近',
-						},
-						frequent:true,
-					},
-				},
-				config:{
-					update:function(config,map){
-						
-					},
-					versus_mode:{
-						name:'游戏模式',
-						init:'two',
-						item:{
-							three:'3v3',
-							two:'2v2',
-						},
-						restart:true,
-						frequent:true,
-					},
-					team_sequence:{
-						name:"队伍顺序",
-						init:"random",
-						item:{
-							random:'随机',
-							crossed:'交叉',
-							near:'临近',
-						},
-						restart:true,
-						frequent:true,
-					},
-					free_choose:{
-						name:'自由选将',
-						init:true,
-						frequent:true,
-						onclick:function(bool){
-							game.saveConfig('free_choose',bool,this._link.config.mode);
-							if(!ui.create.cheat2) return;
-							if(get.mode()!=this._link.config.mode||!_status.event.getParent().showConfig&&!_status.event.showConfig) return;
-							if(!ui.cheat2&&get.config('free_choose')) ui.create.cheat2();
-							else if(ui.cheat2&&!get.config('free_choose')){
-								ui.cheat2.close();
-								delete ui.cheat2;
-							}
-						}
-					},
-					change_identity:{
-						name:'自由选择座位',
-						init:true,
-						onclick:function(bool){
-							game.saveConfig('change_identity',bool,this._link.config.mode);
-							if(!_status.event.getParent().showConfig&&!_status.event.showConfig) return;
-							if(_status.mode=='four'){
-								if(get.config('four_assign')||get.config('four_phaseswap')) return;
-								if(bool){
-									if(_status.event.parent.addSetting){
-										_status.event.parent.addSetting();
-									}
-								}
-								else{
-									var seats=_status.event.parent.seatsbutton;
-									if(seats){
-										while(seats.length){
-											seats.shift().remove();
-										}
-										delete _status.event.parent.seatsbutton;
-									}
-								}
-							}
-							else{
-								var dialog;
-								if(ui.cheat2&&ui.cheat2.backup) dialog=ui.cheat2.backup;
-								else dialog=_status.event.dialog;
-								if(!_status.brawl||!_status.brawl.noAddSetting){
-									if(!dialog.querySelector('table')&&get.config('change_identity')) _status.event.getParent().addSetting(dialog);
-									else _status.event.getParent().removeSetting(dialog);
-								}
-								ui.update();
-							}
-						}
-					},
-					change_choice:{
-						name:'开启换将卡',
-						init:true,
-						onclick:function(bool){
-							game.saveConfig('change_choice',bool,this._link.config.mode);
-							if(!_status.event.getParent().showConfig&&!_status.event.showConfig) return;
-							if(!ui.cheat&&get.config('change_choice')) ui.create.cheat();
-							else if(ui.cheat&&!get.config('change_choice')){
-								ui.cheat.close();
-								delete ui.cheat;
-							}
-						},
-						frequent:true,
-					},
-				}
-			},*/
 			connect:{
 				name:'联机',
 				config:{
