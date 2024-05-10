@@ -2734,12 +2734,12 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
                         if(i>num) break;
                         list.push(i);
                     }
-                    player.chooseControl(list).set('prompt','使用的治疗数量').set('ai',function(){return list.length-1;});
+                    player.chooseControl(list).set('prompt','使用的[治疗]数量').set('ai',function(){return list.length-1;});
 					"step 1"
 					var zhiLiaonum=result.control;
 					if(zhiLiaonum>0){
 						trigger.parent.num-=zhiLiaonum;
-						game.log(player,'的治疗抵挡了'+zhiLiaonum+'点伤害');
+						game.log(player,'的[治疗]抵挡了'+zhiLiaonum+'点伤害');
 						player.changeZhiLiao(-zhiLiaonum).type='damage';
 					}
                 }
