@@ -56298,13 +56298,10 @@
 					default:return '休闲'+(config.double_character?'双将':'')+'斗地主';
 				}
 			}
-			if(config.mode=='versus'){
+			if(config.mode=='xingbei'){
 				switch(config.versus_mode){
-					case '1v1':return '单人对决';
-					case '2v2':return '欢乐成双';
-					case '3v3':return '血战到底';
-					case '4v4':return '四人对决';
-					case 'guandu':return '官渡之战';
+					case '2v2':return '2v2';
+					case '3v3':return '3v3';
 				}
 			}
 			else if(config.mode=='single'){
