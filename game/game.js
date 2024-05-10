@@ -4190,7 +4190,7 @@
 						name:'背景音乐',
 						init:true,
 						item:{
-							music_phliosophy:'Philosophy of ours',
+							'Made in Abyss':'Made in Abyss',
 						},
 						onclick:function(item){
 							game.saveConfig('background_music',item);
