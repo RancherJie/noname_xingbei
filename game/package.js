@@ -49,7 +49,7 @@ window.noname_package={
 		},
 	},
 	background:{
-		
+		xingBei_bg:'星杯传说',
 	},
 	music:{
 		
