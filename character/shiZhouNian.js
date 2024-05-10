@@ -27,7 +27,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             maoXianJia:['female','huan','3/4',['qiZha','qiangYun','diXiaFaZe','maoXianJiaTianTang','touTianHuanRi'],],
             wenYiFaShi:['male','huan','3/4',['buXiu','shengDu','wenYi','siWangZhiChu','juDuXinXing'],],
             zhongCaiZhe:['female','xue','3/4',['zhongCaiFaZe','yiShiZhongDuan','moRiShenPan','shenPanLangChao','zhongCaiYiShi','panJueTianPing','shenPan'],],
-            //shenGuan:['female','sheng',6,['jianxiong'],],
+            shenGuan:['female','sheng',4,['shenShengQiShi','shenShengQiFu','shuiZhiShenLi','shengShiShouHu','shenShengQiYue','shenShengLingYu'],],
             qiDaoShi:['female','yong',4,['guangHuiXinYang','heiAnZuZhou','weiLiCiFu','xunJieCiFu','qiDao','faLiChaoXi','qiDaoFuWen'],],
             //xianZhe:['male','yong',6,['jianxiong'],],
             //lingFuShi:['female','yong',6,['jianxiong'],],
@@ -4013,6 +4013,157 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 markimage:'image/card/moWen.png',
             },
 
+            //神官
+            shenShengQiShi:{
+                trigger:{player:'useSkillEnd'},
+                filter:function(event,player){
+                    var info=get.info(event.skill);
+                    return info.type=='teShu';
+                },
+                content:function(){
+                    player.changeZhiLiao(1);
+                }
+            },
+            shenShengQiFu:{
+                type:'faShu',
+                enable:['chooseToUse','faShu'],
+                filter:function(event,player){
+                    return player.countCards('h',card=>get.type(card)=='faShu')>=2;
+                },
+                selectCard:2,
+                filterCard:function(card){
+                    return get.type(card)=='faShu';
+                },
+                prepare:'showCards',
+                content:function(){
+                    player.changeZhiLiao(2);
+                }
+            },
+            shuiZhiShenLi:{
+                type:'faShu',
+                enable:['chooseToUse','faShu'],
+                filter:function(event,player){
+                    return player.countCards('h',card=>get.suit(card)=='shui')>=1;
+                },
+                selectCard:1,
+                filterCard:function(card){
+                    return get.suit(card)=='shui';
+                },
+                prepare:'showCards',
+                selectTarget:1,
+                filterTarget:function(card,player,target){
+                    return target.side==player.side&&target!=player;
+                },
+                content:function(){
+                    'step 0'
+                    if(player.countCards('h')>0){
+                        player.chooseCard('h','交给目标队友1张牌',true,1);
+                    }
+                    'step 1'
+                    if(result.bool){
+                        player.give(result.cards[0],target);
+                    }
+                    'step 2'
+                    player.changeZhiLiao(1);
+                    target.changeZhiLiao(1);
+                }
+            },
+            shengShiShouHu:{
+                mod:{
+                    maxZhiLiao:function(player,num){
+                        return num+4;
+                    }
+                },
+                trigger:{player:'zhiLiao'},
+                firstDo:true,
+                forced:true,
+                content:function(){
+                    'step 0'
+                    var list=[0,1];
+                    player.chooseControl(list).set('prompt','使用的治疗数量').set('ai',function(){return list.length-1;});
+                    'step 1'
+                    var zhiLiaonum=result.control;
+					if(zhiLiaonum>0){
+						trigger.parent.num-=zhiLiaonum;
+						game.log(player,'的治疗抵挡了'+zhiLiaonum+'点伤害');
+						player.changeZhiLiao(-zhiLiaonum).type='damage';
+					}
+                    'step 2'
+                    trigger.cancel();
+                }
+                
+            },
+            shenShengQiYue:{
+                type:'qiDong',
+                enable:'phaseUse',
+                filter:function(event,player){
+                    return player.canBiShaShuiJing()&&player.zhiLiao>0;
+                },
+                filterTarget:function(card,player,target){
+                    return target.side==player.side&&target!=player;
+                },
+                selectTarget:1,
+                content:function(){
+                    'step 0'
+                    player.removeBiShaShuiJing();
+                    var list=[];
+                    for(var i=1;i<=player.zhiLiao;i++){
+                        list.push(i);
+                    }
+                    player.chooseControl(list).set('prompt','转移[治疗]数量');
+                    'step 1'
+                    var zhiLiaonum=result.control;
+					if(zhiLiaonum>0){
+						player.changeZhiLiao(-zhiLiaonum);
+                        target.changeZhiLiao(zhiLiaonum,4);
+					}
+                }
+                
+            },
+            shenShengLingYu:{
+                type:'faShu',
+                enable:['chooseToUse','faShu'],
+                filter:function(event,player){
+                    return player.canBiShaShuiJing();
+                },
+                selectCard:2,
+                filterCard:true,
+                content:function(){
+                    'step 0'
+                    player.removeBiShaShuiJing();
+                    var choiceList=["<span class='tiaoJian'>(移除你的1[治疗])</span>对目标角色造成2点法术伤害③","你+2[治疗]，目标队友+1[治疗]"];
+                    var list=['选项二'];
+                    if(player.zhiLiao>0){
+                        list.unshift('选项一');
+                    }
+                    player.chooseControl(list).set('prompt','神圣领域').set('choiceList',choiceList);
+                    'step 1'
+                    if(result.control=='选项一'){
+                        event.goto(2);
+                    }else{
+                        event.goto(4);
+                    }
+                    'step 2'
+                    player.changeZhanJi(-1);
+                    player.chooseTarget('对目标角色造成2点法术伤害③',true);
+                    'step 3'
+                    if(result.bool){
+                        result.targets[0].damageFaShu(2,player);
+                        event.finish();
+                    }
+                    'step 4'
+                    player.chooseTarget('目标队友+1[治疗]',true,function(card,player,target){
+                        return target.side==player.side&&target!=player;
+                    });
+                    'step 5'
+                    if(result.bool){
+                        player.changeZhiLiao(2);
+                        result.targets[0].changeZhiLiao(1);
+                        event.finish();
+                    }
+                },       
+            },
+
 		},
 		
 		translate:{
@@ -4371,6 +4522,21 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             shuangChongHuiXiang:"[响应]双重回响[回合限定]",
             shuangChongHuiXiang_info:"[水晶]<span class='tiaoJian'>(对目标角色造成攻击或法术伤害时发动③)</span>对另一目标角色造成X点法术伤害③，X与本次伤害相同但最高为3。【双重回响】的伤害不会造成士气下降。",
             
+            //神官
+            shenShengQiShi:"[响应]神圣启示",
+            shenShengQiShi_info:"<span class='tiaoJian'>(【特殊行动】结束时发动)</span>你+1[治疗]。",
+            shenShengQiFu:"[法术]神圣祈福",
+            shenShengQiFu_info:"<span class='tiaoJian'>(弃2张法术牌[展示])</span>你+2[治疗]。",
+            shuiZhiShenLi:"[法术]水之神力",
+            shuiZhiShenLi_info:"<span class='tiaoJian'>(弃1张水系牌[展示])</span>将手中的1张牌交给目标队友[强制]，你和他各加+1[治疗]。",
+            shengShiShouHu:"[被动]圣使守护",
+            shengShiShouHu_info:"你的[治疗]上限+4，每当你用[治疗]抵挡伤害时，最多只能使用1点。",
+            shenShengQiYue:"[启动]神圣契约",
+            shenShengQiYue_info:"[水晶]将你的X[治疗]转移给目标队友，以此法所转移的[治疗]无视他的[治疗]上限，但他的治疗最高为4。",
+            shenShengLingYu:"[法术]神圣领域",
+            shenShengLingYu_info:"[水晶]你弃2张牌，再选择以下一项发动：<br>·<span class='tiaoJian'>(移除你的1[治疗])</span>对目标角色造成2点法术伤害③。<br>·你+2[治疗]，目标队友+1[治疗]。",
+            
+
 		},
 	};
 });
