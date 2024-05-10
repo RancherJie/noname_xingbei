@@ -121,7 +121,7 @@ window.config={
 	modeconfig:false,
 	gameconfig:false,
 	appearence:false,
-	video:'20',
+	video:'0',
 	coin:0,
 
 	intro:'i',
