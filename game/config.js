@@ -51,7 +51,7 @@ window.config={
 	right_info:true,
 	longpress_info:true,
 	long_info:true,
-	background_music:'Made in Abyss',
+	background_music:'Made_in_Abyss',
 	background_audio:true,
 	background_speak:true,
 	glow_phase:'yellow',

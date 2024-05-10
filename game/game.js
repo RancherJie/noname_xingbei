@@ -4190,7 +4190,7 @@
 						name:'背景音乐',
 						init:true,
 						item:{
-							'Made in Abyss':'Made in Abyss',
+							'Made_in_Abyss':'Made_in_Abyss',
 						},
 						onclick:function(item){
 							game.saveConfig('background_music',item);
