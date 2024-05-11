@@ -3812,12 +3812,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 0'
                     var next=player.chooseToDiscard('h',[2,Infinity],function(card){
                         if(!ui.selected.cards.length) return true;
-                        return get.suit(card,target)==get.suit(ui.selected.cards[0],target)
+                        return get.suit(card)==get.suit(ui.selected.cards[0])
                     });
                     next.set('complexCard',true);
-                    next.set('filterOK',function(){
-                        return ui.selected.cards.length>1;
-                    });
                     next.set('prompt',get.prompt('zhanWenSuiJi'));
                     next.set('prompt2',lib.translate.zhanWenSuiJi_info);
 
