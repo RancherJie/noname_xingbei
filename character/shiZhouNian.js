@@ -153,7 +153,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 trigger:{player:"useCard"},
                 filter:function(event,target){
                     if(event.card.hasNature('lieFengJi')){
-                        return target.hasExpansions('shengDun');
+                        return target.hasExpansions('_shengDun');
                     }
                     return false;
                 },
