@@ -2661,7 +2661,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				enable:'wuFaXingDong',
 				type:'wuFaXingDong',
 				filter:function(event,player){
-					if((player.countCards('h')+3)>player.getHandcardLimit()) return false;
+					if((player.countCards('h')+3)<=player.getHandcardLimit()) return false;
 					var cards=player.getCards('h');
 					for(var i=0;i<cards.length;i++){
 						if(player.hasUseTarget(cards[i])) return false;
