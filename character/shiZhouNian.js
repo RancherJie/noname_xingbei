@@ -4126,40 +4126,40 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 filter:function(event,player){
                     return player.canBiShaShuiJing();
                 },
-                selectCard:2,
-                filterCard:true,
                 content:function(){
                     'step 0'
                     player.removeBiShaShuiJing();
+                    player.chooseToDiscard(2,true,'h');
+                    'step 1'
                     var choiceList=["<span class='tiaoJian'>(移除你的1[治疗])</span>对目标角色造成2点法术伤害③","你+2[治疗]，目标队友+1[治疗]"];
                     var list=['选项二'];
                     if(player.zhiLiao>0){
                         list.unshift('选项一');
                     }
                     player.chooseControl(list).set('prompt','神圣领域').set('choiceList',choiceList);
-                    'step 1'
-                    if(result.control=='选项一'){
-                        event.goto(2);
-                    }else{
-                        event.goto(4);
-                    }
                     'step 2'
+                    if(result.control=='选项一'){
+                        event.goto(3);
+                    }else{
+                        event.goto(5);
+                    }
+                    'step 3'
                     player.changeZhanJi(-1);
                     player.chooseTarget('对目标角色造成2点法术伤害③',true);
-                    'step 3'
+                    'step 4'
                     if(result.bool){
                         result.targets[0].damageFaShu(2,player);
                         event.finish();
                     }
-                    'step 4'
+                    'step 5'
                     player.chooseTarget('目标队友+1[治疗]',true,function(card,player,target){
                         return target.side==player.side&&target!=player;
                     });
-                    'step 5'
+                    'step 6'
                     if(result.bool){
                         player.changeZhiLiao(2);
                         result.targets[0].changeZhiLiao(1);
-                        event.finish();
+                        event.finish(); 
                     }
                 },       
             },
