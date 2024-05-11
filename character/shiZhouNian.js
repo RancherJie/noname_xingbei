@@ -1217,8 +1217,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         player.chooseControl(list).set('prompt','选择要移除的基础效果');
                     }
                     'step 3'
-                    if(result.control=='zhongDu'){
-                        player.chooseButton(target.getExpansions('zhongDu'),true,'选择要移除的中毒')
+                    if(result.control=='_zhongDu'){
+                        player.chooseButton(target.getExpansions('_zhongDu'),true,'选择要移除的中毒')
                     }else{
                         target.loseToDiscardpile(target.getExpansions(result.control));
                         if(!game.jiChuXiaoGuo.pai.includes(result.control)){
@@ -1229,7 +1229,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                     'step 4'
                     var card=result.links[0];
-                    var list=target.getExpansions('zhongDu');
+                    var list=target.getExpansions('_zhongDu');
                     var index=list.indexOf(card);
                     target.storage.zhongDu.splice(index, 1);
                     target.loseToDiscardpile(card);
