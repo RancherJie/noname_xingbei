@@ -58,6 +58,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             fengNuZhuiJi:{
                 usable:1,
                 trigger:{player:"useCardAfter"},
+                priority:1,
                 filter:function(event,player){
                     if(event.yingZhan==true) return false;
                     if(get.type(event.card)=='gongJi'){
@@ -192,6 +193,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             jianYing:{
                 usable:1,
                 trigger:{player:'useCardAfter'},
+                priority:0,
                 filter:function(event,player){
                     if(event.yingZhan==true) return false;
                     if(get.type(event.card)=='gongJi'){
