@@ -106,7 +106,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             var list=[0,1,2,3];
                             player.chooseControl(list).set('prompt','剑影：摸X张牌并弃置X张牌').set('ai',function(){return 0;});
                             "step 1"
-                            event.number=result.control;
+                            if(result.control==0){
+                                event.finish();
+                            }else{
+                                event.number=result.control;
+                            }
                             "step 2"
                             player.draw(event.number);
                             "step 3"
