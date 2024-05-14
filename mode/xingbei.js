@@ -2999,6 +2999,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 
             _moDan:{
                 trigger:{target:'useCardToPlayered'},
+				firstDo:true,
                 forced:true,
                 filter:function(event,player){
                     if(event.card.name=='moDan'){
