@@ -2473,9 +2473,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         var link=button.link;
                         if(link=='tou'){
                             if(player.side==true){
-                                return game.hongZhanJi.includes('宝石');
-                            }else if(player.side==false){
                                 return game.lanZhanJi.includes('宝石');
+                            }else if(player.side==false){
+                                return game.hongZhanJi.includes('宝石');
                             }
                         }
                         if(link=='huan'){
