@@ -368,7 +368,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             },
             lianMin:{
                 type:'qiDong',
-                enable:'phaseUse',
+                trigger:{player:'phaseUseBegin'},
                 filter:function(event,player){
                     return player.canBiShaBaoShi();
                 },
@@ -478,7 +478,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             },
             qianXing:{
                 type:'qiDong',
-                enable:"phaseUse",
+                trigger:{player:'phaseUseBegin'},
                 filter:function(event,player){
                     return player.canBiShaBaoShi();
                 },
@@ -2198,7 +2198,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             },
             yiShiZhongDuan:{
                 type:'qiDong',
-                enable:'phaseUse',
+                trigger:{player:'phaseUseBegin'},
                 filter:function(event,player){
                     return player.isLinked();
                 },
@@ -2250,7 +2250,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             },
             zhongCaiYiShi:{
                 type:'qiDong',
-                enable:'phaseUse',
+                trigger:{player:'phaseUseBegin'},
                 filter:function(event,player){
                     return player.canBiShaBaoShi()&&!player.isLinked();
                 },
@@ -2819,7 +2819,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             },
             jingLingMiYi:{
                 type:'qiDong',
-                enable:'phaseUse',
+                trigger:{player:'phaseUseBegin'},
                 filter:function(event,player){
                     return player.canBiShaBaoShi()&&!player.isLinked(); 
                 },
@@ -3065,7 +3065,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             },
             anYingNingJu:{
                 type:'qiDong',
-                enable:'phaseUse',
+                trigger:{player:'phaseUseBegin'},
                 filter:function(event,player){
                     return !player.isLinked(); 
                 },
@@ -3301,56 +3301,33 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             },
             shanHuaLunWu:{
                 type:'qiDong',
-                enable:'phaseUse',
+                trigger:{player:'phaseUseBegin'},
                 filter:function(event,player){
                     return player.canBiShaShuiJing();
                 },
-                chooseButton:{
-                    dialog:function(event,player){
-                        var dialog=ui.create.dialog('散华轮舞','hidden');
-                        var list=[['b',"[水晶]将【血蔷薇庭院】放置于场上，你+2<span class='hong'>【</span>鲜血<span class='hong'>】</span>"],['r',"[宝石]将【血蔷薇庭院】放置于场上，无视你的<span class='hong'>【</span>鲜血<span class='hong'>】</span>上限为你+2<span class='hong'>【</span>鲜血<span class='hong'>】</span>但你的<span class='hong'>【</span>鲜血<span class='hong'>】</span>数最高为4，你弃到4张牌。"]]
-						dialog.add([list,'textbutton']);
-						return dialog;
-                    },
-                    filter:function(button,player){
-                        var link=button.link;
-                        if(link=='r'){
-                           return player.canBiShaBaoShi();
-                        }else if(link=='b'){
-                            return player.canBiShaShuiJing();
-                        }
-                    },
-                    backup:function(links,player){
-                        if(links[0]=='b'){
-                            var next=get.copy(lib.skill['shanHuaLunWu_b']);
-                        }else if(links[0]=='r'){
-                            var next=get.copy(lib.skill['shanHuaLunWu_r']);
-                        }
-						return next;
-					},
-                },
-                subSkill:{
-                    b:{
-                        type:'qiDong',
-                        content:function(){
-                            player.removeBiShaShuiJing();
-                            player.addZhiShiWu('xueQiangWeiTingYuan');
-                            player.addZhiShiWu('xianXue',2);
-                        }
-                    },
-                    r:{
-                        type:'qiDong',
-                        content:function(){
-                            player.removeBiShaBaoShi();
-                            player.addZhiShiWu('xueQiangWeiTingYuan');
-                            player.addZhiShiWu('xianXue',2,4);
-                            if(player.countCards('h')>4){
-                                var num=player.countCards('h')-4;
-                                player.chooseToDiscard('h',true,num);
-                            }
+                content:function(){
+                    'step 0'
+                    var list=["[水晶]将【血蔷薇庭院】放置于场上，你+2<span class='hong'>【</span>鲜血<span class='hong'>】</span>","[宝石]将【血蔷薇庭院】放置于场上，无视你的<span class='hong'>【</span>鲜血<span class='hong'>】</span>上限为你+2<span class='hong'>【</span>鲜血<span class='hong'>】</span>但你的<span class='hong'>【</span>鲜血<span class='hong'>】</span>数最高为4，你弃到4张牌。"];
+                    var choices=['选项一'];
+                    if(player.canBiShaBaoShi()){
+                        choices.push('选项二');
+                    }
+                    player.chooseControl(choices).set('choiceList',list);
+                    'step 1'
+                    if(result.control=='选项一'){
+                        player.removeBiShaShuiJing();
+                        player.addZhiShiWu('xueQiangWeiTingYuan');
+                        player.addZhiShiWu('xianXue',2);
+                    }else if(result.control=='选项二'){
+                        player.removeBiShaBaoShi();
+                        player.addZhiShiWu('xueQiangWeiTingYuan');
+                        player.addZhiShiWu('xianXue',2,4);
+                        if(player.countCards('h')>4){
+                            var num=player.countCards('h')-4;
+                            player.chooseToDiscard('h',true,num);
                         }
                     }
-                }
+                },
             },
             xianXue:{
                 intro:{
@@ -3504,7 +3481,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             },
             qiDao:{
                 type:'qiDong',
-                enable:'phaseUse',
+                trigger:{player:'phaseUseBegin'},
                 filter:function(event,player){
                     if(player.isLinked()) return false;
                     return player.canBiShaBaoShi();
@@ -3588,82 +3565,51 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             },
             xueXingDaoYan:{
                 type:'qiDong',
-                enable:'phaseUse',
+                trigger:{player:'phaseUseBegin'},
                 filter:function(event,player){
                     return player.zhiLiao>0;
                 },
-                chooseButton:{
-                    dialog:function(event,player){
-						var dialog=ui.create.dialog('血腥祷言：移除X点[治疗]，对自己造成X点法术伤害','hidden');
-                        var list=[];
-                        for(var i=1;i<=player.zhiLiao;i++){
-                            list.push(i);
-                        }
-						dialog.add([list,'tdnodes']);
-						return dialog;
-					},
-                    backup:function(links,player){
-						return{
-							links:links,
-							type:'qiDong',
-                            selectTarget:function(){
-                                var links=lib.skill.xueXingDaoYan_backup.links;
-                                if(links[0]==1){
-                                    return 1;
-                                }else if(links[0]>1){
-                                    return [1,2];
-                                }
-                            },
-                            multitarget:true,
-                            multiline:true,
-                            filterTarget:function(card,player,target){
-                                if(target==player) return false;
-                                return target.side==player.side;
-                            },
-                            contentBefore:function(){
-                                'step 0'
-                                event.links=lib.skill.xueXingDaoYan_backup.links;
-                                player.changeZhiLiao(-event.links[0]);
-                                'step 1'
-                                player.damageFaShu(event.links[0],player);
-                            },
-							content:function(){
-								'step 0'
-                                event.links=lib.skill.xueXingDaoYan_backup.links;
-                                'step 1'
-                                if(targets.length==1){
-                                    targets[0].changeZhiLiao(event.links[0]);
-                                    event.finish();
-                                }
-                                'step 2'
-                                targets.sortBySeat();
-                                event.target=targets[0];
-                                var list=[];
-                                for(var i=1;i<=event.links[0]-1;i++){
-                                    list.push(i);
-                                }
-                                var name=get.translation(event.target);
-                                var str=name+'获得几点治疗';
-                                player.chooseControl(list).set('prompt',str);
-                                'step 3'
-                                event.target.changeZhiLiao(result.control);
-                                event.links[0]-=result.control;
-                                'step 4'
-                                event.target=targets[1];
-                                event.target.changeZhiLiao(event.links[0]);
-							},
-                            contentAfter:function(){
-                                player.addZhiShiWu('xueYin');
-                            }
-						}
-					},
-                    prompt:function(links,player){
-                        if(links[0]==1){
-                            return '分配治疗给1名队友';
-                        }
-						return '分配治疗给1~2名队友';
-					},
-                }
+                content:function(){
+                    'step 0'
+                    var list=[];
+                    for(var i=1;i<=player.zhiLiao;i++){
+                        list.push(i);
+                    }
+                    player.chooseControl(list).set('prompt','血腥祷言：移除X点[治疗]，对自己造成X点法术伤害');
+                    'step 1'
+                    player.changeZhiLiao(-result.control);
+                    player.damageFaShu(result.control,player);
+                    player.storage.xueXingDaoYan=result.control;
+                    'step 2'
+                    event.links=[player.storage.xueXingDaoYan];
+                    player.chooseTarget(function(card,player,target){
+                        if(target==player) return false;
+                        return target.side==player.side;
+                    },[1,2],true,'选择1~2个目标队友');
+                    'step 3'
+                    if(result.targets.length==1){
+                        result.targets[0].changeZhiLiao(event.links[0]);
+                        event.goto(7);
+                    }
+                    'step 4'
+                    result.targets.sortBySeat();
+                    event.target=result.targets[0];
+                    var list=[];
+                    for(var i=1;i<=event.links[0]-1;i++){
+                        list.push(i);
+                    }
+                    var name=get.translation(event.target);
+                    var str=name+'获得几点治疗';
+                    player.chooseControl(list).set('prompt',str);
+                    'step 5'
+                    event.target.changeZhiLiao(result.control);
+                    event.links[0]-=result.control;
+                    'step 6'
+                    event.target=result.targets[1];
+                    event.target.changeZhiLiao(event.links[0]);
+                    'step 7'
+                    player.addZhiShiWu('xueYin');
+                },
             },
             shaLuShengYan:{
                 trigger:{player:'useCardToTargeted'},
@@ -3916,7 +3862,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             },
             fuWenGaiZao:{
                 type:'qiDong',
-                enable:'phaseUse',
+                trigger:{player:'phaseUseBegin'},
                 filter:function(event,player){
                     if(player.isLinked()) return false;
                     return player.canBiShaBaoShi();
@@ -4099,7 +4045,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             },
             shenShengQiYue:{
                 type:'qiDong',
-                enable:'phaseUse',
+                trigger:{player:'phaseUseBegin'},
                 filter:function(event,player){
                     return player.canBiShaShuiJing()&&player.zhiLiao>0;
                 },
