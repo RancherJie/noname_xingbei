@@ -12717,6 +12717,10 @@
 						event.finish();
 						return;
 					}
+					if(info.type=='qiDong'){
+						event.parent.parent.canTeShu=false;
+					}
+
 					if(info.popup!=false&&!info.direct){
 						if(info.popup){
 							player.popup(info.popup);
