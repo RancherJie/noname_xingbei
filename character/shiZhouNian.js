@@ -543,7 +543,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         }
                     },
                     chongZhi:{
-                        forced:true,
+                        direct:true,
+                        priority:1,
                         trigger:{player:'phaseUseBegin'},
                         filter:function(event,player){
                             return player.isLinked();
@@ -3078,7 +3079,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 group:'anYingNingJu_chongZhi',
                 subSkill:{
                     chongZhi:{
-                        forced:true,
+                        direct:true,
+                        priority:1,
                         trigger:{player:'phaseUseBegin'},
                         filter:function(event,player){
                             return player.isLinked();
