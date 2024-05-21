@@ -108,7 +108,7 @@
 	};
 	const lib={
 		configprefix:'noname_0.9_',
-		versionOL:31,
+		versionOL:32,
 		updateURLS:{
 			gitee:'https://gitee.com/RancherJie/noname_xingbei/raw',
 			github:'https://raw.githubusercontent.com/RancherJie/noname_xingbei/master',
