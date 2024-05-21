@@ -46,7 +46,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             //yinYouShiRen:['male','huan',6,['jianxiong'],],
             jingLingSheShou:['female','ji','3/4',['yuanSuSheJi','dongWuHuoBan','jingLingMiYi','chongWuQiangHua','zhuFu'],],
             //yinYangShi:['female','huan',6,['jianxiong'],],
-            xueSeJianLing:['female','xue',4,['xueSeJingJi','chiSeYiShan','xueRanQiangWei','xueQiPingZhang','xueQiangWeiTingYuan','shanHuaLunWu','xianXue'],],
+            xueSeJianLing:['female','xue',4,['xueSeJingJi','chiSeYiShan','xueRanQiangWei','xueQiPingZhang','xueQiangWeiTingYuan','sanHuaLunWu','xianXue'],],
             yueZhiNvShen:['female','sheng',5,['xinYueBiHu','anYueZuZhou','meiDuShaZhiYan','yueZhiLunHui','yueDu','anYueZhan','cangBaiZhiYue','xinYue','shiHua','anYue'],],
             //shouLingWuShi:['female','ji',6,['jianxiong'],],
             //shengGong:['male','sheng',6,['jianxiong'],],
@@ -3299,7 +3299,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.removeZhiShiWu('xueQiangWeiTingYuan');
                 }
             },
-            shanHuaLunWu:{
+            sanHuaLunWu:{
                 type:'qiDong',
                 trigger:{player:'phaseUseBegin'},
                 filter:function(event,player){
@@ -4418,8 +4418,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             xueQiPingZhang_info:"<span class='tiaoJian'>(目标角色对你造成法术伤害③时，移除1点<span class='hong'>【</span>鲜血<span class='hong'>】</span><span class='tiaoJian'>)</span>本次法术伤害-1③，对目标对手造成1点法术伤害③。",
             xueQiangWeiTingYuan:"(专)[被动]血蔷薇庭院",
             xueQiangWeiTingYuan_info:"<span class='tiaoJian'>(此卡在场时)</span>所有角色的[治疗]无法用于抵御伤害；<span class='tiaoJian'>(血色剑灵的回合结束时)</span>移除此卡。",
-            shanHuaLunWu:"[启动]散华轮舞",
-            shanHuaLunWu_info:"你选择以下一项发动：<br>·[水晶]将【血蔷薇庭院】放置于场上，你+2<span class='hong'>【</span>鲜血<span class='hong'>】</span>；<br>·[宝石]将【血蔷薇庭院】放置于场上，无视你的<span class='hong'>【</span>鲜血<span class='hong'>】</span>上限为你+2<span class='hong'>【</span>鲜血<span class='hong'>】</span>但你的<span class='hong'>【</span>鲜血<span class='hong'>】</span>数最高为4，你弃到4张牌。",
+            sanHuaLunWu:"[启动]散华轮舞",
+            sanHuaLunWu_info:"你选择以下一项发动：<br>·[水晶]将【血蔷薇庭院】放置于场上，你+2<span class='hong'>【</span>鲜血<span class='hong'>】</span>；<br>·[宝石]将【血蔷薇庭院】放置于场上，无视你的<span class='hong'>【</span>鲜血<span class='hong'>】</span>上限为你+2<span class='hong'>【</span>鲜血<span class='hong'>】</span>但你的<span class='hong'>【</span>鲜血<span class='hong'>】</span>数最高为4，你弃到4张牌。",
             xianXue:"鲜血",
             xianXue_info:"<span class='hong'>【</span>鲜血<span class='hong'>】</span>为血色剑灵专有指示物，上限为3。",
 
