@@ -2703,6 +2703,102 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						}
 					}
 				},
+				group:['_wuFaXingDong_qiDongQian','_wuFaXingDong_qiDongHou'],
+				subSkill:{
+					qiDongQian:{
+						trigger:{player:'phaseBeginBegin'},
+						filter:function(event,player){
+							if((player.countCards('h')+3)<=player.getHandcardLimit()) return false;
+							var cards=player.getCards('h');
+							for(var i=0;i<cards.length;i++){
+								if(player.hasUseTarget(cards[i])) return false;
+							}
+							return true;
+						},
+						content:function(){
+							"step 0"
+							player.storage.wuFaXingDong={'认可':0,'否认':0};
+							event.targetsx=game.filterPlayer(i=>i!=player).sortBySeat(_status.currentPhase);
+							var name=get.translation(player.name);
+							event.contentx=[name+'无法行动',player.getCards('h').slice()];
+							event.listx=['认可','否认'];
+							"step 1"
+							event.target=event.targetsx.shift();
+							event.target.chooseControl(event.listx).set('dialog',event.contentx).set('ai',function(){
+								return 0;
+							});
+							"step 2"
+							if(result.control=='认可'){
+								event.target.popup('认可');
+								player.storage.wuFaXingDong[result.control]++;
+							}else if(result.control=='否认'){
+								event.target.popup('否认');
+								player.storage.wuFaXingDong[result.control]++;
+							}
+							if(event.targetsx.length>0) event.goto(1);
+							"step 3"
+							var dict=player.storage.wuFaXingDong;
+							if(dict['认可']>=dict['否认']){
+								var num=player.getCards('h').length;
+								player.discard(player.getCards('h'));
+								player.draw(num);
+							}else{
+								if(game.players[0].side==player.side){
+									game.over(false);
+								}else{
+									game.over(true);
+								}
+							}
+						}
+					},
+					qiDongHou:{
+						trigger:{player:'phaseBeginBegin'},
+						filter:function(event,player){
+							if((player.countCards('h')+3)<=player.getHandcardLimit()) return false;
+							var cards=player.getCards('h');
+							for(var i=0;i<cards.length;i++){
+								if(player.hasUseTarget(cards[i])) return false;
+							}
+							return true;
+						},
+						priority:-1,
+						content:function(){
+							"step 0"
+							player.storage.wuFaXingDong={'认可':0,'否认':0};
+							event.targetsx=game.filterPlayer(i=>i!=player).sortBySeat(_status.currentPhase);
+							var name=get.translation(player.name);
+							event.contentx=[name+'无法行动',player.getCards('h').slice()];
+							event.listx=['认可','否认'];
+							"step 1"
+							event.target=event.targetsx.shift();
+							event.target.chooseControl(event.listx).set('dialog',event.contentx).set('ai',function(){
+								return 0;
+							});
+							"step 2"
+							if(result.control=='认可'){
+								event.target.popup('认可');
+								player.storage.wuFaXingDong[result.control]++;
+							}else if(result.control=='否认'){
+								event.target.popup('否认');
+								player.storage.wuFaXingDong[result.control]++;
+							}
+							if(event.targetsx.length>0) event.goto(1);
+							"step 3"
+							var dict=player.storage.wuFaXingDong;
+							if(dict['认可']>=dict['否认']){
+								var num=player.getCards('h').length;
+								player.discard(player.getCards('h'));
+								player.draw(num);
+							}else{
+								if(game.players[0].side==player.side){
+									game.over(false);
+								}else{
+									game.over(true);
+								}
+							}
+						}
+					}
+				}
 			},
 
 
