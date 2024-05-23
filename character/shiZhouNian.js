@@ -2188,6 +2188,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 type:'qiDong',
                 trigger:{player:'phaseUseBegin'},
                 filter:function(event,player){
+                    if(event.canTeShu==false) return false;
                     return player.isLinked();
                 },
                 content:function(){
@@ -2240,6 +2241,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 type:'qiDong',
                 trigger:{player:'phaseUseBegin'},
                 filter:function(event,player){
+                    if(event.canTeShu==false) return false;
                     return player.canBiShaBaoShi()&&!player.isLinked();
                 },
                 content:function(){
