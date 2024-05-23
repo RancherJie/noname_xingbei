@@ -155,23 +155,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 }
             },
             lieFengJi:{
-                trigger:{player:"useCard"},
-                filter:function(event,target){
-                    if(event.card.hasNature('lieFengJi')){
-                        return target.hasExpansions('_shengDun');
-                    }
-                    return false;
-                },
-                content:function(event,target){
-                    player.addTempSkill('lieFengJi2',{player:['useCardBefore','phaseEnd']});
-                }
-            },
-            lieFengJi2:{
-                forced:true,
                 trigger:{player:"useCardToPlayer"},
                 filter:function(event,target){
                     if(event.card.hasNature('lieFengJi')){
-                        return target.hasExpansions('_shengDun');
+                        return event.target.hasExpansions('_shengDun');
                     }
                     return false;
                 },
