@@ -2216,6 +2216,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     biXu:{
                         trigger:{player:'phaseUseBegin'},
                         forced:true,
+                        lastDo:true,
                         filter:function(event,player){
                             return player.countZhiShiWu('shenPan')>=get.info('shenPan').intro.max;
                         },
