@@ -2969,7 +2969,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						propmt+='主动攻击，';
 					}
 					propmt+=get.translation(get.name(trigger.card));
-					var next=player.chooseToUse_qiTa(propmt);
+					var next=player.chooseToUse_yingZhan(propmt);
                     next.set('filterCard',function(card,player,event){
 						if(get.type(card)=='gongJi'){
 							if(_status.event.canYingZhan==false) return false;
