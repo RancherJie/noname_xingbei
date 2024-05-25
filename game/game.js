@@ -57082,6 +57082,25 @@
 				return card.suit;
 			}
 		},
+		xiBie:function(card,player){
+			if(!card) return;
+			if(Array.isArray(card)){
+				if(card.length==1) return get.suit(card[0],player);
+				return 'none';
+			}
+			else if(!card.hasOwnProperty('suit')&&Array.isArray(card.cards)){
+				return get.suit(card.cards,player);
+			}
+			else{
+				if(player!==false){
+					const owner=player||get.owner(card);
+					if(owner){
+						return game.checkMod(card,card.suit,'suit',owner);
+					}
+				}
+				return card.suit;
+			}
+		},
 		color:function(card,player){
 			if(!card) return;
 			if(Array.isArray(card)){
@@ -57107,6 +57126,25 @@
 			}
 		},
 		number:function(card,player){
+			if(!card) return;
+			//狗卡你是真敢出啊
+			var number=null;
+			if(card.hasOwnProperty('number')){
+				number=card.number;
+				//if(typeof number!='number') number=null;
+			}
+			else{
+				if(card.cards&&card.cards.length==1) number=get.number(card.cards[0],false);
+			}
+			if(player!==false){
+				var owner=player||get.owner(card);
+				if(owner){
+					return game.checkMod(card,owner,number,'cardnumber',owner);
+				}
+			}
+			return number;
+		},
+		mingGe:function(card,player){
 			if(!card) return;
 			//狗卡你是真敢出啊
 			var number=null;
