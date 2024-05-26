@@ -4086,21 +4086,20 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         event.goto(5);
                     }
                     'step 3'
-                    player.changeZhanJi(-1);
+                    player.changeZhiLiao(-1);
                     player.chooseTarget('对目标角色造成2点法术伤害③',true);
                     'step 4'
                     if(result.bool){
-                        player.changeZhiLiao(-1);
                         result.targets[0].damageFaShu(2,player);
                         event.finish();
                     }
                     'step 5'
+                    player.changeZhiLiao(2);
                     player.chooseTarget('目标队友+1[治疗]',true,function(card,player,target){
                         return target.side==player.side&&target!=player;
                     });
                     'step 6'
                     if(result.bool){
-                        player.changeZhiLiao(2);
                         result.targets[0].changeZhiLiao(1);
                         event.finish(); 
                     }
