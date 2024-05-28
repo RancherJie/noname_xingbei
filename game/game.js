@@ -32978,6 +32978,11 @@
 			}
 			return item.nature;
 		},
+		//星杯增加设置系别用
+		setXiBie:(item,suit)=>{
+			item.suit=suit;
+			return item.suit;
+		},
 		//洗牌
 		washCard:()=>{
 			if(!ui.cardPile.hasChildNodes()&&!ui.discardPile.hasChildNodes()) return false;
