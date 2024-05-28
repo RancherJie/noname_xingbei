@@ -2972,8 +2972,8 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					var next=player.chooseToUse_yingZhan(propmt);
                     next.set('filterCard',function(card,player,event){
 						if(get.type(card)=='gongJi'){
-							if(_status.event.canYingZhan==false) return false;
-							if(get.suit(_status.event.trigger_card)=='an') return false;
+							if(_status.event.canYingZhan==false) return false;//不能应战设置
+							if(get.suit(_status.event.trigger_card)=='an') return false;//暗灭不能应战
 							if(card.name!='anMie'&&get.suit(card)!=get.suit(_status.event.trigger_card)) return false;
 						}else{
 							if(_status.event.canShengGuang==false) return false;
