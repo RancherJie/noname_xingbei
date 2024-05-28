@@ -3038,7 +3038,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
                 forced:true,
 				firstDo:true,
                 filter:function(event,player){
-                    return event.parent.parent.name=='_yingZhan'&&event.card.name!='shengGuang';
+                    return (event.parent.parent.name=='_yingZhan'||event.parent.parent.name=='shiShenZhouShu')&&event.card.name!='shengGuang';
                 },
                 content:function(){
 					'step 0'
@@ -3054,7 +3054,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
                 forced:true,
 				firstDo:true,
                 filter:function(event,player){
-                    return event.parent.parent.name=='_yingZhan'&&event.card.name!='shengGuang';
+                    return (event.parent.parent.name=='_yingZhan'||event.parent.parent.name=='shiShenZhouShu')&&event.card.name!='shengGuang';
                 },
 				content:function(){
 					trigger.yingZhan=true;
