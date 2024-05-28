@@ -2973,8 +2973,8 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
                     next.set('filterCard',function(card,player,event){
 						if(get.type(card)=='gongJi'){
 							if(_status.event.canYingZhan==false) return false;//不能应战设置
-							if(get.suit(_status.event.trigger_card)=='an') return false;//暗灭不能应战
-							if(card.name!='anMie'&&get.suit(card)!=get.suit(_status.event.trigger_card)) return false;
+							if(get.xiBie(_status.event.trigger_card)=='an') return false;//暗灭不能应战
+							if(card.name!='anMie'&&get.xiBie(card)!=get.xiBie(_status.event.trigger_card)) return false;
 						}else{
 							if(_status.event.canShengGuang==false) return false;
 							if(get.name(card)!='shengGuang') return false;
@@ -3011,7 +3011,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					event.yingZhan=trigger.parent.yingZhan;
 					var next=player.gongJi('h');
                     next.set('filterCard',function(card,player,event){
-                        if(card.name!='anMie'&&get.suit(card)!=get.suit(_status.event.trigger_card)) return false;
+                        if(card.name!='anMie'&&get.xiBie(card)!=get.xiBie(_status.event.trigger_card)) return false;
 						return lib.filter.cardEnabled(card,player,'forceEnable');
 					});
                     next.set('ai',function(card){

@@ -71,7 +71,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     "step 0"
 					var str='风怒追击：风系攻击行动';
 					var next=player.gongJi(function(card,player,event){
-                        if(get.suit(card)!='feng') return false;
+                        if(get.xiBie(card)!='feng') return false;
                         return lib.filter.cardEnabled(card,player,'forceEnable');
 					},str);
 					next.autodelay=true;
@@ -287,7 +287,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 forced:true,
                 trigger:{player:'useCard'},
                 filter:function(event){
-                    return get.suit(event.card)=='shui'||get.name(event.card)=='shengGuang';
+                    return get.xiBie(event.card)=='shui'||get.name(event.card)=='shengGuang';
                 },
                 content:function(){
                     'step 0'
@@ -433,7 +433,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 content:function(event,player){
                     'step 0'
                     var next=player.chooseToDiscard([1,3],function(card){
-                        return get.suit(card)=='shui';
+                        return get.xiBie(card)=='shui';
                     });
                     next.set('prompt',get.prompt('shuiYing'));
                     next.set('prompt2',lib.translate.shuiYing_info);
@@ -615,7 +615,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                 if(event.gaiPai==true) return false;
                             }
                             for(var card of event.cards){
-                                if(get.suit(card)=='di'){
+                                if(get.xiBie(card)=='di'){
                                     return true;
                                 }
                             }
@@ -674,7 +674,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                 if(event.gaiPai==true) return false;
                             }
                             for(var card of event.cards){
-                                if(get.suit(card)=='shui'){
+                                if(get.xiBie(card)=='shui'){
                                     return true;
                                 };
                             }
@@ -733,7 +733,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                 if(event.gaiPai==true) return false;
                             }
                             for(var card of event.cards){
-                                if(get.suit(card)=='huo'){
+                                if(get.xiBie(card)=='huo'){
                                     return true;
                                 };
                             }
@@ -792,7 +792,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                 if(event.gaiPai==true) return false;
                             }
                             for(var card of event.cards){
-                                if(get.suit(card)=='feng'){
+                                if(get.xiBie(card)=='feng'){
                                     return true;
                                 };
                             }
@@ -851,7 +851,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                 if(event.gaiPai==true) return false;
                             }
                             for(var card of event.cards){
-                                if(get.suit(card)=='lei'){
+                                if(get.xiBie(card)=='lei'){
                                     return true;
                                 };
                             }
@@ -1003,7 +1003,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 enable:['chooseToUse','faShu'],
                 filter:function(event,player){
                     if(!player.countCards('h',function(card){
-                        return get.suit(card)=='feng';
+                        return get.xiBie(card)=='feng';
                     })){
                         return false;
                     }
@@ -1019,7 +1019,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     return false;
                 },
                 filterCard:function(card){
-                    return get.suit(card)=='feng';
+                    return get.xiBie(card)=='feng';
                 },
                 selectCard:1,
                 selectTarget:1,
@@ -1069,11 +1069,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 enable:['chooseToUse','faShu'],
                 filter:function(event,player){
                     return player.countCards('h',function(card){
-                        return get.suit(card)=='shui';
+                        return get.xiBie(card)=='shui';
                     });
                 },
                 filterCard:function(card){
-                    return get.suit(card)=='shui';
+                    return get.xiBie(card)=='shui';
                 },
                 selectCard:1,
                 selectTarget:[1,2],
@@ -1287,7 +1287,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 forced:true,
                 trigger:{player:"useCardToPlayer"},
                 filter:function(event){
-                    if(get.suit(event.card)=='lei'&&get.type(event.card)=='gongJi'){
+                    if(get.xiBie(event.card)=='lei'&&get.type(event.card)=='gongJi'){
                         return true;
                     }
                     return false;
@@ -1480,13 +1480,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             moDanRongHe:{
                 enable:['chooseToUse','faShu','chooseToUse_qiTa'],
 				filterCard:function(card){
-                    return get.suit(card)=='di'||get.suit(card)=='huo';
+                    return get.xiBie(card)=='di'||get.xiBie(card)=='huo';
 				},
 				position:'h',
 				viewAs:{name:'moDan'},
 				viewAsFilter:function(player){
                     return player.countCards('h',function(card){
-                        return get.suit(card)=='di'||get.suit(card)=='huo';
+                        return get.xiBie(card)=='di'||get.xiBie(card)=='huo';
                     });
 				},
             },
@@ -1722,7 +1722,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				},
                 content:function(){
                     'step 0'
-                    player.chooseToDiscard(1,card=>get.suit(card)=='di','是否额外弃1张地系牌[展示]');
+                    player.chooseToDiscard(1,card=>get.xiBie(card)=='di','是否额外弃1张地系牌[展示]');
                     'step 1'
                     var num=1;
                     if(result.bool){
@@ -1752,7 +1752,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				},
                 content:function(){
                     'step 0'
-                    player.chooseToDiscard(1,card=>get.suit(card)=='shui','是否额外弃1张水系牌[展示]');
+                    player.chooseToDiscard(1,card=>get.xiBie(card)=='shui','是否额外弃1张水系牌[展示]');
                     'step 1'
                     var num=1;
                     if(result.bool){
@@ -1786,7 +1786,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				},
                 content:function(){
                     'step 0'
-                    player.chooseToDiscard(1,card=>get.suit(card)=='huo','是否额外弃1张火系牌[展示]');
+                    player.chooseToDiscard(1,card=>get.xiBie(card)=='huo','是否额外弃1张火系牌[展示]');
                     'step 1'
                     var num=2;
                     if(result.bool){
@@ -1814,7 +1814,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				},
                 content:function(){
                     'step 0'
-                    player.chooseToDiscard(1,card=>get.suit(card)=='feng','是否额外弃1张风系牌[展示]');
+                    player.chooseToDiscard(1,card=>get.xiBie(card)=='feng','是否额外弃1张风系牌[展示]');
                     'step 1'
                     var num=1;
                     if(result.bool){
@@ -1844,7 +1844,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				},
                 content:function(){
                     'step 0'
-                    player.chooseToDiscard(1,card=>get.suit(card)=='lei','是否额外弃1张雷系牌[展示]');
+                    player.chooseToDiscard(1,card=>get.xiBie(card)=='lei','是否额外弃1张雷系牌[展示]');
                     'step 1'
                     var num=1;
                     if(result.bool){
@@ -1941,7 +1941,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     var anYue=player.getExpansions('anYue');
                     if(_status.connectMode&&anYue.length>0) return true;
                     for(var i=0;i<anYue.length;i++){
-                        if(get.suit(anYue[i])==get.suit(event.card)) return true;
+                        if(get.xiBie(anYue[i])==get.xiBie(event.card)) return true;
                     }
                     return false;
                 },
@@ -1951,7 +1951,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     var cards=player.getExpansions('anYue');
                     var next=player.chooseCardButton(cards,'是否发动【美杜莎之眼】'+lib.translate.meiDuShaZhiYan_info);
                     next.set('filterButton',function(button){
-                        return get.suit(button)==get.suit(_status.event.trigger_card);
+                        return get.xiBie(button)==get.xiBie(_status.event.trigger_card);
                     });
                     next.set('trigger_card',trigger.card);
                     'step 1'
@@ -2316,7 +2316,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     var dict={};
                     var hs=player.getCards('h');
                     for(var i=0;i<hs.length;i++){
-                        var type=get.suit(hs[i]);
+                        var type=get.xiBie(hs[i]);
                         if(!dict[type]) dict[type]=0;
                         dict[type]++;
                     }
@@ -2333,8 +2333,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     if(!ui.selected.cards.length){
                         return true;
                     }
-                    var suit=get.suit(card);
-                    if(get.suit(ui.selected.cards[0])!=suit){
+                    var xiBie=get.xiBie(card);
+                    if(get.xiBie(ui.selected.cards[0])!=xiBie){
                         return false;
                     }
                     return true;
@@ -2355,20 +2355,20 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         event.goto(2);
                     }
                     'step 1'
-                    var suit=result.control;
+                    var xiBie=result.control;
                     var name;
-                    switch(suit){
+                    switch(xiBie){
                         case'shui':name='shuiLianZhan';break;
                         case 'huo':name='huoYanZhan';break;
                         case 'feng':name='fengShenZhan';break;
                         case 'lei':name='leiGuangZhan';break;
                         case 'di':name='diLieZhan';break;
                     }
-                    var card={name:name,suit:suit,isCard:true};
+                    var card={name:name,xiBie:xiBie,isCard:true};
                     player.useCard(card,target).set('action',true);
                     event.finish();
                     'step 2'
-                    var card={name:'anMie',suit:'an',isCard:true};
+                    var card={name:'anMie',xiBie:'an',isCard:true};
                     player.useCard(card,target).set('action',true);
                     event.finish();
                 },
@@ -2535,11 +2535,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 type:'faShu',
                 enable:['chooseToUse','faShu'],
                 filter:function(event,player){
-                    return player.countCards('h',card=>get.suit(card)=='shui');
+                    return player.countCards('h',card=>get.xiBie(card)=='shui');
                 },
                 selectCard:1,
                 filterCard:function(card){
-                    return get.suit(card)=='shui';
+                    return get.xiBie(card)=='shui';
                 },
                 prepare:'showCards',
                 selectTarget:-1,
@@ -2680,7 +2680,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 filter:function(event,player){
                     if(event.yingZhan==true) return false;
                     if(get.type(event.card)!='gongJi') return false;
-                    if(get.suit(event.card)=='an') return false;
+                    if(get.xiBie(event.card)=='an') return false;
                     if(player.countCards('h')==0&&player.countCards('s',card=>card.hasGaintag('zhuFu'))==0) return false;
                     if(_status.connectMode) return true;
                     return player.countCards('h',card=>get.type(card)=='faShu')>0||player.getCards('s',card=>card.hasGaintag('zhuFu')).length>0;
@@ -2712,7 +2712,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         if(flag){
                             player.showCards(result.cards);
                         }
-                        switch(get.suit(player.storage.yuanSuSheJi)){
+                        switch(get.xiBie(player.storage.yuanSuSheJi)){
                             case 'huo':
                                 player.addTempSkill('yuanSuSheJi_huo');
                                 break;
@@ -2933,12 +2933,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 type:'faShu',
                 enable:['chooseToUse','faShu'],
                 filter:function(event,player){
-                    return player.countCards('h',card=>get.suit(card)=='di');
+                    return player.countCards('h',card=>get.xiBie(card)=='di');
                 },
                 prepare:'showCards',
                 selectCard:1,
                 filterCard:function(card){
-                    return get.suit(card)=='di';
+                    return get.xiBie(card)=='di';
                 },
                 selectTarget:-1,
                 filterTarget:function(card,player,target){
@@ -2956,7 +2956,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     var dict={};
                     var hs=player.getCards('h');
                     for(var i=0;i<hs.length;i++){
-                        var type=get.suit(hs[i]);
+                        var type=get.xiBie(hs[i]);
                         if(!dict[type]) dict[type]=0;
                         dict[type]++;
                     }
@@ -2990,8 +2990,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                 if(!ui.selected.cards.length){
                                     return true;
                                 }
-                                var suit=get.suit(card);
-                                if(get.suit(ui.selected.cards[0])!=suit){
+                                var xiBie=get.xiBie(card);
+                                if(get.xiBie(ui.selected.cards[0])!=xiBie){
                                     return false;
                                 }
                                 return true;
@@ -3049,7 +3049,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 content:function(player){
 					var str='修罗连斩：火系攻击行动';
 					var next=player.gongJi('h',function(card,player,event){
-                        if(get.suit(card)!='huo') return false;
+                        if(get.xiBie(card)!='huo') return false;
                         return lib.filter.cardEnabled(card,player,'forceEnable');
 					},str);
                 }
@@ -3743,11 +3743,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     var cards=player.getCards('h');
                     var dict={};
                     for(var i=0;i<cards.length;i++){
-                        var suit=get.suit(cards[i]);
-                        dict[suit]=(dict[suit]||0)+1;
+                        var xiBie=get.xiBie(cards[i]);
+                        dict[xiBie]=(dict[xiBie]||0)+1;
                     }
-                    for(var suit in dict){
-                        if(dict[suit]>1) return true;
+                    for(var xiBie in dict){
+                        if(dict[xiBie]>1) return true;
                     }
                     return false;
                 },
@@ -3756,7 +3756,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 0'
                     var next=player.chooseToDiscard('h',[2,Infinity],function(card){
                         if(!ui.selected.cards.length) return true;
-                        return get.suit(card)==get.suit(ui.selected.cards[0])
+                        return get.xiBie(card)==get.xiBie(ui.selected.cards[0])
                     });
                     next.set('complexCard',true);
                     next.set('prompt',get.prompt('zhanWenSuiJi'));
@@ -3802,8 +3802,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     var cards=player.getCards('h');
                     var dict={};
                     for(var i=0;i<cards.length;i++){
-                        var suit=get.suit(cards[i]);
-                        dict[suit]=(dict[suit]||0)+1;
+                        var xiBie=get.xiBie(cards[i]);
+                        dict[xiBie]=(dict[xiBie]||0)+1;
                     }
                     return Object.keys(dict).length>1;
                 },
@@ -3813,7 +3813,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     var next=player.chooseToDiscard('h',[2,Infinity],function(card){
                         if(!ui.selected.cards.length) return true;
                         for(var i=0;i<ui.selected.cards.length;i++){
-                            if(get.suit(ui.selected.cards[i])==get.suit(card)) return false;
+                            if(get.xiBie(ui.selected.cards[i])==get.xiBie(card)) return false;
                         }
                         return true;
                     });
@@ -3985,11 +3985,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 type:'faShu',
                 enable:['chooseToUse','faShu'],
                 filter:function(event,player){
-                    return player.countCards('h',card=>get.suit(card)=='shui')>=1;
+                    return player.countCards('h',card=>get.xiBie(card)=='shui')>=1;
                 },
                 selectCard:1,
                 filterCard:function(card){
-                    return get.suit(card)=='shui';
+                    return get.xiBie(card)=='shui';
                 },
                 prepare:'showCards',
                 selectTarget:1,
@@ -4154,7 +4154,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 position:'h',
                 viewAs:function(cards,player){
                     var event=_status.event;
-					return {name:get.name(event.trigger_card),suit:get.suit(event.trigger_card)}
+					return {name:get.name(event.trigger_card),xiBie:get.xiBie(event.trigger_card)}
 				},
                 group:['yinYangZhanHuan_xiaoGuo'],
             },
@@ -4243,7 +4243,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					var next=player.chooseToUse_yingZhan();
                     next.set('filterCard',function(card,player,event){
                         if(get.type(card)!='gongJi') return false;
-                        if(card.name!='anMie'&&get.suit(card)!=get.suit(_status.event.trigger_card)) return false;
+                        if(card.name!='anMie'&&get.xiBie(card)!=get.xiBie(_status.event.trigger_card)) return false;
 						return lib.filter.cardEnabled(card,player,'forceEnable');
 					});
 					next.set('filterTarget',function(card,player,target){

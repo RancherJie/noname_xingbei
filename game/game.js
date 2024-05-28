@@ -9963,7 +9963,7 @@
 					}
 				}
 				if(!targets.length) targets.push(game.me);
-				source.useCard(game.createCard(card.name,card.suit,card.number,card.nature),targets);
+				source.useCard(game.createCard(card.name,card.xiBie,card.number,card.nature),targets);
 			},
 			r:function(bool){
 				var list=['s','ap','a','am','bp','b','bm','c','d'];
@@ -10046,22 +10046,22 @@
 			},
 			gn:function(name){
 				var nature=null;
-				var suit=null;
+				var xiBie=null;
 				var suits=['club','spade','diamond','heart'];
 				for(var i=0;i<suits.length;i++){
 					if(name.startsWith(suits[i])){
-						suit=suits[i];
+						xiBie=suits[i];
 						name=name.slice(suits[i].length);
 						break;
 					}
 				}
 				if(name.startsWith('red')){
 					name=name.slice(3);
-					suit=['diamond','heart'].randomGet();
+					xiBie=['diamond','heart'].randomGet();
 				}
 				if(name.startsWith('black')){
 					name=name.slice(5);
-					suit=['spade','club'].randomGet();
+					xiBie=['spade','club'].randomGet();
 				}
 
 				if(name=='huosha'){
@@ -10075,7 +10075,7 @@
 				if(!lib.card[name]){
 					return null;
 				}
-				return game.createCard(name,suit,null,nature);
+				return game.createCard(name,xiBie,null,nature);
 			},
 			ge:function(target){
 				if(target){
@@ -18512,7 +18512,7 @@
 						card:player.judging[0],
 						name:player.judging[0].name,
 						number:get.number(player.judging[0]),
-						suit:get.suit(player.judging[0]),
+						xiBie:get.xiBie(player.judging[0]),
 						color:get.color(player.judging[0]),
 						node:event.node,
 					};
@@ -21134,7 +21134,7 @@
 							for(i=0;i<cards.length;i++){
 								for(j in arg2){
 									var value;
-									if(j=='type'||j=='subtype'||j=='color'||j=='suit'||j=='number'){
+									if(j=='type'||j=='subtype'||j=='color'||j=='xiBie'||j=='number'){
 										value=get[j](cards[i]);
 									}
 									else{
@@ -21405,14 +21405,14 @@
 												}
 											}
 										}
-										else if(j=='suit'){
+										else if(j=='xiBie'){
 											if(typeof arg2[j]=='object'){
-												if(arg2[j].contains(get.suit(cards[i]))==false){
+												if(arg2[j].contains(get.xiBie(cards[i]))==false){
 													cards.splice(i,1);i--;break;
 												}
 											}
 											else if(typeof arg2[j]=='string'){
-												if(get.suit(cards[i])!=arg2[j]){
+												if(get.xiBie(cards[i])!=arg2[j]){
 													cards.splice(i,1);i--;break;
 												}
 											}
@@ -22124,7 +22124,7 @@
 							var player=_status.event.player;
 							var event=_status.event.getParent();
 							var getn=function(card){
-								if(player.hasSkill('tianbian')&&get.suit(card)=='heart') return 13*(Boolean(event.small)?-1:1);
+								if(player.hasSkill('tianbian')&&get.xiBie(card)=='heart') return 13*(Boolean(event.small)?-1:1);
 								return get.number(card)*(Boolean(event.small)?-1:1);
 							}
 							if(source&&source!=player){
@@ -22152,7 +22152,7 @@
 							}
 							var player=get.owner(card);
 							var getn=function(card){
-								if(player.hasSkill('tianbian')&&get.suit(card)=='heart') return 13;
+								if(player.hasSkill('tianbian')&&get.xiBie(card)=='heart') return 13;
 								return get.number(card);
 							}
 							var event=_status.event.getParent();
@@ -24861,7 +24861,7 @@
 							node=name.copy('mark');
 							node.classList.add('drawinghidden');
 							this.node.marks.insertBefore(node,this.node.marks.childNodes[1]);
-							node.suit=name.suit;
+							node.xiBie=name.xiBie;
 							node.number=name.number;
 							// if(name.name&&lib.card[name.name]&&lib.card[name.name].markimage){
 							// 	node.node.image.style.left=lib.card[name.name].markimage;
@@ -28184,7 +28184,7 @@
 						}
 					}
 					else if(typeof card=='object'){
-						card=[card.suit,card.number,card.name,card.nature];
+						card=[card.xiBie,card.number,card.name,card.nature];
 					}
 					var cardnum=card[1]||'';
 					if(parseInt(cardnum)==cardnum) cardnum=parseInt(cardnum);
@@ -28444,7 +28444,7 @@
 						}
 					}
 					this.node.name2.innerHTML=get.translation(card[0])+get.translation(cardnum)+' '+name;
-					this.suit=card[0];
+					this.xiBie=card[0];
 					this.number=card[1];
 					this.name=card[2];
 					this.classList.add('card');
@@ -28616,7 +28616,7 @@
 					var node=this.cloneNode(true);
 					node.style.transform='';
 					node.name=this.name;
-					node.suit=this.suit;
+					node.xiBie=this.xiBie;
 					node.number=this.number;
 					node.classList.remove('hidden');
 					node.classList.remove('start');
@@ -30546,8 +30546,8 @@
 								if(info.type=='discard'&&(source==player||source==info.target)){
 									if(!info.discard) info.discard=[];
 									for(var i of trigger.cards2){
-										var suit=get.suit(i,player);
-										if(lib.suit.contains(suit)) info.discard.add(suit);
+										var xiBie=get.xiBie(i,player);
+										if(lib.xiBie.contains(xiBie)) info.discard.add(xiBie);
 									}
 								}
 							}
@@ -30589,24 +30589,24 @@
 						popup:false,
 						firstDo:true,
 						filter:function(event,player){
-							var suit=get.suit(event.card);
-							if(!lib.suit.contains(suit)) return false;
+							var xiBie=get.xiBie(event.card);
+							if(!lib.xiBie.contains(xiBie)) return false;
 							var storage=player.getStorage('cooperation');
 							for(var info of storage){
 								if(info.type=='use'
 									&&(event.player==player||event.player==info.target)&&
-									(!info.used||!info.used.contains(suit))) return true;
+									(!info.used||!info.used.contains(xiBie))) return true;
 							}
 							return false;
 						},
 						checkx:(info)=>(info.used&&info.used.length>3),
 						content:function(){
-							var source=trigger.player,suit=get.suit(trigger.card);
+							var source=trigger.player,xiBie=get.xiBie(trigger.card);
 							var storage=player.getStorage('cooperation');
 							for(var info of storage){
 								if(info.type=='use'&&(source==player||source==info.target)){
 									if(!info.used) info.used=[];
-									info.used.add(suit);
+									info.used.add(xiBie);
 								}
 							}
 							player.markSkill('cooperation_use');
@@ -30737,13 +30737,13 @@
 							var list=player.getHistory('useCard',function(evt){
 								return evt.isPhaseUsing();
 							});
-							var goon=true,suit=get.suit(list[0].card,false);
-							if(suit=='none'){
+							var goon=true,xiBie=get.xiBie(list[0].card,false);
+							if(xiBie=='none'){
 								goon=false;
 							}
 							else{
 								for(var i=1;i<list.length;i++){
-									if(get.suit(list[i])!=suit){
+									if(get.xiBie(list[i])!=xiBie){
 										goon=false;
 										break;
 									}
@@ -30762,9 +30762,9 @@
 										player.storage.zhengsu_bianzhen=true;
 									},player);
 								}
-								else game.broadcastAll(function(player,suit){
-									if(player.marks.zhengsu_bianzhen) player.marks.zhengsu_bianzhen.firstChild.innerHTML=get.translation(suit);
-								},player,suit);
+								else game.broadcastAll(function(player,xiBie){
+									if(player.marks.zhengsu_bianzhen) player.marks.zhengsu_bianzhen.firstChild.innerHTML=get.translation(xiBie);
+								},player,xiBie);
 							}
 							player.markSkill('zhengsu_bianzhen');
 						},
@@ -30775,28 +30775,28 @@
 							effect:{
 								player_use:function(card,player,target){
 									if(typeof card!='object'||!player.isPhaseUsing()) return;
-									var suitx=get.suit(card);
+									var suitx=get.xiBie(card);
 									var history=player.getHistory('useCard');
 									if(!history.length){
 										var val=0;
 										if(player.hasCard(function(cardx){
-											return get.suit(cardx)==suitx&&card!=cardx&&(!card.cards||!card.cards.contains(cardx))&&player.hasValueTarget(cardx);
+											return get.xiBie(cardx)==suitx&&card!=cardx&&(!card.cards||!card.cards.contains(cardx))&&player.hasValueTarget(cardx);
 										},'hs')) val=[2,0.1];
 										if(val) return val;
 										return;
 									}
 									var num=0;
-									var suit=false;
+									var xiBie=false;
 									for(var i=0;i<history.length;i++){
-										var suit2=get.suit(history[i].card);
-										if(!lib.suit.contains(suit2)) return;
-										if(suit&&suit!=suit2) return;
-										suit=suit2;
+										var suit2=get.xiBie(history[i].card);
+										if(!lib.xiBie.contains(suit2)) return;
+										if(xiBie&&xiBie!=suit2) return;
+										xiBie=suit2;
 										num++;
 									}
-									if(suitx==suit&&num==1) return [1,0.1];
-									if(suitx!=suit&&(num>1||num<=1&&player.hasCard(function(cardx){
-										return get.suit(cardx)==suit&&player.hasValueTarget(cardx);
+									if(suitx==xiBie&&num==1) return [1,0.1];
+									if(suitx!=xiBie&&(num>1||num<=1&&player.hasCard(function(cardx){
+										return get.xiBie(cardx)==xiBie&&player.hasValueTarget(cardx);
 									},'hs'))) return 'zeroplayertarget';
 								},
 							},
@@ -30822,12 +30822,12 @@
 								var evt=event.getParent('phaseDiscard');
 								if(evt&&evt.player==player){
 									for(var i of event.cards2){
-										var suit=get.suit(i,player);
-										if(list.contains(suit)){
+										var xiBie=get.xiBie(i,player);
+										if(list.contains(xiBie)){
 											goon=false;
 											break;
 										}
-										else list.push(suit);
+										else list.push(xiBie);
 									}
 								}
 							});
@@ -32697,7 +32697,7 @@
 				}
 			}
 		},
-		suit:['club','spade','diamond','heart'],
+		xiBie:['club','spade','diamond','heart'],
 		suits:['club','spade','diamond','heart','none'],
 		color:{
 			black:['club','spade'],
@@ -32979,9 +32979,9 @@
 			return item.nature;
 		},
 		//星杯增加设置系别用
-		setXiBie:(item,suit)=>{
-			item.suit=suit;
-			return item.suit;
+		setXiBie:(item,xiBie)=>{
+			item.xiBie=xiBie;
+			return item.xiBie;
 		},
 		//洗牌
 		washCard:()=>{
@@ -35303,7 +35303,7 @@
 					}
 					for(var i=0;i<cards.length;i++){
 						for(var j=0;j<nodes.length;j++){
-							if(cards[i][2]==nodes[j].name&&cards[i][0]==nodes[j].suit&&cards[i][1]==nodes[j].number){
+							if(cards[i][2]==nodes[j].name&&cards[i][0]==nodes[j].xiBie&&cards[i][1]==nodes[j].number){
 								nodes[j].moveDelete(player);
 								cards.splice(i--,1);
 								nodes.splice(j--,1);
@@ -35328,7 +35328,7 @@
 					}
 					for(var i=0;i<cards.length;i++){
 						for(var j=0;j<nodes.length;j++){
-							if(cards[i][2]==nodes[j].name&&cards[i][0]==nodes[j].suit&&cards[i][1]==nodes[j].number){
+							if(cards[i][2]==nodes[j].name&&cards[i][0]==nodes[j].xiBie&&cards[i][1]==nodes[j].number){
 								nodes[j].delete();
 								if(method=='zoom'){
 									nodes[j].style.transform='scale(0)';
@@ -35352,7 +35352,7 @@
 						nodes.push(nodeList[i]);
 					}
 					for(var j=nodes.length-1;j>=0;j--){
-						if(card[2]==nodes[j].name&&card[0]==nodes[j].suit&&card[1]==nodes[j].number){
+						if(card[2]==nodes[j].name&&card[0]==nodes[j].xiBie&&card[1]==nodes[j].number){
 							nodes[j].classList.add('thrownhighlight');
 							break;
 						}
@@ -35430,7 +35430,7 @@
 					var checkMatch=function(l1,l2){
 						for(var i=0;i<l1.length;i++){
 							for(var j=0;j<l2.length;j++){
-								if(l2[j].suit==l1[i][0]&&l2[j].number==l1[i][1]&&l2[j].name==l1[i][2]){
+								if(l2[j].xiBie==l1[i][0]&&l2[j].number==l1[i][1]&&l2[j].name==l1[i][2]){
 									l2[j].addGaintag(content[1]);
 									l2.splice(j--,1);
 									break;
@@ -35753,7 +35753,7 @@
 					var checkMatch=function(l1,l2){
 						for(var i=0;i<l1.length;i++){
 							for(var j=0;j<l2.length;j++){
-								if(l2[j].suit==l1[i][0]&&l2[j].number==l1[i][1]&&l2[j].name==l1[i][2]){
+								if(l2[j].xiBie==l1[i][0]&&l2[j].number==l1[i][1]&&l2[j].name==l1[i][2]){
 									l2[j].remove();
 									l2.splice(j--,1);
 									break;
@@ -36968,35 +36968,35 @@
 			}
 			game.saveConfig('recentCharacter',list,true);
 		},
-		createCard:function(name,suit,number,nature){
+		createCard:function(name,xiBie,number,nature){
 			if(typeof name=='object'){
 				nature=name.nature;
 				number=name.number;
-				suit=name.suit;
+				xiBie=name.xiBie;
 				name=name.name;
 			}
 			if(typeof name!='string'){
 				name='sha';
 			}
 			var noclick=false;
-			if(suit=='noclick'){
+			if(xiBie=='noclick'){
 				noclick=true;
-				suit=null;
+				xiBie=null;
 			}
-			if(!suit&&lib.card[name].cardcolor){
-				suit=lib.card[name].cardcolor;
+			if(!xiBie&&lib.card[name].cardcolor){
+				xiBie=lib.card[name].cardcolor;
 			}
 			if(!nature&&lib.card[name].cardnature){
 				nature=lib.card[name].cardnature;
 			}
-			if(typeof suit!='string'){
-				suit=['heart','diamond','club','spade'].randomGet();
+			if(typeof xiBie!='string'){
+				xiBie=['heart','diamond','club','spade'].randomGet();
 			}
-			else if(suit=='black'){
-				suit=Math.random()<0.5?'club':'spade';
+			else if(xiBie=='black'){
+				xiBie=Math.random()<0.5?'club':'spade';
 			}
-			else if(suit=='red'){
-				suit=Math.random()<0.5?'diamond':'heart';
+			else if(xiBie=='red'){
+				xiBie=Math.random()<0.5?'diamond':'heart';
 			}
 			if(typeof number!='number'&&typeof number!='string'){
 				number=Math.ceil(Math.random()*13);
@@ -37009,7 +37009,7 @@
 				card=ui.create.card(ui.special);
 			}
 			card.storage.vanish=true;
-			return card.init([suit,number,name,nature]);
+			return card.init([xiBie,number,name,nature]);
 		},
 		createCard2:function(){
 			var card=game.createCard.apply(this,arguments);
@@ -39746,7 +39746,7 @@
 			else if(Array.isArray(card)){
 				node.cards=card[1].slice(0)
 				card=card[0];
-				const info=[card.suit||'',card.number||'',card.name||'',card.nature||''];
+				const info=[card.xiBie||'',card.number||'',card.name||'',card.nature||''];
 				if(!Array.isArray(node.cards)||!node.cards.length) node.cards=[ui.create.card(node,'noclick',true).init(info)];
 				if(card.name=='wuxie'){
 					if(ui.historybar.firstChild&&ui.historybar.firstChild.type=='wuxie'){
@@ -49754,7 +49754,7 @@
 					}
 					else hs.sort(function(b,a){
 						if(a.name!=b.name) return lib.sort.card(a.name,b.name);
-						else if(a.suit!=b.suit) return lib.suit.indexOf(a)-lib.suit.indexOf(b);
+						else if(a.xiBie!=b.xiBie) return lib.xiBie.indexOf(a)-lib.xiBie.indexOf(b);
 						else return a.number-b.number;
 					});
 					game.me.directgain(hs,false);
@@ -53553,7 +53553,7 @@
 					if(typeof get.info(event.skill).viewAs=='function') event.result.card=get.info(event.skill).viewAs(event.result.cards,event.player);
 					else event.result.card=get.copy(get.info(event.skill).viewAs);
 					if(event.result.cards.length==1&&event.result.card){
-						if(!event.result.card.suit) event.result.card.suit=get.suit(event.result.cards[0]);
+						if(!event.result.card.xiBie) event.result.card.xiBie=get.xiBie(event.result.cards[0]);
 						if(!event.result.card.number) event.result.card.number=get.number(event.result.cards[0]);
 					}
 					if(event.skillDialog&&get.objtype(event.skillDialog)=='div'){
@@ -55906,8 +55906,8 @@
 			if(get.itemtype(card)=='card'){
 				_card={
 					name:get.name(card),
-					suit:get.suit(card),
-					color:get.suit(card),
+					xiBie:get.xiBie(card),
+					color:get.xiBie(card),
 					number:get.number(card),
 					nature:get.nature(card),
 					isCard:true,
@@ -55926,7 +55926,7 @@
 					}
 					else{
 						_card.cards=cards.slice(0);
-						if(!lib.suits.includes(_card.suit)) _card.suit=get.suit(_card);
+						if(!lib.suits.includes(_card.xiBie)) _card.xiBie=get.xiBie(_card);
 						if(!Object.keys(lib.color).includes(_card.color)) _card.color=get.color(_card);
 						if(!_card.hasOwnProperty('number')) _card.number=get.number(_card);
 						if(!_card.hasOwnProperty('nature')) _card.nature=(get.nature(_card)||false);
@@ -55963,7 +55963,7 @@
 				else{
 					return {
 						name:info.autoViewAs,
-						suit:card.suit,
+						xiBie:card.xiBie,
 						number:card.number,
 						nature:card.nature,
 					};
@@ -55973,7 +55973,7 @@
 				if(card.isCard||get.itemtype(card)=='card'){
 					var next={
 						name:get.name(card),
-						suit:get.suit(card),
+						xiBie:get.xiBie(card),
 						number:get.number(card),
 						nature:get.nature(card),
 						isCard:true,
@@ -56319,7 +56319,7 @@
 					if(lib.inpile.contains(info[2])&&get.type(info[2])==type){
 						list.push({
 							name:info[2],
-							suit:info[0],
+							xiBie:info[0],
 							number:info[1],
 							nature:info[3]
 						});
@@ -56764,7 +56764,7 @@
 			return targets;
 		},
 		cardInfo:function(card){
-			return [card.suit,card.number,card.name,card.nature];
+			return [card.xiBie,card.number,card.name,card.nature];
 		},
 		cardsInfo:function(cards){
 			var info=[];
@@ -56788,7 +56788,7 @@
 			return cards;
 		},
 		cardInfoOL:function(card){
-			return '_noname_card:'+JSON.stringify([card.cardid,card.suit,card.number,card.name,card.nature]);
+			return '_noname_card:'+JSON.stringify([card.cardid,card.xiBie,card.number,card.name,card.nature]);
 		},
 		infoCardOL:function(info){
 			if(!lib.cardOL) return info;
@@ -57176,42 +57176,42 @@
 			}
 			return card.name;
 		},
-		suit:function(card,player){
+		xiBie:function(card,player){
 			if(!card) return;
 			if(Array.isArray(card)){
-				if(card.length==1) return get.suit(card[0],player);
+				if(card.length==1) return get.xiBie(card[0],player);
 				return 'none';
 			}
-			else if(!card.hasOwnProperty('suit')&&Array.isArray(card.cards)){
-				return get.suit(card.cards,player);
+			else if(!card.hasOwnProperty('xiBie')&&Array.isArray(card.cards)){
+				return get.xiBie(card.cards,player);
 			}
 			else{
 				if(player!==false){
 					const owner=player||get.owner(card);
 					if(owner){
-						return game.checkMod(card,card.suit,'suit',owner);
+						return game.checkMod(card,card.xiBie,'xiBie',owner);
 					}
 				}
-				return card.suit;
+				return card.xiBie;
 			}
 		},
 		xiBie:function(card,player){
 			if(!card) return;
 			if(Array.isArray(card)){
-				if(card.length==1) return get.suit(card[0],player);
+				if(card.length==1) return get.xiBie(card[0],player);
 				return 'none';
 			}
-			else if(!card.hasOwnProperty('suit')&&Array.isArray(card.cards)){
-				return get.suit(card.cards,player);
+			else if(!card.hasOwnProperty('xiBie')&&Array.isArray(card.cards)){
+				return get.xiBie(card.cards,player);
 			}
 			else{
 				if(player!==false){
 					const owner=player||get.owner(card);
 					if(owner){
-						return game.checkMod(card,card.suit,'suit',owner);
+						return game.checkMod(card,card.xiBie,'xiBie',owner);
 					}
 				}
-				return card.suit;
+				return card.xiBie;
 			}
 		},
 		color:function(card,player){
@@ -57227,13 +57227,13 @@
 			else if(Object.keys(lib.color).includes(card.color)){
 				return card.color;
 			}
-			else if(Array.isArray(card.cards)&&!lib.suit.includes(card.suit)){
+			else if(Array.isArray(card.cards)&&!lib.xiBie.includes(card.xiBie)){
 				return get.color(card.cards,player);
 			}
 			else{
-				const suit=get.suit(card,player);
+				const xiBie=get.xiBie(card,player);
 				for(let i in lib.color){
-					if(lib.color[i].includes(suit)) return i;
+					if(lib.color[i].includes(xiBie)) return i;
 				}
 				return 'none';
 			}
@@ -57567,7 +57567,7 @@
 							str2+='·'+tagstr;
 						}
 					}
-					if(str.suit&&str.number){
+					if(str.xiBie&&str.number){
 						var cardnum=str.number||'';
 						if([1,11,12,13].contains(cardnum)){
 							cardnum={'1':'A','11':'J','12':'Q','13':'K'}[cardnum]
@@ -57576,9 +57576,9 @@
 							str2+='（'+get.translation(str)+'）';
 						}
 						else{
-							str2+='【'+get.translation(str.suit)+get.translation(cardnum)+'】';
+							str2+='【'+get.translation(str.xiBie)+get.translation(cardnum)+'】';
 							// var len=str2.length-1;
-							// str2=str2.slice(0,len)+'<span style="letter-spacing: -2px">'+str2[len]+'·</span>'+get.translation(str.suit)+str.number;
+							// str2=str2.slice(0,len)+'<span style="letter-spacing: -2px">'+str2[len]+'·</span>'+get.translation(str.xiBie)+str.number;
 						}
 					}
 				}
@@ -57826,12 +57826,12 @@
 									if(get.color(arguments[i])!=filter[j]) return false;
 								}
 							}
-							else if(j=='suit'){
+							else if(j=='xiBie'){
 								if(Array.isArray(filter[j])){
-									if(filter[j].contains(get.suit(arguments[i]))==false) return false;
+									if(filter[j].contains(get.xiBie(arguments[i]))==false) return false;
 								}
 								else if(typeof filter[j]=='string'){
-									if(get.suit(arguments[i])!=filter[j]) return false;
+									if(get.xiBie(arguments[i])!=filter[j]) return false;
 								}
 							}
 							else if(j=='number'){
@@ -57953,10 +57953,10 @@
 			}
 			else if(sort=='suit_sort'){
 				func=function(card){
-					if(get.suit(card)=='heart') return 2;
-					if(get.suit(card)=='diamond') return 1;
-					if(get.suit(card)=='spade') return -1;
-					if(get.suit(card)=='club') return -2;
+					if(get.xiBie(card)=='heart') return 2;
+					if(get.xiBie(card)=='diamond') return 1;
+					if(get.xiBie(card)=='spade') return -1;
+					if(get.xiBie(card)=='club') return -2;
 				}
 			}
 			else if(sort=='number_sort'){
