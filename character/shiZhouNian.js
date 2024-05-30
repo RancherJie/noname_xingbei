@@ -4173,6 +4173,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 content:function(){
                     'step 0'
                     player.addZhiShiWu('guiHuo');
+                    game.setXiBie(trigger.card,get.xiBie(trigger.cards[0]));
+                    console.log(trigger);
                     'step 1'
                     event.player=player;
                     event.trigger('yinYangZhanHuan');
