@@ -2786,7 +2786,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         },
                         content:function(){
                             'step 0'
-                            player.chooseTarget('对目标角色造成1点法术伤害',true);
+                            var next=player.chooseTarget('对目标角色造成1点法术伤害',true);
+                            next.ai=function(target){
+                                return target.side!=player.side;
+                            }
                             'step 1'
                             result.targets[0].damageFaShu(1,player);
                         }
