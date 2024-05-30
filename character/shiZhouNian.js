@@ -4041,10 +4041,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 filter:function(event,player){
                     return player.canBiShaShuiJing()&&player.zhiLiao>0;
                 },
-                filterTarget:function(card,player,target){
-                    return target.side==player.side&&target!=player;
-                },
-                selectTarget:1,
                 content:function(){
                     'step 0'
                     player.removeBiShaShuiJing();
@@ -4054,10 +4050,15 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                     player.chooseControl(list).set('prompt','转移[治疗]数量');
                     'step 1'
-                    var zhiLiaonum=result.control;
-					if(zhiLiaonum>0){
-						player.changeZhiLiao(-zhiLiaonum);
-                        target.changeZhiLiao(zhiLiaonum,4);
+                    event.zhiLiaonum=result.control;
+                    player.chooseTarget('目标队友+'+event.zhiLiaonum+'[治疗]',true,function(card,player,target){
+                        return target.side==player.side&&target!=player;
+                    });
+                    'step 2'
+                    var target=result.targets[0];
+					if(event.zhiLiaonum>0){
+						player.changeZhiLiao(-event.zhiLiaonum);
+                        target.changeZhiLiao(event.zhiLiaonum,4);
 					}
                 }
                 
