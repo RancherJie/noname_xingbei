@@ -2968,7 +2968,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					}else{
 						propmt+='主动攻击，';
 					}
-					propmt+=get.translation(get.name(trigger.card));
+					propmt+=get.translation(get.xiBie(trigger.card));
 					var next=player.chooseToUse_yingZhan(propmt);
                     next.set('filterCard',function(card,player,event){
 						if(get.type(card)=='gongJi'){
