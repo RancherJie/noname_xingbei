@@ -57246,25 +57246,6 @@ const { env } = require('process');
 				return card.xiBie;
 			}
 		},
-		xiBie:function(card,player){
-			if(!card) return;
-			if(Array.isArray(card)){
-				if(card.length==1) return get.xiBie(card[0],player);
-				return 'none';
-			}
-			else if(!card.hasOwnProperty('xiBie')&&Array.isArray(card.cards)){
-				return get.xiBie(card.cards,player);
-			}
-			else{
-				if(player!==false){
-					const owner=player||get.owner(card);
-					if(owner){
-						return game.checkMod(card,card.xiBie,'xiBie',owner);
-					}
-				}
-				return card.xiBie;
-			}
-		},
 		color:function(card,player){
 			if(!card) return;
 			if(Array.isArray(card)){
