@@ -42,7 +42,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             hongLianQiShi:['female','xue',4,['xingHongShengYue','xingHongXinYang','xueXingDaoYan','shaLuShengYan','reXueFeiTeng','jieJiaoJieZao','xingHongShiZi','xueYin'],],
             yingLingRenXing:['female','yong',4,['zhanWenZhangWo','nuHuoYaZhi','zhanWenSuiJi','moWenRongHe','fuWenGaiZao','shuangChongHuiXiang','zhanWen','moWen'],],
             //moQiang:['female','huan',6,['jianxiong'],],
-            //cangYanMoNv:['female','xue',6,['jianxiong'],],
+            cangYanMoNv:['female','xue',4,['cangYanFaDian','tianHuoDianKong','moNvZhiNu','tiShenWanOu','yongShengYinShiJi','tongKuLianJie','moNengFanZhuan','chongSheng'],],
             //yinYouShiRen:['male','huan',6,['jianxiong'],],
             jingLingSheShou:['female','ji','3/4',['yuanSuSheJi','dongWuHuoBan','jingLingMiYi','chongWuQiangHua','zhuFu'],],
             yinYangShi:['female','huan',4,['shiShenJiangLin','yinYangZhanHuan','shiShenZhuanHuan','heiAnJiLi','shiShenZhouShu','shengMingJieJie','guiHuo'],],
@@ -4423,6 +4423,216 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 markimage:'image/card/hong.png',
             },
 
+            //苍炎魔女
+            cangYanFaDian:{
+                type:'faShu',
+                enable:['chooseToUse','faShu'],
+                filter:function(event,player){
+                    return player.countCards('h',card=>get.xiBie(card)=='huo')>0;
+                },
+                filterCard:function(card,player){
+                    return get.xiBie(card)=='huo';
+                },
+                selectCard:1,
+                selectTarget:1,
+                filterTarget:true,
+                prepare:'showCards',
+                content:function(){
+                    'step 0'
+                    player.damageFaShu(2,player);
+                    'step 1'
+                    target.damageFaShu(2,player);
+                }
+            },
+            tianHuoDianKong:{
+                type:'faShu',
+                priority:1,
+                enable:['chooseToUse','faShu'],
+                filter:function(event,player){
+                    if(player.countZhiShiWu('chongSheng')<1&&!player.isLinked()) return false;
+                    return player.countCards('h',card=>get.xiBie(card)=='huo')>1;
+                },
+                selectCard:2,
+                filterCard:function(card,player){
+                    return get.xiBie(card)=='huo';
+                },
+                selectTarget:1,
+                filterTarget:true,
+                prepare:'showCards',
+                content:function(){
+                    'step 0'
+                    if(!player.isLinked()){
+                        player.removeZhiShiWu('chongSheng');
+                    }
+                    event.num=3;
+                    if(player.side==true){
+                        var player_shiQi=game.hongShiQi;
+                    }else{
+                        var player_shiQi=game.lanShiQi;
+                    }
+                    if(target.side==true){
+                        var target_shiQi=game.hongShiQi;
+                    }else{
+                        var target_shiQi=game.lanShiQi;
+                    }
+                    if(player_shiQi<target_shiQi){
+                        event.num++;
+                    }
+                    'step 1'
+                    target.damageFaShu(event.num,player);
+                    'step 2'
+                    player.damageFaShu(event.num,player);
+                }
+            },
+            moNvZhiNu:{
+                type:'qiDong',
+                trigger:{player:'phaseUseBegin'},
+                filter:function(event,player){
+                    if(player.isLinked()) return false;
+                    return player.countCards('h')<4;
+                },
+                content:function(){
+                    'step 0'
+                    player.hengZhi();
+                    player.addSkill('moNvZhiNu_xiBie');
+                    var list=[0,1,2];
+                    player.chooseControl(list).set('prompt','魔女之怒：摸几张牌');
+                    'step 1'
+                    if(result.control>0){
+                        player.draw(result.control);
+                    }
+                    'step 2'
+                    player.qiPai();
+                },
+                mod:{
+                    maxHandcard:function(player,num){
+                        if(player.isLinked()){
+                            return num+player.countZhiShiWu('chongSheng')-2;
+                        }
+                    },
+                },
+                group:'moNvZhiNu_chongZhi',
+                subSkill:{
+                    chongZhi:{
+                        trigger:{player:'phaseUseBegin'},
+                        priority:1,
+                        direct:true,
+                        filter:function(event,player){
+                            return player.isLinked();
+                        },
+                        content:function(){
+                            player.chongZhi();
+                            player.removeSkill('moNvZhiNu_xiBie');
+                        }
+                    },
+                    xiBie:{
+                        mod:{
+                            xiBie:function(card,xiBie,owner){
+                                if(xiBie=='an') return;
+                                if(xiBie=='shui') return;
+                                return 'huo';
+                            }
+                        }
+                    }
+                }
+            },
+            tiShenWanOu:{
+                trigger:{player:'damageBegin'},
+                filter:function(event,player){
+                    return get.is.gongJiShangHai(event)&&player.countCards('h')>0;
+                },
+                direct:true,
+                content:function(){
+                    'step 0'
+                    var next=player.chooseToDiscard('h',card=>get.type(card)=='faShu');
+                    next.set('prompt',get.prompt('tiShenWanOu'));
+                    next.set('prompt2',lib.translate.tiShenWanOu_info);
+                    'step 1'
+                    if(result.bool){
+                        player.logSkill(event.name);
+                        player.showCards(result.cards);
+                        player.chooseTarget('目标队友摸1张牌',true,function(card,player,target){
+                            return target!=player&&target.side==player.side;
+                        });
+                    }else{
+                        event.finish();
+                    }
+                    'step 2'
+                    targets[0].draw(1);
+                }
+            },
+            yongShengYinShiJi:{
+                forced:true,
+                trigger:{player:'changeShiQiEnd'},
+                filter:function(event,player){
+                    if(event.player!=player) return false;
+                    if(event.num>=0) return false;
+                    if(event.faShu!=true) return false;
+                    return true;
+                },
+                content:function(){
+                    player.addZhiShiWu('chongSheng');
+                }
+            },
+            tongKuLianJie:{
+                type:'faShu',
+                enable:['chooseToUse','faShu'],
+                filter:function(event,player){
+                    return player.canBiShaShuiJing();
+                },
+                selectTarget:1,
+                filterTarget:function(card,player,target){
+                    return target.side!=player.side;
+                },
+                content:function(){
+                    'step 0'
+                    player.removeBiShaShuiJing();
+                    target.damageFaShu(1,player);
+                    'step 1'
+                    player.damageFaShu(1,player);
+                    'step 2'
+                    if(player.countCards('h')>3){
+                        player.chooseToDiscard(true,player.countCards('h')-3);
+                    }
+                }
+            },
+            moNengFanZhuan:{
+                trigger:{player:'damageBegin'},
+                direct:true,
+                filter:function(event,player){
+                    return player.canBiShaShuiJing()&&player.countCards('h')>1;
+                },
+                content:function(){
+                    'step 0'
+                    var next=player.chooseToDiscard('h',2,card=>get.type(card)=='faShu');
+                    next.set('prompt',get.prompt('moNengFanZhuan'));
+                    next.set('prompt2',lib.translate.moNengFanZhuan_info);
+                    'step 1'
+                    if(result.bool){
+                        player.logSkill(event.name);
+                        event.num=result.cards.length-1;
+                        player.showCards(result.cards);
+                        player.chooseTarget(true,function(card,player,target){
+                            return target.side!=player.side;
+                        });
+                    }else{
+                        event.finish();
+                    }
+                    'step 2'
+                    result.targets[0].damageFaShu(event.num,player);
+                }
+
+            },
+            chongSheng:{
+                intro:{
+                    content:'mark',
+                    name:'重生',
+                    max:4,
+                },
+                markimage:'image/card/hong.png',
+
+            },
+            
 		},
 		
 		translate:{
@@ -4810,6 +5020,23 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             guiHuo:"鬼火",
             guiHuo_info:"<span class='hong'>【</span>鬼火<span class='hong'>】</span>为阴阳师专有指示物，上限为3。",
             
+            //苍炎魔女
+            cangYanFaDian:"[法术]苍炎法典",
+            cangYanFaDian_info:"<span class='tiaoJian'>(弃1张火系牌[展示])</span>对目标角色和自己造成2点法术伤害③。",
+            tianHuoDianKong:"[法术]天火断空",
+            tianHuoDianKong_info:"<span class='tiaoJian'>(弃2张火系牌[展示]，移除1点【重生】)</span>对目标角色和自己造成3点火焰伤害③，<span class='tiaoJian'>(若我方士气落后于该目标)</span>本次法术伤害额外+1[强制]。",
+            moNvZhiNu:"[启动]魔女之怒",
+            moNvZhiNu_info:"<span class='tiaoJian'>(手牌<4张时)</span>[横置]摸0-2张牌，数值由你决定，持续到你的下个行动阶段开始前，你都处于【烈焰形态】，在此形态下你的所有除水系和暗系外的攻击牌均视为火系[强制]，你释放【天火断空】是无需消耗【重生】,你的手牌上限+X(X-2)(X为你的【重生】数量)；脱离【烈焰形态】时[重置]。",
+            tiShenWanOu:"[响应]替身玩偶",
+            tiShenWanOu_info:"<span class='tiaoJian'>(任何人对你造成攻击伤害时③，弃1张法术牌[展示])</span>，目标队友摸1张牌[强制]。",
+            yongShengYinShiJi:"[被动]永生银时计",
+            yongShengYinShiJi_info:"<span class='tiaoJian'>(当你因承受法术伤害而造成士气下降时)</span>，你+1【重生】",
+            tongKuLianJie:"[法术]痛苦链接",
+            tongKuLianJie_info:"[水晶]对目标对手和自己各造成1点法术伤害③，然后你弃到3张牌。",
+            moNengFanZhuan:"[响应]魔能反转",
+            moNengFanZhuan_info:"[水晶]<span class='tiaoJian'>(任何人对你造成法术伤害时伞，弃X张法术牌[展示](X>1))</span>，对目标对手造成(X-1)点法术伤害。",
+            chongSheng:"重生",
+            chongSheng_info:"<span class='hong'>【</span>重生<span class='hong'>】</span>为苍炎魔女专有指示物，上限为4。",
 
 		},
 	};
