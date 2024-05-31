@@ -18671,6 +18671,7 @@ const { env } = require('process');
 				changeShiQi:function(num,side){//xingbei
 					var next=game.createEvent('changeShiQi');
 					next.num=num;
+					next.player=this;
 					if(side==undefined){
 						next.side=this.side;
 					}else{
@@ -18682,6 +18683,7 @@ const { env } = require('process');
 				changeZhanJi:function(color,num,side){//xingbei
 					var next=game.createEvent('changeZhanJi');
 					next.num=num;
+					next.player=this;
 					next.color=color;
 					if(side==undefined){
 						next.side=this.side;
@@ -18694,6 +18696,7 @@ const { env } = require('process');
 				changeXingBei:function(num,side){//xingbei
 					var next=game.createEvent('changeXingBei');
 					next.num=num;
+					next.player=this;
 					if(side==undefined){
 						next.side=this.side;
 					}else{
