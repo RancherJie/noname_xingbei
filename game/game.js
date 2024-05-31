@@ -55525,21 +55525,21 @@ const { env } = require('process');
 				return event.name=='chooseToUse'||event.name=='faShu'||event.name=='gongJi';
 			},
 
-			isGongJiXingDong:function(event){
+			GongJiXingDong:function(event){
 				if(!get.is.xiDong(event)) return false;
 				if(event.yingZhan==true) return false;
-				return get.is.isGongJi(event);
+				return get.is.GongJi(event);
 			},
-			isGongJi:function(event){
+			GongJi:function(event){
 				return get.type(event.card)=='gongJi'&&event.targets!=[];
 			},
 			isYingZhanGongJi:function(event){
 				if(get.is.xiDong(event)) return false;
 				if(event.yingZhan!=true) return false;
-				return get.is.isGongJi(event);
+				return get.is.GongJi(event);
 			},
 
-			isFaShuXingDong:function(event){
+			FaShuXingDong:function(event){
 				if(event.name=='useSkill'){
 					var info=get.info(event.skill);
                     return info.type=='faShu';
