@@ -55516,6 +55516,26 @@
 			 * @param ...infos 要判断的属性列表 
 			 * @param every {boolean} 是否判断每一个传入的属性是否完全相同而不是存在部分相同
 			 */
+			//星杯
+			xiDong:function(event){
+				//判断事件是否为行动事件
+				return event.name=='chooseToUse'||event.name=='faShu'||event.name=='gongJi';
+			},
+
+			isGongJiXingDong:function(event){
+				if(!get.is.xiDong(event)) return false;
+				if(event.yingZhan==true) return false;
+				return get.is.isGongJi(event);
+			},
+			isGongJi:function(event){
+				return get.type(event.card)=='gongJi'&&event.targets!=[];
+			},
+			isYingZhanGongJi:function(event){
+				if(get.is.xiDong(event)) return false;
+				if(event.yingZhan!=true) return false;
+				return get.is.isGongJi(event);
+			},
+
 			sameNature:function(){
 				let processedArguments=[],every=false;
 				Array.from(arguments).forEach(argument=>{
