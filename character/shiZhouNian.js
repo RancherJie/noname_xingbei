@@ -553,7 +553,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     1:{
                         trigger:{player:'useCardAfter'},
                         filter:function(event,player){
-                            return get.type(event.card)=='faShu'&&event.parent.name!='chooseToUse_qiTa';
+                            return get.type(event.card)=='faShu'&&get.is.xiDong(event.parent);
                         },
                         content:function(){
                             player.storage.gongJi++;
