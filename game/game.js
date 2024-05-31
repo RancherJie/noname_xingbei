@@ -55536,6 +55536,20 @@
 				return get.is.isGongJi(event);
 			},
 
+			isFaShuXingDong:function(event){
+				if(event.name=='useSkill'){
+					var info=get.info(event.skill);
+                    return info.type=='faShu';
+				}else if(event.name=='useCard'){
+					if(get.type(event.card)=='faShu'){
+						return get.is.xiDong(event);
+					}else{
+						return false;
+					}
+				}
+				return false;
+			},
+
 			sameNature:function(){
 				let processedArguments=[],every=false;
 				Array.from(arguments).forEach(argument=>{
