@@ -4378,6 +4378,13 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					}
 				}
 			},
+			is:{
+				xiDong:function(event){
+					//判断事件是否为行动事件
+					return event.name=='chooseToUse'||event.name=='faShu'||event.name=='gongJi';
+				},
+
+			}
 		},
 		help:{
 			
