@@ -4384,6 +4384,20 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					return event.name=='chooseToUse'||event.name=='faShu'||event.name=='gongJi';
 				},
 
+				isGongJiXingDong:function(event){
+					if(!get.is.xiDong(event)) return false;
+					if(event.yingZhan==true) return false;
+					return get.is.isGongJi(event);
+				},
+				isGongJi:function(event){
+					return get.type(event.card)=='gongJi'&&event.targets!=[];
+				},
+				isYingZhanGongJi:function(event){
+					if(get.is.xiDong(event)) return false;
+					if(event.yingZhan!=true) return false;
+					return get.is.isGongJi(event);
+				},
+
 			}
 		},
 		help:{
