@@ -3855,6 +3855,12 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						this.link();
 					}
 				},
+				qiPai:function(){
+					var num=player.needsToDiscard();
+                    if(num>0){
+						player.chooseToDiscard(num,true).set('useCache',true).set('baoPai',true);
+					}
+				},
 
 				dieAfter2:function(source){
 					if(_status.connectMode&&_status.mode!='guandu'){
