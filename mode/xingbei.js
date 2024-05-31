@@ -3856,9 +3856,9 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					}
 				},
 				qiPai:function(){
-					var num=player.needsToDiscard();
+					var num=this.needsToDiscard();
                     if(num>0){
-						player.chooseToDiscard(num,true).set('useCache',true).set('baoPai',true);
+						this.chooseToDiscard(num,true).set('useCache',true).set('baoPai',true);
 					}
 				},
 
