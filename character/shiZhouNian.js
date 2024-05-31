@@ -4558,7 +4558,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         event.finish();
                     }
                     'step 2'
-                    targets[0].draw(1);
+                    result.targets[0].draw(1);
                 }
             },
             yongShengYinShiJi:{
