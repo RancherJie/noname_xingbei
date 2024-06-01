@@ -4514,8 +4514,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 group:'moNvZhiNu_chongZhi',
                 subSkill:{
                     chongZhi:{
-                        trigger:{player:'phaseUseBegin'},
-                        priority:1,
+                        trigger:{player:'phaseUseBefore'},
+                        lastDo:true,
                         direct:true,
                         filter:function(event,player){
                             return player.isLinked();
