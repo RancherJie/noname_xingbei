@@ -3585,10 +3585,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     if(result.targets.length==1){
                         result.targets[0].changeZhiLiao(event.links[0]);
                         event.goto(7);
+                    }else{
+                        result.targets.sortBySeat();
+                        event.targets=result.targets;
+                        event.target=event.targets[0];
                     }
                     'step 4'
-                    result.targets.sortBySeat();
-                    event.target=result.targets[0];
                     var list=[];
                     for(var i=1;i<=event.links[0]-1;i++){
                         list.push(i);
@@ -3600,7 +3602,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     event.target.changeZhiLiao(result.control);
                     event.links[0]-=result.control;
                     'step 6'
-                    event.target=result.targets[1];
+                    event.target=event.targets[1];
                     event.target.changeZhiLiao(event.links[0]);
                     'step 7'
                     player.addZhiShiWu('xueYin');
