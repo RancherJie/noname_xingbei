@@ -3723,30 +3723,30 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				},
 			},
 			player:{
-				canBiShaShuiJing:function(){
+				canBiShaShuiJing:function(){//能够使用必杀星石
 					if(this.hasMark('_tiLian_b')||this.hasMark('_tiLian_r')){
                         return true;
                     }else{
 						return false;
 					}
 				},
-				canBiShaBaoShi:function(){
+				canBiShaBaoShi:function(){//能否使用必杀宝石
 					if(this.hasMark('_tiLian_r')){
                         return true;
                     }else{
 						return false;
 					}
 				},
-				removeBiShaShuiJing:function(){
+				removeBiShaShuiJing:function(){//移除星石
 					var next=game.createEvent('removeBiShaShuiJing',false);
 					next.player=this;
 					next.setContent('removeBiShaShuiJing');
 					return next;
 				},
-				removeBiShaBaoShi:function(){
+				removeBiShaBaoShi:function(){//移除宝石
 					this.removeMark('_tiLian_r');
 				},
-				changeNengLiang:function(color,num){
+				changeNengLiang:function(color,num){//改变能量
 					if(typeof num!='number'||!num) num=1;
 					if(num>0){
 						this.addMark('_tiLian_'+color,num)
@@ -3754,7 +3754,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						this.removeMark('_tiLian_'+color,-num)
 					}
 				},
-				addNengLiang:function(color,num){
+				addNengLiang:function(color,num){//添加能量
 					if(typeof num!='number'||!num) num=1;
 					var max=this.getNengLiangLimit();
 					var current=this.countNengLiang('r')+this.countNengLiang('b');
@@ -3765,7 +3765,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						this.addMark('_tiLian_'+color,num)
 					}
 				},
-				removeNengLiang:function(color,num){
+				removeNengLiang:function(color,num){//移除能量
 					if(typeof num!='number'||!num) num=-1;
 					if(num>0) num=-num;
 					var current=this.countNengLiang(color);
@@ -3776,13 +3776,13 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						this.removeMark('_tiLian_'+color,-num)
 					}
 				},
-				countNengLiang:function(color){
+				countNengLiang:function(color){//统计某个能量数
 					return this.countMark('_tiLian_'+color);
 				},
-				countNengLiangAll:function(){
+				countNengLiangAll:function(){//统计所有能量数
 					return this.countMark('_tiLian_r')+this.countMark('_tiLian_b');
 				},
-				damageFaShu:function(){
+				damageFaShu:function(){//法术伤害，damage简单套皮
 					var num,source;
 					for(var i=0;i<arguments.length;i++){
 						if(typeof arguments[i]=='number'){
@@ -3796,7 +3796,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					if(get.itemtype(source)!='player') source=this;
 					this.damage(num,source).set('faShu',true);
 				},
-				addZhiShiWu:function(zhiShuWu,num,max){
+				addZhiShiWu:function(zhiShuWu,num,max){//添加指示物
 					if(typeof num!='number'||!num) num=1;
 					var info=get.info(zhiShuWu);
 					if(typeof max=='number'){
@@ -3814,14 +3814,14 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						this.addMark(zhiShuWu,num);
 					}
 				},
-				countZhiShiWu:function(zhiShuWu){
+				countZhiShiWu:function(zhiShuWu){//统计指示物
 					return this.countMark(zhiShuWu);
 				},
-				removeZhiShiWu:function(zhiShuWu,num){
+				removeZhiShiWu:function(zhiShuWu,num){//移除指示物
 					if(typeof num!='number'||!num) num=1;
 					this.removeMark(zhiShuWu,num);
 				},
-				addZhanJi:function(color,num){
+				addZhanJi:function(color,num){//增加战绩
 					if(typeof num!='number'||!num) num=1;
 					if(this.side==true){
 						if(!(game.hongZhanJi.length+num<=5)){
@@ -3836,7 +3836,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						this.changeZhanJi(color,num);
 					}
 				},
-				removeZhanJi:function(color,num){
+				removeZhanJi:function(color,num){//移除战绩
 					if(typeof num!='number'||!num) num=-1;
 					if(num>0) num=-num;
 					if(this.side==true){
@@ -3845,23 +3845,23 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						this.changeZhanJi(color,num);
 					}
 				},
-				chongZhi:function(){
+				chongZhi:function(){//重置
 					if(this.isLinked()){
 						this.link();
 					}
 				},
-				hengZhi:function(){
+				hengZhi:function(){//横置
 					if(!this.isLinked()){
 						this.link();
 					}
 				},
-				qiPai:function(){
+				qiPai:function(){//执行一次超出手牌上限的弃牌
 					var num=this.needsToDiscard();
                     if(num>0){
 						this.chooseToDiscard(num,true).set('useCache',true).set('baoPai',true);
 					}
 				},
-				countTongXiPai:function(){
+				countTongXiPai:function(){//统计同系牌数
 					var h=this.getCards('h');
 					var dict={};
                     for(var i=0;i<h.length;i++){
@@ -3877,7 +3877,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					}
 					return maxValue;  
 				},
-				countYiXiPai:function(){
+				countYiXiPai:function(){//统计异系牌数
 					var h=this.getCards('h');
 					var dict={};
                     for(var i=0;i<h.length;i++){
