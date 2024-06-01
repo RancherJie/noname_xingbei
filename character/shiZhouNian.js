@@ -4653,7 +4653,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     return event.num>3;
                 },
                 content:function(){
+                    'step 0'
                     player.addNengLiang('r',2);
+                    'step 1'
+                    if(player.countCards('h')>0){
+                        player.chooseToDiscard('h',true);
+                    }
                 }
             },
             faShuFangTan:{
