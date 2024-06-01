@@ -29,7 +29,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             zhongCaiZhe:['female','xue','3/4',['zhongCaiFaZe','yiShiZhongDuan','moRiShenPan','shenPanLangChao','zhongCaiYiShi','panJueTianPing','shenPan'],],
             shenGuan:['female','sheng',4,['shenShengQiShi','shenShengQiFu','shuiZhiShenLi','shengShiShouHu','shenShengQiYue','shenShengLingYu'],],
             qiDaoShi:['female','yong',4,['guangHuiXinYang','heiAnZuZhou','weiLiCiFu','xunJieCiFu','qiDao','faLiChaoXi','qiDaoFuWen'],],
-            //xianZhe:['male','yong',6,['jianxiong'],],
+            xianZhe:['male','yong',4,['zhiHuiFaDian','faShuFangTan','moDaoFaDian','shengJieFaDian'],],
             //lingFuShi:['female','yong',6,['jianxiong'],],
             //jianDi:['female','ji',6,['jianxiong'],],
             //geDouJia:['female','ji',6,['jianxiong'],],
@@ -4634,6 +4634,121 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 
             },
             
+            //贤者
+            zhiHuiFaDian:{
+                mod:{
+                    maxNengLiang:function(player,num){
+                        return num+1;
+                    }
+                },
+                forced:true,
+                trigger:{player:'damageEnd'},
+                filter:function(event,player){
+                    if(event.faShu!=true) return false;
+                    return event.num>3;
+                },
+                content:function(){
+                    player.addNengLiang('r',2);
+                }
+            },
+            faShuFangTan:{
+                trigger:{player:'damageEnd'},
+                priority:1,
+                filter:function(event,player){
+                    if(event.faShu!=true) return false;
+                    if(event.num!=1) return false;
+                    if(!player.countCards('h')>1) return false;
+                    return true;
+                },
+                direct:true,
+                content:function(){
+                    'step 0'
+                    var next=player.chooseToDiscard('h',[2,Infinity],function(card){
+                        if(ui.selected.cards.length==0) return true;
+                        if(get.xiBie(card)==get.xiBie(ui.selected.cards[0])) return true;
+                        return false;
+                    });
+                    next.set('complexCard',true);
+                    next.set('prompt',get.prompt('faShuFangTan'));
+                    next.set('prompt2',lib.translate.faShuFangTan_info);
+                    'step 1'
+                    if(result.bool){
+                        player.logSkill(event.name);
+                        player.showCards(result.cards);
+                        event.num=result.cards.length;
+                    }else{
+                        event.finish();
+                    }
+                    'step 2'
+                    player.chooseTarget(true,1,'对目标角色造成'+(event.num-1)+'点法术伤害③').set('ai',function(target){
+                        return target.side!=player.side;
+                    });
+                    'step 3'
+                    result.targets[0].damageFaShu(event.num-1,player);
+                    'step 4'
+                    player.damageFaShu(event.num,player);
+
+                }
+            },
+            moDaoFaDian:{
+                type:'faShu',
+                enable:['chooseToUse','faShu'],
+                filter:function(event,player){
+                    if(!player.canBiShaBaoShi()) return false;
+                    return player.countYiXiPai()>1;
+                },
+                selectTarget:1,
+                filterTarget:true,
+                selectCard:[2,Infinity],
+                filterCard:function(card,player){
+                    if(!ui.selected.cards.length) return true;
+                    for(var i=0;i<ui.selected.cards.length;i++){
+                        if(get.xiBie(ui.selected.cards[i])==get.xiBie(card)) return false;
+                    }
+                    return true;
+                },
+                complexCard:true,
+                prepare:'showCards',
+                content:function(){
+                    'step 0'
+                    player.removeBiShaBaoShi();
+                    target.damageFaShu(cards.length-1,player);
+                    'step 1'
+                    player.damageFaShu(cards.length-1,player);
+                }
+            },
+            shengJieFaDian:{
+                type:'faShu',
+                enable:['chooseToUse','faShu'],
+                filter:function(event,player){
+                    if(!player.canBiShaBaoShi()) return false;
+                    return player.countYiXiPai()>2;
+                },
+                filterCard:function(card,player){
+                    if(!ui.selected.cards.length) return true;
+                    for(var i=0;i<ui.selected.cards.length;i++){
+                        if(get.xiBie(ui.selected.cards[i])==get.xiBie(card)) return false;
+                    }
+                    return true;
+                },
+                selectCard:[3,Infinity],
+                complexCard:true,
+                prepare:'showCards',
+                selectTarget:function(){
+                    return [0,ui.selected.cards.length-2];
+                },
+                filterTarget:true,
+                contentBefore:function(){
+                    player.removeBiShaBaoShi();
+                },
+                content:function(){
+                    target.changeZhiLiao(2);
+                },
+                contentAfter:function(){
+                    player.damageFaShu(cards.length-1,player);
+                }
+            },
+
 		},
 		
 		translate:{
@@ -5038,6 +5153,16 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             moNengFanZhuan_info:"[水晶]<span class='tiaoJian'>(任何人对你造成法术伤害时③，弃X张法术牌[展示](X>1))</span>，对目标对手造成(X-1)点法术伤害。",
             chongSheng:"重生",
             chongSheng_info:"<span class='hong'>【</span>重生<span class='hong'>】</span>为苍炎魔女专有指示物，上限为4。",
+
+            //贤者
+            zhiHuiFaDian:"[被动]智慧法典",
+            zhiHuiFaDian_info:"你的【能量】上限+1；<span class='tiaoJian'>(你每次承受法术伤害时⑥，若该伤害>3)</span>你+2[宝石]。",
+            faShuFangTan:"[响应]法术反弹",
+            faShuFangTan_info:"<span class='tiaoJian'>(你每次承受法术伤害时⑥，若该伤害仅为1点，则可以弃X张同系牌[展示](X>1))</span>对目标角色造成(X-1)点法术伤害③，并对自己造成X点法术伤害③。",
+            moDaoFaDian:"[法术]魔道法典",
+            moDaoFaDian_info:"[宝石]<span class='tiaoJian'>(弃X张异系牌[展示](X>1))</span>对目标角色和自己各造成(X-1)点法术伤害③。",
+            shengJieFaDian:"[法术]圣洁法典",
+            shengJieFaDian_info:"[宝石]<span class='tiaoJian'>(弃X张异系牌[展示](X>2))</span>最多(X-2)名角色各+2[治疗]，并对自己造成(X-1)点法术伤害③。",
 
 		},
 	};
