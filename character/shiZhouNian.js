@@ -4601,6 +4601,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 trigger:{player:'damageBegin'},
                 direct:true,
                 filter:function(event,player){
+                    if(event.faShu!=true) return false;
                     return player.canBiShaShuiJing()&&player.countCards('h')>1;
                 },
                 content:function(){
