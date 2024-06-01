@@ -4528,6 +4528,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     xiBie:{
                         mod:{
                             xiBie:function(card,xiBie,owner){
+                                if(get.type(card)!='gongJi') return;
                                 if(xiBie=='an') return;
                                 if(xiBie=='shui') return;
                                 return 'huo';
