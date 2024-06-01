@@ -432,7 +432,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 direct:true,
                 content:function(event,player){
                     'step 0'
-                    var next=player.chooseToDiscard([1,3],function(card){
+                    var next=player.chooseToDiscard([1,Infinity],function(card){
                         return get.xiBie(card)=='shui';
                     });
                     next.set('prompt',get.prompt('shuiYing'));
