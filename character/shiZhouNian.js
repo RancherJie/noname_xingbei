@@ -4605,7 +4605,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 content:function(){
                     'step 0'
-                    var next=player.chooseToDiscard('h',[2,3],card=>get.type(card)=='faShu');
+                    var next=player.chooseToDiscard('h',[2,Infinity],card=>get.type(card)=='faShu');
                     next.set('prompt',get.prompt('moNengFanZhuan'));
                     next.set('prompt2',lib.translate.moNengFanZhuan_info);
                     'step 1'
