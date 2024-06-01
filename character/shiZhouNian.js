@@ -346,7 +346,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				},
 				prompt:'指定最多3名角色各+1[治疗]。',
                 filterTarget:true,
-                selectTarget:[1,3],
+                selectTarget:[0,3],
                 discard:false,
                 prepare:'useCard',
                 content:function(){
