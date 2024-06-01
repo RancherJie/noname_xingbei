@@ -5034,7 +5034,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             tongKuLianJie:"[法术]痛苦链接",
             tongKuLianJie_info:"[水晶]对目标对手和自己各造成1点法术伤害③，然后你弃到3张牌。",
             moNengFanZhuan:"[响应]魔能反转",
-            moNengFanZhuan_info:"[水晶]<span class='tiaoJian'>(任何人对你造成法术伤害时伞，弃X张法术牌[展示](X>1))</span>，对目标对手造成(X-1)点法术伤害。",
+            moNengFanZhuan_info:"[水晶]<span class='tiaoJian'>(任何人对你造成法术伤害时③，弃X张法术牌[展示](X>1))</span>，对目标对手造成(X-1)点法术伤害。",
             chongSheng:"重生",
             chongSheng_info:"<span class='hong'>【</span>重生<span class='hong'>】</span>为苍炎魔女专有指示物，上限为4。",
 
