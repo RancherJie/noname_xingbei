@@ -4608,10 +4608,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 content:function(){
                     'step 0'
+                    player.removeBiShaShuiJing();
+                    'step 1'
                     var next=player.chooseToDiscard('h',[2,Infinity],card=>get.type(card)=='faShu');
                     next.set('prompt',get.prompt('moNengFanZhuan'));
                     next.set('prompt2',lib.translate.moNengFanZhuan_info);
-                    'step 1'
+                    'step 2'
                     if(result.bool){
                         player.logSkill(event.name);
                         event.num=result.cards.length-1;
@@ -4622,7 +4624,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }else{
                         event.finish();
                     }
-                    'step 2'
+                    'step 3'
                     result.targets[0].damageFaShu(event.num,player);
                 }
 
