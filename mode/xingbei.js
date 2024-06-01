@@ -3861,6 +3861,33 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						this.chooseToDiscard(num,true).set('useCache',true).set('baoPai',true);
 					}
 				},
+				countTongXiPai:function(){
+					var h=this.getCards('h');
+					var dict={};
+                    for(var i=0;i<h.length;i++){
+                        var xiBie=get.xiBie(h[i]);
+                        if(!dict[xiBie]) dict[xiBie]=0;
+                        dict[xiBie]++;
+                    }
+    				let maxValue=-Infinity;  
+                    for(let key in dict) {  
+						if (dict[key] > maxValue) {  
+							maxValue = dict[key];  
+						}     
+					}
+					return maxValue;  
+				},
+				countYiXiPai:function(){
+					var h=this.getCards('h');
+					var dict={};
+                    for(var i=0;i<h.length;i++){
+                        var xiBie=get.xiBie(h[i]);
+                        if(!dict[xiBie]) dict[xiBie]=0;
+                        dict[xiBie]++;
+                    }
+					return Object.keys(dict).length;
+				},
+				
 
 				dieAfter2:function(source){
 					if(_status.connectMode&&_status.mode!='guandu'){
