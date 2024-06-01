@@ -2892,13 +2892,22 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
                     });
                     'step 1'
 					if(result.index==1){
-						trigger.cancel();
+						player.addTempSkill('xuRuo_xiaoGuo');
 					}else if(result.index==0){
 						player.draw(3);
 					}
                     player.loseToDiscardpile(player.getExpansions('_xuRuo'));
                 },
             },
+			xuRuo_xiaoGuo:{
+				direct:true,
+                priority:-1,
+				lastDo:true,
+				trigger:{player:'phaseUseBefore'},
+				content:function(){
+					trigger.cancel();
+				}
+			},
             _zhongDu:{
                 priority:3,
                 //marktext:"毒",
