@@ -1,6 +1,6 @@
 window.noname_update={
-	version:'0.2.18',
-	update:'0.2.18',
+	version:'0.2.19',
+	update:'0.2.19',
 	changeLog:[
 		
 	],
