@@ -4758,6 +4758,26 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 }
             },
 
+            //魔弓
+            moGuanChongJi:{},
+            leiGuangSanShe:{},
+            duoChongSheJi:{},
+            chongNeng:{
+                
+            },
+            moYan:{},
+            chongNengPai:{
+                intro:{
+                    name:'暗月',
+                    markcount:'expansion',
+                    mark:function(dialog,storage,player){
+						var cards=player.getExpansions('anYue');
+						if(player.isUnderControl(true)) dialog.addAuto(cards);
+						else return '共有'+cards.length+'张牌';
+					},
+                },
+            },
+
 		},
 		
 		translate:{
@@ -4904,7 +4924,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 
             //魔法少女
             moBaoChongJi:'[法术]魔爆冲击',
-            moBaoChongJi_info:'<span class="tiaoJian">(弃1张法术牌[展示])</span>我方[战绩区]+1[水晶]。2名目标对手各弃一张法术牌[展示]，每有人不如此做，你对他造成2点法术伤害③，你弃一张牌。',
+            moBaoChongJi_info:'<span class="tiaoJian">(弃1张法术牌[展示])</span>我方[战绩区]+1[宝石]。2名目标对手各弃一张法术牌[展示]，每有人不如此做，你对他造成2点法术伤害③，你弃一张牌。',
             moDanZhangWo:'[响应]魔弹掌握',
             moDanZhangWo_info:'你主动使用【魔弹】时可以选择逆向传递。',
             moDanRongHe:'[响应]魔弹融合',
@@ -4948,7 +4968,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             xinYueBiHu:"[响应]新月庇护[持续]",
             xinYueBiHu_info:"<span class='tiaoJian'>(我方角色因承受伤害造成手牌数超过手牌上限，导致士气即将下降时)</span>[横置]转为【暗月形态】，将因此而造成的弃牌面朝下放置于角色旁，作为【暗月】。本次士气不会下降。",
             anYueZuZhou:"[被动]暗月诅咒",
-            anYueZuZhou_info:"<span class='tiaoJian'>(你每次移除【暗月】)</span>我方士气-1；<span class='tiaoJian'>(你的【暗月】数为0时)</span>[重置]脱离暗【暗月形态】。",
+            anYueZuZhou_info:"<span class='tiaoJian'>(你每次移除【暗月】)</span>我方士气-1；<span class='tiaoJian'>(你的【暗月】数为0时)</span>[重置]脱离【暗月形态】。",
             meiDuShaZhiYan:"[响应]美杜莎之眼",
             meiDuShaZhiYan_info:"<span class='tiaoJian'>(目标对手攻击时①，移除1个与攻击牌系别相应的系别的【暗月】[展示])</span>你+1[治疗]，你+1<span class='lan'>【</span>石化<span class='lan'>】</span>。<span class='tiaoJian'>(若该【暗月】为法术牌)</span>你弃1张牌，对目标对手造成1点法术伤害③。",
             yueZhiLunHui:"[响应]月之轮回",
@@ -5084,7 +5104,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             
             //红莲骑士
             xingHongShengYue:"[响应]腥红圣约[回合限定]",
-            xingHongShengYue_info:"[水晶]<span class='tiaoJian'>(主动攻击时发动①)</span>你+1[治疗]。",
+            xingHongShengYue_info:"<span class='tiaoJian'>(主动攻击时发动①)</span>你+1[治疗]。",
             xingHongXinYang:"[被动]猩红信仰",
             xingHongXinYang_info:"你的[治疗]只能抵御自己造成的伤害，你的治疗上限+2。",
             xueXingDaoYan:"[启动]血腥祷言",
@@ -5096,7 +5116,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             jieJiaoJieZao:"[响应]戒骄戒躁",
             jieJiaoJieZao_info:"[水晶]<span class='tiaoJian'>(仅【热血沸腾状态】下，攻击行动或结束行动结束时发动)</span>[重置]并脱离此形态，额外+1攻击行动或法术行动。",
             xingHongShiZi:"[法术]猩红十字",
-            xingHongShiZi_info:"[宝石]<span class='tiaoJian'>(移除1点</span><span class='hong'>【</span>血印<span class='hong'>】</span><span class='tiaoJian'>弃2张法术牌[展示]，对自己造成4点法术伤害)</span>对目标角色造成3点法术伤害③。",
+            xingHongShiZi_info:"[水晶]<span class='tiaoJian'>(移除1点</span><span class='hong'>【</span>血印<span class='hong'>】</span><span class='tiaoJian'>弃2张法术牌[展示]，对自己造成4点法术伤害)</span>对目标角色造成3点法术伤害③。",
             xueYin:"血印",
             xueYin_info:"<span class='hong'>【</span>血印<span class='hong'>】</span>为红莲骑士专有指示物，其上限为2。",
 
@@ -5136,7 +5156,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             shiShenZhuanHuan:"[响应]式神转换",
             shiShenZhuanHuan_info:"<span class='tiaoJian'>(与【阴阳转换】同时发动)</span>你摸1张牌[强制]，你+1<span class='hong'>【</span>鬼火<span class='hong'>】</span>。",
             heiAnJiLi:"[被动]黑暗祭礼",
-            heiAnJiLi_info:"<span class='tiaoJian'>(你的回合结束时，若</span><span class='hong'>【</span>鬼火<span class='hong'>】</span><span class='tiaoJian'>)</span>移除所有<span class='hong'>【</span>鬼火<span class='hong'>】</span>，对目标角色造成2点法术伤害③。",
+            heiAnJiLi_info:"<span class='tiaoJian'>(你的回合结束时，若</span><span class='hong'>【</span>鬼火<span class='hong'>】</span><span class='tiaoJian'>达到上限)</span>移除所有<span class='hong'>【</span>鬼火<span class='hong'>】</span>，对目标角色造成2点法术伤害③。",
             shiShenZhouShu:"[响应]式神咒束",
             shiShenZhouShu_info:"<span class='tiaoJian'>(目标队友受到主动攻击时①，若此攻击可应战且你处于【式神形态】，打出1张合理的应战攻击牌[展示]，移除我方【战绩区】1[宝石]1[水晶])</span>将本次攻击目标变更为你，且视为你使用此牌执行应战攻击。",
             shengMingJieJie:"[法术]生命结界",
@@ -5172,6 +5192,14 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             moDaoFaDian_info:"[宝石]<span class='tiaoJian'>(弃X张异系牌[展示](X>1))</span>对目标角色和自己各造成(X-1)点法术伤害③。",
             shengJieFaDian:"[法术]圣洁法典",
             shengJieFaDian_info:"[宝石]<span class='tiaoJian'>(弃X张异系牌[展示](X>2))</span>最多(X-2)名角色各+2[治疗]，并对自己造成(X-1)点法术伤害③。",
+
+            //魔弓
+            moGuanChongJi:"",
+            leiGuangSanShe:"",
+            duoChongSheJi:"",
+            chongNeng:"",
+            moYan:"",
+            chongNengPai:"",
 
 		},
 	};
