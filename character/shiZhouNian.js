@@ -531,7 +531,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     },
                     chongZhi:{
                         direct:true,
-                        priority:1,
+                        priority:2,
                         trigger:{player:'phaseUseBegin'},
                         filter:function(event,player){
                             return player.isLinked();
@@ -3073,7 +3073,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 subSkill:{
                     chongZhi:{
                         direct:true,
-                        priority:1,
+                        priority:2,
                         trigger:{player:'phaseUseBegin'},
                         filter:function(event,player){
                             return player.isLinked();
