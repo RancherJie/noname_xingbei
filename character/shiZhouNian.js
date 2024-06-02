@@ -502,9 +502,26 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         if(get.type(card)=='gongJi'&&target.isLinked()) return false;
                     }
                 },
+                group:'qianXing_chongZhi',
+                subSkill:{
+                    chongZhi:{
+                        direct:true,
+                        priority:2,
+                        trigger:{player:'phaseUseBegin'},
+                        filter:function(event,player){
+                            return player.isLinked();
+                        },
+                        content:function(){
+                            'step 0'
+                            if(player.isLinked()) player.link();
+                            'step 1'
+                            player.removeSkill('qianXing2');
+                        }
+                    }
+                }
             },
             qianXing2:{
-                group:['qianXing2_shangHai','qianXing2_wuFaYingZhan','qianXing2_chongZhi'],
+                group:['qianXing2_shangHai','qianXing2_wuFaYingZhan'],
                 subSkill:{
                     shangHai:{
                         forced:true,
@@ -529,20 +546,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             trigger.parent.canYingZhan=false;
                         }
                     },
-                    chongZhi:{
-                        direct:true,
-                        priority:2,
-                        trigger:{player:'phaseUseBegin'},
-                        filter:function(event,player){
-                            return player.isLinked();
-                        },
-                        content:function(){
-                            'step 0'
-                            if(player.isLinked()) player.link();
-                            'step 1'
-                            player.removeSkill('qianXing2');
-                        }
-                    }
+                    
                 }
             },
             
