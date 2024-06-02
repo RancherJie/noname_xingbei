@@ -2706,7 +2706,8 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				group:['_wuFaXingDong_qiDongQian','_wuFaXingDong_qiDongHou'],
 				subSkill:{
 					qiDongQian:{
-						trigger:{player:'phaseBeginBegin'},
+						trigger:{player:'phaseUseBegin'},
+						priority:1,
 						filter:function(event,player){
 							if((player.countCards('h')+3)<=player.getHandcardLimit()) return false;
 							var cards=player.getCards('h');
