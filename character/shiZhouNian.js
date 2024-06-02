@@ -4757,7 +4757,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.removeBiShaBaoShi();
                 },
                 content:function(){
-                    target.changeZhiLiao(2);
+                    if(target){
+                        target.changeZhiLiao(2);
+                    }
                 },
                 contentAfter:function(){
                     player.damageFaShu(cards.length-1,player);
