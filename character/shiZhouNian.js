@@ -350,7 +350,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 discard:false,
                 prepare:'useCard',
                 content:function(){
-                    target.changeZhiLiao(1);
+                    if(target){
+                        target.changeZhiLiao(1);
+                    }
                 }
             },
             lianMin:{
