@@ -1525,7 +1525,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             if(get.type(event.card)=='gongJi'){
                                 if(event.yingZhan==true) return false;
                             }else if(get.type(event.card)=='faShu'){
-                                if(event.parent.name=='chooseToUse_qiTa') return false;
+                                return get.is.xiDong(event);
                             }
                             return player.zhiLiao>=1;
                         },
