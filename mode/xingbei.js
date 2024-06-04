@@ -2661,7 +2661,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				enable:'wuFaXingDong',
 				type:'wuFaXingDong',
 				filter:function(event,player){
-					if((player.countCards('h')+3)<=player.getHandcardLimit()) return false;
+					if(((player.countCards('h')+3)<=player.getHandcardLimit())&&event.parent.canTeShu!=false) return false;
 					var cards=player.getCards('h');
 					for(var i=0;i<cards.length;i++){
 						if(player.hasUseTarget(cards[i])) return false;
@@ -2709,7 +2709,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						trigger:{player:'phaseUseBegin'},
 						priority:1,
 						filter:function(event,player){
-							if((player.countCards('h')+3)<=player.getHandcardLimit()) return false;
+							if(((player.countCards('h')+3)<=player.getHandcardLimit())&&event.canTeShu!=false) return false;
 							var cards=player.getCards('h');
 							for(var i=0;i<cards.length;i++){
 								if(player.hasUseTarget(cards[i])) return false;
@@ -2755,7 +2755,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					qiDongHou:{
 						trigger:{player:'phaseBeginBegin'},
 						filter:function(event,player){
-							if((player.countCards('h')+3)<=player.getHandcardLimit()) return false;
+							if(((player.countCards('h')+3)<=player.getHandcardLimit())&&event.canTeShu!=false) return false;
 							var cards=player.getCards('h');
 							for(var i=0;i<cards.length;i++){
 								if(player.hasUseTarget(cards[i])) return false;
