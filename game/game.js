@@ -17974,11 +17974,13 @@
 						}*/ 
 					}
 					"step 9"
+					/*
 					if(player.hp<=0&&player.isAlive()&&!event.nodying){
 						game.delayx();
 						event._dyinged=true;
 						player.dying(event);
 					}
+					*/
 					if(source&&lib.config.border_style=='auto'){
 						var dnum=0;
 						for(var j=0;j<source.stat.length;j++){
@@ -18124,6 +18126,20 @@
 					}
 					event.trigger('changeHp');
 				},
+
+				setHp:function(){
+					"step 0"
+					if(num>player.maxHp){
+						player.maxHp=num;
+					}
+					player.hp=num;
+					player.update();
+				},
+				setMaxHp:function(){
+					player.maxHp=num;
+					player.update();
+				},
+
 				changeZhiLiao:function(){
 					'step 0'
 					player.zhiLiao+=num;
@@ -18137,6 +18153,8 @@
 					if(player.zhiLiao<0){
 						player.zhiLiao=0;
 					}
+					player.setMaxHp(player.getZhiLiaoLimit());
+					player.setHp(player.zhiLiao); 
 					if(event.yiChu==true){
 						event.trigger('zhiLiaoYiChu');
 					}
@@ -20771,8 +20789,11 @@
 							hp.dataset.condition='high';
 						}
 						else if(this.hp==0){
-							hp.dataset.condition='';
+							hp.dataset.condition='high';
+						}else{
+							hp.dataset.condition='high';
 						}
+						/*
 						else if(this.hp>Math.round(this.maxHp/2)||this.hp===this.maxHp){
 							hp.dataset.condition='high';
 						}
@@ -20782,7 +20803,7 @@
 						else{
 							hp.dataset.condition='low';
 						}
-	
+						*/
 						setTimeout(function(){
 							hp.style.transition='';
 						});
@@ -23767,7 +23788,20 @@
 					next.setContent('changeHp');
 					return next;
 				},
-
+				setMaxHp:function(num){
+					var next=game.createEvent('setMaxHp');
+					next.player=this;
+					next.num=num;
+					next.setContent('setMaxHp');
+					return next;
+				},
+				setHp:function(num){
+					var next=game.createEvent('setHp');
+					next.player=this;
+					next.num=num;
+					next.setContent('setHp');
+					return next;
+				},
 				changeZhiLiao:function(num,limit){
 					var next=game.createEvent('changeZhiLiao');
 					if(typeof num!='number'){

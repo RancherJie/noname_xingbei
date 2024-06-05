@@ -2701,15 +2701,15 @@ div:not(.handcards)>.card>.info>span,
 	border: 1px solid rgba(63, 119, 173, 1);
 }
 .hp[data-condition="high"]>div:not(.lost):not(.shield) {
-	background: rgba(57, 123, 4,1);
+	background: rgba(37, 105, 178,1);
 	border: 1px solid rgba(39, 79, 7, 1);
 }
 .hp[data-condition="mid"]>div:not(.lost):not(.shield) {
-	background: rgba(166, 140, 6,1);
+	background: rgba(37, 105, 178,1);
 	border: 1px solid rgba(79, 64, 7, 1);
 }
 .hp[data-condition="low"]>div:not(.lost):not(.shield) {
-	background: rgba(148, 27, 27,1);
+	background: rgba(37, 105, 178,1);
 	border: 1px solid rgba(79, 7, 7, 1);
 }
 .hp.actcount>div:not(.lost):not(.shield) {
