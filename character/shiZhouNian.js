@@ -925,7 +925,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             player.chooseControl().set('choiceList',list).set('prompt','五系束缚：选择一项').set('ai',function(){return 1;});
                             'step 1'
                             if(result.index==1){
-                                trigger.cancel();
+                                player.addTempSkill('xuRuo_xiaoGuo');
                             }else if(result.index==0){
                                 if(player.hasExpansions('_xuRuo')){
                                     player.draw(2+3+event.x);
