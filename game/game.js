@@ -17958,7 +17958,7 @@
 								}
 							}
 						},natures,player);
-						var numx=Math.max(0,num-player.zhiLiao);
+						var numx=Math.max(0,num);
 						player.$damagepop(-numx,natures[0]);
 					}
 					if(event.unreal) event.goto(9)
