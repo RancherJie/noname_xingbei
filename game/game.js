@@ -12719,6 +12719,7 @@
 					}
 					if(info.type=='qiDong'){
 						event.parent.parent.canTeShu=false;
+						event.parent.parent.qiDing=true;
 					}
 
 					if(info.popup!=false&&!info.direct){
