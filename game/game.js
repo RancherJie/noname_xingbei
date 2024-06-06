@@ -4577,6 +4577,15 @@
 						},
 						frequent:true,
 					},
+					connect_viewHandcard:{
+						name:'可见队友手牌',
+						init:'N',
+						item:{
+							'Y':'显示',
+							'N':'隐藏',
+						},
+						frequent:true,
+					},
 				},
 				config:{
 					update:function(config,map){
@@ -4612,6 +4621,16 @@
 						},
 						frequent:true,
 					},
+					viewHandcard:{
+						name:'可见队友手牌',
+						init:'N',
+						item:{
+							'Y':'显示',
+							'N':'隐藏',
+						},
+						frequent:true,
+					},
+
 					free_choose:{
 						name:'自由选将',
 						init:true,

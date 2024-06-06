@@ -616,11 +616,10 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						ui.arena.classList.remove('choose-character');
 					},500);
 
-					//game.addGlobalSkill('versus_viewHandcard');
-					
-
-
-					
+					var viewHandcard=get.config('viewHandcard');
+					if(viewHandcard=='Y'){
+						game.addGlobalSkill('viewHandcard');
+					}
 
 					if(get.config('two_phaseswap')){
 						game.addGlobalSkill('autoswap');
@@ -1858,7 +1857,11 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					setTimeout(function(){
 						ui.arena.classList.remove('choose-character');
 					},500);
-
+					
+					var viewHandcard=lib.configOL.viewHandcard;
+					if(viewHandcard=='Y'){
+						game.addGlobalSkill('viewHandcard');
+					}
 					
 
 					event.trigger('enterGame');
@@ -2657,6 +2660,15 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 			
 		},
 		skill:{
+			viewHandcard:{
+				ai:{
+					viewHandcard:true,
+					skillTagFilter:function(player,tag,target){
+						return player.side==target.side;
+					},
+				},
+			},
+
 			_zhiLiao_set:{
 				trigger:{global:'enterGame'},
 				direct:true,
