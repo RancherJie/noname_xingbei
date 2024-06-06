@@ -34742,7 +34742,7 @@
 			},
 			init:function(players){
 				if(game.chess) return;
-				if(lib.config.mode=='versus'){
+				if(lib.config.mode=='xingbei'){
 					players.bool=players.pop();
 				}
 				ui.arena.setNumber(players.length);
@@ -34755,7 +34755,7 @@
 				ui.handcards2=game.me.node.handcards2;
 				ui.handcards1Container.appendChild(ui.handcards1);
 				ui.handcards2Container.appendChild(ui.handcards2);
-				if(lib.config.mode=='versus'){
+				if(lib.config.mode=='xingbei'){
 					if(players.bool){
 						ui.arena.setNumber(parseInt(ui.arena.dataset.number)+1);
 						for(var i=0;i<game.players.length;i++){
@@ -34800,7 +34800,7 @@
 						game.players[i].dataset.position=players[i].position;
 						game.players[i].node.action.innerHTML='行动';
 					}
-					else if(lib.config.mode=='versus'){
+					else if(lib.config.mode=='xingbei'){
 						game.players[i].init(players[i].name,players[i].name2);
 						game.players[i].node.identity.firstChild.innerHTML=players[i].identity;
 						game.players[i].node.identity.dataset.color=players[i].color;
@@ -34832,7 +34832,7 @@
 					game.playerMap[game.players[i].dataset.position]=game.players[i];
 				}
 
-				if(lib.config.mode=='versus'){
+				if(lib.config.mode=='xingbei'){
 					if(players.bool){
 						game.onSwapControl();
 					}
