@@ -4630,6 +4630,21 @@
 						},
 						frequent:true,
 					},
+					phaseswap:{
+						name:'多控',
+						init:false,
+						onclick:function(bool){
+							game.saveConfig('phaseswap',bool,this._link.config.mode);
+							if(!ui.create.cheat2) return;
+							if(get.mode()!=this._link.config.mode||!_status.event.getParent().showConfig&&!_status.event.showConfig) return;
+							if(!ui.cheat2&&get.config('phaseswap')) ui.create.cheat2();
+							else if(ui.cheat2&&!get.config('phaseswap')){
+								ui.cheat2.close();
+								delete ui.cheat2;
+							}
+						},
+						frequent:true,
+					},
 
 					free_choose:{
 						name:'自由选将',
