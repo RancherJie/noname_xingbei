@@ -1497,12 +1497,11 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 							ref.next.next.next.next.side=bool2;
 							ref.next.next.next.next.next.side=bool2;
 						}else if(team_sequence=='random'){
-							sideList.unshift(true);
 							var sideList=[true,true,false,false,true,false];
 							sideList.randomSort();
 							for(var i=0;i<number;i++){
 								game.players[i].side=sideList[i];
-							}
+							} 
 							while(ref.side!=true){
 								ref=game.players.randomGet();
 							}
