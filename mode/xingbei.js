@@ -4,8 +4,8 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 		name:'xingbei',
 		start:function(){
 			"step 0"
-			_status.mode=get.config('xingbei_mode');
-			if(_status.connectMode) _status.mode=lib.configOL.xingbei_mode;
+			_status.mode=get.config('versus_mode');
+			if(_status.connectMode) _status.mode=lib.configOL.versus_mode;
 			if(_status.brawl&&_status.brawl.submode){
 				_status.mode=_status.brawl.submode;
 			}
@@ -35,7 +35,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 			}
 			if(_status.connectMode){
 				game.waitForPlayer(function(){//联机人数确定
-					switch(lib.configOL.xingbei_mode){
+					switch(lib.configOL.versus_mode){
 						//case '1v1':lib.configOL.number=2;break;
 						case '2v2':lib.configOL.number=4;break;
 						case '3v3':lib.configOL.number=6;break;
@@ -64,7 +64,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				game.chooseCharacterXingBei();
 			}
 			"step 3"
-			if(_status.connectMode) _status.mode=lib.configOL.xingbei_mode;
+			if(_status.connectMode) _status.mode=lib.configOL.versus_mode;
 			var players=get.players(lib.sort.position);
 			var info=[];
 			for(var i=0;i<players.length;i++){
@@ -156,7 +156,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				lib.storage.ladder.current-=40;
 				_status.ladder_tmp=true;
 				game.save('ladder',lib.storage.ladder);
-				game.addGlobalSkill('xingbei_ladder');
+				game.addGlobalSkill('versus_ladder');
 			}
 			game.phaseLoop(_status.firstAct);
 		},
@@ -192,11 +192,11 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				return game.players[0].side==player.side;
 			},
 			getRoomInfo:function(uiintro){
-				if(lib.configOL.xingbei_mode=='1v1'){
+				if(lib.configOL.versus_mode=='1v1'){
 					uiintro.add('<div class="text chat">侯选人数：'+lib.configOL.choice_num+'人');
 					uiintro.add('<div class="text chat">替补人数：'+lib.configOL.replace_number+'人');
 				}
-				else if(lib.configOL.xingbei_mode=='2v2'||lib.configOL.xingbei_mode=='3v3'){
+				else if(lib.configOL.versus_mode=='2v2'||lib.configOL.versus_mode=='3v3'){
 					uiintro.add('<div class="text chat">四号位换牌：'+(lib.configOL.replace_handcard?'开启':'关闭'));
 				}
 				var last=uiintro.add('<div class="text chat">出牌时限：'+lib.configOL.choose_timeout+'秒');
@@ -216,7 +216,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					str+='/'+get.translation(game.me.name2);
 				}
 				var str2;
-				if(game.xingbeiVideoName) str2=game.xingbeiVideoName;
+				if(game.versusVideoName) str2=game.versusVideoName;
 				else{
  				switch(_status.mode){
  					case 'two':str2='2v2';break;
@@ -624,8 +624,8 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					if(get.config('two_phaseswap')){
 						game.addGlobalSkill('autoswap');
 						if(lib.config.show_handcardbutton){
-							ui.xingbeihs=ui.create.system('手牌',null,true);
-							lib.setPopped(ui.xingbeihs,game.xingbeiHoverHandcards,220);
+							ui.versushs=ui.create.system('手牌',null,true);
+							lib.setPopped(ui.versushs,game.versusHoverHandcards,220);
 						}
 					}
 					event.trigger('enterGame');
@@ -927,15 +927,15 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						ui.arena.classList.remove('choose-character');
 					},500);
 
-					//game.addGlobalSkill('xingbei_viewHandcard');
+					//game.addGlobalSkill('versus_viewHandcard');
 					game.addGlobalSkill('xuRuo');
 					game.addGlobalSkill('zhongDu');
 					game.addGlobalSkill('yingZhan');
 					if(get.config('two_phaseswap')){
 						game.addGlobalSkill('autoswap');
 						if(lib.config.show_handcardbutton){
-							ui.xingbeihs=ui.create.system('手牌',null,true);
-							lib.setPopped(ui.xingbeihs,game.xingbeiHoverHandcards,220);
+							ui.versushs=ui.create.system('手牌',null,true);
+							lib.setPopped(ui.versushs,game.versusHoverHandcards,220);
 						}
 					}
 				});
@@ -947,13 +947,13 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				next.showConfig=true;
 				next.setContent(function(){
 					"step 0"
-					if(lib.config.continue_name_xingbei){
-						_status.friend=lib.config.continue_name_xingbei.friend;
-						_status.enemy=lib.config.continue_name_xingbei.enemy;
-						_status.color=lib.config.continue_name_xingbei.color;
+					if(lib.config.continue_name_versus){
+						_status.friend=lib.config.continue_name_versus.friend;
+						_status.enemy=lib.config.continue_name_versus.enemy;
+						_status.color=lib.config.continue_name_versus.color;
 						game.additionaldead=[];
 						event.goto(1);
-						game.saveConfig('continue_name_xingbei');
+						game.saveConfig('continue_name_versus');
 						lib.init.onfree();
 						return;
 					}
@@ -963,40 +963,40 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						this.dialog.classList.add('noslide');
 						for(var i=0;i<this.dialog.buttons.length;i++) this.dialog.buttons[i].style.opacity=1;
 						this.dialog.add('选项');
-						this.dialog.xingbei_zhu=this.dialog.add(ui.create.switcher('xingbei_zhu',lib.storage.zhu)).querySelector('.toggle');
-						// this.dialog.xingbei_only_zhu=this.dialog.add(ui.create.switcher('xingbei_only_zhu',lib.storage.only_zhu)).querySelector('.toggle');
-						this.dialog.xingbei_main_zhu=this.dialog.add(ui.create.switcher('xingbei_main_zhu',lib.storage.main_zhu)).querySelector('.toggle');
+						this.dialog.versus_zhu=this.dialog.add(ui.create.switcher('versus_zhu',lib.storage.zhu)).querySelector('.toggle');
+						// this.dialog.versus_only_zhu=this.dialog.add(ui.create.switcher('versus_only_zhu',lib.storage.only_zhu)).querySelector('.toggle');
+						this.dialog.versus_main_zhu=this.dialog.add(ui.create.switcher('versus_main_zhu',lib.storage.main_zhu)).querySelector('.toggle');
 						if(lib.storage.zhu){
-							// this.dialog.xingbei_only_zhu.parentNode.classList.remove('disabled');
-							this.dialog.xingbei_main_zhu.parentNode.classList.remove('disabled');
+							// this.dialog.versus_only_zhu.parentNode.classList.remove('disabled');
+							this.dialog.versus_main_zhu.parentNode.classList.remove('disabled');
 						}
 						else{
-							// this.dialog.xingbei_only_zhu.parentNode.classList.add('disabled');
-							this.dialog.xingbei_main_zhu.parentNode.classList.add('disabled');
+							// this.dialog.versus_only_zhu.parentNode.classList.add('disabled');
+							this.dialog.versus_main_zhu.parentNode.classList.add('disabled');
 						}
-						// this.dialog.xingbei_cross_seat=this.dialog.add(ui.create.switcher('xingbei_cross_seat',lib.storage.cross_seat)).querySelector('.toggle');
-						// this.dialog.xingbei_random_seat=this.dialog.add(ui.create.switcher('xingbei_random_seat',lib.storage.random_seat)).querySelector('.toggle');
-						this.dialog.xingbei_noreplace_end=this.dialog.add(ui.create.switcher('xingbei_noreplace_end',lib.storage.noreplace_end)).querySelector('.toggle');
-						this.dialog.xingbei_assign_enemy=this.dialog.add(ui.create.switcher('xingbei_assign_enemy',lib.storage.assign_enemy)).querySelector('.toggle');
-						this.dialog.xingbei_single_control=this.dialog.add(ui.create.switcher('xingbei_single_control',lib.storage.single_control)).querySelector('.toggle');
-						this.dialog.xingbei_first_less=this.dialog.add(ui.create.switcher('xingbei_first_less',get.config('first_less'))).querySelector('.toggle');
-						this.dialog.xingbei_reward=this.dialog.add(ui.create.switcher('xingbei_reward',[0,1,2,3,4],lib.storage.xingbei_reward)).querySelector('.toggle');
-						this.dialog.xingbei_punish=this.dialog.add(ui.create.switcher('xingbei_punish',['弃牌','无','摸牌'],lib.storage.xingbei_punish)).querySelector('.toggle');
-						this.dialog.xingbei_seat_order=this.dialog.add(ui.create.switcher('seat_order',['对阵','交叉','随机'],lib.storage.seat_order)).querySelector('.toggle');
-						this.dialog.xingbei_number=this.dialog.add(ui.create.switcher('xingbei_number',[1,2,3],lib.storage.number)).querySelector('.toggle');
+						// this.dialog.versus_cross_seat=this.dialog.add(ui.create.switcher('versus_cross_seat',lib.storage.cross_seat)).querySelector('.toggle');
+						// this.dialog.versus_random_seat=this.dialog.add(ui.create.switcher('versus_random_seat',lib.storage.random_seat)).querySelector('.toggle');
+						this.dialog.versus_noreplace_end=this.dialog.add(ui.create.switcher('versus_noreplace_end',lib.storage.noreplace_end)).querySelector('.toggle');
+						this.dialog.versus_assign_enemy=this.dialog.add(ui.create.switcher('versus_assign_enemy',lib.storage.assign_enemy)).querySelector('.toggle');
+						this.dialog.versus_single_control=this.dialog.add(ui.create.switcher('versus_single_control',lib.storage.single_control)).querySelector('.toggle');
+						this.dialog.versus_first_less=this.dialog.add(ui.create.switcher('versus_first_less',get.config('first_less'))).querySelector('.toggle');
+						this.dialog.versus_reward=this.dialog.add(ui.create.switcher('versus_reward',[0,1,2,3,4],lib.storage.versus_reward)).querySelector('.toggle');
+						this.dialog.versus_punish=this.dialog.add(ui.create.switcher('versus_punish',['弃牌','无','摸牌'],lib.storage.versus_punish)).querySelector('.toggle');
+						this.dialog.versus_seat_order=this.dialog.add(ui.create.switcher('seat_order',['对阵','交叉','随机'],lib.storage.seat_order)).querySelector('.toggle');
+						this.dialog.versus_number=this.dialog.add(ui.create.switcher('versus_number',[1,2,3],lib.storage.number)).querySelector('.toggle');
 						this.dialog.replace_number=this.dialog.add(ui.create.switcher('replace_number',[0,1,2,3,5,7,9,17],lib.storage.replace_number)).querySelector('.toggle');
 						this.dialog.choice=this.dialog.add(ui.create.switcher('choice',[12,16,20,24,40,'∞'],lib.storage.choice)).querySelector('.toggle');
 
 						// if(lib.storage.cross_seat){
-						// 	this.dialog.xingbei_random_seat.parentNode.classList.add('disabled');
+						// 	this.dialog.versus_random_seat.parentNode.classList.add('disabled');
 						// }
 						// else{
-						// 	this.dialog.xingbei_random_seat.parentNode.classList.remove('disabled');
+						// 	this.dialog.versus_random_seat.parentNode.classList.remove('disabled');
 						// 	if(lib.storage.random_seat){
-						// 		this.dialog.xingbei_cross_seat.parentNode.classList.add('disabled');
+						// 		this.dialog.versus_cross_seat.parentNode.classList.add('disabled');
 						// 	}
 						// 	else{
-						// 		this.dialog.xingbei_cross_seat.parentNode.classList.remove('disabled');
+						// 		this.dialog.versus_cross_seat.parentNode.classList.remove('disabled');
 						// 	}
 						// }
 					};
@@ -1025,7 +1025,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					_status.color=Math.random()<0.5;
 					var i,list=[];
 					for(i in lib.character){
-						// if(lib.config.forbidxingbei.contains(i)) continue;
+						// if(lib.config.forbidversus.contains(i)) continue;
 						if(lib.filter.characterDisabled(i)) continue;
 						list.push(i);
 					}
@@ -1106,7 +1106,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 							}
 						}
 						var dialog=_status.event.dialog;
-						var max=dialog.xingbei_number.link+dialog.replace_number.link;
+						var max=dialog.versus_number.link+dialog.replace_number.link;
 						for(var i=0;i<buttons.length;i++){
 							if(_status.friend.length<max){
 								_status.friend.push(buttons[i].link);
@@ -1182,7 +1182,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					};
 					event.custom.add.window=function(){
 						var dialog=_status.event.dialog;
-						if(_status.friend.length==_status.enemy.length&&_status.friend.length>=dialog.xingbei_number.link+dialog.replace_number.link){
+						if(_status.friend.length==_status.enemy.length&&_status.friend.length>=dialog.versus_number.link+dialog.replace_number.link){
 							event.fill.firstChild.innerHTML='开始';
 							_status.choosefinished=true;
 							if(ui.cheat){
@@ -1190,31 +1190,31 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 								delete ui.cheat;
 							}
 						}
-						game.save('zhu',dialog.xingbei_zhu.link);
+						game.save('zhu',dialog.versus_zhu.link);
 						if(lib.storage.zhu){
-							// dialog.xingbei_only_zhu.parentNode.classList.remove('disabled');
-							dialog.xingbei_main_zhu.parentNode.classList.remove('disabled');
+							// dialog.versus_only_zhu.parentNode.classList.remove('disabled');
+							dialog.versus_main_zhu.parentNode.classList.remove('disabled');
 						}
 						else{
-							// dialog.xingbei_only_zhu.parentNode.classList.add('disabled');
-							dialog.xingbei_main_zhu.parentNode.classList.add('disabled');
+							// dialog.versus_only_zhu.parentNode.classList.add('disabled');
+							dialog.versus_main_zhu.parentNode.classList.add('disabled');
 						}
-						// game.save('only_zhu',dialog.xingbei_only_zhu.link);
-						game.save('main_zhu',dialog.xingbei_main_zhu.link);
-						game.save('assign_enemy',dialog.xingbei_assign_enemy.link);
-						game.save('seat_order',dialog.xingbei_seat_order.link);
-						// game.save('cross_seat',dialog.xingbei_cross_seat.link);
-						game.save('noreplace_end',dialog.xingbei_noreplace_end.link);
-						game.save('single_control',dialog.xingbei_single_control.link);
+						// game.save('only_zhu',dialog.versus_only_zhu.link);
+						game.save('main_zhu',dialog.versus_main_zhu.link);
+						game.save('assign_enemy',dialog.versus_assign_enemy.link);
+						game.save('seat_order',dialog.versus_seat_order.link);
+						// game.save('cross_seat',dialog.versus_cross_seat.link);
+						game.save('noreplace_end',dialog.versus_noreplace_end.link);
+						game.save('single_control',dialog.versus_single_control.link);
 						switch(lib.storage.seat_order){
 							case '交叉':lib.storage.cross_seat=true;lib.storage.random_seat=false;break;
 							case '随机':lib.storage.cross_seat=false;lib.storage.random_seat=true;break;
 							default:lib.storage.cross_seat=false;lib.storage.random_seat=false;
 						}
-						game.saveConfig('first_less',dialog.xingbei_first_less.link,true);
-						game.save('number',dialog.xingbei_number.link);
-						game.save('xingbei_reward',dialog.xingbei_reward.link);
-						game.save('xingbei_punish',dialog.xingbei_punish.link);
+						game.saveConfig('first_less',dialog.versus_first_less.link,true);
+						game.save('number',dialog.versus_number.link);
+						game.save('versus_reward',dialog.versus_reward.link);
+						game.save('versus_punish',dialog.versus_punish.link);
 						game.save('replace_number',dialog.replace_number.link);
 						game.save('choice',dialog.choice.link);
 						var count,i;
@@ -1439,7 +1439,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				});
 			},
 			chooseCharacterOL:function(){
-				switch(lib.configOL.xingbei_mode){
+				switch(lib.configOL.versus_mode){
 					//case '1v1':game.chooseCharacterOL1();break;
 					case '2v2':game.chooseCharacterOLXingBei();break;
 					case '3v3':game.chooseCharacterOLXingBei();break;
@@ -1857,7 +1857,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					setTimeout(function(){
 						ui.arena.classList.remove('choose-character');
 					},500);
-
+					
 					var viewHandcard=lib.configOL.viewHandcard;
 					if(viewHandcard=='Y'){
 						game.addGlobalSkill('viewHandcard');
@@ -2205,7 +2205,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					setTimeout(function(){
 						ui.arena.classList.remove('choose-character');
 					},500);
-					//game.addGlobalSkill('xingbei_viewHandcard');
+					//game.addGlobalSkill('versus_viewHandcard');
 				});
 			},
 			
@@ -2314,7 +2314,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					event.goto(0);
 				});
 			},
-			xingbeiPhaseLoop:function(player){
+			versusPhaseLoop:function(player){
 				var next=game.createEvent('phaseLoop');
 				next.player=player;
 				next.setContent(function(){
@@ -2395,7 +2395,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				next.character=character;
 				next.setContent('replacePlayerTwo');
 			},
-			xingbeiClickToSwap:function(e){
+			versusClickToSwap:function(e){
 				if(_status.dragged) return;
 				if(this.link==game.me){
 					if(!this.classList.contains('buttonclick')){
@@ -2410,7 +2410,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					game.modeSwapPlayer(this.link);
 				}
 			},
-			xingbeiHoverEnemy:function(){
+			versusHoverEnemy:function(){
 				var uiintro=ui.create.dialog('hidden');
 
 				if(_status.enemyDied.length){
@@ -2428,7 +2428,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 
 				return uiintro;
 			},
-			xingbeiHoverFriend:function(){
+			versusHoverFriend:function(){
 				var uiintro=ui.create.dialog('hidden');
 
 				if(_status.friendDied.length){
@@ -2446,7 +2446,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 
 				return uiintro;
 			},
-			xingbeiHoverHandcards:function(){
+			versusHoverHandcards:function(){
 				var uiintro=ui.create.dialog('hidden');
 				var added=false;
 				for(var i=0;i<game.players.length;i++){
@@ -2464,11 +2464,11 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				}
 				if(added) return uiintro;
 			},
-			xingbeiCheckEnemy:function(){
+			versusCheckEnemy:function(){
 				_status.clicked=true;
 				if(ui.intro){
 					ui.intro.close();
-					if(ui.intro.source=='xingbeiCheckEnemy'){
+					if(ui.intro.source=='versusCheckEnemy'){
 						delete ui.intro;
 						ui.control.show();
 						game.resume2();
@@ -2478,7 +2478,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				game.pause2();
 				ui.control.hide();
 				ui.intro=ui.create.dialog();
-				ui.intro.source='xingbeiCheckEnemy';
+				ui.intro.source='versusCheckEnemy';
 
 				if(_status.enemyDied.length){
 					ui.intro.add('已阵亡');
@@ -2493,11 +2493,11 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					ui.intro.add('（无）')
 				}
 			},
-			xingbeiCheckFriend:function(){
+			versusCheckFriend:function(){
 				_status.clicked=true;
 				if(ui.intro){
 					ui.intro.close();
-					if(ui.intro.source=='xingbeiCheckFriend'){
+					if(ui.intro.source=='versusCheckFriend'){
 						delete ui.intro;
 						ui.control.show();
 						game.resume2();
@@ -2507,7 +2507,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				game.pause2();
 				ui.control.hide();
 				ui.intro=ui.create.dialog();
-				ui.intro.source='xingbeiCheckFriend';
+				ui.intro.source='versusCheckFriend';
 
 
 
@@ -2525,10 +2525,10 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					ui.intro.add('（无）')
 				}
 			},
-			xingbeiSwapPlayer:function(){
+			versusSwapPlayer:function(){
 				if(ui.intro){
 					ui.intro.close();
-					if(ui.intro.source=='xingbeiSwapPlayer'){
+					if(ui.intro.source=='versusSwapPlayer'){
 						delete ui.intro;
 						ui.control.show();
 						game.resume2();
@@ -2552,7 +2552,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					game.pause2();
 					ui.control.hide();
 					ui.intro=ui.create.dialog();
-					ui.intro.source='xingbeiSwapPlayer';
+					ui.intro.source='versusSwapPlayer';
 					var players=[];
 					for(var i=0;i<game.players.length;i++){
 						if(game.players[i].side==game.me.side&&game.players[i]!=game.me){
@@ -2562,7 +2562,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					ui.intro.add(players,true);
 					var buttons=ui.intro.querySelectorAll('.button');
 					for(var i=0;i<buttons.length;i++){
-						buttons[i].addEventListener(lib.config.touchscreen?'touchend':'click',game.xingbeiClickToSwap);
+						buttons[i].addEventListener(lib.config.touchscreen?'touchend':'click',game.versusClickToSwap);
 					}
 				}
 			},
@@ -2576,10 +2576,10 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				var name=game.me.name;
 				if(ui.fakeme&&ui.fakeme.current!=name){
 					ui.fakeme.current=name;
-					if(ui.xingbeihighlight&&ui.xingbeihighlight!=game.me){
-						ui.xingbeihighlight.classList.remove('current_action');
+					if(ui.versushighlight&&ui.versushighlight!=game.me){
+						ui.versushighlight.classList.remove('current_action');
 					}
-					ui.xingbeihighlight=game.me;
+					ui.versushighlight=game.me;
 					game.me.classList.add('current_action');
 
 					ui.fakeme.style.backgroundImage=game.me.node.avatar.style.backgroundImage;
@@ -2639,7 +2639,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 		translate:{
 			trueColor:"zhu",
 			falseColor:"wei",
-			xingbei_single_control_config:'单人控制',
+			versus_single_control_config:'单人控制',
 
 			_wuFaXingDong:'无法行动',
 			//公共技能
@@ -3932,7 +3932,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 								}
 							}
 							if(friend){
-								var next=game.createEvent('xingbeiDraw');
+								var next=game.createEvent('versusDraw');
 								next.setContent(function(){
 									'step 0'
 									player.chooseBool('是否摸一张牌？');
@@ -4034,7 +4034,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 							}
 							else{
 								if(friend){
-									var next=game.createEvent('xingbeiDraw');
+									var next=game.createEvent('versusDraw');
 									next.setContent(function(){
 										'step 0'
 										player.chooseBool('是否摸一张牌？');
@@ -4076,16 +4076,16 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						else{
 							if(source){
 								if(source.side!=this.side){
-									if(lib.storage.xingbei_reward){
-										source.draw(lib.storage.xingbei_reward);
+									if(lib.storage.versus_reward){
+										source.draw(lib.storage.versus_reward);
 									}
 								}
 								else{
-									if(lib.storage.xingbei_punish=='弃牌'){
+									if(lib.storage.versus_punish=='弃牌'){
 										source.discard(source.getCards('he'));
 									}
-									else if(lib.storage.xingbei_punish=='摸牌'&&lib.storage.xingbei_reward){
-										source.draw(lib.storage.xingbei_reward);
+									else if(lib.storage.versus_punish=='摸牌'&&lib.storage.versus_reward){
+										source.draw(lib.storage.versus_reward);
 									}
 								}
 							}
