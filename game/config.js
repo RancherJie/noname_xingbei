@@ -148,7 +148,7 @@ window.config={
 		xingbei:{
 			free_choose:true,
 			change_identity:true,
-			versus_mode:'two',
+			xingbei_mode:'two',
 			team_sequence:'random',
 			change_choice:true,
 			choose_number:3,
