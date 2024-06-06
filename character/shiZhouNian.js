@@ -1965,7 +1965,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         player.logSkill(event.name);
                         var card=result.links[0];
                         event.card=card;
-                        player.loseToDiscardpile(card);
+                        player.discard(card);
                         player.showCards(card).set('gaiPai',true);
                         event.trigger('yiChuAnYue');
                     }else{
@@ -2024,7 +2024,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 3'
                     var card=result.links[0];
                     event.card=card;
-                    player.loseToDiscardpile(card);
+                    player.discard(card);
                     event.trigger('yiChuAnYue');
                     'step 4'
                     player.chooseTarget(1,'目标角色+1[治疗]',true);
@@ -2075,7 +2075,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 2'
                     if(result.links.length>0){
                         event.num=result.links.length;
-                        player.loseToDiscardpile(result.links);
+                        player.discard(result.links);
                         event.trigger('yiChuAnYue');
                     }else{
                         event.finish();
