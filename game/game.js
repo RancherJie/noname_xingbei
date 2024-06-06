@@ -13042,7 +13042,7 @@
 				},
 				phase:function(){
 					"step 0"
-					player.phaseZhunbei();
+					//player.phaseZhunbei();
 					"step 1"
 					//player.phaseJudge();
 					"step 2"
