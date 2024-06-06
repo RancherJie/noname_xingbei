@@ -1077,21 +1077,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				next.character=character;
 				next.setContent('replacePlayerTwo');
 			},
-			versusClickToSwap:function(e){
-				if(_status.dragged) return;
-				if(this.link==game.me){
-					if(!this.classList.contains('buttonclick')){
-						this.animate('buttonclick');
-					}
-				}
-				else if(_status.event.player==game.me&&!_status.auto){
-					game.me.popup('请稍后再换人');
-					e.stopPropagation();
-				}
-				else{
-					game.modeSwapPlayer(this.link);
-				}
-			},
+
  
 			switchAutoreplace:function(e){
 				e.stopPropagation();
