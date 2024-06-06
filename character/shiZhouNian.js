@@ -4504,6 +4504,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.hengZhi();
                     player.addSkill('moNvZhiNu_xiBie');
                     var list=[0,1,2];
+                    if(player.countCards('h')==0){
+                        list.remove(0);
+                    }
                     player.chooseControl(list).set('prompt','魔女之怒：摸几张牌');
                     'step 1'
                     if(result.control>0){
