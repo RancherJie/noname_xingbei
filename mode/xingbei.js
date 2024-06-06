@@ -192,12 +192,23 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				return game.players[0].side==player.side;
 			},
 			getRoomInfo:function(uiintro){
+				/*
 				if(lib.configOL.versus_mode=='1v1'){
 					uiintro.add('<div class="text chat">侯选人数：'+lib.configOL.choice_num+'人');
 					uiintro.add('<div class="text chat">替补人数：'+lib.configOL.replace_number+'人');
 				}
 				else if(lib.configOL.versus_mode=='2v2'||lib.configOL.versus_mode=='3v3'){
 					uiintro.add('<div class="text chat">四号位换牌：'+(lib.configOL.replace_handcard?'开启':'关闭'));
+				}*/
+				switch(lib.configOL.team_sequence){
+					case 'random':uiintro.add('<div class="text chat">队伍顺序：随机');break;
+					case 'near':uiintro.add('<div class="text chat">队伍顺序：临近');break;
+					case 'crossed':uiintro.add('<div class="text chat">队伍顺序：交叉');break;
+				}
+				var last=uiintro.add('<div class="text chat">可选角色数：'+lib.configOL.choose_number);
+				switch(lib.configOL.viewHandcard){
+					case 'Y':uiintro.add('<div class="text chat">可见队友手牌：是');break;
+					case 'N':uiintro.add('<div class="text chat">可见队友手牌：否');break;
 				}
 				var last=uiintro.add('<div class="text chat">出牌时限：'+lib.configOL.choose_timeout+'秒');
 				// uiintro.add('<div class="text chat">屏蔽弱将：'+(lib.configOL.ban_weak?'开启':'关闭'));
@@ -205,9 +216,10 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				if(lib.configOL.banned.length){
 					last=uiintro.add('<div class="text chat">禁用角色：'+get.translation(lib.configOL.banned));
 				}
+				/*
 				if(lib.configOL.bannedcards.length){
 					last=uiintro.add('<div class="text chat">禁用卡牌：'+get.translation(lib.configOL.bannedcards));
-				}
+				}*/
 				last.style.paddingBottom='8px';
 			},
 			getVideoName:function(){
