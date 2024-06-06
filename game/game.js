@@ -4630,6 +4630,21 @@
 						},
 						frequent:true,
 					},
+					phaseswap:{
+						name:'多控',
+						init:false,
+						onclick:function(bool){
+							game.saveConfig('phaseswap',bool,this._link.config.mode);
+							if(!ui.create.cheat2) return;
+							if(get.mode()!=this._link.config.mode||!_status.event.getParent().showConfig&&!_status.event.showConfig) return;
+							if(!ui.cheat2&&get.config('phaseswap')) ui.create.cheat2();
+							else if(ui.cheat2&&!get.config('phaseswap')){
+								ui.cheat2.close();
+								delete ui.cheat2;
+							}
+						},
+						frequent:true,
+					},
 
 					free_choose:{
 						name:'自由选将',
@@ -26318,6 +26333,10 @@
 						if(_status.mode=='standard') return lib.storage.single_control&&this.side==me.side;
 						if(_status.mode=='four') return get.config('four_phaseswap')&&this.side==me.side;
 						if(_status.mode=='two') return get.config('two_phaseswap')&&this.side==me.side;
+						return false;
+					}
+					else if(lib.config.mode=='xingbei'){
+						return get.config('phaseswap')&&this.side==me.side;
 						return false;
 					}
 					else if(lib.config.mode=='boss'){
