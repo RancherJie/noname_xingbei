@@ -53411,7 +53411,7 @@
 						}
 					}
 					else{
-						if(lib.configOL.mode=='versus'||lib.configOL.mode=='doudizhu'||lib.configOL.mode=='single') return;
+						if(lib.configOL.mode=='xingbei'||lib.configOL.mode=='doudizhu'||lib.configOL.mode=='single') return;
 						if(lib.configOL.mode=='identity'&&(lib.configOL.identity_mode=='zhong'||lib.configOL.identity_mode=='purple')) return;
 						if(!this.classList.contains('unselectable2')&&lib.configOL.number<=2) return;
 						this.classList.toggle('unselectable2')
