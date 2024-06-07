@@ -55598,18 +55598,18 @@
 				return event.name=='chooseToUse'||event.name=='faShu'||event.name=='gongJi';
 			},
 
-			GongJiXingDong:function(event){
+			gongJiXingDong:function(event){
 				if(!get.is.xiDong(event)) return false;
 				if(event.yingZhan==true) return false;
-				return get.is.GongJi(event);
+				return get.is.gongJi(event);
 			},
-			GongJi:function(event){
+			gongJi:function(event){
 				return get.type(event.card)=='gongJi'&&event.targets!=[];
 			},
-			isYingZhanGongJi:function(event){
+			yingZhanGongJi:function(event){
 				if(get.is.xiDong(event)) return false;
 				if(event.yingZhan!=true) return false;
-				return get.is.GongJi(event);
+				return get.is.gongJi(event);
 			},
 
 			FaShuXingDong:function(event){
