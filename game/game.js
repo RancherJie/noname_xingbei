@@ -55595,24 +55595,28 @@
 			//星杯
 			xiDong:function(event){
 				//判断事件是否为行动事件
-				return event.name=='chooseToUse'||event.name=='faShu'||event.name=='gongJi';
+				return event.action==true;
 			},
-
-			gongJiXingDong:function(event){
-				if(!get.is.xiDong(event)) return false;
-				if(event.yingZhan==true) return false;
-				return get.is.gongJi(event);
-			},
+			//useSkill||useCard
 			gongJi:function(event){
 				return get.type(event.card)=='gongJi'&&event.targets!=[];
 			},
 			yingZhanGongJi:function(event){
+				if(!get.is.gongJi(event)) return false;
 				if(get.is.xiDong(event)) return false;
-				if(event.yingZhan!=true) return false;
-				return get.is.gongJi(event);
+				return true;
 			},
-
-			FaShuXingDong:function(event){
+			zhuDongGongJi:function(event){
+				if(!get.is.gongJi(event)) return false;
+				if(!get.is.xiDong(event)) return false;
+				return true;
+			},
+			gongJiXingDong:function(event){
+				if(!get.is.gongJi(event)) return false;
+				if(!get.is.xiDong(event)) return false;
+				return true;
+			},
+			faShuXingDong:function(event){
 				if(event.name=='useSkill'){
 					var info=get.info(event.skill);
                     return info.type=='faShu';
@@ -55625,7 +55629,7 @@
 				}
 				return false;
 			},
-
+			//damge
 			gongJiShangHai:function(event){
 				return get.type(event.card)=='gongJi'
 			},
