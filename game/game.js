@@ -55587,11 +55587,6 @@
 			return 0;
 		},
 		is:{
-			/**
-			 * 判断传入的参数的属性是否相同（参数可以为卡牌、卡牌信息、属性等）
-			 * @param ...infos 要判断的属性列表 
-			 * @param every {boolean} 是否判断每一个传入的属性是否完全相同而不是存在部分相同
-			 */
 			//星杯
 			xiDong:function(event){
 				//判断事件是否为行动事件
@@ -55640,7 +55635,11 @@
 					return false;
 				}
 			},
-
+			/**
+			 * 判断传入的参数的属性是否相同（参数可以为卡牌、卡牌信息、属性等）
+			 * @param ...infos 要判断的属性列表 
+			 * @param every {boolean} 是否判断每一个传入的属性是否完全相同而不是存在部分相同
+			 */
 			sameNature:function(){
 				let processedArguments=[],every=false;
 				Array.from(arguments).forEach(argument=>{
