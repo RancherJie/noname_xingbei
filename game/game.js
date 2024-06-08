@@ -12753,7 +12753,7 @@
 					}
 					if(info.type=='qiDong'){
 						event.parent.parent.canTeShu=false;
-						event.parent.parent.qiDing=true;
+						event.parent.parent.qiDong=true;
 					}
 
 					if(info.popup!=false&&!info.direct){
