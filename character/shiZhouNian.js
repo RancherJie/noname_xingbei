@@ -4793,6 +4793,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         player.logSkill(event.name,trigger.targets);
                         player.discard(result.links);
                         player.showGaiPai(result.links);
+                        if(typeof trigger.baseDamage!='number') trigger.baseDamage=get.info(trigger.card,false).baseDamage||2;
                         trigger.baseDamage++;
                         player.storage.moGuanChongJi=trigger.card;
                         trigger.getParent('phaseUse').duoChongSheJi=false;
@@ -4824,7 +4825,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                 player.logSkill(event.name,trigger.targets);
                                 player.discard(result.links);
                                 player.showGaiPai(result.links);
-                                trigger.baseDamage++;
+                                trigger.parent.baseDamage++;
                             }
                         }
                     },
