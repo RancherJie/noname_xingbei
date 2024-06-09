@@ -16345,7 +16345,7 @@
 
 					//xingBei
 					if(event.parent&&!event.action){
-						event.action=event.parent.action;					
+						event.set('action',event.parent.action);					
 					}
 					if(event.action){
 						var type=get.type(card);
