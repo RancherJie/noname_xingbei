@@ -16347,6 +16347,7 @@
 					if(event.parent&&!event.action){
 						event.set('action',event.parent.action);					
 					}
+					event.targets_x=targets.slice();
 					if(event.action){
 						var type=get.type(card);
 						if(type=='faShu'){
