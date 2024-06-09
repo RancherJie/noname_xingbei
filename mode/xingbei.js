@@ -1592,6 +1592,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
                     event.source=trigger.parent.parent.source;
                     event.player=trigger.parent.player;
 					event.yingZhan=trigger.parent.parent.yingZhan;
+					event.source_card=trigger.parent.trigger_card;
 					'step 1'
                     event.trigger('gongJiWeiMingZhong');
                 }
