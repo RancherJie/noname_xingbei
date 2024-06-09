@@ -18188,8 +18188,8 @@
 					if(player.zhiLiao<0){
 						player.zhiLiao=0;
 					}
-					player.setMaxHp(player.getZhiLiaoLimit());
-					player.setHp(player.zhiLiao); 
+					//player.setMaxHp(player.getZhiLiaoLimit());
+					//player.setHp(player.zhiLiao); 
 					if(event.yiChu==true){
 						event.trigger('zhiLiaoYiChu');
 					}
@@ -20753,9 +20753,11 @@
 				},
 				update:function(){
 					if(_status.video&&arguments.length==0) return;
-					if(this.hp>=this.maxHp) this.hp=this.maxHp;
+					//if(this.hp>=this.maxHp) this.hp=this.maxHp;
 					var hp=this.node.hp;
 					hp.style.transition='none';
+					this.hp=this.zhiLiao;
+					this.maxHp=this.getZhiLiaoLimit();
 					game.broadcast(function(player,hp,maxHp,zhiLiao){
 						player.hp=hp;
 						player.maxHp=maxHp;
