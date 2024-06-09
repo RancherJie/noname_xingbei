@@ -1491,6 +1491,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
                     if(get.type(trigger.card)=='gongJi'){
 						event.source=trigger.player;
 						event.yingZhan=trigger.parent.yingZhan;
+						event.source_card=trigger.card;
                         event.trigger('gongJiWeiMingZhong');
                     }else if(trigger.card.name=='moDan') game.resetMoDan();
                     trigger.cancel();
@@ -1508,6 +1509,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					'step 0'
 					event.source=trigger.player;
 					event.yingZhan=trigger.parent.yingZhan;
+					event.source_card=trigger.card;
 					var name=get.translation(event.source);
 					var propmt=`受到${name}的`;
 					if(event.yingZhan){
