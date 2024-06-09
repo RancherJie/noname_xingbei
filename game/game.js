@@ -55592,7 +55592,7 @@
 			//星杯
 			xiDong:function(event){
 				//判断事件是否为行动事件
-				return event.action==true;
+				return event.action==true||event.parent.action==true;
 			},
 			//useSkill||useCard
 			gongJi:function(event){
