@@ -1194,16 +1194,6 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				},
 			},
 
-			_zhiLiao_set:{
-				trigger:{global:'enterGame'},
-				direct:true,
-				firstDo:true,
-				content:function(){
-					player.setMaxHp(player.getZhiLiaoLimit());
-					player.setHp(player.zhiLiao); 
-				}
-			},
-
 			_wuFaXingDong:{
 				enable:'wuFaXingDong',
 				type:'wuFaXingDong',
