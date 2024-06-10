@@ -5522,7 +5522,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             chongNeng:"[启动]充能",
             chongNeng_info:"[水晶]你弃到4张牌，摸X张牌[强制]，可将自己至多X张手牌面朝下放置在你的角色旁，作为【充能】(X<5)；本回合你不能发动【魔贯冲击】和【泪光散漫】。",
             moYan:"[启动]魔眼",
-            moYan_info:"[水晶]目标角色弃1张牌或你摸3张牌[强制]，将自己1张手牌作为【充能】，你+1[水晶]。",
+            moYan_info:"[宝石]目标角色弃1张牌或你摸3张牌[强制]，将自己1张手牌作为【充能】，你+1[水晶]。",
             chongNengPai:"充能",
             chongNengPai_info:"【充能】为魔弓专有盖牌，上限为8",
 
