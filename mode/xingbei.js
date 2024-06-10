@@ -633,7 +633,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						game.addGlobalSkill('viewHandcard');
 					}
 
-					if(get.config('two_phaseswap')){
+					if(get.config('phaseswap')){
 						game.addGlobalSkill('autoswap');
 						if(lib.config.show_handcardbutton){
 							ui.versushs=ui.create.system('手牌',null,true);
