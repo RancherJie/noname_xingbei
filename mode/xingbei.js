@@ -1215,6 +1215,9 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					"step 1"
 					event.target=event.targetsx.shift();
 					event.target.chooseControl(event.listx).set('dialog',event.contentx).set('ai',function(){
+						if(_status.event.dialog[1].length==0){
+							return 1;
+						}
 						return 0;
 					});
 					"step 2"
@@ -1263,6 +1266,9 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 							"step 1"
 							event.target=event.targetsx.shift();
 							event.target.chooseControl(event.listx).set('dialog',event.contentx).set('ai',function(){
+								if(_status.event.dialog[1].length==0){
+									return 1;
+								}
 								return 0;
 							});
 							"step 2"
@@ -1310,6 +1316,9 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 							"step 1"
 							event.target=event.targetsx.shift();
 							event.target.chooseControl(event.listx).set('dialog',event.contentx).set('ai',function(){
+								if(_status.event.dialog[1].length==0){
+									return 1;
+								}
 								return 0;
 							});
 							"step 2"
