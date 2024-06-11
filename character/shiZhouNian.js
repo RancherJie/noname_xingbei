@@ -2222,7 +2222,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     biXu:{
                         trigger:{player:'phaseUseBegin'},
                         forced:true,
-                        priority:2,
+                        priority:-2,
                         filter:function(event,player){
                             return player.countZhiShiWu('shenPan')>=get.info('shenPan').intro.max;
                         },
