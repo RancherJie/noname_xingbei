@@ -2707,7 +2707,24 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         }
                     });
                     next.set('prompt',get.prompt('yuanSuSheJi'));
-                    next.set('prompt2',lib.translate.yuanSuSheJi_info);
+                    next.set('prompt2',"弃1张法术牌[展示]或移除1个[祝福],");
+                    switch(get.xiBie(player.storage.yuanSuSheJi)){
+                        case 'huo':
+                            next.prompt2+='本次攻击伤害额外+1';
+                            break;
+                        case'shui':
+                            next.prompt2+="<span class='tiaoJian'>(主动攻击命中时)</span>目标角色+1[治疗]";
+                            break;
+                        case 'feng':
+                            next.prompt2+="<span class='tiaoJian'>(攻击行动结束后)</span>额外+1攻击行动";
+                            break;
+                        case 'lei':
+                            next.prompt2+="本次攻击无法应战";
+                            break;
+                        case 'di':
+                            next.prompt2+="<span class='tiaoJian'>(主动攻击命中时②)</span>对目标角色造成1点法术伤害③";
+                            break;
+                    }
                     'step 1'
                     if(result.bool){
                         player.logSkill(event.name);
