@@ -1247,7 +1247,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				subSkill:{
 					qiDongQian:{
 						trigger:{player:'phaseUseBegin'},
-						priority:5,
+						priority:2,
 						filter:function(event,player){
 							if(((player.countCards('h')+3)<=player.getHandcardLimit())&&event.canTeShu!=false) return false;
 							var cards=player.getCards('h');
