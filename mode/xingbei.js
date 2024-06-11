@@ -1296,7 +1296,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						}
 					},
 					qiDongHou:{
-						trigger:{player:'phaseBeginBegin'},
+						trigger:{player:'phaseUseBegin'},
 						filter:function(event,player){
 							if(((player.countCards('h')+3)<=player.getHandcardLimit())&&event.canTeShu!=false) return false;
 							var cards=player.getCards('h');
