@@ -4875,11 +4875,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 chooseButton:{
                     dialog:function(event,player){
-                        var dialog=ui.create.dialog('雷光散射：移除1个雷系【充能】[展示]','hidden');
+                        var dialog=ui.create.dialog('雷光散射：移除1+X个雷系【充能】[展示]','hidden');
                         var cards=player.getExpansions('chongNengPai');
                         dialog.add(cards);
                         return dialog;
                     },
+                    select:[1,Infinity],
                     filter:function(button,player){
                         if(get.xiBie(button)=='lei'){
                             return true;
@@ -4904,27 +4905,15 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                     target.storage.leiGuangSanShe=1;
                                 }
                                 'step 1'
-                                var cards=player.getExpansions('chongNengPai');
-                                if(cards.length!=0){
-                                    var next=player.chooseCardButton(cards,[1,Infinity],'雷光散射：是否额外移除雷系【充能】');
-                                    next.set('filterButton',function(button){
-                                        return get.xiBie(button)=='lei';
-                                    });
-                                }else{
-                                    event.finish()
-                                }
-                                'step 2'
-                                if(result.bool){
-                                    event.num=result.links.length;
-                                    player.discard(result.links);
-                                    player.showGaiPai(result.links);
+                                event.num=event.links.length-1;
+                                if(event.num>0){
                                     player.chooseTarget('对其造成的伤害额外+'+event.num,true,function(card,player,target){
                                         return target.side!=player.side;
                                     });
                                 }else{
                                     event.finish();
                                 }
-                                'step 3'
+                                'step 2'
                                 result.targets[0].storage.leiGuangSanShe+=event.num;
                             },
                             content:function(){
