@@ -30,7 +30,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             shenGuan:['female','sheng',4,['shenShengQiShi','shenShengQiFu','shuiZhiShenLi','shengShiShouHu','shenShengQiYue','shenShengLingYu'],],
             qiDaoShi:['female','yong',4,['guangHuiXinYang','heiAnZuZhou','weiLiCiFu','xunJieCiFu','qiDao','faLiChaoXi','qiDaoFuWen'],],
             xianZhe:['male','yong',4,['zhiHuiFaDian','faShuFangTan','moDaoFaDian','shengJieFaDian'],],
-            //lingFuShi:['female','yong',6,['jianxiong'],],
+            lingFuShi:['female','yong',4,['lingFu_leiMing','lingFu_fengXing','nianZhou','baiGuiYeXing','lingLiBengJie','yaoLi'],],
             //jianDi:['female','ji',6,['jianxiong'],],
             //geDouJia:['female','ji',6,['jianxiong'],],
             //yongZhe:['male','xue',6,['jianxiong'],],
@@ -5380,6 +5380,143 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 }
             },
 
+            //灵符师
+            lingFu_leiMing:{
+                type:'faShu',
+                enable:['chooseToUse','faShu'],
+                filter:function(event,player){
+                    return player.countCards('h',card=>get.xiBie(card)=='lei')>0;
+                },
+                selectCard:1,
+                filterCard:function(card){
+                    return get.xiBie(card)=='lei';
+                },
+                selectTarget:2,
+                filterTarget:true,
+                prepare:'showCards',
+                contentBefore:function(){
+                    'step 0'
+                    event.player=player;
+                    player.storage.lingFu_leiMing=1;
+                    'step 1'
+                    event.trigger('lingFu_leiMing');
+                },
+                content:function(){
+                    target.damageFaShu(player.storage.lingFu_leiMing,player);
+                },
+                contentAfter:function(){
+                    event.player=player;
+                    event.trigger('lingFu');
+                }
+            },
+            lingFu_fengXing:{
+                type:'faShu',
+                enable:['chooseToUse','faShu'],
+                filter:function(event,player){
+                    return player.countCards('h',card=>get.xiBie(card)=='feng')>0;
+                },
+                selectCard:1,
+                filterCard:function(card){
+                    return get.xiBie(card)=='feng';
+                },
+                selectTarget:2,
+                filterTarget:true,
+                prepare:'showCards',
+                content:function(){
+                    target.chooseToDiscard('h',true);
+                },
+                contentAfter:function(){
+                    event.player=player;
+                    event.trigger('lingFu');
+                }
+            },
+            nianZhou:{
+                trigger:{player:'lingFu'},
+                filter:function(event,player){
+                    return player.countCards('h')>0&&player.getExpansions('yaoLi').length<2;
+                },
+                content:function(){
+                    'step 0'
+                    player.chooseCard('h',true);
+                    'step 1'
+                    player.addToExpansion('giveAuto',result.cards).gaintag.add('yaoLi');
+                }
+            },
+            baiGuiYeXing:{
+                trigger:{player:'useCardToTargeted'},
+                filter:function(event,player){
+                    if(!get.is.zhuDongGongJi(event.parent)) return false;
+                    return player.getExpansions('yaoLi').length>0;
+                },
+                content:function(){
+                    'step 0'
+                    event.player=player;
+                    player.storage.baiGuiYeXing=1;
+                    var next=player.chooseCardButton(player.getExpansions('yaoLi'),true,1,'移除1张【妖力】');
+                    next.set('prompt2',lib.translate.baiGuiYeXing_info);
+                    'step 1'
+                    event.card=result.links[0];
+                    player.discard(result.links);
+                    var list=['否'];
+                    if(get.xiBie(event.card)=='huo'){
+                        list.unshift('是');
+                    }
+                    player.chooseControl(list).set('prompt','是否展示');
+                    'step 2'
+                    if(result.control=='是'){
+                        event.flag=true;
+                        player.showGaiPai(event.card);
+                    }
+                    'step 3'
+                    event.trigger('baiGuiYeXing');
+                    'step 4'
+                    if(event.flag){
+                        player.chooseTarget('选取不受伤害的2名角色',2,true);
+                    }else{
+                        player.chooseTarget('对目标角色造成1点法术伤害③',1,true);
+                    }
+                    'step 5'
+                    if(event.flag){
+                        event.targets=game.filterPlayer(function(current){
+                            return !result.targets.includes(current);
+                        }).sortBySeat();
+                    }else{
+                        event.targets=result.targets;
+                    }
+                    'step 6'
+                    for(var i=0;i<event.targets.length;i++){
+                        event.targets[i].damageFaShu(player.storage.baiGuiYeXing,player);
+                    }
+                }
+            },
+            lingLiBengJie:{
+                trigger:{player:['baiGuiYeXing','lingFu_leiMing']},
+                filter:function(event,player){
+                    return player.canBiShaShuiJing();
+                },
+                content:function(){
+                    'step 0'
+                    player.removeBiShaShuiJing();
+                    'step 1'
+                    if(trigger.name=='baiGuiYeXing'){
+                        player.storage.baiGuiYeXing++;
+                    }else if(trigger.name=='lingFu_leiMingContentBefore'){
+                        player.storage.lingFu_leiMing++;
+                    }
+                }
+            },
+            yaoLi:{
+                intro:{
+                    name:'妖力',
+                    markcount:'expansion',
+                    mark:function(dialog,storage,player){
+						var cards=player.getExpansions('yaoLi');
+						if(player.isUnderControl(true)) dialog.addAuto(cards);
+						else return '共有'+cards.length+'张牌';
+					},
+                },
+            },
+
 		},
 		
 		translate:{
@@ -5823,6 +5960,23 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             chongYing_info:"<span class='tiaoJian'>(弃1张法术牌或雷系牌[展示])</span>所有人各弃1张牌[展示]，我方角色可选择不如此做，除你以外每以此法弃1张法术牌或雷系牌，本回合你的下次主动攻击伤害额外+1；额外+1攻击行动。",
             qiHeiZhiQiang:"[响应]漆黑之枪",
             qiHeiZhiQiang_info:"X[水晶]<span class='tiaoJian'>(仅【幻影形态】下，主动攻击手牌为1或2的对手并命中后发动②)</span>本次攻击伤害额外+(X+2)。",
+
+            //灵符师
+            lingFu_leiMing:"[法术]灵符-雷鸣",
+            lingFu_leiMing_info:"<span class='tiaoJian'>(弃1张雷系牌[展示])</span>对任意2名角色各造成1点法术伤害③。",
+            lingFu_fengXing:"[法术]灵符-风行",
+            lingFu_fengXing_info:"<span class='tiaoJian'>(弃1张风系牌[展示])</span>指定2名角色各弃1张牌。",
+            nianZhou:"[响应]念咒",
+            nianZhou_info:"每当你发动【灵符】，可将自己的1张手牌面朝下放置在你的角色旁，作为【妖力】。",
+            baiGuiYeXing:"[响应]百鬼夜行",
+            baiGuiYeXing_info:"<span class='tiaoJian'>(主动攻击命中后发动②，移除1个【妖力】)</span>对目标角色造成1点法术伤害③；<span class='tiaoJian'>(若【妖力】为火系牌，可展示之[展示])</span>改为指定2名角色，对除他们以外的其他所有角色各造成1点法术伤害③。",
+            lingLiBengJie:"[响应]灵力崩解",
+            lingLiBengJie_info:"[水晶]<span class='tiaoJian'>(和【灵符-雷鸣】或【百鬼夜行】同时发动)</span>你的本次【灵符-雷鸣】或【百鬼夜行】每次造成的伤害额外+1。",
+            yaoLi:"妖力",
+            yaoLi_info:"【妖力】为灵符师专有盖牌，上限为2；若【妖力】达到上限，则不能发动【念咒】。",
+
+
+
 
 		},
 	};
