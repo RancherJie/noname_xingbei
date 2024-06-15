@@ -1934,7 +1934,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         }
                     }else if(player.side==false){
                         if(game.lanZhanJi.length<5){
-                            player.changeZhanJi('b',1);
+                            player.changeZhanJi('r',1);
                         }
                     }
                 }
