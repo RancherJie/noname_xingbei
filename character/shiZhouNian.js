@@ -5399,15 +5399,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     event.player=player;
                     player.storage.lingFu_leiMing=1;
                     'step 1'
+                    event.trigger('lingFu');
+                    'step 2'
                     event.trigger('lingFu_leiMing');
                 },
                 content:function(){
                     target.damageFaShu(player.storage.lingFu_leiMing,player);
                 },
-                contentAfter:function(){
-                    event.player=player;
-                    event.trigger('lingFu');
-                }
             },
             lingFu_fengXing:{
                 type:'faShu',
@@ -5422,13 +5420,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 selectTarget:2,
                 filterTarget:true,
                 prepare:'showCards',
+                contentBefore:function(){
+                    event.player=player;
+                    event.trigger('lingFu');
+                },
                 content:function(){
                     target.chooseToDiscard('h',true);
                 },
-                contentAfter:function(){
-                    event.player=player;
-                    event.trigger('lingFu');
-                }
             },
             nianZhou:{
                 trigger:{player:'lingFu'},
