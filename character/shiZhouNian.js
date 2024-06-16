@@ -5184,11 +5184,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     return !player.isLinked();
                 },
                 content:function(){
+                    'step 0'
                     player.hengZhi();
                     player.addTempSkill('anZhiJieFang_shangHai');
                     trigger.qiHeiZhiQiang=false;
                     trigger.chongYing=false;
                     player.storage.anZhiJieFang=0;
+                    'step 1'
                     player.qiPai();
                 },
                 subSkill:{
