@@ -5238,7 +5238,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                     'step 3'
                     if(event.flag){
-                        player.chooseTarget('对目标角色造成2点法术伤害③',true);
+                        player.chooseTarget('对目标角色造成2点法术伤害③',true).set('ai',function(target){
+                            return player.side!=target.side;
+                        });
                     }else{
                         event.finish();
                     }
