@@ -3508,7 +3508,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         },
                         trigger:{player:'useCardToTargeted'},
                         filter:function(event,player){
-                            if(event.card!='gongJi') return false;
+                            if(!get.is.gongJi(event.parent)) return false;
                             return player.hasExpansions('weiLiCiFu_xiaoGuo');
                         },
                         content:function(){
