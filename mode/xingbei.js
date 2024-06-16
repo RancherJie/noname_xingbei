@@ -1195,15 +1195,21 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 			},
 
 			_wuFaXingDong:{
-				enable:'wuFaXingDong',
-				type:'wuFaXingDong',
-				filter:function(event,player){
-					if(((player.countCards('h')+3)<=player.getHandcardLimit())&&event.parent.canTeShu!=false) return false;
+				filterx:function(event,player){
+					if(player.name=='zhongCaiZhe'){
+						if(player.canBiShaShuiJing()) return false;
+					}
+					if(((player.countCards('h')+3)<=player.getHandcardLimit())&&event.canTeShu!=false) return false;
 					var cards=player.getCards('h');
 					for(var i=0;i<cards.length;i++){
 						if(player.hasUseTarget(cards[i])) return false;
 					}
 					return true;
+				},
+				enable:'wuFaXingDong',
+				type:'wuFaXingDong',
+				filter:function(event,player){
+					return lib.skill._wuFaXingDong.filterx(event,player);
 				},
 				content:function(){
 					"step 0"
@@ -1249,12 +1255,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						trigger:{player:'phaseUseBegin'},
 						priority:2,
 						filter:function(event,player){
-							if(((player.countCards('h')+3)<=player.getHandcardLimit())&&event.canTeShu!=false) return false;
-							var cards=player.getCards('h');
-							for(var i=0;i<cards.length;i++){
-								if(player.hasUseTarget(cards[i])) return false;
-							}
-							return true;
+							return lib.skill._wuFaXingDong.filterx(event,player);
 						},
 						content:function(){
 							"step 0"
@@ -1298,12 +1299,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					qiDongHou:{
 						trigger:{player:'phaseUseBegin'},
 						filter:function(event,player){
-							if(((player.countCards('h')+3)<=player.getHandcardLimit())&&event.canTeShu!=false) return false;
-							var cards=player.getCards('h');
-							for(var i=0;i<cards.length;i++){
-								if(player.hasUseTarget(cards[i])) return false;
-							}
-							return true;
+							return lib.skill._wuFaXingDong.filterx(event,player);
 						},
 						priority:-1,
 						content:function(){
