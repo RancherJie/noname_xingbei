@@ -5472,7 +5472,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     if(event.flag){
                         player.chooseTarget('选取不受伤害的2名角色',2,true);
                     }else{
-                        player.chooseTarget('对目标角色造成1点法术伤害③',1,true);
+                        player.chooseTarget(`对目标角色造成${player.storage.baiGuiYeXing}点法术伤害③`,1,true);
                     }
                     'step 5'
                     if(event.flag){
