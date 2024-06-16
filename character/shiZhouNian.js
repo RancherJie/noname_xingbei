@@ -3550,6 +3550,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         intro:{
                             content:'expansion',
                         },
+                        priority:1,
                         trigger:{player:['useCardAfter','useSkillAfter']},
                         filter:function(event,player){
                             if(!player.hasExpansions('xunJieCiFu_xiaoGuo')) return false;
