@@ -4311,6 +4311,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             shiShenZhouShu:{
                 trigger:{global:'useCardToTarget'},
                 filter:function(event,player){
+                    if(player.countCards('h')==0) return false;
                     if(event.yingZhan==true) return false;
                     if(get.type(event.card)!='gongJi') return false;
                     if(get.xiBie(event.card)=='an') return false;
