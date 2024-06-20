@@ -4271,7 +4271,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 0'
                     player.addZhiShiWu('guiHuo');
                     game.setXiBie(trigger.card,get.xiBie(trigger.cards[0]));
-                    console.log(trigger);
                     'step 1'
                     event.player=player;
                     event.trigger('yinYangZhanHuan');
@@ -4398,7 +4397,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             next.set('forced',true);
                             next.set('selectButton',2);
                             next.set('filterOk',function(){
-                                console.log(ui.selected.buttons);
                                 for(var i in ui.selected.buttons){
                                     if(ui.selected.buttons[i].link=='宝石') return true;
                                 }
