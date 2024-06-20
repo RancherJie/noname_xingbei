@@ -5348,6 +5348,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             qiHeiZhiQiang:{
                 trigger:{player:"useCardToTargeted"},
                 filter:function(event,player){
+                    if(!player.isLinked()) return false;
                     if(!player.canBiShaShuiJing()) return false;
                     if(!get.is.zhuDongGongJi(event.parent)) return false;
                     if(event.target.countCards('h')!=1&&event.target.countCards('h')!=2) return false;
