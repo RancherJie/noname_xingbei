@@ -2376,6 +2376,9 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					if(typeof num!='number'||!num) num=1;
 					this.removeMark(zhiShuWu,num);
 				},
+				hasZhiShiWu:function(zhiShuWu){//是否拥有指示物
+					return this.hasMark(zhiShuWu);
+				},
 				addZhanJi:function(color,num){//增加战绩
 					if(typeof num!='number'||!num) num=1;
 					if(this.side==true){
