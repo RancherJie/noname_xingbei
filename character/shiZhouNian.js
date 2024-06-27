@@ -5531,7 +5531,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     if(!(event.player.side!=player.side&&event.source.side==player.side)) return false; 
                     if(player.countCards('h')<2) return false;                    
                     if(player.storage.chenLunXieZouQu_use==true) return false;
-                    return player.storage.chenLunXieZouQu>=2;
+                    return player.storage.chenLunXieZouQu.length>=2;
                 },
                 direct:true,
                 content:function(){
@@ -5570,11 +5570,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 group:['chenLunXieZouQu_chongZhi','chenLunXieZouQu_jiShu'],
                 subSkill:{
                     chongZhi:{
-                        trigger:{player:'phaseEnd'},
+                        trigger:{player:'phaseBegin'},
                         direct:true,
-                        lastDo:true,
+                        firstDo:true,
                         content:function(){
-                            player.storage.chenLunXieZouQu=0;
+                            player.storage.chenLunXieZouQu=[];
                             player.storage.chenLunXieZouQu_use=false;
                         }
                     },
@@ -5586,7 +5586,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         },
                         direct:true,
                         content:function(){
-                            player.storage.chenLunXieZouQu+=1;
+                            if(!player.storage.chenLunXieZouQu.includes(this.trigger.player)){
+                                player.storage.chenLunXieZouQu.add(trigger.player);
+                            }
+                            
                         }
                     }
                 }
