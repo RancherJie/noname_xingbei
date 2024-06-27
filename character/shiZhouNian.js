@@ -5792,7 +5792,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             'step 0'
                             var choiceList=['将我方战绩区的1个星石提炼成为你的能量','为我方战绩区+1[宝石]，你+1[治疗]'];
                             var list=['选项二'];
-                            if(player.countNengLiangAll()<player.getNengLiangLimit()){
+                            if(player.side==true){
+                                var xingShi=game.hongZhanJi;
+                            }else{
+                                var xingShi=game.lanZhanJi;
+                            }
+                            if(player.countNengLiangAll()<player.getNengLiangLimit()&&xingShi.length>0){
                                 list.unshift('选项一');
                             }
                             var next=player.chooseControl(list).set('choiceList',choiceList);
