@@ -114,6 +114,7 @@ window.noname_asset_list=[
 	'image/card/xueQiangWeiTingYuan.png',
 	'image/card/lan.png',
 	'image/card/hong.png',
+	'image/card/yongHengYueZhang.png',
 	/*card image end*/
 	
 	/*character image begin*/
