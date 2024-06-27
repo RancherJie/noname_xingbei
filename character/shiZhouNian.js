@@ -2229,6 +2229,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 intro:{
                     name:'新月',
                     content:'mark',
+                    max:2,
                 },
                 markimage:'image/card/hong.png',
             },
@@ -2236,6 +2237,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 intro:{
                     name:'石化',
                     content:'mark',
+                    max:3,
                 },
                 markimage:'image/card/lan.png',
             },
