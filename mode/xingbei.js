@@ -1198,6 +1198,8 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				filterx:function(event,player){
 					if(player.name=='zhongCaiZhe'){
 						if(player.canBiShaShuiJing()) return false;
+					}else if(player.name=='yinYouShiRen'){
+						if(player.countZhiShiWu('lingGan')>1) return false;
 					}
 					if(((player.countCards('h')+3)<=player.getHandcardLimit())&&event.canTeShu!=false) return false;
 					var cards=player.getCards('h');
