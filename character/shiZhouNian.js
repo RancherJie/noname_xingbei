@@ -5584,14 +5584,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         trigger:{global:'damageBegin'},
                         filter:function(event,player){
                             if(event.faShu!=true) return false;
+                            if(player.storage.chenLunXieZouQu.includes(event.player)) return false;
                             return event.player.side!=player.side&&event.source.side==player.side;
                         },
                         direct:true,
                         content:function(){
-                            if(!player.storage.chenLunXieZouQu.includes(this.trigger.player)){
-                                player.storage.chenLunXieZouQu.add(trigger.player);
-                            }
-                            
+                            player.storage.chenLunXieZouQu.add(trigger.player);
                         }
                     }
                 }
