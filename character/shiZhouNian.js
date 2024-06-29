@@ -5531,20 +5531,31 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     if(player.isLinked()) return false;
                     if(event.faShu!=true) return false;
                     if(!(event.player.side!=player.side&&event.source.side==player.side)) return false; 
-                    if(player.countCards('h')<2) return false;                    
+                    if(player.countCards('h')<2) return false;                
+                    if(player.storage.chenLunXieZouQu_insert==true) return false;    
                     if(player.storage.chenLunXieZouQu_use==true) return false;
                     return player.storage.chenLunXieZouQu.length>=2;
                 },
                 direct:true,
                 content:function(){
-                    'step 0'
-                    var next=player.chooseToDiscard('h',2,function(card){
-                        if(ui.selected.cards.length==0) return true;
-                        return get.xiBie(card)==get.xiBie(ui.selected.cards[0]);
+                    player.storage.chenLunXieZouQu_insert=true;
+                    trigger.parent.insertAfter(lib.skill.chenLunXieZouQu.contentx,{
+                        player:player,
                     });
-                    next.set('complexCard',true);
-                    next.set('prompt',get.prompt('chenLunXieZouQu'));
-                    next.set('prompt2',lib.translate.chenLunXieZouQu_info);
+                },
+                contentx:function(){
+                    'step 0'
+                    if(!player.isLinked()){
+                        var next=player.chooseToDiscard('h',2,function(card){
+                            if(ui.selected.cards.length==0) return true;
+                            return get.xiBie(card)==get.xiBie(ui.selected.cards[0]);
+                        });
+                        next.set('complexCard',true);
+                        next.set('prompt',get.prompt('chenLunXieZouQu'));
+                        next.set('prompt2',lib.translate.chenLunXieZouQu_info);
+                    }else{
+                        event.finish();
+                    }
                     'step 1'
                     if(result.bool){
                         player.logSkill(event.name);
@@ -5552,6 +5563,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         event.cards=result.cards;
                         player.storage.chenLunXieZouQu_use=true;
                     }else{
+                        player.storage.chenLunXieZouQu_insert=false;
                         event.finish();
                     }
                     'step 2'
@@ -5578,6 +5590,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         content:function(){
                             player.storage.chenLunXieZouQu=[];
                             player.storage.chenLunXieZouQu_use=false;
+                            player.storage.chenLunXieZouQu_insert=false;
                         }
                     },
                     jiShu:{
