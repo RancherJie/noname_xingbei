@@ -69,7 +69,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 content:function(player){
                     "step 0"
-					var str='风怒追击：风系攻击行动';
+					var str='风怒追击：风系[攻击行动]';
 					var next=player.gongJi(function(card,player,event){
                         if(get.xiBie(card)!='feng') return false;
                         return lib.filter.cardEnabled(card,player,'forceEnable');
@@ -1386,7 +1386,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.removeBiShaShuiJing();
                     'step 1'
                     target.drawTo(5);
-                    player.gongJi('狙击：攻击行动');
+                    player.gongJi('狙击：[攻击行动]');
                 }
             },
             
@@ -1706,7 +1706,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         next.faShu=true;
                     }
                     'step 3'
-                    player.faShu('元素点燃：法术行动');
+                    player.faShu('元素点燃：[法术行动]');
                     player.storage.yuanSuDianRan=false;
                 }
             },
@@ -1750,7 +1750,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 1'
                     target.damageFaShu(event.num,player);
                     'step 2'
-                    player.faShu('陨石：法术行动');
+                    player.faShu('陨石：[法术行动]');
                 },
             },
             bingDong:{
@@ -1885,7 +1885,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 1'
                     target.damageFaShu(event.num,player);
                     'step 2'
-                    player.gongJi('风刃：攻击行动');
+                    player.gongJi('风刃：[攻击行动]');
                 }
             },
             leiJi:{
@@ -2163,7 +2163,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 0'
                     player.removeBiShaBaoShi();
                     'step 1'
-                    var choiceList=['<span class="tiaoJian">(移除3个【石化】)</span>你的下次主动攻击对手无法应战，额外+1攻击行动。你额外获得一个回合',"移除X点<span class='hong'>【</span>新月<span class='hong'>】</span>，你+1点<span class='lan'>【</span>石化<span class='lan'>】</span>，弃1张牌，对目标对手造成(X+1)点法术伤害③"];
+                    var choiceList=['<span class="tiaoJian">(移除3个【石化】)</span>你的下次主动攻击对手无法应战，额外+1[攻击行动]。你额外获得一个回合',"移除X点<span class='hong'>【</span>新月<span class='hong'>】</span>，你+1点<span class='lan'>【</span>石化<span class='lan'>】</span>，弃1张牌，对目标对手造成(X+1)点法术伤害③"];
                     var choices=['选项二']
                     if(player.countMark('shiHua')>=3){
                         choices.unshift('选项一');
@@ -2178,7 +2178,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 3'
                     player.removeMark('shiHua',3);
                     player.addSkill('cangBaiZhiYue1');
-                    player.gongJi('攻击行动');
+                    player.gongJi('[攻击行动]');
                     'step 4'
                     player.insertPhase();
                     'step 5'
@@ -2789,7 +2789,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             next.prompt2+="<span class='tiaoJian'>(主动攻击命中时)</span>目标角色+1[治疗]";
                             break;
                         case 'feng':
-                            next.prompt2+="<span class='tiaoJian'>(攻击行动结束后)</span>额外+1攻击行动";
+                            next.prompt2+="<span class='tiaoJian'>([攻击行动]结束后)</span>额外+1[攻击行动]";
                             break;
                         case 'lei':
                             next.prompt2+="本次攻击无法应战";
@@ -3146,7 +3146,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                 },
                 content:function(player){
-					var str='修罗连斩：火系攻击行动';
+					var str='修罗连斩：火系[攻击行动]';
 					var next=player.gongJi('h',function(card,player,event){
                         if(get.xiBie(card)!='huo') return false;
                         return lib.filter.cardEnabled(card,player,'forceEnable');
@@ -5906,15 +5906,15 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             
             //风之剑圣
             fengNuZhuiJi:'[响应]风怒追击[回合限定]',
-            fengNuZhuiJi_info:"<span class='tiaoJian'>(攻击行动结束后发动)</span>额外+1风系攻击行动",
+            fengNuZhuiJi_info:"<span class='tiaoJian'>([攻击行动]结束后发动)</span>额外+1风系[攻击行动]",
             shengJian:'[被动]圣剑',
-            shengJian_info:"若你的主动攻击为本次行动阶段的第3次攻击行动，则此攻击强制命中。本次攻击行动结束时，你摸X张牌，弃X张牌（X<4）。",
+            shengJian_info:"若你的主动攻击为本次行动阶段的第3次[攻击行动]，则此攻击强制命中。本次[攻击行动]结束时，你摸X张牌，弃X张牌（X<4）。",
             lieFengJi:"(独)[响应]烈风技",
             lieFengJi_info:"<span class='tiaoJian'>(攻击的目标拥有圣盾时发动)</span>无视对手圣盾的效果,且此攻击对手无法应战。",
             jiFengJi:"(独)[响应]疾风技",
-            jiFengJi_info:"<span class='tiaoJian'>(作为主动攻击打出后发动)</span>额外+1攻击行动。",
+            jiFengJi_info:"<span class='tiaoJian'>(作为主动攻击打出后发动)</span>额外+1[攻击行动]。",
             jianYing:"[响应]剑影[回合限定]",
-            jianYing_info:"[水晶]<span class='tiaoJian'>(攻击行动结束后发动)</span>额外+1攻击行动。",
+            jianYing_info:"[水晶]<span class='tiaoJian'>([攻击行动]结束后发动)</span>额外+1[攻击行动]。",
 
             //狂战士
             kuangHua:"[被动]狂化",
@@ -5936,7 +5936,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             lianMin:"[启动]怜悯[持续]",
             lianMin_info:"[宝石][横置]你的手牌上限恒定为7[持续]，你+1[水晶]。",
             shengLiao:"[法术]圣疗[回合限定]",
-            shengLiao_info:"[水晶]任意分配3[治疗]给1~3名角色，额外+1攻击行动或法术行动。",
+            shengLiao_info:"[水晶]任意分配3[治疗]给1~3名角色，额外+1[攻击行动]或[法术行动]。",
 
             //暗杀者
             fanShi:"[被动]反噬",
@@ -5948,7 +5948,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 
             //封印师
             faShuJiDang:"[响应]法术激荡",
-            faShuJiDang_info:"<span class='tiaoJian'>(法术行动结束后发动)</span>额外+1攻击行动。",
+            faShuJiDang_info:"<span class='tiaoJian'>([法术行动]结束后发动)</span>额外+1[攻击行动]。",
             diZhiFengYin:"(独)[法术]地之封印",
             diZhiFengYin_info:"<span class='tiaoJian'>(将【地之封印】放置于目标对手面前)</span>该对手获得(直到他从手中打出或展示出地系牌时强制触发)：对他造成3点法术伤害③，触发后移除此牌。",
             shuiZhiFengYin:"(独)[法术]水之封印",
@@ -5989,7 +5989,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             jingZhunSheJi:"(独)[响应]精准射击",
             jingZhunSheJi_info:"此攻击强制命中，但本次攻击伤害-1。",
             juJi:"[法术]狙击",
-            juJi_info:"[水晶]目标角色手牌补到5张[强制]，额外+1攻击行动",
+            juJi_info:"[水晶]目标角色手牌补到5张[强制]，额外+1[攻击行动]",
 
             //魔法少女
             moBaoChongJi:'[法术]魔爆冲击',
@@ -6003,7 +6003,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 
             //女武神
             shenShengZhuiJi:"[响应]神圣追击",
-            shenShengZhuiJi_info:"<span class='tiaoJian'>(攻击或法术行动结束后，移除你的1[治疗])</span>额外+1攻击行动。",
+            shenShengZhuiJi_info:"<span class='tiaoJian'>(攻击或[法术行动]结束后，移除你的1[治疗])</span>额外+1[攻击行动]。",
             zhiXuZhiYin:"[法术]秩序之印",
             zhiXuZhiYin_info:"<span class='tiaoJian'>(摸2张牌[强制])</span>你加+1[治疗]并+1[水晶]。",
             hePingXingZhe:"[被动]和平行者",
@@ -6017,15 +6017,15 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             yuanSuXiShou:'[响应]元素吸收',
             yuanSuXiShou_info:'<span class="tiaoJian">(对目标角色造成法术伤害时发动③)</span>你+1<span class="hong">【</span>元素<span class="hong">】</span>。',
             yuanSuDianRan:'[法术]元素点燃',
-            yuanSuDianRan_info:'<span class="tiaoJian">(移除3点</span><span class="hong">【</span>元素<span class="hong">】</span><span class="tiaoJian">)</span>对目标角色造成2点法术伤害③，额外+1法术行动；不能与【元素吸收】同时发动。',
+            yuanSuDianRan_info:'<span class="tiaoJian">(移除3点</span><span class="hong">【</span>元素<span class="hong">】</span><span class="tiaoJian">)</span>对目标角色造成2点法术伤害③，额外+1[法术行动]；不能与【元素吸收】同时发动。',
             yunShi:'(独)[法术]陨石',
-            yunShi_info:'对目标角色造成1点法术伤害③，额外+1法术行动；<span class="tiaoJian">(若你额外弃1张地系牌[展示]①)</span>本次伤害额外+1。',
+            yunShi_info:'对目标角色造成1点法术伤害③，额外+1[法术行动]；<span class="tiaoJian">(若你额外弃1张地系牌[展示]①)</span>本次伤害额外+1。',
             bingDong:'(独)[法术]冰冻',
             bingDong_info:'对目标角色造成1点法术伤害③，并指定1名角色+1[治疗]<span class="tiaoJian">(若你额外弃1张水系牌[展示]①)</span>本次伤害额外+1。',
             huoQou:'(独)[法术]火球',
             huoQou_info:'对目标角色造成2点法术伤害③，<span class="tiaoJian">(若你额外弃1张火系牌[展示]①)</span>本次伤害额外+1。',
             fengRen:'(独)[法术]风刃',
-            fengRen_info:'对目标角色造成1点法术伤害③，额外+1攻击行动；<span class="tiaoJian">(若你额外弃1张风系牌[展示]①)</span>本次伤害额外+1。',
+            fengRen_info:'对目标角色造成1点法术伤害③，额外+1[攻击行动]；<span class="tiaoJian">(若你额外弃1张风系牌[展示]①)</span>本次伤害额外+1。',
             leiJi:'(独)[法术]雷击',
             leiJi_info:'对目标角色造成1点法术伤害③，我方【战绩区】+1[宝石]；<span class="tiaoJian">(若你额外弃1张雷系牌[展示]①)</span>本次伤害额外+1。',
             yueGuang:'[法术]月光',
@@ -6047,7 +6047,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             anYueZhan:"[响应]暗月斩",
             anYueZhan_info:"[水晶]<span class='tiaoJian'>(仅【暗月形态】下可发动，主动攻击命中时②，移除X个【暗月】(x<3))</span>本次攻击伤害额外+X。",
             cangBaiZhiYue:"[法术]苍白之月",
-            cangBaiZhiYue_info:"[宝石]选择以下一项发动：<br>·<span class='tiaoJian'>(移除3点</span><span class='lan'>【</span>石化<span class='lan'>】</span><span class='tiaoJian'>)</span>你的下次主动攻击对手无法应战，额外+1攻击行动。你额外获得一个回合；<br>·移除X点<span class='hong'>【</span>新月<span class='hong'>】</span>，你+1点<span class='lan'>【</span>石化<span class='lan'>】</span>，弃1张牌，对目标对手造成(X+1)点法术伤害③。",
+            cangBaiZhiYue_info:"[宝石]选择以下一项发动：<br>·<span class='tiaoJian'>(移除3点</span><span class='lan'>【</span>石化<span class='lan'>】</span><span class='tiaoJian'>)</span>你的下次主动攻击对手无法应战，额外+1[攻击行动]。你额外获得一个回合；<br>·移除X点<span class='hong'>【</span>新月<span class='hong'>】</span>，你+1点<span class='lan'>【</span>石化<span class='lan'>】</span>，弃1张牌，对目标对手造成(X+1)点法术伤害③。",
             xinYue:"新月",
             xinYue_info:"<span class='hong'>【</span>新月<span class='hong'>】</span>为月之女神专有指示物，上限为2。",
             shiHua:"石化",
@@ -6082,15 +6082,15 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             maoXianJiaTianTang_info:"你执行【提炼】时，将提炼出的[宝石]和[水晶]全部交给目标队友。然后移除你的1[能量]",
             touTianHuanRi:"[法术]偷天换日[回合限定]",
             touTianHuanRi_backup:"[法术]偷天换日[回合限定]",
-            touTianHuanRi_info:"[水晶]将对方【战绩区】的1[宝石]转移到我方【战绩区】，或将我方【战绩区】的[水晶]全部转换为[宝石]，额外+1攻击行动或法术行动。",
+            touTianHuanRi_info:"[水晶]将对方【战绩区】的1[宝石]转移到我方【战绩区】，或将我方【战绩区】的[水晶]全部转换为[宝石]，额外+1[攻击行动]或[法术行动]。",
 
             //圣枪骑士
             shengShengQiShi:"[被动]神圣启示",
             shengShengQiShi_info:"<span class='tiaoJian'>(我方[星杯区]的[星杯]数不小于对方时)</span>你的[治疗]上限+1。",
             huiYao:"[法术]辉耀",
-            huiYao_info:"<span class='tiaoJian'>(弃1张水系牌[展示])</span>所有角色各+1[治疗]，额外+1攻击行动。",
+            huiYao_info:"<span class='tiaoJian'>(弃1张水系牌[展示])</span>所有角色各+1[治疗]，额外+1[攻击行动]。",
             chengJie:"[法术]惩戒",
-            chengJie_info:"<span class='tiaoJian'>(弃1张法术牌[展示])</span>将其他角色的1[治疗]转移给你，额外+1攻击行动。",
+            chengJie_info:"<span class='tiaoJian'>(弃1张法术牌[展示])</span>将其他角色的1[治疗]转移给你，额外+1[攻击行动]。",
             shengJi:"[被动]圣击",
             shengJi_info:"<span class='tiaoJian'>(攻击命中后发动②)</span>你+1[治疗]。",
             tianQiang:"[响应]天枪",
@@ -6098,11 +6098,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             diQiang:"[响应]地枪",
             diQiang_info:"<span class='tiaoJian'>(主动攻击命中后发动②，移除你的X[治疗])</span>本次攻击伤害额外+X，X最高为4；不能和【圣击】同时发动。",
             shengGuangQiYu:"[法术]圣光祈愈",
-            shengGuangQiYu_info:"[宝石]无视你的[治疗]上限为你+2[治疗]，但你的[治疗]最高为5，额外+1攻击行动；本回合你不能再发动天枪。",
+            shengGuangQiYu_info:"[宝石]无视你的[治疗]上限为你+2[治疗]，但你的[治疗]最高为5，额外+1[攻击行动]；本回合你不能再发动天枪。",
             
             //精灵射手
             yuanSuSheJi:"[响应]元素射击[回合限定]",
-            yuanSuSheJi_info:"<span class='tiaoJian'>(主动攻击时①，若攻击牌非暗系，弃1张法术牌[展示]或移除1个[祝福])</span>根据攻击牌类别附加以下【元素箭】效果：<br>【火之矢】：本次攻击伤害额外+1。<br>【水之矢】：<span class='tiaoJian'>(主动攻击命中时)</span>目标角色+1[治疗]。<br>【风之矢】：<span class='tiaoJian'>(攻击行动结束后)</span>额外+1攻击行动。<br>【雷之矢】：本次攻击无法应战。<br>【地之矢】：<span class='tiaoJian'>(主动攻击命中时②)</span>对目标角色造成1点法术伤害③。",
+            yuanSuSheJi_info:"<span class='tiaoJian'>(主动攻击时①，若攻击牌非暗系，弃1张法术牌[展示]或移除1个[祝福])</span>根据攻击牌类别附加以下【元素箭】效果：<br>【火之矢】：本次攻击伤害额外+1。<br>【水之矢】：<span class='tiaoJian'>(主动攻击命中时)</span>目标角色+1[治疗]。<br>【风之矢】：<span class='tiaoJian'>([攻击行动]结束后)</span>额外+1[攻击行动]。<br>【雷之矢】：本次攻击无法应战。<br>【地之矢】：<span class='tiaoJian'>(主动攻击命中时②)</span>对目标角色造成1点法术伤害③。",
             dongWuHuoBan:"[响应]动物伙伴",
             dongWuHuoBan_info:"<span class='tiaoJian'>(你的回合内，目标角色承受你造成的伤害⑥后)</span>你摸1张牌[强制]，你弃1张牌。",
             jingLingMiYi:"[启动]精灵秘仪[持续]",
@@ -6114,7 +6114,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 
             //瘟疫法师
             buXiu:"[响应]不朽",
-            buXiu_info:"<span class='tiaoJian'>(法术行动结束时发动)</span>你+1[治疗]。",
+            buXiu_info:"<span class='tiaoJian'>([法术行动]结束时发动)</span>你+1[治疗]。",
             shengDu:"[被动]圣渎",
             shengDu_info:"你的[治疗]不能抵御攻击伤害，你的[治疗]上限+3。",
             wenYi:"[法术]瘟疫",
@@ -6127,7 +6127,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 
             //魔剑士
             xiuLuoLianZhan:"[响应]修罗连斩[回合限定]",
-            xiuLuoLianZhan_info:"<span class='tiaoJian'>(攻击行动结束后发动)</span>额外+1火系攻击行动。",
+            xiuLuoLianZhan_info:"<span class='tiaoJian'>([攻击行动]结束后发动)</span>额外+1火系[攻击行动]。",
             anYingNingJu:"[启动]暗影凝聚",
             anYingNingJu_info:"<span class='tiaoJian'>(对自己造成1点法术伤害③)</span>[横置]持续到你的下个行动阶段开始，你都处于【暗影形态】，脱离【暗影形态】时[重置]。",
             anYingZhiLi:"[被动]暗影之力",
@@ -6143,7 +6143,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             xueSeJingJi:"[被动]血色荆棘",
             xueSeJingJi_info:"<span class='tiaoJian'>(攻击命中时②)你+1</span><span class='hong'>【</span>鲜血<span class='hong'>】</span>。",
             chiSeYiShan:"[响应]赤色一闪",
-            chiSeYiShan_info:"<span class='tiaoJian'>(攻击行动结束后，移除1点</span><span class='hong'>【</span>鲜血<span class='hong'>】</span><span class='tiaoJian'>，对自己造成2点法术伤害③)</span>额外+1攻击行动。",
+            chiSeYiShan_info:"<span class='tiaoJian'>([攻击行动]结束后，移除1点</span><span class='hong'>【</span>鲜血<span class='hong'>】</span><span class='tiaoJian'>，对自己造成2点法术伤害③)</span>额外+1[攻击行动]。",
             xueRanQiangWei:"[法术]血染蔷薇",
             xueRanQiangWei_info:"<span class='tiaoJian'>(移除2点</span><span class='hong'>【</span>鲜血<span class='hong'>】</span><span class='tiaoJian'>)</span>移除目标角色2[治疗]，将我方角色[能量区]的1[水晶]翻面为[宝石]。<span class='tiaoJian'>(若【血蔷薇庭院】在场)</span>额外对所有角色造成1点法术伤害。",
             xueQiPingZhang:"[响应]血气屏障",
@@ -6163,11 +6163,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             weiLiCiFu:"(独)[法术]威力赐福",
             weiLiCiFu_info:"<span class='tiaoJian'>(将威力赐福放置于目标队友面前)</span>该队友获得<span class='tiaoJian'>(攻击命中后可以移除此牌发动②)</span>本次攻击伤害额外+2。",
             xunJieCiFu:"(独)[法术]迅捷赐福",
-            xunJieCiFu_info:"<span class='tiaoJian'>(将迅捷赐福放置于目标队友面前)</span>该队友获得<span class='tiaoJian'>(法术行动或攻击行动结束时可以移除此牌发动)</span>额外+1攻击行动。",
+            xunJieCiFu_info:"<span class='tiaoJian'>(将迅捷赐福放置于目标队友面前)</span>该队友获得<span class='tiaoJian'>([法术行动]或[攻击行动]结束时可以移除此牌发动)</span>额外+1[攻击行动]。",
             qiDao:"[启动]祈祷[持续]",
             qiDao_info:"[宝石][横置]转为【祈祷形态】，在此形态下，你每发动一次主动攻击①，你+2<span class='hong'>【</span>祈祷符文<span class='hong'>】</span>。",
             faLiChaoXi:"[响应]法力潮汐[回合限定]",
-            faLiChaoXi_info:"[水晶]<span class='tiaoJian'>(法术行动结束时发动)</span>额外+1法术行动。",
+            faLiChaoXi_info:"[水晶]<span class='tiaoJian'>([法术行动]结束时发动)</span>额外+1[法术行动]。",
             qiDaoFuWen:"祈祷符文",
             qiDaoFuWen_info:"<span class='hong'>【</span>祈祷符文<span class='hong'>】</span>为祈祷师专有指示物，其上限为3。",
             
@@ -6183,7 +6183,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             reXueFeiTeng:"[被动]热血沸腾",
             reXueFeiTeng_info:"<span class='tiaoJian'>(当你因承受伤害而导致我方士气下降时强制发动[强制])</span>[横置]转发【热血沸腾状态】，该形态你因承受伤害不会导致我方士气下降[强制]。在你的回合结束阶段，若你处于此形态，[重置]并脱离此形态[强制],你+2[治疗]。",
             jieJiaoJieZao:"[响应]戒骄戒躁",
-            jieJiaoJieZao_info:"[水晶]<span class='tiaoJian'>(仅【热血沸腾状态】下，攻击行动或结束行动结束时发动)</span>[重置]并脱离此形态，额外+1攻击行动或法术行动。",
+            jieJiaoJieZao_info:"[水晶]<span class='tiaoJian'>(仅【热血沸腾状态】下，[攻击行动]或结束行动结束时发动)</span>[重置]并脱离此形态，额外+1[攻击行动]或[法术行动]。",
             xingHongShiZi:"[法术]猩红十字",
             xingHongShiZi_info:"[水晶]<span class='tiaoJian'>(移除1点</span><span class='hong'>【</span>血印<span class='hong'>】</span><span class='tiaoJian'>弃2张法术牌[展示]，对自己造成4点法术伤害)</span>对目标角色造成3点法术伤害③。",
             xueYin:"血印",
@@ -6219,7 +6219,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             
             //阴阳师
             shiShenJiangLin:"[法术]式神降临[持续]",
-            shiShenJiangLin_info:"<span class='tiaoJian'>(弃2张命格相同的手牌[展示])</span>[横置]转为【式神形态】，你+1<span class='hong'>【</span>鬼火<span class='hong'>】</span>，额外+1攻击行动。",
+            shiShenJiangLin_info:"<span class='tiaoJian'>(弃2张命格相同的手牌[展示])</span>[横置]转为【式神形态】，你+1<span class='hong'>【</span>鬼火<span class='hong'>】</span>，额外+1[攻击行动]。",
             yinYangZhanHuan:"[响应]阴阳转换",
             yinYangZhanHuan_info:"<span class='tiaoJian'>(应战攻击时①，打出1张与攻击牌命格相同的攻击牌[展示])</span>你应战此次攻击，并将本次攻击系别转为与此牌相同，你+1<span class='hong'>【</span>鬼火<span class='hong'>】</span>。<span class='tiaoJian'>(若处于【式神形态】，[重置]脱离【式神形态】)</span>本次攻击伤害为X，X为你的<span class='hong'>【</span>鬼火<span class='hong'>】</span>数。",
             shiShenZhuanHuan:"[响应]式神转换",
@@ -6269,7 +6269,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             leiGuangSanShe_backup:"[法术]雷光散射",
             leiGuangSanShe_info:"<span class='tiaoJian'>(移除1个雷系【充能】[展示])</span>对所有对手造成1点法术伤害③；<span class='tiaoJian'>(若你额外移除X个雷系【充能】[展示])</span>指定一名对手，本次对其攻击伤害额外+X③。",
             duoChongSheJi:"[响应]多重射击",
-            duoChongSheJi_info:"<span class='tiaoJian'>(攻击行动结束时发动，移除1个风系【充能】[展示])</span>视为一次暗系的主动攻击，但不能攻击上次的目标且本次攻击伤害-1；本回合你不能发动【魔贯冲击】。",
+            duoChongSheJi_info:"<span class='tiaoJian'>([攻击行动]结束时发动，移除1个风系【充能】[展示])</span>视为一次暗系的主动攻击，但不能攻击上次的目标且本次攻击伤害-1；本回合你不能发动【魔贯冲击】。",
             chongNeng:"[启动]充能",
             chongNeng_info:"[水晶]你弃到4张牌，摸X张牌[强制]，可将自己至多X张手牌面朝下放置在你的角色旁，作为【充能】(X<5)；本回合你不能发动【魔贯冲击】和【泪光散漫】。",
             moYan:"[启动]魔眼",
@@ -6287,7 +6287,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             anZhiZhangBi:"[响应]暗之障壁",
             anZhiZhangBi_info:"<span class='tiaoJian'>(任何人对你造成伤害时发动③)</span>弃X张法术牌或雷系牌[展示]。",
             chongYing:"[法术]充盈",
-            chongYing_info:"<span class='tiaoJian'>(弃1张法术牌或雷系牌[展示])</span>所有人各弃1张牌[展示]，我方角色可选择不如此做，除你以外每以此法弃1张法术牌或雷系牌，本回合你的下次主动攻击伤害额外+1；额外+1攻击行动。",
+            chongYing_info:"<span class='tiaoJian'>(弃1张法术牌或雷系牌[展示])</span>所有人各弃1张牌[展示]，我方角色可选择不如此做，除你以外每以此法弃1张法术牌或雷系牌，本回合你的下次主动攻击伤害额外+1；额外+1[攻击行动]。",
             qiHeiZhiQiang:"[响应]漆黑之枪",
             qiHeiZhiQiang_info:"X[水晶]<span class='tiaoJian'>(仅【幻影形态】下，主动攻击手牌为1或2的对手并命中后发动②)</span>本次攻击伤害额外+(X+2)。",
 
