@@ -2255,8 +2255,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 
             //仲裁者
             zhongCaiFaZe:{
-                trigger:{global:"enterGame"},
+                trigger:{global:"phaseBefore"},
                 forced:true,
+                filter:function(event,player){
+                    return game.phaseNumber==0
+                },
                 content:function(){
                     player.changeNengLiang('b',2);
                 }
@@ -3816,8 +3819,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 
             //英灵人形
             zhanWenZhangWo:{
-                trigger:{global:'enterGame'},
+                trigger:{global:'phaseBefor'},
                 forced:true,
+                filter:function(event,player){
+                    return game.phaseNumber==0;
+                },
                 content:function(){
                     player.addZhiShiWu('zhanWen',3);
                 }

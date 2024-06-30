@@ -640,7 +640,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 							lib.setPopped(ui.versushs,game.versusHoverHandcards,220);
 						}
 					}
-					event.trigger('enterGame');
+					
 				});
 			},
 
@@ -1069,7 +1069,6 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					}
 					
 
-					event.trigger('enterGame');
 				});
 			},
 
