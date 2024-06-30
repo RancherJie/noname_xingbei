@@ -3819,7 +3819,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 
             //英灵人形
             zhanWenZhangWo:{
-                trigger:{global:'phaseBefor'},
+                trigger:{global:'phaseBefore'},
                 forced:true,
                 filter:function(event,player){
                     return game.phaseNumber==0;
