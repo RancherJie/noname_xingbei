@@ -5763,7 +5763,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     name:'灵感',
                     markcount:'mark',
                     max:3,
-                }
+                    content:'mark',
+                },
+                markimage:'image/card/hong.png'
             },
             yongHengYueZhang:{
                 intro:{
