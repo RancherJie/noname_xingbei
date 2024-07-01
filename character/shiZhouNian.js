@@ -2291,23 +2291,37 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.removeZhiShiWu('shenPan',event.num);
                     target.damageFaShu(event.num,player);
                 },
-                group:'moRiShenPan_biXu',
+                group:'moRiShenPan_sheZhi',
                 subSkill:{
-                    biXu:{
+                    sheZhi:{
                         trigger:{player:'phaseUseBegin'},
                         forced:true,
-                        priority:-2,
+                        priority:4,
                         filter:function(event,player){
                             return player.countZhiShiWu('shenPan')>=get.info('shenPan').intro.max;
                         },
                         content:function(){
-                            'step 0'
-                            player.chooseTarget('末日宣告：选择一个目标',true).set('ai',function(target){
-                                return target.side!=player.side;
-                            });
-                            'step 1'
-                            player.useSkill('moRiShenPan',result.targets).set('action',true);
+                            trigger.canTeShu=false;
+                            player.addTempSkill('moRiShenPan_biXu',{player:'useSkill'});
                         }
+                    },
+                    biXu:{
+                        init:function(player,skill){
+                            player.addSkillBlocker(skill);
+                        },
+                        onremove:function(player,skill){
+                            player.removeSkillBlocker(skill);
+                        },
+                        skillBlocker:function(skill,player){
+                            var info=get.info(skill);
+                            return skill!='moRiShenPan'&&info.type=='faShu';
+                        },
+                        mod:{
+                            cardEnabled:function(card,player){
+                                return false;
+                            }
+                        },
+
                     }
                 }
             },
