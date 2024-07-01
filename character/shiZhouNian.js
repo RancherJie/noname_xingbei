@@ -5983,6 +5983,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     return player.side!=target.side;
                 },
                 content:function(){
+                    player.removeZhiShiWu('nuQi');
                     player.addZhiShiWu('zhiXing');
                     if(!target.hasSkill('tiaoXinX')){
                         target.addSkill('tiaoXinX');
