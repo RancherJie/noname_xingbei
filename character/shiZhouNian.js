@@ -5889,9 +5889,16 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     return get.is.zhuDongGongJi(event);
                 },
                 content:function(){
+                    'step 0'
                     player.removeZhiShiWu('nuQi');
                     trigger.baseDamage+=2;
                     player.storage.nuHou=trigger.card;
+                    var list=['是','否'];
+                    player.chooseControl(list).set('prompt','是否摸1张牌');
+                    'step 1'
+                    if(result.control=='是'){
+                        player.draw(1);
+                    }
                 },
                 group:"nuHou_weiMingZhong",
                 subSkill:{
@@ -6678,7 +6685,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             nuQi:"怒气",
             zhiXing:"知性",
             yongZheZhiXin_info:"游戏初始时，你+2[水晶]。",
-            nuHou_info:"<span class='tiaoJian'>(主动攻击前发动①，移除1点[怒气])</span>本次攻击伤害额外+2；<span class='tiaoJian'>(若未命中②)</span>你+1【知性】。",
+            nuHou_info:"<span class='tiaoJian'>(主动攻击前发动①，移除1点[怒气])</span>你可以摸1张牌,本次攻击伤害额外+2；<span class='tiaoJian'>(若未命中②)</span>你+1【知性】。",
             jinPiLiJin_info:"<span class='tiaoJian'>(发动【禁断之力】后强制触发[强制])</span>[横置]额外+1[攻击行动]；持续到你的下个行动阶段开始，你的手牌上限恒定为4[恒定]。 【精疲力竭】的效果结束时[重置]，并对自己造成3点法术伤害③。",
             mingJingZhiShui_info:"<span class='tiaoJian'>(主动攻击前发动①，移除4点【知性】)</span>本次攻击对手无法应战。<span class='tiaoJian'>(本次攻击结束时)</span>你+1[水晶]",
             tiaoXin_info:"<span class='tiaoJian'>(移除1点【怒气】)</span>将挑衅放置于目标对手面前，你+1【知性】；该对手在其下个行动阶段必须且只能主动攻击你，否则他跳过该行动阶段，触发后移除此牌。",
