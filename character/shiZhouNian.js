@@ -2404,6 +2404,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 
             //冒险家
             qiZha:{
+                type:'gongJi',
                 enable:['chooseToUse','gongJi'],
                 filter:function(event,player){
                     if(event.yingZhan==true) return false;
