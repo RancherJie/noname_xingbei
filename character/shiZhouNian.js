@@ -2490,6 +2490,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 enable:'phaseUse',
                 type:'teShu',
                 filter:function(event,player){
+                    if(event.parent.canTeShu==false) return false;
                     var side=player.side
                     if(side==true){
                         if(game.hongZhanJi.length==0) return false;
