@@ -5860,7 +5860,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             }
                             event.goto(5);
                             'step 4'
-                            player.changeZhanJi('r',1);
+                            player.addZhanJi('r',1);
                             player.changeZhiLiao(1);
                             'step 5'
                             event.trigger('yongHengYueZhang');
