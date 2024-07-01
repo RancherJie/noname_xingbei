@@ -10498,6 +10498,17 @@
 					'step 4'
 					num=event.num;
 					side=event.side;
+					//增加参数是否存在最大变动值，如果存在则进行限制
+					if(typeof event.shiQiMax=='number'){
+						if(num<0&&num<event.shiQiMax){
+							num=event.shiQiMax;
+						}
+						if(num>0&&num>event.shiQiMax){
+							num=event.shiQiMax;
+						}
+						
+					}
+
 					if(side==true){
 						game.hongShiQi+=num;
 						if(num>0){
@@ -13890,6 +13901,10 @@
 							if(event.faShu){
 								next.set('faShu',event.faShu)
 							}
+							//传递士气最大变动值
+							if(typeof event.shiQiMax=='number'){
+								next.set('shiQiMax',event.shiQiMax);
+							}
 						}
 					}
 					
@@ -17106,6 +17121,10 @@
 							if(event.shiQiXiaJiang==false){
 								next.set('shiQiXiaJiang',false);
 							}
+							//传递士气最大变动值
+							if(typeof event.shiQiMax=='number'){
+								next.set('shiQiMax',event.shiQiMax);
+							}
 							
 						}
 					}
@@ -17499,6 +17518,10 @@
 						}
 						if(event.shiQiXiaJiang==false){
 							next.set('shiQiXiaJiang',false);
+						}
+						//传递士气最大变动值
+						if(typeof event.shiQiMax=='number'){
+							next.set('shiQiMax',event.shiQiMax);
 						}
 						
 					}
@@ -17972,6 +17995,10 @@
 						var next=player.draw(num).set('yuanYin','damage').set('faShu',event.faShu);
 						if(event.shiQiXiaJiang==false){
 							next.set('shiQiXiaJiang',false);
+						}
+						//传递士气最大变动值
+						if(typeof event.shiQiMax=='number'){
+							next.set('shiQiMax',event.shiQiMax);
 						}
 						/*
 						if(event.notrigger){

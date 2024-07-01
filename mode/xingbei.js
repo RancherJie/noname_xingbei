@@ -1195,6 +1195,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 
 			_wuFaXingDong:{
 				filterx:function(event,player){
+					if(player.hasZhiShiWu('tiaoXinX')) return false;
 					if(player.name=='zhongCaiZhe'){
 						if(player.canBiShaShuiJing()) return false;
 					}else if(player.name=='yinYouShiRen'){

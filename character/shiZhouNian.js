@@ -33,7 +33,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             lingFuShi:['female','yong',4,['lingFu_leiMing','lingFu_fengXing','nianZhou','baiGuiYeXing','lingLiBengJie','yaoLi'],],
             //jianDi:['female','ji',6,['jianxiong'],],
             //geDouJia:['female','ji',6,['jianxiong'],],
-            //yongZhe:['male','xue',6,['jianxiong'],],
+            yongZhe:['male','xue','4/5',['yongZheZhiXin','nuHou','jinPiLiJin','mingJingZhiShui','tiaoXin','jinDuanZhiLi','siDou','','nuQi','zhiXing'],],
             //lingHunShuShi:['female','huan',6,['jianxiong'],],
             //xueZhiWuNv:['female','xue',6,['jianxiong'],],
             //dieWuZhe:['female','yong',6,['jianxiong'],],
@@ -5867,7 +5867,323 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         }
                     }
                 }
-            }
+            },
+
+            //勇者
+            yongZheZhiXin:{
+                trigger:{global:'phaseBefore'},
+                forced:true,
+                filter:function(event,player){
+                    return game.phaseNumber==0;
+                },
+                content:function(){
+                    player.addNengLiang('b',2);
+                }
+            },
+            nuHou:{
+                trigger:{player:'useCard'},
+                filter:function(event,player){
+                    if(!player.hasZhiShiWu('nuQi')) return false;
+                    return get.is.zhuDongGongJi(event);
+                },
+                content:function(){
+                    player.removeZhiShiWu('nuQi');
+                    trigger.baseDamage+=2;
+                    player.storage.nuHou=trigger.card;
+                },
+                group:"nuHou_weiMingZhong",
+                subSkill:{
+                    weiMingZhong:{
+                        trigger:{source:'gongJiWeiMingZhong'},
+                        filter:function(event,player){
+                            if(!player.storage.nuHou) return false;
+                            if(player.storage.nuHou!=event.source_card) return false;
+                            return true;
+                        },
+                        priority:1,
+                        direct:true,
+                        content:function(){
+                            player.addZhiShiWu('zhiXing');
+                        }
+                    }
+                }
+            },
+            jinPiLiJin:{
+                trigger:{player:'jinDuanZhiLi'},
+                forced:true,
+                content:function(){
+                    'step 0'
+                    player.hengZhi();
+                    player.storage.gongJi++;
+                    'step 1'
+                    player.qiPai();
+                },
+                group:'jinPiLiJin_chongZhi',
+                subSkill:{
+                    chongZhi:{
+                        trigger:{player:'phaseUseBegin'},
+                        direct:true,
+                        priority:3,
+                        filter:function(event,player){
+                            return player.isLinked();
+                        },
+                        content:function(){
+                            player.chongZhi();
+                            player.damageFaShu(3,player);
+                        },
+                    }
+                },
+                mod:{
+                    maxHandcardFinal:function(player,num){
+                        if(player.isLinked()) return 4;
+                    }
+                }
+            },
+            mingJingZhiShui:{
+                trigger:{player:'useCardBefore'},
+                filter:function(event,player){
+                    if(player.countZhiShiWu('zhiXing')<4) return false;
+                    return get.is.zhuDongGongJi(event);
+                },
+                content:function(){
+                    player.removeZhiShiWu('zhiXing',4);
+                    trigger.canYingZhan=false;
+                    trigger.mingJingZhiShui=true;
+                },
+                group:'mingJingZhiShui_jieShu',
+                subSkill:{
+                    jieShu:{
+                        trigger:{player:'useCardEnd'},
+                        direct:true,
+                        filter:function(event,player){
+                            return event.mingJingZhiShui;
+                        },
+                        content:function(){
+                           player.addNengLiang('b');
+                        },
+                    }
+                }
+            },
+            tiaoXin:{
+                type:'faShu',
+                enable:['chooseToUse','faShu'],
+                filter:function(event,player){
+                    var players=game.filterPlayer(function(current){
+                        return player.side!=current.side;
+                    });
+                    for(var i=0;i<players.length;i++){
+                        if(players[i].hasZhiShiWu('tiaoXinX')) return false;
+                    }
+                    return player.hasZhiShiWu('nuQi');
+                },
+                selectTarget:1,
+                filterTarget:function(card,player,target){
+                    return player.side!=target.side;
+                },
+                content:function(){
+                    player.addZhiShiWu('zhiXing');
+                    if(!target.hasSkill('tiaoXinX')){
+                        target.addSkill('tiaoXinX');
+                    }
+                    target.addZhiShiWu('tiaoXinX');
+                    target.storage.tiaoXinX_player=player;
+                },
+            },
+            tiaoXinX:{
+                intro:{
+                    content:'你在下个行动阶段必须且只能主动攻击勇者，否则他跳过该行动阶段，触发后移除此牌。',
+                },
+                markimage:'image/card/tiaoXin.png',
+
+                filterx:function(event,player){
+					return player.hasZhiShiWu('tiaoXinX');
+				},
+                filter:function(event,player){
+                    return lib.skill.tiaoXinX.filterx(event,player);
+                },
+                enable:'wuFaXingDong',
+				type:'wuFaXingDong',
+                content:function(){
+                    player.removeZhiShiWu('tiaoXinX')
+                    var evt=_status.event.getParent('phaseUse');
+					if(evt&&evt.name=='phaseUse'){
+						evt.skipped=true;
+					}
+                    player.removeSkill('tiaoXinX');
+                },
+                contentX:function(){
+                    player.removeZhiShiWu('tiaoXinX')
+                    player.removeSkill('tiaoXinX');
+                    trigger.cancel();
+                },
+                group:['tiaoXinX_qiDongQian','tiaoXinX_qiDongHou','tiaoXinX_kaiShi','tiaoXinX_sheZhi','tiaoXinX_yiChu'],
+                subSkill:{
+                    qiDongQian:{
+						trigger:{player:'phaseUseBegin'},
+						priority:2,
+						filter:function(event,player){
+							return lib.skill.tiaoXinX.filterx(event,player);
+						},
+                        content:function(){
+                            lib.skill.tiaoXinX.contentX();
+                        },
+                    },
+                    qiDongHou:{
+						trigger:{player:'phaseUseBegin'},
+                        priority:-1,
+						filter:function(event,player){
+							return lib.skill.tiaoXinX.filterx(event,player);
+						},
+                        content:function(){
+                            lib.skill.tiaoXinX.contentX();
+                        },
+                    },
+                    kaiShi:{
+						trigger:{player:'phaseUseBegin'},
+						firstDo:true,
+						filter:function(event,player){
+							return lib.skill.tiaoXinX.filterx(event,player);
+						},
+                        content:function(){
+                            lib.skill.tiaoXinX.contentX();
+                        },
+                    },
+                    sheZhi:{
+                        trigger:{player:'phaseUseBegin'},
+						lastDo:true,
+                        direct:true,
+						filter:function(event,player){
+							return lib.skill.tiaoXinX.filterx(event,player);
+						},
+                        content:function(){
+                            trigger.canTeShu=false;
+                            player.addTempSkill('tiaoXinX_xianZhi');
+                        },
+                    },
+                    yiChu:{
+                        trigger:{player:'phaseUseAfter'},
+                        filter:function(event,player){
+							return lib.skill.tiaoXinX.filterx(event,player);
+						},
+                        content:function(){
+                            player.removeZhiShiWu('tiaoXinX')
+                            player.removeSkill('tiaoXinX');
+                        },
+                    },
+                    xianZhi:{
+                        init:function(player,skill){
+                            player.addSkillBlocker(skill);
+                        },
+                        onremove:function(player,skill){
+                            player.removeSkillBlocker(skill);
+                        },
+                        skillBlocker:function(skill,player){
+                            var info=get.info(skill);
+                            return info.type=='faShu';
+                        },
+                        mod:{
+                            playerEnabled:function(card,player,target){
+                                if(!player.hasZhiShiWu('tiaoXinX')) return;
+                                if(_status.event.yingZhan==true) return;
+                                if(get.type(card)=='faShu') return false;
+                                if(player.storage.tiaoXinX_player!=target) return false;
+                            },
+                        }
+                    }
+                }, 
+            },
+            jinDuanZhiLi:{
+                group:['jinDuanZhiLi_mingZhong','jinDuanZhiLi_weiMingZhong'],
+                subSkill:{
+                    mingZhong:{
+                        trigger:{player:'useCardToTargeted'},
+                        filter:function(event,player){
+                            if(!player.canBiShaShuiJing()) return false;
+                            return get.is.zhuDongGongJi(event.parent);
+                        },
+                        content:function(){
+                            'step 0'
+                            player.removeBiShaShuiJing();
+                            'step 1'
+                            event.cards=player.getCards('h');
+                            player.discard(event.cards);
+                            'step 2'
+                            player.showCards(event.cards);
+                            'step 3'
+                            var num=0;
+                            for(var i=0;i<event.cards.length;i++){
+                                if(get.type(event.cards[i])=='faShu'){
+                                    player.addZhiShiWu('nuQi');
+                                }
+                                if(get.xiBie(event.cards[i])=='huo'){
+                                    num++;
+                                }
+                            };
+                            if(num>0){
+                                trigger.parent.baseDamage+=num;
+                                player.damageFaShu(num,player);
+                            }
+                            'step 4'
+                            event.player=player;
+                            event.trigger('jinDuanZhiLi');
+                        }
+                    },
+                    weiMingZhong:{
+                        trigger:{source:'gongJiWeiMingZhong'},
+                        filter:function(event,player){
+                            if(!player.canBiShaShuiJing()) return false;
+                            if(event.yingZhan==true) return false;
+                            return true;
+                        },
+                        content:function(){
+                            'step 0'
+                            player.removeBiShaShuiJing();
+                            'step 1'
+                            event.cards=player.getCards('h');
+                            player.discard(event.cards);
+                            'step 2'
+                            player.showCards(event.cards);
+                            'step 3'
+                            for(var i=0;i<event.cards.length;i++){
+                                if(get.type(event.cards[i])=='faShu'){
+                                    player.addZhiShiWu('nuQi');
+                                }
+                                if(get.xiBie(event.cards[i])=='shui'){
+                                    player.addZhiShiWu('zhiXing');
+                                }
+                            };
+                            'step 4'
+                            event.player=player;
+                            event.trigger('jinDuanZhiLi');
+                        }
+                    },
+                }
+            },
+            siDou:{
+                trigger:{player:'jiangYaoChengShou2'},
+                filter:function(event,player){
+                    return event.faShu&&player.canBiShaBaoShi();
+                },
+                content:function(){
+                    player.removeBiShaBaoShi();
+                    player.addZhiShiWu('nuQi',3);
+                    trigger.shiQiMax=-1;
+                }
+            },
+            nuQi:{
+                intro:{
+                    max:4,
+                    content:'mark',
+                },
+                markimage:'image/card/hong.png',
+            },
+            zhiXing:{
+                intro:{
+                    max:4,
+                    content:'mark',
+                },
+                markimage:'image/card/lan.png',
+            },
 
 		},
 		
@@ -6345,6 +6661,27 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             lingGan_info:"【灵感】为吟游诗人的专有指示物，上限为3。",
             yongHengYueZhang_jiAngKuangXiangQu:"(独)[激昂狂想曲]",
             yongHengYueZhang_shengLiJiaoXiangQu:"(独)[胜利交响曲]",
+
+            //勇者
+            yongZheZhiXin:"[被动]勇者之心",
+            nuHou:"[响应]怒吼",
+            jinPiLiJin:"[被动]精疲力竭",
+            mingJingZhiShui:"[响应]明镜止水",
+            tiaoXin:"[法术]挑衅",
+            tiaoXinX:"挑衅",
+            jinDuanZhiLi:"[响应]禁断之力",
+            siDou:"[响应]死斗",
+            nuQi:"怒气",
+            zhiXing:"知性",
+            yongZheZhiXin_info:"游戏初始时，你+2[水晶]。",
+            nuHou_info:"<span class='tiaoJian'>(主动攻击前发动①，移除1点[怒气])</span>本次攻击伤害额外+2；<span class='tiaoJian'>(若未命中②)</span>你+1【知性】。",
+            jinPiLiJin_info:"<span class='tiaoJian'>(发动【禁断之力】后强制触发[强制])</span>[横置]额外+1[攻击行动]；持续到你的下个行动阶段开始，你的手牌上限恒定为4[恒定]。 【精疲力竭】的效果结束时[重置]，并对自己造成3点法术伤害③。",
+            mingJingZhiShui_info:"<span class='tiaoJian'>(主动攻击前发动①，移除4点【知性】)</span>本次攻击对手无法应战。<span class='tiaoJian'>(本次攻击结束时)</span>你+1[水晶]",
+            tiaoXin_info:"<span class='tiaoJian'>(移除1点【怒气】)</span>将挑衅放置于目标对手面前，你+1【知性】；该对手在其下个行动阶段必须且只能主动攻击你，否则他跳过该行动阶段，触发后移除此牌。",
+            jinDuanZhiLi_info:"[水晶]<span class='tiaoJian'>(主动攻击命中或未命中后发动②)</span>弃掉你所有手牌[展示]，其中每有1张法术牌，你+1【怒气】；<span class='tiaoJian'>(若未命中②)</span>其中每有1张水系牌，你+1【知性】；<span class='tiaoJian'>(若命中②)</span>其中每有1张火系牌，本次攻击伤害额外+1，并对自己造成等同于火系牌数量的法术伤害③。",
+            siDou_info:"［宝石］（每当你承受法术伤害时发动⑥）你+3【怒气】；<span class='tiaoJian'>(若此伤害造成士气实际下降)</span>本次的士气下降值恒定为1。",
+            nuQi_info:"【怒气】为勇者专有指示物，上限为4。",
+            zhiXing_info:"【知性】为勇者专有指示物，上限为4。",
 
 		},
 	};
