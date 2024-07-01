@@ -4557,9 +4557,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 prepare:'showCards',
                 content:function(){
                     'step 0'
-                    player.damageFaShu(2,player);
-                    'step 1'
                     target.damageFaShu(2,player);
+                    'step 1'
+                    player.damageFaShu(2,player);
                 }
             },
             tianHuoDianKong:{
