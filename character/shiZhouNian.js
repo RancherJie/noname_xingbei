@@ -6011,11 +6011,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					}
                     player.removeSkill('tiaoXinX');
                 },
-                contentX:function(){
-                    player.removeZhiShiWu('tiaoXinX')
-                    player.removeSkill('tiaoXinX');
-                    trigger.cancel();
-                },
                 group:['tiaoXinX_qiDongQian','tiaoXinX_qiDongHou','tiaoXinX_kaiShi','tiaoXinX_sheZhi','tiaoXinX_yiChu'],
                 subSkill:{
                     qiDongQian:{
@@ -6025,7 +6020,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 							return lib.skill.tiaoXinX.filterx(event,player);
 						},
                         content:function(){
-                            lib.skill.tiaoXinX.contentX();
+                            player.removeZhiShiWu('tiaoXinX')
+                            player.removeSkill('tiaoXinX');
+                            trigger.cancel();
                         },
                     },
                     qiDongHou:{
@@ -6035,7 +6032,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 							return lib.skill.tiaoXinX.filterx(event,player);
 						},
                         content:function(){
-                            lib.skill.tiaoXinX.contentX();
+                            player.removeZhiShiWu('tiaoXinX')
+                            player.removeSkill('tiaoXinX');
+                            trigger.cancel();
                         },
                     },
                     kaiShi:{
@@ -6045,7 +6044,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 							return lib.skill.tiaoXinX.filterx(event,player);
 						},
                         content:function(){
-                            lib.skill.tiaoXinX.contentX();
+                            player.removeZhiShiWu('tiaoXinX')
+                            player.removeSkill('tiaoXinX');
+                            trigger.cancel();
                         },
                     },
                     sheZhi:{
