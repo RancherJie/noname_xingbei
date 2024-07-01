@@ -6081,7 +6081,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         },
                         skillBlocker:function(skill,player){
                             var info=get.info(skill);
-                            return info.type=='faShu'||info.tyep=='teShu';
+                            return info.type=='faShu'||info.type=='teShu';
                         },
                         mod:{
                             playerEnabled:function(card,player,target){
