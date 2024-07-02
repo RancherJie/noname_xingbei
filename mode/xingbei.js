@@ -1195,6 +1195,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 
 			_wuFaXingDong:{
 				filterx:function(event,player){
+					//console.log('--------------------------------');
 					//拥有挑衅直接false
 					if(player.hasZhiShiWu('tiaoXinX')) return false;
 					//判断是否有可使用技能
@@ -1203,12 +1204,15 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					skills=game.filterSkills(skills.concat(lib.skill.global),player,player.getSkills('e').concat(lib.skill.global));
 					game.expandSkills(skills);
 					for(var i=0;i<skills.length;i++){
+						//排除提炼
+						if(skills[i]=='_tiLian') continue;
+						
 						var info=get.info(skills[i]);
 						if(info.type=='faShu'||info.type=='gongJi'||info.type=='teShu'){
 							var enable=false;
 							if(typeof info.enable=='function') enable=info.enable(event);
 							else if(Array.isArray(info.enable)) enable=info.enable.contains('chooseToUse');
-							else if(info.enable=='phaseUse') enable=(event.type=='phase');
+							else if(info.enable=='phaseUse') enable=(event.type=='phase'||event.name=='phaseUse');
 							else if(typeof info.enable=='string') enable=(info.enable==event.name);
 							if(enable){
 								if(!game.expandSkills(player.getSkills(false).concat(lib.skill.global)).contains(skills[i])&&info.noHidden) enable=false;
@@ -1217,6 +1221,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 								if(info.viewAs&&typeof info.viewAs!='function'&&info.viewAsFilter&&info.viewAsFilter(player)==false) enable=false;
 								if(info.chooseButton&&_status.event.noButton) enable=false;
 							}
+							//console.log(skills[i],enable);
 							if(enable) return false;
 						}
 						
