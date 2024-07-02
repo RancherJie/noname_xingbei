@@ -1166,6 +1166,9 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 			versus_single_control_config:'单人控制',
 
 			_wuFaXingDong:'无法行动',
+			_wuFaXingDong_qiDongQian:'无法行动 启动前',
+			_wuFaXingDong_qiDongHou:'无法行动 启动后',
+			
 			//公共技能
             _xuRuo:"虚弱",
             _zhongDu:"中毒",
