@@ -1195,13 +1195,33 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 
 			_wuFaXingDong:{
 				filterx:function(event,player){
+					//拥有挑衅直接false
 					if(player.hasZhiShiWu('tiaoXinX')) return false;
-					if(player.name=='zhongCaiZhe'){
-						if(player.canBiShaShuiJing()) return false;
-					}else if(player.name=='yinYouShiRen'){
-						if(player.countZhiShiWu('lingGan')>1) return false;
+					//判断是否有可使用技能
+					var skills;
+					skills=player.getSkills('invisible',true,false);
+					skills=game.filterSkills(skills.concat(lib.skill.global),player,player.getSkills('e').concat(lib.skill.global));
+					game.expandSkills(skills);
+					for(var i=0;i<skills.length;i++){
+						var info=get.info(skills[i]);
+						if(info.type=='faShu'||info.type=='gongJi'||info.type=='teShu'){
+							var enable=false;
+							if(typeof info.enable=='function') enable=info.enable(event);
+							else if(Array.isArray(info.enable)) enable=info.enable.contains('chooseToUse');
+							else if(info.enable=='phaseUse') enable=(event.type=='phase');
+							else if(typeof info.enable=='string') enable=(info.enable==event.name);
+							if(enable){
+								if(!game.expandSkills(player.getSkills(false).concat(lib.skill.global)).contains(skills[i])&&info.noHidden) enable=false;
+								if(info.filter&&!info.filter(event,player)) enable=false;
+								if(info.viewAs&&typeof info.viewAs!='function'&&event.filterCard&&!event.filterCard(info.viewAs,player,event)) enable=false;
+								if(info.viewAs&&typeof info.viewAs!='function'&&info.viewAsFilter&&info.viewAsFilter(player)==false) enable=false;
+								if(info.chooseButton&&_status.event.noButton) enable=false;
+							}
+							if(enable) return true;
+						}
+						
 					}
-					if(((player.countCards('h')+3)<=player.getHandcardLimit())&&event.canTeShu!=false) return false;
+					//判断是否有可使用手牌
 					var cards=player.getCards('h');
 					for(var i=0;i<cards.length;i++){
 						if(player.hasUseTarget(cards[i])) return false;
