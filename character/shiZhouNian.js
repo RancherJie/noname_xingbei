@@ -6354,6 +6354,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     trigger.canYingZhan=false;
                     trigger.qiJueBengJi=true;
                 },
+                group:'qiJueBengJi_gongJiJieShu',
                 subSkill:{
                     gongJiJieShu:{
                         trigger:{player:'useCardAfter'},
