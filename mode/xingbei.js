@@ -1217,7 +1217,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 								if(info.viewAs&&typeof info.viewAs!='function'&&info.viewAsFilter&&info.viewAsFilter(player)==false) enable=false;
 								if(info.chooseButton&&_status.event.noButton) enable=false;
 							}
-							if(enable) return true;
+							if(enable) return false;
 						}
 						
 					}
