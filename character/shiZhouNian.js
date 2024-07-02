@@ -6252,10 +6252,14 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 2'
                     event.target=result.targets[0];
                     if(event.target.zhiLiao==0){
-                        player.damageFaShu(player.countZhiShiWu('douQi'),player);
+                        event.flag=true;
                     }
                     'step 3'
                     event.target.damageFaShu(1,player);
+                    'step 4'
+                    if(event.flag){
+                        player.damageFaShu(player.countZhiShiWu('douQi'),player);
+                    }
                     
                 }
             },
