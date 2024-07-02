@@ -3362,7 +3362,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     if(player.hasMark('xueQiangWeiTingYuan')){
                         event.flag=true;
                         event.num=0;
-                        event.targets=game.filterPlayer();
+                        event.targets=game.filterPlayer().sortBySeat(player);
                     }
                     'step 1'
                     if(event.flag){
