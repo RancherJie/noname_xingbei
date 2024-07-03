@@ -2323,7 +2323,16 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         },
 
                     }
-                }
+                },
+                ai:{
+					damage:true,
+					order:8,
+					result:{
+						target:function(player,target){
+							return get.damageEffect(target,player);
+						}
+					},
+				},
             },
             shenPanLangChao:{
                 forced:true,
