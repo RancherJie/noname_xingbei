@@ -3262,7 +3262,16 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         player.chongZhi();
                         player.addNengLiang('r');
                     }
-                }
+                },
+                ai:{
+					damage:true,
+					order:8,
+					result:{
+						target:function(player,target){
+							return get.damageEffect(target,player);
+						}
+					},
+				},
             },
             huangQaunZhenChan:{
                 usable:1,
