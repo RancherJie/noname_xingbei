@@ -5630,7 +5630,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 group:['chenLunXieZouQu_chongZhi','chenLunXieZouQu_jiShu'],
                 subSkill:{
                     chongZhi:{
-                        trigger:{player:'phaseBegin'},
+                        trigger:{global:'phaseBegin'},
                         direct:true,
                         firstDo:true,
                         content:function(){
