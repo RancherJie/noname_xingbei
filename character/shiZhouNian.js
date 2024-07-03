@@ -5384,7 +5384,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             player.storage.chongYing_use=true;
                         }   
                     }
-                }
+                },
+                ai:{
+					order:8,
+					result:{
+						player:2,
+					},
+				},
             },
             qiHeiZhiQiang:{
                 trigger:{player:"useCardToTargeted"},
