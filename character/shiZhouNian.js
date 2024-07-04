@@ -2010,8 +2010,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 lastDo:true,
                 filter:function(event,player){
                     if(event.player.side==player.side) return false;
-                    if(get.itemtype(event.cards)!='cards') return false;
                     if(get.type(event.card)!='gongJi') return false;
+                    if(event.card.isCard!=true) return false;
                     if(event.targets.length<=0) return false;
                     var anYue=player.getExpansions('anYue');
                     if(_status.connectMode&&anYue.length>0) return true;
