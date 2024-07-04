@@ -2468,11 +2468,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         case 'lei':name='leiGuangZhan';break;
                         case 'di':name='diLieZhan';break;
                     }
-                    var card={name:name,xiBie:xiBie,isCard:true};
+                    var card={name:name,xiBie:xiBie};
                     player.useCard(card,target).set('action',true);
                     event.finish();
                     'step 2'
-                    var card={name:'anMie',xiBie:'an',isCard:true};
+                    var card={name:'anMie',xiBie:'an'};
                     player.useCard(card,target).set('action',true);
                     event.finish();
                 },
