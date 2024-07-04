@@ -2067,6 +2067,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             },
             yueZhiLunHui:{
                 trigger:{player:'phaseEnd'},
+                priority:1,
                 filter:function(event,player){
                     return player.zhiLiao>0||player.getExpansions('anYue').length>0;
                 },
