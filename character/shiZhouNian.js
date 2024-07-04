@@ -6501,11 +6501,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     var xiBie=get.xiBie(cards[0]);
                     var name;
                     switch(xiBie){
-                        case'shui':name='shuiLianZhan';break;
+                        case 'shui':name='shuiLianZhan';break;
                         case 'huo':name='huoYanZhan';break;
                         case 'feng':name='fengShenZhan';break;
                         case 'lei':name='leiGuangZhan';break;
                         case 'di':name='diLieZhan';break;
+                        case 'an:':name='anMie';break;
                     }
                     player.useCard({name:name,xiBie:xiBie,number:'sheng',shengXieJuBao:true},target).set('action',true);
                 },
