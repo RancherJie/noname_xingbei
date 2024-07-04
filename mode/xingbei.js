@@ -2377,7 +2377,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 							source=arguments[i];
 						}
 					}
-					if(typeof num!='number'||!num) num=1;
+					if(typeof num!='number') num=1;
 					if(get.itemtype(source)!='player') source=this;
 					this.damage(num,source).set('faShu',true);
 				},
