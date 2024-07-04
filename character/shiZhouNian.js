@@ -4339,6 +4339,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             heiAnJiLi:{
                 trigger:{player:'phaseEnd'},
                 forced:true,
+                priority:1,
                 filter:function(event,player){
                     return player.countZhiShiWu('guiHuo')>=3;
                 },
