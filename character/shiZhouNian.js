@@ -6532,13 +6532,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                 event.finish();
                             }else{
                                 event.num=result.control;
-                                player.changeZhiLiao(-num);
+                                player.changeZhiLiao(-event.num);
                                 player.chooseTarget(true,function(card,player,target){
                                     return target!=player&&target.side==player.side;
                                 });
                             }
                             'step 2'
-                            result.targets[0].chooseToDiscard('h',true,num);
+                            result.targets[0].chooseToDiscard('h',true,event.num);
                         }
                     }
                 }
