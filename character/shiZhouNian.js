@@ -6717,10 +6717,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     if(player.countZhiShiWu('shengHuangHuiGuangPaoX')<1) return false;
                     var num=4;
                     if(player.side==true){
-                        var shiQiCha=game.hongShiQi-game.lanShiQi;
+                        var shiQiCha=game.lanShiQi-game.hongShiQi;
                         num+=Math.max(0,shiQiCha);
                     }else{
-                        var shiQiCha=game.lanShiQi-game.hongShiQi;
+                        var shiQiCha=game.hongShiQi-game.lanShiQi;
                         num+=Math.max(0,shiQiCha);
                     }
                     return player.countZhiShiWu('xinYang')>=num;
@@ -6730,10 +6730,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 contentBefore:function(){
                     var num=4;
                     if(player.side==true){
-                        var shiQiCha=game.hongShiQi-game.lanShiQi;
+                        var shiQiCha=game.lanShiQi-game.hongShiQi;
                         num+=Math.max(0,shiQiCha);
                     }else{
-                        var shiQiCha=game.lanShiQi-game.hongShiQi;
+                        var shiQiCha=game.hongShiQi-game.lanShiQi;
                         num+=Math.max(0,shiQiCha);
                     }
                     player.removeZhiShiWu('shengHuangHuiGuangPaoX',num);
