@@ -2955,6 +2955,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     chongZhi:{
                         trigger:{player:'phaseEnd'},
                         forced:true,
+                        priority:1,
                         filter:function(event,player){
                             if(!player.isLinked()) return false;
                             var cards=player.getCards('s',function(card){
