@@ -49,7 +49,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             xueSeJianLing:['female','xue',4,['xueSeJingJi','chiSeYiShan','xueRanQiangWei','xueQiPingZhang','xueQiangWeiTingYuan','sanHuaLunWu','xianXue'],],
             yueZhiNvShen:['female','sheng',5,['xinYueBiHu','anYueZuZhou','meiDuShaZhiYan','yueZhiLunHui','yueDu','anYueZhan','cangBaiZhiYue','xinYue','shiHua','anYue'],],
             //shouLingWuShi:['female','ji',6,['jianxiong'],],
-            //shengGong:['male','sheng',6,['jianxiong'],],
+            shengGong:['female','sheng','4/5',['tianZhiGong','shengXieJuBao','shengHuangJiangLin','shengGuangBaoLie','liuXingShengDan','shengHuangHuiGuangPao','ziDongTianChong','xinYang','shengHuangHuiGuangPaoX'],],
 		},
 		
 		
@@ -6424,6 +6424,405 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 markimage:'image/card/hong.png',
             },
 
+            //圣弓
+            tianZhiGong:{
+                trigger:{global:'phaseBefore'},
+                filter:function(event,player){
+                    return game.phaseNumber==0;
+                },
+                forced:true,
+                content:function(){
+                    player.addZhiShiWu('shengHuangHuiGuangPaoX')
+                },
+                mod:{
+                    maxZhiLiao:function(player,num){
+                        return num+1;
+                    }
+                },
+                group:['tianZhiGong_zhuDongGongJi','tianZhiGong_zhuDongGongJiMingZhong'],
+                subSkill:{
+                    zhuDongGongJi:{
+                        trigger:{player:'useCard'},
+                        forced:true,
+                        filter:function(event,player){
+                            return get.is.zhuDongGongJi(event)&&get.mingGe(event.card)!='sheng';
+                        },
+                        content:function(){
+                            trigger.baseDamage-=1;
+                        }
+                    },
+                    zhuDongGongJiMingZhong:{
+                        trigger:{player:'useCardToTargeted'},
+                        forced:true,
+                        filter:function(event,player){
+                            return get.is.zhuDongGongJi(event.parent)&&get.mingGe(event.card)=='sheng';
+                        },
+                        content:function(){
+                            player.addZhiShiWu('xinYang')
+                        }
+                    }
+                }
+            },
+            shengXieJuBao:{
+                type:'faShu',
+                enable:['chooseToUse','faShu'],
+                filter:function(event,player){
+                    var h=player.getCards('h');
+					var dict={};
+                    for(var i=0;i<h.length;i++){
+                        if(get.type(h[i])!='gongJi') continue;
+                        var xiBie=get.xiBie(h[i]);
+                        if(!dict[xiBie]) dict[xiBie]=0;
+                        dict[xiBie]++;
+                    }
+    				let maxValue=-Infinity;  
+                    for(let key in dict) {  
+						if (dict[key] > maxValue) {  
+							maxValue = dict[key];  
+						}
+					}
+                    return maxValue>=2;
+                },
+                selectCard:2,
+                filterCard:function(card){
+                    if(get.type(card)!='gongJi') return false;
+                    if(!ui.selected.cards.length) return true;
+                    var xiBie=get.xiBie(card);
+                    return get.xiBie(ui.selected.cards[0])==xiBie;
+                },
+                complexCard:true,
+                prepare:'showCards',
+                selectTarget:1,
+                filterTarget:function(card,player,target){
+                    var cardx={name:'anMie'};
+                    return player.canUse(cardx,target);
+                },
+                content:function(){
+                    var xiBie=get.xiBie(cards[0]);
+                    var name;
+                    switch(xiBie){
+                        case'shui':name='shuiLianZhan';break;
+                        case 'huo':name='huoYanZhan';break;
+                        case 'feng':name='fengShenZhan';break;
+                        case 'lei':name='leiGuangZhan';break;
+                        case 'di':name='diLieZhan';break;
+                    }
+                    player.useCard({name:name,xiBie:xiBie,number:'sheng',shengXieJuBao:true},target).set('action',true);
+                },
+                group:'shengXieJuBao_gongJiWeiMingZhong',
+                subSkill:{
+                    gongJiWeiMingZhong:{
+                        trigger:{source:'gongJiWeiMingZhong'},
+                        filter:function(event,player){
+                            return player.zhiLiao>0&&event.source_card.shengXieJuBao;
+                        },
+                        direct:true,
+                        content:function(){
+                            'step 0'
+                            if(player.zhiLiao>1){
+                                var list=[1,2,'cancel2'];
+                            }else{
+                                var list=[1,'cancel2'];
+                            }
+                            var next=player.chooseControl(list);
+                            next.set('prompt','是否移除X点[治疗]，目标队友弃X张牌');
+                            'step 1'
+                            if(result.control=='cancel2'){
+                                event.finish();
+                            }else{
+                                event.num=result.control;
+                                player.changeZhiLiao(-num);
+                                player.chooseTarget(true,function(card,player,target){
+                                    return target!=player&&target.side==player.side;
+                                });
+                            }
+                            'step 2'
+                            result.targets[0].chooseToDiscard('h',true,num);
+                        }
+                    }
+                }
+            },
+            shengHuangJiangLin:{
+                type:'faShu',
+                enable:['chooseToUse','faShu'],
+                filter:function(event,player){
+                    if(player.isLinked()) return false;
+                    return player.zhiLiao>=2||player.countZhiShiWu('xinYang')>=2;
+                },
+                chooseButton:{
+                    dialog:function(event,player){
+						var dialog=ui.create.dialog('圣煌降临：移除[治疗]或【信仰】','hidden');
+                        var list=[];
+                        if(player.zhiLiao>=2){
+                            list.push('治疗');
+                        }
+                        if(player.countZhiShiWu('xinYang')>=2){
+                            list.push('信仰');
+                        }
+						dialog.add([list,'tdnodes']);
+						return dialog;
+					},
+                    backup:function(links,player){
+						return{
+							links:links,
+							type:'faShu',
+							content:function(){
+								event.links=lib.skill.shengHuangJiangLin_backup.links;
+                                if(event.links[0]=='治疗'){
+                                    player.changeZhiLiao(-2);
+                                }else if(event.links[0]=='信仰'){
+                                    player.removeZhiShiWu('xinYang',2);
+                                }
+                                player.hengZhi();
+                                player.storage.faShu++;
+							},
+						}
+					},
+                },
+                group:"shengHuangJiangLin_chongZhi",
+                subSkill:{
+                    chongZhi:{
+                        trigger:{player:'useSkillBegin'},
+                        direct:true,
+                        filter:function(event,player){
+                            if(!player.isLinked()) return false;
+                            var info=get.info(event.skill);
+                            return info.type=='teShu';
+                        },
+                        content:function(){
+                            player.chongZhi();
+                            player.changeZhiLiao(1);
+                        }
+                    }
+                }
+            },
+            shengGuangBaoLie:{
+                type:'faShu',
+                enable:['chooseToUse','faShu'],
+                filter:function(event,player){
+                    return player.isLinked();
+                },
+                chooseButton:{
+                    dialog:function(event,player){
+                        var dialog=ui.create.dialog('圣光爆裂','hidden');
+                        var list=[['1',"移除你的1点[治疗]，摸一张牌[强制]，然后你+1【信仰】，目标队友+1[治疗]"],['2',"<span class='tiaoJian'>(移除你的X[治疗]，选择最多X名手牌数不大于你手牌数-X的对手)</span>你弃X张牌，然后对他们各造成(Y+2)点攻击伤害。 Y为目标数中拥有[治疗]的人数"]]
+						dialog.add([list,'textbutton']);
+						return dialog;
+                    },
+                    filter:function(button,player){
+                        var link=button.link;
+                        if(link=='1'){
+                            return true;
+                        }
+                        if(link=='2'){
+                            var targets=game.filterPlayer(function(current){
+                                return current.side!=player.side&&current.countCards('h')<=player.countCards('h');
+                            })
+                            return player.zhiLiao>0&&targets.length>0;
+                        }
+                    },
+                    backup:function(links,player){
+                        if(links[0]=='1'){
+                            var next=get.copy(lib.skill['shengGuangBaoLie_1']);
+                        }else if(links[0]=='2'){
+                            var next=get.copy(lib.skill['shengGuangBaoLie_2']);
+                        }
+						return next;
+					},
+                    prompt:function(links,player){
+                        return '目标队友+1[治疗]';
+                    }
+                },
+                subSkill:{
+                    1:{
+                        type:'faShu',
+                        selectTarget:1,
+                        filterTarget:function(card,player,target){
+                            return target.side==player.side&&target!=player;
+                        },
+                        content:function(){
+                            if(player.zhiLiao>0){
+                                player.changeZhiLiao(-1);
+                            }
+                            player.draw(1);
+                            player.addZhiShiWu('xinYang');
+                            target.changeZhiLiao(1);
+                        }
+                    },
+                    2:{
+                        type:'faShu',
+                        content:function(){
+                            'step 0'
+                            var list=[];
+                            for(var i=1;i<=player.zhiLiao;i++){
+                                list.push(i);
+                            }
+                            player.chooseControl(list).set('prompt','移除你的X[治疗]');
+                            'step 1'
+                            player.changeZhiLiao(-result.control);
+                            player.chooseTarget(true,[1,result.control],function(card,player,target){
+                                return target.countCards('h')<=player.countCards('h')&&target.side!=player.side;
+                            });
+                            'step 2'
+                            event.num=2;
+                            event.targets=result.targets.sortBySeat();
+                            for(var i=0;i<event.targets.length;i++){
+                                if(event.targets[i].zhiLiao>0) event.num++;
+                            }
+                            'step 3'
+                            var target=event.targets.shift();
+                            target.damage(event.num,player);
+                            if(event.targets.length>0){
+                                event.redo();
+                            }
+                        }
+                    }
+                }
+            },
+            liuXingShengDan:{
+                trigger:{player:'useCardBefore'},
+                filter:function(event,player){
+                    if(!player.isLinked()) return false;
+                    return get.is.zhuDongGongJi(event)&&(player.zhiLiao>0||player.countZhiShiWu('xinYang')>0);
+                },
+                content:function(){
+                    'step 0'
+                    var list=[];
+                    if(player.zhiLiao>0){
+                        list.push('治疗');
+                    }
+                    if(player.countZhiShiWu('xinYang')>0){
+                        list.push('信仰');
+                    }
+                    player.chooseControl(list).set('prompt','移除1点[治疗]或1点【信仰】');
+                    'step 1'
+                    if(result.control=='治疗'){
+                        player.changeZhiLiao(-1);
+                    }else if(result.control=='信仰'){
+                        player.removeZhiShiWu('xinYang',1);
+                    }
+                    player.chooseTarget(true,function(card,player,target){
+                        return target.side==player.side;
+                    }).set('prompt','我方目标角色+1[治疗]');
+                    'step 2'
+                    result.targets[0].changeZhiLiao(1);
+                }
+            },
+            shengHuangHuiGuangPao:{
+                type:'faShu',
+                enable:['chooseToUse','faShu'],
+                filter:function(event,player){
+                    if(!player.isLinked()) return false;
+                    if(player.countZhiShiWu('shengHuangHuiGuangPaoX')<1) return false;
+                    var num=4;
+                    if(player.side==true){
+                        var shiQiCha=game.hongShiQi-game.lanShiQi;
+                        num+=Math.max(0,shiQiCha);
+                    }else{
+                        var shiQiCha=game.lanShiQi-game.hongShiQi;
+                        num+=Math.max(0,shiQiCha);
+                    }
+                    return player.countZhiShiWu('xinYang')>=num;
+                },
+                selectTarget:-1,
+                filterTarget:true,
+                contentBefore:function(){
+                    var num=4;
+                    if(player.side==true){
+                        var shiQiCha=game.hongShiQi-game.lanShiQi;
+                        num+=Math.max(0,shiQiCha);
+                    }else{
+                        var shiQiCha=game.lanShiQi-game.hongShiQi;
+                        num+=Math.max(0,shiQiCha);
+                    }
+                    player.removeZhiShiWu('shengHuangHuiGuangPaoX',num);
+                    player.removeZhiShiWu('xinYang',num);
+                },
+                content:function(){
+                    if(target.countCards('h')>4){
+                        target.chooseToDiscard(true,'h',target.countCards('h')-4);
+                    }
+                },
+                contentAfter:function(){
+                    'step 0'
+                    player.changeXingBei(1);
+                    var choiceList=['红方士气设置为蓝方士气','蓝方士气设置为红方士气'];
+                    var list=['选项一','选项二']
+                    player.chooseControl().set('choiceList',choiceList);
+                    'step 1'
+                    if(result.control=='选项一'){
+                        var num=game.lanShiQi-game.hongShiQi;
+                        game.changeShiQi(num,true);
+                    }else{
+                        var num=game.hongShiQi-game.lanShiQi;
+                        game.changeShiQi(num,false);
+                    }
+                }
+            },
+            ziDongTianChong:{
+                forced:true,
+                trigger:{player:'phaseEnd'},
+                priority:1,
+                filter:function(event,player){
+                    return player.canBiShaShuiJing()&&!event.teShu;
+                },
+                content:function(){
+                    'step 0'
+                    var choiceList=['[水晶]你+1【信仰】或+1[治疗]','[宝石]你+1[水晶]，+2【信仰】或+2[治疗]'];
+                    var list=['选项一'];
+                    if(player.canBiShaBaoShi()){
+                        list.push('选项二');
+                    }
+                    player.chooseControl(list).set('choiceList',choiceList);
+                    'step 1'
+                    if(result.control=='选项一'){
+                        player.removeBiShaShuiJing();
+                        event.num=1;
+                    }else{
+                        player.removeBiShaBaoShi();
+                        player.addNengLiang('b');
+                        event.num=2;
+                    }
+                    'step 2'
+                    var list=['治疗','信仰'];
+                    player.chooseControl(list).set('prompt','+'+event.num+'点[治疗]或[信仰]');
+                    'step 3'
+                    if(result.control=='治疗'){
+                        player.changeZhiLiao(event.num);
+                    }else if(result.control=='信仰'){
+                        player.addZhiShiWu('xinYang',event.num);
+                    }
+                },
+                group:'ziDongTianChong_teShu',
+                subSkill:{
+                    teShu:{
+                        trigger:{player:'useSkill'},
+                        direct:true,
+                        filter:function(event,player){
+                            var info=get.info(event.skill);
+                            return info.type=='teShu';
+                        },
+                        content:function(){
+                            trigger.getParent('phase').teShu=true;
+                        }
+                    }
+                }
+            },
+            xinYang:{
+                intro:{
+                    content:'mark',
+                    max:10,
+                },
+                markimage:'image/card/hong.png',
+            },
+            shengHuangHuiGuangPaoX:{
+                intro:{
+                    content:'mark',
+                    max:1,
+                },
+                markimage:'image/card/lan.png',
+            },
+
 		},
 		
 		translate:{
@@ -6940,6 +7339,29 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             qiJueBengJi_info:"<span class='tiaoJian'>(主动攻击前发动①，移除1点【斗气】)</span>本次攻击对方无法应战，然后对自己造成X点法术伤害③，X为你的【斗气】数；不能和蓄力一击同时发动。",
             douShenTianQu_info:"[水晶]你弃到3张牌，+2[治疗]。",
             douQi_info:"【斗气】为格斗家专有指示物，上限为6",
+
+            //圣弓
+            tianZhiGong:"[被动]天之弓",
+            shengXieJuBao:"[法术]圣屑飓暴",
+            shengHuangJiangLin:"[法术]圣煌降临[持续]",
+            shengHuangJiangLin_backup:"[法术]圣煌降临[持续]",
+            shengGuangBaoLie:"[法术]圣光爆裂",
+            shengGuangBaoLie_backup:"[法术]圣光爆裂",
+            liuXingShengDan:"[响应]流星圣弹",
+            shengHuangHuiGuangPao:"[法术]圣煌辉光炮",
+            ziDongTianChong:"[被动]自动填充",
+            xinYang:"信仰",
+            shengHuangHuiGuangPaoX:"圣煌辉光炮",
+            
+            tianZhiGong_info:"游戏初始时，你+1【圣煌辉光炮】。你的[治疗]上限+1。 <span class='tiaoJian'>(主动攻击时，若攻击牌不为圣类命格)</span>本次攻击伤害-1；<span class='tiaoJian'>(主动攻击命中时，若攻击牌为圣类命格)</span>你+1【信仰】。",
+            shengXieJuBao_info:"<span class='tiaoJian'>(弃2张同系攻击牌[展示])</span>视为一次圣类命格的该系主动攻击。 <span class='tiaoJian'>(若攻击未命中②，移除X点[治疗]，X最高为2)</span>目标队友弃X张牌。",
+            shengHuangJiangLin_info:"<span class='tiaoJian'>(移除你的2个[治疗]或2点【信仰】)</span>[横置]，转为【圣煌形态】，额外+1[法术行动]。此形态下，你若执行【特殊行动】，则[重置]脱离【圣煌形态】并+1[治疗]。",
+            shengGuangBaoLie_info:"<span class='tiaoJian'>(仅【圣煌形态】下可发动)</span>你选择以下一项发动：<br>·移除你的1点[治疗]，摸一张牌[强制]，然后你+1【信仰】，目标队友+1[治疗]。 <br>·<span class='tiaoJian'>(移除你的X[治疗]，选择最多X名手牌数不大于你手牌数-X的对手)</span>你弃X张牌，然后对他们各造成(Y+2)点攻击伤害。 Y为目标数中拥有[治疗]的人数。",
+            liuXingShengDan_info:"<span class='tiaoJian'>(仅【圣煌形态】下，主动攻击前①，移除你的1点[治疗]或是1点【信仰】)</span>我方目标角色+1[治疗]。",
+            shengHuangHuiGuangPao_info:"<span class='tiaoJian'>(仅【圣煌形态】下可发动，移除1点【圣煌辉光炮】，移除4点【信仰】，并额外移除等同我方落后士气的【信仰】数)</span>所有角色将手牌调整为4张，我方[星杯区]+1[星杯]，然后将一方[士气]调整与另一方相同。",
+            ziDongTianChong_info:"<span class='tiaoJian'>(你的回合结束时，若你未执行【特殊行动】)</span>你选择以下一项发动：<br>·[水晶]你+1【信仰】或+1[治疗]。 <br>·[宝石]你+1[水晶]，+2【信仰】或+2[治疗]。",
+            xinYang_info:"【信仰】为圣弓专有指示物，上限为10。",
+            shengHuangHuiGuangPaoX_info:"【圣煌辉光炮】为圣弓专有指示物，上限为1。",
 
 		},
 	};
