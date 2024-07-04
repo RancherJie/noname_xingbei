@@ -6359,7 +6359,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         }
                     },
                     xuLiYiji:{
-                        trigger:{player:"xuLiYiji"},
+                        trigger:{player:"xuLiYijiBegin"},
                         direct:true,
                         content:function(){
                             player.chongZhi();
