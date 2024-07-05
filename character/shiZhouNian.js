@@ -6592,8 +6592,17 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             return info.type=='teShu';
                         },
                         content:function(){
+                            'step 0'
                             player.chongZhi();
-                            player.changeZhiLiao(1);
+                            'step 1'
+                            var list=['治疗','信仰'];
+                            player.chooseControl(list).set('prompt','+1点[治疗]或【信仰】');
+                            'step 2'
+                            if(result.control=='治疗'){
+                                player.changeZhiLiao(1);
+                            }else if(result.control=='信仰'){
+                                player.addZhiShiWu('xinYang',1);
+                            }
                         }
                     }
                 }
@@ -7357,7 +7366,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             
             tianZhiGong_info:"游戏初始时，你+2[水晶]，你+1【圣煌辉光炮】。你的[治疗]上限+1。 <span class='tiaoJian'>(主动攻击时，若攻击牌不为圣类命格)</span>本次攻击伤害-1；<span class='tiaoJian'>(主动攻击命中时，若攻击牌为圣类命格)</span>你+1【信仰】。",
             shengXieJuBao_info:"<span class='tiaoJian'>(弃2张同系攻击牌[展示])</span>视为一次圣类命格的该系主动攻击。 <span class='tiaoJian'>(若攻击未命中②，移除X点[治疗]，X最高为2)</span>目标队友弃X张牌。",
-            shengHuangJiangLin_info:"<span class='tiaoJian'>(移除你的2个[治疗]或2点【信仰】)</span>[横置]，转为【圣煌形态】，额外+1[法术行动]。此形态下，你若执行【特殊行动】，则[重置]脱离【圣煌形态】并+1[治疗]。",
+            shengHuangJiangLin_info:"<span class='tiaoJian'>(移除你的2个[治疗]或2点【信仰】)</span>[横置]，转为【圣煌形态】，额外+1[法术行动]。此形态下，你若执行【特殊行动】，则[重置]脱离【圣煌形态】并+1[治疗]或+1【信仰】。",
             shengGuangBaoLie_info:"<span class='tiaoJian'>(仅【圣煌形态】下可发动)</span>你选择以下一项发动：<br>·移除你的1点[治疗]，摸一张牌[强制]，然后你+1【信仰】，目标队友+1[治疗]。 <br>·<span class='tiaoJian'>(移除你的X[治疗]，选择最多X名手牌数不大于你手牌数-X的对手)</span>你弃X张牌，然后对他们各造成(Y+2)点攻击伤害。 Y为目标数中拥有[治疗]的人数。",
             liuXingShengDan_info:"<span class='tiaoJian'>(仅【圣煌形态】下，主动攻击前①，移除你的1点[治疗]或是1点【信仰】)</span>我方目标角色+1[治疗]。",
             shengHuangHuiGuangPao_info:"<span class='tiaoJian'>(仅【圣煌形态】下可发动，移除1点【圣煌辉光炮】，移除4点【信仰】，并额外移除等同我方落后士气的【信仰】数)</span>所有角色将手牌调整为4张，我方[星杯区]+1[星杯]，然后将一方[士气]调整与另一方相同。",
