@@ -3046,7 +3046,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 trigger:{player:'zhiLiao'},
                 firstDo:true,
                 filter:function(event,player){
-                    return get.type(event.card)=='gongJi';
+                    return event.faShu;
                 },
                 forced:true,
                 content:function(){
