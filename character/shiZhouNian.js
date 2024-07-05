@@ -6432,7 +6432,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 forced:true,
                 content:function(){
-                    player.addZhiShiWu('shengHuangHuiGuangPaoX')
+                    player.addZhiShiWu('shengHuangHuiGuangPaoX');
+                    player.addNengLiang('b',2);
                 },
                 mod:{
                     maxZhiLiao:function(player,num){
@@ -7354,7 +7355,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             xinYang:"信仰",
             shengHuangHuiGuangPaoX:"圣煌辉光炮",
             
-            tianZhiGong_info:"游戏初始时，你+1【圣煌辉光炮】。你的[治疗]上限+1。 <span class='tiaoJian'>(主动攻击时，若攻击牌不为圣类命格)</span>本次攻击伤害-1；<span class='tiaoJian'>(主动攻击命中时，若攻击牌为圣类命格)</span>你+1【信仰】。",
+            tianZhiGong_info:"游戏初始时，你+2[水晶]，你+1【圣煌辉光炮】。你的[治疗]上限+1。 <span class='tiaoJian'>(主动攻击时，若攻击牌不为圣类命格)</span>本次攻击伤害-1；<span class='tiaoJian'>(主动攻击命中时，若攻击牌为圣类命格)</span>你+1【信仰】。",
             shengXieJuBao_info:"<span class='tiaoJian'>(弃2张同系攻击牌[展示])</span>视为一次圣类命格的该系主动攻击。 <span class='tiaoJian'>(若攻击未命中②，移除X点[治疗]，X最高为2)</span>目标队友弃X张牌。",
             shengHuangJiangLin_info:"<span class='tiaoJian'>(移除你的2个[治疗]或2点【信仰】)</span>[横置]，转为【圣煌形态】，额外+1[法术行动]。此形态下，你若执行【特殊行动】，则[重置]脱离【圣煌形态】并+1[治疗]。",
             shengGuangBaoLie_info:"<span class='tiaoJian'>(仅【圣煌形态】下可发动)</span>你选择以下一项发动：<br>·移除你的1点[治疗]，摸一张牌[强制]，然后你+1【信仰】，目标队友+1[治疗]。 <br>·<span class='tiaoJian'>(移除你的X[治疗]，选择最多X名手牌数不大于你手牌数-X的对手)</span>你弃X张牌，然后对他们各造成(Y+2)点攻击伤害。 Y为目标数中拥有[治疗]的人数。",
