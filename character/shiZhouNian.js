@@ -6670,17 +6670,20 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             }
                             player.chooseControl(list).set('prompt','移除你的X[治疗]');
                             'step 1'
+                            event.num=result.control;
                             player.changeZhiLiao(-result.control);
-                            player.chooseTarget(true,[1,result.control],function(card,player,target){
+                            player.chooseToDiscard(true,'h',event.num);
+                            'step 2'
+                            player.chooseTarget(true,[1,event.num],function(card,player,target){
                                 return target.countCards('h')<=player.countCards('h')&&target.side!=player.side;
                             });
-                            'step 2'
+                            'step 3'
                             event.num=2;
                             event.targets=result.targets.sortBySeat();
                             for(var i=0;i<event.targets.length;i++){
                                 if(event.targets[i].zhiLiao>0) event.num++;
                             }
-                            'step 3'
+                            'step 4'
                             var target=event.targets.shift();
                             target.damage(event.num,player);
                             if(event.targets.length>0){
