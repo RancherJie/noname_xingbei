@@ -17965,8 +17965,8 @@
 					var str=event.unreal?'视为受到了':'受到了';
 					if(source) str+='来自<span class="bluetext">'+(source==player?'自己':get.translation(source))+'</span>的';
 					str+=num+'点';
-					if(event.nature) str+=get.translation(event.nature)+'属性';
-					if(event.faShu) str+=get.translation(event.nature)+'法术';
+					if(event.faShu) str+=+'法术';
+					else str+=+'攻击';
 					str+='伤害';
 					game.log(player,str);
 					if(player.stat[player.stat.length-1].damaged==undefined){
