@@ -17957,6 +17957,7 @@
 						next.card=card;
 						next.cards=cards;
 						next.player=player;
+						next.faShu=event.faShu
 					}
 					"step 5"
 					game.broadcastAll(function(num){
