@@ -6795,8 +6795,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         event.num=2;
                     }
                     'step 2'
-                    var list=['治疗','信仰'];
-                    player.chooseControl(list).set('prompt','+'+event.num+'点[治疗]或[信仰]');
+                    var list=['信仰','治疗'];
+                    player.chooseControl(list).set('prompt','+'+event.num+'点【信仰】或[治疗]');
                     'step 3'
                     if(result.control=='治疗'){
                         player.changeZhiLiao(event.num);
