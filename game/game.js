@@ -25068,6 +25068,12 @@
 					if(distance!==false&&!lib.filter.targetInRange(card,this,target)) return false;
 					return lib.filter[includecard?'targetEnabledx':'targetEnabled'](card,this,target);
 				},
+				//星杯
+				canUse_xingBei:function(card,target){
+					if(typeof card=='string') card={name:card,isCard:true};
+					var info=get.info(card);
+					return lib.filter['targetEnabled'](card,this,target);
+				},
 				hasUseTarget:function(card,distance,includecard){
 					var player=this;
 					return game.hasPlayer(function(current){

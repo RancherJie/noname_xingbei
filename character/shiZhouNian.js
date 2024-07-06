@@ -6495,8 +6495,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 prepare:'showCards',
                 selectTarget:1,
                 filterTarget:function(card,player,target){
-                    var cardx={name:'anMie'};
-                    return player.canUse(cardx,target);
+                    return player.canUse_xingBei('anMie',target);
                 },
                 content:function(){
                     var xiBie=get.xiBie(cards[0]);
