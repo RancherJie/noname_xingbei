@@ -2327,7 +2327,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 ai:{
 					damage:true,
-					order:8,
+					order:function(item,player){
+						return 2.5+player.countZhiShiWu('shenPan');
+					},
 					result:{
 						target:function(player,target){
 							return get.damageEffect(target,player);
