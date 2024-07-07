@@ -1527,6 +1527,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						event.source=trigger.player;
 						event.yingZhan=trigger.parent.yingZhan;
 						event.source_card=trigger.card;
+						event.storage=trigger.parent.storage;
                         event.trigger('gongJiWeiMingZhong');
                     }else if(trigger.card.name=='moDan') game.resetMoDan();
                     trigger.cancel();
