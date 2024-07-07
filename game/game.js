@@ -22983,6 +22983,9 @@
 					var next=game.createEvent('useCard');
 					next.player=this;
 					next.num=0;
+					//xingbei
+					next.storage={};
+
 					for(var i=0;i<arguments.length;i++){
 						if(get.itemtype(arguments[i])=='cards'){
 							next.cards=arguments[i].slice(0);

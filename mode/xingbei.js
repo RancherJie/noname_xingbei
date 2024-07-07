@@ -1545,6 +1545,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					event.source=trigger.player;
 					event.yingZhan=trigger.parent.yingZhan;
 					event.source_card=trigger.card;
+					event.storage=trigger.parent.storage;
 					var name=get.translation(event.source);
 					var propmt=`受到${name}的`;
 					if(event.yingZhan){
@@ -1630,6 +1631,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
                     event.player=trigger.parent.player;
 					event.yingZhan=trigger.parent.parent.yingZhan;
 					event.source_card=trigger.parent.trigger_card;
+					event.storage=trigger.parent.parent.storage;
 					'step 1'
                     event.trigger('gongJiWeiMingZhong');
                 }
