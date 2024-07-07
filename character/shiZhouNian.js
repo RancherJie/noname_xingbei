@@ -31,7 +31,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             qiDaoShi:['female','yong',4,['guangHuiXinYang','heiAnZuZhou','weiLiCiFu','xunJieCiFu','qiDao','faLiChaoXi','qiDaoFuWen'],],
             xianZhe:['male','yong',4,['zhiHuiFaDian','faShuFangTan','moDaoFaDian','shengJieFaDian'],],
             lingFuShi:['female','yong',4,['lingFu_leiMing','lingFu_fengXing','nianZhou','baiGuiYeXing','lingLiBengJie','yaoLi'],],
-            //jianDi:['female','ji',6,['jianxiong'],],
+            jianDi:['female','ji','4/5',['jianHunShouHu','yangGong','jianQiZhan','tianShiZhiHun','eMoZhiHun','buQuYiZhi','jianHun','jianQi'],],
             geDouJia:['female','ji','4/5',['nianQiLiChang','xuLiYiji','nianDan','baiShiHuanLongQuan','qiJueBengJi','douShenTianQu','douQi'],],
             yongZhe:['male','xue','4/5',['yongZheZhiXin','nuHou','jinPiLiJin','mingJingZhiShui','tiaoXin','jinDuanZhiLi','siDou','','nuQi','zhiXing'],],
             //lingHunShuShi:['female','huan',6,['jianxiong'],],
@@ -6838,6 +6838,198 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 markimage:'image/card/lan.png',
             },
 
+            //剑帝
+            jianHunShouHu:{
+                trigger:{source:'gongJiWeiMingZhong'},
+                filter:function(event,player){
+                    if(event.storage.tianShiZhiHun) return false;
+                    if(event.storage.eMoZhiHun) return false;
+                    return !event.yingZhan&&player.getExpansions('jianHun').length<lib.skill.jianHun.intro.max;
+                },
+                forced:true,
+                priority:1,
+                content:function(){
+                    game.log(player,'将',trigger.source_card.cards,'作为盖牌');
+                    player.addToExpansion('giveAuto',trigger.source_card.cards,player).gaintag.add('jianHun');
+                }
+            },
+            yangGong:{
+                trigger:{source:'gongJiWeiMingZhong'},
+                forced:true,
+                filter:function(event,player){
+                    return !event.yingZhan;
+                },
+                content:function(){
+                    player.addZhiShiWu('jianQi');
+                }
+            },
+            jianQiZhan:{
+                trigger:{player:'useCardToTargeted'},
+                filter:function(event,player){
+                    return get.is.zhuDongGongJi(event)&&player.countZhiShiWu('jianQi')>0;
+                },
+                direct:true,
+                priority:1,
+                content:function(){
+                    'step 0'
+                    var list=[];
+                    var num=player.countZhiShiWu('jianQi');
+                    for(var i=1;i<=num;i++){
+                        if(i>3) break;
+                        list.push(i);
+                    }
+                    list.push('cancel2');
+                    var next=player.chooseControl(list);
+                    next.set('prompt',get.prompt('jianQiZhan'));
+                    next.set('prompt2',lib.translate.jianQiZhan_info);
+                    'step 1'
+                    if(result.control=='cancel2'){
+                        event.finish();
+                    }else{
+                        player.logSkill(event.name);
+                        event.num=result.control;
+                        player.removeZhiShiWu('jianQi',event.num);
+                        var targetx=trigger.target;
+                        var name=get.translation(targetx);
+                        var next=player.chooseTarget(`对除你所攻击的目标以外的任意一名角色造成${event.num}点法术伤害③`,true,function(card,player,target){
+                            return target!=_status.event.targetx;
+                        });
+                        next.set('targetx',targetx)
+                    }
+                    'step 2'
+                    result.targets[0].damageFaShu(event.num);
+                }
+
+            },
+            tianShiZhiHun:{
+                trigger:{player:'useCardBefore'},
+                filter:function(event,player){
+                    return get.is.zhuDongGongJi(event)&&lib.skill.jianHun.tianShiZhiHun(player)>0;
+                },
+                direct:true,
+                content:function(){
+                    'step 0'
+                    var cards=player.getExpansions('jianHun');
+                    var next=player.chooseCardButton(cards,'是否发动【天使之魂】');
+                    'step 1'
+                    if(result.bool){
+                        player.logSkill(event.name);
+                        player.loseToDiscardpile(result.links[0]).set('log',false);
+                        trigger.storage.tianShiZhiHun=true;
+                    }else{
+                        event.finish();
+                    }
+                },
+                group:['tianShiZhiHun_gongJiMingZhong','tianShiZhiHun_gongJiWeiMingZhong'],
+                subSkill:{
+                    gongJiMingZhong:{
+                        trigger:{player:'useCardToTargeted'},
+                        filter:function(event,player){
+                            return event.parent.storage.tianShiZhiHun;
+                        },
+                        direct:true,
+                        content:function(){
+                            player.changeZhiLiao(2);
+                        }
+                    },
+                    gongJiWeiMingZhong:{
+                        trigger:{source:'gongJiWeiMingZhong'},
+                        direct:true,
+                        filter:function(event,player){
+                            return event.storage.tianShiZhiHun;
+                        },
+                        content:function(){
+                            player.changeShiQi(1);
+                        }
+                    },
+                }
+            },
+            eMoZhiHun:{
+                trigger:{player:'useCardBefore'},
+                filter:function(event,player){
+                    return get.is.zhuDongGongJi(event)&&lib.skill.jianHun.eMoZhiHun(player)>0;
+                },
+                direct:true,
+                content:function(){
+                    'step 0'
+                    var cards=player.getExpansions('jianHun');
+                    var next=player.chooseCardButton(cards,'是否发动【恶魔之魂】');
+                    'step 1'
+                    if(result.bool){
+                        player.logSkill(event.name);
+                        player.loseToDiscardpile(result.links[0]).set('log',false);
+                        trigger.storage.eMoZhiHun=true;
+                    }else{
+                        event.finish();
+                    }
+                },
+                group:['eMoZhiHun_gongJiMingZhong','eMoZhiHun_gongJiWeiMingZhong'],
+                subSkill:{
+                    gongJiMingZhong:{
+                        trigger:{player:'useCardToTargeted'},
+                        filter:function(event,player){
+                            return event.parent.storage.eMoZhiHun;
+                        },
+                        direct:true,
+                        content:function(){
+                            trigger.parent.baseDamage++;
+                        }
+                    },
+                    gongJiWeiMingZhong:{
+                        trigger:{source:'gongJiWeiMingZhong'},
+                        direct:true,
+                        filter:function(event,player){
+                            return event.storage.eMoZhiHun;
+                        },
+                        content:function(){
+                           player.addZhiShiWu('jianQi',2);
+                        }
+                    },
+                }
+            },
+            buQuYiZhi:{
+                trigger:{player:'useCardEnd'},
+                filter:function(event,player){
+                    return get.is.gongJiXingDong(event)&&player.canBiShaShuiJing();
+                },
+                content:function(){
+                    'step 0'
+                    player.removeBiShaShuiJing();
+                    'step 1'
+                    player.draw();
+                    player.addZhiShiWu('jianQi',1);
+                    player.storage.gongJi++;
+                },
+            },
+            jianHun:{
+                intro:{
+                    markcount:'expansion',
+                    mark:function(dialog,storage,player){
+						var cards=player.getExpansions('jianHun');
+						if(player.isUnderControl(true)) dialog.addAuto(cards);
+						else return '共有'+cards.length+'张牌';
+					},
+                    max:3,
+                },
+                tianShiZhiHun:function(player){
+                    if(player.countNengLiangAll()==0) return 0;
+                    else if(player.countNengLiangAll()%2==1) return player.getExpansions('jianHun').length;
+                    else return 0;
+                },
+                eMoZhiHun:function(player){
+                    if(player.countNengLiangAll()==0) return 0;
+                    else if(player.countNengLiangAll()%2==0) return player.getExpansions('jianHun').length;
+                    else return 0;
+                },
+            },
+            jianQi:{
+                intro:{
+                    content:'mark',
+                    max:5,
+                },
+                markimage:'image/card/hong.png',
+            },
+
 		},
 		
 		translate:{
@@ -7378,6 +7570,24 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             xinYang_info:"【信仰】为圣弓专有指示物，上限为10。",
             shengHuangHuiGuangPaoX_info:"【圣煌辉光炮】为圣弓专有指示物，上限为1。",
 
+            //剑帝
+            jianHunShouHu:"[被动]剑魂守护",
+            yangGong:"[被动]佯攻",
+            jianQiZhan:"[响应]剑气斩",
+            tianShiZhiHun:"[响应]天使之魂",
+            eMoZhiHun:"[响应]恶魔之魂",
+            buQuYiZhi:"[响应]不屈意志",
+            jianHun:"剑魂",
+            jianQi:"剑气",
+            jianHunShouHu_info:"<span class='tiaoJian'>(主动攻击未命中时发动②)</span>将本次打出的攻击牌作为面朝下放置在你的角色旁，作为【剑魂】。若你现有能量为单数，你的所有【剑魂】视为【天使之魂】；若为双数，视为【恶魔之魂】；若没有能量，则不属于任何一种。 <span class='tiaoJian'>(若【剑魂】达到上限)</span>你不能发动[剑魂守护]。",
+            yangGong_info:"<span class='tiaoJian'>(主动攻击未命中时发动②)</span>你+1【剑气】。",
+            jianQiZhan_info:"<span class='tiaoJian'>(主动攻击命中后发动②，移除X点【剑气】，X最高为3)</span>对除你所攻击的目标以外的任意一名角色造成X点法术伤害③。",
+            tianShiZhiHun_info:"<span class='tiaoJian'>(主动攻击前发动①，移除1张【天使之魂】)</span>本次攻击若命中②，你+2[治疗]；若未命中②，我方+1士气；不能和【剑魂守护】同时发动。",
+            eMoZhiHun_info:"<span class='tiaoJian'>(主动攻击前发动①，移除1张【恶魔之魂】)</span>本次攻击伤害额外+1；若未命中②，你+2【剑气】；不能和【剑魂守护】同时发动。",
+            buQuYiZhi_info:"[水晶]<span class='tiaoJian'>([攻击行动]结束时发动)</span>你摸1张[强制]，+1【剑气】，额外+1[攻击行动]。",
+            jianHun_info:"【剑魂】为剑帝专有盖牌，上限为3。",
+            jianQi_info:"【剑气】为剑帝专有指示物，上限为5。",
+            
 		},
 	};
 });
