@@ -3695,11 +3695,19 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.storage.xueXingDaoYan=result.control;
                     'step 2'
                     event.links=[player.storage.xueXingDaoYan];
+                    if(event.links[0]>1){
+                        var num=2;
+                        var propmt='选择1~2个目标队友';
+                    }else{
+                        var num=1;
+                        var prompt='选择1个目标队友';
+                    }
                     player.chooseTarget(function(card,player,target){
                         if(target==player) return false;
                         return target.side==player.side;
-                    },[1,2],true,'选择1~2个目标队友');
+                    },[1,num],true,prompt);
                     'step 3'
+                    game.log(player,'选择了',result.targets);
                     if(result.targets.length==1){
                         result.targets[0].changeZhiLiao(event.links[0]);
                         event.goto(7);
