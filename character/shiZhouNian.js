@@ -1218,7 +1218,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                     'step 3'
                     if(result.control=='_zhongDu'){
-                        player.chooseButton(target.getExpansions('_zhongDu'),true,'选择要移除的中毒')
+                        player.chooseCardButton(target.getExpansions('_zhongDu'),true,'选择要移除的中毒')
                     }else{
                         target.loseToDiscardpile(target.getExpansions(result.control));
                         if(!game.jiChuXiaoGuo.pai.includes(result.control)){
