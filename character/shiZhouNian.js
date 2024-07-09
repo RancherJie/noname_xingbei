@@ -2608,17 +2608,23 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         content:function(){
                             'step 0'
                             if(player.side==true){
-                                var list=game.hongZhanJi.slice();
+                                event.list=game.hongZhanJi.slice();
                             }else if(player.side==false){
-                                var list=game.lanZhanJi.slice();
-                            }
-                            for(var i=0;i<list.length;i++){
-                                if(list[i]=='水晶'){
-                                    player.removeZhanJi('b',1);
-                                    player.addZhanJi('r',1);
-                                }
+                                event.list=game.lanZhanJi.slice();
                             }
                             'step 1'
+                            event.xingShi=event.list.shift();
+                            if(event.xingShi=='水晶'){
+                                player.removeZhanJi('b',1);
+                            }
+                            'step 2'
+                            if(event.xingShi=='水晶'){
+                                player.addZhanJi('r',1);
+                            }
+                            if(event.list.length!=0){
+                                event.goto(1);
+                            }
+                            'step 3'
                             player.storage.all++;
                         }
                     }
