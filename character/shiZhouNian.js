@@ -5322,6 +5322,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     next.set('complexCard',true);
                     next.set('prompt',get.prompt('anZhiZhangBi'));
                     next.set('prompt2',lib.translate.anZhiZhangBi_info);
+                    next.set('ai',function(card){
+                        if(get.type(card)=='faShu') return 10;
+                        return 0;
+                    })
                     'step 1'
                     if(result.bool){
                         player.logSkill(event.name);
