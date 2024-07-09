@@ -22,7 +22,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             tianShi:['female','sheng',3,['fengZhiJieJing','tianShiZhuFu','tianShiJiBan','tianShiZhiQiang','tianShiZhiGe','shenZhiBiHu'],],
             moFaShaoNv:['female','yong',3,['moBaoChongJi','moDanZhangWo','moDanRongHe','huiMieFengBao'],],
             moJianShi:['female','huan','3/4',['xiuLuoLianZhan','anYingNingJu','anYingZhiLi','anYingKangJu','anYingLiuXing','huangQaunZhenChan'],],
-            shengQiangQiShi:['female','sheng','3/4',['shengShengQiShi','huiYao','chengJie','shengJi','tianQiang','diQiang','shengGuangQiYu'],],
+            shengQiangQiShi:['female','sheng','3/4',['shenShengQiShi','huiYao','chengJie','shengJi','tianQiang','diQiang','shengGuangQiYu'],],
             yuanSuShi:['male','yong','3/4',['yuanSuXiShou','yuanSuDianRan','yunShi','bingDong','huoQou','fengRen','leiJi','yueGuang','yuanSu'],],
             maoXianJia:['female','huan','3/4',['qiZha','qiangYun','diXiaFaZe','maoXianJiaTianTang','touTianHuanRi'],],
             wenYiFaShi:['male','huan','3/4',['buXiu','shengDu','wenYi','siWangZhiChu','juDuXinXing'],],
@@ -2612,7 +2612,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             },
             
             //圣枪骑士
-            shengShengQiShi:{
+            shenShengQiShi:{
                 mod:{
                     maxZhiLiao:function(player,num){
                         var side=player.side;
@@ -7256,8 +7256,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             touTianHuanRi_info:"[水晶]将对方【战绩区】的1[宝石]转移到我方【战绩区】，或将我方【战绩区】的[水晶]全部转换为[宝石]，额外+1[攻击行动]或[法术行动]。",
 
             //圣枪骑士
-            shengShengQiShi:"[被动]神圣启示",
-            shengShengQiShi_info:"<span class='tiaoJian'>(我方[星杯区]的[星杯]数不小于对方时)</span>你的[治疗]上限+1。",
+            shenShengQiShi:"[被动]神圣启示",
+            shenShengQiShi_info:"<span class='tiaoJian'>(我方[星杯区]的[星杯]数不小于对方时)</span>你的[治疗]上限+1。",
             huiYao:"[法术]辉耀",
             huiYao_info:"<span class='tiaoJian'>(弃1张水系牌[展示])</span>所有角色各+1[治疗]，额外+1[攻击行动]。",
             chengJie:"[法术]惩戒",
