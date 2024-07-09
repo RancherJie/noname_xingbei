@@ -5578,7 +5578,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 
             //吟游诗人
             chenLunXieZouQu:{
-                trigger:{global:'damageAfter'},
+                trigger:{global:'damageBegin'},
                 lastDo:true,
                 filter:function(event,player){
                     if(player.isLinked()) return false;
@@ -5611,7 +5611,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                     'step 1'
                     if(result.bool){
-                        player.logSkill(event.name);
+                        player.logSkill('chenLunXieZouQu');
                         player.showCards(result.cards);
                         event.cards=result.cards;
                         player.storage.chenLunXieZouQu_use=true;
