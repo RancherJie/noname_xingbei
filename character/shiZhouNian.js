@@ -3652,12 +3652,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 usable:1,
                 filter:function(event,player){
                     if(!player.canBiShaShuiJing()) return false;
-                    if(event.name=='useCard'){
-                        return get.type(event.card)=='faShu'&&event.parent.name!='chooseToUse_qiTa';
-                    }else if(event.name=='useSkill'){
-                        var info=get.info(event.skill);
-                        return info.type=='faShu';
-                    }
+                    return get.is.faShuXingDong(event);
                 },
                 content:function(){
                     player.removeBiShaShuiJing();
