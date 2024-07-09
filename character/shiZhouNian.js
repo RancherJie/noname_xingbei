@@ -7035,6 +7035,18 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 markimage:'image/card/hong.png',
             },
 
+            //兽灵武士
+            wuZheCanXin:{},
+            yiJiWuNian:{},
+            shouHunYiNian:{},
+            shouHunJingJie:{},
+            shouFan:{},
+            yuHunLiuJuHeXingTai:{},
+            niFanJuHeZhan:{},
+            yuHunLiuJuHeShi:{},
+            shouHun:{},
+            canXin:{},
+
 		},
 		
 		translate:{
@@ -7459,7 +7471,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             duoChongSheJi:"[响应]多重射击",
             duoChongSheJi_info:"<span class='tiaoJian'>([攻击行动]结束时发动，移除1个风系【充能】[展示])</span>视为一次暗系的主动攻击，但不能攻击上次的目标且本次攻击伤害-1；本回合你不能发动【魔贯冲击】。",
             chongNeng:"[启动]充能",
-            chongNeng_info:"[水晶]你弃到4张牌，摸X张牌[强制]，可将自己至多X张手牌面朝下放置在你的角色旁，作为【充能】(X<5)；本回合你不能发动【魔贯冲击】和【泪光散漫】。",
+            chongNeng_info:"[水晶]你弃到4张牌，摸X张牌[强制]，可将自己至多X张手牌面朝下放置在你的角色旁，作为【充能】(X<5)；本回合你不能发动【魔贯冲击】和【雷光散射】。",
             moYan:"[启动]魔眼",
             moYan_info:"[宝石]目标角色弃1张牌或你摸3张牌[强制]，将自己1张手牌作为【充能】，你+1[水晶]。",
             chongNengPai:"充能",
@@ -7592,7 +7604,30 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             buQuYiZhi_info:"[水晶]<span class='tiaoJian'>([攻击行动]结束时发动)</span>你摸1张[强制]，+1【剑气】，额外+1[攻击行动]。",
             jianHun_info:"【剑魂】为剑帝专有盖牌，上限为3。",
             jianQi_info:"【剑气】为剑帝专有指示物，上限为5。",
+          
+            //兽灵武士
+            wuZheCanXin:"[响应]武者残心[回合限定]",
+            yiJiWuNian:"[响应]一击无念",
+            shouHunYiNian:"[被动]兽魂意念",
+            shouHunJingJie:"[响应]兽魂警戒",
+            shouFan:"[响应]兽反",
+            yuHunLiuJuHeXingTai:"[被动]御魂流居合形态",
+            niFanJuHeZhan:"[响应]逆反居合斩",
+            yuHunLiuJuHeShi:"[启动]御魂流居合形态",
+            shouHun:"兽魂",
+            canXin:"残心",
             
+            wuZheCanXin_info:"[回合限定]<span class='tiaoJian'>([攻击行动]结束时)</span>你+1【残心】。",
+            yiJiWuNian_info:"<span class='tiaoJian'>([攻击行动]结束后，移除4点【残心】)</span>额外+1[攻击行动]，本次攻击无视【圣盾】且无法用【圣光】抵挡。 <span class='tiaoJian'>(若攻击牌为技类命格)</span>本次攻击强制命中。",
+            shouHunYiNian_info:"<span class='tiaoJian'>(你每移除1点【兽魂】)</span>你+1【残心】；<span class='tiaoJian'>(仅【普通形态】下，主动攻击命中时②)</span>你+1【兽魂】。",
+            shouHunJingJie_info:"[持续]<span class='tiaoJian'>(其他角色的[横置]效果结算完成后，移除1点【兽魂】，角色[横置]转为【御魂流居合形态】)</span>目标角色弃1张牌[展示]； <span class='tiaoJian'>(若弃牌为法术牌)</span>你+1【兽魂】。",
+            shouFan_info:"<span class='tiaoJian'>(目标角色对你造成法术伤害③时，移除X点【兽魂】)</span>你弃X张牌，他弃1张牌；<span class='tiaoJian'>(若他的弃牌为法术牌)</span>你+1【兽魂】。",
+            yuHunLiuJuHeXingTai_info:"在此形态下，你对[横置]的目标角色攻击伤害+1。你回合结束前-1【兽魂】。 <span class='tiaoJian'>(你造成伤害⑥，或你的回合结束时【兽魂】为0)</span>[转正]脱离御魂流居合形态。",
+            niFanJuHeZhan_info:"<span class='tiaoJian'>(仅【御魂流居合形态】下，攻击手牌<4的对手前①发动)</span>移除X点【兽魂】。本次攻击命中时②，改为攻击目标弃置<span class='tiaoJian'>(X+2)</span>张手牌。 <span class='tiaoJian'>(若因此弃牌数小于X+2)</span>对方士气-1。",
+            yuHunLiuJuHeShi_info:"[持续][宝石]无视你的【兽魂】上限+1【兽魂】，你可选择摸或弃1张牌；<span class='tiaoJian'>(若你处于【御魂流居合形态】)</span>你+1【残心】 ；<span class='tiaoJian'>(若你处于[普通型态])</span>[横置]转为【御魂流居合形态】。",
+            shouHun_info:"【兽魂】为兽灵武士专有指示物，上限为2。",
+            canXin_info:"【残心】为兽灵武士专有指示物，上限为4。",
+
 		},
 	};
 });
