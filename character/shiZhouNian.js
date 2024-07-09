@@ -4489,8 +4489,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         }
                     },
                     backup:function(links,player){
-                        player.removeBiShaShuiJing();
-                        player.addZhiShiWu('guiHuo');
                         if(links[0]=='1'){
                             var next=get.copy(lib.skill['shengMingJieJie_1']);
                         }else if(links[0]=='2'){
@@ -4515,6 +4513,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         },
                         content:function(){
                             'step 0'
+                            player.removeBiShaShuiJing();
+                            player.addZhiShiWu('guiHuo');
                             target.addNengLiang('r');
                             target.changeZhiLiao(1);
                             'step 1'
@@ -4542,6 +4542,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         prepare:'showCards',
                         content:function(){
                             'step 0'
+                            player.removeBiShaShuiJing();
+                            player.addZhiShiWu('guiHuo');
                             player.chongZhi();
                             'step 1'
                             target.chooseToDiscard(1,true);
