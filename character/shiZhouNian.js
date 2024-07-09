@@ -2561,7 +2561,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         }
                     },
                     backup:function(links,player){
-                        player.removeBiShaShuiJing();
                         if(links[0]=='tou'){
                             var next=get.copy(lib.skill['touTianHuanRi_tou']);
                         }else if(links[0]=='huan'){
@@ -2575,10 +2574,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         type:'faShu',
                         content:function(){
                             'step 0'
+                            player.removeBiShaShuiJing();
+                            'step 1'
                             var side=player.side;
                             player.changeZhanJi('r',-1,!side)
                             player.addZhanJi('r',1);
-                            'step 1'
+                            'step 2'
                             player.storage.all++;
                         }
                     },
@@ -2586,6 +2587,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         type:'faShu',
                         content:function(){
                             'step 0'
+                            player.removeBiShaShuiJing();
                             if(player.side==true){
                                 event.list=game.hongZhanJi.slice();
                             }else if(player.side==false){
