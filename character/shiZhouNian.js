@@ -1517,34 +1517,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 
             //女武神
             shenShengZhuiJi:{
-                group:['shenShengZhuiJi_1','shenShengZhuiJi_2'],
-                subSkill:{
-                    1:{
-                        trigger:{player:'useCardAfter'},
-                        filter:function(event,player){
-                            if(get.type(event.card)=='gongJi'){
-                                if(event.yingZhan==true) return false;
-                            }else if(get.type(event.card)=='faShu'){
-                                return get.is.xiDong(event.parent);
-                            }
-                            return player.zhiLiao>=1;
-                        },
-                        content:function(){
-                            player.changeZhiLiao(-1);
-                            player.storage.gongJi++;
-                        }
-                    },
-                    2:{
-                        trigger:{player:'useSkillAfter'},
-                        filter:function(event,player){
-                            var info=get.info(event.skill);
-                            return info.type=='faShu'&&player.zhiLiao>=1;
-                        },
-                        content:function(player){
-                            player.changeZhiLiao(-1);
-                            player.storage.gongJi++;
-                        }
-                    },
+                trigger:{player:['useCardAfter','useSkillAfter']},
+                filter:function(event,player){
+                    return player.zhiLiao>0&&get.is.faShuXingDong(event);
+                },
+                content:function(){
+                    player.changeZhiLiao(-1);
+                    player.storage.gongJi++;
                 }
             },
             zhiXuZhiYin:{
