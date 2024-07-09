@@ -6901,7 +6901,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         next.set('targetx',targetx)
                     }
                     'step 2'
-                    result.targets[0].damageFaShu(event.num);
+                    result.targets[0].damageFaShu(event.num,player);
                 }
 
             },
