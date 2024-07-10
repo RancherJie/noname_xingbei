@@ -6638,7 +6638,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						return next;
 					},
                     prompt:function(links,player){
-                        return '目标队友+1[治疗]';
+                        if(links[0]=='1'){
+                            return '目标队友+1[治疗]';
+                        }else if(links[0]=='2'){
+                            return;
+                        }
+                        
                     }
                 },
                 subSkill:{
