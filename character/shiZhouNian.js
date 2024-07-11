@@ -3714,7 +3714,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         result.targets[0].changeZhiLiao(event.links[0]);
                         event.goto(7);
                     }else{
-                        result.targets.sortBySeat();
+                        result.targets.sortBySeat(player);
                         event.targets=result.targets;
                         event.target=event.targets[0];
                     }
@@ -5533,7 +5533,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     if(event.flag){
                         event.targets=game.filterPlayer(function(current){
                             return !result.targets.includes(current);
-                        }).sortBySeat();
+                        }).sortBySeat(player);
                     }else{
                         event.targets=result.targets;
                     }
@@ -5837,7 +5837,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                 event.goto(4);
                             }
                             'step 2'
-                            event.targets=result.targets.sortBySeat();
+                            event.targets=result.targets.sortBySeat(player);
                             event.targets[0].damageFaShu(1,player.storage.yongHengYueZhang_player);
                             'step 3'
                             event.targets[1].damageFaShu(1,player.storage.yongHengYueZhang_player);
@@ -6685,7 +6685,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             });
                             'step 3'
                             event.num=2;
-                            event.targets=result.targets.sortBySeat();
+                            event.targets=result.targets.sortBySeat(player);
                             for(var i=0;i<event.targets.length;i++){
                                 if(event.targets[i].zhiLiao>0) event.num++;
                             }
