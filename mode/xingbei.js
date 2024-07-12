@@ -2023,7 +2023,9 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					'step 0'
                     if(player.hasMark('_tiLian_b')&&player.hasMark('_tiLian_r')){
                         var list=['宝石','水晶'];
-                        player.chooseControl(list).set('prompt','选择要移除的星石');
+                        player.chooseControl(list).set('prompt','选择要移除的星石').set('ai',function(){
+							return 1;
+						});
                     }else if(player.hasMark('_tiLian_b')){
                         player.removeMark('_tiLian_b');
                         return;
