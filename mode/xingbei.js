@@ -1291,6 +1291,12 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						}
 					}
 				},
+				ai:{
+					order:1,
+					result:{
+						player:1,
+					},
+				},
 				group:['_wuFaXingDong_qiDongQian','_wuFaXingDong_qiDongHou'],
 				subSkill:{
 					qiDongQian:{
