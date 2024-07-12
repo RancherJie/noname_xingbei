@@ -1198,6 +1198,12 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 
 			_wuFaXingDong:{
 				filterx:function(event,player){
+					if(event.name=='phaseUse'){
+						var next=game.createEvent('wuFaXingDong',false);
+						next.setContent('emptyEvent');
+						next.parent=event;
+					}
+					
 					//console.log('--------------------------------');
 					//拥有挑衅直接false
 					if(player.hasZhiShiWu('tiaoXinX')) return false;
@@ -1217,10 +1223,16 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 							else if(Array.isArray(info.enable)) enable=info.enable.contains('chooseToUse');
 							else if(info.enable=='phaseUse') enable=(event.type=='phase'||event.name=='phaseUse');
 							else if(typeof info.enable=='string') enable=(info.enable==event.name);
-							if(enable){
+							if(enable&&event.name!='phaseUse'){
 								if(!game.expandSkills(player.getSkills(false).concat(lib.skill.global)).contains(skills[i])&&info.noHidden) enable=false;
 								if(info.filter&&!info.filter(event,player)) enable=false;
 								if(info.viewAs&&typeof info.viewAs!='function'&&event.filterCard&&!event.filterCard(info.viewAs,player,event)) enable=false;
+								if(info.viewAs&&typeof info.viewAs!='function'&&info.viewAsFilter&&info.viewAsFilter(player)==false) enable=false;
+								if(info.chooseButton&&_status.event.noButton) enable=false;
+							}else if(enable){
+								if(!game.expandSkills(player.getSkills(false).concat(lib.skill.global)).contains(skills[i])&&info.noHidden) enable=false;
+								if(info.filter&&!info.filter(next,player)) enable=false;
+								if(info.viewAs&&typeof info.viewAs!='function'&&next.filterCard&&!next.filterCard(info.viewAs,player,next)) enable=false;
 								if(info.viewAs&&typeof info.viewAs!='function'&&info.viewAsFilter&&info.viewAsFilter(player)==false) enable=false;
 								if(info.chooseButton&&_status.event.noButton) enable=false;
 							}
