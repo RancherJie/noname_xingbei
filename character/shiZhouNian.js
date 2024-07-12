@@ -6904,7 +6904,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         var next=player.chooseTarget(`对除你所攻击的目标以外的任意一名角色造成${event.num}点法术伤害③`,true,function(card,player,target){
                             return target!=_status.event.targetx;
                         });
-                        next.set('targetx',targetx)
+                        next.set('targetx',targetx);
+                        next.set('ai',function(target){
+                            return target.side!=player.side;
+                        });
                     }
                     'step 2'
                     result.targets[0].damageFaShu(event.num,player);
