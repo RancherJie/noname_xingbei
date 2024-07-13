@@ -5233,6 +5233,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 1'
                     player.qiPai();
                 },
+                check:function(event,player){
+					return player.countCards('h')>0;
+				},
                 subSkill:{
                     shangHai:{
                         trigger:{player:"useCard2"},
