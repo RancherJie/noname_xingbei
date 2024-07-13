@@ -17939,7 +17939,7 @@
 					event.trigger('damageBegin4');
 					"step 4"
 					//检测治疗触发器是否能触发
-					if(event.canZhiLiao!=false){
+					if(event.canZhiLiao!=false&&event.diXiao!=false){
 						event.canZhiLiao=true;
 					}
 					for(var i=0;i<game.players.length;i++){

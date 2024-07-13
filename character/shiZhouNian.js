@@ -3180,7 +3180,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 content:function(){
                     'step 0'
-                    player.damageFaShu(1,player);
+                    if(player.countCards('h')==0){
+                        player.damage(1,player).set('faShu',true).set('canZhiLiao',false);
+                    }else{
+                        player.damage(1,player).set('faShu',true);
+                    }
                     'step 1'
                     player.hengZhi();                 
                 },
