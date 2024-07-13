@@ -3173,7 +3173,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 content:function(){
                     'step 0'
                     if(player.countCards('h')==0){
-                        player.damage(1,player).set('faShu',true).set('canZhiLiao',false);
+                        player.damage(1,player).set('faShu',true).set('diXiao',false);
                     }else{
                         player.damage(1,player).set('faShu',true);
                     }
