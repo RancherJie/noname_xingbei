@@ -4163,8 +4163,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 forced:true,
                 content:function(){
                     'step 0'
+                    var num=trigger.parent.num;
                     var list=[0,1];
-                    player.chooseControl(list).set('prompt','使用的治疗数量').set('ai',function(){return list.length-1;});
+                    player.chooseControl(list).set('prompt','使用的治疗数量，目前伤害量'+num).set('ai',function(){return list.length-1;});
                     'step 1'
                     var zhiLiaonum=result.control;
 					if(zhiLiaonum>0){
