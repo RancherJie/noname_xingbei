@@ -6033,6 +6033,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 markimage:'image/card/tiaoXin.png',
 
                 filterx:function(event,player){
+                    //无可启动技，跳过启动前后挑衅
+                    if(event.name=='phaseUse'){
+						if(player.storage.qiDong==false) return false;
+					}
 					return player.hasZhiShiWu('tiaoXinX');
 				},
                 filter:function(event,player){
