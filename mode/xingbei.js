@@ -2083,6 +2083,17 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
                         player.removeMark('_tiLian_b');
                     }
 				},
+				chongZhi:function(){
+					if(player.isLinked()){
+						player.link();
+					}
+				},
+				hengZhi:function(){
+					if(!player.isLinked()){
+						player.link();
+					}
+				},
+
 				replacePlayer:function(){
 					"step 0"
 					var cards=source.getCards('hej');
@@ -2482,14 +2493,16 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					}
 				},
 				chongZhi:function(){//重置
-					if(this.isLinked()){
-						this.link();
-					}
+					var next=game.createEvent('chongZhi');
+					next.player=this;
+					next.setContent('chongZhi');
+					return next;
 				},
 				hengZhi:function(){//横置
-					if(!this.isLinked()){
-						this.link();
-					}
+					var next=game.createEvent('hengZhi');
+					next.player=this;
+					next.setContent('hengZhi');
+					return next;
 				},
 				qiPai:function(){//执行一次超出手牌上限的弃牌
 					var num=this.needsToDiscard();
