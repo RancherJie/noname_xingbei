@@ -1278,9 +1278,11 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					"step 2"
 					if(result.control=='认可'){
 						event.target.popup('认可');
+						game.log(event.target,'认可');
 						player.storage.wuFaXingDong[result.control]++;
 					}else if(result.control=='否认'){
 						event.target.popup('否认');
+						game.log(event.target,'否认');
 						player.storage.wuFaXingDong[result.control]++;
 					}
 					if(event.targetsx.length>0) event.goto(1);
@@ -1330,9 +1332,11 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 							"step 2"
 							if(result.control=='认可'){
 								event.target.popup('认可');
+								game.log(event.target,'认可');
 								player.storage.wuFaXingDong[result.control]++;
 							}else if(result.control=='否认'){
 								event.target.popup('否认');
+								game.log(event.target,'否认');
 								player.storage.wuFaXingDong[result.control]++;
 							}
 							if(event.targetsx.length>0) event.goto(1);
@@ -1375,9 +1379,11 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 							"step 2"
 							if(result.control=='认可'){
 								event.target.popup('认可');
+								game.log(event.target,'认可');
 								player.storage.wuFaXingDong[result.control]++;
 							}else if(result.control=='否认'){
 								event.target.popup('否认');
+								game.log(event.target,'否认');
 								player.storage.wuFaXingDong[result.control]++;
 							}
 							if(event.targetsx.length>0) event.goto(1);
