@@ -1212,6 +1212,13 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					skills=player.getSkills('invisible',true,false);
 					skills=game.filterSkills(skills.concat(lib.skill.global),player,player.getSkills('e').concat(lib.skill.global));
 					game.expandSkills(skills);
+
+					//无可启动技跳过启动前后无法行动
+					if(event.name=='phaseUse'){
+						if(player.storage.qiDong==false) return false;
+					}
+					
+					//判断是否有可触发的技能
 					for(var i=0;i<skills.length;i++){
 						//排除提炼
 						if(skills[i]=='_tiLian') continue;
@@ -1402,6 +1409,18 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					player.storage.faShu=0;
 					player.storage.gongJi=0;
 					//player.storage.canTeShu=true;
+					//判断是否有可启动技
+					var skills=player.skills;
+					for(var i=0;i<skills.length;i++){
+						var info=get.info(skills[i]);
+						var flag=false;
+						if(info.type=='qiDong'){
+							if(info.filter(event,player)) flag=true;
+							if(flag) break;
+						}
+					}
+					player.storage.qiDong=flag;
+
 				}
 			},
 
