@@ -363,7 +363,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 content:function(){
                     player.removeBiShaBaoShi();
-                    if(!player.isLinked()) player.link();
+                    player.hengZhi();
                     player.addNengLiang('b');
                 },
                 mod:{
@@ -481,7 +481,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         player.draw();
                     }
                     'step 2'
-                    if(!player.isLinked()) player.link();
+                    player.hengZhi();
                     'step 3'
                     var num=player.needsToDiscard();
                     if(num>0){
@@ -515,7 +515,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         },
                         content:function(){
                             'step 0'
-                            if(player.isLinked()) player.link();
+                            player.hengZhi();
                             'step 1'
                             player.removeSkill('qianXing2');
                         }
@@ -1547,7 +1547,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 content:function(){
                     player.storage.yingLingXingTai=true;
-                    if(!player.isLinked()) player.link();
+                    player.hengZhi();
                 },
                 subSkill:{
                     chongZhi:{
@@ -1561,9 +1561,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             return true;
                         },
                         content:function(){
-                            if(player.isLinked()){
-                                player.link();
-                            }
+                            player.chongZhi();
                             
                         }
                     }
@@ -1591,9 +1589,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 1'
                     if(result.index==0){
                         player.changeZhiLiao(1);
-                        if(player.isLinked()){
-                            player.link();
-                        }
+                        player.chongZhi();
                         event.finish();
                     }else if(result.index==1){
                         if(player.side==true){
@@ -1958,9 +1954,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 content:function(){
                     'step 0'
-                    if(!player.isLinked()){
-                        player.link();
-                    }
+                    player.hengZhi();
                     'step 1'
                     var cards=trigger.parent.result.cards;
                     if(cards){
@@ -1978,9 +1972,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.changeShiQi(-1);
                     'step 1'
                     if(player.getExpansions('anYue').length==0){
-                        if(player.isLinked()){
-                            player.link();
-                        }
+                        player.chongZhi();
                     }
                 }
             },
@@ -2252,7 +2244,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     return player.isLinked();
                 },
                 content:function(){
-                    player.link();
+                    player.chongZhi();
                     player.addZhanJi('r',1)
                 }
             },
@@ -3198,7 +3190,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             return player.isLinked();
                         },
                         content:function(){
-                            if(player.isLinked()) player.link();
+                            player.chongZhi();
                         }
                     }
                 }
