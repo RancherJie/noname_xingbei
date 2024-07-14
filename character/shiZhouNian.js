@@ -48,7 +48,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             yinYangShi:['female','huan',4,['shiShenJiangLin','yinYangZhanHuan','shiShenZhuanHuan','heiAnJiLi','shiShenZhouShu','shengMingJieJie','guiHuo'],],
             xueSeJianLing:['female','xue',4,['xueSeJingJi','chiSeYiShan','xueRanQiangWei','xueQiPingZhang','xueQiangWeiTingYuan','sanHuaLunWu','xianXue'],],
             yueZhiNvShen:['female','sheng',5,['xinYueBiHu','anYueZuZhou','meiDuShaZhiYan','yueZhiLunHui','yueDu','anYueZhan','cangBaiZhiYue','xinYue','shiHua','anYue'],],
-            //shouLingWuShi:['female','ji',6,['jianxiong'],],
+            shouLingWuShi:['female','ji','4/5',['wuZheCanXin','yiJiWuNian','shouHunYiNian','shouHunJingJie','shouFan','yuHunLiuJuHeXingTai','niFanJuHeZhan','yuHunLiuJuHeShi','shouHun','canXin'],],
             shengGong:['female','sheng','4/5',['tianZhiGong','shengXieJuBao','shengHuangJiangLin','shengGuangBaoLie','liuXingShengDan','shengHuangHuiGuangPao','ziDongTianChong','xinYang','shengHuangHuiGuangPaoX'],],
 		},
 		
@@ -7048,16 +7048,266 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             },
 
             //兽灵武士
-            wuZheCanXin:{},
-            yiJiWuNian:{},
-            shouHunYiNian:{},
-            shouHunJingJie:{},
-            shouFan:{},
-            yuHunLiuJuHeXingTai:{},
-            niFanJuHeZhan:{},
-            yuHunLiuJuHeShi:{},
-            shouHun:{},
-            canXin:{},
+            wuZheCanXin:{
+                usable:1,
+                trigger:{player:'useCardEnd'},
+                filter:function(event,player){
+                    return get.is.gongJiXingDong(event);
+                },
+                content:function(){
+                    player.addZhiShiWu('canXin',1);
+                }
+            },
+            yiJiWuNian:{
+                trigger:{player:'useCardAfter'},
+                filter:function(event,player){
+                    return get.is.gongJiXingDong(event)&&player.countZhiShiWu('canXin')>=4;
+                },
+                content:function(){
+                    player.removeZhiShiWu('canXin',4);
+                    player.storage.gongJi++;
+                    player.storage.yiJiWuNian=false;
+                    player.addTempSkill('yiJiWuNian_1');
+                },
+                subSkill:{
+                    1:{
+                        trigger:{player:'useCardToPlayer'},
+                        filter:function(event,player){
+                            return player.storage.yiJiWuNian==false&&get.is.gongJiXingDong(event.parent);
+                        },
+                        direct:true,
+                        content:function(){
+                            player.storage.yiJiWuNian=true;
+                            if(get.mingGe(trigger.card)=='ji'){
+                                trigger.parent.canShengDun=false;
+                                trigger.parent.canShengGuang=false;
+                                trigger.parent.canYingZhan=false;
+                            }else{
+                                trigger.parent.canShengDun=false;
+                                trigger.parent.canShengGuang=false;
+                            }
+                        }
+                    }
+                }
+            },
+            shouHunYiNian:{
+                forced:true,
+                trigger:{player:'removeZhiShiWuEnd'},
+                filter:function(event,player){
+                    return event.zhiShiWu=='shouHun';
+                },
+                content:function(){
+                    player.addZhiShiWu('canXin',trigger.num);
+                },
+                group:'shouHunYiNian_zhuDongGongJiMingZhong',
+                subSkill:{
+                    zhuDongGongJiMingZhong:{
+                        forced:true,
+                        trigger:{player:'useCardToTargeted'},
+                        filter:function(event,player){
+                            return (!player.isLinked())&&get.is.zhuDongGongJi(event.parent);
+                        },
+                        content:function(){
+                            player.addZhiShiWu('shouHun',1);
+                        }
+                    }
+                }
+
+            },
+            shouHunJingJie:{
+                trigger:{global:'hengZhiEnd'},
+                filter:function(event,player){
+                    if(player.storage.shouHunJingJie_insert==true) return false;
+                    return event.player!=player&&player.countZhiShiWu('shouHun')>0&&(!player.isLinked());
+                },
+                direct:true,
+                contentx:function(){
+                    'step 0'
+                    var list=['是','否'];
+                    player.chooseControl(list).set('prompt','是否发动【兽魂警戒】');
+                    'step 1'
+                    if(result.control=='是'){
+                        player.logSkill('shouHunJingJie');
+                        player.removeZhiShiWu('shouHun');
+                        player.hengZhi();
+                    }else{
+                        event.goto(5);
+                    }
+                    'step 2'
+                    var next=player.chooseTarget(true,"目标角色弃1张牌");
+                    'step 3'
+                    event.target=result.targets[0];
+                    event.target.chooseToDiscard('h',true);
+                    'step 4'
+                    event.target.showCards(result.cards);
+                    if(get.type(result.cards[0])=='faShu'){
+                        player.addZhiShiWu('shouHun');
+                    }
+                    'step 5'
+                    player.storage.shouHunJingJie_insert=false;
+                },
+                content:function(){
+                    player.storage.shouHunJingJie_insert=true;
+                    trigger.parent.insertAfter(lib.skill.shouHunJingJie.contentx,{
+                        player:player,
+                    });
+                }
+
+            },
+            shouFan:{
+                trigger:{player:'damageBegin'},
+                filter:function(event,player){
+                    return get.is.faShuShangHai(event)&&player.countZhiShiWu('shouHun')>0;
+                },
+                content:function(){
+                    'step 0'
+                    var list=[];
+                    var num=player.countZhiShiWu('shouHun');
+                    for(var i=1;i<=num;i++){
+                        list.push(i);
+                    }
+                    player.chooseControl(list).set('prompt','移除X点兽魂');
+                    'step 1'
+                    var num=result.control;
+                    player.removeZhiShiWu('shouHun',num);
+                    player.chooseToDiscard('h',true,num);
+                    'step 2'
+                    trigger.source.chooseToDiscard('h',true);
+                    'step 3'
+                    trigger.source.showCards(result.cards);
+                    if(get.type(result.cards[0])=='faShu'){
+                        player.addZhiShiWu('shouHun');
+                    }
+                }
+
+            },
+            yuHunLiuJuHeXingTai:{
+                group:['yuHunLiuJuHeXingTai_shangHai','yuHunLiuJuHeXingTai_shouHunJianShao','yuHunLiuJuHeXingTai_shangHaiTuoLi','yuHunLiuJuHeXingTai_shouHunTuoLi'],
+                subSkill:{
+                    shangHai:{
+                        trigger:{player:'useCard'},
+                        filter:function(event,player){
+                            return player.isLinked()&&get.is.gongJi(event)&&event.targets[0].isLinked();
+                        },
+                        forced:true,
+                        content:function(){
+                            trigger.baseDamage++;
+                        }
+                    },
+                    shouHunJianShao:{
+                        trigger:{player:'phaseEnd'},
+                        priority:1,
+                        forced:true,
+                        filter:function(event,player){
+                            return player.isLinked();
+                        },
+                        content:function(){
+                            player.removeZhiShiWu('shouHun');
+                        }
+                    },
+                    shangHaiTuoLi:{
+                        trigger:{source:'jiangYaoChengShou1'},
+                        firstDo:true,
+                        filter:function(event,player){
+                            return player.isLinked();
+                        },
+                        forced:true,
+                        content:function(){
+                            player.chongZhi();
+                        }
+                    },
+                    shouHunTuoLi:{
+                        trigger:{player:'phaseEnd'},
+                        priority:0,
+                        forced:true,
+                        filter:function(event,player){
+                            return player.isLinked()&&player.countZhiShiWu('shouHun')==0;
+                        },
+                        content:function(){
+                            player.chongZhi();
+                        }
+                    }
+                }
+            },
+            niFanJuHeZhan:{
+                trigger:{player:'useCardBefore'},
+                filter:function(event,player){
+                    return player.isLinked()&&get.is.gongJi(event)&&event.targets[0].countCards('h')<4;
+                },
+                content:function(){
+                    'step 0'
+                    var list=[];
+                    var num=player.countZhiShiWu('shouHun');
+                    for(var i=0;i<=num;i++){
+                        list.push(i);
+                    }
+                    player.chooseControl(list).set('prompt','移除X点兽魂');
+                    'step 1'
+                    trigger.storage.niFanJuHeZhan_num=result.control;
+                    player.removeZhiShiWu('shouHun',result.control);
+                },
+                group:'niFanJuHeZhan_xiaoGuo',
+                subSkill:{
+                    xiaoGuo:{
+                        trigger:{player:'useCardToTargeted'},
+                        forced:true,
+                        filter:function(event,player){
+                            return typeof event.parent.storage.niFanJuHeZhan_num=='number';
+                        },
+                        content:function(){
+                            'step 0'
+                            trigger.target.chooseToDiscard('h',true,trigger.parent.storage.niFanJuHeZhan_num+2);
+                            'step 1'
+                            if(result.cards.length<trigger.parent.storage.niFanJuHeZhan_num+2){
+                                trigger.target.changeShiQi(-1);
+                            }
+                            'step 2'
+                            trigger.parent.finish();
+                        }
+                    }
+                }
+            },
+            yuHunLiuJuHeShi:{
+                type:'qiDong',
+                trigger:{player:'phaseUseBegin'},
+                filter:function(event,player){
+                    return player.canBiShaBaoShi();
+                },
+                content:function(){
+                    'step 0'
+                    player.removeBiShaBaoShi();
+                    player.addZhiShiWu('shouHun',1,Infinity);
+                    'step 1'
+                    var list=['摸','弃','放弃'];
+                    player.chooseControl(list).set('prompt','摸或弃1张牌');
+                    'step 2'
+                    if(result.control=='摸'){
+                        player.draw();
+                    }else if(result.control=='弃'){
+                        player.chooseToDiscard('h',true,1);
+                    }
+                    'step 3'
+                    if(player.isLinked()){
+                        player.addZhiShiWu('canXin');
+                    }else{
+                        player.hengZhi();
+                    }
+                }
+            },
+            shouHun:{
+                intro:{
+                    content:'mark',
+                    max:2,
+                },
+                markimage:'image/card/lan.png',
+            },
+            canXin:{
+                intro:{
+                    content:'mark',
+                    max:4,
+                },
+                markimage:'image/card/hong.png',
+            },
 
 		},
 		
@@ -7621,22 +7871,22 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             wuZheCanXin:"[响应]武者残心[回合限定]",
             yiJiWuNian:"[响应]一击无念",
             shouHunYiNian:"[被动]兽魂意念",
-            shouHunJingJie:"[响应]兽魂警戒",
+            shouHunJingJie:"[响应]兽魂警戒[持续]",
             shouFan:"[响应]兽反",
             yuHunLiuJuHeXingTai:"[被动]御魂流居合形态",
             niFanJuHeZhan:"[响应]逆反居合斩",
-            yuHunLiuJuHeShi:"[启动]御魂流居合形态",
+            yuHunLiuJuHeShi:"[启动]御魂流居合形态[持续]",
             shouHun:"兽魂",
             canXin:"残心",
             
             wuZheCanXin_info:"[回合限定]<span class='tiaoJian'>([攻击行动]结束时)</span>你+1【残心】。",
             yiJiWuNian_info:"<span class='tiaoJian'>([攻击行动]结束后，移除4点【残心】)</span>额外+1[攻击行动]，本次攻击无视【圣盾】且无法用【圣光】抵挡。 <span class='tiaoJian'>(若攻击牌为技类命格)</span>本次攻击强制命中。",
             shouHunYiNian_info:"<span class='tiaoJian'>(你每移除1点【兽魂】)</span>你+1【残心】；<span class='tiaoJian'>(仅【普通形态】下，主动攻击命中时②)</span>你+1【兽魂】。",
-            shouHunJingJie_info:"[持续]<span class='tiaoJian'>(其他角色的[横置]效果结算完成后，移除1点【兽魂】，角色[横置]转为【御魂流居合形态】)</span>目标角色弃1张牌[展示]； <span class='tiaoJian'>(若弃牌为法术牌)</span>你+1【兽魂】。",
+            shouHunJingJie_info:"<span class='tiaoJian'>(其他角色的[横置]效果结算完成后，移除1点【兽魂】，角色[横置]转为【御魂流居合形态】)</span>目标角色弃1张牌[展示]； <span class='tiaoJian'>(若弃牌为法术牌)</span>你+1【兽魂】。",
             shouFan_info:"<span class='tiaoJian'>(目标角色对你造成法术伤害③时，移除X点【兽魂】)</span>你弃X张牌，他弃1张牌；<span class='tiaoJian'>(若他的弃牌为法术牌)</span>你+1【兽魂】。",
             yuHunLiuJuHeXingTai_info:"在此形态下，你对[横置]的目标角色攻击伤害+1。你回合结束前-1【兽魂】。 <span class='tiaoJian'>(你造成伤害⑥，或你的回合结束时【兽魂】为0)</span>[转正]脱离御魂流居合形态。",
             niFanJuHeZhan_info:"<span class='tiaoJian'>(仅【御魂流居合形态】下，攻击手牌<4的对手前①发动)</span>移除X点【兽魂】。本次攻击命中时②，改为攻击目标弃置<span class='tiaoJian'>(X+2)</span>张手牌。 <span class='tiaoJian'>(若因此弃牌数小于X+2)</span>对方士气-1。",
-            yuHunLiuJuHeShi_info:"[持续][宝石]无视你的【兽魂】上限+1【兽魂】，你可选择摸或弃1张牌；<span class='tiaoJian'>(若你处于【御魂流居合形态】)</span>你+1【残心】 ；<span class='tiaoJian'>(若你处于[普通型态])</span>[横置]转为【御魂流居合形态】。",
+            yuHunLiuJuHeShi_info:"[宝石]无视你的【兽魂】上限+1【兽魂】，你可选择摸或弃1张牌；<span class='tiaoJian'>(若你处于【御魂流居合形态】)</span>你+1【残心】 ；<span class='tiaoJian'>(若你处于[普通型态])</span>[横置]转为【御魂流居合形态】。",
             shouHun_info:"【兽魂】为兽灵武士专有指示物，上限为2。",
             canXin_info:"【残心】为兽灵武士专有指示物，上限为4。",
 
