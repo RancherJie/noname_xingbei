@@ -55666,7 +55666,7 @@
 			},
 			//damge
 			gongJiShangHai:function(event){
-				return get.type(event.card)=='gongJi'
+				return !event.faShu;
 			},
 			faShuShangHai:function(event){
 				if(event.faShu==true){
