@@ -2093,6 +2093,14 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						player.link();
 					}
 				},
+				addZhiShiWu:function(){
+					if(event.num>0){
+						player.addMark(event.zhiShiWu,event.num);
+					}
+				},
+				removeZhiShiWu:function(){
+					player.removeMark(event.zhiShiWu,event.num);
+				},
 
 				replacePlayer:function(){
 					"step 0"
@@ -2440,9 +2448,9 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					if(get.itemtype(source)!='player') source=this;
 					this.damage(num,source).set('faShu',true);
 				},
-				addZhiShiWu:function(zhiShuWu,num,max){//添加指示物
+				addZhiShiWu:function(zhiShiWu,num,max){//添加指示物
 					if(typeof num!='number'||!num) num=1;
-					var info=get.info(zhiShuWu);
+					var info=get.info(zhiShiWu);
 					if(typeof max=='number'){
 						var max=max;
 					}else if(info&&info.intro&&info.intro.max){
@@ -2450,23 +2458,31 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					}else{
 						var max=Infinity;
 					}
-					var current=this.countMark(zhiShuWu);
+					var current=this.countMark(zhiShiWu);
 					if(current+num>max){
 						num=max-current;
 					}
-					if(num>0){
-						this.addMark(zhiShuWu,num);
-					}
+					var next=game.createEvent('addZhiShiWu');
+					next.player=this;
+					next.zhiShiWu=zhiShiWu;
+					next.num=num;
+					next.setContent('addZhiShiWu');
+					return next;
 				},
-				countZhiShiWu:function(zhiShuWu){//统计指示物
-					return this.countMark(zhiShuWu);
+				countZhiShiWu:function(zhiShiWu){//统计指示物
+					return this.countMark(zhiShiWu);
 				},
-				removeZhiShiWu:function(zhiShuWu,num){//移除指示物
+				removeZhiShiWu:function(zhiShiWu,num){//移除指示物
 					if(typeof num!='number'||!num) num=1;
-					this.removeMark(zhiShuWu,num);
+					var next=game.createEvent('removeZhiShiWu');
+					next.player=this;
+					next.zhiShiWu=zhiShiWu;
+					next.num=num;
+					next.setContent('removeZhiShiWu');
+					return next;
 				},
-				hasZhiShiWu:function(zhiShuWu){//是否拥有指示物
-					return this.hasMark(zhiShuWu);
+				hasZhiShiWu:function(zhiShiWu){//是否拥有指示物
+					return this.hasMark(zhiShiWu);
 				},
 				addZhanJi:function(color,num){//增加战绩
 					if(typeof num!='number'||!num) num=1;
