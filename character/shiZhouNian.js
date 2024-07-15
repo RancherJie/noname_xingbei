@@ -6032,9 +6032,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 markimage:'image/card/tiaoXin.png',
 
-                filterx:function(event,player){
+                filterx:function(event,player,num){
                     //无可启动技，跳过启动前后挑衅
-                    if(event.name=='phaseUse'){
+                    if(event.name=='phaseUse'&&num==1){
 						if(player.storage.qiDong==false) return false;
 					}
 					return player.hasZhiShiWu('tiaoXinX');
@@ -6058,7 +6058,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						trigger:{player:'phaseUseBegin'},
 						priority:2,
 						filter:function(event,player){
-							return lib.skill.tiaoXinX.filterx(event,player);
+							return lib.skill.tiaoXinX.filterx(event,player,1);
 						},
                         content:function(){
                             player.removeZhiShiWu('tiaoXinX')
@@ -6070,7 +6070,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						trigger:{player:'phaseUseBegin'},
                         priority:-1,
 						filter:function(event,player){
-							return lib.skill.tiaoXinX.filterx(event,player);
+							return lib.skill.tiaoXinX.filterx(event,player,1);
 						},
                         content:function(){
                             player.removeZhiShiWu('tiaoXinX')
