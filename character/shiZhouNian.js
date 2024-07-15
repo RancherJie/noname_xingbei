@@ -7244,7 +7244,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.chooseControl(list).set('prompt','移除X点兽魂');
                     'step 1'
                     trigger.storage.niFanJuHeZhan_num=result.control;
-                    player.removeZhiShiWu('shouHun',result.control);
+                    if(result.control>0){
+                        player.removeZhiShiWu('shouHun',result.control);
+                    }
                 },
                 group:'niFanJuHeZhan_xiaoGuo',
                 subSkill:{
