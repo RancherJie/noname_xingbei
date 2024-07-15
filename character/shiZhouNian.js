@@ -6128,8 +6128,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             playerEnabled:function(card,player,target){
                                 if(!player.hasZhiShiWu('tiaoXinX')) return;
                                 if(_status.event.yingZhan==true) return;
-                                if(get.type(card)=='faShu') return false;
                                 if(player.storage.tiaoXinX_player!=target) return false;
+                            },
+                            cardEnabled:function(card,player){
+                                if(!player.hasZhiShiWu('tiaoXinX')) return;
+                                if(_status.event.yingZhan==true) return;
+                                if(get.type(card)=='faShu') return false;
                             },
                         }
                     }
