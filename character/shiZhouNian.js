@@ -7099,7 +7099,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 forced:true,
                 trigger:{player:'removeZhiShiWuEnd'},
                 filter:function(event,player){
-                    return event.zhiShiWu=='shouHun';
+                    return event.zhiShiWu=='shouHun'&&event.num>0;
                 },
                 content:function(){
                     player.addZhiShiWu('canXin',trigger.num);
