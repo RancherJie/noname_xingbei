@@ -7207,7 +7207,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             return player.isLinked();
                         },
                         content:function(){
-                            player.removeZhiShiWu('shouHun');
+                            if(player.countZhiShiWu('shouHun')>0){
+                                player.removeZhiShiWu('shouHun');
+                            }
                         }
                     },
                     shangHaiTuoLi:{
