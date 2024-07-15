@@ -515,7 +515,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         },
                         content:function(){
                             'step 0'
-                            player.hengZhi();
+                            player.chongZhi();
                             'step 1'
                             player.removeSkill('qianXing2');
                         }
