@@ -2099,7 +2099,9 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					}
 				},
 				removeZhiShiWu:function(){
-					player.removeMark(event.zhiShiWu,event.num);
+					if(event.num>0){
+						player.removeMark(event.zhiShiWu,event.num);
+					}
 				},
 
 				replacePlayer:function(){
@@ -2474,6 +2476,8 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				},
 				removeZhiShiWu:function(zhiShiWu,num){//移除指示物
 					if(typeof num!='number'||!num) num=1;
+					var current=this.countMark(zhiShiWu);
+					if(num>current) num=current;
 					var next=game.createEvent('removeZhiShiWu');
 					next.player=this;
 					next.zhiShiWu=zhiShiWu;
