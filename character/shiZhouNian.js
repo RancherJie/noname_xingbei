@@ -6107,6 +6107,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         filter:function(event,player){
 							return lib.skill.tiaoXinX.filterx(event,player);
 						},
+                        direct:true,
                         content:function(){
                             player.removeZhiShiWu('tiaoXinX')
                             player.removeSkill('tiaoXinX');
