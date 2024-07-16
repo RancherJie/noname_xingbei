@@ -1519,7 +1519,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             shenShengZhuiJi:{
                 trigger:{player:['useCardAfter','useSkillAfter']},
                 filter:function(event,player){
-                    return player.zhiLiao>0&&get.is.xiDong(event);
+                    return player.zhiLiao>0&&(get.is.faShuXingDong(event)||get.is.gongJiXingDong(event));
                 },
                 content:function(){
                     player.changeZhiLiao(-1);
