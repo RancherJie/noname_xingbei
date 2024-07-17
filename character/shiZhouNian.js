@@ -7379,7 +7379,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             fengNuZhuiJi:'[响应]风怒追击[回合限定]',
             fengNuZhuiJi_info:"<span class='tiaoJian'>([攻击行动]结束后发动)</span>额外+1风系[攻击行动]",
             shengJian:'[被动]圣剑',
-            shengJian_info:"若你的主动攻击为本次行动阶段的第3次[攻击行动]，则此攻击强制命中。本次[攻击行动]结束时，你摸X张牌，弃X张牌（X<4）。",
+            shengJian_info:"若你的主动攻击为本次行动阶段的第3次[攻击行动]，则此攻击强制命中。本次[攻击行动]结束时，你摸X张牌，弃X张牌(X<4)。",
             lieFengJi:"(独)[响应]烈风技",
             lieFengJi_info:"<span class='tiaoJian'>(攻击的目标拥有圣盾时发动)</span>无视对手圣盾的效果,且此攻击对手无法应战。",
             jiFengJi:"(独)[响应]疾风技",
