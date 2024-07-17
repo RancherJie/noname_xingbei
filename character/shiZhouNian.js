@@ -34,7 +34,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             jianDi:['female','ji','4/5',['jianHunShouHu','yangGong','jianQiZhan','tianShiZhiHun','eMoZhiHun','buQuYiZhi','jianHun','jianQi'],],
             geDouJia:['female','ji','4/5',['nianQiLiChang','xuLiYiji','nianDan','baiShiHuanLongQuan','qiJueBengJi','douShenTianQu','douQi'],],
             yongZhe:['male','xue','4/5',['yongZheZhiXin','nuHou','jinPiLiJin','mingJingZhiShui','tiaoXin','jinDuanZhiLi','siDou','','nuQi','zhiXing'],],
-            //lingHunShuShi:['female','huan',6,['jianxiong'],],
+            lingHunShuShi:['female','huan','4/5',["lingHunTunShi","lingHunZhaoHuan",'lingHunZhuanHuan',"lingHunJingXiang","lingHunZhenBao","lingHunFuYu","lingHunLianJie","lingHunZengFu","huangSeLingHun","lanSeLingHun"],],
             //xueZhiWuNv:['female','xue',6,['jianxiong'],],
             //dieWuZhe:['female','yong',6,['jianxiong'],],
             nvWuShen:['female','sheng','3/4',['shenShengZhuiJi','zhiXuZhiYin','hePingXingZhe','junShenWeiGuan','yingLingZhaoHuan'],],
@@ -7318,6 +7318,242 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 markimage:'image/card/hong.png',
             },
 
+            //灵魂术士
+            lingHunTunShi:{
+                forced:true,
+                trigger:{global:'changeShiQiEnd'},
+                filter:function(event,player){
+                    return player.side==event.side&&event.num<0;
+                },
+                content:function(){
+                    player.addZhiShiWu('huangSeLingHun',Math.abs(trigger.num));
+                }
+            },
+            lingHunZhaoHuan:{
+                type:'faShu',
+                enable:['chooseToUse','faShu'],
+                filter:function(event,player){
+                    return player.countCards('h',card=>get.type(card)=='faShu')>0;
+                },
+                filterCard:function(card){
+                    return get.type(card)=='faShu';
+                },
+                selectCard:[1,Infinity],
+                prepare:'showCards',
+                content:function(){
+                    player.addZhiShiWu('lanSeLingHun',cards.length);
+                }
+            },
+            lingHunZhuanHuan:{
+                trigger:{player:'useCard'},
+                filter:function(event,player){
+                    return get.is.zhuDongGongJi(event)&&(player.hasZhiShiWu('huangSeLingHun')||player.hasZhiShiWu('lanSeLingHun'));
+                },
+                content:function(){
+                    'step 0'
+                    var lanSe=player.hasZhiShiWu('lanSeLingHun');
+                    var huangSe=player.hasZhiShiWu('huangSeLingHun');
+                    if(lanSe&&huangSe){
+                        var list=['黄色->蓝色','蓝色->黄色'];
+                        player.chooseControl(list).set('prompt','选择转换的灵魂');
+                    }else if(lanSe){
+                        player.removeZhiShiWu('lanSeLingHun');
+                        player.addZhiShiWu('huangSeLingHun');
+                        event.finish();
+                    }else if(huangSe){
+                        player.removeZhiShiWu('huangSeLingHun');
+                        player.addZhiShiWu('lanSeLingHun');
+                        event.finish();
+                    }
+                    'step 1'
+                    if(result.control=='黄色->蓝色'){
+                        player.removeZhiShiWu('huangSeLingHun');
+                        player.addZhiShiWu('lanSeLingHun');
+                    }else if(result.control=='蓝色->黄色'){
+                        player.removeZhiShiWu('lanSeLingHun');
+                        player.addZhiShiWu('huangSeLingHun');
+                    }
+                }
+            },
+            lingHunJingXiang:{
+                type:'faShu',
+                enable:['chooseToUse','faShu'],
+                filter:function(event,player){
+                    return player.countZhiShiWu('huangSeLingHun')>=2;
+                },
+                selectTarget:1,
+                filterTarget:true,
+                content:function(){
+                    'step 0'
+                    player.removeZhiShiWu('huangSeLingHun',2);
+                    player.chooseToDiscard('h',true,2);
+                    'step 1'
+                    var chaZhi=target.getHandcardLimit()-target.countCards('h');
+                    if(chaZhi<2){
+                        var num=chaZhi;
+                    }else{
+                        var num=2;
+                    }
+                    target.draw(num);
+                }
+            },
+            lingHunZhenBao:{
+                type:'faShu',
+                enable:['chooseToUse','faShu'],
+                filter:function(event,player){
+                    return player.countCards('h',card=>card.hasNature('lingHunZhenBao'))>0&&player.countZhiShiWu('huangSeLingHun')>=3;
+                },
+                useCard:true,
+                filterCard:function(card){
+                    return card.hasNature('lingHunZhenBao');
+                },
+                selectCard:1,
+                selectTarget:1,
+                filterTarget:true,
+                content:function(){
+                    'step 0'
+                    player.removeZhiShiWu('huangSeLingHun',3);
+                    'step 1'
+                    var num=3;
+                    if(target.countCards('h')<3&&target.getHandcardLimit()>5){
+                        num+=2;
+                    }
+                    target.damageFaShu(num,player);
+                },  
+            },
+            lingHunFuYu:{
+                type:'faShu',
+                enable:['chooseToUse','faShu'],
+                filter:function(event,player){
+                    return player.countCards('h',card=>card.hasNature('lingHunFuYu'))>0&&player.countZhiShiWu('lanSeLingHun')>=3
+                },
+                useCard:true,
+                filterCard:function(card){
+                    return card.hasNature('lingHunFuYu');
+                },
+                selectCard:1,
+                selectTarget:1,
+                filterTarget:true,
+                content:function(){
+                    'step 0'
+                    player.removeZhiShiWu('lanSeLingHun',3);
+                    'step 1'
+                    target.addNengLiang('r',2);
+                }
+            },
+            lingHunLianJie:{
+                type:'qiDong',
+                trigger:{player:'phaseUseBegin'},
+                priority:1,
+                filter:function(event,player){
+                    if(event.qiDong) return false;
+                    //if(game.players.length==4) return false;
+                    if(player.storage.lingHunLianJie) return false;
+                    return player.hasZhiShiWu('huangSeLingHun')&&player.hasZhiShiWu('lanSeLingHun');
+                },
+                content:function(){
+                    'step 0'
+                    player.storage.lingHunLianJie=true;
+                    player.removeZhiShiWu('huangSeLingHun');
+                    player.removeZhiShiWu('lanSeLingHun'); 
+                    'step 1'
+                    var next=player.chooseTarget(true,'将[灵魂链接]放置于一名队友面前',function(card,player,target){
+                        return target!=player&&target.side==player.side;
+                    });
+                    'step 2'
+                    var target=result.targets[0];
+                    player.storage.lingHunLianJie_player=target;
+                    target.addZhiShiWu('lingHunLianJie');
+                },
+                intro:{
+                  content:"<span class='tiaoJian'>(每当你们之间有人承受伤害时⑥，移除X点【蓝色灵魂】)</span>将X点伤害转移给另1人，转移后的伤害为法术伤害⑥。",  
+                },
+                markimage:'image/card/lingHunLianJie.png',
+                group:'lingHunLianJie_xiaoGuo',
+                subSkill:{
+                    xiaoGuo:{
+                        trigger:{global:'jiangYaoChengShou1'},
+                        filter:function(event,player){
+                            if(!player.storage.lingHunLianJie) return false;
+                            if(!event.player.storage.lingHunLianJie) return false;
+                            if(event.lingHunLianJie) return false;
+                            return player.hasZhiShiWu('lanSeLingHun');
+                        },
+                        content:function(){
+                            'step 0'
+                            var num=player.countZhiShiWu('lanSeLingHun');
+                            var list=[];
+                            for(var i=1;i<=num;i++){
+                                if(i>trigger.num) break;
+                                list.push(i);
+                            }
+                            player.chooseControl(list).set('prompt','选择转移伤害量，目前伤害量为'+trigger.num);
+                            'step 1'
+                            event.num=result.control;
+                            player.removeZhiShiWu('lanSeLingHun',event.num)
+                            trigger.num-=event.num;
+                            'step 2'
+                            var list=[player,player.storage.lingHunLianJie_player];
+                            list.sortBySeat(_status.currentPhase);
+                            if(trigger.player==player){
+                                if(list[0]==player){
+                                    trigger.insertAfter(function(){
+                                        player.damage(num,target).set('step',6).set('faShu',true).set('lingHunLianJie',true);
+                                    },{
+                                        player:player.storage.lingHunLianJie_player,
+                                        num:event.num,
+                                        target:player,
+                                    })
+                                }else{
+                                    player.storage.lingHunLianJie_player.damage(event.num,player).set('step',6).set('faShu',true).set('lingHunLianJie',true); 
+                                }
+                            }else{
+                                if(list[0]==player){
+                                    player.damage(event.num,trigger.source).set('step',6).set('faShu',true).set('lingHunLianJie',true);
+                                }else{
+                                    trigger.insertAfter(function(){
+                                        player.damage(num,target).set('step',6).set('faShu',true).set('lingHunLianJie',true);
+                                    },{
+                                        player:player,
+                                        num:event.num,
+                                        target:trigger.source,
+                                    })
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            lingHunZengFu:{
+                type:'qiDong',
+                trigger:{player:'phaseUseBegin'},
+                filter:function(event,player){
+                    if(event.qiDong) return false;
+                    return player.canBiShaBaoShi();
+                },
+                content:function(){
+                    'step 0'
+                    player.removeBiShaBaoShi();
+                    'step 1'
+                    player.addZhiShiWu('huangSeLingHun',2);
+                    player.addZhiShiWu('lanSeLingHun',2);
+                }
+            },
+            huangSeLingHun:{
+                intro:{
+                    content:'mark',
+                    max:6
+                },
+                markimage:'image/card/hong.png',
+            },
+            lanSeLingHun:{
+                intro:{
+                    content:'mark',
+                    max:6
+                },
+                markimage:'image/card/lan.png',
+            },
+
 		},
 		
 		translate:{
@@ -7815,7 +8051,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             mingJingZhiShui_info:"<span class='tiaoJian'>(主动攻击前发动①，移除4点【知性】)</span>本次攻击对手无法应战。<span class='tiaoJian'>(本次攻击结束时)</span>你+1[水晶]",
             tiaoXin_info:"<span class='tiaoJian'>(移除1点【怒气】)</span>将挑衅放置于目标对手面前，你+1【知性】；该对手在其下个行动阶段必须且只能主动攻击你，否则他跳过该行动阶段，触发后移除此牌。",
             jinDuanZhiLi_info:"[水晶]<span class='tiaoJian'>(主动攻击命中或未命中后发动②)</span>弃掉你所有手牌[展示]，其中每有1张法术牌，你+1【怒气】；<span class='tiaoJian'>(若未命中②)</span>其中每有1张水系牌，你+1【知性】；<span class='tiaoJian'>(若命中②)</span>其中每有1张火系牌，本次攻击伤害额外+1，并对自己造成等同于火系牌数量的法术伤害③。",
-            siDou_info:"［宝石］(每当你承受法术伤害时发动⑥)你+3【怒气】；<span class='tiaoJian'>(若此伤害造成士气实际下降)</span>本次的士气下降值恒定为1。",
+            siDou_info:"[宝石](每当你承受法术伤害时发动⑥)你+3【怒气】；<span class='tiaoJian'>(若此伤害造成士气实际下降)</span>本次的士气下降值恒定为1。",
             nuQi_info:"【怒气】为勇者专有指示物，上限为4。",
             zhiXing_info:"【知性】为勇者专有指示物，上限为4。",
 
@@ -7899,6 +8135,29 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             shouHun_info:"【兽魂】为兽灵武士专有指示物，上限为2。",
             canXin_info:"【残心】为兽灵武士专有指示物，上限为4。",
 
+            //灵魂术士
+            lingHunTunShi:"[被动]灵魂吞噬",
+            lingHunZhaoHuan:"[法术]灵魂召还",
+            lingHunZhuanHuan:"[响应]灵魂转换",
+            lingHunJingXiang:"[法术]灵魂镜像",
+            lingHunZhenBao:"(独)[法术]灵魂震爆",
+            lingHunFuYu:"(独)[法术]灵魂赋予",
+            lingHunLianJie:"(专)[启动]灵魂链接",
+            lingHunZengFu:"[启动]灵魂增幅",
+            huangSeLingHun:"黄色灵魂",
+            lanSeLingHun:"蓝色灵魂",
+
+            lingHunTunShi_info:"<span class='tiaoJian'>(我方每有1点士气下降)</span>你+1【黄色灵魂】。",
+            lingHunZhaoHuan_info:"<span class='tiaoJian'>(弃X张法术牌[展示])</span>你+X点【蓝色灵魂】。",
+            lingHunZhuanHuan_info:"<span class='tiaoJian'>(你每发动1次主动攻击①)</span>可转换1点你拥有的[灵魂]的颜色。",
+            lingHunJingXiang_info:"<span class='tiaoJian'>(移除2点【黄色灵魂】)</span>你弃2张牌，目标角色摸2张牌[强制]，但最多补到其手牌上限。",
+            lingHunZhenBao_info:"<span class='tiaoJian'>(移除3点【黄色灵魂】)</span>对目标角色造成3点法术伤害③，若他手牌<3且手牌上限>5，则本次伤害额外+2。",
+            lingHunFuYu_info:"<span class='tiaoJian'>(移除3点【蓝色灵魂】)</span>目标角色+2[宝石]。",
+            lingHunLianJie_info:"<span class='tiaoJian'>(移除1点【黄色灵魂】和1点【蓝色灵魂】)</span>将[灵魂链接]放置于一名队友面前，<span class='tiaoJian'>(每当你们之间有人承受伤害时⑥，移除X点【蓝色灵魂】)</span>将X点伤害转移给另1人，转移后的伤害为法术伤害⑥。",
+            lingHunZengFu_info:"[宝石]你+2【黄色灵魂】和2【蓝色灵魂】。",
+            huangSeLingHun_info:"【黄色灵魂】为灵魂术士专有指示物，上限为6。",
+            lanSeLingHun_info:"【蓝色灵魂】为灵魂术士专有指示物，上限为6。",
+            
 		},
 	};
 });

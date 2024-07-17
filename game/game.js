@@ -55635,7 +55635,7 @@
 			},
 			//useSkill||useCard
 			gongJi:function(event){
-				return get.type(event.card)=='gongJi'&&event.targets!=[];
+				return get.type(event.card)=='gongJi'&&event.targets_x.length>0	;
 			},
 			yingZhanGongJi:function(event){
 				if(!get.is.gongJi(event)) return false;
