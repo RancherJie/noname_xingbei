@@ -5787,7 +5787,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             player.chooseToDiscard(1,true);
                         }
                         var list=['治疗','灵感'];
-                        player.chooseControl(list).set('prompt','选择+1（ ）');
+                        player.chooseControl(list).set('prompt','选择+1( )');
                     }else{
                         event.finish();
                     }
