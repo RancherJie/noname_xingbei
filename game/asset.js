@@ -27,7 +27,6 @@ window.noname_asset_list=[
 	'audio/effect/throw_wine1.mp3',
 	'audio/effect/throw_wine2.mp3',
 	'audio/effect/tie.mp3',
-	'audio/effect/tori_no_uta.mp3',
 	'audio/effect/win.mp3',
 	/*effect audio end*/
 	
