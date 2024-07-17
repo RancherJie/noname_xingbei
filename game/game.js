@@ -17960,6 +17960,12 @@
 						next.faShu=event.faShu
 					}
 					"step 5"
+					event.trigger("shiJiShangHai");
+					"step 6"
+					event.trigger('jiangYaoChengShou1');
+					"step 7"
+					event.trigger('jiangYaoChengShou2');
+					"step 8"
 					game.broadcastAll(function(num){
                         if(lib.config.background_audio) game.playAudio('effect','damage'+(num>2?'2':''));
                     },num);
@@ -17986,12 +17992,7 @@
 						}
 					}
 					player.getHistory('damage').push(event);
-					event.trigger("shiJiShangHai");
-					"step 6"
-					event.trigger('jiangYaoChengShou1');
-					"step 7"
-					event.trigger('jiangYaoChengShou2');
-					"step 8"
+
 					if(!event.unreal){
 						var next=player.draw(num).set('yuanYin','damage').set('faShu',event.faShu);
 						if(event.shiQiXiaJiang==false){
