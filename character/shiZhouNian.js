@@ -4806,32 +4806,33 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 direct:true,
                 content:function(){
-                    'step 0'
-                    var next=player.chooseToDiscard('h',[2,Infinity],function(card){
-                        if(ui.selected.cards.length==0) return true;
-                        if(get.xiBie(card)==get.xiBie(ui.selected.cards[0])) return true;
-                        return false;
-                    });
-                    next.set('complexCard',true);
-                    next.set('prompt',get.prompt('faShuFangTan'));
-                    next.set('prompt2',lib.translate.faShuFangTan_info);
+                   'step 0'
+                    player.chooseCardTarget({
+                        filterCard:function(card){
+                            if(ui.selected.cards.length==0) return true;
+                            if(get.xiBie(card)==get.xiBie(ui.selected.cards[0])) return true;
+                            return false;
+                        },
+                        selectCard:[2,Infinity],
+                        filterTarget:true,
+                        complexCard:true,
+                        prompt:get.prompt('faShuFangTan'),
+                        prompt2:lib.translate.faShuFangTan_info,
+                    })
                     'step 1'
                     if(result.bool){
                         player.logSkill(event.name);
+                        player.discard(result.cards);
                         player.showCards(result.cards);
                         event.num=result.cards.length;
+                        event.target=result.targets[0];
                     }else{
                         event.finish();
                     }
                     'step 2'
-                    player.chooseTarget(true,1,'对目标角色造成'+(event.num-1)+'点法术伤害③').set('ai',function(target){
-                        return target.side!=player.side;
-                    });
+                    event.target.damageFaShu(event.num-1,player);
                     'step 3'
-                    result.targets[0].damageFaShu(event.num-1,player);
-                    'step 4'
                     player.damageFaShu(event.num,player);
-
                 }
             },
             moDaoFaDian:{
