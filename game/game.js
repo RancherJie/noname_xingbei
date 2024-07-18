@@ -10513,7 +10513,7 @@
 						game.hongShiQi+=num;
 						if(num>0){
 							game.log('<span style="color:red;">红方</span>士气增加',num);
-						}else{
+						}else if(num<0){
 							num=-num;
 							game.log('<span style="color:red;">红方</span>士气减少',num);
 						}
@@ -10521,7 +10521,7 @@
 						game.lanShiQi+=num;
 						if(num>0){
 							game.log('<span style="color:blue;">蓝方</span>士气增加',num);
-						}else{
+						}else if(num<0){
 							num=-num;
 							game.log('<span style="color:blue;">蓝方</span>士气减少',num);
 						}
@@ -18749,13 +18749,25 @@
 
 				changeShiQi:function(num,side){//xingbei
 					var next=game.createEvent('changeShiQi');
-					next.num=num;
 					next.player=this;
 					if(side==undefined){
 						next.side=this.side;
 					}else{
 						next.side=side;
 					}
+
+					var shiQi;
+					switch(next.side){
+						case true:
+							shiQi=game.hongShiQi;break;
+						case false:
+							shiQi=game.lanShiQi;break;
+					}
+					if(num>0&&(shiQi+num>game.shiQiMax)){
+						num=Math.max(0,game.shiQiMax-shiQi);
+					}
+					next.num=num;
+
 					next.setContent('changeShiQi');
 					return next;
 				},
@@ -40490,7 +40502,7 @@
 				game.hongShiQi+=num;
 				if(num>0){
 					game.log('<span style="color:red;">红方</span>士气增加',num);
-				}else{
+				}else if(num<0){
 					num=-num;
 					game.log('<span style="color:red;">红方</span>士气减少',num);
 				}
@@ -40498,7 +40510,7 @@
 				game.lanShiQi+=num;
 				if(num>0){
 					game.log('<span style="color:blue;">蓝方</span>士气增加',num);
-				}else{
+				}else if(num<0){
 					num=-num;
 					game.log('<span style="color:blue;">蓝方</span>士气减少',num);
 				}
@@ -40611,6 +40623,7 @@
 
 		lanShiQi:15,
 		hongShiQi:15,
+		shiQiMax:15,
 		hongZhanJi:[],
 		lanZhanJi:[],
 		hongXingBei:0,
