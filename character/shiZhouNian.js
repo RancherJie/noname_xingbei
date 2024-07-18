@@ -1651,7 +1651,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 
             //元素师
             yuanSuXiShou:{
-                trigger:{source:'damageBegin'},
+                trigger:{source:'damageBegin0'},
                 filter:function(event,player){
                     if(player.countMark('yuanSu')>=3) return false;
                     if(event.faShu!=true) return false;
@@ -3380,7 +3380,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 }
             },
             xueQiPingZhang:{
-                trigger:{player:'damageBegin'},
+                trigger:{player:'damageBegin0'},
                 filter:function(event,player){
                     if(event.faShu!=true) return false;
                     return player.countZhiShiWu('xianXue')>=1;
@@ -3761,7 +3761,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 group:['reXueFeiTeng_xiaoGuo','reXueFeiTeng_chongZhi'],
                 subSkill:{
                     xiaoGuo:{
-                        trigger:{player:'damageBegin'},
+                        trigger:{player:'damageBegin0'},
                         forced:true,
                         filter:function(event,player){
                             if(!player.isLinked()) return false;
@@ -4046,7 +4046,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             },
             shuangChongHuiXiang:{
                 usable:1,
-                trigger:{source:'damageBegin'},
+                trigger:{source:'damageBegin0'},
                 filter:function(event,player){
                     return player.canBiShaShuiJing();
                 },
@@ -4675,7 +4675,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 }
             },
             tiShenWanOu:{
-                trigger:{player:'damageBegin'},
+                trigger:{player:'damageBegin0'},
                 filter:function(event,player){
                     return get.is.gongJiShangHai(event)&&player.countCards('h')>0;
                 },
@@ -4735,7 +4735,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 }
             },
             moNengFanZhuan:{
-                trigger:{player:'damageBegin'},
+                trigger:{player:'damageBegin0'},
                 direct:true,
                 filter:function(event,player){
                     if(event.faShu!=true) return false;
@@ -5296,7 +5296,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 }
             },
             anZhiZhangBi:{
-                trigger:{player:'damageBegin'},
+                trigger:{player:'damageBegin0'},
                 direct:true,
                 filter:function(event,player){
                     return player.countCards('h')>0;
@@ -5574,7 +5574,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 
             //吟游诗人
             chenLunXieZouQu:{
-                trigger:{global:'damageBegin'},
+                trigger:{global:'damageBegin0'},
                 lastDo:true,
                 filter:function(event,player){
                     if(player.isLinked()) return false;
@@ -5643,7 +5643,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         }
                     },
                     jiShu:{
-                        trigger:{global:'damageBegin'},
+                        trigger:{global:'damageBegin0'},
                         filter:function(event,player){
                             if(event.faShu!=true) return false;
                             if(player.storage.chenLunXieZouQu.includes(event.player)) return false;
@@ -6234,7 +6234,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 
             //格斗家
             nianQiLiChang:{
-                trigger:{source:"damageBegin"},
+                trigger:{source:"damageBegin0"},
                 filter:function(event,player){
                     return event.num>4;
                 },
@@ -7161,7 +7161,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 
             },
             shouFan:{
-                trigger:{player:'damageBegin'},
+                trigger:{player:'damageBegin0'},
                 filter:function(event,player){
                     return get.is.faShuShangHai(event)&&player.countZhiShiWu('shouHun')>0;
                 },
