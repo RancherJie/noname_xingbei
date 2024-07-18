@@ -17929,14 +17929,16 @@
 					"step 0"
 					event.forceDie=true;
 					if(event.unreal) event.goto(4)
+					event.trigger('damageBegin0');
+					'step 1'
 					event.trigger('damageBegin1');
-					"step 1"
-					event.trigger('damageBegin2');
 					"step 2"
-					event.trigger('damageBegin3');
+					event.trigger('damageBegin2');
 					"step 3"
-					event.trigger('damageBegin4');
+					event.trigger('damageBegin3');
 					"step 4"
+					event.trigger('damageBegin4');
+					"step 5"
 					//检测治疗触发器是否能触发
 					if(event.canZhiLiao!=false&&event.diXiao!=false){
 						event.canZhiLiao=true;
@@ -17958,13 +17960,13 @@
 						next.player=player;
 						next.faShu=event.faShu
 					}
-					"step 5"
-					event.trigger("shiJiShangHai");
 					"step 6"
-					event.trigger('jiangYaoChengShou1');
+					event.trigger("shiJiShangHai");
 					"step 7"
-					event.trigger('jiangYaoChengShou2');
+					event.trigger('jiangYaoChengShou1');
 					"step 8"
+					event.trigger('jiangYaoChengShou2');
+					"step 9"
 					game.broadcastAll(function(num){
                         if(lib.config.background_audio) game.playAudio('effect','damage'+(num>2?'2':''));
                     },num);
@@ -18037,7 +18039,7 @@
 							event.trigger('damage');
 						}*/ 
 					}
-					"step 9"
+					"step 10"
 					/*
 					if(player.hp<=0&&player.isAlive()&&!event.nodying){
 						game.delayx();
@@ -18085,7 +18087,7 @@
 							}
 						}
 					}
-					"step 10"
+					"step 11"
 					game.resetMoDan();
 					if(!event.notrigger) event.trigger('damageSource');
 					
