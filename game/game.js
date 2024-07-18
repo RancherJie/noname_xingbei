@@ -16362,7 +16362,6 @@
 					if(event.parent&&!event.action){
 						event.set('action',event.parent.action);					
 					}
-					event.targets_x=targets.slice();
 					if(event.action){
 						var type=get.type(card);
 						if(type=='faShu'){
@@ -23032,6 +23031,7 @@
 					if(!next.targets){
 						next.targets=[];
 					}
+					next.targets_x=next.targets.slice();
 					if(next.card){
 						next.card=get.autoViewAs(next.card,next.cards);
 						var info=get.info(next.card);
