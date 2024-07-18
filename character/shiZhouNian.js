@@ -6320,6 +6320,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             if(!player.isLinked()) return false;
                             return get.is.zhuDongGongJi(event);
                         },
+                        priority:1,
                         direct:true,
                         content:function(){
                             trigger.baseDamage+=2;
