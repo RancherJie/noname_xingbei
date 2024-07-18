@@ -6866,7 +6866,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     return !event.yingZhan&&player.getExpansions('jianHun').length<lib.skill.jianHun.intro.max;
                 },
                 forced:true,
-                priority:1,
+                priority:2,
                 content:function(){
                     game.log(player,'将',trigger.source_card.cards,'作为盖牌');
                     player.addToExpansion('giveAuto',trigger.source_card.cards,player).gaintag.add('jianHun');
