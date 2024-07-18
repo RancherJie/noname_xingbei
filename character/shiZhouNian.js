@@ -6886,7 +6886,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             jianQiZhan:{
                 trigger:{player:'useCardToTargeted'},
                 filter:function(event,player){
-                    return get.is.zhuDongGongJi(event)&&player.countZhiShiWu('jianQi')>0;
+                    return get.is.zhuDongGongJi(event.parent)&&player.countZhiShiWu('jianQi')>0;
                 },
                 direct:true,
                 priority:1,
