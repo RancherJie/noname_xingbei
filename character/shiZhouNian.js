@@ -35,7 +35,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             geDouJia:['female','ji','4/5',['nianQiLiChang','xuLiYiji','nianDan','baiShiHuanLongQuan','qiJueBengJi','douShenTianQu','douQi'],],
             yongZhe:['male','xue','4/5',['yongZheZhiXin','nuHou','jinPiLiJin','mingJingZhiShui','tiaoXin','jinDuanZhiLi','siDou','','nuQi','zhiXing'],],
             lingHunShuShi:['female','huan','4/5',["lingHunTunShi","lingHunZhaoHuan",'lingHunZhuanHuan',"lingHunJingXiang","lingHunZhenBao","lingHunFuYu","lingHunLianJie","lingHunZengFu","huangSeLingHun","lanSeLingHun"],],
-            //xueZhiWuNv:['female','xue',6,['jianxiong'],],
+            xueZhiWuNv:['female','xue',5,['xueZhiAiShang','liuXue','niLiu','xueZhiBeiMing','tongShengGongSi','xueZhiZuZhou'],],
             //dieWuZhe:['female','yong',6,['jianxiong'],],
             nvWuShen:['female','sheng','3/4',['shenShengZhuiJi','zhiXuZhiYin','hePingXingZhe','junShenWeiGuan','yingLingZhaoHuan'],],
             moGong:['female','huan',4,['moGuanChongJi','leiGuangSanShe','duoChongSheJi','chongNeng','moYan','chongNengPai'],],
@@ -7570,6 +7570,207 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 markimage:'image/card/lan.png',
             },
 
+            //血之巫女
+            xueZhiAiShang:{
+                type:'qiDong',
+                trigger:{player:'phaseUseBegin'},
+                filter:function(event,player){
+                    return player.storage.tongShengGongSi_use;
+                },
+                content:function(){
+                    'step 0'
+                    player.damageFaShu(2,player);
+                    'step 1'
+                    var next=player.chooseTarget('转移【同生共死】目标，取消则移除【同生共死】',function(card,player,target){
+                        return target!=_status.event.targetX;
+                    });
+                    next.set('targetX',player.storage.tongShengGongSi_target);
+                    'step 2'
+                    if(result.bool){
+                        player.storage.tongShengGongSi_target.removeZhiShiWu('tongShengGongSi');
+                        event.target=result.targets[0];
+                    }else{
+                        player.storage.tongShengGongSi_target.removeZhiShiWu('tongShengGongSi');
+                        player.storage.tongShengGongSi_use=false;
+                    }
+                    'step 3'
+                    player.qiPai();
+                    'step 4'
+                    player.storage.tongShengGongSi_target.qiPai();
+                    if(!event.target){
+                        player.storage.tongShengGongSi_target=null;
+                        event.finish();
+                    }
+                    'step 5'
+                    event.target.addZhiShiWu('tongShengGongSi');
+                    if(!target.hasSkill('tongShengGongSi_xiaoGuo')){
+                        event.target.addSkill('tongShengGongSi_xiaoGuo');
+                        event.target.storage.tongShengGongSi_player=player;
+                    }
+                    player.storage.tongShengGongSi_target=event.target;
+                    'step 6'
+                    event.target.qiPai();
+                }
+            },
+            liuXue:{
+                forced:true,
+                priority:-1,
+                trigger:{global:'changeShiQiEnd'},
+                filter:function(event,player){
+                    return player==event.player&&event.num<0&&event.yuanYin=='damage'&&!player.isLinked();
+                },
+                content:function(){
+                    'step 0'
+                    player.hengZhi();
+                    'step 1'
+                    player.changeZhiLiao(1);
+                },
+                group:['liuXue_shangHai','liuXue_chongZhi'],
+                subSkill:{
+                    shangHai:{
+                        trigger:{player:'phaseBegin'},
+                        direct:true,
+                        filter:function(event,player){
+                            return player.isLinked();
+                        },
+                        content:function(){
+                            player.damageFaShu(1,player);
+                        }
+                    },
+                    chongZhi:{
+                        trigger:{
+                            player:'loseAfter',
+                            global:['gainAfter','loseAsyncAfter','addToExpansionAfter'],
+                        },
+                        filter:function(event,player){
+                            if(!player.isLinked()) return false;
+                            if(event.name=='gain'&&event.player==player) return false;
+                            var evt=event.getl(player);
+                            return evt&&evt.cards2&&evt.cards2.length>0&&player.countCards('h')<3;
+                        },
+                        forced:true,
+                        content:function(){
+                            'step 0'
+                            player.chongZhi();
+                            'step 1'
+                            player.qiPai();
+                            'step 2'
+                            if(player.storage.tongShengGongSi_target){
+                                player.storage.tongShengGongSi_target.qiPai();
+                            }
+                        }
+                    }
+                }
+            },
+            niLiu:{
+                type:'faShu',
+                enable:['chooseToUse','faShu'],
+                filter:function(event,player){
+                    return player.isLinked();
+                },
+                content:function(){
+                    'step 0'
+                    player.chooseToDiscard(true,2);
+                    'step 1'
+                    player.changeZhiLiao(1);
+                }
+            },
+            xueZhiBeiMing:{
+                type:'faShu',
+                enable:['chooseToUse','faShu'],
+                filter:function(event,player){
+                    return player.isLinked()&&player.countCards('h',card=>card.hasNature('xueZhiBeiMing'))>0;
+                },
+                filterCard:function(card){
+                    return card.hasNature('xueZhiBeiMing');
+                },
+                selectCard:1,
+                useCard:true,
+                filterTarget:true,
+                selectTarget:1,
+                contentBefore:function(){
+                    'step 0'
+                    var list=[1,2,3];
+                    player.chooseControl(list).set('prompt','选择伤害值');
+                    'step 1'
+                    player.storage.xueZhiBeiMin=result.control;
+                },
+                content:function(){
+                    'step 0'
+                    target.damageFaShu(player.storage.xueZhiBeiMin,player);
+                    'step 1'
+                    player.damageFaShu(player.storage.xueZhiBeiMin,player);
+                }
+            },
+            tongShengGongSi:{
+                intro:{
+                    content:"<span class='tiaoJian'>(在【普通形态】下)</span>你和他手牌上限各-2。 <span class='tiaoJian'>(在【流血形态】下)</span>你和他手牌上限各+1。"
+                },
+                markimage:'image/card/tongShengGongSi.png',
+                type:'faShu',
+                enable:['chooseToUse','faShu'],
+                filter:function(event,player){
+                    return !player.storage.tongShengGongSi_use;
+                },
+                selectTarget:1,
+                filterTarget:true,
+                content:function(){
+                    'step 0'
+                    player.draw(2);
+                    'step 1'
+                    player.storage.tongShengGongSi_target=target;
+                    player.storage.tongShengGongSi_use=true;
+                    target.addZhiShiWu('tongShengGongSi');
+                    if(!target.hasSkill('tongShengGongSi_xiaoGuo')){
+                        target.addSkill('tongShengGongSi_xiaoGuo');
+                        target.storage.tongShengGongSi_player=player;
+                    }
+                    'step 2'
+                    player.qiPai();
+                    'step 3'
+                    target.qiPai();
+                },
+                group:'tongShengGongSi_xiaoGuo',
+                subSkill:{
+                    xiaoGuo:{
+                        mod:{
+                            maxHandcard:function(player,num){
+                                if(player.hasZhiShiWu('tongShengGongSi')){
+                                    if(player.storage.tongShengGongSi_player.isLinked()){
+                                        return num+1;
+                                    }else{
+                                        return num-2;
+                                    }
+                                }else if(player.storage.tongShengGongSi_use){
+                                    if(player.isLinked()){
+                                        return num+1;
+                                    }else{
+                                        return num-2;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            xueZhiZuZhou:{
+                type:'faShu',
+                enable:['chooseToUse','faShu'],
+                filter:function(event,player){
+                    return player.canBiShaBaoShi();
+                },
+                filterTarget:true,
+                selectTarget:1,
+                content:function(){
+                    'step 0'
+                    player.removeBiShaBaoShi();
+                    'step 1'
+                    target.damageFaShu(2,player);
+                    'step 2'
+                    player.chooseToDiscard(3,true,'h');
+                }
+            },
+
 		},
 		
 		translate:{
@@ -8174,6 +8375,21 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             huangSeLingHun_info:"【黄色灵魂】为灵魂术士专有指示物，上限为6。",
             lanSeLingHun_info:"【蓝色灵魂】为灵魂术士专有指示物，上限为6。",
             
+            //血之巫女
+            xueZhiAiShang:"[启动]血之哀伤",
+            liuXue:"[被动]流血[持续]",
+            niLiu:"[法术]逆流",
+            xueZhiBeiMing:"(独)[法术]血之悲鸣",
+            tongShengGongSi:"(专)[法术]同生共死",
+            xueZhiZuZhou:"[法术]血之诅咒",
+
+            xueZhiAiShang_info:"<span class='tiaoJian'>(对自己造成2点法术伤害③)</span>转移同生共死的目标或是移除同生共死。",
+            liuXue_info:"[持续]<span class='tiaoJian'>(当你在普通形态下因承受伤害而导致我方士气减少时强制发动[强制])</span>[横置]转为【流血形态】，你+1[治疗]。此形态下在你的每次回合开始时对自己造成1点法术伤害③。 <span class='tiaoJian'>(自身手牌<3时强制发动[强制])</span>[转正]脱离【流血形态】。",
+            niLiu_info:"<span class='tiaoJian'>(仅【流血形态】下发动)</span>你弃2张牌，你+1[治疗]。",
+            xueZhiBeiMing_info:"<span class='tiaoJian'>(仅【流血形态】下发动)</span>对目标角色和自己各造成(X+1)点法术伤害③，X<3。",
+            tongShengGongSi_info:"<span class='tiaoJian'>(你摸2张牌[强制])</span>将同生共死放置于目标角色面前。 <span class='tiaoJian'>(在【普通形态】下)</span>你和他手牌上限各-2。 <span class='tiaoJian'>(在【流血形态】下)</span>你和他手牌上限各+1。",
+            xueZhiZuZhou_info:"[宝石]对目标角色造成2点法术伤害③，你弃3张牌。",
+
 		},
 	};
 });
