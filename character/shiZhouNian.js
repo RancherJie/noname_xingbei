@@ -1660,7 +1660,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 filter:function(event,player){
                     if(player.countMark('yuanSu')>=3) return false;
                     if(event.faShu!=true) return false;
-                    if(player.storage.yuanSuDianRan==true) return false;
+                    if(event.yuanSuDianRan==true) return false;
                     return true;
                 },
                 content:function(){
@@ -1673,21 +1673,15 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 filter:function(event,player){
                     return player.countMark('yuanSu')>=3
                 },
+                selectTarget:1,
+                filterTarget:true,
                 content:function(){
                     'step 0'
-                    player.storage.yuanSuDianRan=true;
                     player.removeMark('yuanSu',3);
                     'step 1'
-                    player.chooseTarget(1,'元素点燃：选择1名目标角色造成2点法术伤害',true);
+                    target.damage(2,player).set('faShu',true).set('yuanSuDianRan',true);
                     'step 2'
-                    if(result.bool){
-                        var target=result.targets[0];
-                        var next=target.damage(2,player);
-                        next.faShu=true;
-                    }
-                    'step 3'
-                    player.faShu('元素点燃：[法术行动]');
-                    player.storage.yuanSuDianRan=false;
+                    player.storage.faShu++;
                 }
             },
             yunShi:{
