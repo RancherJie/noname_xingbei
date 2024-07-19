@@ -4745,27 +4745,35 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 direct:true,
                 filter:function(event,player){
                     if(event.faShu!=true) return false;
+                    if(player.countCards('h')<2) return false;
                     return player.canBiShaShuiJing()&&player.countCards('h')>1;
                 },
                 content:function(){
                     'step 0'
-                    var next=player.chooseToDiscard('h',[2,Infinity],card=>get.type(card)=='faShu');
-                    next.set('prompt',get.prompt('moNengFanZhuan'));
-                    next.set('prompt2',lib.translate.moNengFanZhuan_info);
+                    player.chooseCardTarget({
+                        selectCard:[2,Infinity],
+                        filterCard:function(card){
+                            return get.type(card)=='faShu'
+                        },
+                        filterTarget:function(card,player,target){
+                            return target.side!=player.side;
+                        },
+                        prompt:get.prompt('moNengFanZhuan'),
+                        prompt2:lib.translate.moNengFanZhuan_info,
+                    });
                     'step 1'
                     if(result.bool){
                         player.logSkill(event.name);
                         player.removeBiShaShuiJing();
                         event.num=result.cards.length-1;
+                        player.discard(result.cards);
                         player.showCards(result.cards);
-                        player.chooseTarget(true,function(card,player,target){
-                            return target.side!=player.side;
-                        });
+                        event.target=result.targets[0];
                     }else{
                         event.finish();
                     }
                     'step 2'
-                    result.targets[0].damageFaShu(event.num,player);
+                    event.target.damageFaShu(event.num,player);
                 }
 
             },
