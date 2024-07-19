@@ -4681,21 +4681,28 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 direct:true,
                 content:function(){
                     'step 0'
-                    var next=player.chooseToDiscard('h',card=>get.type(card)=='faShu');
-                    next.set('prompt',get.prompt('tiShenWanOu'));
-                    next.set('prompt2',lib.translate.tiShenWanOu_info);
+                    player.chooseCardTarget({
+                        filterCard:function(card){
+                            return get.type(card)=='faShu';
+                        },
+                        selectCard:1,
+                        filterTarget:function(card,player,target){
+                            return target!=player&&target.side==player.side;
+                        },
+                        prompt:get.prompt('tiShenWanOu'),
+                        prompt2:lib.translate.tiShenWanOu_info,
+                    });
                     'step 1'
                     if(result.bool){
                         player.logSkill(event.name);
+                        player.discard(result.cards);
                         player.showCards(result.cards);
-                        player.chooseTarget('目标队友摸1张牌',true,function(card,player,target){
-                            return target!=player&&target.side==player.side;
-                        });
+                        event.target=result.targets[0];
                     }else{
                         event.finish();
                     }
                     'step 2'
-                    result.targets[0].draw(1);
+                    event.target.draw(1);
                 }
             },
             yongShengYinShiJi:{
