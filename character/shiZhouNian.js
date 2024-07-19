@@ -1631,18 +1631,23 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 1'
                     trigger.parent.baseDamage+=1;
                     'step 2'
-                    player.chooseToDiscard(1,'英灵召唤：弃置1张法术牌[展示]，目标角色+1[治疗]',function(card){
-                        return get.type(card)=='faShu';
+                    player.chooseCardTarget({
+                        filterCard:function(card){
+                            return get.type(card)=='faShu';
+                        },
+                        filterTarget:true,
+                        prompt:"<span class='tiaoJian'>(若你额外弃置1张法术牌[展示])</span>目标角色+1[治疗]",
                     });
                     'step 3'
                     if(result.bool){
+                        player.discard(result.cards);
                         player.showCards(result.cards);
-                        player.chooseTarget(1,'英灵召唤：目标角色+1[治疗]',true);
+                        event.target=result.targets[0];
+                    }else{
+                        event.goto(5);
                     }
                     'step 4'
-                    if(result.bool){
-                        result.targets[0].changeZhiLiao(1);
-                    }
+                    event.target.changeZhiLiao(1);
                     'step 5'
                     event.player=player;
                     event.trigger('yingLingZhaoHuan')
