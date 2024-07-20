@@ -6638,7 +6638,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 chooseButton:{
                     dialog:function(event,player){
                         var dialog=ui.create.dialog('圣光爆裂','hidden');
-                        var list=[['1',"移除你的1点[治疗]，摸一张牌[强制]，然后你+1【信仰】，目标队友+1[治疗]"],['2',"<span class='tiaoJian'>(移除你的X[治疗]，选择最多X名手牌数不大于你手牌数-X的对手)</span>你弃X张牌，然后对他们各造成(Y+2)点攻击伤害。 Y为目标数中拥有[治疗]的人数"]]
+                        var list=[['1',"移除你的1点[治疗]，摸一张牌[强制]，然后你+1【信仰】，目标队友+1[治疗]"],['2',"<span class='tiaoJian'>(移除你的X[治疗]，选择最多X名手牌数不大于你手牌数的对手)</span>你弃X张牌，然后对他们各造成(Y+2)点攻击伤害。 Y为目标数中拥有[治疗]的人数"]]
 						dialog.add([list,'textbutton']);
 						return dialog;
                     },
@@ -6703,18 +6703,19 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             'step 1'
                             event.num=result.control;
                             player.changeZhiLiao(-result.control);
-                            player.chooseToDiscard(true,'h',event.num);
                             'step 2'
                             player.chooseTarget(true,[1,event.num],function(card,player,target){
                                 return target.countCards('h')<=player.countCards('h')&&target.side!=player.side;
                             });
                             'step 3'
-                            event.num=2;
                             event.targets=result.targets.sortBySeat(player);
+                            player.chooseToDiscard(true,'h',event.num);
+                            'step 4'
+                            event.num=2;
                             for(var i=0;i<event.targets.length;i++){
                                 if(event.targets[i].zhiLiao>0) event.num++;
                             }
-                            'step 4'
+                            'step 5'
                             var target=event.targets.shift();
                             target.damage(event.num,player);
                             if(event.targets.length>0){
