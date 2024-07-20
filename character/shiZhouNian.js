@@ -5702,22 +5702,39 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             filterTarget:true,
                             contentBefore:function(){
                                 'step 0'
-                                player.chongZhi();
+                                var links=lib.skill.buXieHeXian_backup.links;
+                                for(var i=0;i<links.length;i++){
+                                    if(typeof links[i]=='number'){
+                                        event.buXieHeXian_num=links[i]-1;
+                                    }else if(typeof links[i]=='string'){
+                                        event.buXieHeXian=links[i];
+                                    }
+                                }
                                 'step 1'
-                                player.removeZhiShiWu('lingGan',player.storage.buXieHeXian_num+1);
+                                if(player.isLinked()) player.chongZhi();
+                                'step 2'
+                                player.removeZhiShiWu('lingGan',event.buXieHeXian_num+1);
                             },
 							content:function(){
 								'step 0'
-								if(player.storage.buXieHeXian=='摸'){
-                                    player.draw(player.storage.buXieHeXian_num);
+                                var links=lib.skill.buXieHeXian_backup.links;
+                                for(var i=0;i<links.length;i++){
+                                    if(typeof links[i]=='number'){
+                                        event.buXieHeXian_num=links[i]-1;
+                                    }else if(typeof links[i]=='string'){
+                                        event.buXieHeXian=links[i];
+                                    }
+                                }
+								if(event.buXieHeXian=='摸'){
+                                    player.draw(buXieHeXian_num);
                                 }else{
-                                    player.chooseToDiscard('h',player.storage.buXieHeXian_num,true);
+                                    player.chooseToDiscard('h',event.buXieHeXian_num,true);
                                 }
                                 'step 1'
-                                if(player.storage.buXieHeXian=='摸'){
-                                    target.draw(player.storage.buXieHeXian_num);
+                                if(event.buXieHeXian=='摸'){
+                                    target.draw(event.buXieHeXian_num);
                                 }else{
-                                    target.chooseToDiscard('h',player.storage.buXieHeXian_num,true);
+                                    target.chooseToDiscard('h',event.buXieHeXian_num,true);
                                 }
                                 
 							},
@@ -5726,15 +5743,15 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     prompt:function(links,player){
                         for(var i=0;i<links.length;i++){
                             if(typeof links[i]=='number'){
-                                player.storage.buXieHeXian_num=links[i]-1;
+                                var buXieHeXian_num=links[i]-1;
                             }else if(typeof links[i]=='string'){
-                                player.storage.buXieHeXian=links[i];
+                                var buXieHeXian=links[i];
                             }
                         }
-                        if(player.storage.buXieHeXian=='摸'){
-                            return `你和目标角色各摸${player.storage.buXieHeXian_num}张牌[强制]`
+                        if(buXieHeXian=='摸'){
+                            return `你和目标角色各摸${buXieHeXian_num}张牌[强制]`
                         }else{
-                            return `你和目标角色各弃${player.storage.buXieHeXian_num}张牌`
+                            return `你和目标角色各弃${buXieHeXian_num}张牌`
                         }
                     }
                 }
