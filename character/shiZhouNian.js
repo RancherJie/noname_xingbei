@@ -2168,7 +2168,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					if(num>0){
 						player.removeMark('xinYue',num);
 					}
-                    player.addMark('shiHua');
+                    player.addZhiShiWu('shiHua');
                     if(player.countCards('h')>0){
                         player.chooseToDiscard(1,'h',true);
                     }
