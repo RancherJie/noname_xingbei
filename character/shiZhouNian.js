@@ -4832,6 +4832,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         complexCard:true,
                         prompt:get.prompt('faShuFangTan'),
                         prompt2:lib.translate.faShuFangTan_info,
+                        ai2:function(target){
+							var player=_status.event.player;
+							return target.side!=player.side;
+						},
                     })
                     'step 1'
                     if(result.bool){
