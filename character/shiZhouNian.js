@@ -6194,14 +6194,16 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             player.showCards(event.cards);
                             'step 3'
                             var num=0;
+                            var nuQi=0;
                             for(var i=0;i<event.cards.length;i++){
                                 if(get.type(event.cards[i])=='faShu'){
-                                    player.addZhiShiWu('nuQi');
+                                    nuQi++;
                                 }
                                 if(get.xiBie(event.cards[i])=='huo'){
                                     num++;
                                 }
                             };
+                            player.addZhiShiWu('nuQi',nuQi);
                             if(num>0){
                                 trigger.parent.baseDamage+=num;
                                 player.damageFaShu(num,player);
@@ -6227,14 +6229,18 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             'step 2'
                             player.showCards(event.cards);
                             'step 3'
+                            var nuQi=0;
+                            var zhiXing=0;
                             for(var i=0;i<event.cards.length;i++){
                                 if(get.type(event.cards[i])=='faShu'){
-                                    player.addZhiShiWu('nuQi');
+                                    nuQi++;
                                 }
                                 if(get.xiBie(event.cards[i])=='shui'){
-                                    player.addZhiShiWu('zhiXing');
+                                    zhiXing++;
                                 }
                             };
+                            player.addZhiShiWu('nuQi',nuQi);
+                            player.addZhiShiWu('zhiXing',zhiXing);
                             'step 4'
                             event.player=player;
                             event.trigger('jinDuanZhiLi');
