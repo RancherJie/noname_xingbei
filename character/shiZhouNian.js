@@ -3244,19 +3244,33 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         [list,'tdnodes'],
                     ]);
                     next.set('selectButton',[2,2]);
+                    next.set('ai',function(button){
+                        if(button.link=='水晶'){
+                            return 5;
+                        }else{
+                            return 2;
+                        }
+                    });
                     'step 1'
                     target.damageFaShu(2,player);
                     if(result.bool){
-                        for(var i=0;i<result.links.length;i++){
-                            if(result.links[i]=='宝石'){
-                                player.changeZhanJi('r',-1);
-                            }else if(result.links[i]=='水晶'){
-                                player.changeZhanJi('b',-1);
-                            }
-                        }
-                        player.chongZhi();
-                        player.addNengLiang('r');
+                        event.list=result.links;
+                    }else{
+                        event.finish();
                     }
+                    'step 2'
+                    var xingShi=event.list.shift();
+                    if(xingShi=='宝石'){
+                        player.changeZhanJi('r',-1);
+                    }else if(xingShi=='水晶'){
+                        player.changeZhanJi('b',-1);
+                    }
+                    if(event.list.length>0) event.redo();
+                    'step 3'
+                    player.chongZhi();
+                    'step 4'
+                    player.addNengLiang('r');
+
                 },
                 ai:{
 					damage:true,
