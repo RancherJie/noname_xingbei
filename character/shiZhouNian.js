@@ -5726,7 +5726,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                     }
                                 }
 								if(event.buXieHeXian=='摸'){
-                                    player.draw(buXieHeXian_num);
+                                    player.draw(event.buXieHeXian_num);
                                 }else{
                                     player.chooseToDiscard('h',event.buXieHeXian_num,true);
                                 }
