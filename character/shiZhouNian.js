@@ -5943,6 +5943,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             }
                             'step 2'
                             event.targets=result.targets.sortBySeat(player);
+                            game.log(player.storage.yongHengYueZhang_player,'选择了',event.targets);
+                            player.storage.yongHengYueZhang_player.line(event.targets,'red');
                             event.targets[0].damageFaShu(1,player.storage.yongHengYueZhang_player);
                             'step 3'
                             event.targets[1].damageFaShu(1,player.storage.yongHengYueZhang_player);
