@@ -1212,6 +1212,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     if(result.bool){
                         var target=result.targets[0];
                         event.target=target;
+                        game.log(player,'选择了',target);
+                        player.line(target,'blue');
                         var list=[];
                         for(var xiaoGuoList in game.jiChuXiaoGuo){
                             for(var xiaoGuo of game.jiChuXiaoGuo[xiaoGuoList]){
