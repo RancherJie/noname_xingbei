@@ -1780,6 +1780,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.chooseTarget(1,'冰冻：选择1名角色+1[治疗]',true);
                     'step 3'
                     if(result.bool){
+                        game.log(player,'选择了',result.targets[0]);
+                        player.line(result.targets[0],'blue');
                         result.targets[0].changeZhiLiao(1);
                     }
                 }
