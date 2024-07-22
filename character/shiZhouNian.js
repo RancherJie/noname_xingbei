@@ -6661,6 +6661,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                 });
                             }
                             'step 2'
+                            game.log(player,'选择了',result.targets[0]);
+                            player.line(result.targets[0],'green');
                             result.targets[0].chooseToDiscard('h',true,event.num);
                         }
                     }
