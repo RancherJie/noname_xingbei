@@ -5365,6 +5365,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         event.finish();
                     }
                     'step 4'
+                    game.log(player,'选择了',result.targets[0]);
+                    player.line(result.targets[0],'red');
                     result.targets[0].damageFaShu(2,player);
                 }
             },
