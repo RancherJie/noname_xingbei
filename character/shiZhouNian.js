@@ -2037,11 +2037,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         event.finish();
                     }
                     'step 4'
-                    player.chooseTarget(1,'暗月：目标对手造成1点法术伤害③',true,function(card,player,target){
+                    player.chooseTarget(1,'美杜莎之眼：目标对手造成1点法术伤害③',true,function(card,player,target){
                         return target.side!=player.side;
                     });
                     'step 5'
                     if(result.bool){
+                        game.log(player,'选择了',result.targets[0]);
+                        player.line(result.targets[0],'red');
                         result.targets[0].damage(1,player).set('faShu',true);
                     }
                 }
