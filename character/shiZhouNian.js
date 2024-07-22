@@ -6399,6 +6399,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         return target.side!=player.side;
                     });
                     'step 2'
+                    game.log(player,'选择了',result.targets[0]);
+                    player.line(result.targets[0],'red');
                     event.target=result.targets[0];
                     if(event.target.zhiLiao==0){
                         event.flag=true;
