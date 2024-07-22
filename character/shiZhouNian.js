@@ -4239,6 +4239,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     });
                     'step 2'
                     var target=result.targets[0];
+                    game.log(player,'选择了',result.targets[0]);
+                    player.line(result.targets[0],'blue');
 					if(event.zhiLiaonum>0){
 						player.changeZhiLiao(-event.zhiLiaonum);
                         target.changeZhiLiao(event.zhiLiaonum,4);
