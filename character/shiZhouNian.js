@@ -2977,6 +2977,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                            player.unmarkSkill('zhuFu');
                            player.chooseTarget('对目标角色造成2点法术伤害',true);
                            'step 1'
+                           game.log(player,'选择了',result.targets[0]);
+                           player.line(result.targets[0],'red');
                            result.targets[0].damageFaShu(2,player); 
                         }
                     }
