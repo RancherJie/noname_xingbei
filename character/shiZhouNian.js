@@ -8105,6 +8105,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 1'
                     player.addZhiShiWu('DWZyong');
                     'step 2'
+                    player.qiPai();
                     var card=get.cards(4);
                     player.addToExpansion('giveAuto',card).gaintag.add('jian');
                     'step 3'
