@@ -2880,6 +2880,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             'step 0'
                             player.chooseTarget('目标角色+1[治疗]',true);
                             'step 1'
+                            game.log(player,'选择了',result.targets[0]);
+                            player.line(result.targets[0],'blue');
                             result.targets[0].changeZhiLiao(1);
                         }
                     },
