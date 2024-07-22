@@ -8135,6 +8135,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     var next=player.chooseTarget("对目标角色造成1点法术伤害③，该伤害不能用[治疗]抵御",true);
                     next.set('ai',function(target){return target.side!=player.side;})
                     'step 5'
+                    game.log(player,'选择了',result.targets[0]);
+                    player.line(result.targets[0],'red');
                     result.targets[0].damage(1,player).set('faShu',true).set('canZhiLiao',false);
                     event.finish();
 
