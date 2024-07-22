@@ -2927,7 +2927,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.removeBiShaBaoShi();
                     player.hengZhi();
                     'step 1'
-                    var cards=get.cards(3)
+                    var cards=get.cards(3);
                     player.loseToSpecial(cards,'zhuFu',player);
                     player.markSkill('zhuFu');
                 },
