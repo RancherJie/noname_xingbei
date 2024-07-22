@@ -289,9 +289,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 filter:function(event){
                     return get.xiBie(event.card)=='shui'||get.name(event.card)=='shengGuang';
                 },
+                direct:true,
                 content:function(){
                     'step 0'
-                    player.chooseTarget('冰霜祷言：选择一名角色+1[治疗]',true).set('ai',function(target){
+                    var next=player.chooseTarget().set('ai',function(target){
 						if(target.side==player.side&&target.zhiLiao<target.getZhiLiaoLimit()){
                             return 1;
                         }else if(target.side==player.side&&target.zhiLiao>=target.getZhiLiaoLimit()){
@@ -302,8 +303,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             return 1;
                         }
 					});
+                    next.set('prompt',get.prompt('bingShuangDaoYan'));
+                    next.set('prompt2',lib.translate.bingShuangDaoYan_info);
                     'step 1'
 					if(result.bool){
+                        player.logSkill(event.name,result.targets);
 						var target=result.targets[0];
 						player.line(target,'blue');
 						target.changeZhiLiao();
