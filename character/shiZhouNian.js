@@ -7531,6 +7531,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 subSkill:{
                     xiaoGuo:{
                         trigger:{global:'jiangYaoChengShou1'},
+                        priority:5,
                         filter:function(event,player){
                             if(!player.storage.lingHunLianJie) return false;
                             if(!event.player.storage.lingHunLianJie) return false;
