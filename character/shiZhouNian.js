@@ -6855,6 +6855,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         return target.side==player.side;
                     }).set('prompt','我方目标角色+1[治疗]');
                     'step 2'
+                    game.log(player,'选择了',result.targets[0]);
+                    player.line(result.targets[0],'blue');
                     result.targets[0].changeZhiLiao(1);
                 }
             },
