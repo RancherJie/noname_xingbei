@@ -36,7 +36,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             yongZhe:['male','xue','4/5',['yongZheZhiXin','nuHou','jinPiLiJin','mingJingZhiShui','tiaoXin','jinDuanZhiLi','siDou','','nuQi','zhiXing'],],
             lingHunShuShi:['female','huan','4/5',["lingHunTunShi","lingHunZhaoHuan",'lingHunZhuanHuan',"lingHunJingXiang","lingHunZhenBao","lingHunFuYu","lingHunLianJie","lingHunZengFu","huangSeLingHun","lanSeLingHun"],],
             xueZhiWuNv:['female','xue',5,['xueZhiAiShang','liuXue','niLiu','xueZhiBeiMing','tongShengGongSi','xueZhiZuZhou'],],
-            //dieWuZhe:['female','yong',6,['jianxiong'],],
+            dieWuZhe:['female','yong',5,['shengMingZhiHuo','wuDong','duFen','chaoSheng','jingHuaShuiYue','diaoLing','yongHua','daoNiZhiDie','jian','DWZyong'],],
             nvWuShen:['female','sheng','3/4',['shenShengZhuiJi','zhiXuZhiYin','hePingXingZhe','junShenWeiGuan','yingLingZhaoHuan'],],
             moGong:['female','huan',4,['moGuanChongJi','leiGuangSanShe','duoChongSheJi','chongNeng','moYan','chongNengPai'],],
             hongLianQiShi:['female','xue',4,['xingHongShengYue','xingHongXinYang','xueXingDaoYan','shaLuShengYan','reXueFeiTeng','jieJiaoJieZao','xingHongShiZi','xueYin'],],
@@ -7814,6 +7814,303 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 }
             },
 
+            //蝶舞者
+            shengMingZhiHuo:{
+                mod:{
+                    maxHandcardFinal:function(player,num){
+                        var x=player.countZhiShiWu('DWZyong');
+                        var n=num-x;
+                        if(n<=3){
+                            return 3;
+                        }else{
+                            return n
+                        }
+                    }
+                }
+            },
+            wuDong:{
+                type:"faShu",
+                enable:['chooseToUse','faShu'],
+                selectCard:[0,1],
+                filterCard:true,
+                content:function(){
+                    'step 0'
+                    if(cards.length==0){
+                        player.draw();
+                    }
+                    'step 1'
+                    var cards=get.cards();
+                    player.addToExpansion('giveAuto',cards).gaintag.add('jian');
+                    'step 2'
+                    var next=game.createEvent();
+                    next.player=player;
+                    next.setContent(lib.skill.jian.contentx);
+                }
+            },
+            duFen:{
+                trigger:{global:'shiJiShangHai'},
+                filter:function(event,player){
+                    return event.num==1&&event.faShu==true&&player.getExpansions('jian').length>0;
+                },
+                direct:true,
+                priority:1,
+                content:function(){
+                    'step 0'
+                    var cards=player.getExpansions('jian');
+                    var next=player.chooseCardButton(cards,"是否发动【毒粉】,移除1个【茧】");
+                    'step 1'
+                    if(result.bool){
+                        player.logSkill(event.name,trigger.player);
+                        player.discard(result.links).set('jian',true);
+                    }else{
+                        event.finish();
+                    }
+                    'step 2'
+                    trigger.num++;
+                }
+            },
+            chaoSheng:{
+                trigger:{player:'jiangYaoChengShou1'},
+                filter:function(event,player){
+                    return event.num>0&&player.getExpansions('jian').length>0;
+                },
+                direct:true,
+                content:function(){
+                    'step 0'
+                    var cards=player.getExpansions('jian');
+                    var next=player.chooseCardButton(cards,"是否发动【朝圣】,移除1个【茧】");
+                    'step 1'
+                    if(result.bool){
+                        player.logSkill(event.name,trigger.player);
+                        player.discard(result.links).set('jian',true);
+                    }else{
+                        event.finish();
+                    }
+                    'step 2'
+                    trigger.num--;
+                }
+            },
+            jingHuaShuiYue:{
+                trigger:{global:'shiJiShangHai'},
+                filter:function(event,player){
+                    return event.num==2&&event.faShu==true&&player.getExpansions('jian').length>1;
+                },
+                direct:true,
+                content:function(){
+                    'step 0'
+                    var cards=player.getExpansions('jian');
+                    var next=player.chooseCardButton(cards,2,"是否发动【镜花水月】，移除2张同系【茧】");
+                    next.set('filterButton',function(button){
+                        if(ui.selected.buttons.length==0) return true;
+                        var xiBie=get.xiBie(button);
+                        if(xiBie==get.xiBie(ui.selected.buttons[0])) return true;
+                        else return false;
+                    })
+                    'step 1'
+                    if(result.bool){
+                        player.logSkill(event.name,trigger.player);
+                        player.discard(result.links).set('jian',true);
+                        player.showGaiPai(result.links);
+                    }else{
+                        event.finish();
+                    }
+                    'step 2'
+                    trigger.num=0;
+                    'step 3'
+                    trigger.player.damageFaShu(1,player);
+                    'step 4'
+                    trigger.player.damageFaShu(1,player);
+                }
+            },
+            diaoLing:{
+                trigger:{player:'discard'},
+                filter:function(event,player){
+                    return event.jian;
+                },
+                direct:true,
+                content:function(){
+                    'step 0'
+                    var cards=trigger.cards;
+                    var next=player.chooseCardButton(cards,[1,Infinity],"是否发动【凋零】,展示法术茧");
+                    next.set('filterButton',function(button){
+                        return get.type(button)=='faShu';
+                    });
+                    'step 1'
+                    if(result.bool){
+                        player.logSkill(event.name);
+                        player.showGaiPai(result.links);
+                        event.num=result.links.length;
+                    }else{
+                        event.finish();
+                    }
+                    'step 2'
+                    event.num--;
+                    var next=player.chooseTarget('对目标角色造成1点法术伤害',true);
+                    next.set('ai',function(target){
+                        return target.side!=player.side;
+                    });
+                    'step 3'
+                    result.targets[0].damageFaShu(1,player);
+                    'step 4'
+                    player.damageFaShu(2,player);
+                    if(event.num>0) event.goto(2);
+                    'step 5'
+                    if(!player.hasSkill('diaoLing2')) player.addTempSkill('diaoLing2',{player:'phaseBefore'});
+                },
+            },
+            diaoLing2:{
+                filterx:function(event,player){
+                    if(player.side==event.side) return false;
+                    if(player.side==true){
+                        var shiQi=game.lanShiQi;
+                    }else{
+                        var shiQi=game.hongShiQi;
+                    }
+                    return shiQi+event.num<1;
+                },
+                group:['diaoLing2_changeShiQiBegin','diaoLing2_changeShiQi1','diaoLing2_changeShiQi4'],
+                subSkill:{
+                    changeShiQiBegin:{
+                        trigger:{global:'changeShiQiBegin'},
+                        forced:true,
+                        filter:function(event,player){
+                            return lib.skill.diaoLing2.filterx(event,player);
+                        },
+                        content:function(){
+                            if(player.side==true){
+                                var shiQi=game.lanShiQi;
+                            }else{
+                                var shiQi=game.hongShiQi;
+                            }
+                            var num=1-shiQi;
+                            trigger.num=num;
+                        },
+                    },
+                    changeShiQi1:{
+                        trigger:{global:'changeShiQi1'},
+                        forced:true,
+                        filter:function(event,player){
+                            return lib.skill.diaoLing2.filterx(event,player);
+                        },
+                        content:function(){
+                            if(player.side==true){
+                                var shiQi=game.lanShiQi;
+                            }else{
+                                var shiQi=game.hongShiQi;
+                            }
+                            var num=1-shiQi;
+                            trigger.num=num;
+                        },
+                    },
+                    changeShiQi4:{
+                        trigger:{global:'changeShiQi4'},
+                        forced:true,
+                        filter:function(event,player){
+                            return lib.skill.diaoLing2.filterx(event,player);
+                        },
+                        content:function(){
+                            if(player.side==true){
+                                var shiQi=game.lanShiQi;
+                            }else{
+                                var shiQi=game.hongShiQi;
+                            }
+                            var num=1-shiQi;
+                            trigger.num=num;
+                        },
+                    },
+                }
+            },
+            yongHua:{
+                type:'faShu',
+                enable:['chooseToUse','faShu'],
+                filter:function(event,player){
+                    return player.canBiShaBaoShi();
+                },
+                content:function(){
+                    'step 0'
+                    player.removeBiShaBaoShi();
+                    'step 1'
+                    player.addZhiShiWu('DWZyong');
+                    'step 2'
+                    var card=get.cards(4);
+                    player.addToExpansion('giveAuto',card).gaintag.add('jian');
+                    'step 3'
+                    var next=game.createEvent();
+                    next.player=player;
+                    next.setContent(lib.skill.jian.contentx);
+                }
+            },
+            daoNiZhiDie:{
+                type:'faShu',
+                enable:['chooseToUse','faShu'],
+                filter:function(event,player){
+                    return player.canBiShaShuiJing();
+                },
+                content:function(){
+                    'step 0'
+                    player.removeBiShaShuiJing();
+                    'step 1'
+                    player.chooseToDiscard(2,true);
+                    'step 2'
+                    var choiceList=['对目标角色造成1点法术伤害③，该伤害不能用[治疗]抵御',"<span class='tiaoJian'>(移除2个【茧】或对自己造成4点法术伤害③)</span>移除1个【蛹】"];
+                    var next=player.chooseControl().set('choiceList',choiceList);
+                    'step 3'
+                    if(result.control=='选项一'){
+                        event.goto(4);
+                    }else if(result.control=='选项二'){
+                        event.goto(6);
+                    }
+                    'step 4'
+                    var next=player.chooseTarget("对目标角色造成1点法术伤害③，该伤害不能用[治疗]抵御",true);
+                    next.set('ai',function(target){return target.side!=player.side;})
+                    'step 5'
+                    result.targets[0].damage(1,player).set('faShu',true).set('canZhiLiao',false);
+                    event.finish();
+
+                    'step 6'
+                    var cards=player.getExpansions('jian');
+                    var next=player.chooseCardButton(cards,2,'移除2个【茧】或对自己造成4点法术伤害③');
+                    'step 7'
+                    if(result.bool){
+                        player.discard(result.links).set('jian',true);
+                    }else{
+                        player.damageFaShu(4,player);
+                    }
+                    'step 8'
+                    player.removeZhiShiWu('DWZyong');
+                    event.finish();
+
+                }
+            },
+            jian:{
+                intro:{
+                    markcount:'expansion',
+                    mark:function(dialog,storage,player){
+						var cards=player.getExpansions('jian');
+						if(player.isUnderControl(true)) dialog.addAuto(cards);
+						else return '共有'+cards.length+'张牌';
+					},
+                },
+                contentx:function(){
+                    'step 0'
+                    var num=player.getExpansions('jian').length;
+                    var cards=player.getExpansions('jian');
+                    if(num>8){
+                        player.chooseCardButton(num-8,true,cards,'舍弃多余【茧】');
+                    }else{
+                        event.finish();
+                    }
+                    'step 1'
+                    player.discard(result.links);
+                }
+            },
+            DWZyong:{
+                intro:{
+                    content:'mark',
+                },
+                markimage:'image/card/hong.png'
+            },
+
 		},
 		
 		translate:{
@@ -8432,6 +8729,30 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             xueZhiBeiMing_info:"<span class='tiaoJian'>(仅【流血形态】下发动)</span>对目标角色和自己各造成(X+1)点法术伤害③，X<3。",
             tongShengGongSi_info:"<span class='tiaoJian'>(你摸2张牌[强制])</span>将同生共死放置于目标角色面前。 <span class='tiaoJian'>(在【普通形态】下)</span>你和他手牌上限各-2。 <span class='tiaoJian'>(在【流血形态】下)</span>你和他手牌上限各+1。",
             xueZhiZuZhou_info:"[宝石]对目标角色造成2点法术伤害③，你弃3张牌。",
+
+            //蝶舞者
+            shengMingZhiHuo:"[被动]生命之火",
+            wuDong:"[法术]舞动",
+            duFen:"[响应]毒粉",
+            chaoSheng:"[响应]朝圣",
+            jingHuaShuiYue:"[响应]镜花水月",
+            diaoLing:"[响应]凋零",
+            diaoLing2:"[响应]凋零",
+            yongHua:"[法术]蛹化",
+            daoNiZhiDie:"[法术]倒逆之蝶",
+            jian:"茧",
+            DWZyong:"蛹",
+
+            shengMingZhiHuo_info:"你的手牌上限-X，X为你拥有的【蛹】的数量，但你的手牌上限最少为3。",
+            wuDong_info:"<span class='tiaoJian'>(摸1张牌[强制]或弃 1 张牌[强制])</span>将牌库顶的1张牌面朝下放置在你角色旁，作为【茧】。",
+            duFen_info:"<span class='tiaoJian'>(每当有角色产生1点实际法术伤害时发动⑤，移除1个【茧】)</span>该次伤害额外+1。",
+            chaoSheng_info:"<span class='tiaoJian'>(每当你承受伤害时发动⑥，移除1个【茧】)</span>抵御1点该来源的伤害。",
+            jingHuaShuiYue_info:"<span class='tiaoJian'>(每当有角色承受2点实际法术伤害时发动⑤，移除2张同系【茧】[展示])</span>抵御该次伤害，你对他造成2次法术伤害③，每次伤害为1点。",
+            diaoLing_info:"<span class='tiaoJian'>(你每次移除【茧】时，若为法术牌，可展示之[展示])</span>你对目标角色造成1点法术伤害③，再对自己造成2点法术伤害③；此技能发动后，直到你下个回合开始前，对方的士气最少为1[强制]。",
+            yongHua_info:"[宝石]<span class='tiaoJian'>(你+1【蛹】)</span>将牌库顶的4张牌面朝下放置在你角色旁，作为【茧】。",
+            daoNiZhiDie_info:"[水晶]你弃2张牌，再选择以下1项发动：<br>·对目标角色造成1点法术伤害③，该伤害不能用[治疗]抵御。<br> ·<span class='tiaoJian'>(移除2个【茧】或对自己造成4点法术伤害③)</span>移除1个【蛹】。",
+            jian_info:"【茧】为蝶舞者专有盖牌，上限为8。",
+            DWZyong_info:"【蛹】为蝶舞者专有指示物，无上限。",
 
 		},
 	};
