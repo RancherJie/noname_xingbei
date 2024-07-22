@@ -3397,6 +3397,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     target.changeZhiLiao(-2);
                     'step 1'
                     if(result.bool){
+                        game.log(player,'选择了',result.targets[0]);
+                        player.line(result.targets[0],'green');
                         if(result.targets[0].countNengLiang('b')){
                             result.targets[0].removeNengLiang('b');
                             result.targets[0].addNengLiang('r');
