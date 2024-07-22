@@ -7926,7 +7926,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 content:function(){
                     'step 0'
                     var cards=player.getExpansions('jian');
-                    var next=player.chooseCardButton(cards,"是否发动【毒粉】,移除1个【茧】");
+                    var name=get.translation(trigger.player);
+                    var next=player.chooseCardButton(cards,"是否发动【毒粉】,移除1个【茧】，目标"+name);
                     'step 1'
                     if(result.bool){
                         player.logSkill(event.name,trigger.player);
@@ -7947,10 +7948,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 content:function(){
                     'step 0'
                     var cards=player.getExpansions('jian');
-                    var next=player.chooseCardButton(cards,"是否发动【朝圣】,移除1个【茧】");
+                    var next=player.chooseCardButton(cards,"是否发动【朝圣】,移除1个【茧】,目前伤害量"+trigger.num);
                     'step 1'
                     if(result.bool){
-                        player.logSkill(event.name,trigger.player);
+                        player.logSkill(event.name);
                         player.discard(result.links).set('jian',true);
                     }else{
                         event.finish();
@@ -7968,7 +7969,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 content:function(){
                     'step 0'
                     var cards=player.getExpansions('jian');
-                    var next=player.chooseCardButton(cards,2,"是否发动【镜花水月】，移除2张同系【茧】");
+                    var name=get.translation(trigger.player);
+                    var next=player.chooseCardButton(cards,2,"是否发动【镜花水月】，移除2张同系【茧】，目标"+name);
                     next.set('filterButton',function(button){
                         if(ui.selected.buttons.length==0) return true;
                         var xiBie=get.xiBie(button);
