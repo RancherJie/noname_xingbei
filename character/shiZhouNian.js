@@ -2196,6 +2196,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     });
                     'step 9'
                     if(result.bool){
+                        game.log(player,'选择了',result.targets[0]);
+                        player.line(result.targets[0],'red');
                         result.targets[0].damage(event.num+1,player).set('faShu',true);
                     }
                 },
