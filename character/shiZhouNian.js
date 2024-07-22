@@ -3751,6 +3751,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     },[1,num],true,prompt);
                     'step 3'
                     game.log(player,'选择了',result.targets);
+                    player.line(result.targets,'blue');
                     if(result.targets.length==1){
                         result.targets[0].changeZhiLiao(event.links[0]);
                         event.goto(7);
