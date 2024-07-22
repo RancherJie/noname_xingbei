@@ -6811,6 +6811,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             });
                             'step 3'
                             event.targets=result.targets.sortBySeat(player);
+                            game.log(player,'选择了',event.targets);
+                            player.line(event.targets,'red');
                             player.chooseToDiscard(true,'h',event.num);
                             'step 4'
                             event.num=2;
