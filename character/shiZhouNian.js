@@ -4112,6 +4112,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }).set('trigger_player',trigger.player);
                     'step 3'
                     if(result.bool){
+                        game.log(player,'选择了',result.targets[0]);
+                        player.line(result.targets[0],'red');
                         var next=result.targets[0].damage(event.num,player);
                         next.set('faShu',true);
                         next.set('shiQiXiaJiang',false);
