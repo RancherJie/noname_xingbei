@@ -6751,7 +6751,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         }
                         if(link=='2'){
                             var targets=game.filterPlayer(function(current){
-                                return current.side!=player.side&&current.countCards('h')<=player.countCards('h');
+                                return current.side!=player.side&&current.countCards('h')<=player.countCards('h')-1;
                             })
                             return player.zhiLiao>0&&targets.length>0;
                         }
@@ -6797,23 +6797,33 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         type:'faShu',
                         content:function(){
                             'step 0'
+                            var targets=game.filterPlayer(function(current){
+                                return current.side!=player.side;
+                            });
+                            //获取对手中手牌数最小的角色的手牌数
+                            var num=10;
+                            for(var i=0;i<targets.length;i++){
+                                if(targets[i].countCards('h')<num) num=targets[i].countCards('h');
+                            }
+                            var cha=player.countCards('h')-num;
                             var list=[];
                             for(var i=1;i<=player.zhiLiao;i++){
+                                if(i>cha) break;
                                 list.push(i);
                             }
                             player.chooseControl(list).set('prompt','移除你的X[治疗]');
                             'step 1'
-                            event.num=result.control;
+                            event.x=result.control;
                             player.changeZhiLiao(-result.control);
                             'step 2'
-                            player.chooseTarget(true,[1,event.num],function(card,player,target){
-                                return target.countCards('h')<=player.countCards('h')&&target.side!=player.side;
-                            });
+                            player.chooseTarget(true,[1,event.x],function(card,player,target){
+                                return target.countCards('h')<=player.countCards('h')-_status.event.x&&target.side!=player.side;
+                            }).set('x',event.x);
                             'step 3'
                             event.targets=result.targets.sortBySeat(player);
                             game.log(player,'选择了',event.targets);
                             player.line(event.targets,'red');
-                            player.chooseToDiscard(true,'h',event.num);
+                            player.chooseToDiscard(true,'h',event.x);
                             'step 4'
                             event.num=2;
                             for(var i=0;i<event.targets.length;i++){
