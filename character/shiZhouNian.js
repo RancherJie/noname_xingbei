@@ -5099,6 +5099,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                     event.finish();
                                 }
                                 'step 2'
+                                game.log(player,'选择了',result.targets[0],'伤害额外+'+event.num);
+                                player.line(result.targets[0],'green');
                                 result.targets[0].storage.leiGuangSanShe+=event.num;
                             },
                             content:function(){
