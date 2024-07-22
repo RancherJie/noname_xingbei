@@ -6740,7 +6740,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 chooseButton:{
                     dialog:function(event,player){
                         var dialog=ui.create.dialog('圣光爆裂','hidden');
-                        var list=[['1',"移除你的1点[治疗]，摸一张牌[强制]，然后你+1【信仰】，目标队友+1[治疗]"],['2',"<span class='tiaoJian'>(移除你的X[治疗]，选择最多X名手牌数不大于你手牌数的对手)</span>你弃X张牌，然后对他们各造成(Y+2)点攻击伤害。 Y为目标数中拥有[治疗]的人数"]]
+                        var list=[['1',"摸1张牌[强制]，移除你的1点[治疗]，你+1【信仰】，目标队友+1[治疗]"],['2',"<span class='tiaoJian'>(移除你的X[治疗]，选择最多X名手牌数不大于你手牌数-X的对手)</span>你弃X张牌，然后对他们各造成(Y+2)点攻击伤害。 Y为目标数中拥有[治疗]的人数"]]
 						dialog.add([list,'textbutton']);
 						return dialog;
                     },
