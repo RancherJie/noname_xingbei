@@ -1624,6 +1624,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					}
                     player.chooseTarget(1,true,'选择一个目标角色+'+number+'[治疗]');
                     'step 3'
+                    game.log(player,'选择了',result.targets[0]);
+                    player.line(result.targets[0],'blue');
                     result.targets[0].changeZhiLiao(event.number);
                 }
             },
