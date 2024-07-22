@@ -2995,6 +2995,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 1'
                     player.chooseTarget('目标角色摸1张牌[强制]，弃1张牌',true);
                     'step 2'
+                    game.log(player,'选择了',result.targets[0]);
+                    player.line(result.targets[0],'green');
                     result.targets[0].draw(1);
                     result.targets[0].chooseToDiscard('h',true,1);
                     'step 3'
