@@ -1130,6 +1130,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             'step 1'
                             if(result.bool){
                                 var target=result.targets[0];
+                                game.log(player,'选择了',target);
                                 player.line(target,'blue');
                                 target.changeZhiLiao();
                             }
@@ -1155,6 +1156,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             'step 1'
                             if(result.bool){
                                 var target=result.targets[0];
+                                game.log(player,'选择了',target);
                                 player.line(target,'blue');
                                 target.changeZhiLiao();
                             }
