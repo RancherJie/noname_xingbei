@@ -4394,6 +4394,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.chooseTarget('对目标角色造成2点法术伤害③',true);
                     'step 2'
                     if(result.bool){
+                        game.log(player,'选择了',result.targets[0]);
+                        player.line(result.targets[0],'red');
                         result.targets[0].damageFaShu(2,player);
                     }
                 }
