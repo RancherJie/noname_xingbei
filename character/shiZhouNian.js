@@ -8019,6 +8019,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         return target.side!=player.side;
                     });
                     'step 3'
+                    game.log(player,'选择了',result.targets[0]);
+                    player.line(result.targets[0],'red');
                     result.targets[0].damageFaShu(1,player);
                     'step 4'
                     player.damageFaShu(2,player);
