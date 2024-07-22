@@ -5613,10 +5613,14 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                     'step 5'
                     if(event.flag){
+                        game.log(player,'选择了',result.targets[0],'不受伤害');
+                        player.line(result.targets[0],'green');
                         event.targets=game.filterPlayer(function(current){
                             return !result.targets.includes(current);
                         }).sortBySeat(player);
                     }else{
+                        game.log(player,'选择了',result.targets[0]);
+                        player.line(result.targets[0],'red');
                         event.targets=result.targets;
                     }
                     'step 6'
