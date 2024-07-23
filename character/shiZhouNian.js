@@ -5708,7 +5708,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         if(get.type(event.cards[i])=='faShu') event.flag=true;
                     }
                     if(event.flag){
-                        player.chooseTarget('对目标角色造成1点法术伤害',true).set('ai',function(target){
+                        player.chooseTarget('对目标对手造成1点法术伤害',true,function(target){
                             return player.side!=target.side;
                         });
                     }else{
