@@ -43,7 +43,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             yingLingRenXing:['female','yong',4,['zhanWenZhangWo','nuHuoYaZhi','zhanWenSuiJi','moWenRongHe','fuWenGaiZao','shuangChongHuiXiang','zhanWen','moWen'],],
             moQiang:['female','huan',4,['anZhiJieFang','huanYingXingChen','heiAnShuFu','anZhiZhangBi','chongYing','qiHeiZhiQiang'],],
             cangYanMoNv:['female','xue',4,['cangYanFaDian','tianHuoDianKong','moNvZhiNu','tiShenWanOu','yongShengYinShiJi','tongKuLianJie','moNengFanZhuan','chongSheng'],],
-            yinYouShiRen:['male','huan',4,['chenLunXieZouQu','buXieHeXian','jinJiShiPian','jiYangKuangXiangQu','shengLiJiaoXiangQu','xiWangFuGeQu','lingGan'],],
+            yinYouShiRen:['male','huan','4/5',['chenLunXieZouQu','buXieHeXian','jinJiShiPian','jiYangKuangXiangQu','shengLiJiaoXiangQu','xiWangFuGeQu','lingGan'],],
             jingLingSheShou:['female','ji','3/4',['yuanSuSheJi','dongWuHuoBan','jingLingMiYi','chongWuQiangHua','zhuFu'],],
             yinYangShi:['female','huan',4,['shiShenJiangLin','yinYangZhanHuan','shiShenZhuanHuan','heiAnJiLi','shiShenZhouShu','shengMingJieJie','guiHuo'],],
             xueSeJianLing:['female','xue',4,['xueSeJingJi','chiSeYiShan','xueRanQiangWei','xueQiPingZhang','xueQiangWeiTingYuan','sanHuaLunWu','xianXue'],],
