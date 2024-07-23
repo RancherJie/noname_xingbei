@@ -43,7 +43,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             yingLingRenXing:['female','yong',4,['zhanWenZhangWo','nuHuoYaZhi','zhanWenSuiJi','moWenRongHe','fuWenGaiZao','shuangChongHuiXiang','zhanWen','moWen'],],
             moQiang:['female','huan',4,['anZhiJieFang','huanYingXingChen','heiAnShuFu','anZhiZhangBi','chongYing','qiHeiZhiQiang'],],
             cangYanMoNv:['female','xue',4,['cangYanFaDian','tianHuoDianKong','moNvZhiNu','tiShenWanOu','yongShengYinShiJi','tongKuLianJie','moNengFanZhuan','chongSheng'],],
-            yinYouShiRen:['male','huan','4/5',['chenLunXieZouQu','buXieHeXian','jinJiShiPian','jiYangKuangXiangQu','shengLiJiaoXiangQu','xiWangFuGeQu','lingGan'],],
+            yinYouShiRen:['male','huan','4/5',['chenLunXieZouQu','buXieHeXian','jinJiShiPian','jiYangKuangXiangQu','shengLiJiaoXiangShi','xiWangFuGeQu','lingGan'],],
             jingLingSheShou:['female','ji','3/4',['yuanSuSheJi','dongWuHuoBan','jingLingMiYi','chongWuQiangHua','zhuFu'],],
             yinYangShi:['female','huan',4,['shiShenJiangLin','yinYangZhanHuan','shiShenZhuanHuan','heiAnJiLi','shiShenZhouShu','shengMingJieJie','guiHuo'],],
             xueSeJianLing:['female','xue',4,['xueSeJingJi','chiSeYiShan','xueRanQiangWei','xueQiPingZhang','xueQiangWeiTingYuan','sanHuaLunWu','xianXue'],],
@@ -5906,7 +5906,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 }
             },
             jiYangKuangXiangQu:{},
-            shengLiJiaoXiangQu:{},
+            shengLiJiaoXiangShi:{},
             lingGan:{
                 intro:{
                     name:'灵感',
@@ -5919,9 +5919,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             yongHengYueZhang:{
                 intro:{
                     name:'永恒乐章',
-                    content:"(独)[激昂狂想曲]：<span class='tiaoJian'>(回合开始时若你拥有永恒乐章)</span>选择以下一项执行：<br>·吟游诗人对2名目标对手各造成1点法术伤害③。 <br>·你弃2张牌。<br>(独)[胜利交响曲]：<span class='tiaoJian'>(回合结束时若你拥有永恒乐章)</span>选择以下一项执行<br>·将我方战绩区的1个星石提炼成为你的能量。<br>·为我方战绩区+1[宝石]，你+1[治疗]。",
+                    content:"(独)[激昂狂想曲]：<span class='tiaoJian'>(回合开始时若你拥有【永恒乐章】)</span>选择以下一项执行：<br>·吟游诗人对2名目标对手各造成1点法术伤害③。 <br>·你弃2张牌。<br>(独)[胜利交响曲]：<span class='tiaoJian'>(回合结束时若你拥有【永恒乐章】)</span>选择以下一项执行<br>·将我方战绩区的1个星石提炼成为你的能量。<br>·为我方战绩区+1[宝石]，你+1[治疗]。",
                 },
-                group:['yongHengYueZhang_jiAngKuangXiangQu','yongHengYueZhang_shengLiJiaoXiangQu'],
+                group:['yongHengYueZhang_jiAngKuangXiangQu','yongHengYueZhang_shengLiJiaoXiangShi'],
                 markimage:'image/card/yongHengYueZhang.png',
                 subSkill:{
                     jiAngKuangXiangQu:{
@@ -5953,7 +5953,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             event.trigger('yongHengYueZhang');
                         }
                     },
-                    shengLiJiaoXiangQu:{
+                    shengLiJiaoXiangShi:{
                         trigger:{player:'phaseEnd'},
                         filter:function(event,player){
                             return player.hasZhiShiWu('yongHengYueZhang');
@@ -8663,17 +8663,17 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             buXieHeXian_backup:"[法术]不谐和弦",
             buXieHeXian_info:"<span class='tiaoJian'>(移除X点【灵感】，X>1)(若你处于【永恒囚徒形态】，[重置]脱离【永恒囚徒形态】)</span>你选择以下一项发动：<br>·你和目标角色各摸(X-1)张牌[强制]。<br>·你和目标角色各弃(X-1)张牌。",
             jinJiShiPian:"[被动]禁忌诗篇",
-            jinJiShiPian_info:"<span class='tiaoJian'>([激昂狂想曲]或[胜利交响诗]的效果结算完后)</span>根据【灵感】数量：<br>·([灵感]未达上限)你+1[灵感]，移除永恒乐章。<br> ·(灵感已达上限)对自己造成3点法术伤害③。<span class='tiaoJian'>(若你处于[普通形态])</span>[横置]转为[永恒囚徒形态]。",
-            jiAngKuangXiangQu:"(独)[激昂狂想曲]",
-            jiAngKuangXiangQu_info:"<span class='tiaoJian'>(回合开始时若你拥有永恒乐章)</span>选择以下一项执行：<br>·吟游诗人对2名目标对手各造成1点法术伤害③。 <br>·你弃2张牌。",
-            shengLiJiaoXiangQu:"(独)[胜利交响曲]",
-            shengLiJiaoXiangQu_info:"<span class='tiaoJian'>(回合结束时若你拥有永恒乐章)</span>选择以下一项执行<br>·将我方战绩区的1个星石提炼成为你的能量。<br>·为我方战绩区+1[宝石]，你+1[治疗]。",
+            jinJiShiPian_info:"<span class='tiaoJian'>([激昂狂想曲]或[胜利交响诗]的效果结算完后)</span>根据【灵感】数量：<br>·(【灵感】未达上限)你+1【灵感】，移除【永恒乐章】。<br> ·(灵感已达上限)对自己造成3点法术伤害③。<span class='tiaoJian'>(若你处于【普通形态】)</span>[横置]转为【永恒囚徒形态】。",
+            jiAngKuangXiangQu:"(专)[响应]激昂狂想曲",
+            jiAngKuangXiangQu_info:"<span class='tiaoJian'>(回合开始时若你拥有【永恒乐章】)</span>选择以下一项执行：<br>·吟游诗人对2名目标对手各造成1点法术伤害③。 <br>·你弃2张牌。",
+            shengLiJiaoXiangShi:"(专)[响应]胜利交响诗",
+            shengLiJiaoXiangShi_info:"<span class='tiaoJian'>(回合结束时若你拥有【永恒乐章】)</span>选择以下一项执行<br>·将我方【战绩区】的1个星石提炼成为你的能量。<br>·为我方【战绩区】+1[宝石]，你+1[治疗]。",
             xiWangFuGeQu:"[启动]希望赋格曲",
             xiWangFuGeQu_info:"[水晶]你可以选择摸1张牌，如果【永恒乐章】不在场，则将【永恒乐章】放置于目标队友面前；否则将【永恒乐章】转移给我方另一名目标角色，你弃1张牌，+1[治疗]或+1【灵感】。",
             lingGan:"灵感",
             lingGan_info:"【灵感】为吟游诗人的专有指示物，上限为3。",
-            yongHengYueZhang_jiAngKuangXiangQu:"(独)[激昂狂想曲]",
-            yongHengYueZhang_shengLiJiaoXiangQu:"(独)[胜利交响曲]",
+            yongHengYueZhang_jiAngKuangXiangQu:"(专)[响应]激昂狂想曲",
+            yongHengYueZhang_shengLiJiaoXiangShi:"(专)[响应]胜利交响诗",
 
             //勇者
             yongZheZhiXin:"[被动]勇者之心",
