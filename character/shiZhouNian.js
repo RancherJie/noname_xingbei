@@ -8018,6 +8018,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     });
                     'step 1'
                     if(result.bool){
+                        if(!player.hasSkill('diaoLing2')) player.addTempSkill('diaoLing2',{player:'phaseBefore'});
                         player.logSkill(event.name);
                         player.showGaiPai(result.links);
                         event.num=result.links.length;
@@ -8037,8 +8038,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 4'
                     player.damageFaShu(2,player);
                     if(event.num>0) event.goto(2);
-                    'step 5'
-                    if(!player.hasSkill('diaoLing2')) player.addTempSkill('diaoLing2',{player:'phaseBefore'});
+                    
                 },
             },
             diaoLing2:{
