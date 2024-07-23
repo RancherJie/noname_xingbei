@@ -5918,7 +5918,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             },
             yongHengYueZhang:{
                 intro:{
-                    name:'永恒乐章',
+                    name:'(专)永恒乐章',
                     content:"(专)[响应]激昂狂想曲：<span class='tiaoJian'>(回合开始时若你拥有【永恒乐章】)</span>选择以下一项执行：<br>·吟游诗人对2名目标对手各造成1点法术伤害③。 <br>·你弃2张牌。<br>(专)[响应]胜利交响诗：<span class='tiaoJian'>(回合结束时若你拥有【永恒乐章】)</span>选择以下一项执行<br>·将我方【战绩区】的1个星石提炼成为你的能量。<br>·为我方【战绩区】+1[宝石]，你+1[治疗]。",
                 },
                 group:['yongHengYueZhang_jiAngKuangXiangQu','yongHengYueZhang_shengLiJiaoXiangShi'],
