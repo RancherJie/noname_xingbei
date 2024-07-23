@@ -2382,7 +2382,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.removeBiShaShuiJing();
                     'step 1'
                     player.addZhiShiWu('shenPan',1);
-                    var list=['弃掉所有手牌','将你的手牌补到上限[强制]，我方战绩区+1[宝石]'];
+                    var list=['弃掉所有手牌','将你的手牌补到上限[强制]，我方【战绩区】+1[宝石]'];
                     player.chooseControl().set('prompt','判决天平：选择一项').set('choiceList',list);
                     'step 2'
                     if(result.control=='选项一'){
@@ -5960,7 +5960,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         },
                         content:function(){
                             'step 0'
-                            var choiceList=['将我方战绩区的1个星石提炼成为你的能量','为我方战绩区+1[宝石]，你+1[治疗]'];
+                            var choiceList=['将我方【战绩区】的1个星石提炼成为你的能量','为我方【战绩区】+1[宝石]，你+1[治疗]'];
                             var list=['选项二'];
                             if(player.side==true){
                                 var xingShi=game.hongZhanJi;
@@ -5983,7 +5983,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             }else if(player.side==false){
                                 var list=game.lanZhanJi;
                             }
-                            var next=player.chooseButton(['将我方战绩区的1个星石提炼成为你的能量',[list,'tdnodes']],true);
+                            var next=player.chooseButton(['将我方【战绩区】的1个星石提炼成为你的能量',[list,'tdnodes']],true);
                             next.set('forced',true);
                             'step 3'
                             for(var i=0;i<result.links.length;i++){
@@ -8344,7 +8344,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 
             //魔法少女
             moBaoChongJi:'[法术]魔爆冲击',
-            moBaoChongJi_info:'<span class="tiaoJian">(弃1张法术牌[展示])</span>我方[战绩区]+1[宝石]。2名目标对手各弃一张法术牌[展示]，每有人不如此做，你对他造成2点法术伤害③，你弃一张牌。',
+            moBaoChongJi_info:'<span class="tiaoJian">(弃1张法术牌[展示])</span>我方【战绩区】+1[宝石]。2名目标对手各弃一张法术牌[展示]，每有人不如此做，你对他造成2点法术伤害③，你弃一张牌。',
             moDanZhangWo:'[响应]魔弹掌握',
             moDanZhangWo_info:'你主动使用【魔弹】时可以选择逆向传递。',
             moDanRongHe:'[响应]魔弹融合',
@@ -8418,7 +8418,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             zhongCaiYiShi:"[启动]仲裁仪式[持续]",
             zhongCaiYiShi_info:"[宝石][横置]转为【审判形态】，你的手牌上限恒定为5[恒定]；每次你的回合开始时，你+1<span class='hong'>【</span>审判<span class='hong'>】</span>。",
             panJueTianPing:"[法术]判决天平",
-            panJueTianPing_info:"[水晶]你+1<span class='hong'>【</span>审判<span class='hong'>】</span>，再选择一下一项发动：<br>·弃掉所有手牌。<br>·将你的手牌补到上限[强制]，我方战绩区+1[宝石]。",
+            panJueTianPing_info:"[水晶]你+1<span class='hong'>【</span>审判<span class='hong'>】</span>，再选择一下一项发动：<br>·弃掉所有手牌。<br>·将你的手牌补到上限[强制]，我方【战绩区】+1[宝石]。",
             shenPan:"审判",
             shenPan_info:"<span class='hong'>【</span>审判<span class='hong'>】</span>为仲裁者专有指示物，上限为4。",
 
