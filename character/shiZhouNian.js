@@ -8279,10 +8279,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 
             //圣女
             bingShuangDaoYan:"[被动]冰霜祷言",
-            bingShuangDaoYan_info:"<span class='tiaoJian'>(每当你使用水系牌或【圣光】时发动时发动)</span>目标角色+1[治疗]。",
-            zhiLiaoShu:"[法术]治疗术",
+            bingShuangDaoYan_info:"<span class='tiaoJian'>(每当你使用水系牌或【圣光】时发动)</span>目标角色+1[治疗]。",
+            zhiLiaoShu:"(独)[法术]治疗术",
             zhiLiaoShu_info:"目标角色+2[治疗]。",
-            zhiYuZhiGuang:"[法术]治愈之光",
+            zhiYuZhiGuang:"(独)[法术]治愈之光",
             zhiYuZhiGuang_info:"指定最多3名角色各+1[治疗]。",
             lianMin:"[启动]怜悯[持续]",
             lianMin_info:"[宝石][横置]你的手牌上限恒定为7[持续]，你+1[水晶]。",
