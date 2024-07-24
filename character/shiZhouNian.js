@@ -8274,7 +8274,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             xueYingKuangDao_info:"<span class='tiaoJian'>(作为主动攻击打出时发动)</span><br>·若命中手牌为2的对手②，本次攻击伤害额外+2；<br>·若命中手牌为3的对手②，本次攻击伤害额外+1。",
             xueXingPaoXiao:"(独)[响应]血腥咆哮",
             xueXingPaoXiao_info:'<span class="tiaoJian">(作为主动攻击打出时发动)</span>若攻击的目标拥有的治疗为2，则本次攻击强制命中。',
-            siLie:"撕裂",
+            siLie:"[响应]撕裂",
             siLie_info:"[宝石]<span class='tiaoJian'>(攻击命中后发动②)</span>本次攻击伤害额外+2。",
 
             //圣女
