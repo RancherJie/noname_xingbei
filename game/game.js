@@ -20612,7 +20612,7 @@
 					}
 					setTimeout(function(){
 						dialog.delete();
-					},lib.quickVoice.includes(str)?3800:2000);
+					},lib.quickVoice.includes(str)?3800:3500);//玩家弹出聊天框时间
 					var name=get.translation(this.name);
 					var info=[name?(name+'['+this.nickname+']'):this.nickname,str];
 					lib.chatHistory.push(info);
