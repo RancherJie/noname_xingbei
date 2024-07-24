@@ -7585,7 +7585,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 priority:1,
                 filter:function(event,player){
                     if(event.qiDong) return false;
-                    //if(game.players.length==4) return false;
+                    if(game.players.length==4) return false;
                     if(player.storage.lingHunLianJie) return false;
                     return player.hasZhiShiWu('huangSeLingHun')&&player.hasZhiShiWu('lanSeLingHun');
                 },
