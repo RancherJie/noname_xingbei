@@ -291,9 +291,9 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					if(number==4){
 						if(team_sequence=='near'){
 							ref.side=bool;
-							ref.next.side=bool2;
+							ref.next.side=bool;
 							ref.next.next.side=bool2;
-							ref.previous.side=bool;
+							ref.previous.side=bool2;
 						}else if(team_sequence=='crossed'){
 							ref.side=bool;
 							ref.next.side=bool2;
@@ -308,13 +308,18 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 							while(ref.side!=true){
 								ref=game.players.randomGet();
 							}
+						}else if(team_sequence=='CM'){
+							ref.side=bool;
+							ref.next.side=bool2;
+							ref.next.next.side=bool2;
+							ref.next.next.next.side=bool;
 						}
 					}else{
 						if(team_sequence=='crossed'){
 							ref.side=bool;
 							ref.next.side=bool2;
-							ref.next.next.side=bool2;
-							ref.next.next.next.side=bool;
+							ref.next.next.side=bool;
+							ref.next.next.next.side=bool2;
 							ref.next.next.next.next.side=bool;
 							ref.next.next.next.next.next.side=bool2;
 						}else if(team_sequence=='near'){
@@ -333,6 +338,13 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 							while(ref.side!=true){
 								ref=game.players.randomGet();
 							}
+						}else if(team_sequence=='CM'){
+							ref.side=bool;
+							ref.next.side=bool2;
+							ref.next.next.side=bool2;
+							ref.next.next.next.side=bool;
+							ref.next.next.next.next.side=bool;
+							ref.next.next.next.next.next.side=bool2;
 						}
 					}	
 					
@@ -686,6 +698,11 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 							while(ref.side!=true){
 								ref=game.players.randomGet();
 							}
+						}else if(team_sequence=='CM'){
+							ref.side=bool;
+							ref.next.side=bool2;
+							ref.next.next.side=bool2;
+							ref.next.next.next.side=bool;
 						}
 					}else{
 						if(team_sequence=='crossed'){
@@ -711,6 +728,13 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 							while(ref.side!=true){
 								ref=game.players.randomGet();
 							}
+						}else if(team_sequence=='CM'){
+							ref.side=bool;
+							ref.next.side=bool2;
+							ref.next.next.side=bool2;
+							ref.next.next.next.side=bool;
+							ref.next.next.next.next.side=bool;
+							ref.next.next.next.next.next.side=bool2;
 						}
 					}
 
