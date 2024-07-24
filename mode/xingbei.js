@@ -204,6 +204,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					case 'random':uiintro.add('<div class="text chat">队伍顺序：随机');break;
 					case 'near':uiintro.add('<div class="text chat">队伍顺序：临近');break;
 					case 'crossed':uiintro.add('<div class="text chat">队伍顺序：交叉');break;
+					case 'CM':uiintro.add('<div class="text chat">队伍顺序：CM');break;
 				}
 				var last=uiintro.add('<div class="text chat">可选角色数：'+lib.configOL.choose_number);
 				switch(lib.configOL.viewHandcard){
