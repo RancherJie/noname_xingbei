@@ -483,6 +483,16 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					}
 					var basenum=1;
 					var basestr='选择角色';
+					if(get.config('phaseswap')){
+						if(number==4){
+							basenum=2;
+						}else{
+							basenum=3;
+						}
+						basestr='选择你和队友的角色';
+						event.phaseswap=true;
+					}
+
 					var dialog=ui.create.dialog(basestr,[characterChoice,'characterx']);
 					game.me.chooseButton(true,dialog,basenum).set('onfree',true);
 					if(!_status.brawl||!_status.brawl.noAddSetting){
@@ -595,13 +605,16 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 								}
 							}
 							else{
-								if(event.two_assign&&game.players[i].side==game.me.side){
+								if(event.phaseswap&&game.players[i].side==game.me.side){
 									if(_status.replacetwo){
 										game.players[i].init(result.links[2]);
 										game.players[i].replacetwo=result.links[3];
 									}
-									else{
+									else if(flag!=true){
+										var flag=true;
 										game.players[i].init(result.links[1]);
+									}else{
+										game.players[i].init(result.links[2]);
 									}
 								}
 								else{
