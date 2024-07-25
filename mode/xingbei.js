@@ -843,6 +843,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					for(var i=0;i<game.players.length;i++){
 						choose[game.players[i].playerid]=list.randomRemove(choose_number);
 					}
+					//每名玩家的可选角色
 					game._characterChoice=choose;
 					event._choiceMap={};
 					event.videoId=lib.status.videoId++;
@@ -851,7 +852,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						game._characterDialogID=id;
 						var dialog=ui.create.dialog('请选择角色');
 						dialog.videoId=id;
-						var players,friends;
+						var players,friends;//分别记录自己和队友的可选角色
 						var player=game.me;
 						for(var i in choice){
 							var current=lib.playerOL[i];
@@ -951,7 +952,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					//确认选将后的回传函数
 					event.confirm=function(player,choice){
 						if(!player.name1) player.init(choice,null,null,false);
-						game._friendConfirmed=true;
+						//game._friendConfirmed=true;
 						if(game._characterDialogID==undefined) return;
 						var dialog=get.idDialog(game._characterDialogID);
 						if(!dialog) return;
@@ -963,6 +964,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					//处理result
 					var sendback=function(result,player){
 						var type=typeof result;
+						/*
 						var friend=game.findPlayer(function(current){
 							return current!=player&&current.side==player.side;
 						});
@@ -971,13 +973,13 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 							if(friend==game.me) event.recommend(friend,result);
 							else if(friend.isOnline()) friend.send(event.recommend,friend,result);
 							else friend._aiChoice=result;
-						}
+						}*/
 						//处理确认选将
 						if(result&&type=='object'){
 							var choice=result.links[0];
 							event._choiceMap[player.playerid]=choice;
-							if(friend==game.me) event.confirm(player,choice);
-							else if(friend.isOnline()) friend.send(event.confirm,player,choice);
+							//if(friend==game.me) event.confirm(player,choice);
+							//else if(friend.isOnline()) friend.send(event.confirm,player,choice);
 						}
 					}
 					event.sendback=sendback;
