@@ -3126,9 +3126,9 @@
 						init:'rotate',
 						unfrequent:true,
 						item:{
-							chain:'铁索',
+							//chain:'铁索',
 							rotate:'横置',
-							mark:'标记'
+							//mark:'标记'
 						},
 						onclick:function(style){
 							var list=[];
