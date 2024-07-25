@@ -4395,6 +4395,7 @@
 						},
 						clear:true
 					},
+					/*
 					reset_tutorial:{
 						name:'重置新手向导',
 						onclick:function(){
@@ -4410,7 +4411,7 @@
 							}
 						},
 						clear:true
-					},
+					},*/
 					import_data:{
 						name:'导入游戏设置',
 						onclick:function(){
