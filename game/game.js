@@ -4660,7 +4660,6 @@
 					free_choose:{
 						name:'自由选将',
 						init:true,
-						frequent:true,
 						onclick:function(bool){
 							game.saveConfig('free_choose',bool,this._link.config.mode);
 							if(!ui.create.cheat2) return;
@@ -4719,7 +4718,6 @@
 								delete ui.cheat;
 							}
 						},
-						frequent:true,
 					},
 				}
 			},
