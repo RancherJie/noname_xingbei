@@ -4551,7 +4551,11 @@
 				name:'星杯传说',
 				connect:{
 					update:function(config,map){
-						
+						if(config.connect_choose_mod=='多选1'){
+							map.connect_choose_number.show();
+						}else{
+							map.connect_choose_number.hide();
+						}
 					},
 					connect_versus_mode:{
 						name:'游戏模式',
@@ -4564,6 +4568,15 @@
 							//'guandu':'官渡',
 						},
 						frequent:true
+					},
+					connect_choose_mod:{
+						name:"选角模式",
+						init:"多选1",
+						item:{
+							'多选1':'多选1',
+							//'CM02':"CM02",
+						},
+						frequent:true,
 					},
 					connect_team_sequence:{
 						name:"队伍顺序",
@@ -4597,7 +4610,11 @@
 				},
 				config:{
 					update:function(config,map){
-						
+						if(config.choose_mod=='多选1'){
+							map.choose_number.show();
+						}else{
+							map.choose_number.hide();
+						}
 					},
 					versus_mode:{
 						name:'游戏模式',
@@ -4607,6 +4624,15 @@
 							two:'2v2',
 						},
 						restart:true,
+						frequent:true,
+					},
+					choose_mod:{
+						name:"选角模式",
+						init:"多选1",
+						item:{
+							'多选1':'多选1',
+							//'CM02':"CM02",
+						},
 						frequent:true,
 					},
 					team_sequence:{

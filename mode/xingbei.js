@@ -61,7 +61,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				for(var i=0;i<game.players.length;i++){
 					game.players[i].getId();
 				}
-				game.chooseCharacterXingBei();
+				game.chooseCharacter();
 			}
 			"step 3"
 			if(_status.connectMode) _status.mode=lib.configOL.versus_mode;
@@ -200,6 +200,9 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				else if(lib.configOL.versus_mode=='2v2'||lib.configOL.versus_mode=='3v3'){
 					uiintro.add('<div class="text chat">四号位换牌：'+(lib.configOL.replace_handcard?'开启':'关闭'));
 				}*/
+				switch(lib.configOL.connect_choose_mod){
+					case '多选1':uiintro.add('<div class="text chat">选角模式：多选1');break;
+				}
 				switch(lib.configOL.team_sequence){
 					case 'random':uiintro.add('<div class="text chat">队伍顺序：随机');break;
 					case 'near':uiintro.add('<div class="text chat">队伍顺序：临近');break;
@@ -269,7 +272,13 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				}
 			},
 			
-			chooseCharacterXingBei:function(){
+			chooseCharacter:function(){
+				switch(lib.configOL.connect_choose_mod){
+					case '多选1':game.chooseCharacterDuoXuanYi();break;
+					//case '3v3':game.chooseCharacterOLXingBei();break;
+				}
+			},
+			chooseCharacterDuoXuanYi:function(){
 				var next=game.createEvent('chooseCharacter');
 				next.showConfig=true;
 				next.setContent(function(){
@@ -659,12 +668,9 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 			},
 
 			chooseCharacterOL:function(){
-				switch(lib.configOL.versus_mode){
-					//case '1v1':game.chooseCharacterOL1();break;
-					case '2v2':game.chooseCharacterOLXingBei();break;
-					case '3v3':game.chooseCharacterOLXingBei();break;
-					//case '4v4':game.chooseCharacterOL4();break;
-					//case 'guandu':game.chooseCharacterOLGuandu();break;
+				switch(lib.configOL.connect_choose_mod){
+					case '多选1':game.chooseCharacterOLXingBei();break;
+					//case '3v3':game.chooseCharacterOLXingBei();break;
 				}
 			},
 			
