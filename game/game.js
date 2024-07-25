@@ -2542,11 +2542,11 @@
 					autoborder_count:{
 						name:'边框升级方式',
 						intro:'<strong>击杀</strong> 每击杀一人，边框提升两级<br><strong>伤害</strong> 每造成两点伤害，边框提升一级<br><strong>混合</strong> 击杀量决定边框颜色，伤害量决定边框装饰',
-						init:'kill',
+						init:'damage',
 						item:{
-							kill:'击杀',
+							//kill:'击杀',
 							damage:'伤害',
-							mix:'混合',
+							//mix:'混合',
 						},
 						unfrequent:true,
 					},
