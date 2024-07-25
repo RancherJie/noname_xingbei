@@ -589,8 +589,10 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						game.addRecentCharacter(result.links[i]);
 					}
 					game.me.init(result.links[0]);
-					if(_status.replacetwo){
-						game.me.replacetwo=result.links[1];
+					if(event.phaseswap){
+						for(var i=1;i<result.links.length;i++){
+							event.list.remove(result.links[i]);
+						}
 					}
 					event.list.remove(game.me.name1);
 					for(var i=0;i<game.players.length;i++){
@@ -599,18 +601,10 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 								var list=_status.brawl.chooseCharacter(event.list,game.players[i]);
 								game.players[i].init(list.randomGet());
 								event.list.remove(game.players[i].name1);
-								if(_status.replacetwo){
-									game.players[i].replacetwo=list.randomGet(game.players[i].name1);
-									event.list.remove(game.players[i].replacetwo);
-								}
 							}
 							else{
 								if(event.phaseswap&&game.players[i].side==game.me.side){
-									if(_status.replacetwo){
-										game.players[i].init(result.links[2]);
-										game.players[i].replacetwo=result.links[3];
-									}
-									else if(flag!=true){
+									if(flag!=true){
 										var flag=true;
 										game.players[i].init(result.links[1]);
 									}else{
@@ -621,18 +615,12 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 									var name=event.list.randomRemove();
 									if(lib.characterReplace[name]&&lib.characterReplace[name].length) name=lib.characterReplace[name].randomGet();
 									game.players[i].init(name);
-									if(_status.replacetwo){
-										var name2=event.list.randomRemove();
-										if(lib.characterReplace[name2]&&lib.characterReplace[name2].length) name2=lib.characterReplace[name2].randomGet();
-										game.players[i].replacetwo=name2;
-									}
 								}
 							}
 						}
 					}
 					for(var i=0;i<game.players.length;i++){
 						_status.characterlist.remove(game.players[i].name1);
-						_status.characterlist.remove(game.players[i].replacetwo);
 					}
 					'step 3'
 					for(var i=0;i<game.players.length;i++){
