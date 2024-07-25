@@ -273,7 +273,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 			},
 			
 			chooseCharacter:function(){
-				switch(lib.configOL.connect_choose_mod){
+				switch(get.config('choose_mod')){
 					case '多选1':game.chooseCharacterDuoXuanYi();break;
 					//case '3v3':game.chooseCharacterOLXingBei();break;
 				}
