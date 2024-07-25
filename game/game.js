@@ -3105,6 +3105,7 @@
 							ui.arena.dataset.target_shake=bool;
 						}
 					},
+					/*
 					turned_style:{
 						name:'翻面文字',
 						intro:'角色被翻面时显示“翻面”',
@@ -3120,6 +3121,7 @@
 							}
 						}
 					},
+					*/
 					link_style2:{
 						name:'横置样式',
 						intro:'设置角色被横置时的样式',
