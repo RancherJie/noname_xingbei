@@ -4221,10 +4221,11 @@
 						name:'人物配音',
 						init:true,
 					},
+					/*
 					equip_audio:{
 						name:'装备配音',
 						init:false,
-					},
+					},*/
 					repeat_audio:{
 						name:'播放重复语音',
 						init:false,
