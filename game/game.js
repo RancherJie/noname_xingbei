@@ -3901,12 +3901,13 @@
 						init:true,
 						unfrequent:true
 					},
+					/*
 					right_range:{
 						name:'显示距离信息',
 						intro:'在角色的右键菜单中显示距离等信息',
 						init:true,
 						unfrequent:true
-					},
+					},*/
 					hide_card_image:{
 						name:'隐藏卡牌背景',
 						intro:'所有卡牌将使用文字作为背景',
