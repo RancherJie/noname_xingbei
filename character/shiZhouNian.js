@@ -5051,7 +5051,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 type:'faShu',
                 enable:['chooseToUse','faShu'],
                 filter:function(event,player){
-                    if(event.parent.leiGuangSanShe==false) return false;
+                    if(event.getParent('phaseUse').leiGuangSanShe==false) return false;
                     var cards=player.getExpansions('chongNengPai');
                     if(cards.length==0) return false;
                     for(var i=0;i<cards.length;i++){
