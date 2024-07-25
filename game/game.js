@@ -3349,6 +3349,7 @@
 							lib.init.cssstyles();
 						}
 					},
+					/*
 					suits_font:{
 						name:'替换花色字体',
 						init:true,
@@ -3357,7 +3358,7 @@
 						onclick:function(bool){
 							game.saveConfig('suits_font',bool);
 						}
-					},
+					},*/
 					update:function(config,map){
 						if(lib.config.custom_button){
 							map.custom_button_system_top.show();
