@@ -2098,16 +2098,16 @@
 					},
 					hp_style:{
 						name:'体力条样式',
-						init:'ol',
+						init:'default',
 						item:{
 							default:'默认',
 							// official:'勾玉',
-							emotion:'表情',
-							glass:'勾玉',
-							round:'国战',
-							ol:'手杀',
-							xinglass:'双鱼',
-							xinround:'OL',
+							//emotion:'表情',
+							//glass:'勾玉',
+							//round:'国战',
+							//ol:'手杀',
+							//xinglass:'双鱼',
+							//xinround:'OL',
 							custom:'自定',
 						},
 						visualBar:function(node,item,create,switcher){
