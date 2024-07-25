@@ -101,7 +101,7 @@ window.config={
 	show_wuxie:false,
 	show_wuxie_self:true,
 	show_stat:true,
-	show_playerids:true,
+	//show_playerids:true,
 	show_scrollbar:false,
 	mousewheel:true,
 	fold_card:true,

@@ -3955,6 +3955,7 @@
 							}
 						}
 					},
+					/*
 					show_playerids:{
 						name:'显示身份按钮',
 						init:true,
@@ -3968,7 +3969,7 @@
 								ui.playerids.style.display='none';
 							}
 						}
-					},
+					},*/
 					show_sortcard:{
 						name:'显示整理手牌按钮',
 						init:true,
