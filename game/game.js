@@ -3832,6 +3832,7 @@
 							game.saveConfig('show_rarity',bool);
 						}
 					},
+					/*
 					mark_identity_style:{
 						name:'标记身份操作',
 						intro:'设置单击身份按钮时的操作',
@@ -3841,7 +3842,7 @@
 							menu:'菜单',
 							click:'单击',
 						},
-					},
+					},*/
 					character_dialog_tool:{
 						name:'自由选将显示',
 						intro:'点击自由选将时默认显示的条目',
