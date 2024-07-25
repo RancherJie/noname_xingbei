@@ -3054,17 +3054,19 @@
 						init:true,
 						unfrequent:true,
 					},
+					/*
 					jiu_effect:{
 						name:'喝酒效果',
 						init:true,
 						unfrequent:true,
-					},
+					},*/
 					animation:{
 						name:'游戏特效',
 						intro:'开启后出现属性伤害、回复体力等情况时会显示动画',
 						init:false,
 						unfrequent:true,
 					},
+					/*
 					skill_animation_type:{
 						name:'技能特效',
 						intro:'开启后觉醒技、限定技将显示全屏文字',
@@ -3087,6 +3089,7 @@
 							flip:'翻面',
 						}
 					},
+					*/
 					target_shake:{
 						name:'目标效果',
 						intro:'一名玩家成为卡牌或技能的目标时的显示效果',
