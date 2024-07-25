@@ -1831,7 +1831,7 @@
 						item:{
 							wood:'木纹',
 							music:'音乐',
-							simple:'原版',
+							//simple:'原版',
 							//ol:'手杀',
 							// new:'新版',
 							custom:'自定',
