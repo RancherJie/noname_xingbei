@@ -669,12 +669,12 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 
 			chooseCharacterOL:function(){
 				switch(lib.configOL.connect_choose_mod){
-					case '多选1':game.chooseCharacterOLXingBei();break;
+					case '多选1':game.chooseCharacterOLDuoXuanYi();break;
 					//case '3v3':game.chooseCharacterOLXingBei();break;
 				}
 			},
 			
-			chooseCharacterOLXingBei:function(){
+			chooseCharacterOLDuoXuanYi:function(){
 				var next=game.createEvent('chooseCharacterOL');
 				next.setContent(function(){
 					'step 0'
