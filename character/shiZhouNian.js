@@ -8487,7 +8487,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             anYingKangJu:"[被动]暗影抗拒",
             anYingKangJu_info:"在你的行动阶段你始终不能使用法术牌。",
             anYingLiuXing:"[法术]暗影流星",
-            anYingLiuXing_info:"<span class='tiaoJian'>(仅【暗影形态】下发动，弃2张法术牌[展示])</span>对目标角色造成2点法术伤害③；<span class='tiaoJian'>(若你额外移除我方【战绩区】2星石)</span>[重置]脱离[暗影型态]，你+1[宝石]。",
+            anYingLiuXing_info:"<span class='tiaoJian'>(仅【暗影形态】下发动，弃2张法术牌[展示])</span>对目标角色造成2点法术伤害③；<span class='tiaoJian'>(若你额外移除我方【战绩区】2星石)</span>[重置]脱离【暗影形态】，你+1[宝石]。",
             huangQaunZhenChan:"[响应]黄泉震颤[回合限定]",
             huangQaunZhenChan_info:"[宝石]<span class='tiaoJian'>(主动攻击前发动①)</span>本次攻击对手不能应战，<span class='tiaoJian'>(若命中②)</span>你将手牌补至上限，然后弃2张牌。",
 
