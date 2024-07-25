@@ -4075,6 +4075,7 @@
 							game.saveConfig('show_giveup',bool);
 						}
 					},
+					/*
 					show_wuxie:{
 						name:'显示无懈按钮',
 						intro:'在右上角显示不询问无懈',
@@ -4094,7 +4095,7 @@
 						name:'无懈按钮靠左',
 						init:true,
 						unfrequent:true,
-					},
+					},*/
 					show_discardpile:{
 						name:'暂停时显示弃牌堆',
 						init:false,
