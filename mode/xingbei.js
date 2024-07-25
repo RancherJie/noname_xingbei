@@ -208,8 +208,8 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				}
 				var last=uiintro.add('<div class="text chat">可选角色数：'+lib.configOL.choose_number);
 				switch(lib.configOL.viewHandcard){
-					case 'Y':uiintro.add('<div class="text chat">可见队友手牌：是');break;
-					case 'N':uiintro.add('<div class="text chat">可见队友手牌：否');break;
+					case true:uiintro.add('<div class="text chat">可见队友手牌：是');break;
+					case false:uiintro.add('<div class="text chat">可见队友手牌：否');break;
 				}
 				var last=uiintro.add('<div class="text chat">出牌时限：'+lib.configOL.choose_timeout+'秒');
 				// uiintro.add('<div class="text chat">屏蔽弱将：'+(lib.configOL.ban_weak?'开启':'关闭'));
@@ -643,7 +643,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					},500);
 
 					var viewHandcard=get.config('viewHandcard');
-					if(viewHandcard=='Y'){
+					if(viewHandcard==true){
 						game.addGlobalSkill('viewHandcard');
 					}
 
@@ -1090,7 +1090,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					},500);
 					
 					var viewHandcard=lib.configOL.viewHandcard;
-					if(viewHandcard=='Y'){
+					if(viewHandcard==true){
 						game.addGlobalSkill('viewHandcard');
 					}
 					

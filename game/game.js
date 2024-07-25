@@ -4588,10 +4588,9 @@
 					},
 					connect_viewHandcard:{
 						name:'可见队友手牌',
-						init:'N',
-						item:{
-							'Y':'显示',
-							'N':'隐藏',
+						init:false,
+						onclick:function(bool){
+							game.saveConfig('connect_viewHandcard',bool,this._link.config.mode);
 						},
 						frequent:true,
 					},
@@ -4636,10 +4635,9 @@
 					},
 					viewHandcard:{
 						name:'可见队友手牌',
-						init:'N',
-						item:{
-							'Y':'显示',
-							'N':'隐藏',
+						init:false,
+						onclick:function(bool){
+							game.saveConfig('viewHandcard',bool,this._link.config.mode);
 						},
 						frequent:true,
 					},
