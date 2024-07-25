@@ -52,7 +52,7 @@ window.noname_package={
 		xingBei_bg:'星杯传说',
 	},
 	music:{
-		
+		'Made_in_Abyss':'Made_in_Abyss',
 	},
 	font:{
 		xiaozhuan:'方正小篆体',
