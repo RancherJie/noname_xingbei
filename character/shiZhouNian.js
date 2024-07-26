@@ -6323,6 +6323,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             },
             siDou:{
                 trigger:{player:'jiangYaoChengShou2'},
+                lastDo:true,
                 filter:function(event,player){
                     return event.faShu&&player.canBiShaBaoShi();
                 },
