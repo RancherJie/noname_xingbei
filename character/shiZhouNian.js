@@ -6350,7 +6350,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 
             //格斗家
             nianQiLiChang:{
-                trigger:{source:"damageBegin0"},
+                trigger:{player:"damageBegin0"},
                 filter:function(event,player){
                     return event.num>4;
                 },
