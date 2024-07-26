@@ -6137,7 +6137,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             },
             tiaoXinX:{
                 intro:{
-                    content:'你在下个行动阶段必须且只能主动攻击勇者，否则他跳过该行动阶段，触发后移除此牌。',
+                    content:'你在下个行动阶段必须且只能主动攻击勇者，否则你跳过该行动阶段，触发后移除此牌。',
                 },
                 markimage:'image/card/tiaoXin.png',
 
