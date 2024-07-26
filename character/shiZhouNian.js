@@ -3446,7 +3446,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             },
             xueQiangWeiTingYuan:{
                 intro:{
-                    name:'血蔷薇庭院',
                     content:"<span class='tiaoJian'>(此卡在场时)</span>所有角色的[治疗]无法用于抵御伤害；<span class='tiaoJian'>(血色剑灵的回合结束时)</span>移除此卡。",
                 },
                 markimage:'image/card/xueQiangWeiTingYuan.png',
@@ -6137,6 +6136,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             },
             tiaoXinX:{
                 intro:{
+                    name:"(专)[法术]挑衅",
                     content:'你在下个行动阶段必须且只能主动攻击勇者，否则你跳过该行动阶段，触发后移除此牌。',
                 },
                 markimage:'image/card/tiaoXin.png',
