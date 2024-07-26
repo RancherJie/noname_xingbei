@@ -7752,6 +7752,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 group:['liuXue_shangHai','liuXue_chongZhi'],
                 subSkill:{
                     shangHai:{
+                        firstDo:true,
                         trigger:{player:'phaseBegin'},
                         direct:true,
                         filter:function(event,player){
