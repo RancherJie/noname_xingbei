@@ -13919,32 +13919,28 @@
 						}
 					}
 					if(!game.online){
+						event.done=player.discard(event.result.cards);
 						if(typeof event.delay=='boolean'){
-							event.done=player.discard(event.result.cards).set('delay',event.delay);
+							event.done.set('delay',event.delay);
 						}
-						else{
-							event.done=player.discard(event.result.cards);
+						if(event.baoPai==true){
+							if(event.shiQiXiaJiang!=false){
+								event.done.set('baoPai',true);
+								if(event.yuanYin=='damage'){
+									event.done.set('yuanYin','damage');
+								}
+								if(event.faShu){
+									event.done.set('faShu',event.faShu);
+								}
+								//传递士气最大变动值
+								if(typeof event.shiQiMax=='number'){
+									event.done.set('shiQiMax',event.shiQiMax);
+								}
+							}
 						}
 						event.done.discarder=player;
 					}
 					if(event.dialog&&event.dialog.close) event.dialog.close();
-					"step 5"
-					if(event.baoPai==true){
-						if(event.shiQiXiaJiang!=false){
-							var next=player.changeShiQi(-event.result.cards.length).set('baoPai',true);
-							if(event.yuanYin=='damage'){
-								next.set('yuanYin','damage');
-							}
-							if(event.faShu){
-								next.set('faShu',event.faShu)
-							}
-							//传递士气最大变动值
-							if(typeof event.shiQiMax=='number'){
-								next.set('shiQiMax',event.shiQiMax);
-							}
-						}
-					}
-					
 				},
 				gaincardMultiple:function(){
 					'step 0'
@@ -17182,6 +17178,22 @@
 					if(event.discarder) event.done.discarder=event.discarder;
 					"step 1"
 					event.trigger('discard');
+					'step 2'
+					if(event.baoPai==true){
+						if(event.shiQiXiaJiang!=false){
+							var next=player.changeShiQi(-cards.length).set('baoPai',true).set('cards',cards);
+							if(event.yuanYin=='damage'){
+								next.set('yuanYin','damage');
+							}
+							if(event.faShu){
+								next.set('faShu',event.faShu)
+							}
+							//传递士气最大变动值
+							if(typeof event.shiQiMax=='number'){
+								next.set('shiQiMax',event.shiQiMax);
+							}
+						}
+					}
 				},
 				loseToDiscardpile:function(){
 					"step 0"
