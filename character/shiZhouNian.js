@@ -1960,16 +1960,16 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     if(event.side!=player.side) return false;
                     if(event.num>=0) return false;
                     if(event.yuanYin!='damage') return false;
-                    if(!event.parent.result.cards) return false;
+                    if(!event.cards) return false;
                     return true;
                 },
                 content:function(){
                     'step 0'
                     player.hengZhi();
                     'step 1'
-                    var cards=trigger.parent.result.cards;
+                    var cards=trigger.cards;
                     if(cards){
-                        player.addToExpansion('giveAuto',trigger.parent.result.cards).gaintag.add('anYue');
+                        player.addToExpansion('giveAuto',trigger.cards).gaintag.add('anYue');
                     }
                     'step 2'
                     trigger.cancel();
