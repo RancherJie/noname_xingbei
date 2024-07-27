@@ -1537,13 +1537,14 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
                     'step 0'
                     var list=['摸三张牌','跳过行动阶段'];
                     player.chooseControl().set('choiceList',list).set('prompt','虚弱：选择一项').set('ai',function(){
+						var player=_status.event.player;
                         if(player.countCards('h')+3<=player.getHandcardLimit()) return 0;
                         return 1;
                     });
                     'step 1'
-					if(result.index==1){
+					if(result.control=='选项二'){
 						player.addTempSkill('xuRuo_xiaoGuo');
-					}else if(result.index==0){
+					}else if(result.control=="选项一"){
 						player.draw(3);
 					}
                     player.loseToDiscardpile(player.getExpansions('_xuRuo'));
