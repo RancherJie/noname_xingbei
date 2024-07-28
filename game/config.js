@@ -152,7 +152,7 @@ window.config={
 			team_sequence:'random',
 			change_choice:true,
 			choose_number:3,
-			choose_mod:"多选1"
+			choose_mode:"多选1"
 		},
 		identity:{
 			identity:[
