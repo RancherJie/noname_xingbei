@@ -200,7 +200,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				else if(lib.configOL.versus_mode=='2v2'||lib.configOL.versus_mode=='3v3'){
 					uiintro.add('<div class="text chat">四号位换牌：'+(lib.configOL.replace_handcard?'开启':'关闭'));
 				}*/
-				switch(lib.configOL.connect_choose_mode){
+				switch(lib.configOL.choose_mode){
 					case '多选1':uiintro.add('<div class="text chat">选角模式：多选1');break;
 					case 'CM02':uiintro.add('<div class="text chat">选角模式：CM02');break;
 				}
