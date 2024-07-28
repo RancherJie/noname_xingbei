@@ -4551,10 +4551,15 @@
 				name:'星杯传说',
 				connect:{
 					update:function(config,map){
-						if(config.connect_choose_mod=='多选1'){
+						if(config.connect_choose_mode=='多选1'){
 							map.connect_choose_number.show();
 						}else{
 							map.connect_choose_number.hide();
+						}
+						if(config.connect_choose_mode=='CM02'){
+							map.connect_team_sequence.hide();
+						}else{
+							map.connect_team_sequence.show();
 						}
 					},
 					connect_versus_mode:{
@@ -4569,12 +4574,12 @@
 						},
 						frequent:true
 					},
-					connect_choose_mod:{
+					connect_choose_mode:{
 						name:"选角模式",
 						init:"多选1",
 						item:{
 							'多选1':'多选1',
-							//'CM02':"CM02",
+							'CM02':"CM02",
 						},
 						frequent:true,
 					},
@@ -4612,7 +4617,7 @@
 				},
 				config:{
 					update:function(config,map){
-						if(config.choose_mod=='多选1'){
+						if(config.choose_mode=='多选1'){
 							map.choose_number.show();
 						}else{
 							map.choose_number.hide();
@@ -4628,7 +4633,7 @@
 						restart:true,
 						frequent:true,
 					},
-					choose_mod:{
+					choose_mode:{
 						name:"选角模式",
 						init:"多选1",
 						item:{
@@ -56645,10 +56650,25 @@
 				}
 			}
 			if(config.mode=='xingbei'){
+				var str='';
 				switch(config.versus_mode){
-					case '2v2':return '2v2';
-					case '3v3':return '3v3';
+					case '2v2':str='2v2';break;
+					case '3v3':str='3v3';break;
 				}
+				str+=' ';
+				str+=config.choose_mode;
+				if(config.choose_mode=='CM02'){
+					return str;
+				}
+				str+=' 座次'
+				switch(config.team_sequence){
+					case 'near':str+='临近';break;
+					case 'crossed':str+='交叉';break;
+					case 'random':str+='随机';break;
+					case 'CM':str+='CM';break;
+				}
+				return str;
+				
 			}
 			else if(config.mode=='single'){
 				switch(config.single_mode){

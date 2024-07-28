@@ -200,16 +200,19 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				else if(lib.configOL.versus_mode=='2v2'||lib.configOL.versus_mode=='3v3'){
 					uiintro.add('<div class="text chat">四号位换牌：'+(lib.configOL.replace_handcard?'开启':'关闭'));
 				}*/
-				switch(lib.configOL.connect_choose_mod){
+				switch(lib.configOL.connect_choose_mode){
 					case '多选1':uiintro.add('<div class="text chat">选角模式：多选1');break;
+					case 'CM02':uiintro.add('<div class="text chat">选角模式：CM02');break;
 				}
-				switch(lib.configOL.team_sequence){
-					case 'random':uiintro.add('<div class="text chat">队伍顺序：随机');break;
-					case 'near':uiintro.add('<div class="text chat">队伍顺序：临近');break;
-					case 'crossed':uiintro.add('<div class="text chat">队伍顺序：交叉');break;
-					case 'CM':uiintro.add('<div class="text chat">队伍顺序：CM');break;
+				if(lib.configOL.choose_mode!='CM02'){
+					switch(lib.configOL.team_sequence){
+						case 'random':uiintro.add('<div class="text chat">队伍顺序：随机');break;
+						case 'near':uiintro.add('<div class="text chat">队伍顺序：临近');break;
+						case 'crossed':uiintro.add('<div class="text chat">队伍顺序：交叉');break;
+						case 'CM':uiintro.add('<div class="text chat">队伍顺序：CM');break;
+					}
+					var last=uiintro.add('<div class="text chat">可选角色数：'+lib.configOL.choose_number);
 				}
-				var last=uiintro.add('<div class="text chat">可选角色数：'+lib.configOL.choose_number);
 				switch(lib.configOL.viewHandcard){
 					case true:uiintro.add('<div class="text chat">可见队友手牌：是');break;
 					case false:uiintro.add('<div class="text chat">可见队友手牌：否');break;
@@ -273,9 +276,9 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 			},
 			
 			chooseCharacter:function(){
-				switch(get.config('choose_mod')){
+				switch(get.config('choose_mode')){
 					case '多选1':game.chooseCharacterDuoXuanYi();break;
-					//case '3v3':game.chooseCharacterOLXingBei();break;
+					case 'CM02':game.chooseCharacterCM02();break;
 				}
 			},
 			chooseCharacterDuoXuanYi:function(){
@@ -668,9 +671,9 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 			},
 
 			chooseCharacterOL:function(){
-				switch(lib.configOL.choose_mod){
+				switch(lib.configOL.choose_mode){
 					case '多选1':game.chooseCharacterOLDuoXuanYi();break;
-					//case '3v3':game.chooseCharacterOLXingBei();break;
+					case 'CM02':game.chooseCharacterOLCM02();break;
 				}
 			},
 			
@@ -1103,6 +1106,681 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					}
 					
 
+				});
+			},
+			chooseCharacterOLCM02:function(){
+				var next=game.createEvent('chooseCharacterOL');
+				next.setContent(function(){
+					'step 0'
+					//console.log('chooseCharacterOLCM02');
+					//var ref=game.players[0];
+					event.number=lib.configOL.number;
+					event.choose_number=18;
+
+					var ref=game.players.randomGet();
+					var bool=true;
+					var bool2=false;
+					if(event.number==4){
+						event.red_list=[ref,ref.previous];
+						event.blue_list=[ref.next,ref.next.next];
+						event.team_list=['R1','B1','B2','R2'];
+
+						ref.side=bool;
+						ref.next.side=bool2;
+						ref.next.next.side=bool2;
+						ref.next.next.next.side=bool;
+					}else{
+						event.red_list=[ref,ref.next.next.next,ref.next.next.next.next];
+						event.blue_list=[ref.next,ref.next.next,ref.previous];
+						event.team_list=['R1','B1','B2','R2','R3','B3'];
+
+						ref.side=bool;
+						ref.next.side=bool2;
+						ref.next.next.side=bool2;
+						ref.next.next.next.side=bool;
+						ref.next.next.next.next.side=bool;
+						ref.next.next.next.next.next.side=bool2;
+					}
+
+					var firstChoose=ref;
+
+					_status.firstAct=firstChoose;
+					for(var i=0;i<event.number;i++){
+						firstChoose.node.name.innerHTML=get.verticalStr(get.cnNumber(i+1,true)+'号位');
+						firstChoose=firstChoose.next;
+					}
+					for(var i=0;i<game.players.length;i++){
+						if(game.players[i].side==true){
+							game.players[i].node.identity.firstChild.innerHTML='红';
+						}
+						else{
+							game.players[i].node.identity.firstChild.innerHTML='蓝';
+						}
+						game.players[i].node.identity.dataset.color=game.players[i].side+'zhu';
+					}
+
+					
+					var map={};
+					for(var i=0;i<event.number;i++){
+						map[game.players[i].playerid]=[game.players[i].side,game.players[i].node.identity.firstChild.innerHTML,game.players[i].node.name.innerHTML];
+					}
+
+					var func=function(map){
+						for(var i in map){
+							var player=lib.playerOL[i];
+							if(player){
+								player.side=map[i][0];
+								player.node.identity.firstChild.innerHTML=map[i][1];
+								player.node.name.innerHTML=map[i][2];
+								player.node.identity.dataset.color=player.side+'zhu';
+							}
+						}
+						ui.arena.classList.add('choose-character');
+					}
+
+
+					game.broadcastAll(func,map);
+
+
+					'step 1'
+					if(event.number==4){
+						event.red_vote=[0,0];
+						event.blue_vote=[0,0];
+					}else{
+						event.red_vote=[0,0,0];
+						event.blue_vote=[0,0,0];
+					}
+
+					var choose={};
+					
+					for(var i=0;i<game.players.length;i++){
+						let player=game.players[i];
+						let dialog;
+						if(player.side==true){
+							if(event.number==4) dialog=["R1", "R2"];
+							else dialog=["R1", "R2", "R3"];
+						}else{
+							if(event.number==4) dialog=["B1", "B2"];
+							else dialog=["B1", "B2", "B3"];
+						}
+						choose[game.players[i].playerid]=dialog;
+						
+					}
+					//投票
+					game._voteChoose=choose;
+					event._vote=[];
+					event.videoId=lib.status.videoId++;
+					game.broadcastAll(function(id,choice){
+						game._voteDialogID=id;
+						game._voteList=choice;
+						var dialog=ui.create.dialog('投票选择队长');
+						dialog.videoId=id;
+						var text;
+						var player=game.me;
+						for(var i in choice){
+							var current=lib.playerOL[i];
+							if(current==player) text=choice[i];
+						}
+						var buttons=ui.create.div('.buttons',dialog.content);
+						dialog.text=ui.create.buttons(text,'tdnodes',buttons);
+						dialog.buttons=dialog.buttons.concat(dialog.text);
+					},event.videoId,choose);
+					
+					var send=function(){
+						var next=game.me.chooseButton([1,2],true);
+						next.set('dialog',game._voteDialogID);
+						next.set('callback',function(player,result){
+							var button=game._playerChoice;
+							button.classList.remove('glow2');
+							button.classList.add('selected');
+							delete game._playerChoice;
+						});
+						//托管选择
+						next.set('ai',function(button){
+							//优先选择活人
+							var player=_status.event.player;
+							if(player.side==true){
+								var list=_status.event.listx[0];
+							}else{
+								var list=_status.event.listx[1];
+							}
+							for(var i=0;i<list.length;i++){
+								if(list[i].side==player.side&&(list[i].isOnline()||list[i]==game.me)) return i;	
+							}
+							return 0;
+						});
+						next.set('listx',[event.red_list,event.blue_list])
+						//修改点击按钮后的反应
+						next.set('custom',{replace:{
+							button:function(button){
+								var dialog=get.idDialog(game._voteDialogID);
+								//选择按钮时自动取消选择上一个按钮
+								if(dialog.text.contains(button)){
+									if(!button.classList.contains('selected')){
+										button.classList.add('selected');
+										ui.selected.buttons.add(button);
+										game._playerChoice=button;
+										for(var other of dialog.text){
+											if(other!=button&&other.classList.contains('selected')){
+												other.classList.remove('selected');
+												ui.selected.buttons.remove(other);
+											}
+										}
+									}
+									game.check();
+								}
+							}
+						},add:{}});
+						if(game.online) game.resume();
+					}
+
+					//确认后的回传函数
+					event.confirm=function(player,choice){
+						if(game._voteDialogID==undefined) return;
+						var dialog=get.idDialog(game._voteDialogID);
+						if(!dialog) return;
+					}
+					//处理result
+					var sendback=function(result,player){
+						//处理确认选将
+						if(result){
+							var choice=result.links[0];
+							event._vote.push(choice);
+						}
+					}
+					event.sendback=sendback;
+
+					event.ai_targets=[];
+					for(var i=0;i<game.players.length;i++){
+						if(game.players[i].isOnline()){
+							event.withol_vote=true;
+							game.players[i].send(send);
+							game.players[i].wait(sendback);
+						}
+						else if(game.players[i]==game.me){
+							event.withme_vote=true;
+							send();
+							game.me.wait(sendback);
+						}
+						else{
+							event.ai_targets.push(game.players[i]);
+							game.players[i].showTimer();
+						}
+					}
+					//模拟AI思考后选择
+					if(event.ai_targets.length){
+						event.ai_targets.randomSort();
+						setTimeout(function(){
+							event.interval=setInterval(function(){
+								var target=event.ai_targets.shift();
+								//ai优先选择真人玩家
+								var list=game._voteList[target.playerid];
+								if(target.side==true){
+									var listx=event.red_list;
+								}else{
+									var listx=event.blue_list;
+								}
+								var index=0;
+								for(var i=0;i<listx.length;i++){
+									if(listx[i].side==target.side&&(listx[i].isOnline()||listx[i]==game.me)){
+										index=i;
+										break;
+									}
+								}
+								var choice=list[index];
+								event.sendback({
+									result:bool,
+									links:[choice],
+								},target);
+								target.hideTimer();
+								if(!event.ai_targets.length){
+									clearInterval(event.interval);
+									if(event.withai_vote) game.resume();
+								}
+							},1000);
+						},6000)
+					}
+
+					'step 2'
+					if(event.withme_vote){
+						game.me.unwait(result);
+					}
+					'step 3'
+					if(event.withol_vote&&!event.resultOL){
+						game.pause();
+					}
+					'step 4'
+					if(event.ai_targets.length>0){
+						event.withai_vote=true;
+						game.pause();
+					}
+					
+					'step 5'
+					game.broadcastAll(function(id){
+						var dialog=get.idDialog(id);
+						if(dialog){
+							dialog.close();
+							clearInterval(dialog.delay);
+						}
+					},event.videoId);
+					var result=event._vote;
+					for(var i in result){
+						if(result[i][0]=='R'){
+							event.red_vote[result[i][1]-1]++;
+						}else{
+							event.blue_vote[result[i][1]-1]++;
+						}
+					}
+
+					game.broadcast(function(){
+						setTimeout(function(){
+							ui.arena.classList.remove('choose-character');
+						},500)
+					});
+					setTimeout(function(){
+						ui.arena.classList.remove('choose-character');
+					},500);
+
+					'step 6'
+					var red_index=0;
+					var red_max=0;
+					var blue_index=0;
+					var blue_max=0;
+					for(var i=0;i<event.red_vote.length;i++){
+						if(event.red_vote[i]>red_max){
+							red_max=event.red_vote[i];
+							red_index=i;
+						}
+					}
+					for(var i=0;i<event.blue_vote.length;i++){
+						if(event.blue_vote[i]>blue_max){
+							blue_max=event.blue_vote[i];
+							blue_index=i;
+						}
+					}
+					event.red_leader=event.red_list[red_index];
+					event.blue_leader=event.blue_list[blue_index];
+					game.log('<span style="color:red;">红方</span>队长为',event.red_leader.node.name.innerHTML);
+					game.log('<span style="color:blue;">蓝方</span>队长为',event.blue_leader.node.name.innerHTML);
+					game.broadcastAll(function(red_leader,blue_leader){
+						game.red_leader=red_leader;
+						game.blue_leader=blue_leader;
+					},event.red_leader,event.blue_leader);
+					game.delay(4);
+					'step 7'//ban角色
+					//角色列表
+					var list = get.charactersOL();
+					event.list = list.randomGets(event.choose_number);
+					event.choosing=game.red_leader;
+					event.videoId = lib.status.videoId++;
+					var createDialog = function (list, id, list1, list2) {
+						var dialog = ui.create.dialog("Ban角色", [list, "character"]);
+						dialog.classList.add("fullwidth");
+						dialog.classList.add("fullheight");
+						dialog.classList.add("noslide");
+						dialog.classList.add("fixed");
+						dialog.videoId = id;
+						if (list2 && list2) {
+							ui.arena.classList.add("playerhidden");
+							for (var i = 0; i < dialog.buttons.length; i++) {
+								var button = dialog.buttons[i];
+								if (list1.includes(button.link)) {
+									button.classList.add("selectedx");
+								} else if (list2.includes(button.link)) {
+									button.classList.add("glow");
+								}
+							}
+						} else {
+							if (list1 != game.me&&list1==game.red_leader) {
+								dialog.content.firstChild.innerHTML = "等待红方队长选择";
+							}else if(list1!=game.me&&list1==game.blue_leader){
+								dialog.content.firstChild.innerHTML = "等待蓝方队长选择";
+							}
+						}
+					};
+					
+					game.broadcastAll(createDialog, event.list, event.videoId, event.choosing);
+					event.num=1;
+					event.selected = [];
+					_status.firstChoose = event.choosing;
+					_status.onreconnect = [
+						createDialog,
+						event.list,
+						event.videoId,
+					];
+					'step 8'
+					var next = event.choosing.chooseButton(event.videoId, event.num, true);
+					next.set("filterButton", function (button) {
+						if (_status.event.selected.includes(button.link)) return false;
+						return true;
+					});
+					next.set("selected", event.selected);
+					next.set("ai", function () {
+						return Math.random();
+					});
+					'step 9'
+					game.broadcastAll(
+						function (links, choosing, first, id) {
+							var dialog = get.idDialog(id);
+							if (dialog) {
+								if (choosing == game.red_leader) {
+									choosing = "红方队长";
+								} else {
+									choosing = "蓝方队长";
+								}
+								dialog.content.firstChild.innerHTML =
+									choosing + "Ban了" + get.translation(links);
+								for (var i = 0; i < dialog.buttons.length; i++) {
+									if ((dialog.buttons[i].link == links[0])||(dialog.buttons[i].link == links[1])) {
+										if (first) {
+											dialog.buttons[i].classList.add("selectedx");
+										} else {
+											dialog.buttons[i].classList.add("glow");
+										}
+									}
+								}
+							}
+						},
+						result.links,
+						event.choosing,
+						event.choosing == _status.firstChoose,
+						event.videoId
+					);
+					event.selected.addArray(result.links);
+					for(var i=0;i<result.links.length;i++){
+						var index=event.list.indexOf(result.links[i]);
+						if(index!=-1) event.list.splice(index,1);
+					}
+					if(event.choosing==game.blue_leader){
+						event.choosing=game.red_leader;
+					}else{
+						event.choosing=game.blue_leader;
+					}
+					event.num++;
+					if (event.num<event.number/2) {
+						event.goto(8);
+					}
+					'step 10'
+					game.delay(2);
+					'step 11'
+					game.broadcastAll(function (id) {
+						ui.arena.classList.remove("playerhidden");
+						var dialog = get.idDialog(id);
+						if (dialog) {
+							dialog.close();
+						}
+					}, event.videoId);
+					//为各方队友选择角色
+					'step 12'
+					event.choosing=game.blue_leader;
+					event.videoId = lib.status.videoId++;
+					var createDialog = function (list, id, list1, list2) {
+						var dialog = ui.create.dialog("蓝方队长选择是否Ban", [list, "character"]);
+						dialog.classList.add("fullwidth");
+						dialog.classList.add("fullheight");
+						dialog.classList.add("noslide");
+						dialog.classList.add("fixed");
+						dialog.videoId = id;
+						if (list2 && list2) {
+							ui.arena.classList.add("playerhidden");
+							for (var i = 0; i < dialog.buttons.length; i++) {
+								var button = dialog.buttons[i];
+								if (list1.includes(button.link)) {
+									button.classList.add("selectedx");
+								} else if (list2.includes(button.link)) {
+									button.classList.add("glow");
+								}
+							}
+						} else {
+							if (list1 != game.me&&list1==game.red_leader) {
+								dialog.content.firstChild.innerHTML = "等待红方队长选择";
+							}else if(list1!=game.me&&list1==game.blue_leader){
+								dialog.content.firstChild.innerHTML = "等待蓝方队长选择";
+							}
+						}
+					};
+					game.broadcastAll(createDialog, event.list, event.videoId, event.choosing);
+					event.red_chooseList = [];
+					event.blue_chooseList = [];
+					event.selected = [];
+					_status.firstChoose = game.red_leader;
+					event.num=1;//记录选角次数
+					_status.onreconnect = [
+						createDialog,
+						list,
+						event.videoId,
+						event.red_chooseList,
+						event.blue_chooseList
+					];
+					event.choosing=game.red_leader;
+					"step 13"//插入ban角色
+					result.bool=undefined;
+					if(event.choosing==game.blue_leader){
+						event.choosing=game.red_leader;
+					}else{
+						event.choosing=game.blue_leader;
+					}
+					if(!event.red_ban&&event.choosing==game.red_leader){
+						//console.log('红方插入ban');
+						var next = event.choosing.chooseButton(event.videoId, 1);
+						next.set("filterButton", function (button) {
+							if (_status.event.selected.includes(button.link)) return false;
+							return true;
+						});
+						next.set("selected", event.selected);
+						next.set("ai", function () {
+							return Math.random();
+						});
+					}else if(!event.blue_ban&&event.choosing==game.blue_leader){
+						//console.log('蓝方插入ban');
+						var next = event.choosing.chooseButton(event.videoId, 1);
+						next.set("filterButton", function (button) {
+							if (_status.event.selected.includes(button.link)) return false;
+							return true;
+						});
+						next.set("selected", event.selected);
+						next.set("ai", function () {
+							return Math.random();
+						});
+					}
+					'step 14'
+					//console.log(result.bool);
+					if(result.bool){
+						if(event.choosing==game.blue_leader){
+							event.blue_ban=true;
+						}else{
+							event.red_ban=true;
+						}
+						game.broadcastAll(
+							function (link, choosing,id,num) {
+								var dialog = get.idDialog(id);
+								if (dialog) {
+									var str;
+									if (choosing == game.red_leader) {
+										choosing = "红方队长";
+										str=`，蓝方队长B${num}选择角色`;
+									} else {
+										choosing = "蓝方队长";
+										str=`，红方队长为R${num}选择角色`;
+									}
+									dialog.content.firstChild.innerHTML =
+										choosing + "Ban了" + get.translation(link)+str;
+
+									//console.log(dialog.content.firstChild.innerHTML);
+
+									for (var i = 0; i < dialog.buttons.length; i++) {
+										if (dialog.buttons[i].link == link) {
+											dialog.buttons[i].classList.add("glow2");
+										}
+									}
+								}
+							},
+							result.links[0],
+							event.choosing,
+							event.videoId,
+							event.num					
+						);
+						event.selected.push(result.links[0]);
+					}
+
+					if(event.choosing==game.blue_leader){
+						event.choosing=game.red_leader;
+					}else{
+						event.choosing=game.blue_leader;
+					}
+					if(result.bool===false){
+						game.broadcastAll(
+							function (choosing,id,num) {
+								var dialog = get.idDialog(id);
+								if (dialog) {
+									if (choosing == game.red_leader) {
+										choosing = `红方队长为R${num}`;
+									} else {
+										choosing = `蓝方队长为B${num}`;
+									}
+									dialog.content.firstChild.innerHTML =
+										choosing + "选择角色";
+
+									//console.log(dialog.content.firstChild.innerHTML);
+								}
+							},
+							event.choosing,
+							event.videoId,
+							event.num
+						);
+					}
+					
+					'step 15'
+					//console.log('选择角色');
+					var next = event.choosing.chooseButton(event.videoId, 1, true);
+					next.set("filterButton", function (button) {
+						if (_status.event.selected.includes(button.link)) return false;
+						return true;
+					});
+					next.set("selected", event.selected);
+					next.set("ai", function () {
+						return Math.random();
+					});
+					"step 16";
+					event.selected.push(result.links[0]);
+					if(event.choosing==game.red_leader){
+						event.red_chooseList.push(result.links[0]);
+						var id=event.red_list[event.num-1].playerid;
+					}else{
+						event.blue_chooseList.push(result.links[0]);
+						var id=event.blue_list[event.num-1].playerid;
+					}
+					game.broadcastAll(function(id,link){
+							if(!lib.playerOL[id].name1){
+								lib.playerOL[id].init(link);
+								lib.playerOL[id].update();
+							}
+					},id,result.links[0]);
+					game.broadcastAll(
+						function (link, choosing, first, id,red_ban,blue_ban,num) {
+							var dialog = get.idDialog(id);
+							if (dialog) {
+								//console.log(red_ban,blue_ban);
+								var ban='';
+								if (choosing == game.red_leader) {
+									choosing = `红方队长为R${num}`;
+									if(!red_ban){
+										ban='，红方队长选择是否Ban';
+									}else{
+										ban=`，蓝方队长为B${num}选择角色`;
+									}
+								} else {
+									choosing = `蓝方队长为B${num}`;
+									if(!blue_ban){
+										ban='，蓝方队长选择是否Ban';
+									}else{
+										if(num!=3){
+											ban=`，红方队长为R${num+1}选择角色`;
+										}
+									}
+								}
+								var str=choosing + "选择了" + get.translation(link)+ban;
+								dialog.content.firstChild.innerHTML =str;
+
+								for (var i = 0; i < dialog.buttons.length; i++) {
+									if (dialog.buttons[i].link == link) {
+										if (first) {
+											dialog.buttons[i].classList.add("selectedx");
+										} else {
+											dialog.buttons[i].classList.add("glow");
+										}
+									}
+								}
+							}
+						},
+						result.links[0],
+						event.choosing,
+						event.choosing == _status.firstChoose,
+						event.videoId,
+						event.red_ban,
+						event.blue_ban,
+						event.num
+					);
+					if(event.choosing==game.blue_leader){
+						event.num++;
+						event.choosing=game.red_leader;
+					}else{
+						event.choosing=game.blue_leader;
+					}
+					if (event.num<=3) {
+						event.goto(13);
+					}
+					'step 17'
+					game.delay(2);
+					'step 18'
+					game.broadcastAll(function (id) {
+						ui.arena.classList.remove("playerhidden");
+						var dialog = get.idDialog(id);
+						if (dialog) {
+							dialog.close();
+						}
+					}, event.videoId);
+					
+					'step 19'
+					for(var i=0;i<game.players.length;i++){
+						game.players[i].storage.moDan=false;
+						game.players[i].storage.zhongDu=[];
+					}
+					game.broadcastAll(function(){
+						if(get.is.phoneLayout()){
+							ui.shiQiInfo=ui.create.div('.touchinfo.bottom-right',ui.window);
+						}
+						else{
+							ui.shiQiInfo=ui.create.div('.touchinfo.bottom-right',ui.window);
+						}
+						ui.updateShiQiInfo();
+					})
+
+					_status.onreconnect=[function(){
+						var players=game.players;
+						for(var i=0;i<players.length;i++){
+							if(players[i].side==true){
+								players[i].node.identity.firstChild.innerHTML='红';
+							}
+							else{
+								players[i].node.identity.firstChild.innerHTML='蓝';
+							}
+						}
+						
+						if(get.is.phoneLayout()){
+							ui.shiQiInfo=ui.create.div('.touchinfo.bottom-right',ui.window);
+						}
+						else{
+							ui.shiQiInfo=ui.create.div('.touchinfo.bottom-right',ui.window);
+						}
+						ui.updateShiQiInfo();
+					}];
+
+					var viewHandcard=lib.configOL.viewHandcard;
+					if(viewHandcard==true){
+						game.addGlobalSkill('viewHandcard');
+					}
+					
 				});
 			},
 
