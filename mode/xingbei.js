@@ -2775,7 +2775,28 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						}
 						return range;
 					},
+					check:function(button,player){
+						var player=_status.event.player;
+						if(button.link=='宝石'){
+							if(player.hasSkillTag('baoShi')) return 5;
+							return 2;
+						}else{
+							if(player.hasSkillTag('shuiJing')) return 5;
+							return 2;
+						}
+					}
 				},
+				ai:{
+					order:4,
+					result:{
+						player:function(player){
+							if(!(player.hasSkillTag('baoShi')||player.hasSkillTag('shuiJing'))) return -1;
+							var num=player.getNengLiangLimit()-player.countNengLiangAll();
+							if(num>=2) return 2;
+							return 0;
+						},
+					},
+				}
 			},
 			_gongJiXingShi:{//攻击获得星石
 				trigger:{player:'useCardToTargeted'},
