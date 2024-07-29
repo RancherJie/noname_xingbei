@@ -1197,11 +1197,17 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						let player=game.players[i];
 						let dialog;
 						if(player.side==true){
+							/*
 							if(event.number==4) dialog=["R1", "R2"];
-							else dialog=["R1", "R2", "R3"];
+							else dialog=["R1", "R2", "R3"];*/
+							if(event.number==4) dialog=["一号位", "四号位"];
+							else dialog=["一号位", "四号位", "五号位"];
 						}else{
+							/*
 							if(event.number==4) dialog=["B1", "B2"];
-							else dialog=["B1", "B2", "B3"];
+							else dialog=["B1", "B2", "B3"];*/
+							if(event.number==4) dialog=["二号位", "三号位"];
+							else dialog=["二号位", "三号位", "六号位"];
 						}
 						choose[game.players[i].playerid]=dialog;
 						
@@ -1365,10 +1371,28 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					},event.videoId);
 					var result=event._vote;
 					for(var i in result){
+						/*
 						if(result[i][0]=='R'){
 							event.red_vote[result[i][1]-1]++;
 						}else{
 							event.blue_vote[result[i][1]-1]++;
+						}*/
+						if(event.number==4){
+							switch(result[i]){
+								case "一号位":event.red_vote[0]++;break;
+								case "四号位":event.red_vote[1]++;break;
+								case "二号位":event.blue_vote[0]++;break;
+								case "三号位":event.blue_vote[1]++;break;
+							}
+						}else{
+							switch(result[i]){
+								case "一号位":event.red_vote[0]++;break;
+								case "四号位":event.red_vote[1]++;break;
+								case "五号位":event.red_vote[2]++;break;
+								case "二号位":event.blue_vote[0]++;break;
+								case "三号位":event.blue_vote[1]++;break;
+								case "六号位":event.blue_vote[2]++;break;
+							}
 						}
 					}
 
