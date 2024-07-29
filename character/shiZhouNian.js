@@ -5342,32 +5342,36 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 content:function(){
                     'step 0'
-                    if(player.side==true){
-                        event.shiQi=game.hongShiQi;
-                    }else{
-                        event.shiQi=game.lanShiQi;
-                    }
+                    player.storage.huanYingXingChen=true;
+                    player.addTempSkill('huanYingXingChen_shiQiXiaJiang');
                     player.damageFaShu(2,player);
                     'step 1'
                     player.chongZhi();
                     'step 2'
-                    if(player.side==true){
-                        if(event.shiQi==game.hongShiQi) event.flag=true;
-                    }else{
-                        if(event.shiQi==game.lanShiQi) event.flag=true;
-                    }
-                    'step 3'
-                    if(event.flag){
+                    if(player.storage.huanYingXingChen){
                         player.chooseTarget('对目标角色造成2点法术伤害③',true).set('ai',function(target){
                             return player.side!=target.side;
                         });
                     }else{
                         event.finish();
                     }
-                    'step 4'
+                    'step 3'
                     game.log(player,'选择了',result.targets[0]);
                     player.line(result.targets[0],'red');
                     result.targets[0].damageFaShu(2,player);
+                },
+                subSkill:{
+                    shiQiXiaJiang:{
+                        trigger:{player:'changeShiQiEnd'},
+                        lastDo:true,
+                        direct:true,
+                        filter:function(event,player){
+                            return event.getParent('damage').source==player&&event.num<0;
+                        },
+                        content:function(){
+                            player.storage.huanYingXingChen=false;
+                        }
+                    },
                 }
             },
             heiAnShuFu:{
