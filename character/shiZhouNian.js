@@ -5411,7 +5411,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 0'
                     player.storage.huanYingXingChen=true;
                     player.addTempSkill('huanYingXingChen_shiQiXiaJiang');
-                    player.damageFaShu(2,player);
+                    player.damage(2,player).set('faShu',true).set('huanYingXingChen',true);
                     'step 1'
                     player.chongZhi();
                     'step 2'
@@ -5433,7 +5433,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         lastDo:true,
                         direct:true,
                         filter:function(event,player){
-                            return event.getParent('damage').source==player&&event.num<0;
+                            return event.getParent('damage').huanYingXingChen==true&&event.num<0;
                         },
                         content:function(){
                             player.storage.huanYingXingChen=false;
