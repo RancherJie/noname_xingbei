@@ -1773,14 +1773,14 @@
 						onclick:function(bool){
 							game.saveConfig('image_background_blur',bool);
 							if(lib.config.image_background_blur){
-								ui.background.style.filter='blur(8px)';
-								ui.background.style.webkitFilter='blur(8px)';
-								ui.background.style.transform='scale(1.05)';
+								ui.background.style.filter='blur(4px)';
+								ui.background.style.webkitFilter='blur(4px)';
+								ui.background.style.opacity = '0.5';
 							}
 							else{
 								ui.background.style.filter='';
 								ui.background.style.webkitFilter='';
-								ui.background.style.transform='';
+								ui.background.style.opacity = '';
 							}
 						},
 					},
@@ -8207,9 +8207,9 @@
 				if(lib.config.image_background&&lib.config.image_background!='default'&&!lib.config.image_background.startsWith('custom_')){
 					ui.background.setBackgroundImage('image/background/'+lib.config.image_background+'.jpg');
 					if(lib.config.image_background_blur){
-						ui.background.style.filter='blur(8px)';
-						ui.background.style.webkitFilter='blur(8px)';
-						ui.background.style.transform='scale(1.05)';
+						ui.background.style.filter='blur(4px)';
+						ui.background.style.webkitFilter='blur(4px)';
+						ui.background.style.opacity = '0.5';
 					}
 				}
 				document.documentElement.style.backgroundImage='';
@@ -8242,9 +8242,9 @@
 							var data = fileLoadedEvent.target.result;
 							ui.background.style.backgroundImage='url('+data+')';
 							if(lib.config.image_background_blur){
-								ui.background.style.filter='blur(8px)';
-								ui.background.style.webkitFilter='blur(8px)';
-								ui.background.style.transform='scale(1.05)';
+								ui.background.style.filter='blur(4px)';
+								ui.background.style.webkitFilter='blur(4px)';
+								ui.background.style.opacity = '0.5';
 							}
 						};
 						fileReader.readAsDataURL(fileToLoad, "UTF-8");
