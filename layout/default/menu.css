@@ -230,17 +230,17 @@
 }
 
 .menubg.charactercard {
-	width: 500px;
-	height: 300px;
-	left: calc(50% - 250px);
-	top: calc(50% - 150px);
+	width: 600px;
+	height: 400px;
+	left: calc(50% - 300px);
+	top: calc(50% - 200px);
 	animation: dialog_start2 0.3s;
 	-webkit-animation: dialog_start2 0.3s;
 }
 
 .menubg.charactercard>.menubutton.large.ava {
 	width: 180px;
-	height: 240px;
+	height: 230px;
 	left: 10px;
 	top: 10px;
 	overflow: hidden;
@@ -257,11 +257,13 @@
 }
 
 .menubg.charactercard>.menubutton.ban {
-	left: 10px;
+	left: -100px;
+	top: 300px;
 }
 
 .menubg.charactercard>.menubutton.fav {
-	left: 105px;
+	left: -100px;
+	top: 350px;
 }
 
 .menubg.charactercard>.ava>.changeskin {
@@ -284,14 +286,18 @@
 }
 
 .menubg.charactercard>.characterskill {
-	left: 191px;
-	padding-left: 9px;
-	padding-right: 10px;
-	width: 290px;
-	top: 125px;
-	height: 50px;
-	white-space: nowrap;
-	overflow-x: scroll;
+	left: 200px;
+	padding: 5px;
+	top: 130px;
+	width: 380px;
+	height: 100px;
+	/*white-space: nowrap;
+	overflow-x: scroll;*/
+	white-space: normal; /* 改为 normal 以允许内容多行显示 */
+	overflow-x: hidden; /* 改为 hidden 以隐藏水平滚动条 */
+	overflow-y: auto; /* 添加 overflow-y 以允许垂直滚动 */
+	border-radius: 4px;
+	box-shadow: rgba(0, 0, 0, 0.2) 0 0 0 1px;
 }
 
 .menubg.charactercard>.characterskill>.menubutton.large {
@@ -383,7 +389,7 @@
 
 .menubg.charactercard .characterintro {
 	left: 200px;
-	width: 280px;
+	width: 380px;
 	height: 105px;
 	padding: 5px;
 	overflow: scroll;
@@ -397,8 +403,11 @@
 }
 
 .menubg.charactercard .characterintro.intro2 {
-	top: auto;
+	top: 250px;
+	left: 10px;
 	bottom: 10px;
+	width: 570px;
+	height: auto;
 }
 
 .menubg.charactercard>.ava>.avatars {
