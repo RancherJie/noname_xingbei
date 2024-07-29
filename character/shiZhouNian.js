@@ -142,6 +142,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         return lib.filter.cardEnabled(card,player,'forceEnable');
 					},str);
 					next.autodelay=true;
+                },
+                check:function(event,player){
+                    var num=player.countCards('h',card=>get.xiBie(card)=='feng'&&get.type(card)=='gongJi');
+                    return num>0
                 }
             },
             shengJian:{
@@ -172,7 +176,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         content:function(){
                             "step 0"
                             var list=[0,1,2,3];
-                            player.chooseControl(list).set('prompt','圣剑：摸X张牌并弃置X张牌').set('ai',function(){return 0;});
+                            player.chooseControl(list).set('prompt','圣剑：摸X张牌并弃置X张牌').set('ai',function(){
+                                var num=player.getHandcardLimit()-player.countCards('h');
+                                if(num>3) num=3;
+                                return num;
+                            });
                             "step 1"
                             if(result.control==0){
                                 event.finish();
@@ -259,6 +267,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 content:function(player){
                     player.removeBiShaShuiJing();
                     player.storage.gongJi++;
+                },
+                check:function(event,player){
+                    return player.storage.zhuDongGongJi==2||(player.countCards('h',card=>get.type(card)=='gongJi')>2&&(player.countNengLiangAll()>=2&& player.storage.zhuDongGongJi==1));
+                },
+                ai:{
+                    shuiJing:true,
                 }
             },
 
