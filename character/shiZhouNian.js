@@ -688,6 +688,15 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             player.removeSkill('diZhiFengYin_xiaoGuo')
                         }
                     },
+                },
+                ai:{
+                    order:4,
+                    result:{
+                        target:function(player,target){
+                            if(target.countCards('h')>3) return -3;
+                            return -1;
+                        }
+                    }
                 }
             },
             shuiZhiFengYin:{
@@ -747,6 +756,15 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             player.removeSkill('shuiZhiFengYin_xiaoGuo')
                         }
                     },
+                },
+                ai:{
+                    order:4,
+                    result:{
+                        target:function(player,target){
+                            if(target.countCards('h')>3) return -3;
+                            return -1;
+                        }
+                    }
                 }
             },
             huoZhiFengYin:{
@@ -806,6 +824,15 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             player.removeSkill('huoZhiFengYin_xiaoGuo')
                         }
                     },
+                },
+                ai:{
+                    order:4,
+                    result:{
+                        target:function(player,target){
+                            if(target.countCards('h')>3) return -3;
+                            return -1;
+                        }
+                    }
                 }
             },
             fengZhiFengYin:{
@@ -865,6 +892,15 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             player.removeSkill('fengZhiFengYin_xiaoGuo')
                         }
                     },
+                },
+                ai:{
+                    order:4,
+                    result:{
+                        target:function(player,target){
+                            if(target.countCards('h')>3) return -3;
+                            return -1;
+                        }
+                    }
                 }
             },
             leiZhiFengYin:{
@@ -924,6 +960,15 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             player.removeSkill('leiZhiFengYin_xiaoGuo')
                         }
                     },
+                },
+                ai:{
+                    order:4,
+                    result:{
+                        target:function(player,target){
+                            if(target.countCards('h')>3) return -3;
+                            return -1;
+                        }
+                    }
                 }
             },
             wuXiShuFu:{
@@ -995,6 +1040,16 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             player.removeSkill('wuXiShuFu_xiaoGuo');
                         },
                     }
+                },
+                ai:{
+                    shuiJing:true,
+                    order:4,
+                    result:{
+                        target:function(player,target){
+                            if(target.countCards('h')>4) return -3;
+                            return -1;
+                        }
+                    }
                 }
             },
             fengYinPoSui:{
@@ -1054,6 +1109,15 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     var index=list.indexOf(card);
                     target.storage.zhongDu.splice(index, 1);
                     player.gain(card);
+                },
+                ai:{
+                    shuiJing:true,
+                    order:3.4,
+                    result:{
+                        target:function(player,target){
+                            return 1;
+                        }
+                    }
                 }
             },
 
