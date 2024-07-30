@@ -109,6 +109,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             "step 0"
                             var list=[0,1,2,3];
                             player.chooseControl(list).set('prompt','圣剑：摸X张牌并弃置X张牌').set('ai',function(){
+                                var player=_status.event.player;
                                 var num=player.getHandcardLimit()-player.countCards('h');
                                 if(num>3) num=3;
                                 return num;
@@ -308,6 +309,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 content:function(){
                     'step 0'
                     var next=player.chooseTarget().set('ai',function(target){
+                        var player=_status.event.player;
 						if(target.side==player.side&&target.zhiLiao<target.getZhiLiaoLimit()){
                             return 1;
                         }else if(target.side==player.side&&target.zhiLiao>=target.getZhiLiaoLimit()){
@@ -526,6 +528,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.removeBiShaBaoShi();
                     var list=['是','否'];
                     player.chooseControl(list).set('prompt','潜行：是否摸一张牌').set('ai',function(){
+                        var player=_status.event.player;
                         if(player.countCards('h')+3<=player.getHandcardLimit()) return 0;
                         return 1;
                     });
@@ -1243,6 +1246,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         content:function(){
                             'step 0'
                             player.chooseTarget('天使羁绊：选择一名角色+1[治疗]',true).set('ai',function(target){
+                                var player=_status.event.player;
                                 if(target.side==player.side&&target.zhiLiao<target.getZhiLiaoLimit()){
                                     return 2;
                                 }else if(target.side==player.side&&target.zhiLiao==target.getZhiLiaoLimit()){
@@ -1269,6 +1273,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         content:function(){
                             'step 0'
                             player.chooseTarget('天使羁绊：选择一名角色+1[治疗]',true).set('ai',function(target){
+                                var player=_status.event.player;
                                 if(target.side==player.side&&target.zhiLiao<target.getZhiLiaoLimit()){
                                     return 2;
                                 }else if(target.side==player.side&&target.zhiLiao==target.getZhiLiaoLimit()){
@@ -2449,7 +2454,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     for(var i=0;i<=num;i++){
                         list.push(i);
                     }
-                    player.chooseControl(list).set('prompt',"移除X点<span class='hong'>【</span>新月<span class='hong'>】</span>，你+1点<span class='lan'>【</span>石化<span class='lan'>】</span>，弃1张牌，对目标对手造成(X+1)点法术伤害③").set('ai',function(){return list.length-1;});
+                    player.chooseControl(list).set('prompt',"移除X点<span class='hong'>【</span>新月<span class='hong'>】</span>，你+1点<span class='lan'>【</span>石化<span class='lan'>】</span>，弃1张牌，对目标对手造成(X+1)点法术伤害③").set('ai',function(){return _status.event.num;}).set('num',list.length-1);
 					"step 7"
 					var num=result.control;
                     event.num=num;
@@ -3033,8 +3038,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         }
                     }
                     player.chooseControl(list).set('prompt','选择移除的[治疗]数量').set('ai',function(){
-                        return list.length-1;
-                    });
+                        return _status.event.num;
+                    }).set('num',list.length-1);
                     'step 2'
                     var zhiLiaonum=result.control;
 					if(zhiLiaonum>0){
@@ -4494,7 +4499,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 0'
                     var num=trigger.parent.num;
                     var list=[0,1];
-                    player.chooseControl(list).set('prompt','使用的治疗数量，目前伤害量'+num).set('ai',function(){return list.length-1;});
+                    player.chooseControl(list).set('prompt','使用的治疗数量，目前伤害量'+num).set('ai',function(){return _status.event.num;}).set('num',list.length-1);
                     'step 1'
                     var zhiLiaonum=result.control;
 					if(zhiLiaonum>0){
@@ -5639,6 +5644,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 2'
                     if(player.storage.huanYingXingChen){
                         player.chooseTarget('对目标角色造成2点法术伤害③',true).set('ai',function(target){
+                            var player=_status.event.player;
                             return player.side!=target.side;
                         });
                     }else{
@@ -7344,6 +7350,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         });
                         next.set('targetx',targetx);
                         next.set('ai',function(target){
+                            var player=_status.event.player;
                             return target.side!=player.side;
                         });
                     }
@@ -8326,6 +8333,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     event.num--;
                     var next=player.chooseTarget('对目标角色造成1点法术伤害',true);
                     next.set('ai',function(target){
+                        var player=_status.event.player;
                         return target.side!=player.side;
                     });
                     'step 3'
@@ -8443,7 +8451,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                     'step 4'
                     var next=player.chooseTarget("对目标角色造成1点法术伤害③，该伤害不能用[治疗]抵御",true);
-                    next.set('ai',function(target){return target.side!=player.side;})
+                    next.set('ai',function(target){
+                        var player=_status.event.player;
+                        return target.side!=player.side;
+                    })
                     'step 5'
                     game.log(player,'选择了',result.targets[0]);
                     player.line(result.targets[0],'red');

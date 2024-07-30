@@ -2182,7 +2182,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
                         if(i>num) break;
                         list.push(i);
                     }
-                    player.chooseControl(list).set('prompt','使用的[治疗]数量，目前伤害量'+num).set('ai',function(){return list.length-1;});
+                    player.chooseControl(list).set('prompt','使用的[治疗]数量，目前伤害量'+num).set('ai',function(){return _status.event.num;}).set('num',list.length-1);
 					"step 1"
 					var zhiLiaonum=result.control;
 					if(zhiLiaonum>0){
