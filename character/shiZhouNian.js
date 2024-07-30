@@ -1727,6 +1727,16 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 1'
                     player.changeZhiLiao(1);
                     player.addNengLiang('b');
+                },
+                ai:{
+                    order:4,
+                    result:{
+                        player:function(player, target){
+                            if(player.isLinked()) return -1;
+                            if(player.countCards('h')+2>player.getHandcardLimit()) return -1;
+                            else return 1;
+                        },
+                    }
                 }
             },
             hePingXingZhe:{
@@ -1845,6 +1855,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 5'
                     event.player=player;
                     event.trigger('yingLingZhaoHuan')
+                },
+                ai:{
+                    shuiJing:true,
+
                 }
             },
 
