@@ -2592,13 +2592,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                 },
                 ai:{
-					damage:true,
 					order:function(item,player){
-						return 2.5+player.countZhiShiWu('shenPan');
+						return 1.5+player.countZhiShiWu('shenPan');
 					},
 					result:{
 						target:function(player,target){
-							return get.damageEffect(target,player);
+							return get.damageEffect(target,player.countZhiShiWu('shenPan'));
 						}
 					},
 				},
@@ -2645,6 +2644,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             player.addZhiShiWu('shenPan',1);
                         }
                     }
+                },
+                ai:{
+                    baoShi:true,
                 }
             },
             panJueTianPing:{
@@ -2659,7 +2661,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 1'
                     player.addZhiShiWu('shenPan',1);
                     var list=['弃掉所有手牌','将你的手牌补到上限[强制]，我方【战绩区】+1[宝石]'];
-                    player.chooseControl().set('prompt','判决天平：选择一项').set('choiceList',list);
+                    player.chooseControl().set('prompt','判决天平：选择一项').set('choiceList',list).set('ai',function(){
+                        var player=_status.event.player;
+                        if(player.countCards('h')>3) return '选项一';
+                        return '选项二';
+                    });
                     'step 2'
                     if(result.control=='选项一'){
                         player.discard(player.getCards());
@@ -2668,6 +2674,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         var num=player.getHandcardLimit();
                         player.drawTo(num);
                         player.addZhanJi('r',1);
+                    }
+                },
+                ai:{
+                    shuiJing:true,
+                    order:3.6,
+                    result:{
+                        player:1,
                     }
                 }
             },
