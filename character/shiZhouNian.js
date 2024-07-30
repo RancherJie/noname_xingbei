@@ -1604,6 +1604,16 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             player.chooseToDiscard(1,true);
                         }
                     }
+                },
+                ai:{
+                    order:3.6,
+                    result:{
+                        target:function(player,target){
+                            var chaZhi=target.getHandcardLimit()-target.countCards('h');
+                            if(chaZhi<=1) return -2;
+                            else return -0.1;
+                        }
+                    }
                 }
             },
             moDanZhangWo:{
@@ -1665,6 +1675,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         return get.xiBie(card)=='di'||get.xiBie(card)=='huo';
                     });
 				},
+                ai:{
+                    order:3.5,
+                }
             },
             huiMieFengBao:{
                 type:'faShu',
@@ -1682,6 +1695,15 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 content:function(){
                     var next=target.damage(2,player);
                     next.faShu=true;
+                },
+                ai:{
+                    baoShi:true,
+                    order:3.8,
+                    result:{
+                        target:function(player,target){
+                            return get.damageEffect(target,player,2);
+                        }
+                    }
                 }
             },
 
