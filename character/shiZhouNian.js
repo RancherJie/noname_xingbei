@@ -3316,6 +3316,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.draw(1);
                     'step 2'
                     player.chooseToDiscard('h',true,1);
+                },
+                check:function(event,player){
+                    var num=player.getHandcardLimit()-player.countCards('h');
+                    return num>0;
                 }
             },
             jingLingMiYi:{
@@ -3350,16 +3354,21 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             return true;
                         },
                         content:function(){
-                           'step 0'
-                           player.chongZhi();
-                           player.unmarkSkill('zhuFu');
-                           player.chooseTarget('对目标角色造成2点法术伤害',true);
-                           'step 1'
-                           game.log(player,'选择了',result.targets[0]);
-                           player.line(result.targets[0],'red');
-                           result.targets[0].damageFaShu(2,player); 
+                            'step 0'
+                            player.chongZhi();
+                            player.unmarkSkill('zhuFu');
+                            player.chooseTarget('对目标角色造成2点法术伤害',true).set('ai',function(target){
+                                return get.damageEffect(target,2);
+                            });
+                            'step 1'
+                            game.log(player,'选择了',result.targets[0]);
+                            player.line(result.targets[0],'red');
+                            result.targets[0].damageFaShu(2,player); 
                         }
                     }
+                },
+                ai:{
+                    baoShi:true,
                 }
             },
             chongWuQiangHua:{
@@ -3371,7 +3380,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 0'
                     player.removeBiShaShuiJing();
                     'step 1'
-                    player.chooseTarget('目标角色摸1张牌[强制]，弃1张牌',true);
+                    player.chooseTarget('目标角色摸1张牌[强制]，弃1张牌',true).set('ai',function(target){
+                        var player=_status.event.player;
+                        var num=target.countCards('h')-target.getHandcardLimit();
+                        return target.side!=player.side&&num>=0;
+                    });
                     'step 2'
                     game.log(player,'选择了',result.targets[0]);
                     player.line(result.targets[0],'green');
@@ -3379,6 +3392,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     result.targets[0].chooseToDiscard('h',true,1);
                     'step 3'
                     trigger.finish();
+                },
+                check:function(event,player){
+                    var target=game.filterPlayer(function(current){
+                        var num=current.countCards('h')-current.getHandcardLimit();
+                        return current.side!=player.side&&num>=0;
+                    })
+                    return target.length>0;
                 }
             },
             zhuFu:{
