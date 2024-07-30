@@ -1309,11 +1309,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                     return false;
                 },
+                direct:true,
                 content:function(){
                     'step 0'
-                    player.removeBiShaShuiJing();
-                    'step 1'
-                    player.chooseTarget('天使之歌：选择1个有基础效果的目标角色',function(card,player,target){
+                    var next=player.chooseTarget(function(card,player,target){
                         for(var xiaoGuoList in game.jiChuXiaoGuo){
                             for(var xiaoGuo of game.jiChuXiaoGuo[xiaoGuoList]){
                                 if(target.hasExpansions(xiaoGuo)){
@@ -1321,13 +1320,20 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                 }
                             }
                         }
-                    },true);
-                    'step 2'
+                    });
+                    next.set('ai',function(target){
+                        return target.side==_status.event.player.side;
+                    });
+                    next.set('prompt',get.prompt('tianShiZhiGe'));
+                    next.set('prompt2',lib.translate.tianShiZhiGe_info);
+                    'step 1'
                     if(result.bool){
                         var target=result.targets[0];
                         event.target=target;
-                        game.log(player,'选择了',target);
+                        player.logSkill(event.name,result.targets);
                         player.line(target,'blue');
+                        player.removeBiShaShuiJing();
+
                         var list=[];
                         for(var xiaoGuoList in game.jiChuXiaoGuo){
                             for(var xiaoGuo of game.jiChuXiaoGuo[xiaoGuoList]){
@@ -1337,8 +1343,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             }
                         }
                         player.chooseControl(list).set('prompt','选择要移除的基础效果');
+                    }else{
+                        event.finish();
                     }
-                    'step 3'
+                    'step 2'
                     if(result.control=='_zhongDu'){
                         player.chooseCardButton(target.getExpansions('_zhongDu'),true,'选择要移除的中毒')
                     }else{
@@ -1349,7 +1357,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         event.trigger('yiChuJiChuXiaoGuo');
                         event.finish();
                     }
-                    'step 4'
+                    'step 3'
                     var card=result.links[0];
                     var list=target.getExpansions('_zhongDu');
                     var index=list.indexOf(card);
