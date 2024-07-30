@@ -300,7 +300,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 
             //圣女
             bingShuangDaoYan:{
-                forced:true,
                 trigger:{player:'useCard'},
                 filter:function(event){
                     return get.xiBie(event.card)=='shui'||get.name(event.card)=='shengGuang';
@@ -350,7 +349,15 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 prepare:'useCard',
                 content:function(){
                     target.changeZhiLiao(2);
-                }
+                },
+                ai: {
+					result: {
+						target:function(player,target){
+                            return get.zhiLiaoEffect(target,2);
+                        },
+					},
+					order: 3.5,
+				},
             },
             zhiYuZhiGuang:{
                 type:'faShu',
@@ -373,7 +380,15 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     if(target){
                         target.changeZhiLiao(1);
                     }
-                }
+                },
+                ai: {
+					result: {
+						target:function(player,target){
+                            return get.zhiLiaoEffect(target,1);
+                        },
+					},
+					order: 3.5,
+				},
             },
             lianMin:{
                 type:'qiDong',
@@ -390,6 +405,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     maxHandcardFinal:function(player,num){
                         if(player.isLinked()) return 7
                     }
+                },
+                check:function(event,player){
+                    return !player.isLinked();
+                },
+                ai:{
+                    baoShi:true,
                 }
             },
             shengLiao:{
@@ -432,7 +453,16 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 contentAfter:function(){
                     player.storage.shengLiao=0;
                     player.chooseToUse();
-                }
+                },
+                ai: {
+                    shuiJing:true,
+					result: {
+						target:function(player,target){
+                            return get.zhiLiaoEffect(target,1);
+                        },
+					},
+					order: 5,
+				},
             },
 
             //暗杀者
