@@ -3007,6 +3007,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 contentAfter:function(){
                     player.storage.gongJi++;
+                },
+                ai:{
+                    order:3.6,
+                    result:{
+                        target:1,
+                    }
                 }
             },
             chengJie:{
@@ -3039,6 +3045,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 contentAfter:function(){
                     player.storage.gongJi++;
+                },
+                ai:{
+                    order:3.8,
+                    result:{
+                        target:-1,
+                        player:2,
+                    }
                 }
             },
             shengJi:{
@@ -3066,7 +3079,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 subSkill:{
                     x:{
                         trigger:{player:'useCardToPlayer'},
-                        forced:true,
+                        direct:true,
                         content:function(){
                             'step 0'
                             trigger.parent.canYingZhan=false;
@@ -3074,8 +3087,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             player.removeSkill('tianQiang_x')
                         }
                     },
+                },
+                check:function(event,player){
+                    var num=Math.random();
+                    return num>0.25;
                 }
-
             },
             diQiang:{
                 trigger:{player:'useCardToTargeted'},
@@ -3104,6 +3120,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						trigger.getParent().baseDamage+=zhiLiaonum;
 						player.changeZhiLiao(-zhiLiaonum);
 					}
+                },
+                check:function(event,player){
+                    return player.zhiLiao>=1;
                 }
             },
             shengGuangQiYu:{
@@ -3122,6 +3141,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.storage.gongJi++;
                 },
                 group:'shengGuangQiYu_tianQiang',
+                ai:{
+                    baoShi:true,
+                    order:4,
+                    result:{
+                        player:2.5,
+                    }
+                }
             },
             shengGuangQiYu_tianQiang:{
                 trigger:{player:'phaseEnd'},
