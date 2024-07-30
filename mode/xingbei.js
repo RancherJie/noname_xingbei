@@ -2775,15 +2775,19 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						}
 						return range;
 					},
-					check:function(button,player){
+					check:function(button){
 						var player=_status.event.player;
-						if(button.link=='宝石'){
-							if(player.hasSkillTag('baoShi')) return 5;
-							return 2;
-						}else{
-							if(player.hasSkillTag('shuiJing')) return 5;
-							return 2;
+						if(player.hasSkillTag('baoShi')&&!player.hasSkillTag('shuiJing')){
+							if(button.link=='宝石') return 5;
+							else return -1;
 						}
+						if(player.hasSkillTag('shuiJing')&&!player.hasSkillTag('baoShi')){
+							if(button.link=='水晶') return 5;
+							else return 2;
+						}
+						//既有水晶也有宝石
+						return 2;
+
 					}
 				},
 				ai:{
