@@ -2324,7 +2324,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     if(player.zhiLiao>0){
                         choices.push("选项二");
                     }
-                    player.chooseControl(choices).set('prompt',"月之轮回：选择以下一项发动").set('choiceList',choiceList);
+                    player.chooseControl(choices).set('prompt',"月之轮回：选择以下一项发动").set('choiceList',choiceList).set('ai',function(){
+                        var player=_status.event.player;
+                        if(player.zhiLiao>0) return "选项二";
+                        if(player.getExpansions('anYue').length>0) return "选项一";
+                    });
                     'step 1'
                     if(result.control=='选项一'){
                         event.goto(2);
@@ -2399,6 +2403,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                     'step 3'
                     trigger.parent.baseDamage+=event.num;
+                },
+                ai:{
+                    shuiJing:true,
                 }
             },
             cangBaiZhiYue:{
@@ -2416,7 +2423,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     if(player.countMark('shiHua')>=3){
                         choices.unshift('选项一');
                     }
-                    player.chooseControl(choices).set('prompt','苍白之月：选择以下一项发动').set('choiceList',choiceList);
+                    player.chooseControl(choices).set('prompt','苍白之月：选择以下一项发动').set('choiceList',choiceList).set('ai',function(){
+                        var player=_status.event.player;
+                        if(player.countZhiShiWu('shiHua')>=3) return "选项一";
+                        return "选项二";
+                    });
                     'step 2'
                     if(result.control=='选项一'){
                         event.goto(3);
@@ -2460,7 +2471,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         result.targets[0].damage(event.num+1,player).set('faShu',true);
                     }
                 },
-                 
+                ai:{
+                    baoShi:true,
+                    order:4,
+                    result:{
+                        player:1,
+                    }
+                }
             },
             cangBaiZhiYue1:{
                 trigger:{player:'useCardToPlayer'},
