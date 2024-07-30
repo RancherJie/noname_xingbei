@@ -1890,6 +1890,14 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     target.damage(2,player).set('faShu',true).set('yuanSuDianRan',true);
                     'step 2'
                     player.storage.faShu++;
+                },
+                ai:{
+                    order:3.5,
+                    result:{
+                        target:function(player,target){
+                            return get.damageEffect(target,2);
+                        }
+                    }
                 }
             },
             yunShi:{
@@ -1934,6 +1942,14 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 2'
                     player.faShu('陨石：[法术行动]');
                 },
+                ai:{
+                    order:3.8,
+                    result:{
+                        target:function(player,target){
+                            return get.damageEffect(target);
+                        }
+                    }
+                }
             },
             bingDong:{
                 type:'faShu',
@@ -1975,12 +1991,22 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 1'
                     target.damageFaShu(event.num,player);
                     'step 2'
-                    player.chooseTarget(1,'冰冻：选择1名角色+1[治疗]',true);
+                    player.chooseTarget(1,'冰冻：选择1名角色+1[治疗]',true).set('ai',function(target){
+                        return get.damageEffect(target);
+                    });
                     'step 3'
                     if(result.bool){
                         game.log(player,'选择了',result.targets[0]);
                         player.line(result.targets[0],'blue');
                         result.targets[0].changeZhiLiao(1);
+                    }
+                },
+                ai:{
+                    order:3.8,
+                    result:{
+                        target:function(player,target){
+                            return get.damageEffect(target);
+                        }
                     }
                 }
             },
@@ -2027,6 +2053,14 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                     'step 1'
                     target.damageFaShu(event.num,player);
+                },
+                ai:{
+                    order:3.8,
+                    result:{
+                        target:function(player,target){
+                            return get.damageEffect(target,2);
+                        }
+                    }
                 }
             },
             fengRen:{
@@ -2070,6 +2104,14 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     target.damageFaShu(event.num,player);
                     'step 2'
                     player.gongJi('风刃：[攻击行动]');
+                },
+                ai:{
+                    order:3.8,
+                    result:{
+                        target:function(player,target){
+                            return get.damageEffect(target);
+                        }
+                    }
                 }
             },
             leiJi:{
@@ -2121,6 +2163,14 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             player.changeZhanJi('r',1);
                         }
                     }
+                },
+                ai:{
+                    order:3.8,
+                    result:{
+                        target:function(player,target){
+                            return get.damageEffect(target);
+                        }
+                    }
                 }
             },
             yueGuang:{
@@ -2140,6 +2190,17 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 2'
                     var next=target.damage(event.num,player);
                     next.faShu=true;
+                },
+                ai:{
+                    baoShi:true,
+                    order:function(item,player){
+                        return 3.4+player.countNengLiangAll()-1;
+                    },
+                    result:{
+                        target:function(player,target){
+                            return get.damageEffect(target,2);
+                        }
+                    }
                 }
             },
             yuanSu:{
