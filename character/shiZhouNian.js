@@ -525,7 +525,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 0'
                     player.removeBiShaBaoShi();
                     var list=['是','否'];
-                    player.chooseControl(list).set('prompt','潜行：是否摸一张牌');
+                    player.chooseControl(list).set('prompt','潜行：是否摸一张牌').set('ai',function(){
+                        if(player.countCards('h')+3<=player.getHandcardLimit()) return 0;
+                        return 1;
+                    });
                     'step 1'
                     if(result.control=='是'){
                         player.draw();
@@ -539,12 +542,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					}
                     'step 4'
                     player.addSkill('qianXing2');
-                },
-                ai:{
-                    order:10,
-                    result:{
-                        player:5,
-                    }
                 },
                 mod:{
                     maxHandcardBase:function(player,num){
@@ -570,7 +567,14 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             player.removeSkill('qianXing2');
                         }
                     }
-                }
+                },
+                ai:{
+                    baoShi:true,
+                },
+                check:function(event,player){
+                    if(player.countNengLiangAll()<=1) return false;
+                    return true;
+                },
             },
             qianXing2:{
                 group:['qianXing2_shangHai','qianXing2_wuFaYingZhan'],
