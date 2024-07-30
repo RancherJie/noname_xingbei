@@ -2763,7 +2763,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.useCard(card,target).set('action',true);
                     event.finish();
                 },
-                
+                ai:{
+                    order:3.7,
+                    result:{
+                        target:-1,
+                    }
+                }
             },
             qiangYun:{
                 trigger:{player:'useSkill'},
@@ -2820,6 +2825,20 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     ]);
                     next.set('forced',true);
                     next.set('selectButton',[1,num]);
+                    next.set('ai',function(button){
+                        var player=_status.event.target;
+						if(player.hasSkillTag('baoShi')&&!player.hasSkillTag('shuiJing')){
+							if(button.link=='宝石') return 5;
+							else return -1;
+						}
+						if(player.hasSkillTag('shuiJing')&&!player.hasSkillTag('baoShi')){
+							if(button.link=='水晶') return 5;
+							else return 2;
+						}
+						//既有水晶也有宝石
+						return 2;
+                    });
+                    next.set('target',target);
                     'step 1'
                     for(var i=0;i<result.links.length;i++){
 						if(result.links[i]=='宝石'){
@@ -2835,6 +2854,17 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         if(player.canBiShaShuiJing()){
                             player.removeBiShaShuiJing();
                         }
+                    }
+                },
+                ai:{
+                    order:3.6,
+                    result:{
+                        target:function(player,target){
+                            if(!(target.hasSkillTag('baoShi')||target.hasSkillTag('shuiJing'))) return -1;
+							var num=target.getNengLiangLimit()-target.countNengLiangAll();
+							if(num>=2) return 2;
+							return 0;
+                        },
                     }
                 }
             },
@@ -2873,6 +2903,19 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         }
 						return next;
 					},
+                    check:function(button){
+                        var player=_status.event.player;
+                        if(button.link=='huan'){
+                            if(player.side==true){
+                                return game.lanZhanJi.includes('水晶');
+                            }else if(player.side==false){
+                                return game.hongZhanJi.includes('水晶');
+                            }
+                        }
+                        if(button.link=='tou'){
+                            return Math.random()*3;
+                        }
+                    }
                 },
                 subSkill:{
                     tou:{
@@ -2913,6 +2956,21 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             'step 3'
                             player.storage.all++;
                         }
+                    }
+                },
+                ai:{
+                    shuiJing:true,
+                    order:3.8,
+                    result:{
+                        player:function(player){
+                            if(player.side==true){
+                                if(game.hongZhanJi.includes('水晶')||game.lanZhanJi.includes('宝石')) return 1;
+                                else return 0;
+                            }else{
+                                if(game.lanZhanJi.includes('水晶')||game.hongZhanJi.includes('宝石')) return 1;
+                                else return 0;
+                            }
+                        },
                     }
                 }
 
