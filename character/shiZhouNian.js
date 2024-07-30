@@ -1222,6 +1222,15 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                     'step 1'
                     target.give(result.cards,player,'give');
+                },
+                ai:{
+                    order:3,
+                    result:{
+                        target:function(player,target){
+                            return 1;
+                        },
+                        player:0,
+                    }
                 }
             },
             tianShiJiBan:{
@@ -1291,6 +1300,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         return card.hasNature('tianShiZhiQiang');
                     });
 				},
+                ai:{
+                    order:4,
+                }
             },
             tianShiZhiGe:{
                 trigger:{player:'phaseBegin'},
@@ -1322,7 +1334,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         }
                     });
                     next.set('ai',function(target){
-                        return target.side==_status.event.player.side;
+                        return false;
                     });
                     next.set('prompt',get.prompt('tianShiZhiGe'));
                     next.set('prompt2',lib.translate.tianShiZhiGe_info);
@@ -1415,6 +1427,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }else{
                         event.finish();
                     }
+                },
+                ai:{
+                    shuiJing:true,
                 }
             },
             
