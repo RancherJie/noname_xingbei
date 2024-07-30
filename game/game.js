@@ -60170,6 +60170,7 @@
 			}
 			return final;
 		},
+		/*
 		damageEffect:function(target,player,viewer,nature){
 			if(get.itemtype(nature)=='natures'){
 				var natures=get.natureList(nature);
@@ -60194,6 +60195,12 @@
 			var eff=get.effect(target,{name:name},player,viewer);
 			if(eff>0&&target.zhiLiao>0) return eff/1.3;
 			return eff;
+		},*/
+		damageEffect:function(target,player,num){
+			if(!num) num=2;
+			var chaZhi=target.getHandcardLimit()-target.countCards('h');
+			if(chaZhi<=num) return -2;
+			else return -0.1;
 		},
 		recoverEffect:function(target,player,viewer){
 			if(target.hp==target.maxHp) return 0;
