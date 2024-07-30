@@ -1498,6 +1498,15 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 useCard:true,
                 content:function(){
                     target.damageFaShu(2,player);
+                },
+                ai:{
+                    order:3.6,
+                    result:{
+                        target:function(player,target){
+                            if(target.countCards('h')+2>target.getHandcardLimit()) return -1;
+                            return -0.1;
+                        }
+                    }
                 }
             },
             jingZhunSheJi:{
@@ -1507,6 +1516,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 content:function(){
                     player.addTempSkill('jingZhunSheJi2',{player:['useCardBefore','phaseEnd']});
+                },
+                check:function(event,player){
+                    return event.targets[0].countCards('h')>3;
                 }
             },
             jingZhunSheJi2:{
@@ -1533,6 +1545,18 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 1'
                     target.drawTo(5);
                     player.gongJi('狙击：[攻击行动]');
+                },
+                ai:{
+                    shuiJing:true,
+                    order:4,
+                    result:{
+                        target:function(player,target){
+                            var num=target.countCards('h');
+                            if(target.getHandcardLimit()<5) return -5;
+                            if(num>=5) return 0;
+                            return -0.1;
+                        }
+                    }
                 }
             },
             
