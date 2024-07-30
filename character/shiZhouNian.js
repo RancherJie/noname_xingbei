@@ -1110,6 +1110,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     target.storage.zhongDu.splice(index, 1);
                     player.gain(card);
                 },
+                /*
                 ai:{
                     shuiJing:true,
                     order:3.4,
@@ -1118,7 +1119,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             return 1;
                         }
                     }
-                }
+                }*/
             },
 
             //天使
