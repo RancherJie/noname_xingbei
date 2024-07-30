@@ -20854,7 +20854,11 @@
 					var hp=this.node.hp;
 					hp.style.transition='none';
 					this.hp=this.zhiLiao;
-					this.maxHp=this.getZhiLiaoLimit();
+					if(this.hp>this.maxHp){
+						this.maxHp=this.hp;
+					}else{
+						this.maxHp=this.getZhiLiaoLimit();
+					}
 					game.broadcast(function(player,hp,maxHp,zhiLiao){
 						player.hp=hp;
 						player.maxHp=maxHp;
