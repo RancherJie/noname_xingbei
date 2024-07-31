@@ -2711,7 +2711,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					}
 				},
 				ai:{
-					order:7,
+					order:7.5,
 					result:{
 						player:function(player){
                             if(player.side){
