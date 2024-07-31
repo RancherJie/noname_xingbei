@@ -6554,7 +6554,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                    'step 0'
                     player.removeBiShaShuiJing();
                     'step 1'
-                    player.chooseControl(['是','否']).set('prompt','是否摸1张牌');
+                    player.chooseControl(['是','否']).set('prompt','是否摸1张牌').set("ai",function(){
+                        return '否'
+                    });
                     'step 2'
                     if(result.control=='是'){
                         player.draw();
@@ -6605,6 +6607,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }else{
                         player.addZhiShiWu('lingGan');
                     }
+                },
+                ai:{
+                    shuiJing:true,
                 }
             },
             jiAngKuangXiangQu:{},
@@ -6672,7 +6677,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             if(player.countNengLiangAll()<player.getNengLiangLimit()&&xingShi.length>0){
                                 list.unshift('选项一');
                             }
-                            var next=player.chooseControl(list).set('choiceList',choiceList);
+                            var next=player.chooseControl(list).set('choiceList',choiceList).set("ai",function(){
+                                var num=Math.random();
+                                if(num<0.5) return '选项一';
+                                return '选项二';
+                            });
                             'step 1'
                             if(result.control=='选项一'){
                                 event.goto(2);
