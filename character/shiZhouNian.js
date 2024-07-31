@@ -5754,6 +5754,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         }
                     }
                 },
+                ai:{
+                    order:3.7,
+                    result:{
+                        player:1,
+                    }
+                }
             },
             duoChongSheJi:{
                 trigger:{player:'useCardAfter'},
@@ -5857,6 +5863,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 9'
                     trigger.moGuanChongJi=false;
                     trigger.leiGuangSanShe=false;
+                },
+                check:function(event,player){
+                    if(player.countNengLiang('r')>0) return false;
+                    return true;
+                },
+                ai:{
+                    shuiJing:true,
                 }
             },
             moYan:{
@@ -5870,7 +5883,14 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.removeBiShaBaoShi();
                     'step 1'
                     var choiceList=['目标角色弃1张牌','你摸3张牌【强制】'];
-                    player.chooseControl().set('prompt','魔眼').set('choiceList',choiceList);
+                    player.chooseControl().set('prompt','魔眼').set('choiceList',choiceList).set('ai',function(){
+                        var player=_status.event.player;
+                        if(player.countCards('h')<2){
+                            return '选项二'
+                        }else{
+                            return '选项一'
+                        }
+                    });
                     'step 2'
                     if(result.control=='选项一'){
                         event.goto(3);
@@ -5892,6 +5912,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             return false;
                         }
                         return true;
+                    }).set('ai',function(target){
+                        return Math.random();
                     });
                     'step 4'
                     game.log(player,'选择了',result.targets[0]);
@@ -5921,6 +5943,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                     'step 10'
                     player.addNengLiang('b',1);
+                },
+                ai:{
+                    baoShi:true,
                 }
             },
             chongNengPai:{
