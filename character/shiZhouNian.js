@@ -4353,6 +4353,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.chongZhi();
                     'step 2'
                     player.storage.all++;
+                },
+                check:function(event,player){
+                    var num=Math.random();
+                    return num>0.2;
+                },
+                ai:{
+                    shuiJing:true,
                 }
                 
             },
@@ -4381,6 +4388,23 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.damageFaShu(4,player);
                     'step 1'
                     target.damageFaShu(3,player);
+                },
+                ai:{
+                    shuiJing:true,
+                    order:function(item,player){
+                        var num=3.1;
+                        if(player.isLinked()) num+=2;
+                        return num;
+                    },
+                    result:{
+                        target:function(player,target){
+                            return get.damageEffect(target,3);
+                        },
+                        player:function(player){
+                            if(player.isLinked()) return 0;
+                            else return -1;
+                        },
+                    }
                 }
             },
             xueYin:{
