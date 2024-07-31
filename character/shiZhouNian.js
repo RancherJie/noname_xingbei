@@ -2695,7 +2695,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     content:'mark',
                     max:4,
                 },
-                markimage:'image/card/lan.png',
+                markimage:'image/card/hong.png',
             },
 
             //冒险家
