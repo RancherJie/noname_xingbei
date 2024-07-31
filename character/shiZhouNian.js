@@ -7387,6 +7387,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             }
                             var next=player.chooseControl(list);
                             next.set('prompt','是否移除X点[治疗]，目标队友弃X张牌');
+                            next.set('ai',function(){
+                                return 'cancel2';
+                            });
                             'step 1'
                             if(result.control=='cancel2'){
                                 event.finish();
@@ -7401,6 +7404,14 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             game.log(player,'选择了',result.targets[0]);
                             player.line(result.targets[0],'green');
                             result.targets[0].chooseToDiscard('h',true,event.num);
+                        }
+                    }
+                },
+                ai:{
+                    order:5.5,
+                    result:{
+                        target:function(player,target){
+                            return get.damageEffect(target,2);
                         }
                     }
                 }
@@ -7466,6 +7477,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             }
                         }
                     }
+                },
+                ai:{
+                    order:7,
+                    result:{
+                        player:1,
+                    }
                 }
             },
             shengGuangBaoLie:{
@@ -7508,7 +7525,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             return;
                         }
                         
-                    }
+                    },
                 },
                 subSkill:{
                     1:{
@@ -7528,6 +7545,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             player.addZhiShiWu('xinYang');
                             'step 3'
                             target.changeZhiLiao(1);
+                        },
+                        ai:{
+                            result:{
+                                target:function(target,player){
+                                    return get.zhiLiaoEffect(target,1);
+                                }
+                            }
                         }
                     },
                     2:{
@@ -7574,6 +7598,14 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             }
                         }
                     }
+                },
+                ai:{
+                    order:function(item,player){
+                        return 10-player.countCards('h');
+                    },
+                    result:{
+                        player:1,
+                    }
                 }
             },
             liuXingShengDan:{
@@ -7600,7 +7632,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                     player.chooseTarget(true,function(card,player,target){
                         return target.side==player.side;
-                    }).set('prompt','我方目标角色+1[治疗]');
+                    }).set('prompt','我方目标角色+1[治疗]').set('ai',function(target){
+                        return get.damageEffect(target,1);
+                    });
                     'step 2'
                     game.log(player,'选择了',result.targets[0]);
                     player.line(result.targets[0],'blue');
@@ -7651,7 +7685,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.changeXingBei(1);
                     var choiceList=['红方士气设置为蓝方士气','蓝方士气设置为红方士气'];
                     var list=['选项一','选项二']
-                    player.chooseControl().set('choiceList',choiceList);
+                    player.chooseControl().set('choiceList',choiceList).set('ai',function(){
+                        var num=Math.random();
+                        if(num<0.5) return '选项一';
+                        else return '选项二';
+                    });
                     'step 1'
                     if(result.control=='选项一'){
                         var num=game.lanShiQi-game.hongShiQi;
@@ -7659,6 +7697,19 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }else{
                         var num=game.hongShiQi-game.lanShiQi;
                         game.changeShiQi(num,false);
+                    }
+                },
+                ai:{
+                    order:function(item,player){
+                        if(player.side==true){
+                            if(game.hongShiQi<game.lanShiQi) return 10;
+                        }else{
+                            if(game.lanShiQi<game.hongShiQi) return 10;
+                        }
+                        return 2;
+                    },
+                    result:{
+                        player:1,
                     }
                 }
             },
@@ -7676,7 +7727,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     if(player.canBiShaBaoShi()){
                         list.push('选项二');
                     }
-                    player.chooseControl(list).set('choiceList',choiceList);
+                    player.chooseControl(list).set('choiceList',choiceList).set('ai',function(){
+                        var player=_status.event.player;
+                        if(player.canBiShaBaoShi()) return '选项二';
+                        return '选项一';
+                    });
                     'step 1'
                     if(result.control=='选项一'){
                         player.removeBiShaShuiJing();
@@ -7709,6 +7764,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             trigger.getParent('phase').teShu=true;
                         }
                     }
+                },
+                ai:{
+                    shuiJing:true,
+                    baoShi:true,
                 }
             },
             xinYang:{
