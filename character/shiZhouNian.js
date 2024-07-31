@@ -8831,6 +8831,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     var next=game.createEvent();
                     next.player=player;
                     next.setContent(lib.skill.jian.contentx);
+                },
+                ai:{
+                    order:4.1,
+                    result:{
+                        player:1,
+                    }
                 }
             },
             duFen:{
@@ -8854,6 +8860,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                     'step 2'
                     trigger.num++;
+                },
+                check:function(event,player){
+                    if(event.player.side==player.side) return false;
+                    else return true;
                 }
             },
             chaoSheng:{
@@ -8908,6 +8918,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     trigger.player.damageFaShu(1,player);
                     'step 4'
                     trigger.player.damageFaShu(1,player);
+                },
+                check:function(event,player){
+                    if(event.player.side==player.side) return false;
+                    else return true;
                 }
             },
             diaoLing:{
@@ -9030,6 +9044,15 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     var next=game.createEvent();
                     next.player=player;
                     next.setContent(lib.skill.jian.contentx);
+                },
+                ai:{
+                    baoShi:true,
+                    order:function(card,player){
+                        return 9-player.getExpansions('jian').length;
+                    },
+                    result:{
+                        player:1,
+                    }
                 }
             },
             daoNiZhiDie:{
@@ -9045,7 +9068,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.chooseToDiscard(2,true);
                     'step 2'
                     var choiceList=['对目标角色造成1点法术伤害③，该伤害不能用[治疗]抵御',"<span class='tiaoJian'>(移除2个【茧】或对自己造成4点法术伤害③)</span>移除1个【蛹】"];
-                    var next=player.chooseControl().set('choiceList',choiceList);
+                    var next=player.chooseControl().set('choiceList',choiceList).set('ai',function(){
+                        return '选项一';
+                    });
                     'step 3'
                     if(result.control=='选项一'){
                         event.goto(4);
@@ -9077,6 +9102,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.removeZhiShiWu('DWZyong');
                     event.finish();
 
+                },
+                ai:{
+                    shuiJing:true,
+                    order:4,
                 }
             },
             jian:{
