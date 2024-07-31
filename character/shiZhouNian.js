@@ -7271,6 +7271,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         player.chooseToDiscard(true,'h',player.countCards('h')-3);
                     };
                     player.changeZhiLiao(2);
+                },
+                ai:{
+                    shuiJing:true,
                 }
             },
             douQi:{
