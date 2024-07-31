@@ -3482,6 +3482,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 content:function(){
                     target.damageFaShu(1,player);
                 },
+                ai:{
+                    order:3.6,
+                    result:{
+                        target:-0.5,
+                    }
+                }
             },
             siWangZhiChu:{
                 type:'faShu',
@@ -3541,11 +3547,29 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                 'step 1'
                                 target.damageFaShu(event.a+event.b-3,player);
 							},
+                            ai:{
+                                result:{
+                                    target:function(player, target){
+                                        return get.damageEffect(target,2);
+                                    }
+                                }
+                            }
 						}
 					},
                     prompt:function(links,player){
 						return '弃置b张同系牌[展示]至少2张，对目标角色造成(a+b-3)点伤害。';
 					},
+                    check: function (button) {
+                        return button.link;
+                    },
+                },
+                ai:{
+                    order:function(item,player){
+                        return 1.3+player.zhiLiao;
+                    },
+                    result:{
+                        player:1,
+                    }
                 }
             },
             juDuXinXing:{
@@ -3566,6 +3590,15 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 contentAfter:function(){
                     player.changeZhiLiao(1);
+                },
+                ai:{
+                    baoShi:true,
+                    order:3.7,
+                    result:{
+                        target:function(player, target){
+                            return get.damageEffect(target,2);
+                        }
+                    }
                 }
             },
             
