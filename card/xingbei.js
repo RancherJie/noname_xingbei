@@ -344,24 +344,23 @@ game.import('card',function(lib,game,ui,get,ai,_status){
                 },
 				ai:{
 					order:function(item,player){
-						for(var i=0;i<game.players.length;i++){
-							if(game.players[i].side==player.side) return;
-							if(game.players[i].countCards('h')+3>=game.players[i].getHandcardLimit()){
-								return 5;
-							}else{
-								return 3;
-							}
+						var num=game.filterPlayer(function(current){
+							return current.side!=player.side&&current.countCards('h')+3>=current.getHandcardLimit();
+						});
+						if(num.length>=1){
+							return 4;
+						}else{
+							return 3;
 						}
 					},
 					basic:{
-						useful:[5,3,1],
+						useful:[4,2,1],
 						value:[5,3,1],
 					},
 					result:{
 						ignoreStatus:true,
 						target:function(player,target){
-							if(target.side==player.side) return;
-							if(target.countCards('h')+2>=target.getHandcardLimit()){
+							if(target.countCards('h')+3>=target.getHandcardLimit()){
 								return -3;
 							}else{
 								return -1;
