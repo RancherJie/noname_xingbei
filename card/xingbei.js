@@ -388,29 +388,14 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 					target.addToExpansion(event.cards,player,'gain2').gaintag.add('_zhongDu');
 				},
 				ai:{
-					order:function(item,player){
-						for(var i=0;i<game.players.length;i++){
-							if(game.players[i].side==player.side) return;
-							if(game.players[i].countCards('h')+1>=game.players[i].getHandcardLimit()){
-								return 2;
-							}else{
-								return 1;
-							}
-						}
-					},
+					order:3,
 					basic:{
-						useful:[5,3,1],
-						value:[5,3,1],
+						useful:[3,2,0],
+						value:3,
 					},
 					result:{
-                        target:function(target){
-							if(target.countCards('h')+1>target.getHandcardLimit()){
-								return -3;
-							}
-                            if(target.countCards('h')>=3){
-                                return -2;
-                            }
-                            return -1;
+                        target:function(player,target){
+							return get.damageEffect(target,1);
                         }
 					}
 				}
