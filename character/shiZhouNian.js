@@ -3836,7 +3836,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 0'
                     player.chooseTarget('将我方角色[能量区]的1[水晶]翻面为[宝石]',true,function(card,player,target){
                         return player.side==target.side;
-                    })
+                    }).set('ai',function(target){
+                        if(target.countNengLiang('b')>0) return 2;
+                        else return 1;
+                    });
                     target.changeZhiLiao(-2);
                     'step 1'
                     if(result.bool){
@@ -3862,6 +3865,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             event.num++;
                             event.redo();
 					    }
+                    }
+                },
+                ai:{
+                    order:3.4,
+                    result:{
+                        target:-1,
                     }
                 }
             },
@@ -3914,7 +3923,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     if(player.canBiShaBaoShi()){
                         choices.push('选项二');
                     }
-                    player.chooseControl(choices).set('choiceList',list);
+                    player.chooseControl(choices).set('choiceList',list).set('ai',function(){
+                        var player=_status.event.player;
+                        if(player.canBiShaBaoShi()) return '选项二';
+                        return '选项一';
+                    });
                     'step 1'
                     if(result.control=='选项一'){
                         player.removeBiShaShuiJing();
@@ -3930,6 +3943,14 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         }
                     }
                 },
+                check:function(event,player){
+                    if(player.countZhiShiWu('xianXue')+2>=3&&!player.canBiShaBaoShi()) return false;
+                    return true;
+                },
+                ai:{
+                    baoShi:true,
+                    shuiJing:true,
+                }
             },
             xianXue:{
                 intro:{
