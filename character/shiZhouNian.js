@@ -7975,6 +7975,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     else if(player.countNengLiangAll()%2==0) return player.getExpansions('jianHun').length;
                     else return 0;
                 },
+                ai:{
+                    shuiJing:true,
+                }
             },
             jianQi:{
                 intro:{
