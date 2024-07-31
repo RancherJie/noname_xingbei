@@ -2638,7 +2638,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					}
 				},
 				ai:{
-					order:5,
+					order:4,
 					result:{
 						player:2,
 					},
