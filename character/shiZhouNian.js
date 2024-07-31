@@ -3988,6 +3988,16 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.addZhanJi('r',1);
                     'step 3'
                     target.changeZhiLiao(1);
+                },
+                ai:{
+                    order:3.7,
+                    result:{
+                        target:1,
+                        player:function(player){
+                            if(player.countCards('h')>=4) return 2;
+                            else return 1;
+                        }
+                    }
                 }
             },
             heiAnZuZhou:{
@@ -4007,6 +4017,18 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     target.damageFaShu(2,player);
                     'step 2'
                     player.damageFaShu(2,player);
+                },
+                ai:{
+                    order:3.7,
+                    result:{
+                        target:function(player,target){
+                            return get.damageEffect(target,2);
+                        },
+                        player:function(player){
+                            if(player.countCards('h')+2-player.zhiLiao>=6) return -1;
+                            else return 1;
+                        }
+                    }
                 }
             },
             weiLiCiFu:{
@@ -4050,6 +4072,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             trigger.parent.baseDamage+=2;
                             player.removeSkill('weiLiCiFu_xiaoGuo');
                         }
+                    }
+                },
+                ai:{
+                    order:3.8,
+                    result:{
+                        target:1,
                     }
                 }
             },
@@ -4101,6 +4129,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             player.removeSkill('xunJieCiFu_xiaoGuo');
                         }
                     }
+                },
+                ai:{
+                    order:3.8,
+                    result:{
+                        target:1,
+                    }
                 }
             },
             qiDao:{
@@ -4130,6 +4164,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             player.addZhiShiWu('qiDaoFuWen',2);
                         }
                     }
+                },
+                ai:{
+                    baoShi:true,
                 }
             },
             faLiChaoXi:{
@@ -4142,6 +4179,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 content:function(){
                     player.removeBiShaShuiJing();
                     player.storage.faShu++;
+                },
+                ai:{
+                    shuiJing:true,
                 }
             },
             qiDaoFuWen:{
