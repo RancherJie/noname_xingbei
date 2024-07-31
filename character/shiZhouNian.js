@@ -4581,7 +4581,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     for(var i=0;i<=3;i++){
                         list.push(i);
                     }
-                    player.chooseControl(list).set('prompt','选择战纹数量');
+                    player.chooseControl(list).set('prompt','选择战纹数量').set('ai',function(){
+                        return 1;
+                    });
                     'step 5'
                     if(result.control>0){
                         player.addZhiShiWu('zhanWen',result.control);
@@ -4616,6 +4618,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             }
                         }
                     },
+                },
+                ai:{
+                    baoShi:true,
                 }
             },
             shuangChongHuiXiang:{
@@ -4637,7 +4642,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     var str='对另一名目标角色造成'+event.num+'点法术伤害';
                     player.chooseTarget(str,true,function(card,player,target){
                         return target!=_status.event.trigger_player;
-                    }).set('trigger_player',trigger.player);
+                    }).set('trigger_player',trigger.player).set('ai',function(target){
+                        return get.damageEffect(target,_status.event.num);
+                    }).set('num',event.num);
                     'step 3'
                     if(result.bool){
                         game.log(player,'选择了',result.targets[0]);
@@ -4646,6 +4653,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         next.set('faShu',true);
                         next.set('shiQiXiaJiang',false);
                     }
+                },
+                ai:{
+                    shuiJing:true,
                 }
             },
             zhanWen:{
