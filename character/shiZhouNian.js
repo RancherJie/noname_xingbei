@@ -3733,10 +3733,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 ai:{
 					damage:true,
-					order:8,
+					order:function(item,player){
+                        return 1.5+player.countCards('h');
+                    },
 					result:{
 						target:function(player,target){
-							return get.damageEffect(target,player);
+							return get.damageEffect(target,2);
 						}
 					},
 				},
@@ -3771,6 +3773,16 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             player.chooseToDiscard('h',true,2);
                         }
                     }
+                },
+                check:function(event,player){
+                    var target=event.targets[0];
+                    var minus=target.getHandcardLimit()-target.countCards('h');
+                    var num=Math.random();
+                    if(minus<2) return num>0.1;
+                    else return num>0.5;
+                },
+                ai:{
+                    baoShi:true,
                 }
             },
             
