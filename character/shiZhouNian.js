@@ -5225,6 +5225,14 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     target.damageFaShu(2,player);
                     'step 1'
                     player.damageFaShu(2,player);
+                },
+                ai:{
+                    order:3.6,
+                    result:{
+                        target:function(player,target){
+                            return get.damageEffect(target,2);
+                        }
+                    }
                 }
             },
             tianHuoDianKong:{
@@ -5265,6 +5273,14 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     target.damageFaShu(event.num,player);
                     'step 2'
                     player.damageFaShu(event.num,player);
+                },
+                ai:{
+                    order:3.7,
+                    result:{
+                        target:function(player,target){
+                            return get.damageEffect(target,3);
+                        }
+                    }
                 }
             },
             moNvZhiNu:{
@@ -5341,6 +5357,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         },
                         prompt:get.prompt('tiShenWanOu'),
                         prompt2:lib.translate.tiShenWanOu_info,
+                        ai:function(target){
+                            if(target.getHandcardLimit()-target.countCards('h')>=1){
+                                return 1;
+                            }else{
+                                return 0;
+                            }
+                        }
                     });
                     'step 1'
                     if(result.bool){
@@ -5388,6 +5411,14 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     if(player.countCards('h')>3){
                         player.chooseToDiscard(true,player.countCards('h')-3);
                     }
+                },
+                ai:{
+                    shuiJing:true,
+                    order:3.8,
+                    result:{
+                        target:-1,
+                        player:1,
+                    }
                 }
             },
             moNengFanZhuan:{
@@ -5424,8 +5455,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                     'step 2'
                     event.target.damageFaShu(event.num,player);
+                },
+                ai:{
+                    shuiJing:true,
                 }
-
             },
             chongSheng:{
                 intro:{
