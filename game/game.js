@@ -60203,7 +60203,8 @@
 		damageEffect:function(target,player,num){
 			if(!num) num=2;
 			var chaZhi=target.getHandcardLimit()-target.countCards('h');
-			if(chaZhi<=num) return -2;
+			if(chaZhi<num) return -3;
+			else if(chaZhi-3<num) return -1;
 			else return -0.1;
 		},
 		recoverEffect:function(target,player,viewer){
