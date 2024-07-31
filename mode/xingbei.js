@@ -2818,7 +2818,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					}
 				},
 				ai:{
-					order:3.5,
+					order:3.65,
 					result:{
 						player:function(player){
 							if(!(player.hasSkillTag('baoShi')||player.hasSkillTag('shuiJing'))) return -1;
