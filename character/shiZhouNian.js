@@ -8572,8 +8572,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 5'
                     event.target.addZhiShiWu('tongShengGongSi');
                     if(!target.hasSkill('tongShengGongSi_xiaoGuo')){
-                        event.target.addSkill('tongShengGongSi_xiaoGuo');
                         event.target.storage.tongShengGongSi_player=player;
+                        event.target.addSkill('tongShengGongSi_xiaoGuo');                        
                     }
                     player.storage.tongShengGongSi_target=event.target;
                     'step 6'
@@ -8691,8 +8691,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.storage.tongShengGongSi_use=true;
                     target.addZhiShiWu('tongShengGongSi');
                     if(!target.hasSkill('tongShengGongSi_xiaoGuo')){
-                        target.addSkill('tongShengGongSi_xiaoGuo');
                         target.storage.tongShengGongSi_player=player;
+                        target.addSkill('tongShengGongSi_xiaoGuo');
                     }
                     'step 2'
                     player.qiPai();
@@ -8704,17 +8704,17 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     xiaoGuo:{
                         mod:{
                             maxHandcard:function(player,num){
-                                if(player.hasZhiShiWu('tongShengGongSi')){
-                                    if(player.storage.tongShengGongSi_player.isLinked()){
-                                        return num+1;
-                                    }else{
-                                        return num-2;
-                                    }
-                                }else if(player.storage.tongShengGongSi_use){
+                                if(player.storage.tongShengGongSi_use){
                                     if(player.isLinked()){
                                         return num+1;
                                     }else{
                                         return num-2;
+                                    }
+                                }else if(player.hasZhiShiWu('tongShengGongSi')){
+                                        if(player.storage.tongShengGongSi_player.isLinked()){
+                                            return num+1;
+                                        }else{
+                                            return num-2;
                                     }
                                 }
                             }
