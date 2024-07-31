@@ -60200,7 +60200,8 @@
 			if(eff>0&&target.zhiLiao>0) return eff/1.3;
 			return eff;
 		},*/
-		damageEffect:function(target,player,num){
+		damageEffect:function(target,num){
+			if(!target) return 0;
 			if(!num) num=2;
 			var chaZhi=target.getHandcardLimit()-target.countCards('h');
 			if(chaZhi<num) return -3;
