@@ -427,6 +427,10 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 					next.faShu=true;					
 				},
 				ai:{
+					basic:{
+						useful:[4,3,0],
+						value:5,
+					},
 					order:function(item,player){
 						if(player.side==true){
 							if(game.hongZhanJi.length>=4){
