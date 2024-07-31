@@ -60205,7 +60205,7 @@
 			var chaZhi=target.getHandcardLimit()-target.countCards('h');
 			if(chaZhi<num) return -3;
 			else if(chaZhi-3<num) return -1;
-			else return -0.1;
+			else return -0.5;
 		},
 		recoverEffect:function(target,player,viewer){
 			if(target.hp==target.maxHp) return 0;
