@@ -4899,6 +4899,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.hengZhi();
                     player.addZhiShiWu('guiHuo');
                     player.storage.gongJi++;
+                },
+                ai:{
+                    order:4,
+                    result:{
+                        player:1,
+                    }
                 }
             },
             yinYangZhanHuan:{
@@ -4918,6 +4924,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					return {name:get.name(event.trigger_card),xiBie:get.xiBie(event.trigger_card)}
 				},
                 group:['yinYangZhanHuan_xiaoGuo'],
+                ai:{
+                    order:5,
+                }
             },
             yinYangZhanHuan_xiaoGuo:{
                 trigger:{player:'useCard1'},
@@ -4949,6 +4958,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 content:function(){
                     player.draw(1);
                     player.addZhiShiWu('guiHuo');
+                },
+                check:function(event,player){
+                    if(player.countCards('h')+1<=player.getHandcardLimit()) return true;
+                    return false;
                 }
             },
             heiAnJiLi:{
@@ -4962,7 +4975,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 0'
                     player.removeZhiShiWu('guiHuo',player.countZhiShiWu('guiHuo'));
                     'step 1'
-                    player.chooseTarget('对目标角色造成2点法术伤害③',true);
+                    player.chooseTarget('对目标角色造成2点法术伤害③',true).set('ai',function(target){
+                        return get.damageEffect(target,2);
+                    });
                     'step 2'
                     if(result.bool){
                         game.log(player,'选择了',result.targets[0]);
@@ -5127,6 +5142,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             return '弃2张命格相同的手牌[展示]，目标队友弃1张牌'
                         }  
                     },
+                    check:function(button){
+                        return Math.random();
+                    }
                 },
                 subSkill:{
                     1:{
@@ -5173,6 +5191,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             target.chooseToDiscard(1,true);
                         }
                     }
+                },
+                ai:{
+                    shuiJing:true,
+                    order:3.8,
                 }
             },
             guiHuo:{
