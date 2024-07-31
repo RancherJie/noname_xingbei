@@ -4699,6 +4699,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 prepare:'showCards',
                 content:function(){
                     player.changeZhiLiao(2);
+                },
+                ai:{
+                    order:3.8,
+                    result:{
+                        player:2,
+                    }
                 }
             },
             shuiZhiShenLi:{
@@ -4728,6 +4734,19 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 2'
                     player.changeZhiLiao(1);
                     target.changeZhiLiao(1);
+                },
+                ai:{
+                    order:3.5,
+                    result:{
+                        target:function(player,target){
+                            if(target.countCards('h')+1<=target.getHandcardLimit()){
+                                return 1.5;
+                            }else{
+                                return -1;
+                            }
+                        },
+                        player:1,
+                    }
                 }
             },
             shengShiShouHu:{
@@ -4769,11 +4788,15 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     for(var i=1;i<=player.zhiLiao;i++){
                         list.push(i);
                     }
-                    player.chooseControl(list).set('prompt','转移[治疗]数量');
+                    player.chooseControl(list).set('prompt','转移[治疗]数量').set('num',list.length-1).set('ai',function(){
+                        return _status.event.num;
+                    });
                     'step 1'
                     event.zhiLiaonum=result.control;
                     player.chooseTarget('目标队友+'+event.zhiLiaonum+'[治疗]',true,function(card,player,target){
                         return target.side==player.side&&target!=player;
+                    }).set('ai',function(){
+                        return Math.random();
                     });
                     'step 2'
                     var target=result.targets[0];
@@ -4783,8 +4806,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						player.changeZhiLiao(-event.zhiLiaonum);
                         target.changeZhiLiao(event.zhiLiaonum,4);
 					}
+                },
+                ai:{
+                    shuiJing:true,
                 }
-                
             },
             shenShengLingYu:{
                 type:'faShu',
@@ -4811,7 +4836,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                     'step 3'
                     player.changeZhiLiao(-1);
-                    player.chooseTarget('对目标角色造成2点法术伤害③',true);
+                    player.chooseTarget('对目标角色造成2点法术伤害③',true).set('ai',function(target){
+                        return get.damageEffect(target,2);
+                    });
                     'step 4'
                     if(result.bool){
                         game.log(player,'选择了',result.targets[0]);
@@ -4823,6 +4850,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.changeZhiLiao(2);
                     player.chooseTarget('目标队友+1[治疗]',true,function(card,player,target){
                         return target.side==player.side&&target!=player;
+                    }).set('ai',function(target){
+                        return get.zhiLiaoEffect(target,1);
                     });
                     'step 6'
                     if(result.bool){
@@ -4831,7 +4860,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         result.targets[0].changeZhiLiao(1);
                         event.finish(); 
                     }
-                },       
+                },
+                ai:{
+                    shuiJing:true,
+                    order:3.8,
+                }       
             },
 
             //阴阳师
