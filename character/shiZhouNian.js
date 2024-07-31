@@ -6042,6 +6042,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             player.storage.huanYingXingChen=false;
                         }
                     },
+                },
+                check:function(event,player){
+                    if(player.getHandcardLimit()-player.countCards('h')>=2) return true;
+                    return false;
                 }
             },
             heiAnShuFu:{
@@ -6190,6 +6194,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         event.finish();
                     }
                     
+                },
+                ai:{
+                    shuiJing:true,
                 }
             },
 
