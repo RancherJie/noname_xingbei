@@ -6844,6 +6844,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     target.addZhiShiWu('tiaoXinX');
                     target.storage.tiaoXinX_player=player;
                 },
+                ai:{
+                    order:4,
+                    result:{
+                        target:-1,
+                    }
+                }
             },
             tiaoXinX:{
                 intro:{
@@ -7030,6 +7036,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             event.trigger('jinDuanZhiLi');
                         }
                     },
+                },
+                ai:{
+                    shuiJing:true,
                 }
             },
             siDou:{
@@ -7042,6 +7051,17 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.removeBiShaBaoShi();
                     player.addZhiShiWu('nuQi',3);
                     trigger.shiQiMax=-1;
+                },
+                check:function(event,player){
+                    var num=Math.random();
+                    if(event.num+player.countCards('h')>player.getHandcardLimit()){
+                        return num>0.1;
+                    }else{
+                        return num>0.6;
+                    }
+                },
+                ai:{
+                    baoShi:true
                 }
             },
             nuQi:{
