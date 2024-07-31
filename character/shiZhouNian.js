@@ -5561,6 +5561,15 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     target.damageFaShu(cards.length-1,player);
                     'step 1'
                     player.damageFaShu(cards.length-1,player);
+                },
+                ai:{
+                    baoShi:true,
+                    order:3.8,
+                    result:{
+                        target:function(player,target){
+                            return get.damageEffect(target,2);
+                        },
+                    }
                 }
             },
             shengJieFaDian:{
@@ -5594,6 +5603,15 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 contentAfter:function(){
                     player.damageFaShu(cards.length-1,player);
+                },
+                ai:{
+                    baoShi:true,
+                    order:3.8,
+                    result:{
+                        target:function(player,target){
+                            return get.zhiLiaoEffect(target,2);
+                        },
+                    }
                 }
             },
 
