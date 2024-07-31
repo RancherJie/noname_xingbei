@@ -438,18 +438,20 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 							if(game.hongZhanJi.length>=4){
 								return 5;
 							}else{
-								return 2;
+								return 3;
 							}
 						}else if(player.side==false){
 							if(game.lanZhanJi.length>=4){
 								return 5;
 							}else{
-								return 2;
+								return 3;
 							}
 						}
 					},
 					result:{
-						target:-2,
+						target:function(player,target,card,isLink){
+							return get.damageEffect(target,game.moDan);
+						}
 					},
 				}	
 			},
