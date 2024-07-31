@@ -8282,6 +8282,14 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 prepare:'showCards',
                 content:function(){
                     player.addZhiShiWu('lanSeLingHun',cards.length);
+                },
+                ai:{
+                    order:function(item,player){
+                        return 2.1+player.countCards('h',card=>get.type(card)=='faShu');
+                    },
+                    result:{
+                        player:1,
+                    }
                 }
             },
             lingHunZhuanHuan:{
@@ -8295,7 +8303,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     var huangSe=player.hasZhiShiWu('huangSeLingHun');
                     if(lanSe&&huangSe){
                         var list=['黄色->蓝色','蓝色->黄色'];
-                        player.chooseControl(list).set('prompt','选择转换的灵魂');
+                        player.chooseControl(list).set('prompt','选择转换的灵魂').set('ai',function(){
+                            var player=_status.event.player;
+                            if(player.countZhiShiWu('lanSeLingHun')>=player.countZhiShiWu('huangSeLingHun')) return '黄色->蓝色';
+                            else return '蓝色->黄色';
+                        });
                     }else if(lanSe){
                         player.removeZhiShiWu('lanSeLingHun');
                         player.addZhiShiWu('huangSeLingHun');
@@ -8335,6 +8347,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         var num=2;
                     }
                     target.draw(num);
+                },
+                ai:{
+                    order:4,
+                    result:{
+                        target:-1,
+                    }
                 }
             },
             lingHunZhenBao:{
@@ -8359,7 +8377,15 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         num+=2;
                     }
                     target.damageFaShu(num,player);
-                },  
+                },
+                ai:{
+                    order:5,
+                    result:{
+                        target:function(player,target){
+                            return get.damageEffect(target,3);
+                        },
+                    }
+                }
             },
             lingHunFuYu:{
                 type:'faShu',
@@ -8379,6 +8405,20 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.removeZhiShiWu('lanSeLingHun',3);
                     'step 1'
                     target.addNengLiang('r',2);
+                },
+                ai:{
+                    order:5,
+                    result:{
+                        target:function(player,target){
+                            if(target.getHandcardLimit()-target.countNengLiangAll()>=2){
+                                return 2;
+                            }else if(target.getHandcardLimit()-target.countNengLiangAll()>=1){
+                                return 1;
+                            }else{
+                                return 0;
+                            }
+                        }
+                    }
                 }
             },
             lingHunLianJie:{
@@ -8478,6 +8518,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 1'
                     player.addZhiShiWu('huangSeLingHun',2);
                     player.addZhiShiWu('lanSeLingHun',2);
+                },
+                ai:{
+                    baoShi:true,
                 }
             },
             huangSeLingHun:{
