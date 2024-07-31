@@ -68,12 +68,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 					},
 					result:{
 						target:function(player,target,card,isLink){
-							if(target.side==player.side) return;
-							if(target.countCards('h')+2>target.getHandcardLimit()){
-								return -5;
-							}else if(target.countCards('h')+2>target.getHandcardLimit()-3){
-								return -3;
-							}
+							return get.damageEffect(target,2);
 						},
 					},
 				},
@@ -111,12 +106,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 					},
 					result:{
 						target:function(player,target,card,isLink){
-							if(target.side==player.side) return;
-							if(target.countCards('h')+2>target.getHandcardLimit()){
-								return -5;
-							}else if(target.countCards('h')+2>target.getHandcardLimit()-3){
-								return -3;
-							}
+							return get.damageEffect(target,2);
 						},
 					},
 				},
@@ -154,12 +144,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 					},
 					result:{
 						target:function(player,target,card,isLink){
-							if(target.side==player.side) return;
-							if(target.countCards('h')+2>target.getHandcardLimit()){
-								return -5;
-							}else if(target.countCards('h')+2>target.getHandcardLimit()-3){
-								return -3;
-							}
+							return get.damageEffect(target,2);
 						},
 					},
 				},
@@ -197,12 +182,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 					},
 					result:{
 						target:function(player,target,card,isLink){
-							if(target.side==player.side) return;
-							if(target.countCards('h')+2>target.getHandcardLimit()){
-								return -5;
-							}else if(target.countCards('h')+2>target.getHandcardLimit()-3){
-								return -3;
-							}
+							return get.damageEffect(target,2);
 						},
 					},
 				},
@@ -240,12 +220,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 					},
 					result:{
 						target:function(player,target,card,isLink){
-							if(target.side==player.side) return;
-							if(target.countCards('h')+2>target.getHandcardLimit()){
-								return -5;
-							}else if(target.countCards('h')+2>target.getHandcardLimit()-3){
-								return -3;
-							}
+							return get.damageEffect(target,2);
 						},
 					},
 				},
@@ -282,12 +257,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 					},
 					result:{
 						target:function(player,target,card,isLink){
-							if(target.side==player.side) return;
-							if(target.countCards('h')+2>target.getHandcardLimit()){
-								return -5;
-							}else if(target.countCards('h')+2>target.getHandcardLimit()-3){
-								return -3;
-							}
+							return get.damageEffect(target,2);
 						},
 					},
 				},
