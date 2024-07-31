@@ -6226,6 +6226,14 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 content:function(){
                     target.damageFaShu(player.storage.lingFu_leiMing,player);
                 },
+                ai:{
+                    order:4,
+                    result:{
+                        target:function(player,target){
+                            return get.damageEffect(target,1);
+                        },
+                    }
+                }
             },
             lingFu_fengXing:{
                 type:'faShu',
@@ -6247,6 +6255,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 content:function(){
                     target.chooseToDiscard('h',true);
                 },
+                ai:{
+                    order:3.7,
+                    result:{
+                        target:1,
+                    }
+                }
             },
             nianZhou:{
                 trigger:{player:'lingFu'},
@@ -6289,9 +6303,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     event.trigger('baiGuiYeXing');
                     'step 4'
                     if(event.flag){
-                        player.chooseTarget('选取不受伤害的2名角色',2,true);
+                        player.chooseTarget('选取不受伤害的2名角色',2,true).set('ai',function(target){
+                            return -get.damageEffect(target,_status.event.num);
+                        }).set('num',player.storage.baiGuiYeXing);
                     }else{
-                        player.chooseTarget(`对目标角色造成${player.storage.baiGuiYeXing}点法术伤害③`,1,true);
+                        player.chooseTarget(`对目标角色造成${player.storage.baiGuiYeXing}点法术伤害③`,1,true).set('ai',function(target){
+                            return get.damageEffect(target,_status.event.num);
+                        }).set('num',player.storage.baiGuiYeXing);
                     }
                     'step 5'
                     if(event.flag){
@@ -6325,6 +6343,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }else if(trigger.name=='lingFu_leiMingContentBefore'){
                         player.storage.lingFu_leiMing++;
                     }
+                },
+                ai:{
+                    shuiJing:true,
                 }
             },
             yaoLi:{
