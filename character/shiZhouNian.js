@@ -8553,6 +8553,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         return target!=_status.event.targetX;
                     });
                     next.set('targetX',player.storage.tongShengGongSi_target);
+                    next.set('ai',function(target){
+                        var player=_status.event.player;
+                        if(target==player) return 0;
+                        if(player.isLinked()) return 1;
+                        else return -1;
+                    })
                     'step 2'
                     if(result.bool){
                         player.storage.tongShengGongSi_target.removeZhiShiWu('tongShengGongSi');
@@ -8578,6 +8584,14 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.storage.tongShengGongSi_target=event.target;
                     'step 6'
                     event.target.qiPai();
+                },
+                check:function(event,player){
+                    if(player.isLinked()&&player.storage.tongShengGongSi_target.side==player.side) return false;
+                    var minus=player.getHandcardLimit()-player.countCards('h');
+                    var num=Math.random();
+                    if(player.isLinked()&&minus>=1) return num>0.1;
+                    if(minus>=3) return num>0.15;
+                    return false;
                 }
             },
             liuXue:{
@@ -8642,6 +8656,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.chooseToDiscard(true,2);
                     'step 1'
                     player.changeZhiLiao(1);
+                },
+                ai:{
+                    order:7.5,
+                    result:{
+                        player:2,
+                    }
                 }
             },
             xueZhiBeiMing:{
@@ -8660,7 +8680,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 contentBefore:function(){
                     'step 0'
                     var list=[1,2,3];
-                    player.chooseControl(list).set('prompt','选择伤害值');
+                    player.chooseControl(list).set('prompt','选择伤害值').set('ai',function(){
+                        var num=Math.random();
+                        if(num>0.5) return 2;
+                        else if(num>0.2) return 3;
+                        else return 1;
+                    });
                     'step 1'
                     player.storage.xueZhiBeiMin=result.control;
                 },
@@ -8669,6 +8694,16 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     target.damageFaShu(player.storage.xueZhiBeiMin,player);
                     'step 1'
                     player.damageFaShu(player.storage.xueZhiBeiMin,player);
+                },
+                ai:{
+                    order:function(card,player){
+                        return 8-player.countCards('h');
+                    },
+                    result:{
+                        target:function(player,target){
+                            return get.damageEffect(target,2)
+                        }
+                    }
                 }
             },
             tongShengGongSi:{
@@ -8720,6 +8755,20 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             }
                         }
                     }
+                },
+                ai:{
+                    order:function(item,player){
+                        var num=0;
+                        if(player.isLinked()) num+=2;
+                        return 7-player.countCards('h')+num;
+                    },
+                    result:{
+                        target:function(player,target){
+                            if(target==player) return 0;
+                            if(player.isLinked()) return 2;
+                            else return -1;
+                        },
+                    }
                 }
             },
             xueZhiZuZhou:{
@@ -8737,6 +8786,17 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     target.damageFaShu(2,player);
                     'step 2'
                     player.chooseToDiscard(3,true,'h');
+                },
+                ai:{
+                    baoShi:true,
+                    order:function(card,player){
+                        return 3+player.countCards('h');
+                    },
+                    result:{
+                        target:function(player,target){
+                            return get.damageEffect(target,2)
+                        }
+                    }
                 }
             },
 
