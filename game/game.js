@@ -4561,6 +4561,11 @@
 						}else{
 							map.connect_team_sequence.show();
 						}
+						if(config.connect_choose_mode=='BP01' || config.connect_choose_mode=='BP02'){
+							map.connect_BPchoose_number.show();
+						}else{
+							map.connect_BPchoose_number.hide();
+						}
 					},
 					connect_versus_mode:{
 						name:'游戏模式',
@@ -4605,6 +4610,16 @@
 							3:'3',
 							4:'4',
 							5:'5',
+						},
+						frequent:true,
+					},
+					connect_BPchoose_number:{
+						name:'可选角色数',
+						init:16,
+						item:{
+							12:'12',
+							16:'16',
+							20:'20',
 						},
 						frequent:true,
 					},

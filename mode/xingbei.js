@@ -1872,7 +1872,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					//console.log('chooseCharacterOLCM02');
 					//var ref=game.players[0];
 					event.number=lib.configOL.number;
-					event.choose_number=18;
+					event.choose_number=lib.configOL.BPchoose_number;
 
 					var team_sequence=lib.configOL.team_sequence;
 
@@ -2298,7 +2298,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					//console.log('chooseCharacterOLCM02');
 					//var ref=game.players[0];
 					event.number=lib.configOL.number;
-					event.choose_number=18;
+					event.choose_number=event.choose_number=lib.configOL.BPchoose_number;;
 
 					var team_sequence=lib.configOL.team_sequence;
 
