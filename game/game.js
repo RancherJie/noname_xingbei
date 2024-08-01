@@ -4561,6 +4561,11 @@
 						}else{
 							map.connect_team_sequence.show();
 						}
+						if(config.connect_choose_mode=='BP01' || config.connect_choose_mode=='BP02'){
+							map.connect_BPchoose_number.show();
+						}else{
+							map.connect_BPchoose_number.hide();
+						}
 					},
 					connect_versus_mode:{
 						name:'游戏模式',
@@ -4580,6 +4585,8 @@
 						item:{
 							'多选1':'多选1',
 							'CM02':"CM02",
+							'BP01':"BP01",
+							'BP02':"BP02",
 						},
 						frequent:true,
 					},
@@ -4603,6 +4610,16 @@
 							3:'3',
 							4:'4',
 							5:'5',
+						},
+						frequent:true,
+					},
+					connect_BPchoose_number:{
+						name:'可选角色数',
+						init:16,
+						item:{
+							12:'12',
+							16:'16',
+							20:'20',
 						},
 						frequent:true,
 					},
@@ -20854,7 +20871,11 @@
 					var hp=this.node.hp;
 					hp.style.transition='none';
 					this.hp=this.zhiLiao;
-					this.maxHp=this.getZhiLiaoLimit();
+					if(this.hp>this.maxHp){
+						this.maxHp=this.hp;
+					}else{
+						this.maxHp=this.getZhiLiaoLimit();
+					}
 					game.broadcast(function(player,hp,maxHp,zhiLiao){
 						player.hp=hp;
 						player.maxHp=maxHp;
@@ -60170,6 +60191,7 @@
 			}
 			return final;
 		},
+		/*
 		damageEffect:function(target,player,viewer,nature){
 			if(get.itemtype(nature)=='natures'){
 				var natures=get.natureList(nature);
@@ -60194,6 +60216,14 @@
 			var eff=get.effect(target,{name:name},player,viewer);
 			if(eff>0&&target.zhiLiao>0) return eff/1.3;
 			return eff;
+		},*/
+		damageEffect:function(target,num){
+			if(!target) return 0;
+			if(!num) num=2;
+			var chaZhi=target.getHandcardLimit()-target.countCards('h');
+			if(chaZhi<num) return -3;
+			else if(chaZhi-3<num) return -1;
+			else return -0.5;
 		},
 		recoverEffect:function(target,player,viewer){
 			if(target.hp==target.maxHp) return 0;
@@ -60241,6 +60271,20 @@
 		},
 		attitude2:function(to){
 			return get.attitude(_status.event.player,to);
+		},
+
+		//xingbei
+		zhiLiaoEffect:function(target,num){
+			if(target.getZhiLiaoLimit()-target.zhiLiao<=0) return 0;
+			if(!num){
+				num=1;
+			}
+			var chaZhi=target.getZhiLiaoLimit()-target.zhiLiao-num;
+			if(chaZhi>0){
+				return chaZhi;
+			}else{
+				return target.getZhiLiaoLimit()-target.zhiLiao
+			}
 		},
 	};
 	const ai={

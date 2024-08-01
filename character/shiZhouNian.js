@@ -109,6 +109,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             "step 0"
                             var list=[0,1,2,3];
                             player.chooseControl(list).set('prompt','圣剑：摸X张牌并弃置X张牌').set('ai',function(){
+                                var player=_status.event.player;
                                 var num=player.getHandcardLimit()-player.countCards('h');
                                 if(num>3) num=3;
                                 return num;
@@ -292,12 +293,14 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.removeBiShaBaoShi();
                     trigger.getParent().baseDamage++;
                     trigger.getParent().baseDamage++;
+                },
+                ai:{
+                    baoShi:true,
                 }
             },
 
             //圣女
             bingShuangDaoYan:{
-                forced:true,
                 trigger:{player:'useCard'},
                 filter:function(event){
                     return get.xiBie(event.card)=='shui'||get.name(event.card)=='shengGuang';
@@ -306,6 +309,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 content:function(){
                     'step 0'
                     var next=player.chooseTarget().set('ai',function(target){
+                        var player=_status.event.player;
 						if(target.side==player.side&&target.zhiLiao<target.getZhiLiaoLimit()){
                             return 1;
                         }else if(target.side==player.side&&target.zhiLiao>=target.getZhiLiaoLimit()){
@@ -347,7 +351,15 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 prepare:'useCard',
                 content:function(){
                     target.changeZhiLiao(2);
-                }
+                },
+                ai: {
+					result: {
+						target:function(player,target){
+                            return get.zhiLiaoEffect(target,2);
+                        },
+					},
+					order: 3.5,
+				},
             },
             zhiYuZhiGuang:{
                 type:'faShu',
@@ -370,7 +382,15 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     if(target){
                         target.changeZhiLiao(1);
                     }
-                }
+                },
+                ai: {
+					result: {
+						target:function(player,target){
+                            return get.zhiLiaoEffect(target,1);
+                        },
+					},
+					order: 3.5,
+				},
             },
             lianMin:{
                 type:'qiDong',
@@ -387,6 +407,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     maxHandcardFinal:function(player,num){
                         if(player.isLinked()) return 7
                     }
+                },
+                check:function(event,player){
+                    return !player.isLinked();
+                },
+                ai:{
+                    baoShi:true,
                 }
             },
             shengLiao:{
@@ -429,7 +455,16 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 contentAfter:function(){
                     player.storage.shengLiao=0;
                     player.chooseToUse();
-                }
+                },
+                ai: {
+                    shuiJing:true,
+					result: {
+						target:function(player,target){
+                            return get.zhiLiaoEffect(target,1);
+                        },
+					},
+					order: 5,
+				},
             },
 
             //暗杀者
@@ -492,7 +527,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 0'
                     player.removeBiShaBaoShi();
                     var list=['是','否'];
-                    player.chooseControl(list).set('prompt','潜行：是否摸一张牌');
+                    player.chooseControl(list).set('prompt','潜行：是否摸一张牌').set('ai',function(){
+                        var player=_status.event.player;
+                        if(player.countCards('h')+3<=player.getHandcardLimit()) return 0;
+                        return 1;
+                    });
                     'step 1'
                     if(result.control=='是'){
                         player.draw();
@@ -506,12 +545,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					}
                     'step 4'
                     player.addSkill('qianXing2');
-                },
-                ai:{
-                    order:10,
-                    result:{
-                        player:5,
-                    }
                 },
                 mod:{
                     maxHandcardBase:function(player,num){
@@ -537,7 +570,14 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             player.removeSkill('qianXing2');
                         }
                     }
-                }
+                },
+                ai:{
+                    baoShi:true,
+                },
+                check:function(event,player){
+                    if(player.countNengLiangAll()<=1) return false;
+                    return true;
+                },
             },
             qianXing2:{
                 group:['qianXing2_shangHai','qianXing2_wuFaYingZhan'],
@@ -651,6 +691,15 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             player.removeSkill('diZhiFengYin_xiaoGuo')
                         }
                     },
+                },
+                ai:{
+                    order:4,
+                    result:{
+                        target:function(player,target){
+                            if(target.countCards('h')>3) return -3;
+                            return -1;
+                        }
+                    }
                 }
             },
             shuiZhiFengYin:{
@@ -710,6 +759,15 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             player.removeSkill('shuiZhiFengYin_xiaoGuo')
                         }
                     },
+                },
+                ai:{
+                    order:4,
+                    result:{
+                        target:function(player,target){
+                            if(target.countCards('h')>3) return -3;
+                            return -1;
+                        }
+                    }
                 }
             },
             huoZhiFengYin:{
@@ -769,6 +827,15 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             player.removeSkill('huoZhiFengYin_xiaoGuo')
                         }
                     },
+                },
+                ai:{
+                    order:4,
+                    result:{
+                        target:function(player,target){
+                            if(target.countCards('h')>3) return -3;
+                            return -1;
+                        }
+                    }
                 }
             },
             fengZhiFengYin:{
@@ -828,6 +895,15 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             player.removeSkill('fengZhiFengYin_xiaoGuo')
                         }
                     },
+                },
+                ai:{
+                    order:4,
+                    result:{
+                        target:function(player,target){
+                            if(target.countCards('h')>3) return -3;
+                            return -1;
+                        }
+                    }
                 }
             },
             leiZhiFengYin:{
@@ -887,6 +963,15 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             player.removeSkill('leiZhiFengYin_xiaoGuo')
                         }
                     },
+                },
+                ai:{
+                    order:4,
+                    result:{
+                        target:function(player,target){
+                            if(target.countCards('h')>3) return -3;
+                            return -1;
+                        }
+                    }
                 }
             },
             wuXiShuFu:{
@@ -958,6 +1043,16 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             player.removeSkill('wuXiShuFu_xiaoGuo');
                         },
                     }
+                },
+                ai:{
+                    shuiJing:true,
+                    order:4,
+                    result:{
+                        target:function(player,target){
+                            if(target.countCards('h')>4) return -3;
+                            return -1;
+                        }
+                    }
                 }
             },
             fengYinPoSui:{
@@ -1017,7 +1112,17 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     var index=list.indexOf(card);
                     target.storage.zhongDu.splice(index, 1);
                     player.gain(card);
-                }
+                },
+                /*
+                ai:{
+                    shuiJing:true,
+                    order:3.4,
+                    result:{
+                        target:function(player,target){
+                            return 1;
+                        }
+                    }
+                }*/
             },
 
             //天使
@@ -1121,6 +1226,15 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                     'step 1'
                     target.give(result.cards,player,'give');
+                },
+                ai:{
+                    order:3,
+                    result:{
+                        target:function(player,target){
+                            return 1;
+                        },
+                        player:0,
+                    }
                 }
             },
             tianShiJiBan:{
@@ -1132,6 +1246,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         content:function(){
                             'step 0'
                             player.chooseTarget('天使羁绊：选择一名角色+1[治疗]',true).set('ai',function(target){
+                                var player=_status.event.player;
                                 if(target.side==player.side&&target.zhiLiao<target.getZhiLiaoLimit()){
                                     return 2;
                                 }else if(target.side==player.side&&target.zhiLiao==target.getZhiLiaoLimit()){
@@ -1158,6 +1273,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         content:function(){
                             'step 0'
                             player.chooseTarget('天使羁绊：选择一名角色+1[治疗]',true).set('ai',function(target){
+                                var player=_status.event.player;
                                 if(target.side==player.side&&target.zhiLiao<target.getZhiLiaoLimit()){
                                     return 2;
                                 }else if(target.side==player.side&&target.zhiLiao==target.getZhiLiaoLimit()){
@@ -1190,6 +1306,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         return card.hasNature('tianShiZhiQiang');
                     });
 				},
+                ai:{
+                    order:4,
+                }
             },
             tianShiZhiGe:{
                 trigger:{player:'phaseBegin'},
@@ -1208,11 +1327,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                     return false;
                 },
+                direct:true,
                 content:function(){
                     'step 0'
-                    player.removeBiShaShuiJing();
-                    'step 1'
-                    player.chooseTarget('天使之歌：选择1个有基础效果的目标角色',function(card,player,target){
+                    var next=player.chooseTarget(function(card,player,target){
                         for(var xiaoGuoList in game.jiChuXiaoGuo){
                             for(var xiaoGuo of game.jiChuXiaoGuo[xiaoGuoList]){
                                 if(target.hasExpansions(xiaoGuo)){
@@ -1220,13 +1338,20 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                 }
                             }
                         }
-                    },true);
-                    'step 2'
+                    });
+                    next.set('ai',function(target){
+                        return false;
+                    });
+                    next.set('prompt',get.prompt('tianShiZhiGe'));
+                    next.set('prompt2',lib.translate.tianShiZhiGe_info);
+                    'step 1'
                     if(result.bool){
                         var target=result.targets[0];
                         event.target=target;
-                        game.log(player,'选择了',target);
+                        player.logSkill(event.name,result.targets);
                         player.line(target,'blue');
+                        player.removeBiShaShuiJing();
+
                         var list=[];
                         for(var xiaoGuoList in game.jiChuXiaoGuo){
                             for(var xiaoGuo of game.jiChuXiaoGuo[xiaoGuoList]){
@@ -1236,8 +1361,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             }
                         }
                         player.chooseControl(list).set('prompt','选择要移除的基础效果');
+                    }else{
+                        event.finish();
                     }
-                    'step 3'
+                    'step 2'
                     if(result.control=='_zhongDu'){
                         player.chooseCardButton(target.getExpansions('_zhongDu'),true,'选择要移除的中毒')
                     }else{
@@ -1248,7 +1375,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         event.trigger('yiChuJiChuXiaoGuo');
                         event.finish();
                     }
-                    'step 4'
+                    'step 3'
                     var card=result.links[0];
                     var list=target.getExpansions('_zhongDu');
                     var index=list.indexOf(card);
@@ -1306,6 +1433,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }else{
                         event.finish();
                     }
+                },
+                ai:{
+                    shuiJing:true,
                 }
             },
             
@@ -1373,6 +1503,15 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 useCard:true,
                 content:function(){
                     target.damageFaShu(2,player);
+                },
+                ai:{
+                    order:3.6,
+                    result:{
+                        target:function(player,target){
+                            if(target.countCards('h')+2>target.getHandcardLimit()) return -1;
+                            return -0.1;
+                        }
+                    }
                 }
             },
             jingZhunSheJi:{
@@ -1382,6 +1521,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 content:function(){
                     player.addTempSkill('jingZhunSheJi2',{player:['useCardBefore','phaseEnd']});
+                },
+                check:function(event,player){
+                    return event.targets[0].countCards('h')>3;
                 }
             },
             jingZhunSheJi2:{
@@ -1408,6 +1550,18 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 1'
                     target.drawTo(5);
                     player.gongJi('狙击：[攻击行动]');
+                },
+                ai:{
+                    shuiJing:true,
+                    order:4,
+                    result:{
+                        target:function(player,target){
+                            var num=target.countCards('h');
+                            if(target.getHandcardLimit()<5) return -5;
+                            if(num>=5) return 0;
+                            return -0.1;
+                        }
+                    }
                 }
             },
             
@@ -1453,6 +1607,16 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         next.faShu=true;
                         if(player.countCards('h')>=1){
                             player.chooseToDiscard(1,true);
+                        }
+                    }
+                },
+                ai:{
+                    order:3.6,
+                    result:{
+                        target:function(player,target){
+                            var chaZhi=target.getHandcardLimit()-target.countCards('h');
+                            if(chaZhi<=1) return -2;
+                            else return -0.1;
                         }
                     }
                 }
@@ -1516,6 +1680,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         return get.xiBie(card)=='di'||get.xiBie(card)=='huo';
                     });
 				},
+                ai:{
+                    order:3.5,
+                }
             },
             huiMieFengBao:{
                 type:'faShu',
@@ -1533,6 +1700,15 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 content:function(){
                     var next=target.damage(2,player);
                     next.faShu=true;
+                },
+                ai:{
+                    baoShi:true,
+                    order:3.8,
+                    result:{
+                        target:function(player,target){
+                            return get.damageEffect(target,player,2);
+                        }
+                    }
                 }
             },
 
@@ -1556,6 +1732,16 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 1'
                     player.changeZhiLiao(1);
                     player.addNengLiang('b');
+                },
+                ai:{
+                    order:4,
+                    result:{
+                        player:function(player, target){
+                            if(player.isLinked()) return -1;
+                            if(player.countCards('h')+2>player.getHandcardLimit()) return -1;
+                            else return 1;
+                        },
+                    }
                 }
             },
             hePingXingZhe:{
@@ -1674,6 +1860,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 5'
                     event.player=player;
                     event.trigger('yingLingZhaoHuan')
+                },
+                ai:{
+                    shuiJing:true,
+
                 }
             },
 
@@ -1705,6 +1895,14 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     target.damage(2,player).set('faShu',true).set('yuanSuDianRan',true);
                     'step 2'
                     player.storage.faShu++;
+                },
+                ai:{
+                    order:3.5,
+                    result:{
+                        target:function(player,target){
+                            return get.damageEffect(target,2);
+                        }
+                    }
                 }
             },
             yunShi:{
@@ -1749,6 +1947,14 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 2'
                     player.faShu('陨石：[法术行动]');
                 },
+                ai:{
+                    order:3.8,
+                    result:{
+                        target:function(player,target){
+                            return get.damageEffect(target);
+                        }
+                    }
+                }
             },
             bingDong:{
                 type:'faShu',
@@ -1790,12 +1996,22 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 1'
                     target.damageFaShu(event.num,player);
                     'step 2'
-                    player.chooseTarget(1,'冰冻：选择1名角色+1[治疗]',true);
+                    player.chooseTarget(1,'冰冻：选择1名角色+1[治疗]',true).set('ai',function(target){
+                        return get.damageEffect(target);
+                    });
                     'step 3'
                     if(result.bool){
                         game.log(player,'选择了',result.targets[0]);
                         player.line(result.targets[0],'blue');
                         result.targets[0].changeZhiLiao(1);
+                    }
+                },
+                ai:{
+                    order:3.8,
+                    result:{
+                        target:function(player,target){
+                            return get.damageEffect(target);
+                        }
                     }
                 }
             },
@@ -1842,6 +2058,14 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                     'step 1'
                     target.damageFaShu(event.num,player);
+                },
+                ai:{
+                    order:3.8,
+                    result:{
+                        target:function(player,target){
+                            return get.damageEffect(target,2);
+                        }
+                    }
                 }
             },
             fengRen:{
@@ -1885,6 +2109,14 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     target.damageFaShu(event.num,player);
                     'step 2'
                     player.gongJi('风刃：[攻击行动]');
+                },
+                ai:{
+                    order:3.8,
+                    result:{
+                        target:function(player,target){
+                            return get.damageEffect(target);
+                        }
+                    }
                 }
             },
             leiJi:{
@@ -1936,6 +2168,14 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             player.changeZhanJi('r',1);
                         }
                     }
+                },
+                ai:{
+                    order:3.8,
+                    result:{
+                        target:function(player,target){
+                            return get.damageEffect(target);
+                        }
+                    }
                 }
             },
             yueGuang:{
@@ -1955,6 +2195,17 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 2'
                     var next=target.damage(event.num,player);
                     next.faShu=true;
+                },
+                ai:{
+                    baoShi:true,
+                    order:function(item,player){
+                        return 3.4+player.countNengLiangAll()-1;
+                    },
+                    result:{
+                        target:function(player,target){
+                            return get.damageEffect(target,2);
+                        }
+                    }
                 }
             },
             yuanSu:{
@@ -2078,7 +2329,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     if(player.zhiLiao>0){
                         choices.push("选项二");
                     }
-                    player.chooseControl(choices).set('prompt',"月之轮回：选择以下一项发动").set('choiceList',choiceList);
+                    player.chooseControl(choices).set('prompt',"月之轮回：选择以下一项发动").set('choiceList',choiceList).set('ai',function(){
+                        var player=_status.event.player;
+                        if(player.zhiLiao>0) return "选项二";
+                        if(player.getExpansions('anYue').length>0) return "选项一";
+                    });
                     'step 1'
                     if(result.control=='选项一'){
                         event.goto(2);
@@ -2153,6 +2408,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                     'step 3'
                     trigger.parent.baseDamage+=event.num;
+                },
+                ai:{
+                    shuiJing:true,
                 }
             },
             cangBaiZhiYue:{
@@ -2170,7 +2428,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     if(player.countMark('shiHua')>=3){
                         choices.unshift('选项一');
                     }
-                    player.chooseControl(choices).set('prompt','苍白之月：选择以下一项发动').set('choiceList',choiceList);
+                    player.chooseControl(choices).set('prompt','苍白之月：选择以下一项发动').set('choiceList',choiceList).set('ai',function(){
+                        var player=_status.event.player;
+                        if(player.countZhiShiWu('shiHua')>=3) return "选项一";
+                        return "选项二";
+                    });
                     'step 2'
                     if(result.control=='选项一'){
                         event.goto(3);
@@ -2192,7 +2454,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     for(var i=0;i<=num;i++){
                         list.push(i);
                     }
-                    player.chooseControl(list).set('prompt',"移除X点<span class='hong'>【</span>新月<span class='hong'>】</span>，你+1点<span class='lan'>【</span>石化<span class='lan'>】</span>，弃1张牌，对目标对手造成(X+1)点法术伤害③").set('ai',function(){return list.length-1;});
+                    player.chooseControl(list).set('prompt',"移除X点<span class='hong'>【</span>新月<span class='hong'>】</span>，你+1点<span class='lan'>【</span>石化<span class='lan'>】</span>，弃1张牌，对目标对手造成(X+1)点法术伤害③").set('ai',function(){return _status.event.num;}).set('num',list.length-1);
 					"step 7"
 					var num=result.control;
                     event.num=num;
@@ -2214,7 +2476,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         result.targets[0].damage(event.num+1,player).set('faShu',true);
                     }
                 },
-                 
+                ai:{
+                    baoShi:true,
+                    order:4,
+                    result:{
+                        player:1,
+                    }
+                }
             },
             cangBaiZhiYue1:{
                 trigger:{player:'useCardToPlayer'},
@@ -2329,13 +2597,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                 },
                 ai:{
-					damage:true,
 					order:function(item,player){
-						return 2.5+player.countZhiShiWu('shenPan');
+						return 1.5+player.countZhiShiWu('shenPan');
 					},
 					result:{
 						target:function(player,target){
-							return get.damageEffect(target,player);
+							return get.damageEffect(target,player.countZhiShiWu('shenPan'));
 						}
 					},
 				},
@@ -2382,6 +2649,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             player.addZhiShiWu('shenPan',1);
                         }
                     }
+                },
+                ai:{
+                    baoShi:true,
                 }
             },
             panJueTianPing:{
@@ -2396,7 +2666,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 1'
                     player.addZhiShiWu('shenPan',1);
                     var list=['弃掉所有手牌','将你的手牌补到上限[强制]，我方【战绩区】+1[宝石]'];
-                    player.chooseControl().set('prompt','判决天平：选择一项').set('choiceList',list);
+                    player.chooseControl().set('prompt','判决天平：选择一项').set('choiceList',list).set('ai',function(){
+                        var player=_status.event.player;
+                        if(player.countCards('h')>3) return '选项一';
+                        return '选项二';
+                    });
                     'step 2'
                     if(result.control=='选项一'){
                         player.discard(player.getCards());
@@ -2406,6 +2680,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         player.drawTo(num);
                         player.addZhanJi('r',1);
                     }
+                },
+                ai:{
+                    shuiJing:true,
+                    order:3.6,
+                    result:{
+                        player:1,
+                    }
                 }
             },
             shenPan:{
@@ -2414,7 +2695,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     content:'mark',
                     max:4,
                 },
-                markimage:'image/card/lan.png',
+                markimage:'image/card/hong.png',
             },
 
             //冒险家
@@ -2482,7 +2763,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.useCard(card,target).set('action',true);
                     event.finish();
                 },
-                
+                ai:{
+                    order:3.7,
+                    result:{
+                        target:-1,
+                    }
+                }
             },
             qiangYun:{
                 trigger:{player:'useSkill'},
@@ -2539,6 +2825,20 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     ]);
                     next.set('forced',true);
                     next.set('selectButton',[1,num]);
+                    next.set('ai',function(button){
+                        var player=_status.event.target;
+						if(player.hasSkillTag('baoShi')&&!player.hasSkillTag('shuiJing')){
+							if(button.link=='宝石') return 5;
+							else return -1;
+						}
+						if(player.hasSkillTag('shuiJing')&&!player.hasSkillTag('baoShi')){
+							if(button.link=='水晶') return 5;
+							else return 2;
+						}
+						//既有水晶也有宝石
+						return 2;
+                    });
+                    next.set('target',target);
                     'step 1'
                     for(var i=0;i<result.links.length;i++){
 						if(result.links[i]=='宝石'){
@@ -2554,6 +2854,17 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         if(player.canBiShaShuiJing()){
                             player.removeBiShaShuiJing();
                         }
+                    }
+                },
+                ai:{
+                    order:3.6,
+                    result:{
+                        target:function(player,target){
+                            if(!(target.hasSkillTag('baoShi')||target.hasSkillTag('shuiJing'))) return -1;
+							var num=target.getNengLiangLimit()-target.countNengLiangAll();
+							if(num>=2) return 2;
+							return 0;
+                        },
                     }
                 }
             },
@@ -2592,6 +2903,19 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         }
 						return next;
 					},
+                    check:function(button){
+                        var player=_status.event.player;
+                        if(button.link=='huan'){
+                            if(player.side==true){
+                                return game.lanZhanJi.includes('水晶');
+                            }else if(player.side==false){
+                                return game.hongZhanJi.includes('水晶');
+                            }
+                        }
+                        if(button.link=='tou'){
+                            return Math.random()*3;
+                        }
+                    }
                 },
                 subSkill:{
                     tou:{
@@ -2633,6 +2957,21 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             player.storage.all++;
                         }
                     }
+                },
+                ai:{
+                    shuiJing:true,
+                    order:3.8,
+                    result:{
+                        player:function(player){
+                            if(player.side==true){
+                                if(game.hongZhanJi.includes('水晶')||game.lanZhanJi.includes('宝石')) return 1;
+                                else return 0;
+                            }else{
+                                if(game.lanZhanJi.includes('水晶')||game.hongZhanJi.includes('宝石')) return 1;
+                                else return 0;
+                            }
+                        },
+                    }
                 }
 
             },
@@ -2668,6 +3007,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 contentAfter:function(){
                     player.storage.gongJi++;
+                },
+                ai:{
+                    order:3.6,
+                    result:{
+                        target:1,
+                    }
                 }
             },
             chengJie:{
@@ -2700,6 +3045,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 contentAfter:function(){
                     player.storage.gongJi++;
+                },
+                ai:{
+                    order:3.8,
+                    result:{
+                        target:-1,
+                        player:2,
+                    }
                 }
             },
             shengJi:{
@@ -2727,7 +3079,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 subSkill:{
                     x:{
                         trigger:{player:'useCardToPlayer'},
-                        forced:true,
+                        direct:true,
                         content:function(){
                             'step 0'
                             trigger.parent.canYingZhan=false;
@@ -2735,8 +3087,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             player.removeSkill('tianQiang_x')
                         }
                     },
+                },
+                check:function(event,player){
+                    var num=Math.random();
+                    return num>0.25;
                 }
-
             },
             diQiang:{
                 trigger:{player:'useCardToTargeted'},
@@ -2757,14 +3112,17 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         }
                     }
                     player.chooseControl(list).set('prompt','选择移除的[治疗]数量').set('ai',function(){
-                        return list.length-1;
-                    });
+                        return _status.event.num;
+                    }).set('num',list.length-1);
                     'step 2'
                     var zhiLiaonum=result.control;
 					if(zhiLiaonum>0){
 						trigger.getParent().baseDamage+=zhiLiaonum;
 						player.changeZhiLiao(-zhiLiaonum);
 					}
+                },
+                check:function(event,player){
+                    return player.zhiLiao>=1;
                 }
             },
             shengGuangQiYu:{
@@ -2783,6 +3141,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.storage.gongJi++;
                 },
                 group:'shengGuangQiYu_tianQiang',
+                ai:{
+                    baoShi:true,
+                    order:4,
+                    result:{
+                        player:2.5,
+                    }
+                }
             },
             shengGuangQiYu_tianQiang:{
                 trigger:{player:'phaseEnd'},
@@ -2951,6 +3316,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.draw(1);
                     'step 2'
                     player.chooseToDiscard('h',true,1);
+                },
+                check:function(event,player){
+                    var num=player.getHandcardLimit()-player.countCards('h');
+                    return num>0;
                 }
             },
             jingLingMiYi:{
@@ -2985,16 +3354,21 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             return true;
                         },
                         content:function(){
-                           'step 0'
-                           player.chongZhi();
-                           player.unmarkSkill('zhuFu');
-                           player.chooseTarget('对目标角色造成2点法术伤害',true);
-                           'step 1'
-                           game.log(player,'选择了',result.targets[0]);
-                           player.line(result.targets[0],'red');
-                           result.targets[0].damageFaShu(2,player); 
+                            'step 0'
+                            player.chongZhi();
+                            player.unmarkSkill('zhuFu');
+                            player.chooseTarget('对目标角色造成2点法术伤害',true).set('ai',function(target){
+                                return get.damageEffect(target,2);
+                            });
+                            'step 1'
+                            game.log(player,'选择了',result.targets[0]);
+                            player.line(result.targets[0],'red');
+                            result.targets[0].damageFaShu(2,player); 
                         }
                     }
+                },
+                ai:{
+                    baoShi:true,
                 }
             },
             chongWuQiangHua:{
@@ -3006,7 +3380,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 0'
                     player.removeBiShaShuiJing();
                     'step 1'
-                    player.chooseTarget('目标角色摸1张牌[强制]，弃1张牌',true);
+                    player.chooseTarget('目标角色摸1张牌[强制]，弃1张牌',true).set('ai',function(target){
+                        var player=_status.event.player;
+                        var num=target.countCards('h')-target.getHandcardLimit();
+                        return target.side!=player.side&&num>=0;
+                    });
                     'step 2'
                     game.log(player,'选择了',result.targets[0]);
                     player.line(result.targets[0],'green');
@@ -3014,6 +3392,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     result.targets[0].chooseToDiscard('h',true,1);
                     'step 3'
                     trigger.finish();
+                },
+                check:function(event,player){
+                    var target=game.filterPlayer(function(current){
+                        var num=current.countCards('h')-current.getHandcardLimit();
+                        return current.side!=player.side&&num>=0;
+                    })
+                    return target.length>0;
                 }
             },
             zhuFu:{
@@ -3097,6 +3482,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 content:function(){
                     target.damageFaShu(1,player);
                 },
+                ai:{
+                    order:3.6,
+                    result:{
+                        target:-0.5,
+                    }
+                }
             },
             siWangZhiChu:{
                 type:'faShu',
@@ -3156,11 +3547,29 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                 'step 1'
                                 target.damageFaShu(event.a+event.b-3,player);
 							},
+                            ai:{
+                                result:{
+                                    target:function(player, target){
+                                        return get.damageEffect(target,2);
+                                    }
+                                }
+                            }
 						}
 					},
                     prompt:function(links,player){
 						return '弃置b张同系牌[展示]至少2张，对目标角色造成(a+b-3)点伤害。';
 					},
+                    check: function (button) {
+                        return button.link;
+                    },
+                },
+                ai:{
+                    order:function(item,player){
+                        return 1.3+player.zhiLiao;
+                    },
+                    result:{
+                        player:1,
+                    }
                 }
             },
             juDuXinXing:{
@@ -3181,6 +3590,15 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 contentAfter:function(){
                     player.changeZhiLiao(1);
+                },
+                ai:{
+                    baoShi:true,
+                    order:3.7,
+                    result:{
+                        target:function(player, target){
+                            return get.damageEffect(target,2);
+                        }
+                    }
                 }
             },
             
@@ -3315,10 +3733,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 ai:{
 					damage:true,
-					order:8,
+					order:function(item,player){
+                        return 1.5+player.countCards('h');
+                    },
 					result:{
 						target:function(player,target){
-							return get.damageEffect(target,player);
+							return get.damageEffect(target,2);
 						}
 					},
 				},
@@ -3353,6 +3773,16 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             player.chooseToDiscard('h',true,2);
                         }
                     }
+                },
+                check:function(event,player){
+                    var target=event.targets[0];
+                    var minus=target.getHandcardLimit()-target.countCards('h');
+                    var num=Math.random();
+                    if(minus<2) return num>0.1;
+                    else return num>0.5;
+                },
+                ai:{
+                    baoShi:true,
                 }
             },
             
@@ -3406,7 +3836,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 0'
                     player.chooseTarget('将我方角色[能量区]的1[水晶]翻面为[宝石]',true,function(card,player,target){
                         return player.side==target.side;
-                    })
+                    }).set('ai',function(target){
+                        if(target.countNengLiang('b')>0) return 2;
+                        else return 1;
+                    });
                     target.changeZhiLiao(-2);
                     'step 1'
                     if(result.bool){
@@ -3432,6 +3865,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             event.num++;
                             event.redo();
 					    }
+                    }
+                },
+                ai:{
+                    order:3.4,
+                    result:{
+                        target:-1,
                     }
                 }
             },
@@ -3484,7 +3923,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     if(player.canBiShaBaoShi()){
                         choices.push('选项二');
                     }
-                    player.chooseControl(choices).set('choiceList',list);
+                    player.chooseControl(choices).set('choiceList',list).set('ai',function(){
+                        var player=_status.event.player;
+                        if(player.canBiShaBaoShi()) return '选项二';
+                        return '选项一';
+                    });
                     'step 1'
                     if(result.control=='选项一'){
                         player.removeBiShaShuiJing();
@@ -3500,6 +3943,14 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         }
                     }
                 },
+                check:function(event,player){
+                    if(player.countZhiShiWu('xianXue')+2>=3&&!player.canBiShaBaoShi()) return false;
+                    return true;
+                },
+                ai:{
+                    baoShi:true,
+                    shuiJing:true,
+                }
             },
             xianXue:{
                 intro:{
@@ -3537,6 +3988,16 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.addZhanJi('r',1);
                     'step 3'
                     target.changeZhiLiao(1);
+                },
+                ai:{
+                    order:3.7,
+                    result:{
+                        target:1,
+                        player:function(player){
+                            if(player.countCards('h')>=4) return 2;
+                            else return 1;
+                        }
+                    }
                 }
             },
             heiAnZuZhou:{
@@ -3556,6 +4017,18 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     target.damageFaShu(2,player);
                     'step 2'
                     player.damageFaShu(2,player);
+                },
+                ai:{
+                    order:3.7,
+                    result:{
+                        target:function(player,target){
+                            return get.damageEffect(target,2);
+                        },
+                        player:function(player){
+                            if(player.countCards('h')+2-player.zhiLiao>=6) return -1;
+                            else return 1;
+                        }
+                    }
                 }
             },
             weiLiCiFu:{
@@ -3599,6 +4072,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             trigger.parent.baseDamage+=2;
                             player.removeSkill('weiLiCiFu_xiaoGuo');
                         }
+                    }
+                },
+                ai:{
+                    order:3.8,
+                    result:{
+                        target:1,
                     }
                 }
             },
@@ -3650,6 +4129,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             player.removeSkill('xunJieCiFu_xiaoGuo');
                         }
                     }
+                },
+                ai:{
+                    order:3.8,
+                    result:{
+                        target:1,
+                    }
                 }
             },
             qiDao:{
@@ -3679,6 +4164,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             player.addZhiShiWu('qiDaoFuWen',2);
                         }
                     }
+                },
+                ai:{
+                    baoShi:true,
                 }
             },
             faLiChaoXi:{
@@ -3691,6 +4179,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 content:function(){
                     player.removeBiShaShuiJing();
                     player.storage.faShu++;
+                },
+                ai:{
+                    shuiJing:true,
                 }
             },
             qiDaoFuWen:{
@@ -3862,6 +4353,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.chongZhi();
                     'step 2'
                     player.storage.all++;
+                },
+                check:function(event,player){
+                    var num=Math.random();
+                    return num>0.2;
+                },
+                ai:{
+                    shuiJing:true,
                 }
                 
             },
@@ -3890,6 +4388,23 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.damageFaShu(4,player);
                     'step 1'
                     target.damageFaShu(3,player);
+                },
+                ai:{
+                    shuiJing:true,
+                    order:function(item,player){
+                        var num=3.1;
+                        if(player.isLinked()) num+=2;
+                        return num;
+                    },
+                    result:{
+                        target:function(player,target){
+                            return get.damageEffect(target,3);
+                        },
+                        player:function(player){
+                            if(player.isLinked()) return 0;
+                            else return -1;
+                        },
+                    }
                 }
             },
             xueYin:{
@@ -4066,7 +4581,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     for(var i=0;i<=3;i++){
                         list.push(i);
                     }
-                    player.chooseControl(list).set('prompt','选择战纹数量');
+                    player.chooseControl(list).set('prompt','选择战纹数量').set('ai',function(){
+                        return 1;
+                    });
                     'step 5'
                     if(result.control>0){
                         player.addZhiShiWu('zhanWen',result.control);
@@ -4101,6 +4618,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             }
                         }
                     },
+                },
+                ai:{
+                    baoShi:true,
                 }
             },
             shuangChongHuiXiang:{
@@ -4122,7 +4642,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     var str='对另一名目标角色造成'+event.num+'点法术伤害';
                     player.chooseTarget(str,true,function(card,player,target){
                         return target!=_status.event.trigger_player;
-                    }).set('trigger_player',trigger.player);
+                    }).set('trigger_player',trigger.player).set('ai',function(target){
+                        return get.damageEffect(target,_status.event.num);
+                    }).set('num',event.num);
                     'step 3'
                     if(result.bool){
                         game.log(player,'选择了',result.targets[0]);
@@ -4131,6 +4653,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         next.set('faShu',true);
                         next.set('shiQiXiaJiang',false);
                     }
+                },
+                ai:{
+                    shuiJing:true,
                 }
             },
             zhanWen:{
@@ -4174,6 +4699,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 prepare:'showCards',
                 content:function(){
                     player.changeZhiLiao(2);
+                },
+                ai:{
+                    order:3.8,
+                    result:{
+                        player:2,
+                    }
                 }
             },
             shuiZhiShenLi:{
@@ -4203,6 +4734,19 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 2'
                     player.changeZhiLiao(1);
                     target.changeZhiLiao(1);
+                },
+                ai:{
+                    order:3.5,
+                    result:{
+                        target:function(player,target){
+                            if(target.countCards('h')+1<=target.getHandcardLimit()){
+                                return 1.5;
+                            }else{
+                                return -1;
+                            }
+                        },
+                        player:1,
+                    }
                 }
             },
             shengShiShouHu:{
@@ -4218,7 +4762,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 0'
                     var num=trigger.parent.num;
                     var list=[0,1];
-                    player.chooseControl(list).set('prompt','使用的治疗数量，目前伤害量'+num).set('ai',function(){return list.length-1;});
+                    player.chooseControl(list).set('prompt','使用的治疗数量，目前伤害量'+num).set('ai',function(){return _status.event.num;}).set('num',list.length-1);
                     'step 1'
                     var zhiLiaonum=result.control;
 					if(zhiLiaonum>0){
@@ -4244,11 +4788,15 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     for(var i=1;i<=player.zhiLiao;i++){
                         list.push(i);
                     }
-                    player.chooseControl(list).set('prompt','转移[治疗]数量');
+                    player.chooseControl(list).set('prompt','转移[治疗]数量').set('num',list.length-1).set('ai',function(){
+                        return _status.event.num;
+                    });
                     'step 1'
                     event.zhiLiaonum=result.control;
                     player.chooseTarget('目标队友+'+event.zhiLiaonum+'[治疗]',true,function(card,player,target){
                         return target.side==player.side&&target!=player;
+                    }).set('ai',function(){
+                        return Math.random();
                     });
                     'step 2'
                     var target=result.targets[0];
@@ -4258,8 +4806,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						player.changeZhiLiao(-event.zhiLiaonum);
                         target.changeZhiLiao(event.zhiLiaonum,4);
 					}
+                },
+                ai:{
+                    shuiJing:true,
                 }
-                
             },
             shenShengLingYu:{
                 type:'faShu',
@@ -4286,7 +4836,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                     'step 3'
                     player.changeZhiLiao(-1);
-                    player.chooseTarget('对目标角色造成2点法术伤害③',true);
+                    player.chooseTarget('对目标角色造成2点法术伤害③',true).set('ai',function(target){
+                        return get.damageEffect(target,2);
+                    });
                     'step 4'
                     if(result.bool){
                         game.log(player,'选择了',result.targets[0]);
@@ -4298,6 +4850,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.changeZhiLiao(2);
                     player.chooseTarget('目标队友+1[治疗]',true,function(card,player,target){
                         return target.side==player.side&&target!=player;
+                    }).set('ai',function(target){
+                        return get.zhiLiaoEffect(target,1);
                     });
                     'step 6'
                     if(result.bool){
@@ -4306,7 +4860,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         result.targets[0].changeZhiLiao(1);
                         event.finish(); 
                     }
-                },       
+                },
+                ai:{
+                    shuiJing:true,
+                    order:3.8,
+                }       
             },
 
             //阴阳师
@@ -4341,6 +4899,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.hengZhi();
                     player.addZhiShiWu('guiHuo');
                     player.storage.gongJi++;
+                },
+                ai:{
+                    order:4,
+                    result:{
+                        player:1,
+                    }
                 }
             },
             yinYangZhanHuan:{
@@ -4360,6 +4924,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					return {name:get.name(event.trigger_card),xiBie:get.xiBie(event.trigger_card)}
 				},
                 group:['yinYangZhanHuan_xiaoGuo'],
+                ai:{
+                    order:5,
+                }
             },
             yinYangZhanHuan_xiaoGuo:{
                 trigger:{player:'useCard1'},
@@ -4391,6 +4958,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 content:function(){
                     player.draw(1);
                     player.addZhiShiWu('guiHuo');
+                },
+                check:function(event,player){
+                    if(player.countCards('h')+1<=player.getHandcardLimit()) return true;
+                    return false;
                 }
             },
             heiAnJiLi:{
@@ -4404,7 +4975,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 0'
                     player.removeZhiShiWu('guiHuo',player.countZhiShiWu('guiHuo'));
                     'step 1'
-                    player.chooseTarget('对目标角色造成2点法术伤害③',true);
+                    player.chooseTarget('对目标角色造成2点法术伤害③',true).set('ai',function(target){
+                        return get.damageEffect(target,2);
+                    });
                     'step 2'
                     if(result.bool){
                         game.log(player,'选择了',result.targets[0]);
@@ -4569,6 +5142,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             return '弃2张命格相同的手牌[展示]，目标队友弃1张牌'
                         }  
                     },
+                    check:function(button){
+                        return Math.random();
+                    }
                 },
                 subSkill:{
                     1:{
@@ -4615,6 +5191,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             target.chooseToDiscard(1,true);
                         }
                     }
+                },
+                ai:{
+                    shuiJing:true,
+                    order:3.8,
                 }
             },
             guiHuo:{
@@ -4645,6 +5225,14 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     target.damageFaShu(2,player);
                     'step 1'
                     player.damageFaShu(2,player);
+                },
+                ai:{
+                    order:3.6,
+                    result:{
+                        target:function(player,target){
+                            return get.damageEffect(target,2);
+                        }
+                    }
                 }
             },
             tianHuoDianKong:{
@@ -4685,6 +5273,14 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     target.damageFaShu(event.num,player);
                     'step 2'
                     player.damageFaShu(event.num,player);
+                },
+                ai:{
+                    order:3.7,
+                    result:{
+                        target:function(player,target){
+                            return get.damageEffect(target,3);
+                        }
+                    }
                 }
             },
             moNvZhiNu:{
@@ -4761,6 +5357,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         },
                         prompt:get.prompt('tiShenWanOu'),
                         prompt2:lib.translate.tiShenWanOu_info,
+                        ai:function(target){
+                            if(target.getHandcardLimit()-target.countCards('h')>=1){
+                                return 1;
+                            }else{
+                                return 0;
+                            }
+                        }
                     });
                     'step 1'
                     if(result.bool){
@@ -4808,6 +5411,14 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     if(player.countCards('h')>3){
                         player.chooseToDiscard(true,player.countCards('h')-3);
                     }
+                },
+                ai:{
+                    shuiJing:true,
+                    order:3.8,
+                    result:{
+                        target:-1,
+                        player:1,
+                    }
                 }
             },
             moNengFanZhuan:{
@@ -4844,8 +5455,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                     'step 2'
                     event.target.damageFaShu(event.num,player);
+                },
+                ai:{
+                    shuiJing:true,
                 }
-
             },
             chongSheng:{
                 intro:{
@@ -4948,6 +5561,15 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     target.damageFaShu(cards.length-1,player);
                     'step 1'
                     player.damageFaShu(cards.length-1,player);
+                },
+                ai:{
+                    baoShi:true,
+                    order:3.8,
+                    result:{
+                        target:function(player,target){
+                            return get.damageEffect(target,2);
+                        },
+                    }
                 }
             },
             shengJieFaDian:{
@@ -4981,6 +5603,15 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 contentAfter:function(){
                     player.damageFaShu(cards.length-1,player);
+                },
+                ai:{
+                    baoShi:true,
+                    order:3.8,
+                    result:{
+                        target:function(player,target){
+                            return get.zhiLiaoEffect(target,2);
+                        },
+                    }
                 }
             },
 
@@ -5123,6 +5754,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         }
                     }
                 },
+                ai:{
+                    order:3.7,
+                    result:{
+                        player:1,
+                    }
+                }
             },
             duoChongSheJi:{
                 trigger:{player:'useCardAfter'},
@@ -5226,6 +5863,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 9'
                     trigger.moGuanChongJi=false;
                     trigger.leiGuangSanShe=false;
+                },
+                check:function(event,player){
+                    if(player.countNengLiang('r')>0) return false;
+                    return true;
+                },
+                ai:{
+                    shuiJing:true,
                 }
             },
             moYan:{
@@ -5239,7 +5883,14 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.removeBiShaBaoShi();
                     'step 1'
                     var choiceList=['目标角色弃1张牌','你摸3张牌【强制】'];
-                    player.chooseControl().set('prompt','魔眼').set('choiceList',choiceList);
+                    player.chooseControl().set('prompt','魔眼').set('choiceList',choiceList).set('ai',function(){
+                        var player=_status.event.player;
+                        if(player.countCards('h')<2){
+                            return '选项二'
+                        }else{
+                            return '选项一'
+                        }
+                    });
                     'step 2'
                     if(result.control=='选项一'){
                         event.goto(3);
@@ -5261,6 +5912,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             return false;
                         }
                         return true;
+                    }).set('ai',function(target){
+                        return Math.random();
                     });
                     'step 4'
                     game.log(player,'选择了',result.targets[0]);
@@ -5290,6 +5943,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                     'step 10'
                     player.addNengLiang('b',1);
+                },
+                ai:{
+                    baoShi:true,
                 }
             },
             chongNengPai:{
@@ -5363,6 +6019,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 2'
                     if(player.storage.huanYingXingChen){
                         player.chooseTarget('对目标角色造成2点法术伤害③',true).set('ai',function(target){
+                            var player=_status.event.player;
                             return player.side!=target.side;
                         });
                     }else{
@@ -5385,6 +6042,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             player.storage.huanYingXingChen=false;
                         }
                     },
+                },
+                check:function(event,player){
+                    if(player.getHandcardLimit()-player.countCards('h')>=2) return true;
+                    return false;
                 }
             },
             heiAnShuFu:{
@@ -5533,6 +6194,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         event.finish();
                     }
                     
+                },
+                ai:{
+                    shuiJing:true,
                 }
             },
 
@@ -5562,6 +6226,14 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 content:function(){
                     target.damageFaShu(player.storage.lingFu_leiMing,player);
                 },
+                ai:{
+                    order:4,
+                    result:{
+                        target:function(player,target){
+                            return get.damageEffect(target,1);
+                        },
+                    }
+                }
             },
             lingFu_fengXing:{
                 type:'faShu',
@@ -5583,6 +6255,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 content:function(){
                     target.chooseToDiscard('h',true);
                 },
+                ai:{
+                    order:3.7,
+                    result:{
+                        target:1,
+                    }
+                }
             },
             nianZhou:{
                 trigger:{player:'lingFu'},
@@ -5625,9 +6303,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     event.trigger('baiGuiYeXing');
                     'step 4'
                     if(event.flag){
-                        player.chooseTarget('选取不受伤害的2名角色',2,true);
+                        player.chooseTarget('选取不受伤害的2名角色',2,true).set('ai',function(target){
+                            return -get.damageEffect(target,_status.event.num);
+                        }).set('num',player.storage.baiGuiYeXing);
                     }else{
-                        player.chooseTarget(`对目标角色造成${player.storage.baiGuiYeXing}点法术伤害③`,1,true);
+                        player.chooseTarget(`对目标角色造成${player.storage.baiGuiYeXing}点法术伤害③`,1,true).set('ai',function(target){
+                            return get.damageEffect(target,_status.event.num);
+                        }).set('num',player.storage.baiGuiYeXing);
                     }
                     'step 5'
                     if(event.flag){
@@ -5661,6 +6343,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }else if(trigger.name=='lingFu_leiMingContentBefore'){
                         player.storage.lingFu_leiMing++;
                     }
+                },
+                ai:{
+                    shuiJing:true,
                 }
             },
             yaoLi:{
@@ -5869,7 +6554,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                    'step 0'
                     player.removeBiShaShuiJing();
                     'step 1'
-                    player.chooseControl(['是','否']).set('prompt','是否摸1张牌');
+                    player.chooseControl(['是','否']).set('prompt','是否摸1张牌').set("ai",function(){
+                        return '否'
+                    });
                     'step 2'
                     if(result.control=='是'){
                         player.draw();
@@ -5920,6 +6607,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }else{
                         player.addZhiShiWu('lingGan');
                     }
+                },
+                ai:{
+                    shuiJing:true,
                 }
             },
             jiAngKuangXiangQu:{},
@@ -5987,7 +6677,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             if(player.countNengLiangAll()<player.getNengLiangLimit()&&xingShi.length>0){
                                 list.unshift('选项一');
                             }
-                            var next=player.chooseControl(list).set('choiceList',choiceList);
+                            var next=player.chooseControl(list).set('choiceList',choiceList).set("ai",function(){
+                                var num=Math.random();
+                                if(num<0.5) return '选项一';
+                                return '选项二';
+                            });
                             'step 1'
                             if(result.control=='选项一'){
                                 event.goto(2);
@@ -6150,6 +6844,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     target.addZhiShiWu('tiaoXinX');
                     target.storage.tiaoXinX_player=player;
                 },
+                ai:{
+                    order:4,
+                    result:{
+                        target:-1,
+                    }
+                }
             },
             tiaoXinX:{
                 intro:{
@@ -6336,6 +7036,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             event.trigger('jinDuanZhiLi');
                         }
                     },
+                },
+                ai:{
+                    shuiJing:true,
                 }
             },
             siDou:{
@@ -6348,6 +7051,17 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.removeBiShaBaoShi();
                     player.addZhiShiWu('nuQi',3);
                     trigger.shiQiMax=-1;
+                },
+                check:function(event,player){
+                    var num=Math.random();
+                    if(event.num+player.countCards('h')>player.getHandcardLimit()){
+                        return num>0.1;
+                    }else{
+                        return num>0.6;
+                    }
+                },
+                ai:{
+                    baoShi:true
                 }
             },
             nuQi:{
@@ -6557,6 +7271,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         player.chooseToDiscard(true,'h',player.countCards('h')-3);
                     };
                     player.changeZhiLiao(2);
+                },
+                ai:{
+                    shuiJing:true,
                 }
             },
             douQi:{
@@ -6670,6 +7387,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             }
                             var next=player.chooseControl(list);
                             next.set('prompt','是否移除X点[治疗]，目标队友弃X张牌');
+                            next.set('ai',function(){
+                                return 'cancel2';
+                            });
                             'step 1'
                             if(result.control=='cancel2'){
                                 event.finish();
@@ -6684,6 +7404,14 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             game.log(player,'选择了',result.targets[0]);
                             player.line(result.targets[0],'green');
                             result.targets[0].chooseToDiscard('h',true,event.num);
+                        }
+                    }
+                },
+                ai:{
+                    order:5.5,
+                    result:{
+                        target:function(player,target){
+                            return get.damageEffect(target,2);
                         }
                     }
                 }
@@ -6749,6 +7477,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             }
                         }
                     }
+                },
+                ai:{
+                    order:7,
+                    result:{
+                        player:1,
+                    }
                 }
             },
             shengGuangBaoLie:{
@@ -6791,7 +7525,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             return;
                         }
                         
-                    }
+                    },
                 },
                 subSkill:{
                     1:{
@@ -6811,6 +7545,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             player.addZhiShiWu('xinYang');
                             'step 3'
                             target.changeZhiLiao(1);
+                        },
+                        ai:{
+                            result:{
+                                target:function(target,player){
+                                    return get.zhiLiaoEffect(target,1);
+                                }
+                            }
                         }
                     },
                     2:{
@@ -6857,6 +7598,14 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             }
                         }
                     }
+                },
+                ai:{
+                    order:function(item,player){
+                        return 10-player.countCards('h');
+                    },
+                    result:{
+                        player:1,
+                    }
                 }
             },
             liuXingShengDan:{
@@ -6883,7 +7632,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                     player.chooseTarget(true,function(card,player,target){
                         return target.side==player.side;
-                    }).set('prompt','我方目标角色+1[治疗]');
+                    }).set('prompt','我方目标角色+1[治疗]').set('ai',function(target){
+                        return get.damageEffect(target,1);
+                    });
                     'step 2'
                     game.log(player,'选择了',result.targets[0]);
                     player.line(result.targets[0],'blue');
@@ -6934,7 +7685,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.changeXingBei(1);
                     var choiceList=['红方士气设置为蓝方士气','蓝方士气设置为红方士气'];
                     var list=['选项一','选项二']
-                    player.chooseControl().set('choiceList',choiceList);
+                    player.chooseControl().set('choiceList',choiceList).set('ai',function(){
+                        var num=Math.random();
+                        if(num<0.5) return '选项一';
+                        else return '选项二';
+                    });
                     'step 1'
                     if(result.control=='选项一'){
                         var num=game.lanShiQi-game.hongShiQi;
@@ -6942,6 +7697,19 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }else{
                         var num=game.hongShiQi-game.lanShiQi;
                         game.changeShiQi(num,false);
+                    }
+                },
+                ai:{
+                    order:function(item,player){
+                        if(player.side==true){
+                            if(game.hongShiQi<game.lanShiQi) return 10;
+                        }else{
+                            if(game.lanShiQi<game.hongShiQi) return 10;
+                        }
+                        return 2;
+                    },
+                    result:{
+                        player:1,
                     }
                 }
             },
@@ -6959,7 +7727,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     if(player.canBiShaBaoShi()){
                         list.push('选项二');
                     }
-                    player.chooseControl(list).set('choiceList',choiceList);
+                    player.chooseControl(list).set('choiceList',choiceList).set('ai',function(){
+                        var player=_status.event.player;
+                        if(player.canBiShaBaoShi()) return '选项二';
+                        return '选项一';
+                    });
                     'step 1'
                     if(result.control=='选项一'){
                         player.removeBiShaShuiJing();
@@ -6992,6 +7764,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             trigger.getParent('phase').teShu=true;
                         }
                     }
+                },
+                ai:{
+                    shuiJing:true,
+                    baoShi:true,
                 }
             },
             xinYang:{
@@ -7068,6 +7844,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         });
                         next.set('targetx',targetx);
                         next.set('ai',function(target){
+                            var player=_status.event.player;
                             return target.side!=player.side;
                         });
                     }
@@ -7198,6 +7975,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     else if(player.countNengLiangAll()%2==0) return player.getExpansions('jianHun').length;
                     else return 0;
                 },
+                ai:{
+                    shuiJing:true,
+                }
             },
             jianQi:{
                 intro:{
@@ -7458,6 +8238,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }else{
                         player.hengZhi();
                     }
+                },
+                ai:{
+                    baoShi:true,
                 }
             },
             shouHun:{
@@ -7499,6 +8282,14 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 prepare:'showCards',
                 content:function(){
                     player.addZhiShiWu('lanSeLingHun',cards.length);
+                },
+                ai:{
+                    order:function(item,player){
+                        return 2.1+player.countCards('h',card=>get.type(card)=='faShu');
+                    },
+                    result:{
+                        player:1,
+                    }
                 }
             },
             lingHunZhuanHuan:{
@@ -7512,7 +8303,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     var huangSe=player.hasZhiShiWu('huangSeLingHun');
                     if(lanSe&&huangSe){
                         var list=['黄色->蓝色','蓝色->黄色'];
-                        player.chooseControl(list).set('prompt','选择转换的灵魂');
+                        player.chooseControl(list).set('prompt','选择转换的灵魂').set('ai',function(){
+                            var player=_status.event.player;
+                            if(player.countZhiShiWu('lanSeLingHun')>=player.countZhiShiWu('huangSeLingHun')) return '黄色->蓝色';
+                            else return '蓝色->黄色';
+                        });
                     }else if(lanSe){
                         player.removeZhiShiWu('lanSeLingHun');
                         player.addZhiShiWu('huangSeLingHun');
@@ -7552,6 +8347,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         var num=2;
                     }
                     target.draw(num);
+                },
+                ai:{
+                    order:4,
+                    result:{
+                        target:-1,
+                    }
                 }
             },
             lingHunZhenBao:{
@@ -7576,7 +8377,15 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         num+=2;
                     }
                     target.damageFaShu(num,player);
-                },  
+                },
+                ai:{
+                    order:5,
+                    result:{
+                        target:function(player,target){
+                            return get.damageEffect(target,3);
+                        },
+                    }
+                }
             },
             lingHunFuYu:{
                 type:'faShu',
@@ -7596,6 +8405,20 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.removeZhiShiWu('lanSeLingHun',3);
                     'step 1'
                     target.addNengLiang('r',2);
+                },
+                ai:{
+                    order:5,
+                    result:{
+                        target:function(player,target){
+                            if(target.getHandcardLimit()-target.countNengLiangAll()>=2){
+                                return 2;
+                            }else if(target.getHandcardLimit()-target.countNengLiangAll()>=1){
+                                return 1;
+                            }else{
+                                return 0;
+                            }
+                        }
+                    }
                 }
             },
             lingHunLianJie:{
@@ -7695,6 +8518,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 1'
                     player.addZhiShiWu('huangSeLingHun',2);
                     player.addZhiShiWu('lanSeLingHun',2);
+                },
+                ai:{
+                    baoShi:true,
                 }
             },
             huangSeLingHun:{
@@ -7727,6 +8553,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         return target!=_status.event.targetX;
                     });
                     next.set('targetX',player.storage.tongShengGongSi_target);
+                    next.set('ai',function(target){
+                        var player=_status.event.player;
+                        if(target==player) return 0;
+                        if(player.isLinked()) return 1;
+                        else return -1;
+                    })
                     'step 2'
                     if(result.bool){
                         player.storage.tongShengGongSi_target.removeZhiShiWu('tongShengGongSi');
@@ -7746,12 +8578,20 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 5'
                     event.target.addZhiShiWu('tongShengGongSi');
                     if(!target.hasSkill('tongShengGongSi_xiaoGuo')){
-                        event.target.addSkill('tongShengGongSi_xiaoGuo');
                         event.target.storage.tongShengGongSi_player=player;
+                        event.target.addSkill('tongShengGongSi_xiaoGuo');                        
                     }
                     player.storage.tongShengGongSi_target=event.target;
                     'step 6'
                     event.target.qiPai();
+                },
+                check:function(event,player){
+                    if(player.isLinked()&&player.storage.tongShengGongSi_target.side==player.side) return false;
+                    var minus=player.getHandcardLimit()-player.countCards('h');
+                    var num=Math.random();
+                    if(player.isLinked()&&minus>=1) return num>0.1;
+                    if(minus>=3) return num>0.15;
+                    return false;
                 }
             },
             liuXue:{
@@ -7816,6 +8656,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.chooseToDiscard(true,2);
                     'step 1'
                     player.changeZhiLiao(1);
+                },
+                ai:{
+                    order:7.5,
+                    result:{
+                        player:2,
+                    }
                 }
             },
             xueZhiBeiMing:{
@@ -7834,7 +8680,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 contentBefore:function(){
                     'step 0'
                     var list=[1,2,3];
-                    player.chooseControl(list).set('prompt','选择伤害值');
+                    player.chooseControl(list).set('prompt','选择伤害值').set('ai',function(){
+                        var num=Math.random();
+                        if(num>0.5) return 2;
+                        else if(num>0.2) return 3;
+                        else return 1;
+                    });
                     'step 1'
                     player.storage.xueZhiBeiMin=result.control;
                 },
@@ -7843,6 +8694,16 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     target.damageFaShu(player.storage.xueZhiBeiMin,player);
                     'step 1'
                     player.damageFaShu(player.storage.xueZhiBeiMin,player);
+                },
+                ai:{
+                    order:function(card,player){
+                        return 8-player.countCards('h');
+                    },
+                    result:{
+                        target:function(player,target){
+                            return get.damageEffect(target,2)
+                        }
+                    }
                 }
             },
             tongShengGongSi:{
@@ -7865,8 +8726,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.storage.tongShengGongSi_use=true;
                     target.addZhiShiWu('tongShengGongSi');
                     if(!target.hasSkill('tongShengGongSi_xiaoGuo')){
-                        target.addSkill('tongShengGongSi_xiaoGuo');
                         target.storage.tongShengGongSi_player=player;
+                        target.addSkill('tongShengGongSi_xiaoGuo');
                     }
                     'step 2'
                     player.qiPai();
@@ -7878,21 +8739,35 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     xiaoGuo:{
                         mod:{
                             maxHandcard:function(player,num){
-                                if(player.hasZhiShiWu('tongShengGongSi')){
-                                    if(player.storage.tongShengGongSi_player.isLinked()){
-                                        return num+1;
-                                    }else{
-                                        return num-2;
-                                    }
-                                }else if(player.storage.tongShengGongSi_use){
+                                if(player.storage.tongShengGongSi_use){
                                     if(player.isLinked()){
                                         return num+1;
                                     }else{
                                         return num-2;
                                     }
+                                }else if(player.hasZhiShiWu('tongShengGongSi')){
+                                        if(player.storage.tongShengGongSi_player.isLinked()){
+                                            return num+1;
+                                        }else{
+                                            return num-2;
+                                    }
                                 }
                             }
                         }
+                    }
+                },
+                ai:{
+                    order:function(item,player){
+                        var num=0;
+                        if(player.isLinked()) num+=2;
+                        return 7-player.countCards('h')+num;
+                    },
+                    result:{
+                        target:function(player,target){
+                            if(target==player) return 0;
+                            if(player.isLinked()) return 2;
+                            else return -1;
+                        },
                     }
                 }
             },
@@ -7911,6 +8786,17 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     target.damageFaShu(2,player);
                     'step 2'
                     player.chooseToDiscard(3,true,'h');
+                },
+                ai:{
+                    baoShi:true,
+                    order:function(card,player){
+                        return 3+player.countCards('h');
+                    },
+                    result:{
+                        target:function(player,target){
+                            return get.damageEffect(target,2)
+                        }
+                    }
                 }
             },
 
@@ -7945,6 +8831,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     var next=game.createEvent();
                     next.player=player;
                     next.setContent(lib.skill.jian.contentx);
+                },
+                ai:{
+                    order:4.1,
+                    result:{
+                        player:1,
+                    }
                 }
             },
             duFen:{
@@ -7968,6 +8860,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                     'step 2'
                     trigger.num++;
+                },
+                check:function(event,player){
+                    if(event.player.side==player.side) return false;
+                    else return true;
                 }
             },
             chaoSheng:{
@@ -8022,6 +8918,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     trigger.player.damageFaShu(1,player);
                     'step 4'
                     trigger.player.damageFaShu(1,player);
+                },
+                check:function(event,player){
+                    if(event.player.side==player.side) return false;
+                    else return true;
                 }
             },
             diaoLing:{
@@ -8050,6 +8950,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     event.num--;
                     var next=player.chooseTarget('对目标角色造成1点法术伤害',true);
                     next.set('ai',function(target){
+                        var player=_status.event.player;
                         return target.side!=player.side;
                     });
                     'step 3'
@@ -8143,6 +9044,15 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     var next=game.createEvent();
                     next.player=player;
                     next.setContent(lib.skill.jian.contentx);
+                },
+                ai:{
+                    baoShi:true,
+                    order:function(card,player){
+                        return 9-player.getExpansions('jian').length;
+                    },
+                    result:{
+                        player:1,
+                    }
                 }
             },
             daoNiZhiDie:{
@@ -8158,7 +9068,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.chooseToDiscard(2,true);
                     'step 2'
                     var choiceList=['对目标角色造成1点法术伤害③，该伤害不能用[治疗]抵御',"<span class='tiaoJian'>(移除2个【茧】或对自己造成4点法术伤害③)</span>移除1个【蛹】"];
-                    var next=player.chooseControl().set('choiceList',choiceList);
+                    var next=player.chooseControl().set('choiceList',choiceList).set('ai',function(){
+                        return '选项一';
+                    });
                     'step 3'
                     if(result.control=='选项一'){
                         event.goto(4);
@@ -8167,7 +9079,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                     'step 4'
                     var next=player.chooseTarget("对目标角色造成1点法术伤害③，该伤害不能用[治疗]抵御",true);
-                    next.set('ai',function(target){return target.side!=player.side;})
+                    next.set('ai',function(target){
+                        var player=_status.event.player;
+                        return target.side!=player.side;
+                    })
                     'step 5'
                     game.log(player,'选择了',result.targets[0]);
                     player.line(result.targets[0],'red');
@@ -8187,6 +9102,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.removeZhiShiWu('DWZyong');
                     event.finish();
 
+                },
+                ai:{
+                    shuiJing:true,
+                    order:4,
                 }
             },
             jian:{
