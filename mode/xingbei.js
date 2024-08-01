@@ -203,6 +203,8 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				switch(lib.configOL.choose_mode){
 					case '多选1':uiintro.add('<div class="text chat">选角模式：多选1');break;
 					case 'CM02':uiintro.add('<div class="text chat">选角模式：CM02');break;
+					case 'BP01':uiintro.add('<div class="text chat">选角模式：BP01');break;
+					case 'BP02':uiintro.add('<div class="text chat">选角模式：BP02');break;
 				}
 				if(lib.configOL.choose_mode!='CM02'){
 					switch(lib.configOL.team_sequence){
