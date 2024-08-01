@@ -1449,6 +1449,9 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					event.list = list.randomGets(event.choose_number);
 					event.choosing=game.red_leader;
 					event.videoId = lib.status.videoId++;
+					event.red_chooseList = [];
+					event.blue_chooseList = [];
+
 					var createDialog = function (list, id, list1, list2) {
 						var dialog = ui.create.dialog("Ban角色", [list, "character"]);
 						dialog.classList.add("fullwidth");
@@ -1456,7 +1459,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						dialog.classList.add("noslide");
 						dialog.classList.add("fixed");
 						dialog.videoId = id;
-						if (list2 && list2) {
+						if (list1 && list2) {
 							ui.arena.classList.add("playerhidden");
 							for (var i = 0; i < dialog.buttons.length; i++) {
 								var button = dialog.buttons[i];
@@ -1483,6 +1486,8 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						createDialog,
 						event.list,
 						event.videoId,
+						event.red_chooseList,
+						event.blue_chooseList
 					];
 					'step 8'
 					var next = event.choosing.chooseButton(event.videoId, event.num, true);
@@ -1523,6 +1528,12 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						event.videoId
 					);
 					event.selected.addArray(result.links);
+					if(event.choosing==game.blue_leader){
+						event.blue_chooseList.addArray(result.links);
+					}else{
+						event.red_chooseList.addArray(result.links);
+					}
+
 					for(var i=0;i<result.links.length;i++){
 						var index=event.list.indexOf(result.links[i]);
 						if(index!=-1) event.list.splice(index,1);
@@ -1550,8 +1561,11 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					'step 12'
 					//设置第一次提示
 					event.choosed=event.choose_list[0];
-					console.log(event.choosed.node.name.innerHTML);
+					//console.log(event.choosed.node.name.innerHTML);
 					event.choosing=game.blue_leader;
+					event.red_chooseList = [];
+					event.blue_chooseList = [];
+					event.selected = [];
 
 					event.videoId = lib.status.videoId++;
 					var createDialog = function (choosed,list, id,list1, list2) {
@@ -1561,7 +1575,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						dialog.classList.add("noslide");
 						dialog.classList.add("fixed");
 						dialog.videoId = id;
-						if (list2 && list2) {
+						if (list1 && list2) {
 							ui.arena.classList.add("playerhidden");
 							for (var i = 0; i < dialog.buttons.length; i++) {
 								var button = dialog.buttons[i];
@@ -1580,9 +1594,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						}
 					};
 					game.broadcastAll(createDialog,event.choosed.node.name.innerHTML, event.list, event.videoId, event.choosing);
-					event.red_chooseList = [];
-					event.blue_chooseList = [];
-					event.selected = [];
+
 					_status.firstChoose = game.red_leader;
 					event.num=1;//记录选角次数
 					_status.onreconnect = [
