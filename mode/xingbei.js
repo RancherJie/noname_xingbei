@@ -1544,7 +1544,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						event.choosing=game.blue_leader;
 					}
 					event.num++;
-					if (event.num<event.number/2) {
+					if (event.num<=2) {
 						event.goto(8);
 					}
 					'step 10'
