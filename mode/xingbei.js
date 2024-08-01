@@ -213,7 +213,12 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						case 'crossed':uiintro.add('<div class="text chat">队伍顺序：交叉');break;
 						case 'CM':uiintro.add('<div class="text chat">队伍顺序：CM');break;
 					}
-					var last=uiintro.add('<div class="text chat">可选角色数：'+lib.configOL.choose_number);
+					if(lib.configOL.choose_mode=='BP02'||lib.configOL.choose_mode=='BP01'){
+						var last=uiintro.add('<div class="text chat">可选角色数：'+lib.configOL.BPchoose_number);
+					}else{
+						var last=uiintro.add('<div class="text chat">侯选角色数：'+lib.configOL.choose_number);
+					}
+					
 				}
 				switch(lib.configOL.viewHandcard){
 					case true:uiintro.add('<div class="text chat">可见队友手牌：是');break;
