@@ -2236,6 +2236,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					if (event.choose_list.length>0) {
 						event.goto(7);
 					}
+					game.delay(1);
 					'step 9'
 					game.delay(3);
 					'step 10'
@@ -2661,6 +2662,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					if (event.choose_list.length>0) {
 						event.goto(7);
 					}
+					game.delay(1);
 					'step 9'
 					game.delay(3);
 					'step 10'
