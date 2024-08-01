@@ -675,6 +675,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					case '多选1':game.chooseCharacterOLDuoXuanYi();break;
 					case 'CM02':game.chooseCharacterOLCM02();break;
 					case 'BP01':game.chooseCharacterOLBP01();break;
+					case 'BP02':game.chooseCharacterOLBP02();break;
 				}
 			},
 			
@@ -2287,7 +2288,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				});
 			},
 
-			chooseCharacterOLBP01:function(){
+			chooseCharacterOLBP02:function(){
 				var next=game.createEvent('chooseCharacterOL');
 				next.setContent(function(){
 					'step 0'
