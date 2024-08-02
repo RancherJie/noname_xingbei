@@ -18287,7 +18287,11 @@
 					'step 0'
 					player.zhiLiao+=num;
 					if(num>0){
-						game.log(player,'获得了'+num+'点治疗');
+						if(event.yiChu==true){
+							game.log(player,'获得了'+num+'点治疗'+',治疗溢出');
+						}else{
+							game.log(player,'获得了'+num+'点治疗');
+						}
 					}else if(num<0){
 						num=-num;
 						game.log(player,'移除了'+num+'点治疗')
