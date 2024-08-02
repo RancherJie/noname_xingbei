@@ -5019,6 +5019,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					'step 0'
 					event.source=trigger.player;
 					event.yingZhan=trigger.parent.yingZhan;
+                    event.storage=trigger.parent.storage;
 					var name=get.translation(event.source);
 					var propmt=`受到${name}的`;
 					if(event.yingZhan){
