@@ -9147,12 +9147,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 		},
 		
 		translate:{
-            //角色排序
-            '3星':'3星',
-            '3.5星':'3.5星',
-            '4星':'4星',
-            '4.5星':'4.5星',
-            '5星':'5星',
             //角色名字
 			fengZhiJianSheng:"风之剑圣",
             kuangZhanShi:"狂战士",
