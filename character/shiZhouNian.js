@@ -1821,7 +1821,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 							player.changeZhanJi('b',-1);
 						}
 					}
-                    player.chooseTarget(1,true,'选择一个目标角色+'+number+'[治疗]');
+                    player.chooseTarget(1,true,'选择一个目标角色+'+number+'[治疗]').set('ai',function(){
+                        return get.attitude(player, target)
+                    });
                     'step 3'
                     game.log(player,'选择了',result.targets[0]);
                     player.line(result.targets[0],'blue');
@@ -1997,7 +1999,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     target.damageFaShu(event.num,player);
                     'step 2'
                     player.chooseTarget(1,'冰冻：选择1名角色+1[治疗]',true).set('ai',function(target){
-                        return get.damageEffect(target);
+                        return get.attitude(player, target)
                     });
                     'step 3'
                     if(result.bool){
@@ -2349,7 +2351,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.discard(card);
                     event.trigger('yiChuAnYue');
                     'step 4'
-                    player.chooseTarget(1,'目标角色+1[治疗]',true);
+                    player.chooseTarget(1,'目标角色+1[治疗]',true).set('ai',function(target){
+                        return get.attitude(player, target)
+                    });
                     'step 5'
                     if(result.bool){
                         game.log(player,'选择了',result.targets[0]);
@@ -3256,7 +3260,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         },
                         content:function(){
                             'step 0'
-                            player.chooseTarget('目标角色+1[治疗]',true);
+                            player.chooseTarget('目标角色+1[治疗]',true).set('ai',function(){
+                                return get.attitude(player, target)
+                            });
                             'step 1'
                             game.log(player,'选择了',result.targets[0]);
                             player.line(result.targets[0],'blue');
@@ -3358,7 +3364,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             player.chongZhi();
                             player.unmarkSkill('zhuFu');
                             player.chooseTarget('对目标角色造成2点法术伤害',true).set('ai',function(target){
-                                return get.damageEffect(target,2);
+                                return -get.attitude(player, target)
                             });
                             'step 1'
                             game.log(player,'选择了',result.targets[0]);
@@ -4643,8 +4649,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.chooseTarget(str,true,function(card,player,target){
                         return target!=_status.event.trigger_player;
                     }).set('trigger_player',trigger.player).set('ai',function(target){
-                        return get.damageEffect(target,_status.event.num);
-                    }).set('num',event.num);
+                        return -get.attitude(player, target);
+                    });
                     'step 3'
                     if(result.bool){
                         game.log(player,'选择了',result.targets[0]);
@@ -4837,7 +4843,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 3'
                     player.changeZhiLiao(-1);
                     player.chooseTarget('对目标角色造成2点法术伤害③',true).set('ai',function(target){
-                        return get.damageEffect(target,2);
+                        return -get.attitude(player, target);
                     });
                     'step 4'
                     if(result.bool){
@@ -4976,7 +4982,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.removeZhiShiWu('guiHuo',player.countZhiShiWu('guiHuo'));
                     'step 1'
                     player.chooseTarget('对目标角色造成2点法术伤害③',true).set('ai',function(target){
-                        return get.damageEffect(target,2);
+                        return -get.attitude(player, target)
                     });
                     'step 2'
                     if(result.bool){
@@ -5013,6 +5019,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					'step 0'
 					event.source=trigger.player;
 					event.yingZhan=trigger.parent.yingZhan;
+                    event.storage=trigger.parent.storage;
 					var name=get.translation(event.source);
 					var propmt=`受到${name}的`;
 					if(event.yingZhan){
@@ -6304,11 +6311,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 4'
                     if(event.flag){
                         player.chooseTarget('选取不受伤害的2名角色',2,true).set('ai',function(target){
-                            return -get.damageEffect(target,_status.event.num);
+                            return get.attitude(player, target);
                         }).set('num',player.storage.baiGuiYeXing);
                     }else{
                         player.chooseTarget(`对目标角色造成${player.storage.baiGuiYeXing}点法术伤害③`,1,true).set('ai',function(target){
-                            return get.damageEffect(target,_status.event.num);
+                            return -get.attitude(player, target);
                         }).set('num',player.storage.baiGuiYeXing);
                     }
                     'step 5'
