@@ -385,13 +385,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						game.players[i].node.identity.dataset.color=game.players[i].side+'zhu';
 					}
 					//22选将框分配
-					var list=[];
-
-					for(i in lib.character){
-						if(!lib.filter.characterDisabled(i)){
-							list.push(i);
-						}
-					}
+					var list=get.characters();
 
 					event.list=list;
 					
@@ -805,22 +799,8 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					}];
 					
 					//22联机分配角色
-					var list=[];
-					var libCharacter={};
-					for(var i=0;i<lib.configOL.characterPack.length;i++){
-						var pack=lib.characterPack[lib.configOL.characterPack[i]];
-						for(var j in pack){
-							if(typeof func=='function'&&func(j)) continue;
-							if(lib.connectBanned.contains(j)) continue;
-							if(lib.character[j]) libCharacter[j]=pack[j];
-						}
-					}
+					var list=get.charactersOL();
 
-					for(i in libCharacter){
-						if(lib.filter.characterDisabled(i,libCharacter)) continue;
-						list.push(i);
-
-					}
 					var choose={};
 					event.list=list;
 
