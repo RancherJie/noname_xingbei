@@ -512,7 +512,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						event.phaseswap=true;
 					}
 
-					var dialog=ui.create.dialog(basestr,[characterChoice,'characterx']);
+					var dialog=ui.create.dialog(basestr,[characterChoice,'character']);
 					game.me.chooseButton(true,dialog,basenum).set('onfree',true);
 					if(!_status.brawl||!_status.brawl.noAddSetting){
 						if(get.config('change_identity')){
@@ -531,7 +531,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 							}
 							var buttons=ui.create.div('.buttons');
 							var node=_status.event.dialog.buttons[0].parentNode;
-							_status.event.dialog.buttons=ui.create.buttons(list.randomGets(choose_number),'characterx',buttons);
+							_status.event.dialog.buttons=ui.create.buttons(list.randomGets(choose_number),'character',buttons);
 							_status.event.dialog.content.insertBefore(buttons,node);
 							buttons.animate('start');
 							node.remove();
@@ -879,12 +879,8 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						}
 						dialog.addText('你的选将框');
 						var buttons=ui.create.div('.buttons',dialog.content);
-						dialog.players=ui.create.buttons(players,'characterx',buttons)
+						dialog.players=ui.create.buttons(players,'character',buttons)
 						dialog.buttons=dialog.buttons.concat(dialog.players);
-						//dialog.addText('队友的选将框（点击可为其推荐角色）');
-						//buttons=ui.create.div('.buttons',dialog.content);
-						//dialog.friends=ui.create.buttons(friends,'characterx',buttons)
-						//dialog.buttons=dialog.buttons.concat(dialog.friends);
 					},event.videoId,choose);
 					
 					//发送选择事件
