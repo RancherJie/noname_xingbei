@@ -9185,13 +9185,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             yueZhiNvShen:"月之女神",
             shouLingWuShi:"兽灵武士",
             shengGong:"圣弓",
-            zhanDouFaShi:"战斗法师",
-            xingZhuiNvWu:"星坠巫女",
-            shengTingJianChaShi:"圣庭监察士",
-            lieWuRen:"猎巫人",
-            shengDianQiShi:"圣殿骑士",
-            yuanChuZhiGong:"原初之弓",
-
 
             
             
