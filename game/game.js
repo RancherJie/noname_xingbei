@@ -20881,7 +20881,7 @@
 					var hp=this.node.hp;
 					hp.style.transition='none';
 					this.hp=this.zhiLiao;
-					if(this.hp>this.maxHp){
+					if(this.hp>=this.maxHp){
 						this.maxHp=this.hp;
 					}else{
 						this.maxHp=this.getZhiLiaoLimit();
