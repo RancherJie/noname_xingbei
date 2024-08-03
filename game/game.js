@@ -20892,6 +20892,7 @@
 						player.zhiLiao=zhiLiao;
 						player.update();
 					},this,this.hp,this.maxHp,this.zhiLiao);
+					/*
 					if(!_status.video){
 						if(this.zhiLiao){
 							this.markSkill('gzhiLiao');
@@ -20899,7 +20900,7 @@
 						else{
 							this.unmarkSkill('gzhiLiao');
 						}
-					}
+					}*/
 					if(!this.storage.nohp){
 						if(this.maxHp==Infinity){
 							hp.innerHTML='∞';
