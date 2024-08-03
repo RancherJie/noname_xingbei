@@ -394,18 +394,15 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						}
 						if(ix.length){
 							list.push(i);
-							list4.addArray(ix);
 						}
 					}
 					for(i in lib.character){
 						if(!list4.contains(i)&&!lib.filter.characterDisabled(i)){
 							list.push(i);
-							list4.push(i);
 						}
 					}
 					var choose=[];
 					event.list=list;
-					_status.characterlist=list4;
 					
 
 					var addSetting=function(dialog){
@@ -638,9 +635,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 							}
 						}
 					}
-					for(var i=0;i<game.players.length;i++){
-						_status.characterlist.remove(game.players[i].name1);
-					}
+
 					'step 3'
 					for(var i=0;i<game.players.length;i++){
 						game.players[i].storage.moDan=false;
@@ -821,7 +816,6 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					//22联机分配角色
 					var list=[];
 					var libCharacter={};
-					var list4=[];
 					for(var i=0;i<lib.configOL.characterPack.length;i++){
 						var pack=lib.characterPack[lib.configOL.characterPack[i]];
 						for(var j in pack){
@@ -837,7 +831,6 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						}
 						if(ix.length){
 							list.push(i);
-							list4.addArray(ix);
 						}
 					}
 					game.broadcast(function(list){
@@ -851,11 +844,11 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					for(i in libCharacter){
 						if(list4.contains(i)||lib.filter.characterDisabled(i,libCharacter)) continue;
 						list.push(i);
-						list4.push(i);
+
 					}
 					var choose={};
 					event.list=list;
-					_status.characterlist=list4;
+
 					//推荐队友选将
 					//给所有人生成对话框
 					for(var i=0;i<game.players.length;i++){
@@ -1084,7 +1077,6 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						if(!lib.character[result[i]]){
 							result[i]=game._characterChoice[i].randomGet();
 						}
-						_status.characterlist.remove(result[i]);
 						if(!lib.playerOL[i].name1){
 							lib.playerOL[i].init(result[i]);
 						}
