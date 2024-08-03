@@ -386,22 +386,13 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					}
 					//22选将框分配
 					var list=[];
-					var list4=[];
-					for(i in lib.characterReplace){
-						var ix=lib.characterReplace[i];
-						for(var j=0;j<ix.length;j++){
-							if(lib.filter.characterDisabled(ix[j])) ix.splice(j--,1);
-						}
-						if(ix.length){
-							list.push(i);
-						}
-					}
+
 					for(i in lib.character){
-						if(!list4.contains(i)&&!lib.filter.characterDisabled(i)){
+						if(!lib.filter.characterDisabled(i)){
 							list.push(i);
 						}
 					}
-					var choose=[];
+
 					event.list=list;
 					
 
@@ -824,25 +815,9 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 							if(lib.character[j]) libCharacter[j]=pack[j];
 						}
 					}
-					for(i in lib.characterReplace){
-						var ix=lib.characterReplace[i];
-						for(var j=0;j<ix.length;j++){
-							if(!libCharacter[ix[j]]||lib.filter.characterDisabled(ix[j],libCharacter)) ix.splice(j--,1);
-						}
-						if(ix.length){
-							list.push(i);
-						}
-					}
-					game.broadcast(function(list){
-						for(var i in lib.characterReplace){
-							var ix=lib.characterReplace[i];
-							for(var j=0;j<ix.length;j++){
-								if(!list.contains(ix[j])) ix.splice(j--,1);
-							}
-						}
-					},list4);
+
 					for(i in libCharacter){
-						if(list4.contains(i)||lib.filter.characterDisabled(i,libCharacter)) continue;
+						if(lib.filter.characterDisabled(i,libCharacter)) continue;
 						list.push(i);
 
 					}
