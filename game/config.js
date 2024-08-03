@@ -16,7 +16,7 @@ window.config={
 	zhinang_tricks:[],
 	connect_zhinang_tricks:[],
 	all:{
-		sgscharacters:['xingbei','yiDuanYeHuo'],
+		sgscharacters:['shiZhouNian'],
 		sgscards:['xingbei'],
 		sgsmodes:['connect','xingbei'],
 		stockmode:['connect','xingbei'],
