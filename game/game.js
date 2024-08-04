@@ -18286,7 +18286,7 @@
 				changeZhiLiao:function(){
 					'step 0'
 					player.zhiLiao+=num;
-					if(num>0){
+					if(num>=0){
 						if(event.yiChu==true){
 							game.log(player,'获得了'+num+'点治疗'+',治疗溢出');
 						}else{
