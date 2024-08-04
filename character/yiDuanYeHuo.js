@@ -368,6 +368,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             shenWei:"[响应]神威",
             shengCai:"[响应]圣裁",
             shengYu:"[法术]圣愈",
+            shengYu_backup:"圣愈",
             shenZhiZi:"[被动]神之子",
             shenLinShengQi:"[法术]神临圣启",
             shengYanQiFu:"[响应]圣炎祈愿",
