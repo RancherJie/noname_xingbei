@@ -56768,9 +56768,12 @@
 		},
 
 		characterGets:function(list,num){
-			if(!num) num=1;
 			var result=[];
-			result=list.randomRemove(num);
+			if(!num){
+				result=list.slice();
+			}else{
+				result=list.randomRemove(num);
+			}
 			if(result.includes('hongLianQiShi')&&result.includes('shengDianQiShi')){
 				var num=Math.random();
 				if(num<0.5){
