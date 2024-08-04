@@ -385,27 +385,9 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						game.players[i].node.identity.dataset.color=game.players[i].side+'zhu';
 					}
 					//22选将框分配
-					var list=[];
-					var list4=[];
-					for(i in lib.characterReplace){
-						var ix=lib.characterReplace[i];
-						for(var j=0;j<ix.length;j++){
-							if(lib.filter.characterDisabled(ix[j])) ix.splice(j--,1);
-						}
-						if(ix.length){
-							list.push(i);
-							list4.addArray(ix);
-						}
-					}
-					for(i in lib.character){
-						if(!list4.contains(i)&&!lib.filter.characterDisabled(i)){
-							list.push(i);
-							list4.push(i);
-						}
-					}
-					var choose=[];
+					var list=get.characters();
+
 					event.list=list;
-					_status.characterlist=list4;
 					
 
 					var addSetting=function(dialog){
@@ -512,7 +494,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						event.phaseswap=true;
 					}
 
-					var dialog=ui.create.dialog(basestr,[characterChoice,'characterx']);
+					var dialog=ui.create.dialog(basestr,[characterChoice,'character']);
 					game.me.chooseButton(true,dialog,basenum).set('onfree',true);
 					if(!_status.brawl||!_status.brawl.noAddSetting){
 						if(get.config('change_identity')){
@@ -531,7 +513,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 							}
 							var buttons=ui.create.div('.buttons');
 							var node=_status.event.dialog.buttons[0].parentNode;
-							_status.event.dialog.buttons=ui.create.buttons(list.randomGets(choose_number),'characterx',buttons);
+							_status.event.dialog.buttons=ui.create.buttons(list.randomGets(choose_number),'character',buttons);
 							_status.event.dialog.content.insertBefore(buttons,node);
 							buttons.animate('start');
 							node.remove();
@@ -638,9 +620,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 							}
 						}
 					}
-					for(var i=0;i<game.players.length;i++){
-						_status.characterlist.remove(game.players[i].name1);
-					}
+
 					'step 3'
 					for(var i=0;i<game.players.length;i++){
 						game.players[i].storage.moDan=false;
@@ -819,43 +799,11 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					}];
 					
 					//22联机分配角色
-					var list=[];
-					var libCharacter={};
-					var list4=[];
-					for(var i=0;i<lib.configOL.characterPack.length;i++){
-						var pack=lib.characterPack[lib.configOL.characterPack[i]];
-						for(var j in pack){
-							if(typeof func=='function'&&func(j)) continue;
-							if(lib.connectBanned.contains(j)) continue;
-							if(lib.character[j]) libCharacter[j]=pack[j];
-						}
-					}
-					for(i in lib.characterReplace){
-						var ix=lib.characterReplace[i];
-						for(var j=0;j<ix.length;j++){
-							if(!libCharacter[ix[j]]||lib.filter.characterDisabled(ix[j],libCharacter)) ix.splice(j--,1);
-						}
-						if(ix.length){
-							list.push(i);
-							list4.addArray(ix);
-						}
-					}
-					game.broadcast(function(list){
-						for(var i in lib.characterReplace){
-							var ix=lib.characterReplace[i];
-							for(var j=0;j<ix.length;j++){
-								if(!list.contains(ix[j])) ix.splice(j--,1);
-							}
-						}
-					},list4);
-					for(i in libCharacter){
-						if(list4.contains(i)||lib.filter.characterDisabled(i,libCharacter)) continue;
-						list.push(i);
-						list4.push(i);
-					}
+					var list=get.charactersOL();
+					list=get.characterGets(list);
 					var choose={};
 					event.list=list;
-					_status.characterlist=list4;
+
 					//推荐队友选将
 					//给所有人生成对话框
 					for(var i=0;i<game.players.length;i++){
@@ -879,12 +827,8 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						}
 						dialog.addText('你的选将框');
 						var buttons=ui.create.div('.buttons',dialog.content);
-						dialog.players=ui.create.buttons(players,'characterx',buttons)
+						dialog.players=ui.create.buttons(players,'character',buttons)
 						dialog.buttons=dialog.buttons.concat(dialog.players);
-						//dialog.addText('队友的选将框（点击可为其推荐角色）');
-						//buttons=ui.create.div('.buttons',dialog.content);
-						//dialog.friends=ui.create.buttons(friends,'characterx',buttons)
-						//dialog.buttons=dialog.buttons.concat(dialog.friends);
 					},event.videoId,choose);
 					
 					//发送选择事件
@@ -1088,7 +1032,6 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						if(!lib.character[result[i]]){
 							result[i]=game._characterChoice[i].randomGet();
 						}
-						_status.characterlist.remove(result[i]);
 						if(!lib.playerOL[i].name1){
 							lib.playerOL[i].init(result[i]);
 						}
@@ -1455,7 +1398,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					'step 7'//ban角色
 					//角色列表
 					var list = get.charactersOL();
-					event.list = list.randomGets(event.choose_number);
+					event.list = get.characterGets(list,event.choose_number);
 					event.choosing=game.red_leader;
 					event.videoId = lib.status.videoId++;
 					event.red_chooseList = [];
@@ -1877,7 +1820,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					//console.log('chooseCharacterOLCM02');
 					//var ref=game.players[0];
 					event.number=lib.configOL.number;
-					event.choose_number=lib.configOL.BPchoose_number;
+					event.choose_number=parseInt(lib.configOL.BPchoose_number);
 
 					var team_sequence=lib.configOL.team_sequence;
 
@@ -2004,7 +1947,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					//ban角色
 					//角色列表
 					var list = get.charactersOL();
-					event.list = list.randomGets(event.choose_number);
+					event.list = get.characterGets(list,event.choose_number);
 					event.choosing=event.red_list[0];
 					event.videoId = lib.status.videoId++;
 					event.red_ban=[];
@@ -2303,7 +2246,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					//console.log('chooseCharacterOLCM02');
 					//var ref=game.players[0];
 					event.number=lib.configOL.number;
-					event.choose_number=event.choose_number=lib.configOL.BPchoose_number;;
+					event.choose_number=parseInt(lib.configOL.BPchoose_number);
 
 					var team_sequence=lib.configOL.team_sequence;
 
@@ -2430,7 +2373,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					//ban角色
 					//角色列表
 					var list = get.charactersOL();
-					event.list = list.randomGets(event.choose_number);
+					event.list = get.characterGets(list,event.choose_number);
 					event.choosing=event.red_list[0];
 					event.videoId = lib.status.videoId++;
 					event.red_ban=[];

@@ -10510,7 +10510,13 @@
 			shui:"水",
 			feng:"风",
 			lei:"雷",
-			guang:"光"
+			guang:"光",
+			//角色星级
+			'3星':'3星',
+			'3.5星':'3.5星',
+			'4星':'4星',
+			'4.5星':'4.5星',
+			'5星':'5星',
 
 		},
 		element:{
@@ -18280,8 +18286,12 @@
 				changeZhiLiao:function(){
 					'step 0'
 					player.zhiLiao+=num;
-					if(num>0){
-						game.log(player,'获得了'+num+'点治疗');
+					if(num>=0){
+						if(event.yiChu==true){
+							game.log(player,'获得了'+num+'点治疗'+',治疗溢出');
+						}else{
+							game.log(player,'获得了'+num+'点治疗');
+						}
 					}else if(num<0){
 						num=-num;
 						game.log(player,'移除了'+num+'点治疗')
@@ -20871,7 +20881,7 @@
 					var hp=this.node.hp;
 					hp.style.transition='none';
 					this.hp=this.zhiLiao;
-					if(this.hp>this.maxHp){
+					if(this.hp>=this.maxHp){
 						this.maxHp=this.hp;
 					}else{
 						this.maxHp=this.getZhiLiaoLimit();
@@ -20882,6 +20892,7 @@
 						player.zhiLiao=zhiLiao;
 						player.update();
 					},this,this.hp,this.maxHp,this.zhiLiao);
+					/*
 					if(!_status.video){
 						if(this.zhiLiao){
 							this.markSkill('gzhiLiao');
@@ -20889,7 +20900,7 @@
 						else{
 							this.unmarkSkill('gzhiLiao');
 						}
-					}
+					}*/
 					if(!this.storage.nohp){
 						if(this.maxHp==Infinity){
 							hp.innerHTML='∞';
@@ -56737,6 +56748,54 @@
 			}
 			return list;
 		},
+
+		characters:function(func){
+			var list=[];
+			var libCharacter={};
+			for(var i=0;i<lib.config.characters.length;i++){
+				var pack=lib.characterPack[lib.config.characters[i]];
+				for(var j in pack){
+					if(typeof func=='function'&&func(j)) continue;
+					if(lib.character[j]) libCharacter[j]=pack[j];
+				}
+			}
+			for(i in libCharacter){
+				if(lib.filter.characterDisabled(i,libCharacter)) continue;
+				list.push(i);
+			}
+
+			return list;
+		},
+
+		characterGets:function(list,num){
+			var result=[];
+			if(!num){
+				result=list.slice();
+			}else{
+				result=list.randomRemove(num);
+			}
+			if(result.includes('hongLianQiShi')&&result.includes('shengDianQiShi')){
+				var num=Math.random();
+				if(num<0.5){
+					result=result.filter(item=>item!='hongLianQiShi');
+				}else{
+					result=result.filter(item=>item!='shengDianQiShi');
+				}
+				result.push(list.randomRemove());
+			}
+			if(result.includes('shengNv')&&result.includes('jinGuiZhiNv')){
+				var num=Math.random();
+				if(num<0.5){
+					result=result.filter(item=>item!='shengNv');
+				}else{
+					result=result.filter(item=>item!='jinGuiZhiNv');
+				}
+				result.push(list.randomRemove());
+			}
+			return result;
+		},
+
+
 		trimip:function(str){
 			var len=str.length-5;
 			if(str.lastIndexOf(':8080')==len){

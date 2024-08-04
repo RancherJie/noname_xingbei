@@ -3874,7 +3874,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                 },
                 ai:{
-                    order:3.4,
+                    order:function(item,player){
+                        return 6-player.countCards('h');
+                    },
                     result:{
                         target:-1,
                     }
@@ -3893,6 +3895,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 1'
                     player.chooseTarget('对目标对手造成1点法术伤害③',true,function(card,player,target){
                         return target.side!=player.side;
+                    }).set('ai',function(target){
+                        return get.damageEffect(target,1);
                     })
                     'step 2'
                     if(result.bool){
@@ -9147,12 +9151,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 		},
 		
 		translate:{
-            //角色排序
-            '3星':'3星',
-            '3.5星':'3.5星',
-            '4星':'4星',
-            '4.5星':'4.5星',
-            '5星':'5星',
             //角色名字
 			fengZhiJianSheng:"风之剑圣",
             kuangZhanShi:"狂战士",
@@ -9191,13 +9189,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             yueZhiNvShen:"月之女神",
             shouLingWuShi:"兽灵武士",
             shengGong:"圣弓",
-            zhanDouFaShi:"战斗法师",
-            xingZhuiNvWu:"星坠巫女",
-            shengTingJianChaShi:"圣庭监察士",
-            lieWuRen:"猎巫人",
-            shengDianQiShi:"圣殿骑士",
-            yuanChuZhiGong:"原初之弓",
-
 
             
             

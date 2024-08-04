@@ -2,7 +2,7 @@ window.noname_package={
 	character:{
 		//standard:'标准',
 		shiZhouNian:"十周年",
-		//yiDuanYeHuo:"异端业火",
+		yiDuanYeHuo:"异端业火",
 	},
 	card:{
 		//standard:'标准',
