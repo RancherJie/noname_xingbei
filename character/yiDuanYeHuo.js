@@ -353,6 +353,17 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 markimage:'image/card/hong.png',
             },
 
+            //圣庭监察士
+            kuangXinTu:{},
+            caiJueLunDing:{},
+            enDianShenShou:{},
+            jingHuaZhiShu:{},
+            biHuLingYu:{},
+            caiJueZhe:{},
+            shenShengBianCe:{},
+            yiDuanCaiJueSuo:{},
+            caiJue:{},
+
         },
 		
 		translate:{
@@ -381,6 +392,27 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             shenLinShengQi_info:"[水晶]无视你的【圣印】上限为你+2【圣印】，但你的【圣印】最高为4，额外+1[攻击行动]；本回合你不能发动[神威]。",
             shengYanQiFu_info:"[水晶]<span class='tiaoJian'>[重置]脱离【圣炎形态】时)</span>目标角色+2[治疗]。",
             shengYin_info:'【圣印】为圣殿骑士专有指示物，上限为2。',
+            
+            //圣庭监察士
+            kuangXinTu:"[被动]狂信徒",
+            caiJueLunDing:"[响应]裁决论定",
+            enDianShenShou:"[响应]恩典神授",
+            jingHuaZhiShu:"[响应]净化之术",
+            biHuLingYu:"(专)[庇护领域]",
+            caiJueZhe:"[启动]裁决者",
+            shenShengBianCe:"[法术]神圣鞭策",
+            yiDuanCaiJueSuo:"裁决",
+            caiJue:"异端裁决所",
+
+            kuangXinTu_info:"游戏初始时你拥有［异端裁决所］。 （我方队友存在圣类命格时）你的［治疗］上限+1。 （你的［攻击行动］结束后）目标角色+1［治疗］。",
+            caiJueLunDing_info:"［回合限定］（我方目标角色［治疗］溢出时）［异端裁决所］+1［治疗］︔（若因此［异端裁决所］［治疗］增加）你+1［水晶］。",
+            enDianShenShou_info:"（你执行［提炼］时，移除我方角色合计2［治疗］或［异端裁决所］3［治疗］）将提炼出的［宝石］和［水晶］全部交给目标队友，你弃1张牌；（若该弃牌为圣类命格，可展示之［展示］）对目标对手造成1点法术伤害③。",
+            jingHuaZhiShu_info:"（你承受伤害⑥并结算完成后，弃1张法术牌［展示］）你+1［治疗］，摸1张牌［强制］，然后移除［异端裁决所］上1［治疗］。",
+            biHuLingYu_info:"（我方目标角色受到伤害时③，移除［异端裁决所］3［治疗］）本次伤害-1，你+1［裁决］。",
+            caiJueZhe_info:"［水晶］你+1［裁决］，［异端裁决所］+2［治疗］。",
+            shenShengBianCe_info:"［水晶］（移除X点［裁决］）X名目标角色各摸1张牌［强制］，你弃X张牌。",
+            yiDuanCaiJueSuo_info:"",
+            caiJue_info:"",
             
         },
 	};
