@@ -56767,6 +56767,31 @@
 			return list;
 		},
 
+		characterGets:function(list,num){
+			if(!num) num=1;
+			var result=[];
+			result=list.randomRemove(num);
+			if(result.includes('hongLianQiShi')&&result.includes('shengDianQiShi')){
+				var num=Math.random();
+				if(num<0.5){
+					result=result.filter(item=>item!='hongLianQiShi');
+				}else{
+					result=result.filter(item=>item!='shengDianQiShi');
+				}
+				result.push(list.randomRemove());
+			}
+			if(result.includes('shengNv')&&result.includes('jinGuiZhiNv')){
+				var num=Math.random();
+				if(num<0.5){
+					result=result.filter(item=>item!='shengNv');
+				}else{
+					result=result.filter(item=>item!='jinGuiZhiNv');
+				}
+				result.push(list.randomRemove());
+			}
+			return result;
+		},
+
 
 		trimip:function(str){
 			var len=str.length-5;
