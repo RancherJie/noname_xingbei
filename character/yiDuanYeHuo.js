@@ -202,11 +202,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         },
                         content:function(){
                             if(player.side==true){
-                                var shiQi=game.lanShiQi;
-                            }else{
                                 var shiQi=game.hongShiQi;
+                            }else{
+                                var shiQi=game.lanShiQi;
                             }
-                            var num=10-shiQi;
+                            var num=1-shiQi;
                             trigger.num=num;
                         },
                     },
@@ -219,11 +219,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         },
                         content:function(){
                             if(player.side==true){
-                                var shiQi=game.lanShiQi;
-                            }else{
                                 var shiQi=game.hongShiQi;
+                            }else{
+                                var shiQi=game.lanShiQi;
                             }
-                            var num=10-shiQi;
+                            var num=1-shiQi;
                             trigger.num=num;
                         }
                     },
@@ -236,11 +236,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         },
                         content:function(){
                             if(player.side==true){
-                                var shiQi=game.lanShiQi;
-                            }else{
                                 var shiQi=game.hongShiQi;
+                            }else{
+                                var shiQi=game.lanShiQi;
                             }
-                            var num=10-shiQi;
+                            var num=1-shiQi;
                             trigger.num=num;
                         }
                     },
