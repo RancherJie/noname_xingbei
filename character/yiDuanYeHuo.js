@@ -59,10 +59,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     trigger.canYingZhan=false;
                     if(get.mingGe(trigger.card)=='sheng'){
                         if(typeof trigger.baseDamage!='number') trigger.baseDamage=get.info(trigger.card,false).baseDamage||2;
-                        trigger.baseDamage+=1;
-                        player.addTempSkill('shenWei_zhiLiao');
-                        trigger.targets[0].addTempSkill('shenWei_zhiLiao');
+                        trigger.baseDamage+=1;   
                     }
+                    player.addTempSkill('shenWei_zhiLiao');
+                    trigger.targets[0].addTempSkill('shenWei_zhiLiao');
                 },
                 subSkill:{
                     zhiLiao:{
