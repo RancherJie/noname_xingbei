@@ -800,7 +800,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					
 					//22联机分配角色
 					var list=get.charactersOL();
-
+					list=get.characterGets(list);
 					var choose={};
 					event.list=list;
 
@@ -1398,7 +1398,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					'step 7'//ban角色
 					//角色列表
 					var list = get.charactersOL();
-					event.list = list.randomGets(event.choose_number);
+					event.list = get.characterGets(list,event.choose_number);
 					event.choosing=game.red_leader;
 					event.videoId = lib.status.videoId++;
 					event.red_chooseList = [];
@@ -1947,7 +1947,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					//ban角色
 					//角色列表
 					var list = get.charactersOL();
-					event.list = list.randomGets(event.choose_number);
+					event.list = get.characterGets(list,event.choose_number);
 					event.choosing=event.red_list[0];
 					event.videoId = lib.status.videoId++;
 					event.red_ban=[];
@@ -2373,7 +2373,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					//ban角色
 					//角色列表
 					var list = get.charactersOL();
-					event.list = list.randomGets(event.choose_number);
+					event.list = get.characterGets(list,event.choose_number);
 					event.choosing=event.red_list[0];
 					event.videoId = lib.status.videoId++;
 					event.red_ban=[];
