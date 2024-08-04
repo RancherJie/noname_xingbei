@@ -137,7 +137,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             },
                             content:function(){
                                 'step 0'
-                                event.links=lib.skill.siWangZhiChu_backup.links;
+                                event.links=lib.skill.shengYu_backup.links;
                                 player.removeZhiShiWu('shengYin',event.links[0]);
                                 'step 1'
                                 player.chooseToDiscard(1,true);
