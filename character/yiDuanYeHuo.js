@@ -133,7 +133,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             type:'faShu',
                             selectTarget:1,
                             filterTarget:function(card,player,target){
-                                return target!=player&&target.side!=player.side;
+                                return target!=player&&target.side==player.side;
                             },
                             content:function(){
                                 'step 0'
