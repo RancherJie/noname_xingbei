@@ -7910,6 +7910,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     var next=player.chooseControl(list);
                     next.set('prompt',get.prompt('jianQiZhan'));
                     next.set('prompt2',lib.translate.jianQiZhan_info);
+                    next.set('ai',function(){
+                        return _status.event.num;
+                    });
+                    next.set('num',list.length-2);
                     'step 1'
                     if(result.control=='cancel2'){
                         event.finish();
