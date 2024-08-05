@@ -95,6 +95,8 @@ window.noname_source_list=[
 	'theme/style/hp/round.css',
 	'theme/style/hp/xinglass.css',
 	'theme/style/hp/xinround.css',
+	'theme/style/hp/xingbei.css',
+	'theme/style/hp/image/xingbei.png',
 	'theme/style/hp/image/emotion1.png',
 	'theme/style/hp/image/emotion2.png',
 	'theme/style/hp/image/emotion3.png',

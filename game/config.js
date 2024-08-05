@@ -78,7 +78,7 @@ window.config={
 	layout:'nova',
 	card_style:'default',
 	cardback_style:'xingbei',
-	hp_style:'default',
+	hp_style:'xingbei',
 
 	image_character:'default',
 	image_background:'default',

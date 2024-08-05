@@ -2097,8 +2097,8 @@
 						unfrequent:true,
 					},
 					hp_style:{
-						name:'体力条样式',
-						init:'default',
+						name:'治疗样式',
+						init:'xingbei',
 						item:{
 							default:'默认',
 							// official:'勾玉',
@@ -2108,6 +2108,7 @@
 							//ol:'手杀',
 							//xinglass:'双鱼',
 							//xinround:'OL',
+							xingbei:"星杯",
 							custom:'自定',
 						},
 						visualBar:function(node,item,create,switcher){
