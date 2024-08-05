@@ -7446,7 +7446,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         case 'feng':name='fengShenZhan';break;
                         case 'lei':name='leiGuangZhan';break;
                         case 'di':name='diLieZhan';break;
-                        case 'an:':name='anMie';break;
+                        case 'an':name='anMie';break;
                     }
                     player.useCard({name:name,xiBie:xiBie,number:'sheng',shengXieJuBao:true},target).set('action',true);
                 },
