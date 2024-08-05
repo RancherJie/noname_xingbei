@@ -1,37 +1,37 @@
 .hp:not(.text):not(.actcount):not(.treasure)[data-condition="high"]>div:not(.lost):not(.shield){
     background: url('image/xingbei.png');
     box-shadow: none;
-    border: 1px solid white;
+    border: none;
     background-size: 100% 100%;
-    transform: scale(2);
+    transform: scale(2.5);
     -webkit-filter:brightness(0.8) contrast(1.5);
-    border-radius: 4px;
+    border-radius: 0px;
 }
 .hp:not(.text):not(.actcount):not(.treasure)[data-condition="mid"]>div:not(.lost):not(.shield){
     background: url('image/xingbei.png');
     box-shadow: none;
-    border: 1px solid white;
+    border: none;
     background-size: 100% 100%;
-    transform: scale(2);
+    transform: scale(2.5);
     -webkit-filter:brightness(0.8) contrast(1.5);
-    border-radius: 4px;
+    border-radius: 0px;
 }
 .hp:not(.text):not(.actcount):not(.treasure)[data-condition="low"]>div:not(.lost):not(.shield){
     background: url('image/xingbei.png');
     box-shadow: none;
-    border: 1px solid white;
+    border: none;
     background-size: 100% 100%;
-    transform: scale(2);
+    transform: scale(2.5);
     -webkit-filter:brightness(0.8) contrast(1.5);
-    border-radius: 4px;
+    border-radius: 0px;
 }
 .hp:not(.text):not(.actcount):not(.treasure)>.lost{
-    background: url('image/xingbei.png');
+    background: url('image/xingbei_bg.png');
     box-shadow: none;
-    border: 1px solid black;
+    border: none;
     background-size: 100% 100%;
-    transform: scale(2);
-    border-radius: 4px;
+    transform: scale(2.5);
+    border-radius: 0px;
 }
 .hp:not(.text):not(.actcount):not(.treasure)>.shield{
     background: url('image/shield.png');

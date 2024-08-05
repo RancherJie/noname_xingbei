@@ -312,6 +312,7 @@ window.noname_asset_list=[
 	'theme/style/hp/image/round3.png',
 	'theme/style/hp/image/round4.png',
 	'theme/style/hp/image/xingbei.png',
+	'theme/style/hp/image/xingbei_bg.png',
 	'theme/style/player/bronze1.png',
 	'theme/style/player/bronze2.png',
 	'theme/style/player/bronze3.png',
