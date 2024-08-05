@@ -8935,6 +8935,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     var cards=player.getExpansions('jian');
                     var name=get.translation(trigger.player);
                     var next=player.chooseCardButton(cards,"是否发动【毒粉】,移除1个【茧】，目标"+name);
+                    next.set('ai',function(button){
+                        if(_status.event.bool) return 0;
+                        return 1;
+                    });
+                    next.set('bool',trigger.player.side==player.side);
                     'step 1'
                     if(result.bool){
                         player.logSkill(event.name,trigger.player);
@@ -8945,10 +8950,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 2'
                     trigger.num++;
                 },
-                check:function(event,player){
-                    if(event.player.side==player.side) return false;
-                    else return true;
-                }
             },
             chaoSheng:{
                 trigger:{player:'jiangYaoChengShou1'},
@@ -8987,7 +8988,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         var xiBie=get.xiBie(button);
                         if(xiBie==get.xiBie(ui.selected.buttons[0])) return true;
                         else return false;
-                    })
+                    });
+                    next.set('ai',function(button){
+                        if(_status.event.bool) return 0;
+                        return 1;
+                    });
+                    next.set('bool',trigger.player.side==player.side);
                     'step 1'
                     if(result.bool){
                         player.logSkill(event.name,trigger.player);
@@ -9003,10 +9009,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 4'
                     trigger.player.damageFaShu(1,player);
                 },
-                check:function(event,player){
-                    if(event.player.side==player.side) return false;
-                    else return true;
-                }
             },
             diaoLing:{
                 trigger:{player:'discard'},
