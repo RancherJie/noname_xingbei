@@ -184,13 +184,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 
                 filterx:function(event,player){
                     if(!player.isLinked()) return false;
-                    if(player.side==event.side) return false;
+                    if(player.side!=event.side) return false;
                     if(player.side==true){
                         var shiQi=game.hongShiQi;
                     }else{
                         var shiQi=game.lanShiQi;
                     }
-                    return shiQi+event.num<10; 
+                    return shiQi+event.num<1; 
                 },
                 group:['shenZhiZi_changeShiQiBegin','shenZhiZi_changeShiQi1','shenZhiZi_changeShiQi4','shenZhiZi_huiHekaiShi','shenZhiZi_chongZhiHuiHe','shenZhiZi_chongZhiShangHai'],
                 subSkill:{
@@ -280,12 +280,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         forced:true,
                         priority:-1,
                         filter:function(event,player){
-                            console.log(1);
                             return player.isLinked();
                         },
                         content:function(){
                             'step 0'
-                            console.log(2);
                             trigger.cancel();
                             player.damage(1,player).set('faShu',true).set('step',7);
                             'step 1'
