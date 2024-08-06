@@ -4516,6 +4516,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.removeZhiShiWu('zhanWen');
                     player.addZhiShiWu('moWen'); 
                     trigger.cancel();
+                },
+                check:function(event,player){
+                    var num=Math.random();
+                    return num>0.5;
                 }
             },
             zhanWenSuiJi:{
