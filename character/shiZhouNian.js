@@ -7184,6 +7184,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.storage.xuLiYiji=trigger.card;
                     trigger.xuLiYiji=true;
                 },
+                check:function(event,player){
+                    if(!player.isLinked()) return true;
+                    var num=Math.random();
+                    return num>0.9;
+                },
                 group:'xuLiYiji_weiMingZhong',
                 subSkill:{
                     weiMingZhong:{
