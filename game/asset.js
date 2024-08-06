@@ -334,4 +334,28 @@ window.noname_asset_list=[
 	'theme/woodden/wood2.jpg',
 	'theme/woodden/wood2.png'
 ];
-window.noname_skin_list={};
+window.noname_skin_list={
+	cangYanMoNv:1,
+	dieWuZhe:1,
+	fengYinShi:1,
+	geDouJia:1,
+	hongLianQiShi:1,
+	jingLingSheShou:1,
+	lingFuShi:1,
+	maoXianJia:1,
+	moFaShaoNv:1,
+	moGong:1,
+	moJianShi:3,
+	moQiang:1,
+	nvWuShen:3,
+	qiDaoShi:1,
+	shengGong:1,
+	shenGuan:1,
+	shenJianShou:1,
+	shouLingWuShi:1,
+	xueSeJianLing:1,
+	yinYangShi:1,
+	yinYouShiRen:1,
+	yuanSuShi:1,
+	zhongCaiZhe:1,
+};
