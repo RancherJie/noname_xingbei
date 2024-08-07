@@ -9230,6 +9230,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 ai:{
                     shuiJing:true,
                     order:4,
+                    result:{
+                        player:1,
+                    }
                 }
             },
             jian:{
