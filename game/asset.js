@@ -1,5 +1,5 @@
 window.noname_asset_list=[
-	'v0.4.1',
+	'v0.6.3',
 	/*audio start*/
 	'audio/background/Made_in_Abyss.mp3',
 	/*cardaudio start*/
@@ -117,6 +117,7 @@ window.noname_asset_list=[
 	'image/card/tiaoXin.png',
 	'image/card/lingHunLianJie.png',
 	'image/card/tongShengGongSi.png',
+	'image/card/yiDuanCaiJueSuo.png',
 	/*card image end*/
 	
 	/*character image begin*/
