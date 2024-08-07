@@ -4955,6 +4955,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 ai:{
                     shuiJing:true,
                     order:3.8,
+                    result:{
+                        player:1,
+                    }
                 }       
             },
 
