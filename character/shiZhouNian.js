@@ -4553,7 +4553,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     next.set('complexCard',true);
                     next.set('prompt',get.prompt('zhanWenSuiJi'));
                     next.set('prompt2',lib.translate.zhanWenSuiJi_info);
-
+                    next.ai=function(card){
+						return 1;
+					}
                     'step 1'
                     if(result.bool){
                         player.logSkill(event.name,trigger.target);
@@ -4612,7 +4614,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     next.set('complexCard',true);
                     next.set('prompt',get.prompt('moWenRongHe'));
                     next.set('prompt2',lib.translate.moWenRongHe_info);
-
+                    next.ai=function(card){
+						return 1;
+					}
                     'step 1'
                     if(result.bool){
                         player.logSkill(event.name,trigger.player);
