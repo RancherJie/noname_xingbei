@@ -5261,6 +5261,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             if(num==3){
                                 next.set('shiQiXiaJiang',false);
                             }
+                        },
+                        ai:{
+                            result:{
+                                target:1
+                            }
                         }
                     },
                     2:{
@@ -5284,12 +5289,20 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             player.chongZhi();
                             'step 1'
                             target.chooseToDiscard(1,true);
+                        },
+                        ai:{
+                            result:{
+                                target:1
+                            }
                         }
                     }
                 },
                 ai:{
                     shuiJing:true,
                     order:3.8,
+                    result:{
+                        player:1,
+                    }
                 }
             },
             guiHuo:{
