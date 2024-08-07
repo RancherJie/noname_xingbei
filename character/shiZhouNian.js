@@ -4671,7 +4671,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         list.push(i);
                     }
                     player.chooseControl(list).set('prompt','选择战纹数量').set('ai',function(){
-                        return 1;
+                        var num=Math.random();
+                        if(num>0.5) return 1;
+                        else return 2;
                     });
                     'step 5'
                     if(result.control>0){
