@@ -14,7 +14,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 		character:{
             //zhanDouFaShi:['female','yong',6,['jianxiong'],],
             //xingZhuiNvWu:['female','yong',6,['jianxiong'],],
-            //shengTingJianChaShi:['female','sheng',6,['jianxiong'],],
+            shengTingJianChaShi:['female','sheng',4,['kuangXinTu','caiJueLunDing','enDianShenShou','jingHuaZhiShu','biHuLingYu','caiJueZhe','shenShengBianCe','caiJue'],],
             //lieWuRen:['male','ji',6,['jianxiong'],],
             shengDianQiShi:['female','sheng',4,['shenXuanZhe','shenWei','shengCai','shengYu','shenZhiZi','shenLinShengQi','shengYanQiFu','shengYin'],],
 		},
@@ -352,6 +352,360 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 markimage:'image/card/hong.png',
             },
 
+            //圣庭监察士
+            kuangXinTu:{
+                trigger:{global:"phaseBefore"},
+                forced:true,
+                filter:function(event,player){
+                    return game.phaseNumber==0
+                },
+                content:function(){
+                    player.addSkill('yiDuanCaiJueSuo');
+                },
+                mod:{
+                    maxZhiLiao:function(player,num){
+                        var players=game.filterPlayer(function(current){
+                            return current.side==player.side&&current!=player&&current.group=='sheng';
+                        });
+                        if(players.lengt>0) return num+1;
+                    }
+                },
+                group:'kuangXinTu_zhiLiao',
+                subSkill:{
+                    zhiLiao:{
+                        trigger:{player:'useCardAfter'},
+                        filter:function(event,player){
+                            return get.is.gongJiXingDong(event);
+                        },
+                        forced:true,
+                        content:function(){
+                            'step 0'
+                            var next=player.chooseTarget(true,'目标角色+1[治疗]');
+                            next.set('ai',function(target){
+                                var player=_status.event.player;
+                                return get.attitude(player,target);
+                            });
+                            'step 1'
+                            game.log(player,'选择了',result.targets[0]);
+                            player.line(result.targets[0],'blue');
+                            result.targets[0].changeZhiLiao(1);
+                        }
+                    }
+                }
+            },
+            caiJueLunDing:{
+                trigger:{global:'zhiLiaoYiChu'},
+                usable:1,
+                filter:function(event,player){
+                    return event.player.side==player.side;
+                },
+                content:function(){
+                    var bool=lib.skill.yiDuanCaiJueSuo.addZhiLiao(player,1);
+                    if(bool){
+                        player.addNengLiang('b');
+                    }
+                }   
+            },
+            enDianShenShou:{
+                enable:'phaseUse',
+                type:'teShu',
+                filter:function(event,player){
+                    if(event.parent.canTeShu==false) return false;
+                    var side=player.side
+                    if(side==true){
+                        if(game.hongZhanJi.length==0) return false;
+                    }else if(side==false){
+                        if(game.lanZhanJi.length==0) return false;
+                    }
+                    var num=0;
+                    for(var i=0;i<game.players.length;i++){
+                        if(game.players[i].side!=side) continue;
+                        num+=game.players[i].zhiLiao;
+                    }
+                    if(!(num>=2||player.storage.yiDuanCaiJueSuo>=3)) return false
+                    for(var i=0;i<game.players.length;i++){
+                        if(side!=game.players[i].side) continue;
+                        if(game.players[i].countNengLiangAll()<game.players[i].getNengLiangLimit()){
+                            return true;
+                        }
+                    }
+                },
+                selectTarget:1,
+                filterTarget:function(card,player,target){
+                    if(target==player) return false;
+                    return player.side==target.side&&target.countNengLiangAll()<target.getNengLiangLimit();
+                },
+                content:function(){
+                    'step 0'
+                    var num=0;
+                    for(var i=0;i<game.players.length;i++){
+                        if(game.players[i].side!=side) continue;
+                        num+=game.players[i].zhiLiao;
+                    }
+                    if(num>=2&&player.storage.yiDuanCaiJueSuo>=3){
+                        var next=player.chooseTarget('是否移除我方角色合计2[治疗]，否则移除【异端裁决所】3[治疗]',[1,2],function(card,player,target){
+                            return target.side==player.side&&target.zhiLiao>=1;
+                        });
+                        next.set('filterOk',function(){
+                            var num=0;
+                            for(var i=0;i<ui.selected.targets.length;i++){
+                                num+=ui.selected.targets[i].zhiLiao;
+                            }
+                            return num>=2;
+                        })
+                    }else if(num>=2&&!(player.storage.yiDuanCaiJueSuo>=3)){
+                        var next=player.chooseTarget('移除我方角色合计2[治疗]',true,[1,2],function(card,player,target){
+                            return target.side==player.side&&target.zhiLiao>=1;
+                        });
+                        next.set('filterOk',function(){
+                            var num=0;
+                            for(var i=0;i<ui.selected.targets.length;i++){
+                                num+=ui.selected.targets[i].zhiLiao;
+                            }
+                            return num>=2;
+                        })
+                    }
+                    'step 1'
+                    if(result.bool){
+                        game.log(player,'选择了',result.targets);
+                        player.line(result.targets,'green');
+                        if(result.targets.length==1){
+                            result.targets[0].changeZhiLiao(-2);
+                        }else{
+                            result.targets[0].changeZhiLiao(-1);
+                            result.targets[1].changeZhiLiao(-1);
+                        }
+                    }else{
+                        lib.skill.yiDuanCaiJueSuo.removeZhiLiao(player,-3);
+                    }
+                    'step 2'
+                    var num=target.getNengLiangLimit()-target.countNengLiangAll();
+                    if(player.side==true){
+                        var list=game.hongZhanJi;
+                    }else if(player.side==false){
+                        var list=game.lanZhanJi;
+                    }
+                    var next=player.chooseButton([
+                        '选择提炼的星石',
+                        [list,'tdnodes'],
+                    ]);
+                    next.set('forced',true);
+                    next.set('selectButton',[1,num]);
+                    next.set('ai',function(button){
+                        var target=_status.event.target;
+                        if(target.hasSkillTag('baoShi')&&!target.hasSkillTag('shuiJing')){
+                            if(button.link=='宝石') return 5;
+                            else return -1;
+                        }
+                        if(target.hasSkillTag('shuiJing')&&!target.hasSkillTag('baoShi')){
+                            if(button.link=='水晶') return 5;
+                            else return 2;
+                        }
+                        //既有水晶也有宝石
+                        return 2;
+                    });
+                    next.set('target',target);
+                    'step 3'
+                    for(var i=0;i<result.links.length;i++){
+                        if(result.links[i]=='宝石'){
+                            target.addMark('_tiLian_r');
+                            player.changeZhanJi('r',-1);
+                        }else if(result.links[i]=='水晶'){
+                            target.addMark('_tiLian_b');
+                            player.changeZhanJi('b',-1);
+                        }
+                    }
+                    'step 4'
+                    player.chooseToDiscard('h',1,true);
+                    'step 5'
+                    if(result.bool){
+                        var next=player.chooseCardButton(result.cards,'是否展示,对目标角色造成1点法术伤害③');
+                        next.set('filterButton',function(button){
+                            return get.mingGe(button)=='sheng';
+                        });
+                    }else{
+                        event.finish();
+                    }
+                    
+                    'step 6'
+                    if(result.bool){
+                        player.chooseTarget('对目标对手造成1点法术伤害③',true,function(card,player,target){
+                            return target.side!=player.side;
+                        })
+                    }else{
+                        event.finish();
+                    }
+                    'step 7'
+                    game.log(player,'选择了',result.targets[0]);
+                    player.line(result.targets[0],'red');
+                    result.targets[0].damageFaShu(1,player);
+                },
+                ai:{
+                    order:3.6,
+                    result:{
+                        target:function(player,target){
+                            if(!(target.hasSkillTag('baoShi')||target.hasSkillTag('shuiJing'))) return -1;
+                            var num=target.getNengLiangLimit()-target.countNengLiangAll();
+                            if(num>=2) return 2;
+                            return 0;
+                        },
+                    }
+                }
+            },
+            jingHuaZhiShu:{
+                trigger:{player:'damageAfter'},
+                priority:-1,
+                filter:function(event,player){
+                    return player.countCards('h')>0;
+                },
+                direct:true,
+                content:function(){
+                    'step 0'
+                    var next=player.chooseToDiscard('h',function(card){
+                        return get.type(card)=='faShu';
+                    });
+                    next.set('prompt',get.prompt('jingHuaZhiShu'));
+                    next.set('prompt2',lib.translate.jingHuaZhiShu_info);
+                    'step 1'
+                    if(result.bool){
+                        player.logSkill(event.name);
+                        player.showCards(result.cards);
+                        player.changeZhiLiao(1);
+                        player.draw(1);
+                        lib.skill.yiDuanCaiJueSuo.removeZhiLiao(player,1);
+                    }else{
+                        event.finish();
+                    }
+                }
+            },
+            biHuLingYu:{
+                trigger:{global:'damageBegin1'},
+                priority:1,
+                filter:function(event,player){
+                    return player.storage.yiDuanCaiJueSuo>=3&&event.player.side==player.side;
+                },
+                content:function(){
+                    lib.skill.yiDuanCaiJueSuo.removeZhiLiao(player,3);
+                    trigger.num--;
+                    player.addZhiShiWu('caiJue',1);
+                }
+            },
+            caiJueZhe:{
+                type:'qiDong',
+                trigger:{player:'phaseUseBegin'},
+                filter:function(event,player){
+                    return player.canBiShaShuiJing();
+                },
+                content:function(){
+                    'step 0'
+                    player.removeBiShaShuiJing();
+                    player.addZhiShiWu('caiJue',1);
+                    lib.skill.yiDuanCaiJueSuo.addZhiLiao(player,2);
+                }
+            },
+            shenShengBianCe:{
+                type:'faShu',
+                enable:['chooseToUse','faShu'],
+                filter:function(event,player){
+                    return player.canBiShaShuiJing()&&player.countZhiShiWu('caiJue')>=1;
+                },
+                chooseButton:{
+                    dialog:function(event,player){
+                        var dialog=ui.create.dialog('神圣鞭策：移除X点【裁决】','hidden');
+                        var list=[];
+                        var num=player.countZhiShiWu('caiJue');
+                        for(var i=1;i<=num;i++){
+                            list.push(i);
+                        }
+                        dialog.add([list,'tdnodes']);
+                        return dialog;
+                    },
+                    backup:function(links,player){
+                        return{
+                            links:links,
+                            type:'faShu',
+                            selectTarget:links[0],
+                            filterTarget:true,
+                            contentBefore:function(){
+                                event.links=lib.skill.shenShengBianCe_backup.links;
+                                player.removeBiShaShuiJing();
+                                player.removeZhiShiWu('caiJue',event.links[0]);
+                            }, 
+                            content:function(){
+                                target.draw();
+
+                            },
+                            contentAfter:function(){
+                                event.links=lib.skill.shenShengBianCe_backup.links;
+                                player.chooseToDiscard(true,'h',event.links[0])
+                            },
+                            ai:{
+                                result:{
+                                    target:-1,
+                                }
+                            }
+                        }
+                    },
+                    prompt:function(links,player){
+                        return `${links[0]}名目标角色各摸1张牌[强制]`;
+                    },
+                    check: function (button) {
+                        return button.link;
+                    },
+                },
+                ai:{
+                    order:function(item,player){
+                        return 2.3+player.countZhiShiWu('caiJue');
+                    },
+                    result:{
+                        player:1,
+                    }
+                }
+            },
+            yiDuanCaiJueSuo:{
+                init:function(player){
+                    player.storage.yiDuanCaiJueSuo=0;
+                },
+                intro:{
+                    content:'共有#个[治疗]',
+                    max:4,
+                },
+                mark:true,
+                markimage:'image/card/yiDuanCaiJueSuo.png',
+                addZhiLiao:function(player,num){
+                    var current=player.storage.yiDuanCaiJueSuo;
+                    var max=4;
+                    if(current>=max){
+                        return false;
+                    }else if(current+num>max){
+                        num=max-current;
+                    }
+                    player.storage.yiDuanCaiJueSuo+=num;
+                    game.log('【异端裁决所】','增加'+num,'[治疗]');
+                    player.updateMarks('yiDuanCaiJueSuo');
+                    return true;
+                },
+                removeZhiLiao:function(player,num){
+                    var current=player.storage.yiDuanCaiJueSuo;
+                    if(current<=0){
+                        return false
+                    }else if(current-num<0){
+                        num=current;
+                    }
+                    player.storage.yiDuanCaiJueSuo-=num;
+                    game.log('【异端裁决所】','减少'+num,'[治疗]');
+                    player.updateMarks('yiDuanCaiJueSuo');
+                    return true;
+                }
+            },
+            caiJue:{
+                intro:{
+                    content:'mark',
+                    max:3,
+                },
+                markimage:'image/card/hong.png',
+            },
+
         },
 		
 		translate:{
@@ -381,6 +735,27 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             shengYanQiFu_info:"[水晶]<span class='tiaoJian'>([重置]脱离【圣炎形态】时)</span>目标角色+2[治疗]。",
             shengYin_info:'【圣印】为圣殿骑士专有指示物，上限为2。',
             
+            //圣庭监察士
+            kuangXinTu:"[被动]狂信徒",
+            caiJueLunDing:"[响应]裁决论定",
+            enDianShenShou:"[响应]恩典神授",
+            jingHuaZhiShu:"[响应]净化之术",
+            biHuLingYu:"(专)[庇护领域]",
+            caiJueZhe:"[启动]裁决者",
+            shenShengBianCe:"[法术]神圣鞭策",
+            shenShengBianCe_backup:"[法术]神圣鞭策",
+            yiDuanCaiJueSuo:"异端裁决所",
+            caiJue:"裁决",
+
+            kuangXinTu_info:"游戏初始时你拥有【异端裁决所】。 <span class='tiaoJian'>(我方队友存在圣类命格时)</span>你的[治疗]上限+1。 <span class='tiaoJian'>(你的[攻击行动]结束后)</span>目标角色+1[治疗]。",
+            caiJueLunDing_info:"[回合限定]<span class='tiaoJian'>(我方目标角色[治疗]溢出时)</span>【异端裁决所】+1[治疗]︔<span class='tiaoJian'>(若因此【异端裁决所】[治疗]增加)</span>你+1[水晶]。",
+            enDianShenShou_info:"<span class='tiaoJian'>(你执行[提炼]时，移除我方角色合计2[治疗]或【异端裁决所】3[治疗])</span>将提炼出的[宝石]和[水晶]全部交给目标队友，你弃1张牌；<span class='tiaoJian'>(若该弃牌为圣类命格，可展示之[展示])</span>对目标对手造成1点法术伤害③。",
+            jingHuaZhiShu_info:"<span class='tiaoJian'>(你承受伤害⑥并结算完成后，弃1张法术牌[展示])</span>你+1[治疗]，摸1张牌[强制]，然后移除【异端裁决所】上1[治疗]。",
+            biHuLingYu_info:"<span class='tiaoJian'>(我方目标角色受到伤害时③，移除【异端裁决所】3[治疗])</span>本次伤害-1，你+1【裁决】。",
+            caiJueZhe_info:"[水晶]你+1【裁决】，【异端裁决所】+2[治疗]。",
+            shenShengBianCe_info:"[水晶]<span class='tiaoJian'>(移除X点【裁决】)</span>X名目标角色各摸1张牌[强制]，你弃X张牌。",
+            yiDuanCaiJueSuo_info:"【异端裁决所】的[治疗]上限为4。",
+            caiJue_info:"【裁决】为圣庭监察士专有指示物，上限为3。",
         },
 	};
 });
