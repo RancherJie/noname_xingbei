@@ -476,7 +476,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             result.targets[1].changeZhiLiao(-1);
                         }
                     }else{
-                        lib.skill.yiDuanCaiJueSuo.removeZhiLiao(player,-3);
+                        lib.skill.yiDuanCaiJueSuo.removeZhiLiao(player,3);
                     }
                     'step 2'
                     var num=target.getNengLiangLimit()-target.countNengLiangAll();
