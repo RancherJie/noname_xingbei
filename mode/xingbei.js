@@ -2858,16 +2858,22 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					player.storage.wuFaXingDong={'认可':0,'否认':0};
 					event.targetsx=game.filterPlayer(i=>i!=player).sortBySeat(_status.currentPhase);
 					var name=get.translation(player.name);
-					event.contentx=[name+'无法行动',player.getCards('h').slice()];
+					event.contentx=[name+'宣言无法行动',player.getCards('h').slice()];
 					event.listx=['认可','否认'];
 					"step 1"
 					event.target=event.targetsx.shift();
-					event.target.chooseControl(event.listx).set('dialog',event.contentx).set('ai',function(){
-						if(_status.event.dialog[1].length==0){
+					if(event.contentx[1].length==0){
+						event.target.chooseControl(event.listx).set('dialog',[event.contentx[0]]).set('ai',function(){
 							return 1;
-						}
-						return 0;
-					});
+						});
+					}else{
+						event.target.chooseControl(event.listx).set('dialog',event.contentx).set('ai',function(){
+							if(_status.event.dialog[1].length==0){
+								return 1;
+							}
+							return 0;
+						});
+					}
 					"step 2"
 					if(result.control=='认可'){
 						event.target.popup('认可');
@@ -2912,16 +2918,22 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 							player.storage.wuFaXingDong={'认可':0,'否认':0};
 							event.targetsx=game.filterPlayer(i=>i!=player).sortBySeat(_status.currentPhase);
 							var name=get.translation(player.name);
-							event.contentx=[name+'无法行动',player.getCards('h').slice()];
+							event.contentx=[name+'宣言无法行动',player.getCards('h')];
 							event.listx=['认可','否认'];
 							"step 1"
 							event.target=event.targetsx.shift();
-							event.target.chooseControl(event.listx).set('dialog',event.contentx).set('ai',function(){
-								if(_status.event.dialog[1].length==0){
+							if(event.contentx[1].length==0){
+								event.target.chooseControl(event.listx).set('dialog',[event.contentx[0]]).set('ai',function(){
 									return 1;
-								}
-								return 0;
-							});
+								});
+							}else{
+								event.target.chooseControl(event.listx).set('dialog',event.contentx).set('ai',function(){
+									if(_status.event.dialog[1].length==0){
+										return 1;
+									}
+									return 0;
+								});
+							}
 							"step 2"
 							if(result.control=='认可'){
 								event.target.popup('认可');
@@ -2959,16 +2971,22 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 							player.storage.wuFaXingDong={'认可':0,'否认':0};
 							event.targetsx=game.filterPlayer(i=>i!=player).sortBySeat(_status.currentPhase);
 							var name=get.translation(player.name);
-							event.contentx=[name+'无法行动',player.getCards('h').slice()];
+							event.contentx=[name+'宣言无法行动',player.getCards('h').slice()];
 							event.listx=['认可','否认'];
 							"step 1"
 							event.target=event.targetsx.shift();
-							event.target.chooseControl(event.listx).set('dialog',event.contentx).set('ai',function(){
-								if(_status.event.dialog[1].length==0){
+							if(event.contentx[1].length==0){
+								event.target.chooseControl(event.listx).set('dialog',[event.contentx[0]]).set('ai',function(){
 									return 1;
-								}
-								return 0;
-							});
+								});
+							}else{
+								event.target.chooseControl(event.listx).set('dialog',event.contentx).set('ai',function(){
+									if(_status.event.dialog[1].length==0){
+										return 1;
+									}
+									return 0;
+								});
+							}
 							"step 2"
 							if(result.control=='认可'){
 								event.target.popup('认可');
