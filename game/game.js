@@ -18294,7 +18294,7 @@
 					player.zhiLiao+=num;
 					if(num>=0){
 						if(event.yiChu==true){
-							game.log(player,'获得了'+num+'点','[治疗]',',','[治疗]','溢出');
+							game.log(player,'获得了'+num+'点','[治疗]','，','[治疗]','溢出');
 						}else{
 							game.log(player,'获得了'+num+'点','[治疗]');
 						}
