@@ -367,7 +367,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         var players=game.filterPlayer(function(current){
                             return current.side==player.side&&current!=player&&current.group=='sheng';
                         });
-                        if(players.lengt>0) return num+1;
+                        if(players.length>0) return num+1;
                     }
                 },
                 group:'kuangXinTu_zhiLiao',
