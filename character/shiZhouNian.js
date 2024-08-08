@@ -4350,7 +4350,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         list.push(i);
                     }
                     var name=get.translation(event.target);
-                    var str=name+'获得几点治疗';
+                    var str=name+'获得几点[治疗]';
                     player.chooseControl(list).set('prompt',str);
                     'step 5'
                     event.target.changeZhiLiao(result.control);
@@ -4853,12 +4853,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 0'
                     var num=trigger.parent.num;
                     var list=[0,1];
-                    player.chooseControl(list).set('prompt','使用的治疗数量，目前伤害量'+num).set('ai',function(){return _status.event.num;}).set('num',list.length-1);
+                    player.chooseControl(list).set('prompt','使用的[治疗]数量，目前伤害量'+num).set('ai',function(){return _status.event.num;}).set('num',list.length-1);
                     'step 1'
                     var zhiLiaonum=result.control;
 					if(zhiLiaonum>0){
 						trigger.parent.num-=zhiLiaonum;
-						game.log(player,'的治疗抵挡了'+zhiLiaonum+'点伤害');
+						game.log(player,'的','[治疗]','抵挡了'+zhiLiaonum+'点伤害');
 						player.changeZhiLiao(-zhiLiaonum).type='damage';
 					}
                     'step 2'
@@ -9326,7 +9326,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             xueYingKuangDao:"(独)[响应]血影狂刀",
             xueYingKuangDao_info:"<span class='tiaoJian'>(作为主动攻击打出时发动)</span><br>·若命中手牌为2的对手②，本次攻击伤害额外+2；<br>·若命中手牌为3的对手②，本次攻击伤害额外+1。",
             xueXingPaoXiao:"(独)[响应]血腥咆哮",
-            xueXingPaoXiao_info:'<span class="tiaoJian">(作为主动攻击打出时发动)</span>若攻击的目标拥有的治疗为2，则本次攻击强制命中。',
+            xueXingPaoXiao_info:'<span class="tiaoJian">(作为主动攻击打出时发动)</span>若攻击的目标拥有的[治疗]为2，则本次攻击强制命中。',
             siLie:"[响应]撕裂",
             siLie_info:"[宝石]<span class='tiaoJian'>(攻击命中后发动②)</span>本次攻击伤害额外+2。",
 
@@ -9579,7 +9579,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             xingHongShengYue:"[响应]腥红圣约[回合限定]",
             xingHongShengYue_info:"<span class='tiaoJian'>(主动攻击时发动①)</span>你+1[治疗]。",
             xingHongXinYang:"[被动]猩红信仰",
-            xingHongXinYang_info:"你的[治疗]只能抵御自己造成的伤害，你的治疗上限+2。",
+            xingHongXinYang_info:"你的[治疗]只能抵御自己造成的伤害，你的[治疗]上限+2。",
             xueXingDaoYan:"[启动]血腥祷言",
             xueXingDaoYan_info:"<span class='tiaoJian'>(移除你的X[治疗]，对自己造成X点法术伤害③)</span>任意分配X[治疗]给1~2名队友，你+1<span class='hong'>【</span>血印<span class='hong'>】</span>。",
             shaLuShengYan:"[响应]杀戮盛宴",
@@ -9617,7 +9617,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             shengShiShouHu:"[被动]圣使守护",
             shengShiShouHu_info:"你的[治疗]上限+4，每当你用[治疗]抵挡伤害时，最多只能使用1点。",
             shenShengQiYue:"[启动]神圣契约",
-            shenShengQiYue_info:"[水晶]将你的X[治疗]转移给目标队友，以此法所转移的[治疗]无视他的[治疗]上限，但他的治疗最高为4。",
+            shenShengQiYue_info:"[水晶]将你的X[治疗]转移给目标队友，以此法所转移的[治疗]无视他的[治疗]上限，但他的[治疗]最高为4。",
             shenShengLingYu:"[法术]神圣领域",
             shenShengLingYu_info:"[水晶]你弃2张牌，再选择以下一项发动：<br>·<span class='tiaoJian'>(移除你的1[治疗])</span>对目标角色造成2点法术伤害③。<br>·你+2[治疗]，目标队友+1[治疗]。",
             

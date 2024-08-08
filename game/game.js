@@ -2097,7 +2097,7 @@
 						unfrequent:true,
 					},
 					hp_style:{
-						name:'治疗样式',
+						name:'[治疗]样式',
 						init:'xingbei',
 						item:{
 							default:'默认',
@@ -12836,7 +12836,7 @@
 					if(info.popup!=false&&!info.direct){
 						if(info.popup){
 							player.popup(info.popup);
-							game.log(player,'发动了','【'+get.skillTranslation(event.skill,player)+'】');
+							game.log(player,'发动了',get.skillTranslation(event.skill,player));
 						}
 						else{
 							if(info.logTarget&&info.logLine!==false){
@@ -16876,6 +16876,7 @@
 							player.line(targets,config);
 						}
 					}
+					/*
 					var str='';
 					if(targets&&targets.length&&info.log!='notarget'){
 						str+='对<span class="bluetext">'+(targets[0]==player?'自己':get.translation(targets[0]));
@@ -16885,8 +16886,9 @@
 						str+='</span>'
 					}
 					str+='发动了';
+					*/
 					if(!info.direct&&info.log!==false){
-						game.log(player,str,'【'+get.skillTranslation(skill,player)+'】');
+						game.log(player,'对',targets,'发动了','【'+get.skillTranslation(skill,player)+'】');
 						if(info.logv!==false) game.logv(player,skill,targets);
 						player.trySkillAnimate(skill,skill,checkShow);
 					}
@@ -18048,13 +18050,16 @@
 					game.broadcastAll(function(num){
                         if(lib.config.background_audio) game.playAudio('effect','damage'+(num>2?'2':''));
                     },num);
+					/*
 					var str=event.unreal?'视为受到了':'受到了';
 					if(source) str+='来自<span class="bluetext">'+(source==player?'自己':get.translation(source))+'</span>的';
 					str+=num+'点';
 					if(event.faShu) str+='法术';
 					else str+='攻击';
 					str+='伤害';
-					game.log(player,str);
+					*/
+					var str=`${num}点${event.faShu?'法术':'攻击'}伤害`;
+					game.log(player,'受到了',source,str);
 					if(player.stat[player.stat.length-1].damaged==undefined){
 						player.stat[player.stat.length-1].damaged=num;
 					}
@@ -18289,13 +18294,13 @@
 					player.zhiLiao+=num;
 					if(num>=0){
 						if(event.yiChu==true){
-							game.log(player,'获得了'+num+'点治疗'+',治疗溢出');
+							game.log(player,'获得了'+num+'点','[治疗]',',','[治疗]','溢出');
 						}else{
-							game.log(player,'获得了'+num+'点治疗');
+							game.log(player,'获得了'+num+'点','[治疗]');
 						}
 					}else if(num<0){
 						num=-num;
-						game.log(player,'移除了'+num+'点治疗')
+						game.log(player,'移除了'+num+'点','[治疗]')
 					}
 					'step 1'
 					if(player.zhiLiao<0){
@@ -24559,6 +24564,7 @@
 					if(lib.translate[name]){
 						this.trySkillAnimate(name,popname,checkShow);
 						if(Array.isArray(targets)&&targets.length){
+							/*
 							var str;
 							if(targets[0]==this){
 								str='#b自己';
@@ -24568,7 +24574,8 @@
 								}
 							}
 							else str=targets;
-							game.log(this,'对',str,'发动了','【'+get.skillTranslation(name,this)+'】');
+							*/
+							game.log(this,'对',targets,'发动了','【'+get.skillTranslation(name,this)+'】');
 						}
 						else{
 							game.log(this,'发动了','【'+get.skillTranslation(name,this)+'】');
@@ -39844,8 +39851,34 @@
 			Array.from(arguments).forEach(value=>{
 				const itemtype=get.itemtype(value);
 				if(itemtype=='player'||itemtype=='players'){
+					/*
 					str+=`<span class="bluetext">${get.translation(value)}</span>`;
 					str2+=get.translation(value);
+					*/
+					if(itemtype=='player'){
+						if(value.side==true){
+							var c='red';
+						}else{
+							var c='blue'
+						}
+						str+=`<span style="color:${c};">${get.translation(value)}</span>`;
+						str2+=get.translation(value);
+					}else{
+						for(let i=0;i<value.length;i++){
+							if(value[i].side==true){
+								var c='red';
+							}else{
+								var c='blue'
+							}
+							str+=`<span style="color:${c};">${get.translation(value[i])}</span>`;
+							str2+=get.translation(value[i]);
+							if(i!=value.length-1){
+								str+='、';
+								str2+='、';
+							}
+						}
+					}
+					
 				}
 				else if(itemtype=='cards'||itemtype=='card'||(typeof value=='object'&&value&&value.name)){
 					str+=`<span class="yellowtext">${get.translation(value)}</span>`;
@@ -39866,6 +39899,15 @@
 					else if(value[0]=='#'){
 						str+=`<span class="${color.get(value[1])||''}text">${get.translation(value.slice(2))}</span>`;
 						str2+=get.translation(value.slice(2));
+					}else if(value[0]=='['&&value[value.length-1]==']'){
+						str+=`<span style="color:skyblue;">${get.translation(value)}</span>`;
+						str2+=get.translation(value);
+					}else if(value=='宝石'){
+						str+=`<span style="color:OrangeRed;">${get.translation(value)}</span>`;
+						str2+=get.translation(value);
+					}else if(value=='水晶'){
+						str+=`<span style="color:PowderBlue;">${get.translation(value)}</span>`;
+						str2+=get.translation(value);
 					}
 					else{
 						str+=get.translation(value);
