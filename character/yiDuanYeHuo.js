@@ -413,7 +413,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 type:'teShu',
                 filter:function(event,player){
                     if(event.parent.canTeShu==false) return false;
-                    var side=player.side
+                    var side=player.side;
                     if(side==true){
                         if(game.hongZhanJi.length==0) return false;
                     }else if(side==false){
@@ -440,6 +440,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 content:function(){
                     'step 0'
                     var num=0;
+                    var side=player.side;
                     for(var i=0;i<game.players.length;i++){
                         if(game.players[i].side!=side) continue;
                         num+=game.players[i].zhiLiao;
