@@ -6954,7 +6954,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     target.storage.tiaoXinX_player=player;
                 },
                 ai:{
-                    order:4,
+                    order:3.8,
                     result:{
                         target:-1,
                     }
