@@ -572,9 +572,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         player.showCards(result.cards);
                         player.changeZhiLiao(1);
                         player.draw(1);
-                        lib.skill.yiDuanCaiJueSuo.removeZhiLiao(player,1);
+                        event.flag=true;
                     }else{
                         event.finish();
+                    }
+                    'step 2'
+                    if(event.flag){
+                        lib.skill.yiDuanCaiJueSuo.removeZhiLiao(player,1);
                     }
                 }
             },
