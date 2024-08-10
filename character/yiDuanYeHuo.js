@@ -591,7 +591,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             },
             biHuLingYu:{
                 trigger:{global:'damageBegin1'},
-                priority:1,
+                firstDo:true,
                 filter:function(event,player){
                     return player.storage.yiDuanCaiJueSuo>=3&&event.player.side==player.side;
                 },
@@ -599,7 +599,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     lib.skill.yiDuanCaiJueSuo.removeZhiLiao(player,3);
                     trigger.num--;
                     player.addZhiShiWu('caiJue',1);
-                }
+                },
             },
             caiJueZhe:{
                 type:'qiDong',
