@@ -3062,7 +3062,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					var zhiLiaonum=result.control;
 					if(zhiLiaonum>0){
 						trigger.parent.num-=zhiLiaonum;
-						game.log(player,'的[治疗]抵挡了'+zhiLiaonum+'点伤害');
+						game.log(player,'的','[治疗]','抵挡了'+zhiLiaonum+'点伤害');
 						player.changeZhiLiao(-zhiLiaonum).type='damage';
 					}
                 }
