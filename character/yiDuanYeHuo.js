@@ -12,7 +12,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             }
         },
 		character:{
-            //zhanDouFaShi:['female','yong',6,['jianxiong'],],
+            zhanDouFaShi:['female','yong',3,['fuWenZhiHuan','fuMoDaJi','shangBian','moLiShangZeng'],],
             //xingZhuiNvWu:['female','yong',6,['jianxiong'],],
             shengTingJianChaShi:['female','sheng',4,['kuangXinTu','caiJueLunDing','enDianShenShou','jingHuaZhiShu','biHuLingYu','caiJueZhe','shenShengBianCe','caiJue'],],
             //lieWuRen:['male','ji',6,['jianxiong'],],
@@ -716,6 +716,203 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 markimage:'image/card/hong.png',
             },
 
+            //战斗法师
+            fuWenZhiHuan:{
+                type:'faShu',
+                enable:['chooseToUse','faShu'],
+                usable:1,
+                filter:function(event,player){
+                    return player.countTongXiPai()>=2;
+                },
+                selectCard:2,
+                filterCard:function(card){
+                    if(!ui.selected.cards.length){
+                        return true;
+                    }
+                    var xiBie=get.xiBie(card);
+                    if(get.xiBie(ui.selected.cards[0])!=xiBie){
+                        return false;
+                    }
+                    return true;
+                },
+                complexCard:true,
+                prepare:'showCards',
+                content:function(){
+                    'step 0'
+                    player.draw(1);
+                    'step 1'
+                    for(var i=0;i<cards.length;i++){
+                        if(get.mingGe(cards[i])=='yong'||get.type(cards[i])=='faShu'){
+                            event.flag=true;
+                            break;
+                        }
+                    }
+                    if(event.flag){
+                        player.storage.gongJi++;
+                    }
+                },
+                ai:{
+                    order:3.8,
+                    result:{
+                        player:1,
+                    }
+                }
+            },
+            fuMoDaJi:{
+                trigger:{global:'phaseBefore'},
+                direct:true,
+                priority:-1,
+                content:function(){
+                    player.storage.fuMoDaJi=0;
+                },
+                group:['fuMoDaJi_mingZhong','fuMoDaJi_weiMingZhong'],
+                subSkill:{
+                    mingZhong:{
+                        trigger:{player:'useCardToTargeted'},
+                        filter:function(event,player){
+                            return get.is.zhuDongGongJi(event.parent)&&player.storage.fuMoDaJi==0;
+                        },
+                        content:function(){
+                            player.storage.faShu++;
+                            player.storage.fuMoDaJi++;
+                        }
+                    },
+                    weiMingZhong:{
+                        trigger:{source:'gongJiWeiMingZhong'},
+                        filter:function(event,player){
+                            return !event.yingZhan&&get.mingGe(event.source_card)=='yong'&&player.storage.fuMoDaJi==0;
+                        },
+                        content:function(){
+                            player.storage.faShu++;
+                            player.storage.fuMoDaJi++;
+                        }
+                    }
+                }
+            },
+            shangBian:{
+                trigger:{player:['chooseToUseEnd','gongJiEnd','faShuEnd']},
+                filter:function(event,player){
+                    if(event.result.bool!=true) return false;
+                    if(player.side){
+                        var bool=game.hongZhanJi.includes('宝石');
+                    }else{
+                        var bool=game.lanZhanJi.includes('宝石');
+                    }
+                    var players=game.filterPlayer(function(current){
+                        return current.side==player.side&&current!=player&&current.countNengLiangAll()>0;
+                    });
+                    return player.storage.shangBian==3&&(bool||players.length>0);
+                },
+                content:function(){
+                    'step 0'
+                    if(player.side){
+                        var bool=game.hongZhanJi.includes('宝石');
+                    }else{
+                        var bool=game.lanZhanJi.includes('宝石');
+                    }
+                    var players=game.filterPlayer(function(current){
+                        return current.side==player.side&&current!=player&&current.countNengLiangAll()>0;
+                    });
+                    if(bool&&players.length>0){
+                        var next=player.chooseTarget('是否消耗队友【能量区】1【能量】,否者消耗我方【战绩区】1[宝石]',function(card,player,target){
+                            return target.side==player.side&&target!=player&&target.countNengLiangAll()>0;
+                        });
+                    }else if(!bool&&players.length>0){
+                        var next=player.chooseTarget('消耗队友【能量区】1【能量】',true,function(card,player,target){
+                            return target.side==player.side&&target!=player&&target.countNengLiangAll()>0;
+                        });
+                    }
+                    'step 1'
+                    if(result.bool){
+                        game.log(player,'选择了',result.targets);
+                        player.line(result.targets,'green');
+                        var target=result.targets[0];
+                        event.target=target;
+                        if(target.countNengLiang('r')>0&&target.countNengLiang('b')>0){
+                            var list=['宝石','水晶'];
+                            var next=player.chooseControl(list);
+                            next.set('prompt','选择消耗的能量');
+                            next.set('ai',function(control){
+                                return 1;
+                            });
+                        }else if(target.countNengLiang('r')>0){
+                            event.target.removeNengLiang('r',1);
+                            event.goto(3);
+                        }else if(target.countNengLiang('b')>0){
+                            event.target.removeNengLiang('b',1);
+                            event.goto(3);
+                        }
+                    }else{
+                        player.removeZhanJi('r',1);
+                        event.goto(3);
+                    }
+                    'step 2'
+                    if(result.control=='宝石'){
+                        event.target.removeNengLiang('r',1);
+                    }else{
+                        event.target.removeNengLiang('b',1);
+                    }
+                    'step 3'
+                    var next=player.chooseTarget(2,'对2名目标对手各造成1点法术伤害③',true,function(card,player,target){
+                        return target.side!=player.side;
+                    });
+                    'step 4'
+                    event.targets=result.targets.sortBySeat(player);
+                    game.log(player,'选择了',event.targets);
+                    player.line(event.targets,'red');
+                    'step 5'
+                    var target=event.targets.shift();
+                    target.damageFaShu(1,player);
+
+                    if(event.targets.length){
+                        event.redo();
+                    }
+                },
+                group:['shangBian_jiShu','shangBian_chongZhi'],
+                subSkill:{
+                    jiShu:{
+                        priority:1,
+                        trigger:{player:['chooseToUseEnd','gongJiEnd','faShuEnd']},
+                        filter:function(event,player){
+                            return event.result.bool==true;
+                        },
+                        direct:true,
+                        content:function(){
+                            player.storage.shangBian++;
+                        }
+                    },
+                    chongZhi:{
+                        trigger:{player:'phaseBefore'},
+                        direct:true,
+                        priority:-2,
+                        content:function(){
+                            player.storage.shangBian=0;
+                        }
+                    }
+                }
+            },
+            moLiShangZeng:{
+                trigger:{player:['chooseToUseEnd','gongJiEnd','faShuEnd']},
+                filter:function(event,player){
+                    return event.result.bool==true&&event.type!='phase'&&player.canBiShaShuiJing();
+                },
+                content:function(){
+                    'step 0'
+                    player.removeBiShaShuiJing();
+                    'step 1'
+                    player.chooseTarget('对目标对手造成1点法术伤害③',true,function(card,player,target){
+                        return target.side!=player.side;
+                    });
+                    'step 2'
+                    game.log(player,'选择了',result.targets);
+                    player.line(result.targets,'red');
+                    result.targets[0].damageFaShu(1,player);
+                },
+                ai:{
+                    shuiJing:true,
+                }
+            },
+
         },
 		
 		translate:{
@@ -766,6 +963,17 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             shenShengBianCe_info:"[水晶]<span class='tiaoJian'>(移除X点【裁决】)</span>X名目标角色各摸1张牌[强制]，你弃X张牌。",
             yiDuanCaiJueSuo_info:"【异端裁决所】的[治疗]上限为4。",
             caiJue_info:"【裁决】为圣庭监察士专有指示物，上限为3。",
+
+            //战斗法师
+            fuWenZhiHuan:"[法术]符文置换",
+            fuWenZhiHuan_info:"[回合限定]<span class='tiaoJian'>(弃2张同系牌[展示])</span>摸1张牌[强制]；<span class='tiaoJian'>(若弃牌包含咏类命格或法术牌)</span>额外+1[攻击行动]。",
+            fuMoDaJi:"[响应]附魔打击",
+            fuMoDaJi_info:"[回合限定]<span class='tiaoJian'>(主动攻击命中时②)</span>额外+1[法术行动]。 <span class='tiaoJian'>(主动攻击未命中②且攻击牌为咏类命格)</span>额外+1[法术行动]。",
+            shangBian:"[响应]熵变",
+            shangBian_info:"<span class='tiaoJian'>(本回合第三次行动结束时，消耗我方【战绩区】1[宝石]或队友【能量区】1【能量】)</span>对2名目标对手各造成1点法术伤害③。",
+            moLiShangZeng:"[响应]魔力熵增",
+            moLiShangZeng_info:"[水晶]<span class='tiaoJian'>(每次额外行动结束时)</span>对目标对手造成1点法术伤害③。",
+            
         },
 	};
 });
