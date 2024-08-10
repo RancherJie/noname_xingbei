@@ -396,6 +396,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             caiJueLunDing:{
                 trigger:{global:'zhiLiaoYiChu'},
                 usable:1,
+                priority:1,
                 filter:function(event,player){
                     return event.player.side==player.side;
                 },
