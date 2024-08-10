@@ -516,7 +516,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         }
                     }
                     'step 4'
-                    player.chooseToDiscard('h',1,true);
+                    if(player.countCards('h')==0){
+                        event.finish();
+                    }else{
+                        player.chooseToDiscard('h',1,true);
+                    }
                     'step 5'
                     if(result.bool){
                         var next=player.chooseCardButton(result.cards,'是否展示,对目标角色造成1点法术伤害③');
