@@ -740,7 +740,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             caiJueLunDing:"[响应]裁决论定",
             enDianShenShou:"[响应]恩典神授",
             jingHuaZhiShu:"[响应]净化之术",
-            biHuLingYu:"(专)[庇护领域]",
+            biHuLingYu:"(专)[响应]庇护领域",
             caiJueZhe:"[启动]裁决者",
             shenShengBianCe:"[法术]神圣鞭策",
             shenShengBianCe_backup:"[法术]神圣鞭策",
