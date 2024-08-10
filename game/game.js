@@ -47676,7 +47676,7 @@
 						var norow2=function(){
 							var node=currentrow1;
 							if(!node) return false;
-							return node.innerHTML=='横置'||node.innerHTML=='翻面'||node.innerHTML=='换人'||node.innerHTML=='复活';
+							return node.innerHTML=='横置'||node.innerHTML=='翻面'||node.innerHTML=='换人'||node.innerHTML=='复活'||node.innerHTML=='回合';
 						};
 						var checkCheat=function(){
 							if(norow2()){
@@ -47733,11 +47733,11 @@
 								var num;
 								if(currentrow2){
 									switch(currentrow2.innerHTML){
-										case '一':num=1;break;
-										case '二':num=2;break;
-										case '三':num=3;break;
-										case '四':num=4;break;
-										case '五':num=5;break;
+										case '1':num=1;break;
+										case '2':num=2;break;
+										case '3':num=3;break;
+										case '4':num=4;break;
+										case '5':num=5;break;
 									}
 								}
 								var targets=[];
@@ -47748,13 +47748,18 @@
 								while(targets.length){
 									var target=targets.shift();
 									switch(currentrow1.innerHTML){
-										case '伤害':target.damage(num,'nosource');break;
-										case '回复':target.recover(num,'nosource');break;
+										case '伤害':target.damage(num);break;
+										case '法伤':target.damageFaShu(num);break;
 										case '摸牌':target.draw(num);break;
 										case '弃牌':target.discard(target.getCards('he').randomGets(num));break;
 										case '横置':target.link();break;
 										case '翻面':target.turnOver();break;
-										case '复活':target.revive(target.maxHp);break;
+										case '增疗':target.changeZhiLiao(num);break;
+										case '减疗':target.changeZhiLiao(-num);break;
+										case '回合':target.insertPhase();break;
+										case '宝石战绩':target.addZhanJi('r',num);break;
+										case '宝石能量':target.addNengLiang('r',num);break;
+
 										case '换人':{
 											if(_status.event.isMine()){
 												if(!ui.auto.classList.contains('hidden')){
@@ -47809,17 +47814,24 @@
 							}
 							checkCheat();
 						};
-						var nodedamage=ui.create.div('.menubutton','伤害',row1,clickrow1);
-						var noderecover=ui.create.div('.menubutton','回复',row1,clickrow1);
+						var nodedamage=ui.create.div('.menubutton','攻害',row1,clickrow1);
+						var nodedamageFaShu=ui.create.div('.menubutton','法伤',row1,clickrow1);
+						//var noderecover=ui.create.div('.menubutton','回复',row1,clickrow1);
 						var nodedraw=ui.create.div('.menubutton','摸牌',row1,clickrow1);
 						var nodediscard=ui.create.div('.menubutton','弃牌',row1,clickrow1);
 						var nodelink=ui.create.div('.menubutton','横置',row1,clickrow1);
-						var nodeturnover=ui.create.div('.menubutton','翻面',row1,clickrow1);
-						var noderevive=ui.create.div('.menubutton','复活',row1,clickrow1);
-						var nodereplace=ui.create.div('.menubutton','换人',row1,clickrow1);
+						//var nodeturnover=ui.create.div('.menubutton','翻面',row1,clickrow1);
+						var nodePhase=ui.create.div('.menubutton','回合',row1,clickrow1);
+						//var noderevive=ui.create.div('.menubutton','复活',row1,clickrow1);
+						//var nodereplace=ui.create.div('.menubutton','换人',row1,clickrow1);
+						var nodeaddZhiLiao=ui.create.div('.menubutton','增疗',row1,clickrow1);
+						var noderemoveZhiLaio=ui.create.div('.menubutton','减疗',row1,clickrow1);
+						var nodeaddNengLiang=ui.create.div('.menubutton','宝石能量',row1,clickrow1);
+						var nodeaddZhanJi=ui.create.div('.menubutton','宝石战绩',row1,clickrow1);
+						/*
 						if(!game.canReplaceViewpoint||!game.canReplaceViewpoint()){
 							nodereplace.classList.add('unselectable');
-						}
+						}*/
 
 						var currentrow2=null;
 						var row2=ui.create.div('.menu-cheat',page);
@@ -47838,11 +47850,11 @@
 							}
 							checkCheat();
 						};
-						var nodex1=ui.create.div('.menubutton','一',row2,clickrow2);
-						var nodex2=ui.create.div('.menubutton','二',row2,clickrow2);
-						var nodex3=ui.create.div('.menubutton','三',row2,clickrow2);
-						var nodex4=ui.create.div('.menubutton','四',row2,clickrow2);
-						var nodex5=ui.create.div('.menubutton','五',row2,clickrow2);
+						var nodex1=ui.create.div('.menubutton','1',row2,clickrow2);
+						var nodex2=ui.create.div('.menubutton','2',row2,clickrow2);
+						var nodex3=ui.create.div('.menubutton','3',row2,clickrow2);
+						var nodex4=ui.create.div('.menubutton','4',row2,clickrow2);
+						var nodex5=ui.create.div('.menubutton','5',row2,clickrow2);
 
 						var row3=ui.create.div('.menu-buttons.leftbutton.commandbutton',page);
 						row3.style.marginTop='3px';
@@ -47918,12 +47930,13 @@
 									nodereplace.classList.remove('unselectable');
 								}
 							}
+							/*
 							if(game.dead.length==0){
 								noderevive.classList.add('unselectable');
 							}
 							else{
 								noderevive.classList.remove('unselectable');
-							}
+							}*/
 							checkCheat();
 						});
 					}());
