@@ -35,6 +35,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     yiChu:{
                         trigger:{player:'zhiLiaoYiChu'},
                         forced:true,
+                        priority:-1,
                         content:function(){
                             player.addZhiShiWu('shengYin');
                         }
