@@ -56826,7 +56826,7 @@
 		characterGets:function(list,num){
 			var result=[];
 			if(!num){
-				result=list.slice();
+				return list;
 			}else{
 				result=list.randomRemove(num);
 			}
