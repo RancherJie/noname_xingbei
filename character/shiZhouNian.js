@@ -7103,7 +7103,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                     num++;
                                 }
                             };
-                            player.addZhiShiWu('nuQi',nuQi);
+                            if(nuQi>0){
+                                player.addZhiShiWu('nuQi',nuQi);
+                            }
                             if(num>0){
                                 trigger.parent.baseDamage+=num;
                                 player.damageFaShu(num,player);
@@ -7139,8 +7141,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                     zhiXing++;
                                 }
                             };
-                            player.addZhiShiWu('nuQi',nuQi);
-                            player.addZhiShiWu('zhiXing',zhiXing);
+                            if(nuQi>0) player.addZhiShiWu('nuQi',nuQi);
+                            if(zhiXing>0) player.addZhiShiWu('zhiXing',zhiXing);
                             'step 4'
                             event.player=player;
                             event.trigger('jinDuanZhiLi');
