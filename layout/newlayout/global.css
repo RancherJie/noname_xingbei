@@ -253,14 +253,14 @@
 }
 .player .count{
 	top:auto;
-	bottom:30px;
-	left:-3px;
+	bottom:7px;
+	left:9px;
 	padding:2px;
 	line-height:20px;
 	width:8px;
 	text-align:left;
 	border-radius:2px;
-	z-index:1;
+	z-index:2;
 	border-radius:3px 0 0 3px;
 	box-shadow: rgba(0,0,0,0.2) 1px -1px 2px inset,rgba(255,255,255,0.15) -1px 1px 5px inset;
 }
@@ -288,10 +288,10 @@
 	text-align: center;
 }
 #arena.slim_player .player .count{
-	left: -6px;
+	left: 6px;
 }
 #arena.mslim_player .player .count{
-	left: -5px;
+	left: 7px;
 }
 .player .count.action{
 	bottom:60px;
