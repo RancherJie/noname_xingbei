@@ -31459,7 +31459,7 @@
 					}
 				}
 			},
-			_recovercheck:{
+			recovercheck:{
 				trigger:{player:'recoverBefore'},
 				forced:true,
 				priority:100,
@@ -31472,7 +31472,7 @@
 					trigger.cancel();
 				},
 			},
-			_turnover:{
+			turnover:{
 				trigger:{player:'phaseBefore'},
 				forced:true,
 				forceOut:true,
@@ -31683,7 +31683,7 @@
 				}
 			},
 			*/
-			_ismin:{
+			ismin:{
 				mod:{
 					cardEnabled:function(card,player){
 						if(player.isMin()){
