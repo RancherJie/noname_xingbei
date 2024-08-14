@@ -47754,7 +47754,7 @@
 								while(targets.length){
 									var target=targets.shift();
 									switch(currentrow1.innerHTML){
-										case '伤害':target.damage(num);break;
+										case '攻害':target.damage(num);break;
 										case '法伤':target.damageFaShu(num);break;
 										case '摸牌':target.draw(num);break;
 										case '弃牌':target.discard(target.getCards('he').randomGets(num));break;
