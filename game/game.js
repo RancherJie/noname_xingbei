@@ -114,10 +114,10 @@
 		updateURLS:{
 			gitee:'https://gitee.com/RancherJie/noname_xingbei/raw',
 			github:'https://raw.githubusercontent.com/RancherJie/noname_xingbei/master',
-			Proxy:'https://ghproxy.com/https://raw.githubusercontent.com/RancherJie/noname_xingbei/master',
+			gitmirror:'https://raw.gitmirror.com/RancherJie/noname_xingbei/master',
 		},
 		updateURL:'https://gitee.com/RancherJie/noname_xingbei/raw',
-		mirrorURL:'https://ghproxy.com/https://raw.githubusercontent.com/RancherJie/noname_xingbei/master',
+		mirrorURL:'https://raw.gitmirror.com/RancherJie/noname_xingbei/master/',
 		hallURL:'ssyy.tech:58080',
 		assetURL:typeof nonameInitialized!='string'||nonameInitialized=='nodejs'?'':nonameInitialized,
 		compatibleEdition:Boolean(typeof nonameInitialized=='string'&&nonameInitialized.match(/\/(?:com\.widget|yuri\.nakamura)\.noname\//)),
@@ -1047,12 +1047,12 @@
 					},
 					update_link:{
 						name:'更新地址',
-						init:'gitee',
+						init:'gitmirror',
 						unfrequent:true,
 						item:{
 							gitee:'gitee',
 							github:'GitHub',
-							Proxy:'GitHub Proxy',
+							gitmirror:'gitmirror',
 						},
 						onclick:function(item){
 							game.saveConfig('update_link',item);
