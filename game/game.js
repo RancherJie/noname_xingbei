@@ -16442,7 +16442,8 @@
 					}
 
 					if(targets.length){
-						var str=(targets.length==1&&targets[0]==player)?'#b自己':targets;
+						//var str=(targets.length==1&&targets[0]==player)?'#b自己':targets;
+						var str=targets;
 						if(cards.length&&!card.isCard){
 							if(event.addedTarget){
 								game.log(player,'对',str,'使用了',card,'（',cards,'，指向',event.addedTargets,'）');
