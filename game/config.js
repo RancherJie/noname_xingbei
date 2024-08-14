@@ -1,6 +1,6 @@
 window.config={
 	extension_sources:{
-		'GitHub Proxy':'https://ghproxy.com/https://raw.githubusercontent.com/RancherJie/noname_xingbei_extension/master/',
+		'gitmirror':'https://raw.staticdn.net/RancherJie/noname_xingbei_extension/master/',
 		gitee:'https://gitee.com/RancherJie/noname_xingbei_extension/raw/master/',
 		GitHub:'https://raw.githubusercontent.com/RancherJie/noname_xingbei_extension/master/'
 	},
