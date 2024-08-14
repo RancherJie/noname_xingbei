@@ -344,7 +344,6 @@ window.noname_skin_list={
 	jingLingSheShou:1,
 	lingFuShi:1,
 	maoXianJia:1,
-	moFaShaoNv:1,
 	moGong:2,
 	moJianShi:3,
 	moQiang:1,
@@ -364,4 +363,7 @@ window.noname_skin_list={
 	tianShi:1,
 	xingZhuiNvWu:1,
 	nvPuZhang:1,
+	xueZhiWuNv:1,
+	yueZhiNvShen:1,
+	jianDi:1,
 };
