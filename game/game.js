@@ -18012,6 +18012,8 @@
 					event.trigger('damageBegin0');
 					'step 1'
 					event.trigger('damageBegin1');
+					var str=`${num}点${event.faShu?'法术':'攻击'}伤害`;
+					game.log(player,'受到',source,str);
 					"step 2"
 					event.trigger('damageBegin2');
 					"step 3"
@@ -18059,7 +18061,7 @@
 					str+='伤害';
 					*/
 					var str=`${num}点${event.faShu?'法术':'攻击'}伤害`;
-					game.log(player,'受到了',source,str);
+					game.log(player,'承受',source,str);
 					if(player.stat[player.stat.length-1].damaged==undefined){
 						player.stat[player.stat.length-1].damaged=num;
 					}
