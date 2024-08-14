@@ -26202,6 +26202,7 @@
 					num=game.checkMod(this,num,'maxHandcardBase',this);
 					num=game.checkMod(this,num,'maxHandcard',this);
 					num=game.checkMod(this,num,'maxHandcardFinal',this);
+					num=game.checkMod(this,num,'maxHandcardWuShi',this);
 					return Math.max(0,num);
 				},
 				getEnemies:function(func){
