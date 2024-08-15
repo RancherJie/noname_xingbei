@@ -2352,7 +2352,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         player.logSkill(event.name);
                         var card=result.links[0];
                         event.card=card;
-                        player.discard(card);
+                        player.discard(card,'anYue');
                         player.showCards(card).set('gaiPai',true);
                         event.trigger('yiChuAnYue');
                     }else{
@@ -2418,7 +2418,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 3'
                     var card=result.links[0];
                     event.card=card;
-                    player.discard(card);
+                    player.discard(card,'anYue');
                     event.trigger('yiChuAnYue');
                     'step 4'
                     player.chooseTarget(1,'目标角色+1[治疗]',true).set('ai',function(target){
@@ -2475,7 +2475,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 2'
                     if(result.links.length>0){
                         event.num=result.links.length;
-                        player.discard(result.links);
+                        player.discard(result.links,'anYue');
                         event.trigger('yiChuAnYue');
                     }else{
                         event.finish();
@@ -3284,10 +3284,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         player.logSkill(event.name);
                         if(get.position(result.cards[0])=='h'){
                             var flag=true;
-                        }
-                        player.discard(result.cards);
+                        }    
                         if(flag){
+                            player.discard(result.cards);
                             player.showCards(result.cards);
+                        }else{
+                            player.discard(result.cards,'zhuFu');
                         }
                         switch(get.xiBie(player.storage.yuanSuSheJi)){
                             case 'huo':
@@ -5745,7 +5747,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 1'
                     if(result.bool){
                         player.logSkill(event.name,trigger.targets);
-                        player.discard(result.links);
+                        player.discard(result.links,'chongNengPai');
                         player.showGaiPai(result.links);
                         if(typeof trigger.baseDamage!='number') trigger.baseDamage=get.info(trigger.card,false).baseDamage||2;
                         trigger.baseDamage++;
@@ -5777,7 +5779,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             'step 1'
                             if(result.bool){
                                 player.logSkill(event.name,trigger.targets);
-                                player.discard(result.links);
+                                player.discard(result.links,'chongNengPai');
                                 player.showGaiPai(result.links);
                                 trigger.parent.baseDamage++;
                             }
@@ -5836,7 +5838,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             contentBefore:function(){
                                 'step 0'
                                 event.links=lib.skill.leiGuangSanShe_backup.links;
-                                player.discard(event.links);
+                                player.discard(event.links,'chongNengPai');
                                 player.showGaiPai(event.links);
                                 for(var target of targets){
                                     target.storage.leiGuangSanShe=1;
@@ -5889,7 +5891,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 1'
                     if(result.bool){
                         player.logSkill(event.name);
-                        player.discard(result.links);
+                        player.discard(result.links,'chongNengPai');
                         trigger.getParent('phaseUse').moGuanChongJi=false;
                         var next=player.chooseTarget(true,function(card,player,target){
                             if(target==_status.event.trigger_target) return false;
@@ -5960,7 +5962,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 7'
                     var cards=player.getExpansions('chongNengPai');
                     if(cards.length>8){
-                        player.chooseCardButton(cards,true,cards.length-8,'充能：移除多余充能');
+                        player.chooseCardButton(cards,true,cards.length-8,`充能：舍弃${cards.length-8}张【充能】`);
                     }else{
                         event.goto(9);
                     }
@@ -6041,7 +6043,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 8'
                     var cards=player.getExpansions('chongNengPai');
                     if(cards.length>8){
-                        player.chooseCardButton(cards,true,cards.length-8,'充能：移除多余充能');
+                        player.chooseCardButton(cards,true,cards.length-8,`充能：舍弃${cards.length-8}张【充能】`);
                     }else{
                         event.goto(10);
                     }
@@ -6396,7 +6398,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     next.set('prompt2',lib.translate.baiGuiYeXing_info);
                     'step 1'
                     event.card=result.links[0];
-                    player.discard(result.links);
+                    player.discard(result.links,'yaoLi');
                     var list=['否'];
                     if(get.xiBie(event.card)=='huo'){
                         list.unshift('是');
@@ -8983,7 +8985,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 1'
                     if(result.bool){
                         player.logSkill(event.name,trigger.player);
-                        player.discard(result.links).set('jian',true);
+                        player.discard(result.links,'jian').set('jian',true);
                     }else{
                         event.finish();
                     }
@@ -9004,7 +9006,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 1'
                     if(result.bool){
                         player.logSkill(event.name);
-                        player.discard(result.links).set('jian',true);
+                        player.discard(result.links,'jian').set('jian',true);
                     }else{
                         event.finish();
                     }
@@ -9037,7 +9039,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 1'
                     if(result.bool){
                         player.logSkill(event.name,trigger.player);
-                        player.discard(result.links).set('jian',true);
+                        player.discard(result.links,'jian').set('jian',true);
                         player.showGaiPai(result.links);
                     }else{
                         event.finish();
@@ -9220,7 +9222,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     var next=player.chooseCardButton(cards,2,'移除2个【茧】或对自己造成4点法术伤害③');
                     'step 7'
                     if(result.bool){
-                        player.discard(result.links).set('jian',true);
+                        player.discard(result.links,'jian').set('jian',true);
                     }else{
                         player.damageFaShu(4,player);
                     }
@@ -9251,7 +9253,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     var num=player.getExpansions('jian').length;
                     var cards=player.getExpansions('jian');
                     if(num>8){
-                        player.chooseCardButton(num-8,true,cards,'舍弃多余【茧】');
+                        player.chooseCardButton(num-8,true,cards,`舍弃${num-8}张【茧】`);
                     }else{
                         event.finish();
                     }
