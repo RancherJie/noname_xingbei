@@ -117,7 +117,7 @@
 			gitmirror:'https://raw.gitmirror.com/RancherJie/noname_xingbei/master',
 		},
 		updateURL:'https://gitee.com/RancherJie/noname_xingbei/raw',
-		mirrorURL:'https://raw.gitmirror.com/RancherJie/noname_xingbei/master/',
+		mirrorURL:'https://raw.gitmirror.com/RancherJie/noname_xingbei/master',
 		hallURL:'ssyy.tech:58080',
 		assetURL:typeof nonameInitialized!='string'||nonameInitialized=='nodejs'?'':nonameInitialized,
 		compatibleEdition:Boolean(typeof nonameInitialized=='string'&&nonameInitialized.match(/\/(?:com\.widget|yuri\.nakamura)\.noname\//)),
