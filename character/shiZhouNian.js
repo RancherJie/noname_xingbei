@@ -3261,7 +3261,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         }
                     });
                     next.set('prompt',get.prompt('yuanSuSheJi'));
-                    next.set('prompt2',"弃1张法术牌[展示]或移除1个[祝福],");
+                    next.set('prompt2',"弃1张法术牌[展示]或移除1个【祝福】,");
                     switch(get.xiBie(player.storage.yuanSuSheJi)){
                         case 'huo':
                             next.prompt2+='本次攻击伤害额外+1';
