@@ -945,7 +945,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             
             //圣庭监察士
             kuangXinTu:"[被动]狂信徒",
-            caiJueLunDing:"[响应]裁决论定",
+            caiJueLunDing:"[响应]裁决论定[回合限定]",
             enDianShenShou:"[响应]恩典神授",
             jingHuaZhiShu:"[响应]净化之术",
             biHuLingYu:"(专)[响应]庇护领域",
@@ -956,7 +956,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             caiJue:"裁决",
 
             kuangXinTu_info:"游戏初始时你拥有【异端裁决所】。 <span class='tiaoJian'>(我方队友存在圣类命格时)</span>你的[治疗]上限+1。 <span class='tiaoJian'>(你的[攻击行动]结束后)</span>目标角色+1[治疗]。",
-            caiJueLunDing_info:"[回合限定]<span class='tiaoJian'>(我方目标角色[治疗]溢出时)</span>【异端裁决所】+1[治疗]；<span class='tiaoJian'>(若因此【异端裁决所】[治疗]增加)</span>你+1[水晶]。",
+            caiJueLunDing_info:"<span class='tiaoJian'>(我方目标角色[治疗]溢出时)</span>【异端裁决所】+1[治疗]；<span class='tiaoJian'>(若因此【异端裁决所】[治疗]增加)</span>你+1[水晶]。",
             enDianShenShou_info:"<span class='tiaoJian'>(你执行[提炼]时，移除我方角色合计2[治疗]或【异端裁决所】3[治疗])</span>将提炼出的[宝石]和[水晶]全部交给目标队友，你弃1张牌；<span class='tiaoJian'>(若该弃牌为圣类命格，可展示之[展示])</span>对目标对手造成1点法术伤害③。",
             jingHuaZhiShu_info:"<span class='tiaoJian'>(你承受伤害⑥并结算完成后，弃1张法术牌[展示])</span>你+1[治疗]，摸1张牌[强制]，然后移除【异端裁决所】上1[治疗]。",
             biHuLingYu_info:"<span class='tiaoJian'>(我方目标角色受到伤害时③，移除【异端裁决所】3[治疗])</span>本次伤害-1，你+1【裁决】。",
@@ -966,10 +966,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             caiJue_info:"【裁决】为圣庭监察士专有指示物，上限为3。",
 
             //战斗法师
-            fuWenZhiHuan:"[法术]符文置换",
-            fuWenZhiHuan_info:"[回合限定]<span class='tiaoJian'>(弃2张同系牌[展示])</span>摸1张牌[强制]；<span class='tiaoJian'>(若弃牌包含咏类命格或法术牌)</span>额外+1[攻击行动]。",
-            fuMoDaJi:"[响应]附魔打击",
-            fuMoDaJi_info:"[回合限定]<span class='tiaoJian'>(主动攻击命中时②)</span>额外+1[法术行动]。 <span class='tiaoJian'>(主动攻击未命中②且攻击牌为咏类命格)</span>额外+1[法术行动]。",
+            fuWenZhiHuan:"[法术]符文置换[回合限定]",
+            fuWenZhiHuan_info:"<span class='tiaoJian'>(弃2张同系牌[展示])</span>摸1张牌[强制]；<span class='tiaoJian'>(若弃牌包含咏类命格或法术牌)</span>额外+1[攻击行动]。",
+            fuMoDaJi:"[响应]附魔打击[回合限定]",
+            fuMoDaJi_info:"<span class='tiaoJian'>(主动攻击命中时②)</span>额外+1[法术行动]。 <span class='tiaoJian'>(主动攻击未命中②且攻击牌为咏类命格)</span>额外+1[法术行动]。",
             shangBian:"[响应]熵变",
             shangBian_info:"<span class='tiaoJian'>(本回合第三次行动结束时，消耗我方【战绩区】1[宝石]或队友【能量区】1【能量】)</span>对2名目标对手各造成1点法术伤害③。",
             moLiShangZeng:"[响应]魔力熵增",
