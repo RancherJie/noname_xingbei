@@ -2305,7 +2305,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 1'
                     var cards=trigger.cards;
                     if(cards){
-                        player.addToExpansion('giveAuto',trigger.cards).gaintag.add('anYue');
+                        player.addToExpansion('draw',trigger.cards,'log').gaintag.add('anYue');
                     }
                     'step 2'
                     trigger.cancel();
@@ -5955,7 +5955,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                     'step 6'
                     if(result.cards){
-                        player.addToExpansion('giveAuto',result.cards).gaintag.add('chongNengPai');
+                        player.addToExpansion('draw',result.cards,'log').gaintag.add('chongNengPai');
                     }
                     'step 7'
                     var cards=player.getExpansions('chongNengPai');
@@ -6037,7 +6037,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         event.goto(10);
                     }
                     'step 7'
-                    player.addToExpansion('giveAuto',result.cards).gaintag.add('chongNengPai');
+                    player.addToExpansion('draw',result.cards,'log').gaintag.add('chongNengPai');
                     'step 8'
                     var cards=player.getExpansions('chongNengPai');
                     if(cards.length>8){
@@ -6379,7 +6379,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 0'
                     player.chooseCard('h',true);
                     'step 1'
-                    player.addToExpansion('giveAuto',result.cards).gaintag.add('yaoLi');
+                    player.addToExpansion('draw',result.cards,'log').gaintag.add('yaoLi');
                 }
             },
             baiGuiYeXing:{
@@ -7914,8 +7914,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 forced:true,
                 priority:2,
                 content:function(){
-                    game.log(player,'将',trigger.source_card.cards,'作为盖牌');
-                    player.addToExpansion('giveAuto',trigger.source_card.cards,player).gaintag.add('jianHun');
+                    //game.log(player,'将',trigger.source_card.cards,'作为盖牌');
+                    player.addToExpansion('draw',trigger.source_card.cards,player,'log').gaintag.add('jianHun');
                 }
             },
             yangGong:{
@@ -8950,7 +8950,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                     'step 1'
                     var cards=get.cards();
-                    player.addToExpansion('giveAuto',cards).gaintag.add('jian');
+                    player.addToExpansion('draw',cards,'log').gaintag.add('jian');
                     'step 2'
                     var next=game.createEvent();
                     next.player=player;
@@ -9165,7 +9165,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 2'
                     player.qiPai();
                     var card=get.cards(4);
-                    player.addToExpansion('giveAuto',card).gaintag.add('jian');
+                    player.addToExpansion('draw',card,'log').gaintag.add('jian');
                     'step 3'
                     var next=game.createEvent();
                     next.player=player;
