@@ -31478,7 +31478,7 @@
 					trigger.cancel();
 				},
 			},
-			turnover:{
+			_turnover:{
 				trigger:{player:'phaseBefore'},
 				forced:true,
 				forceOut:true,
