@@ -1107,8 +1107,26 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             ["卢恩", cards],
                             ["手牌", player.getCards("h")],
                         ]);
-                        next.set("filterMove", function (from, to) {
-                            return typeof to != "number";
+                        next.set("filterMove", function (from, to, moved) {
+                            if (typeof to == "number") return false;
+                            var player = _status.event.player;
+                            var hs = player.getCards("h");
+                            var changed = hs.filter(function (card) {
+                                return !moved[1].includes(card);
+                            });
+                            var changed2 = moved[1].filter(function (card) {
+                                return !hs.includes(card);
+                            });
+                            if (changed.length < 1) return true;
+                            var pos1 = moved[0].includes(from.link) ? 0 : 1,
+                                pos2 = moved[0].includes(to.link) ? 0 : 1;
+                            if (pos1 == pos2) return true;
+                            if (pos1 == 0) {
+                                if (changed.includes(from.link)) return true;
+                                return changed2.includes(to.link);
+                            }
+                            if (changed2.includes(from.link)) return true;
+                            return changed.includes(to.link);
                         });
                     }else{
                         event.finish();
