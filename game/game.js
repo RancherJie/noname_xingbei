@@ -17204,7 +17204,12 @@
 				discard:function(){
 					"step 0"
 					//game.log(player,'弃置了',cards);
-					game.log(player,'弃置了',cards.length,'张牌');//星杯暗置弃牌日志
+					if(event.gaiPai){//移除了盖牌日志
+						let name=get.translation(event.gaiPai);
+						game.log(player,'移除了',cards.length,'张','【'+name+'】');
+					}else{
+						game.log(player,'弃置了',cards.length,'张牌');//星杯暗置弃牌日志
+					}
 					event.done=player.lose(cards,event.position,'visible');
 					event.done.type='discard';
 					if(event.discarder) event.done.discarder=event.discarder;
@@ -23360,6 +23365,9 @@
 						}
 						else if(arguments[i]=='notBySelf'){
 							next.notBySelf=true;
+						}
+						else if(typeof arguments[i]=='string'){
+							next.gaiPai=arguments[i];
 						}
 					}
 					if(next.cards==undefined) _status.event.next.remove(next);
