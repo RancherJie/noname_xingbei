@@ -483,6 +483,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                     'step 2'
                     var num=target.getNengLiangLimit()-target.countNengLiangAll();
+                    num=Math.min(num,2);
                     if(player.side==true){
                         var list=game.hongZhanJi;
                     }else if(player.side==false){
