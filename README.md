@@ -27,7 +27,9 @@ github：[RancherJie/noname_xingbei (github.com)](https://github.com/RancherJie/
 
 启动器：https://pan.baidu.com/s/1mJDEW_dCJBYqCQPdQ4U0mw?pwd=3sc7 提取码：3sc7
 
-本  体：https://pan.baidu.com/s/1fc0HMuuJ2nNpKVe1PXgUQw?pwd=d8tt 提取码：d8tt
+本  体v0.6.0.1：https://pan.baidu.com/s/1fc0HMuuJ2nNpKVe1PXgUQw?pwd=d8tt 提取码：d8tt
+
+安卓懒人包：链接：https://pan.baidu.com/s/1qL5SATsZfXZpMM2_VsWNhA?pwd=alsj 提取码：alsj
 
 
-## [无名杀官网]（https://gitee.com/qinkunwei/noname）
+## [无名杀仓库]（https://github.com/libccy/noname）
