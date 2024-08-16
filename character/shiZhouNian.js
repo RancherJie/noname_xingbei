@@ -5129,13 +5129,15 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						return lib.filter.cardEnabled(card,player,'forceEnable');
 					});
 					next.set('filterTarget',function(card,player,target){
+                        return target!=_status.event.trigger_player&&target.side!=player.side;
+                        /*
 						if(ui.selected.cards.length){
 							if(get.type(ui.selected.cards[0])=='gongJi'){
 								return target!=_status.event.trigger_player&&target.side!=player.side;
 							}else{
 								return false;
 							}
-						}
+						}*/
                     });
 					next.set('trigger_card',trigger.card);
                     next.set('trigger_player',event.source);
