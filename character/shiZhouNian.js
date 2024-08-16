@@ -5007,6 +5007,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             yinYangZhanHuan:{
                 enable:['chooseToUse_yingZhan'],
                 filter:function(event,player){
+                    if(event.canYingZhan==false||get.xiBie(event.trigger_card)=='an') return false;
+                    
                     var mingGe=get.mingGe(event.trigger_card);
                     return player.countCards('h',card=>get.mingGe(card)==mingGe&&get.type(card)=='gongJi')>0;
                 },
