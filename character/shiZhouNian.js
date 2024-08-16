@@ -7995,7 +7995,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 1'
                     if(result.bool){
                         player.logSkill(event.name);
-                        player.loseToDiscardpile(result.links[0]).set('log',false);
+                        player.discard(result.links,'jianHun');
                         trigger.storage.tianShiZhiHun=true;
                     }else{
                         event.finish();
@@ -8038,7 +8038,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 1'
                     if(result.bool){
                         player.logSkill(event.name);
-                        player.loseToDiscardpile(result.links[0]).set('log',false);
+                        player.discard(result.links,'jianHun');
                         trigger.storage.eMoZhiHun=true;
                     }else{
                         event.finish();
