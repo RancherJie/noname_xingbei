@@ -13292,7 +13292,11 @@
 						
 					}
 					"step 1"
+					/*
 					if(result.bool&&!event.skipped&&(player.storage.all>0||player.storage.gongJi>0||player.storage.faShu>0)){
+						event.goto(0);
+					}*/
+					if(!event.skipped&&(player.storage.all>0||player.storage.gongJi>0||player.storage.faShu>0)){
 						event.goto(0);
 					}
 					game.broadcastAll(function(){
