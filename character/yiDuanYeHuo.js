@@ -1472,6 +1472,17 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 filter:function(event,player){
                     if(event.name=='chooseToUse_yingZhan'&&(event.canYingZhan==false||get.xiBie(event.trigger_card)=='an')) return false;
 
+                    if(event.name=='chooseToUse_yingZhan'){
+                        var cards=player.getCards();
+                        for(var i=0;i<cards.length;i++){
+                            var card=cards[i];
+                            if(card.name!='shengGuang'&&get.type(card)=='faShu'){
+                                if(get.xiBie(card)==get.xiBie(event.trigger_card)) return true;
+                            }
+                        }
+                        return false;
+                    }
+
                     return player.countCards('h',function(card){
                         return card.name!='shengGuang'&&get.type(card)=='faShu';
                     });
