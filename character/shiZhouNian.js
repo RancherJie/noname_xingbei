@@ -548,7 +548,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 }
             },
             shuiYing:{
-                trigger:{player:'drawBegin'},
+                trigger:{player:'drawBefore'},
                 filter:function(event,player){
                     return event.yuanYin!="teShuXingDong"&&player.countCards('h')>0;
                 },
