@@ -15,7 +15,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             zhanDouFaShi:['female','yong',3,['fuWenZhiHuan','fuMoDaJi','shangBian','moLiShangZeng'],],
             xingZhuiNvWu:['female','yong','4/5',['mingDingZhiLi','xingHuan','xingKe','qunXingQiShi','huangJinLv','fanXing','yingYue','shiRi','chuangKeLvDong','luEn'],],
             shengTingJianChaShi:['female','sheng',4,['kuangXinTu','caiJueLunDing','enDianShenShou','jingHuaZhiShu','biHuLingYu','caiJueZhe','shenShengBianCe','caiJue'],],
-            //lieWuRen:['male','ji',6,['jianxiong'],],
+            lieWuRen:['male','ji','3/4',['zhuanHuan','shouMoCi','faShuBoLi','guanYinDuRen','touXi','moLiPing'],],
             shengDianQiShi:['female','sheng',4,['shenXuanZhe','shenWei','shengCai','shengYu','shenZhiZi','shenLinShengQi','shengYanQiFu','shengYin'],],
 		},
 		
@@ -1444,6 +1444,212 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 }
             },
 
+            //猎巫人
+            zhuanHuan:{
+                enable:['chooseToUse','gongJi','chooseToUse_yingZhan'],
+                filter:function(event,player){
+                    if(event.name=='chooseToUse_yingZhan'&&(event.canYingZhan==false||get.xiBie(event.trigger_card)=='an')) return false;
+
+                    return player.countCards('h',function(card){
+                        return card.name!='shengGuang'&&get.type(card)=='faShu';
+                    });
+                },
+                filterCard:function(card,player,event){
+                    return card.name!='shengGuang'&&get.type(card)=='faShu';
+                },
+                position:'h',
+                viewAs:function(cards,player){
+                    var xiBie=get.xiBie(cards[0]);
+                    var name;
+                    switch(xiBie){
+                        case 'shui':
+                            name='shuiLianZhan';
+                            break;
+                        case 'huo':
+                            name='huoYanZhan';
+                            break;
+                        case 'feng':
+                            name='fengShenZhan';
+                            break;
+                        case 'lei':
+                            name='leiGuangZhan';
+                            break;
+                        case 'di':
+                            name='diLieZhan';
+                            break;
+                    }
+
+					return {name:name,xiBie:xiBie}
+				},
+                ai:{
+                    order:3.5,
+                    result:{
+                        player:1,
+                    }
+                }
+            },
+            shouMoCi:{
+                trigger:{player:'useCard'},
+                filter:function(event,player){
+                    var num=player.getExpansions('moLiPing').length;
+                    if(num>=4) return false;
+
+                    return get.is.zhuDongGongJi(event)&&event.targets[0].countCards('h')<4&&event.targets[0].countCards('h')>0;
+                },
+                content:function(){
+                    'step 0'
+                    trigger.targets[0].chooseToDiscard(true);
+                    'step 1'
+                    player.addToExpansion('draw',result.cards,'log').gaintag.add('moLiPing');
+                }
+            },
+            faShuBoLi:{
+                trigger:{player:'useCardToTargeted'},
+                filter:function(event,player){
+                    var num=player.getExpansions('moLiPing').length;
+                    if(num>=4) return false;
+
+                    return get.is.zhuDongGongJi(event.parent);
+                },
+                direct:true,
+                content:function(){
+                    'step 0'
+                    var next=player.chooseTarget();
+                    next.set('prompt',get.prompt('faShuBoLi'));
+                    next.set('prompt2',lib.translate.faShuBoLi_info);
+                    next.set('ai',function(target){
+                        var player=_status.event.player;
+                        if(target.countCards('h')<=0) return -1;
+                        return -get.attitude(player,target);
+                    });
+                    'step 1'
+                    if(result.bool){
+                        player.logSkill(event.name,result.targets);
+                        player.line(result.targets,'green');
+                        var target=result.targets[0];
+                        if(target.countCards('h')>0){
+                            target.chooseToDiscard('h',true);
+                        }else{
+                            event.finish();
+                        }
+                    }else{
+                        event.finish();
+                    }
+                    'step 2'
+                    player.addToExpansion('draw',result.cards,'log').gaintag.add('moLiPing');
+                }
+            },
+            guanYinDuRen:{
+                trigger:{global:'drawBegin'},
+                filter:function(event,player){
+                    return event.parent.name=='damage'&&event.parent.source==player&&player.getExpansions('moLiPing').length>=1;
+                },
+                direct:true,
+                content:function(){
+                    'step 0'
+                    var cards=player.getExpansions('moLiPing');
+                    var next=player.chooseCardButton(cards,`是否发动【灌银毒刃】，移除1个【魔力瓶】`);
+                    'step 1'
+                    if(result.bool){
+                        player.logSkill(event.name);
+                        player.discard(result.links,'moLiPing');
+                        trigger.num--;
+                        game.log(trigger.player,'获得了',result.links.length,'张牌');
+                        trigger.player.gain(result.links,'draw');
+                        player.changeZhiLiao(1);
+                    }else{
+                        event.finish();
+                    }
+                }
+            },
+            touXi:{
+                usable:1,
+                trigger:{player:'useCardEnd'},
+                filter:function(event,player){
+                    return player.canBiShaShuiJing()&&get.is.gongJiXingDong(event)&&player.getExpansions('moLiPing').length>=2;
+                },
+                content:function(){
+                    'step 0'
+                    var cards=player.getExpansions('moLiPing');
+                    var next=player.chooseCardButton(cards,2,`是否发动【偷袭】，移除2个【魔力瓶】`);
+                    'step 1'
+                    if(result.bool){
+                        player.logSkill('touXi');
+                        player.removeBiShaShuiJing();
+                        player.discard(result.links,'moLiPing');
+                        player.showGaiPai(result.links);
+                        event.cards=result.links;
+                    }else{
+                        event.finish();
+                    }
+
+                    'step 2'
+                    event.faShu=0;
+                    event.gongJi=0;
+                    event.tongXi=false;
+
+                    for(var i=0;i<event.cards.length;i++){
+                        var card=event.cards[i];
+                        if(get.type(card)=='faShu'){
+                            event.faShu++;
+                        }else if(get.type(card)=='gongJi'){
+                            event.gongJi++;
+                        }
+                    }
+                    if(get.xiBie(event.cards[0])==get.xiBie(event.cards[1])) event.tongXi=true;
+
+                    'step 3'
+                    if(event.faShu>=1){
+                        player.chooseTarget(`对${event.faShu}个目标对手造成1点法术伤害③`,true,event.faShu,function(card,player,target){
+                            return target.side!=player.side;
+                        }).set('ai',function(target){
+                            return get.damageEffect(target,1);
+                        });
+                    }else{
+                        event.goto(6);
+                    }
+                    'step 4'
+                    game.log(player,'选择了',result.targets);
+                    player.line(result.targets,'red');
+                    event.targets=result.targets;
+                    'step 5'
+                    var target=event.targets.shift();
+                    target.damageFaShu(1,player);
+                    if(event.targets.length>0) event.redo();
+
+                    'step 6'
+                    if(event.gongJi>=2) player.storage.gongJi++;
+                    
+                    'step 7'
+                    if(event.tongXi){
+                        player.chooseTarget(`对目标角色造成1点法术伤害③`,true).set('ai',function(target){
+                            var player=_status.event.player;
+                            if(target.side==player.side) return -1;
+                            return get.damageEffect(target,1);
+                        });
+                    }else{
+                        event.finish();
+                    }
+                    'step 8'
+                    game.log(player,'选择了',result.targets);
+                    player.line(result.targets,'red');
+                    result.targets[0].damageFaShu(1,player);
+                },
+                ai:{
+                    shuiJing:true,
+                }
+            },
+            moLiPing:{
+                intro:{
+                    markcount:'expansion',
+                    mark:function(dialog,storage,player){
+						var cards=player.getExpansions('moLiPing');
+						if(player.isUnderControl(true)) dialog.addAuto(cards);
+						else return '共有'+cards.length+'张牌';
+					},
+                },
+            },
+
         },
 		
 		translate:{
@@ -1527,6 +1733,19 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             luEn:"卢恩",
             luEn_info:"【卢恩】为星坠巫女专有改盖牌，上限为6。",
 
+            //猎巫人
+            zhuanHuan:"[响应]转换",
+            zhuanHuan_info:"除[圣光]外，你的法术牌都可作为对应系别攻击牌使用。",
+            shouMoCi:"[响应]狩魔刺",
+            shouMoCi_info:"<span class='tiaoJian'>(主动攻击手牌<4的目标对手时①，该目标弃1张牌)</span>将弃牌面朝下放置于你的角色旁，作为【魔力瓶】。",
+            faShuBoLi:"[响应]法术剥离",
+            faShuBoLi_info:"<span class='tiaoJian'>(主动攻击命中时②发动)</span>目标角色弃1张牌，将弃牌面朝下放置于你的角色旁，作为【魔力瓶】。",
+            guanYinDuRen:"[响应]灌银毒刃",
+            guanYinDuRen_info:"<span class='tiaoJian'>(目标角色承受你造成的伤害导致摸牌时发动，移除1个【魔力瓶】)</span>本次摸牌数-1，将移除的【魔力瓶】加入他手牌[强制]，你+1[治疗]。",
+            touXi:"[响应]偷袭[回合限定]",
+            touXi_info:"[水晶]<span class='tiaoJian'>([攻击行动]结束时，移除2个【魔力瓶】[展示])</span>每有X张法术牌，对X名目标对手造成1点法术伤害③；<span class='tiaoJian'>(若有2张攻击牌)</span>额外+1[攻击行动]。 <span class='tiaoJian'>(若为同系牌)</span>对目标角色造成1点法术伤害③。",
+            moLiPing:"魔力瓶",
+            moLiPing_info:"【魔力瓶】为猎巫人专有盖牌，上限为4；若【魔力瓶】达到上限，则不能发动【狩魔刺】、【法术剥离】",
         },
 	};
 });
