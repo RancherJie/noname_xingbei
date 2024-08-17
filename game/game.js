@@ -13297,7 +13297,21 @@
 						event.goto(0);
 					}*/
 					if(!event.skipped&&(player.storage.all>0||player.storage.gongJi>0||player.storage.faShu>0)){
-						event.goto(0);
+						if(result.bool){
+							event.goto(0);
+						}else{
+							if(result.name=='chooseToUse'){
+								player.storage.all--;
+							}else if(result.name=='faShu'){
+								player.storage.faShu--;
+							}else if(result.name=='gongJi'){
+								player.storage.gongJi--;
+							}
+							if(player.storage.all>0||player.storage.gongJi>0||player.storage.faShu>0){
+								event.goto(0);
+							}
+						}
+						
 					}
 					game.broadcastAll(function(){
 						if(ui.tempnowuxie){
@@ -13606,6 +13620,7 @@
 					"step 5"
 					if(event._result&&event.result){
 						event.result.result=event._result;
+						event.result.name=event.name;
 					}
 				},
 				chooseToRespond:function(){
