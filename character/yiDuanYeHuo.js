@@ -1168,7 +1168,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             },
             fanXing:{
                 intro:{
-                    name:'繁星',
+                    name:'律法：繁星',
                     content:"<span class='tiaoJian'>(当移除的【卢恩】包含4个不同系别或4个不同命格)</span>对所有对手各造成1点法术伤害③；<span class='tiaoJian'>(若移除的【卢恩】包含4个不同系别与4个不同命格)</span>目标队友额外+1[宝石]。",
                     nocount:true,
                 },
@@ -1227,7 +1227,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             },
             yingYue:{
                 intro:{
-                    name:'影月',
+                    name:'律法：影月',
                     content:"<span class='tiaoJian'>(当移除的【卢恩】包含X对相同系别的【卢恩】，X>1)</span>对目标角色造成X点法术伤害③。<span class='tiaoJian'>(当移除的【卢恩】包含X对相同命格的【卢恩】，X>1)</span>任意分配X点[治疗]给1~2位我方角色。",
                     nocount:true,
                 },
@@ -1344,7 +1344,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             },
             shiRi:{
                 intro:{
-                    name:'蚀日',
+                    name:'律法：蚀日',
                     content:"<span class='tiaoJian'>(当移除的【卢恩】包含每3个相同系别的【卢恩】)</span>你+1[宝石]。<span class='tiaoJian'>(当移除的【卢恩】包含每3个相同命格的【卢恩】)</span>我方【战绩区】+1[宝石]。",
                     nocount:true,
                 },
