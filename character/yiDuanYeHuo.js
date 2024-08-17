@@ -1687,7 +1687,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 		
 		translate:{
             zhanDouFaShi:"战斗法师",
-            xingZhuiNvWu:"星坠巫女",
+            xingZhuiNvWu:"星坠女巫",
             shengTingJianChaShi:"圣庭检察士",
             lieWuRen:"猎巫人",
             shengDianQiShi:"圣殿骑士",
