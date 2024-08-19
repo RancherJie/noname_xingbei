@@ -8567,7 +8567,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.removeZhiShiWu('huangSeLingHun');
                     player.removeZhiShiWu('lanSeLingHun'); 
                     'step 1'
-                    var next=player.chooseTarget(true,'将[灵魂链接]放置于一名队友面前',function(card,player,target){
+                    var next=player.chooseTarget(true,'将【灵魂链接】放置于一名队友面前',function(card,player,target){
                         return target!=player&&target.side==player.side;
                     });
                     'step 2'
@@ -8632,6 +8632,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                     })
                                 }
                             }
+                        },
+                        check:function(event,player){
+                            if(event.player.name=='xianZhe'&&event.faShu==true){
+                                if(event.num==1||event.num==4) return false;
+                            }
+                            return true;
                         }
                     }
                 }
@@ -9860,7 +9866,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             lingHunJingXiang_info:"<span class='tiaoJian'>(移除2点【黄色灵魂】)</span>你弃2张牌，目标角色摸2张牌[强制]，但最多补到其手牌上限。",
             lingHunZhenBao_info:"<span class='tiaoJian'>(移除3点【黄色灵魂】)</span>对目标角色造成3点法术伤害③，若他手牌<3且手牌上限>5，则本次伤害额外+2。",
             lingHunFuYu_info:"<span class='tiaoJian'>(移除3点【蓝色灵魂】)</span>目标角色+2[宝石]。",
-            lingHunLianJie_info:"<span class='tiaoJian'>(移除1点【黄色灵魂】和1点【蓝色灵魂】)</span>将[灵魂链接]放置于一名队友面前，<span class='tiaoJian'>(每当你们之间有人承受伤害时⑥，移除X点【蓝色灵魂】)</span>将X点伤害转移给另1人，转移后的伤害为法术伤害⑥。",
+            lingHunLianJie_info:"<span class='tiaoJian'>(移除1点【黄色灵魂】和1点【蓝色灵魂】)</span>将【灵魂链接】放置于一名队友面前，<span class='tiaoJian'>(每当你们之间有人承受伤害时⑥，移除X点【蓝色灵魂】)</span>将X点伤害转移给另1人，转移后的伤害为法术伤害⑥。",
             lingHunZengFu_info:"[宝石]你+2【黄色灵魂】和2【蓝色灵魂】。",
             huangSeLingHun_info:"【黄色灵魂】为灵魂术士专有指示物，上限为6。",
             lanSeLingHun_info:"【蓝色灵魂】为灵魂术士专有指示物，上限为6。",
