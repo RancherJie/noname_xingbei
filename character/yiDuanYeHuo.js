@@ -1587,12 +1587,15 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         player.logSkill(event.name);
                         player.discard(result.links,'moLiPing');
                         trigger.num--;
-                        game.log(trigger.player,'获得了',result.links.length,'张牌');
-                        trigger.player.gain(result.links,'draw');
-                        player.changeZhiLiao(1);
+                        event.cards=result.links;
+                        
                     }else{
                         event.finish();
                     }
+                    'step 2'
+                    game.log(trigger.player,'获得了',event.cards.length,'张牌');
+                    trigger.player.gain(event.cards,'draw');
+                    player.changeZhiLiao(1);
                 }
             },
             touXi:{
