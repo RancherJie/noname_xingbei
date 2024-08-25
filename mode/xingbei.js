@@ -1180,9 +1180,10 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					game._voteChoose=choose;
 					event._vote=[];
 					event.videoId=lib.status.videoId++;
-					game.broadcastAll(function(id,choice){
+					game.broadcastAll(function(id,choice,listx){
 						game._voteDialogID=id;
 						game._voteList=choice;
+						game._voteListx=listx;
 						var dialog=ui.create.dialog('投票选择队长');
 						dialog.videoId=id;
 						var text;
@@ -1194,7 +1195,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						var buttons=ui.create.div('.buttons',dialog.content);
 						dialog.text=ui.create.buttons(text,'tdnodes',buttons);
 						dialog.buttons=dialog.buttons.concat(dialog.text);
-					},event.videoId,choose);
+					},event.videoId,choose,[event.red_list,event.blue_list]);
 					
 					var send=function(){
 						var next=game.me.chooseButton([1,2],true);
@@ -1219,7 +1220,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 							}
 							return 0;
 						});
-						next.set('listx',[event.red_list,event.blue_list])
+						next.set('listx',game._voteListx);
 						//修改点击按钮后的反应
 						next.set('custom',{replace:{
 							button:function(button){
