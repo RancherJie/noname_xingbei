@@ -55579,7 +55579,7 @@
 				lanZhanJi_str += images;
 			});
 		
-
+			/*
 			ui.shiQiInfo.innerHTML = '士气' +
 				'<span style="color:red;">' + game.hongShiQi + '</span>' + '/' +
 				'<span style="color:blue;">' + game.lanShiQi + '</span>' + '|战绩' +
@@ -55587,6 +55587,57 @@
 				lanZhanJi_str + '|星杯' +
 				'<span style="color:red;">' + game.hongXingBei + '</span>' + '/' +
 				'<span style="color:blue;">' + game.lanXingBei + '</span>';
+			*/
+			/*
+			ui.shiQiInfo.innerHTML = `
+				<table>
+				<tr>
+					<td>士气</td>
+					<td><span style="color:red;">${game.hongShiQi}</span></td>
+					<td>/</td>
+					<td><span style="color:blue;">${game.lanShiQi}</span></td>
+				</tr>
+				<tr>
+					<td>战绩</td>
+					<td>${hongZhanJi_str}</td>
+					<td>/</td>
+					<td>${lanZhanJi_str}</td>
+				</tr>
+				<tr>
+					<td>星杯</td>
+					<td><span style="color:red;">${game.hongXingBei}</span></td>
+					<td>/</td>
+					<td><span style="color:blue;">${game.lanXingBei}</span></td>
+				</tr>
+				</table>
+				`;
+			*/
+			ui.shiQiInfo.innerHTML = `
+				<table>
+				<tr>
+					<td style="text-align: center;">士气</td>
+					<td style="text-align: center;">星石</td>
+					<td style="text-align: center;">星杯</td>
+				</tr>
+				<tr>
+					<td style="text-align: center;"><span style="color:red;">${game.hongShiQi}</span></td>
+					<td style="width: 100px; text-align: center;">${hongZhanJi_str}</td>
+					<td style="text-align: center;"><span style="color:red;">${game.hongXingBei}</span></td>
+				</tr>
+				<tr>
+					<td style="text-align: center;"><span style="color:blue;">${game.lanShiQi}</span></td>
+					<td style="width: 100px; text-align: center;">${lanZhanJi_str}</td>
+					<td style="text-align: center;"><span style="color:blue;">${game.lanXingBei}</span></td>
+				</tr>
+				</table>
+				`;
+
+
+
+
+
+
+				
 		}
 	};
 	const get={
