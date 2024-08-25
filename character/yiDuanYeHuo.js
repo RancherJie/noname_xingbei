@@ -1586,16 +1586,42 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     if(result.bool){
                         player.logSkill(event.name);
                         player.discard(result.links,'moLiPing');
-                        trigger.num--;
-                        event.cards=result.links;
-                        
+                        player.storage.guanYinDuRen=result.links;
+                        player.addSkill('guanYinDuRen_num');
+                        player.addSkill('guanYinDuRen_gain');
+                        trigger.num
                     }else{
                         event.finish();
                     }
-                    'step 2'
-                    game.log(trigger.player,'获得了',event.cards.length,'张牌');
-                    trigger.player.gain(event.cards,'draw');
-                    player.changeZhiLiao(1);
+                    
+                },
+                subSkill:{
+                    num:{
+                        trigger:{global:'drawBefore'},
+                        lastDo:true,
+                        direct:true,
+                        filter:function(event,player){
+                            return event.parent.name='damage'&&event.parent.source==player;
+                        },
+                        content:function(){
+                            trigger.num--;
+                            trigger.parent.num--;
+                            player.removeSkill('guanYinDuRen_num')
+                        }
+                    },
+                    gain:{
+                        trigger:{global:'drawAfter'},
+                        direct:true,
+                        filter:function(event,player){
+                            return event.parent.name='damage'&&event.parent.source==player;
+                        },
+                        content:function(){
+                            game.log(trigger.player,'获得了',player.storage.guanYinDuRen.length,'张牌');
+                            trigger.player.gain(player.storage.guanYinDuRen,'draw');
+                            player.changeZhiLiao(1);
+                            player.removeSkill('guanYinDuRen_gain')
+                        }
+                    }
                 }
             },
             touXi:{
@@ -1777,7 +1803,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             faShuBoLi:"[响应]法术剥离",
             faShuBoLi_info:"<span class='tiaoJian'>(主动攻击命中时②发动)</span>目标角色弃1张牌，将弃牌面朝下放置于你的角色旁，作为【魔力瓶】。",
             guanYinDuRen:"[响应]灌银毒刃",
-            guanYinDuRen_info:"<span class='tiaoJian'>(目标角色将要承受你造成的伤害时⑥发动，移除1个【魔力瓶】)</span>本次伤害-1，将移除的【魔力瓶】加入他手牌[强制]，你+1[治疗]。",
+            guanYinDuRen_info:"<span class='tiaoJian'>(目标角色将要承受你造成的伤害时⑥发动，移除1个【魔力瓶】)</span>本次伤害-1，其摸牌后将移除的【魔力瓶】加入他手牌[强制]，你+1[治疗]。",
             touXi:"[响应]偷袭[回合限定]",
             touXi_info:"[水晶]<span class='tiaoJian'>([攻击行动]结束时，移除2个【魔力瓶】[展示])</span>每有X张法术牌，对X名目标对手造成1点法术伤害③；<span class='tiaoJian'>(若有2张攻击牌)</span>额外+1[攻击行动]。 <span class='tiaoJian'>(若为同系牌)</span>对目标角色造成1点法术伤害③。",
             moLiPing:"魔力瓶",
