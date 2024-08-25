@@ -4191,6 +4191,19 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					return Object.keys(dict).length;
 				},
 				
+				countSkill:function(skill){//统计使用技能次数
+					if(!skill) return 0;
+					var skillsList=this.getHistory('useSkill');
+					var count=0;
+					for(var i of skillsList){
+						if(i.skill==skill) count++;
+					}
+					return count;
+				},
+				usedSkill:function(skill){//是否使用过技能
+					if(!skill) return false;
+					return this.countSkill(skill)>0;
+				}
 			}
 		},
 		get:{
