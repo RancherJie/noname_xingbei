@@ -8610,25 +8610,23 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             if(trigger.player==player){
                                 if(list[0]==player){
                                     trigger.insertAfter(function(){
-                                        player.damage(num,target).set('step',7).set('faShu',true).set('lingHunLianJie',true);
+                                        player.damage(num,player).set('step',7).set('faShu',true).set('lingHunLianJie',true);
                                     },{
                                         player:player.storage.lingHunLianJie_player,
                                         num:event.num,
-                                        target:player,
                                     })
                                 }else{
                                     player.storage.lingHunLianJie_player.damage(event.num,player).set('step',7).set('faShu',true).set('lingHunLianJie',true); 
                                 }
                             }else{
                                 if(list[0]==player){
-                                    player.damage(event.num,trigger.source).set('step',7).set('faShu',true).set('lingHunLianJie',true);
+                                    player.damage(event.num,player).set('step',7).set('faShu',true).set('lingHunLianJie',true);
                                 }else{
                                     trigger.insertAfter(function(){
-                                        player.damage(num,target).set('step',7).set('faShu',true).set('lingHunLianJie',true);
+                                        player.damage(num,player).set('step',7).set('faShu',true).set('lingHunLianJie',true);
                                     },{
                                         player:player,
                                         num:event.num,
-                                        target:trigger.source,
                                     })
                                 }
                             }
