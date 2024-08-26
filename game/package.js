@@ -3,6 +3,7 @@ window.noname_package={
 		//standard:'标准',
 		shiZhouNian:"十周年",
 		yiDuanYeHuo:"异端业火",
+		shenZiJiangLin:"神子降临",
 	},
 	card:{
 		//standard:'标准',

@@ -167,6 +167,11 @@ window.noname_asset_list=[
 	'image/character/yueZhiNvShen.jpg',
 	'image/character/zhanDouFaShi.jpg',
 	'image/character/zhongCaiZhe.jpg',
+	'image/character/jinGuiZhiNv.jpg',
+	'image/character/nvPuZhang.jpg',
+	'image/character/jieJieShi.jpg',
+	'image/character/shenMiXueZhe.jpg',
+	'image/character/wuRanZhe.jpg',
 	/*character image end*/
 	
 	'image/emotion/shibing_emotion/1.gif',
