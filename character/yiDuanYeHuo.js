@@ -633,7 +633,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 content:function(){
                     'step 0'
                     player.removeBiShaShuiJing();
+                    'step 1'
                     player.addZhiShiWu('caiJue',1);
+                    'step 2'
                     lib.skill.yiDuanCaiJueSuo.addZhiLiao(player,2);
                 }
             },
