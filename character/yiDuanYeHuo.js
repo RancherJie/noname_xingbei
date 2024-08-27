@@ -559,6 +559,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     
                     'step 6'
                     if(result.bool){
+                        player.showCards(result.links);
                         player.chooseTarget('对目标对手造成1点法术伤害③',true,function(card,player,target){
                             return target.side!=player.side;
                         })
