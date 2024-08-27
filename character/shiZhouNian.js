@@ -8610,10 +8610,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             if(trigger.player==player){
                                 if(list[0]==player){
                                     trigger.insertAfter(function(){
-                                        player.damage(num,player).set('step',7).set('faShu',true).set('lingHunLianJie',true);
+                                        player.damage(num,source).set('step',7).set('faShu',true).set('lingHunLianJie',true);
                                     },{
                                         player:player.storage.lingHunLianJie_player,
                                         num:event.num,
+                                        source:player,
                                     })
                                 }else{
                                     player.storage.lingHunLianJie_player.damage(event.num,player).set('step',7).set('faShu',true).set('lingHunLianJie',true); 
