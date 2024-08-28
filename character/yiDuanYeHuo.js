@@ -1592,7 +1592,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         player.storage.guanYinDuRen=result.links;
                         player.addSkill('guanYinDuRen_num');
                         player.addSkill('guanYinDuRen_gain');
-                        trigger.num
                     }else{
                         event.finish();
                     }
@@ -1604,7 +1603,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         lastDo:true,
                         direct:true,
                         filter:function(event,player){
-                            return event.parent.name='damage'&&event.parent.source==player;
+                            return event.parent.name=='damage'&&event.parent.source==player;
                         },
                         content:function(){
                             trigger.num--;
@@ -1616,7 +1615,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         trigger:{global:'drawAfter'},
                         direct:true,
                         filter:function(event,player){
-                            return event.parent.name='damage'&&event.parent.source==player;
+                            return event.parent.name=='damage'&&event.parent.source==player;
                         },
                         content:function(){
                             game.log(trigger.player,'获得了',player.storage.guanYinDuRen.length,'张牌');
