@@ -7408,6 +7408,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 ai:{
                     shuiJing:true,
+                },
+                check:function(event,player){
+                    if(player.countCards('h')<=3) return false;
+                    return true;
                 }
             },
             douQi:{
