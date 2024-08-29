@@ -6779,6 +6779,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     },
                     shengLiJiaoXiangShi:{
                         trigger:{player:'phaseEnd'},
+                        lastDo:true,
+                        priority:1,
                         filter:function(event,player){
                             return player.hasZhiShiWu('yongHengYueZhang');
                         },
