@@ -743,6 +743,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             if(!player.hasExpansions('diZhiFengYin_xiaoGuo')){
                                 return false
                             }
+                            if(player.hasZhiShiWu('jueJieX')) return false;
+
                             if(event.name=='showCards'){
                                 if(event.gaiPai==true) return false;
                             }
@@ -811,6 +813,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             if(!player.hasExpansions('shuiZhiFengYin_xiaoGuo')){
                                 return false
                             }
+                            if(player.hasZhiShiWu('jueJieX')) return false;
+
                             if(event.name=='showCards'){
                                 if(event.gaiPai==true) return false;
                             }
@@ -879,6 +883,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             if(!player.hasExpansions('huoZhiFengYin_xiaoGuo')){
                                 return false
                             }
+                            if(player.hasZhiShiWu('jueJieX')) return false;
+
                             if(event.name=='showCards'){
                                 if(event.gaiPai==true) return false;
                             }
@@ -947,6 +953,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             if(!player.hasExpansions('fengZhiFengYin_xiaoGuo')){
                                 return false
                             }
+                            if(player.hasZhiShiWu('jueJieX')) return false;
+
                             if(event.name=='showCards'){
                                 if(event.gaiPai==true) return false;
                             }
@@ -1015,7 +1023,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             if(!player.hasExpansions('leiZhiFengYin_xiaoGuo')){
                                 return false
                             }
-                            if(event.name=='showCards'){
+                            if(player.hasZhiShiWu('jueJieX')) return false;
+
+                            if(e1vent.name=='showCards'){
                                 if(event.gaiPai==true) return false;
                             }
                             for(var card of event.cards){
@@ -4150,6 +4160,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         trigger:{player:'useCardToTargeted'},
                         filter:function(event,player){
                             if(!get.is.gongJi(event.parent)) return false;
+                            if(player.hasZhiShiWu('jueJieX')) return false;
+
                             return player.hasExpansions('weiLiCiFu_xiaoGuo');
                         },
                         content:function(){
@@ -4201,6 +4213,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         trigger:{player:['useCardAfter','useSkillAfter']},
                         filter:function(event,player){
                             if(!player.hasExpansions('xunJieCiFu_xiaoGuo')) return false;
+                            if(player.hasZhiShiWu('jueJieX')) return false;
+                            
                             if(event.name=='useCard'){
                                 return !(event.parent.name=='chooseToUse_qiTa'||event.parent.name=='chooseToUse_yingZhan');
                             }else if(event.name=='useSkill'){

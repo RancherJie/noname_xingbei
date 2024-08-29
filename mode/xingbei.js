@@ -3109,6 +3109,8 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					content:'expansion',
 				},
                 filter:function(event,player){
+					if(player.hasZhiShiWu('jueJieX')) return false;
+					
                     return player.hasExpansions('_xuRuo');
                 },
                 content:function(event,player){
@@ -3148,6 +3150,8 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
                 trigger:{player:'phaseUseBefore'},
                 forced:true,
                 filter:function(event,player){
+					if(player.hasZhiShiWu('jueJieX')) return false;
+
                     return player.hasExpansions('_zhongDu');
                 },
                 content:function(event){
@@ -3170,6 +3174,8 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
                 forced:true,
                 filter:function(event,player){
                     if(event.parent.canShengDun==false) return false;
+					if(player.hasZhiShiWu('jueJieX')) return false;
+
                     if(get.type(event.card)=='gongJi'||event.card.name=='moDan'){
                         return player.hasExpansions('_shengDun');
                     }
