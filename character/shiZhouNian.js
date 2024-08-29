@@ -9854,7 +9854,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             lingHunJingXiang:"[法术]灵魂镜像",
             lingHunZhenBao:"(独)[法术]灵魂震爆",
             lingHunFuYu:"(独)[法术]灵魂赋予",
-            lingHunLianJie:"(专)[启动]灵魂链接",
+            lingHunLianJie:"(专)[启动]灵魂链接(2v2禁用)",
             lingHunZengFu:"[启动]灵魂增幅",
             huangSeLingHun:"黄色灵魂",
             lanSeLingHun:"蓝色灵魂",
