@@ -379,15 +379,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 0'
                     var next=player.chooseTarget().set('ai',function(target){
                         var player=_status.event.player;
-						if(target.side==player.side&&target.zhiLiao<target.getZhiLiaoLimit()){
-                            return 1;
-                        }else if(target.side==player.side&&target.zhiLiao>=target.getZhiLiaoLimit()){
-                            return 0;
-                        }else if(target.side!=player.side){
-                            return -1;
-                        }else{
-                            return 1;
-                        }
+						if(target.side==player.side) return get.zhiLiaoEffect(target,1);
+                        return -1;
 					});
                     next.set('prompt',get.prompt('bingShuangDaoYan'));
                     next.set('prompt2',lib.translate.bingShuangDaoYan_info);
