@@ -254,7 +254,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             fuMoJing:{
                 trigger:{player:'addZhiShiWuEnd'},
                 filter:function(event,player){
-                    return event.zhiShiWu=='jiX'&&player.canBiShaShuiJing();
+                    return event.zhiShiWu=='jiX'&&event.num>0&&player.canBiShaShuiJing();
                 },
                 direct:true,
                 content:function(){
