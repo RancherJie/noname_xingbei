@@ -575,10 +575,19 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     order:3.6,
                     result:{
                         target:function(player,target){
-                            if(!(target.hasSkillTag('baoShi')||target.hasSkillTag('shuiJing'))) return -1;
-                            var num=target.getNengLiangLimit()-target.countNengLiangAll();
-                            if(num>=2) return 2;
-                            return 0;
+                            if(!(target.hasSkillTag('baoShi')||target.hasSkillTag('shuiJing'))) return 0;
+                            var list;
+                            if(player.side==true){
+                                list=game.hongZhanJi;
+                            }else if(player.side==false){
+                                list=game.lanZhanJi;
+                            }
+                            if(target.hasSkillTag('baoShi')&&!target.hasSkillTag('shuiJing')&&!list.includes('宝石')){
+                                return 0;
+                            }
+							var num=target.getNengLiangLimit()-target.countNengLiangAll();
+							if(num>=2) return 2;
+							return 0;
                         },
                     }
                 }
