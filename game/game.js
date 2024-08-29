@@ -60475,7 +60475,7 @@
 
 		//xingbei
 		zhiLiaoEffect:function(target,num){
-			if(target.getZhiLiaoLimit()-target.zhiLiao<=0) return 0;
+			if(target.getZhiLiaoLimit()-target.zhiLiao<=0) return 0.1;
 			if(!num){
 				num=1;
 			}
