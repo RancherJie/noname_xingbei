@@ -5765,6 +5765,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     next.set('filterButton',function(button){
                         return get.xiBie(button)=='huo';
                     });
+                    next.set('ai',function(button){
+                        if(get.xiBie(button.link)=='huo') return 1;
+                        return 0;
+                    });
                     'step 1'
                     if(result.bool){
                         player.logSkill(event.name,trigger.targets);
@@ -5869,6 +5873,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                 if(event.num>0){
                                     player.chooseTarget('对其造成的伤害额外+'+event.num,true,function(card,player,target){
                                         return target.side!=player.side;
+                                    }).set('ai',function(target){
+                                        return get.damageEffect(2,target);
                                     });
                                 }else{
                                     event.finish();
@@ -5883,6 +5889,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 
                             },
                         }
+                    },
+                    check:function(button){
+                        if(get.xiBie(button.link)=='lei') return 1;
+                        return 0;
                     }
                 },
                 ai:{
@@ -5908,6 +5918,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     var next=player.chooseCardButton('是否发动【[响应]多重射击】',cards);
                     next.set('filterButton',function(button){
                         return get.xiBie(button)=='feng';
+                    });
+                    next.set('ai',function(button){
+                        if(get.xiBie(button.link)=='feng') return 1;
+                        return 0;
                     });
                     'step 1'
                     if(result.bool){
