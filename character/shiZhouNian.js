@@ -5455,6 +5455,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         content:function(){
                             player.chongZhi();
                             player.removeSkill('moNvZhiNu_xiBie');
+                            player.qiPai();
                         }
                     },
                     xiBie:{
