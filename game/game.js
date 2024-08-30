@@ -31624,6 +31624,24 @@
 					},trigger.discardid);
 				}
 			},
+			_discard2:{
+				trigger:{global:['discardAfter','loseToDiscardpileAfter','loseAsyncAfter']},
+				forced:true,
+				popup:false,
+				priority:-101,
+				lastDo:true,
+				filter:function(event){
+					return !event._cleared;
+				},
+				content:function(){
+					game.broadcastAll(function(){
+						ui.clear();
+					});
+					event._cleared=true;
+				}
+			},
+
+
 			/*
 			_save:{
 				//trigger:{source:'dying2',player:'dying2'},
