@@ -172,8 +172,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     event.cards=result.cards;
                     event.target.showCards(event.cards);
                     'step 5'
-                    var list=['是','否'];
-                    player.chooseControl(list).set('prompt',`是否将${get.translation(event.cards)}作为【结界】`);
+                    if(player.getExpansions('jieJie').length>=2){
+                        event.finish();
+                    }else{
+                        var list=['是','否'];
+                        player.chooseControl(list).set('prompt',`是否将${get.translation(event.cards)}作为【结界】`);
+                    }
                     'step 6'
                     if(result.control=='是'){
                         player.addToExpansion('draw',event.cards,'log').gaintag.add('jieJie');
