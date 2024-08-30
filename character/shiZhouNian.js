@@ -5972,9 +5972,17 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                     'step 5'
                     if(event.flag){
-                        player.chooseCard('h',[1,event.num-1]).set('prompt',`将至多${event.num-1}张手牌作为充能`);
+                        player.chooseCard('h',[1,event.num-1]).set('prompt',`将至多${event.num-1}张手牌作为充能`).set('ai',function(card){
+                            var xiBie=get.xiBie(card);
+                            if(xiBie=='lei'||xiBie=='huo'||xiBie=='feng') return 1;
+                            return 0;
+                        });
                     }else{
-                        player.chooseCard('h',[1,event.num]).set('prompt',`将至多${event.num}张手牌作为充能`);
+                        player.chooseCard('h',[1,event.num]).set('prompt',`将至多${event.num}张手牌作为充能`).set('ai',function(card){
+                            var xiBie=get.xiBie(card);
+                            if(xiBie=='lei'||xiBie=='huo'||xiBie=='feng') return 1;
+                            return 0;
+                        });
                     }
                     'step 6'
                     if(result.cards){
@@ -6055,7 +6063,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.draw(3);
                     'step 6'
                     if(player.countCards('h')>0){
-                        player.chooseCard('h',1,true).set('prompt','将自己1张手牌作为充能');
+                        player.chooseCard('h',1,true).set('prompt','将自己1张手牌作为充能').set('ai',function(card){
+                            var xiBie=get.xiBie(card);
+                            if(xiBie=='lei'||xiBie=='huo'||xiBie=='feng') return 1;
+                            return 0;
+                        });
                     }else{
                         event.goto(10);
                     }
