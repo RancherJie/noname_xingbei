@@ -176,12 +176,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 trigger:{player:'moFaRuMenEnd'},
                 content:function(){
                     'step 0'
-                    player.chooseToDiscard(2,true);
-                    'step 1'
                     if(trigger.faShu==false&&trigger.yong==0&&trigger.shui==0){
                         player.storage.faShu++;
+                    }else{
+                        player.chooseToDiscard(2,true);
                     }
-                    'step 2'
+                    'step 1'
                     if(player.countSkill('moFaRuMen')==3){
                         player.addZhanJi('r',2);
                     }
