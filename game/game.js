@@ -4567,6 +4567,11 @@
 							map.connect_BPchoose_number.hide();
 						}
 					},
+					connect_remark:{
+						name:'房间备注',
+						input:true,
+						frequent:true,
+					},
 					connect_versus_mode:{
 						name:'游戏模式',
 						init:'2v2',
@@ -20401,6 +20406,9 @@
 								if(i<config.cardPack.length-1) str+='+';
 							}
 							str+='】';
+						}
+						if(info[2].remark){
+							str+=`[${info[2].remark}]`;
 						}
 						this.config=config;
 						if(this.hp==this.maxHp&&!config.gameStarted){
@@ -41833,6 +41841,19 @@
 								}
 								input.innerHTML=input.innerHTML.replace(/<br>/g,'');
 								game.saveConfig('hall_ip',input.innerHTML,'connect');
+							}
+						}
+						else if(config.name=='房间备注'){
+							input.innerHTML=config.init||'无';
+							input.onblur=function(){
+								input.innerHTML=input.innerHTML.replace(/<br>/g,'');
+								if(!input.innerHTML||get.is.banWords(input.innerHTML)){
+									input.innerHTML='无';
+								}
+								input.innerHTML=input.innerHTML.slice(0,12);
+								console.log(input.innerHTML);
+								game.saveConfig('connect_remark',input.innerHTML);
+								game.saveConfig('connect_remark',input.innerHTML,'xingbei');
 							}
 						}
 						else{
