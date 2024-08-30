@@ -358,7 +358,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             jieJieYiShi_info:"<span class='tiaoJian'>(将2张手牌面朝上放置在你角色旁[展示]作为【结界】)</span>你+1【祭】。",
             huangShenZhiLi:"[被动]荒神之力",
             huangShenZhiLi_info:"<span class='tiaoJian'>(当【结界】在场时)</span>所有与【结界】系别相同的攻击伤害额外+1。",
-            huangShenJiYi:"[响应]荒神祭仪",
+            huangShenJiYi:"[响应]\u8352\u795e\u796d\u4eea",
             huangShenJiYi_info:"<span class='tiaoJian'>(目标角色主动攻击时①，若攻击的系别与【结界】相同)</span>你+1【祭】；<span class='tiaoJian'>(若你额外移除3点【祭】)</span>你弃1张牌，移除1个【结界】并[横置][持续]。",
             jinMoJing:"[法术]禁魔境",
             jinMoJing_info:"<span class='tiaoJian'>(移除1点【祭】)</span>将[绝界]转移或放置在目标角色前，你弃1张牌。",
