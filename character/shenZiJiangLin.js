@@ -301,7 +301,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 4'
                     if(result.bool){
                         if(result.links[0]=='宝石'){
-                        player.removeZhanJi("r");
+                            player.removeZhanJi("r");
                         }else{
                             player.removeZhanJi("b");
                         }
