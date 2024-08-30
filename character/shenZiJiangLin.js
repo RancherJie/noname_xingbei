@@ -290,20 +290,25 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                     if(player.storage.fuMoJing&&list.length>0){
                         var next=player.chooseButton([
-                            '移除1个星石',
+                            '是否移除1个星石',
                             [list,'tdnodes'],
                         ]);
-                        next.set('forced',true);
+                        //next.set('forced',true);
                         next.set('selectButton',1);
                     }else{
                         event.finish();
                     }
                     'step 4'
-                    if(result.links[0]=='宝石'){
+                    if(result.bool){
+                        if(result.links[0]=='宝石'){
                         player.removeZhanJi("r");
+                        }else{
+                            player.removeZhanJi("b");
+                        }
                     }else{
-                        player.removeZhanJi("b");
+                        event.finish();
                     }
+                    
                     'step 5'
                     player.addNengLiang('b');
                 },
