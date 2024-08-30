@@ -375,4 +375,5 @@ window.noname_skin_list={
 	xueZhiWuNv:1,
 	yueZhiNvShen:1,
 	jianDi:1,
+	moFaShaoNv:2,
 };
