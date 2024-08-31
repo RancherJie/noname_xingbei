@@ -147,7 +147,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     if(event.shui>0){
                         player.chooseTarget(`${event.shui}名目标角色各+1点[治疗]`,true,event.shui).set('ai',function(target){
                             var player=_status.event.player;
-                            if(player.side!=target.side) return -1;
+                            if(player.side!=target.side) return 0;
                             return get.zhiLiaoEffect(target,1);
                         });
                     }
