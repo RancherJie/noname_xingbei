@@ -259,9 +259,15 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 check:function(event,player){
                     if(player.countCards('h')==4) return false;
+                },
+                ai:{
+                    shuiJing:true,
                 }
             },
             youQingJiBan:{
+                ai:{
+                    baoShi:true,
+                },
                 trigger:{player:'moFaRuMenBegin'},
                 usable:1,
                 filter:function(event,player){
