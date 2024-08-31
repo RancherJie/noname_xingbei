@@ -166,7 +166,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                 },
                 ai:{
-                    order:4.5,
+                    order:function(card,player){
+                        if(player.countCards('h')>=player.getHandcardLimit()) return 1;
+                        return 4;
+                    },
                     result:{
                         player:1,
                     }
