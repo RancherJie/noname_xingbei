@@ -6797,6 +6797,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 subSkill:{
                     jiAngKuangXiangQu:{
                         trigger:{player:'phaseBegin'},
+                        lastDo:true,
                         filter:function(event,player){
                             return player.hasZhiShiWu('yongHengYueZhang');
                         },
