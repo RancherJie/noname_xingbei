@@ -7403,6 +7403,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             player.storage.baiShiHuanLongQuan=[];
                         }
                     }
+                },
+                check:function(event,player){
+                    if(player.countCards('h',card=>get.type(card)=='gongJi')==0) return false;
+                    return true;
                 }
 
 
