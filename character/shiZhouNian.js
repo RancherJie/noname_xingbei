@@ -1016,7 +1016,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             }
                             if(player.hasZhiShiWu('jueJieX')) return false;
 
-                            if(e1vent.name=='showCards'){
+                            if(event.name=='showCards'){
                                 if(event.gaiPai==true) return false;
                             }
                             for(var card of event.cards){
