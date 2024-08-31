@@ -2781,6 +2781,42 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 			
 		},
 		skill:{
+			_gongJiRiZhi:{
+				trigger:{player:'useCardToTarget'},
+                filter:function(event,player){
+					return get.is.gongJi(event.getParent());
+				},
+				lastDo:true,
+				direct:true,
+				content:function(){
+					var canYingZhan=trigger.getParent().canYingZhan;
+					var canShengGuang=trigger.getParent().canShengGuang;
+					var canShengDun=trigger.getParent().canShengDun;
+
+					if(canYingZhan==false||canShengGuang==false||canShengDun==false){
+						var str='本次攻击';
+						if(canYingZhan==false&&canShengGuang==false&&canShengDun==false){
+							str+='强制命中';
+						}else{
+							var list=[canYingZhan,canShengGuang,canShengDun];
+							for(var i=0;i<list.length;i++){
+								if(i==0){
+									if(list[i]==false) str+='无法应战';
+								}else if(i==1){
+									if(list[i]==false) str+='无法被圣光抵消';
+								}else{
+									if(list[i]==false) str+='无法被圣盾抵消';
+								}
+								if(i<list.length-1){
+									if(list[i+1]==false) str+='，';
+								}
+							}
+						}
+						game.log(str);
+					}
+				}
+			},
+			
 			viewHandcard:{
 				ai:{
 					viewHandcard:true,
