@@ -378,7 +378,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     var num=player.countZhiShiWu('mi');
                     var list=[];
                     for(var i=1;i<=num;i++){
-                        if(num>=4) break;
+                        if(i>=4) break;
                         list.push(i)
                     }
                     list.push('cancel2');
