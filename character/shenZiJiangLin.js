@@ -440,11 +440,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     nocount:true,
                     content:`
                     <span class="greentext">[被动]灭界破散</span><br>
-                    <span class='tiaoJian'>(结界师的【结界】为0时)</span>结界师[横置]，移除[绝界]。 <span class='tiaoJian'>(拥有此卡的角色回合结束前)</span>结界师移除1个【结界】。<br>
+                    <span class='tiaoJian'>(结界师的【结界】为0时)</span>结界师[横置]，移除【绝界】。 <span class='tiaoJian'>(拥有此卡的角色回合结束前)</span>结界师移除1个【结界】。<br>
                     <span class="greentext">[响应]白二羯磨</span><br>
-                    <span class='tiaoJian'>(若你拥有[绝界]，你的[攻击行动]结束时发动)</span>结界师+1【祭】，你将1个【结界】加入手牌[强制]。<br>
+                    <span class='tiaoJian'>(若你拥有【绝界】，你的[攻击行动]结束时发动)</span>结界师+1【祭】，你将1个【结界】加入手牌[强制]。<br>
                     <span class="greentext">[被动]虚空境</span><br>
-                    <span class='tiaoJian'>(若你拥有[绝界])</span>你拥有的基础效果无法触发。`,
+                    <span class='tiaoJian'>(若你拥有【绝界】)</span>你拥有的基础效果无法触发。`,
                 },
                 markimage:'image/card/juejie.png',
                 group:['jueJieX_zero','jueJieX_remove','jueJieX_attack'],
@@ -622,17 +622,17 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             huangShenJiYi:"[响应]\u8352\u795e\u796d\u4eea",
             huangShenJiYi_info:"<span class='tiaoJian'>(目标角色主动攻击时①，若攻击的系别与【结界】相同)</span>你+1【祭】；<span class='tiaoJian'>(若你额外移除3点【祭】)</span>你弃1张牌，移除1个【结界】并[横置][持续]。",
             jinMoJing:"[法术]禁魔境",
-            jinMoJing_info:"<span class='tiaoJian'>(移除1点【祭】)</span>将[绝界]转移或放置在目标角色前，你弃1张牌。",
+            jinMoJing_info:"<span class='tiaoJian'>(移除1点【祭】)</span>将【绝界】转移或放置在目标角色前，你弃1张牌。",
             liuLiJing:"[响应]琉璃境",
             liuLiJing_info:"<span class='tiaoJian'>(我方士气下降时，若你已[横置])</span>[重置]，我方【战绩区】+1[宝石]，指定1名目标角色弃1张牌[展示]，你可将弃牌面朝上放置在你角色旁作为【结界】。",
             jueJie:"(专属)绝界",
             jueJie_info:`
             <span class="greentext">[被动]灭界破散</span><br>
-            <span class='tiaoJian'>(结界师的【结界】为0时)</span>结界师[横置]，移除[绝界]。 <span class='tiaoJian'>(拥有此卡的角色回合结束前)</span>结界师移除1个【结界】。<br>
+            <span class='tiaoJian'>(结界师的【结界】为0时)</span>结界师[横置]，移除【绝界】。 <span class='tiaoJian'>(拥有此卡的角色回合结束前)</span>结界师移除1个【结界】。<br>
             <span class="greentext">[响应]白二羯磨</span><br>
-            <span class='tiaoJian'>(若你拥有[绝界]，你的[攻击行动]结束时发动)</span>结界师+1【祭】，你将1个【结界】加入手牌[强制]。<br>
+            <span class='tiaoJian'>(若你拥有【绝界】，你的[攻击行动]结束时发动)</span>结界师+1【祭】，你将1个【结界】加入手牌[强制]。<br>
             <span class="greentext">[被动]虚空境</span><br>
-            <span class='tiaoJian'>(若你拥有[绝界])</span>你拥有的基础效果无法触发。`,
+            <span class='tiaoJian'>(若你拥有【绝界】)</span>你拥有的基础效果无法触发。`,
             jueJieX_zero:"[响应]灭界破散",
             jueJieX_remove:"[响应]灭界破散",
             jueJieX_attack:"[响应]白二羯磨",
