@@ -5035,7 +5035,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 position:'h',
                 viewAs:function(cards,player){
                     var event=_status.event;
-					return {name:get.name(event.trigger_card),xiBie:get.xiBie(event.trigger_card)}
+					return {name:get.name(event.trigger_card),xiBie:get.xiBie(event.trigger_card),isCard:true};
 				},
                 group:['yinYangZhanHuan_xiaoGuo'],
                 ai:{
