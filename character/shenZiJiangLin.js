@@ -382,7 +382,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 2'
                     player.storage.jueJie_target=target;
                     target.addSkill('jueJieX');
-                    target.addZhiShiWu('jueJieX');
+                    target.addZhiShiWu('jueJieX').set('jieJie',true);
                     target.storage.jueJie_player=player;
                     'step 3'
                     if(player.countCards('h')>0){
@@ -451,7 +451,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 subSkill:{
                     zero:{
                         forced:true,
-                        trigger:{global:['loseToDiscardpileEnd','gainEnd']},
+                        trigger:{global:['loseToDiscardpileEnd','gainEnd','addZhiShiWuEnd']},
                         filter:function(event,player){
                             return event.jieJie==true&&player.storage.jueJie_player.getExpansions('jieJie').length==0;
                         },
