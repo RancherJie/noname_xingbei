@@ -3056,7 +3056,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 
 			_chongZhiAction:{
 				trigger:{player:'phaseBegin'},
-				forced:true,
+				direct:true,
 				firstDo:true,
 				content:function(){
 					player.storage.all=1;
