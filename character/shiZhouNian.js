@@ -8752,9 +8752,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     next.set('targetX',player.storage.tongShengGongSi_target);
                     next.set('ai',function(target){
                         var player=_status.event.player;
-                        if(target==player) return 0;
-                        if(player.isLinked()) return 1;
-                        else return -1;
+                        if(target==player) return -1;
+                        if(player.isLinked()&&target.side==player.side) return 1;
+                        else if(!player.isLinked()&&target.side!=player.side) return 1;
+                        else return 0;
                     })
                     'step 2'
                     if(result.bool){
