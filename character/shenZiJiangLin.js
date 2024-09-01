@@ -501,6 +501,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             fengXue:{},
             fengXueX:{
                 intro:{
+                    name:"(专)风穴",
                     content:`
                     <span class="greentext">[被动]影之风</span><br>
                     <span class='tiaoJian'>(若你拥有【风穴】，当你主动攻击命中的攻击牌置入弃牌堆时)</span>将该牌面朝下放置在女仆长角色旁作为【影】。 <span class='tiaoJian'>(你每次[攻击行动]结束时)</span>女仆长+1【糸】。<br>
