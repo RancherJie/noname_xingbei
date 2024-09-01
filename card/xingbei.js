@@ -306,8 +306,8 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 						}
 					},
 					basic:{
-						useful:[5,3,1],
-						value:[5,3,1],
+						useful:5,
+						value:[5,2,0],
 					},
 					result:{
 						target:function(player,target,card,isLink){
@@ -384,8 +384,8 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 				ai:{
 					order:3,
 					basic:{
-						useful:[3,2,0],
-						value:3,
+						useful:3,
+						value:[3,2,0],
 					},
 					result:{
                         target:function(player,target){
@@ -428,8 +428,8 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 				},
 				ai:{
 					basic:{
-						useful:[4,3,0],
-						value:5,
+						useful:4,
+						value:[4,2,0],
 					},
 					order:function(item,player){
 						if(player.side==true){
