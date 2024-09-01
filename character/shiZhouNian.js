@@ -1543,6 +1543,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     });
                     next.set('prompt',get.prompt('guanChuanSheJi'));
                     next.set('prompt2',lib.translate.guanChuanSheJi_info);
+                    next.set('ai',function(card){
+                        return 6-get.value(card);
+                    });
                     'step 1'
                     if(result.bool){
                         player.logSkill(event.name,trigger.player);
