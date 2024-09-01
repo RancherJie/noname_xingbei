@@ -398,9 +398,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     trigger.player.chooseToDiscard(`弃置${event.num}张牌`,true,event.num);
                     'step 3'
                     event.cards=result.cards;
-                    player.chooseCardButton(event.cards,true,1,'你观看并将其中1张弃牌面朝下放置在你角色旁作为【影】').set('ai',function(button){
-                        return Math.random();
-                    });
+                    if(event.cards.length>0){
+                        player.chooseCardButton(event.cards,true,1,'你观看并将其中1张弃牌面朝下放置在你角色旁作为【影】').set('ai',function(button){
+                            return Math.random();
+                        });
+                    }else{
+                        event.goto(5);
+                    }
                     'step 4'
                     player.addToExpansion('draw',result.links,'log').gaintag.add('ying');
                     'step 5'
