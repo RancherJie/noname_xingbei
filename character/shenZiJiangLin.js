@@ -126,7 +126,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         player.chooseTarget(`对${event.yong}名目标角色各造成1点法术伤害③`,true,event.yong).set('ai',function(target){
                             var player=_status.event.player;
                             if(player.side==target.side) return -1;
-                            return get.damageEffect(target,1);
+                            else return get.damageEffect(target,1);
                         });
                     }
                     'step 10'
