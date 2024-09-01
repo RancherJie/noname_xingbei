@@ -480,7 +480,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         event.finish();
                     }
                     'step 2'
-                    player.removeZhiShiWu('mi',3);
+                    if(result.control=='是'){
+                        player.removeZhiShiWu('mi',3);
+                    }else{
+                        event.finish();
+                    }
                     'step 3'
                     player.chongZhi();
                     'step 4'
