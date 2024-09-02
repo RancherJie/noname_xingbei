@@ -545,9 +545,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         }
                     },
                     yingZhiFeng2:{
-                        trigger:{player:'useCardAfter'},
-                        lastDo:true,
-                        priority:-20,
+                        trigger:{player:'useCardEnd'},
                         filter:function(event,player){
                             return get.is.gongJiXingDong(event);
                         },
