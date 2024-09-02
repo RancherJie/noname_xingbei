@@ -466,6 +466,14 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     result.targets[0].gain(event.card,'draw');
                     'step 6'
                     player.hengZhi();
+                },
+                check:function(event,player){
+                    var num=Math.random();
+                    if(player.isLinked()) return num>0.1;
+                    var cards=player.getExpansions('ying');
+                    var num=get.countTongXiPai(cards);
+                    if(num>=2) return true;
+                    else return false;
                 }
             },
             jinShu:{
