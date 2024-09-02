@@ -451,10 +451,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     
                     'step 4'
                     event.card=result.links[0];
-                    player.chooseTarget('将【'+get.translation(event.card)+'】交给目标角色',true).set('ai',function(card,player,target){
+                    player.chooseTarget('将【'+get.translation(event.card)+'】交给目标角色',true).set('ai',function(target){
+                        var player=_status.event.player;
                         if(target.side==player.side){
                             if(target.countCards('h')>=target.getHandcardLimit()) return -1;
-                            return Math.random();
+                            else Math.random();
                         }else{
                             return Math.random()-0.1;
                         }
