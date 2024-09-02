@@ -457,7 +457,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             if(target.countCards('h')>=target.getHandcardLimit()) return -1;
                             else Math.random();
                         }else{
-                            return Math.random()-0.1;
+                            if(target.countCards('h')>=target.getHandcardLimit()) return 2;
+                            else Math.random();
                         }
                     });
                     'step 5'
