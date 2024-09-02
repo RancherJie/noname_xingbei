@@ -4246,6 +4246,33 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				usedSkill:function(skill){//是否使用过技能
 					if(!skill) return false;
 					return this.countSkill(skill)>0;
+				},
+
+				changeHong:function(num){//改变红点
+					if(typeof num!='number'||!num) num=1;
+					var skills=this.getSkills();
+					for(var i=0;i<skills.length;i++){
+						var skill=skills[i];
+						var info=get.info(skill);
+						if(info.intro&&info.markimage=='image/card/hong.png'){
+							if(num>0) this.addZhiShiWu(skill,num);
+							if(num<0) this.removeZhiShiWu(skill,-num);
+							break;
+						}
+					}
+				},
+				changeLan:function(num){//改变蓝点
+					if(typeof num!='number'||!num) num=1;
+					var skills=this.getSkills();
+					for(var i=0;i<skills.length;i++){
+						var skill=skills[i];
+						var info=get.info(skill);
+						if(info.intro&&info.markimage=='image/card/lan.png'){
+							if(num>0) this.addZhiShiWu(skill,num);
+							if(num<0) this.removeZhiShiWu(skill,-num);
+							break;
+						}
+					}
 				}
 			}
 		},
