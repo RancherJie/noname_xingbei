@@ -4388,6 +4388,14 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					return target.getZhiLiaoLimit()-target.zhiLiao
 				}
 			},
+			damageEffect:function(target,num){
+				if(!target) return 0;
+				if(!num) num=2;
+				var chaZhi=target.getHandcardLimit()-target.countCards('h');
+				if(chaZhi<num) return -3;
+				else if(chaZhi-3<num) return -1;
+				else return -0.5;
+			},
 			countTongXiPai:function(cards){
 				var dict={};
 				for(var i=0;i<cards.length;i++){
