@@ -161,9 +161,6 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 			game.phaseLoop(_status.firstAct);
 		},
 		game:{
-			getLadderName:function(score){
-			},
-
 			checkResult:function(me){
 				if(game.players[0].side==true){
 					if(game.hongShiQi<=0||game.lanXingBei>=5){
@@ -183,12 +180,6 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 			},
 
 			checkOnlineResult:function(player){
-				if(_status.mode=='4v4'||_status.mode=='guandu'){
-					var zhu=game.findPlayer(function(current){
-						return current.identity=='zhu';
-					});
-					return player.side==zhu.side;
-				}
 				return game.players[0].side==player.side;
 			},
 			getRoomInfo:function(uiintro){
@@ -2666,29 +2657,6 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				});
 			},
 
-			replacePlayerOL:function(player){
-				var next=game.createEvent('replacePlayer',false,_status.event.getParent());
-				next.source=player;
-				next.setContent('replacePlayerOL');
-			},
-			replacePlayer:function(player){
-				var next=game.createEvent('replacePlayer',false,_status.event.getParent());
-				next.source=player;
-				next.setContent('replacePlayer');
-			},
-			replacePlayerTwo:function(player,character){
-				var next=game.createEvent('replacePlayerTwo',false,_status.event.getParent());
-				next.source=player;
-				next.character=character;
-				next.setContent('replacePlayerTwo');
-			},
-
- 
-			switchAutoreplace:function(e){
-				e.stopPropagation();
-				this.classList.toggle('on');
-				game.save('autoreplaceinnerhtml',this.classList.contains('on'));
-			},
 			onSwapControl:function(){
 				game.addVideo('onSwapControl');
 				var name=game.me.name;
@@ -2711,45 +2679,6 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				else{
 					game.swapPlayer(player);
 				}
-			},
-			updateLineMe:function(opacity,player){
-				if(!player){
-					player=game.me;
-				}
-				ui.lineme.width=ui.window.offsetWidth;
-				ui.lineme.height=ui.window.offsetHeight;
-
-				var ctx=ui.linemectx;
-				ctx.shadowBlur=5;
-				ctx.shadowColor='rgba(0,0,0,0.3)';
-				ctx.fillStyle='white';
-				if(typeof opacity!='number'){
-					opacity=0.5;
-				}
-				ctx.strokeStyle='rgba(255,255,255,'+opacity+')';
-				ctx.lineWidth=3;
-				ctx.setLineDash([8,2]);
-
-				ctx.beginPath();
-
-				var startx,endx,pos;
-				var endy=game.me.offsetHeight/2+game.me.offsetTop+ui.arena.offsetTop;
-				var starty=ui.me.offsetTop+ui.arena.offsetTop+ui.me.offsetHeight/2;
-				if(game.me.offsetLeft+game.me.offsetWidth/2<=ui.arena.offsetWidth/2){
-					startx=ui.me.offsetLeft+ui.arena.offsetLeft;
-					endx=game.me.offsetLeft+ui.arena.offsetLeft;
-					pos=-1;
-				}
-				else{
-					startx=ui.me.offsetLeft+ui.arena.offsetLeft+ui.me.offsetWidth;
-					endx=game.me.offsetWidth+game.me.offsetLeft+ui.arena.offsetLeft;
-					pos=1;
-				}
-				ctx.moveTo(startx,starty);
-				startx+=pos*ui.arena.offsetLeft/2;
-				ctx.quadraticCurveTo(startx,starty,startx,starty-(starty-endy)/2);
-				ctx.quadraticCurveTo(startx,endy,endx,endy);
-				ctx.stroke();
 			},
 		},
 		
