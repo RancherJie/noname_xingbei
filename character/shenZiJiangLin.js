@@ -361,7 +361,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             return get.is.zhuDongGongJi(event.getParent());
                         },
                         content:function(){
-                            trigger.parent.canYingZhan=false;
+                            trigger.getParent().canYingZhan=false;
                         }
                     }
                 }
@@ -668,7 +668,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 firstDo:true,
                 priority:1,
                 content:function(){
-                    trigger.parent.baseDamage++;
+                    trigger.getParent().baseDamage++;
                 },
                 
             },

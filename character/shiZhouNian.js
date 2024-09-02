@@ -162,9 +162,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                 },
                 content:function(){
-                    trigger.parent.canYingZhan=false;
-                    trigger.parent.canShengGuang=false;
-                    trigger.parent.canShengDun=false;
+                    trigger.getParent().canYingZhan=false;
+                    trigger.getParent().canShengGuang=false;
+                    trigger.getParent().canShengDun=false;
                 },
                 subSkill:{
                     draw_discard:{
@@ -240,8 +240,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     return false;
                 },
                 content:function(){
-                    trigger.parent.canShengDun=false;
-                    trigger.parent.canYingZhan=false;
+                    trigger.getParent().canShengDun=false;
+                    trigger.getParent().canYingZhan=false;
                 }
             },
             jiFengJi:{
@@ -342,9 +342,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 content:function(){
                     var target=trigger.target;
                     if(target.zhiLiao==2){//三者合一为强制命中，注意触发时机
-                        trigger.parent.canYingZhan=false;
-                        trigger.parent.canShengGuang=false;
-                        trigger.parent.canShengDun=false;
+                        trigger.getParent().canYingZhan=false;
+                        trigger.getParent().canShengGuang=false;
+                        trigger.getParent().canShengDun=false;
                     }
                 }
             },
@@ -662,7 +662,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             if(get.type(event.card)=='gongJi') return true;
                         },
                         content:function(){
-                            trigger.parent.canYingZhan=false;
+                            trigger.getParent().canYingZhan=false;
                         }
                     },
                     
@@ -1521,7 +1521,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     return false;
                 },
                 content:function(){
-                    trigger.parent.canYingZhan=false;
+                    trigger.getParent().canYingZhan=false;
                 }
             },
             guanChuanSheJi:{
@@ -1604,10 +1604,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 forced:true,
                 trigger:{player:'useCardToPlayer'},
                 content:function(){
-                    trigger.parent.canShengDun=false;
-                    trigger.parent.canShengGuang=false;
-                    trigger.parent.canYingZhan=false;
-                    trigger.parent.baseDamage--;
+                    trigger.getParent().canShengDun=false;
+                    trigger.getParent().canShengGuang=false;
+                    trigger.getParent().canYingZhan=false;
+                    trigger.getParent().baseDamage--;
                 },
             },
             juJi:{
@@ -1915,7 +1915,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 0'
                     player.removeBiShaShuiJing();
                     'step 1'
-                    trigger.parent.baseDamage+=1;
+                    trigger.getParent().baseDamage+=1;
                     'step 2'
                     player.chooseCardTarget({
                         filterCard:function(card){
@@ -2486,7 +2486,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         event.finish();
                     }
                     'step 3'
-                    trigger.parent.baseDamage+=event.num;
+                    trigger.getParent().baseDamage+=event.num;
                 },
                 ai:{
                     shuiJing:true,
@@ -2571,7 +2571,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 content:function(){
                     'step 0'
-                    trigger.parent.canYingZhan=false;
+                    trigger.getParent().canYingZhan=false;
                     'step 1'
                     player.removeSkill('cangBaiZhiYue1');
                 }
@@ -3171,7 +3171,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         direct:true,
                         content:function(){
                             'step 0'
-                            trigger.parent.canYingZhan=false;
+                            trigger.getParent().canYingZhan=false;
                             'step 1'
                             player.removeSkill('tianQiang_x')
                         }
@@ -3191,7 +3191,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 content:function(){
                     'step 0'
-                    trigger.parent.shengJi=false;
+                    trigger.getParent().shengJi=false;
                     'step 1'
                     var list=[];
                     var num=4;
@@ -3373,7 +3373,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             return event.card==player.storage.yuanSuSheJi;
                         },
                         content:function(){
-                            trigger.parent.canYingZhan=false;
+                            trigger.getParent().canYingZhan=false;
                         }
                     },
                     di:{
@@ -4169,7 +4169,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         },
                         content:function(){
                             player.loseToDiscardpile(player.getExpansions('weiLiCiFu_xiaoGuo'));
-                            trigger.parent.baseDamage+=2;
+                            trigger.getParent().baseDamage+=2;
                             player.removeSkill('weiLiCiFu_xiaoGuo');
                         }
                     }
@@ -4393,7 +4393,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 content:function(){
                     player.removeZhiShiWu('xueYin');
                     player.damageFaShu(4,player);
-                    trigger.parent.baseDamage+=2;
+                    trigger.getParent().baseDamage+=2;
                 }
             },
             reXueFeiTeng:{
@@ -4604,7 +4604,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         event.num+=result.control;
                     }
                     'step 4'
-                    trigger.parent.baseDamage+=event.num;
+                    trigger.getParent().baseDamage+=event.num;
                 }
             },
             moWenRongHe:{
@@ -4872,13 +4872,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 forced:true,
                 content:function(){
                     'step 0'
-                    var num=trigger.parent.num;
+                    var num=trigger.getParent().num;
                     var list=[0,1];
                     player.chooseControl(list).set('prompt','使用的[治疗]数量，目前伤害量'+num).set('ai',function(){return _status.event.num;}).set('num',list.length-1);
                     'step 1'
                     var zhiLiaonum=result.control;
 					if(zhiLiaonum>0){
-						trigger.parent.num-=zhiLiaonum;
+						trigger.getParent().num-=zhiLiaonum;
 						game.log(player,'的','[治疗]','抵挡了'+zhiLiaonum+'点伤害');
 						player.changeZhiLiao(-zhiLiaonum).type='damage';
 					}
@@ -5129,8 +5129,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 content:function(){
 					'step 0'
 					event.source=trigger.player;
-					event.yingZhan=trigger.parent.yingZhan;
-                    event.storage=trigger.parent.storage;
+					event.yingZhan=trigger.getParent().yingZhan;
+                    event.storage=trigger.getParent().storage;
 					var name=get.translation(event.source);
 					var propmt=`受到${name}的`;
 					if(event.yingZhan){
@@ -5159,8 +5159,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					next.set('trigger_card',trigger.card);
                     next.set('trigger_player',event.source);
                     next.set('yingZhan',true);
-					next.set('canYingZhan',trigger.parent.canYingZhan);
-					next.set('canShengGuang',trigger.parent.canShengGuang);
+					next.set('canYingZhan',trigger.getParent().canYingZhan);
+					next.set('canShengGuang',trigger.getParent().canShengGuang);
                     next.set('prompt',get.prompt('shiShenZhouShu')+propmt);
                     next.set('prompt2',lib.translate.shiShenZhouShu_info);
 					'step 1'
@@ -5809,7 +5809,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                 player.logSkill(event.name,trigger.targets);
                                 player.discard(result.links,'chongNengPai');
                                 player.showGaiPai(result.links);
-                                trigger.parent.baseDamage++;
+                                trigger.getParent().baseDamage++;
                             }
                         }
                     },
@@ -6347,7 +6347,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     if(result.bool){
                         var num=result.links.length;
                         if(num>0){
-                            trigger.parent.baseDamage+=num+2;
+                            trigger.getParent().baseDamage+=num+2;
                             for(var i=0;i<result.links.length;i++){
                                 if(result.links[i]=='宝石'){
                                     player.removeMark('_tiLian_r');
@@ -6543,7 +6543,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 direct:true,
                 content:function(){
                     player.storage.chenLunXieZouQu_insert=true;
-                    trigger.parent.insertAfter(lib.skill.chenLunXieZouQu.contentx,{
+                    trigger.getParent().insertAfter(lib.skill.chenLunXieZouQu.contentx,{
                         player:player,
                     });
                 },
@@ -7172,7 +7172,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                 player.addZhiShiWu('nuQi',nuQi);
                             }
                             if(num>0){
-                                trigger.parent.baseDamage+=num;
+                                trigger.getParent().baseDamage+=num;
                                 player.damageFaShu(num,player);
                             }
                             'step 4'
@@ -8121,7 +8121,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         },
                         direct:true,
                         content:function(){
-                            trigger.parent.baseDamage++;
+                            trigger.getParent().baseDamage++;
                         }
                     },
                     gongJiWeiMingZhong:{
@@ -8214,12 +8214,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         content:function(){
                             player.storage.yiJiWuNian=true;
                             if(get.mingGe(trigger.card)=='ji'){
-                                trigger.parent.canShengDun=false;
-                                trigger.parent.canShengGuang=false;
-                                trigger.parent.canYingZhan=false;
+                                trigger.getParent().canShengDun=false;
+                                trigger.getParent().canShengGuang=false;
+                                trigger.getParent().canYingZhan=false;
                             }else{
-                                trigger.parent.canShengDun=false;
-                                trigger.parent.canShengGuang=false;
+                                trigger.getParent().canShengDun=false;
+                                trigger.getParent().canShengGuang=false;
                             }
                         }
                     }
@@ -8285,7 +8285,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 content:function(){
                     player.storage.shouHunJingJie_insert=true;
-                    trigger.parent.insertAfter(lib.skill.shouHunJingJie.contentx,{
+                    trigger.getParent().insertAfter(lib.skill.shouHunJingJie.contentx,{
                         player:player,
                     });
                 }
@@ -8397,13 +8397,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         },
                         content:function(){
                             'step 0'
-                            trigger.target.chooseToDiscard('h',true,trigger.parent.storage.niFanJuHeZhan_num+2);
+                            trigger.target.chooseToDiscard('h',true,trigger.getParent().storage.niFanJuHeZhan_num+2);
                             'step 1'
-                            if(result.cards.length<trigger.parent.storage.niFanJuHeZhan_num+2){
+                            if(result.cards.length<trigger.getParent().storage.niFanJuHeZhan_num+2){
                                 trigger.target.changeShiQi(-1);
                             }
                             'step 2'
-                            trigger.parent.finish();
+                            trigger.getParent().finish();
                         }
                     }
                 }

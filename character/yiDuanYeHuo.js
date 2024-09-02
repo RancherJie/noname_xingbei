@@ -1616,7 +1616,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         },
                         content:function(){
                             trigger.num--;
-                            trigger.parent.num--;
+                            trigger.getParent().num--;
                             player.removeSkill('guanYinDuRen_num')
                         }
                     },

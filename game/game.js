@@ -55708,7 +55708,7 @@
 			//星杯
 			xiDong:function(event){
 				//判断事件是否为行动事件
-				return event.action==true||event.parent.action==true||event.parent.name=='chooseTouse'||event.parent.name=='gongJi'||event.parent.name=='faShu';
+				return event.action==true||event.getParent().action==true||event.getParent().name=='chooseTouse'||event.getParent().name=='gongJi'||event.getParent().name=='faShu';
 			},
 			//useSkill||useCard
 			gongJi:function(event){

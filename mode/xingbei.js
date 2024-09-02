@@ -3017,7 +3017,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
                 },
                 content:function(){
                     "step 0"
-                    var num=trigger.parent.num;
+                    var num=trigger.getParent().num;
                     var list=[];
                     for(var i=0;i<=player.zhiLiao;i++){
                         if(i>num) break;
@@ -3027,7 +3027,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					"step 1"
 					var zhiLiaonum=result.control;
 					if(zhiLiaonum>0){
-						trigger.parent.num-=zhiLiaonum;
+						trigger.getParent().num-=zhiLiaonum;
 						game.log(player,'的','[治疗]','抵挡了'+zhiLiaonum+'点伤害');
 						player.changeZhiLiao(-zhiLiaonum).type='damage';
 					}
@@ -3663,7 +3663,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					}
 				},
 				content:function(event,player){
-					if(trigger.parent.yingZhan==true){
+					if(trigger.getParent().yingZhan==true){
 						player.changeZhanJi('b',1)
 					}else{
 						player.changeZhanJi('r',1)
