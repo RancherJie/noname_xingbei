@@ -3744,6 +3744,141 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 		},
 		element:{
 			content:{
+				//xingbei
+				changeXingBei:function(){
+					num=event.num;
+					side=event.side;
+					if(side==true){
+						game.hongXingBei+=num;
+						if(num>0){
+							game.log('<span style="color:red;">红方</span>星杯数量增加',num);
+						}else{
+							game.log('<span style="color:red;">红方</span>星杯数量减少',num);
+						}
+					}else if(side==false){
+						game.lanXingBei+=num;
+						if(num>0){
+							game.log('<span style="color:blue;">蓝方</span>星杯数量增加',num);
+						}else{
+							game.log('<span style="color:blue;">蓝方</span>星杯数量减少',num);
+						}
+					}
+					ui.updateShiQiInfo();
+					game.broadcast(function(hongXingBei,lanXingBei){
+						game.hongXingBei=hongXingBei;
+						game.lanXingBei=lanXingBei;
+						ui.updateShiQiInfo();
+					},game.hongXingBei,game.lanXingBei);
+
+					game.checkResult();
+					
+
+				},
+				changeShiQi:function(){
+					'step 0'
+					event.trigger('changeShiQi1');
+					'step 1'
+					event.trigger('changeShiQi2');
+					'step 2'
+					event.trigger('changeShiQi3');
+					'step 3'
+					event.trigger('changeShiQi4');
+					'step 4'
+					num=event.num;
+					side=event.side;
+					//增加参数是否存在最大变动值，如果存在则进行限制
+					if(typeof event.shiQiMax=='number'){
+						if(num<0&&num<event.shiQiMax){
+							num=event.shiQiMax;
+						}
+						if(num>0&&num>event.shiQiMax){
+							num=event.shiQiMax;
+						}
+						
+					}
+
+					if(side==true){
+						game.hongShiQi+=num;
+						if(num>0){
+							game.log('<span style="color:red;">红方</span>士气增加',num);
+						}else if(num<0){
+							num=-num;
+							game.log('<span style="color:red;">红方</span>士气减少',num);
+						}
+					}else if(side==false){
+						game.lanShiQi+=num;
+						if(num>0){
+							game.log('<span style="color:blue;">蓝方</span>士气增加',num);
+						}else if(num<0){
+							num=-num;
+							game.log('<span style="color:blue;">蓝方</span>士气减少',num);
+						}
+					}
+					ui.updateShiQiInfo();
+					game.broadcast(function(hongShiQi,lanShiQi){
+						game.lanShiQi=lanShiQi;
+						game.hongShiQi=hongShiQi;
+						ui.updateShiQiInfo();
+					},game.hongShiQi,game.lanShiQi);
+
+					game.checkResult();
+				},
+				changeZhanJi:function(){
+					num=event.num;
+					color=event.color;
+					side=event.side;
+					if(color=="r"){
+						var xingShi='宝石';
+					}else if(color=="b"){
+						var xingShi='水晶';
+					}
+					if(num>0){
+						if(side==true){
+							for(let i=0;i<num;i++){
+								game.hongZhanJi.push(xingShi);
+								game.log('<span style="color:red;">红方</span>战绩区增加',xingShi);
+							}
+						}else if(side==false){
+							for(let i=0;i<num;i++){
+								game.lanZhanJi.push(xingShi);
+								game.log('<span style="color:blue;">蓝方</span>战绩区增加为',xingShi);
+							}
+						}
+					}else if(num<0){
+						num=-num;
+						if(side==true){
+							for(let i=0;i<num;i++){
+								let index = game.hongZhanJi.indexOf(xingShi);  
+								if (index !== -1) {  
+									game.hongZhanJi.splice(index, 1);  
+									game.log('<span style="color:red;">红方</span>战绩区移除',xingShi);
+								}
+							}
+							
+						}else if(side==false){
+							for(let i=0;i<num;i++){
+								let index = game.lanZhanJi.indexOf(xingShi);  
+								if (index !== -1) {  
+									game.lanZhanJi.splice(index, 1);  
+									game.log('<span style="color:blue;">蓝方</span>战绩区移除',xingShi);
+								}
+							}
+							
+						}	
+					}
+					game.hongZhanJi.sort();
+					game.lanZhanJi.sort();
+					ui.updateShiQiInfo();
+					game.broadcast(function(hongZhanJi,lanZhanJi){
+						game.lanZhanJi=lanZhanJi;
+						game.hongZhanJi=hongZhanJi;
+						ui.updateShiQiInfo();
+					},game.hongZhanJi,game.lanZhanJi);
+
+					game.checkResult();
+				},
+
+
 				removeBiShaShuiJing:function(){
 					'step 0'
                     if(player.hasMark('_tiLian_b')&&player.hasMark('_tiLian_r')){
@@ -4050,6 +4185,85 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				},
 			},
 			player:{
+				//xingbei
+
+				changeShiQi:function(num,side){//xingbei
+					var next=game.createEvent('changeShiQi');
+					next.player=this;
+					if(side==undefined){
+						next.side=this.side;
+					}else{
+						next.side=side;
+					}
+
+					var shiQi;
+					switch(next.side){
+						case true:
+							shiQi=game.hongShiQi;break;
+						case false:
+							shiQi=game.lanShiQi;break;
+					}
+					if(num>0&&(shiQi+num>game.shiQiMax)){
+						num=Math.max(0,game.shiQiMax-shiQi);
+					}
+					next.num=num;
+
+					next.setContent('changeShiQi');
+					return next;
+				},
+				changeZhanJi:function(color,num,side){//xingbei
+					var next=game.createEvent('changeZhanJi');
+					next.num=num;
+					next.player=this;
+					next.color=color;
+					if(side==undefined){
+						next.side=this.side;
+					}else{
+						next.side=side;
+					}
+					next.setContent('changeZhanJi');
+					return next;
+				},
+				changeXingBei:function(num,side){//xingbei
+					var next=game.createEvent('changeXingBei');
+					next.num=num;
+					next.player=this;
+					if(side==undefined){
+						next.side=this.side;
+					}else{
+						next.side=side;
+					}
+					next.setContent('changeXingBei');
+					return next;
+				},
+				showGaiPai:function(cards,str){
+					var next=game.createEvent('showGaiPai');
+					next.player=this;
+					next.str=str;
+					if(typeof cards=='string'){
+						str=cards;
+						cards=next.str;
+						next.str=str;
+					}
+					if(get.itemtype(cards)=='card') next.cards=[cards];
+					else if(get.itemtype(cards)=='cards') next.cards=cards.slice(0);
+					else _status.event.next.remove(next);
+					next.setContent('showCards');
+					next._args=Array.from(arguments);
+					return next;
+				},
+				getZhiLiaoLimit:function(){
+					var num=game.zhiLiaoMax;
+					num=game.checkMod(this,num,'maxZhiLiao',this);
+					return Math.max(0,num);
+				},
+				getNengLiangLimit:function(){
+					var num=game.nengLiangMax;
+					num=game.checkMod(this,num,'maxNengLiang',this);
+					return Math.max(0,num);
+				},
+
+
 				canBiShaShuiJing:function(){//能够使用必杀星石
 					if(this.hasMark('_tiLian_b')||this.hasMark('_tiLian_r')){
                         return true;
