@@ -60521,19 +60521,6 @@
 			return get.attitude(_status.event.player,to);
 		},
 
-		//xingbei
-		zhiLiaoEffect:function(target,num){
-			if(target.getZhiLiaoLimit()-target.zhiLiao<=0) return 0.1;
-			if(!num){
-				num=1;
-			}
-			var chaZhi=target.getZhiLiaoLimit()-target.zhiLiao-num;
-			if(chaZhi>0){
-				return chaZhi;
-			}else{
-				return target.getZhiLiaoLimit()-target.zhiLiao
-			}
-		},
 	};
 	const ai={
 		basic:{

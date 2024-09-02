@@ -4374,6 +4374,44 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					}
 				}
 			},
+
+			//xingbei
+			zhiLiaoEffect:function(target,num){
+				if(target.getZhiLiaoLimit()-target.zhiLiao<=0) return 0.1;
+				if(!num){
+					num=1;
+				}
+				var chaZhi=target.getZhiLiaoLimit()-target.zhiLiao-num;
+				if(chaZhi>0){
+					return chaZhi;
+				}else{
+					return target.getZhiLiaoLimit()-target.zhiLiao
+				}
+			},
+			countTongXiPai:function(cards){
+				var dict={};
+				for(var i=0;i<cards.length;i++){
+					var xiBie=get.xiBie(cards[i]);
+					if(!dict[xiBie]) dict[xiBie]=0;
+					dict[xiBie]++;
+				}
+				let maxValue=-Infinity;  
+				for(let key in dict) {  
+					if (dict[key] > maxValue) {  
+						maxValue = dict[key];  
+					}     
+				}
+				return maxValue;
+			},
+			countYiXiPai:function(cards){
+				var dict={};
+				for(var i=0;i<cards.length;i++){
+					var xiBie=get.xiBie(cards[i]);
+					if(!dict[xiBie]) dict[xiBie]=0;
+					dict[xiBie]++;
+				}
+				return Object.keys(dict).length;
+			}
 		},
 		help:{
 			
