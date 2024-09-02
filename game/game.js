@@ -47832,6 +47832,10 @@
 										case '回合':target.insertPhase();break;
 										case '宝石战绩':target.addZhanJi('r',num);break;
 										case '宝石能量':target.addNengLiang('r',num);break;
+										case '加红':target.changeHong(num);break;
+										case '减红':target.changeHong(-num);break;
+										case '加蓝':target.changeLan(num);break;
+										case '减蓝':target.changeLan(-num);break;
 
 										case '换人':{
 											if(_status.event.isMine()){
@@ -47899,8 +47903,13 @@
 						//var nodereplace=ui.create.div('.menubutton','换人',row1,clickrow1);
 						var nodeaddZhiLiao=ui.create.div('.menubutton','增疗',row1,clickrow1);
 						var noderemoveZhiLaio=ui.create.div('.menubutton','减疗',row1,clickrow1);
+						var nodeaddHong=ui.create.div('.menubutton','加红',row1,clickrow1);
+						var noderemoveHong=ui.create.div('.menubutton','减红',row1,clickrow1);
+						var nodeaddLan=ui.create.div('.menubutton','加蓝',row1,clickrow1);
+						var noderemoveLan=ui.create.div('.menubutton','减蓝',row1,clickrow1);
 						var nodeaddNengLiang=ui.create.div('.menubutton','宝石能量',row1,clickrow1);
 						var nodeaddZhanJi=ui.create.div('.menubutton','宝石战绩',row1,clickrow1);
+
 						/*
 						if(!game.canReplaceViewpoint||!game.canReplaceViewpoint()){
 							nodereplace.classList.add('unselectable');
