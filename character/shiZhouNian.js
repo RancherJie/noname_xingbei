@@ -6631,6 +6631,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         dialog.add([['摸','弃'],'tdnodes'])
 						return dialog;
 					},
+                    filter:function(button,player){
+                        if (ui.selected.buttons.length) return typeof ui.selected.buttons[0].link != typeof button.link;
+                        else return true;
+                    },
                     select:2,
                     backup:function(links,player){
 						return{
