@@ -202,7 +202,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 priority:2,
                 trigger:{player:"useCardToPlayer"},
                 filter:function(event,player){
-                    if(event.parent.yingZhan==true) return false;
+                    if(event.getParent().yingZhan==true) return false;
                     if(get.type(event.card)=='gongJi'){
                         return true;
                     }else{
@@ -646,7 +646,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         forced:true,
                         trigger:{player:"useCardToTargeted"},
                         filter:function(event,player){
-                            if(event.parent.yingZhan==true) return false;
+                            if(event.getParent().yingZhan==true) return false;
                             return true;
                         },
                         content:function(){
@@ -658,7 +658,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         forced:true,
                         trigger:{player:'useCardToPlayer'},
                         filter:function(event,player){
-                            if(event.parent.yingZhan==true) return false;
+                            if(event.getParent().yingZhan==true) return false;
                             if(get.type(event.card)=='gongJi') return true;
                         },
                         content:function(){
@@ -676,7 +676,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     1:{
                         trigger:{player:'useCardAfter'},
                         filter:function(event,player){
-                            return get.type(event.card)=='faShu'&&get.is.xiDong(event.parent);
+                            return get.type(event.card)=='faShu'&&get.is.xiDong(event.getParent());
                         },
                         content:function(){
                             player.storage.gongJi++;
@@ -1839,7 +1839,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         filter:function(event,player){
                             if(!player.isLinked()) return false;
                             if(get.type(event.card)!= 'gongJi') return false;
-                            if(event.parent.yingZhan==true) return false;
+                            if(event.getParent().yingZhan==true) return false;
                             return true;
                         },
                         content:function(){
@@ -2567,7 +2567,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 trigger:{player:'useCardToPlayer'},
                 forced:true,
                 filter:function(event,player){
-                    return event.parent.yingZhan!=true&&get.type(event.card)=="gongJi";
+                    return event.getParent().yingZhan!=true&&get.type(event.card)=="gongJi";
                 },
                 content:function(){
                     'step 0'
@@ -2871,7 +2871,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 enable:'phaseUse',
                 type:'teShu',
                 filter:function(event,player){
-                    if(event.parent.canTeShu==false) return false;
+                    if(event.getParent().canTeShu==false) return false;
                     var side=player.side
                     if(side==true){
                         if(game.hongZhanJi.length==0) return false;
@@ -3147,7 +3147,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 trigger:{player:'useCardToTargeted'},
                 forced:true,
                 filter:function(event,player){
-                    return get.type(event.card)=="gongJi"&&event.parent.shengJi!=false;
+                    return get.type(event.card)=="gongJi"&&event.getParent().shengJi!=false;
                 },
                 content:function(){
                     player.changeZhiLiao();
@@ -3187,7 +3187,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 firstDo:true,
                 filter:function(event,player){
                     if(player.zhiLiao<1) return false;
-                    return get.type(event.card)=="gongJi"&&event.parent.yingZhan!=true;
+                    return get.type(event.card)=="gongJi"&&event.getParent().yingZhan!=true;
                 },
                 content:function(){
                     'step 0'
@@ -3343,7 +3343,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         trigger:{player:'useCardToTargeted'},
                         direct:true,
                         filter:function(event,player){
-                            return event.card==player.storage.yuanSuSheJi&&event.parent.yingZhan!=true;
+                            return event.card==player.storage.yuanSuSheJi&&event.getParent().yingZhan!=true;
                         },
                         content:function(){
                             'step 0'
@@ -3380,7 +3380,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         trigger:{player:'useCardToTargeted'},
                         direct:true,
                         filter:function(event,player){
-                            return event.card==player.storage.yuanSuSheJi&&event.parent.yingZhan!=true;
+                            return event.card==player.storage.yuanSuSheJi&&event.getParent().yingZhan!=true;
                         },
                         content:function(){
                             'step 0'
@@ -3531,7 +3531,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     2:{
                         trigger:{player:'useCardEnd'},
                         filter:function(event,player){
-                            if(event.parent.name!='chooseToUse'&&event.parent.name!='faShu') return false;
+                            if(event.getParent().name!='chooseToUse'&&event.getParent().name!='faShu') return false;
                             if(get.type(event.card)!='faShu') return false;
                             return true;
                         },
@@ -4162,7 +4162,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         },
                         trigger:{player:'useCardToTargeted'},
                         filter:function(event,player){
-                            if(!get.is.gongJi(event.parent)) return false;
+                            if(!get.is.gongJi(event.getParent())) return false;
                             if(player.hasZhiShiWu('jueJieX')) return false;
 
                             return player.hasExpansions('weiLiCiFu_xiaoGuo');
@@ -4219,7 +4219,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             if(player.hasZhiShiWu('jueJieX')) return false;
                             
                             if(event.name=='useCard'){
-                                return !(event.parent.name=='chooseToUse_qiTa'||event.parent.name=='chooseToUse_yingZhan');
+                                return !(event.getParent().name=='chooseToUse_qiTa'||event.getParent().name=='chooseToUse_yingZhan');
                             }else if(event.name=='useSkill'){
                                 var info=get.info(event.skill);
                                 return info.type=='faShu';
@@ -4401,7 +4401,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 trigger:{global:'changeShiQiEnd'},
                 filter:function(event,player){
                     if(player.isLinked()) return false;
-                    if(event.parent.player!=player) return false;
+                    if(event.getParent().player!=player) return false;
                     if(event.num>=0) return false;
                     if(event.yuanYin!='damage') return false;
                     return true;
@@ -4442,7 +4442,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     if(!player.canBiShaShuiJing()) return false;
                     if(!player.isLinked()) return false;
                     if(event.name=='useCard'){
-                        return !(event.parent.name=='chooseToUse_qiTa'||event.parent.name=='chooseToUse_yingZhan');
+                        return !(event.getParent().name=='chooseToUse_qiTa'||event.getParent().name=='chooseToUse_yingZhan');
                     }else if(event.name=='useSkill'){
                         var info=get.info(event.skill);
                         return info.type=='faShu';
@@ -5112,7 +5112,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     if(get.xiBie(event.card)=='an') return false;
                     if(event.target.side!=player.side) return false;
                     if(event.target==player) return false;
-                    if(event.parent.canYingZhan==false) return false;
+                    if(event.getParent().canYingZhan==false) return false;
                     if(!player.isLinked()) return false;
                     if(player.side==true){
                         if(game.hongZhanJi.length<2) return false;
@@ -5177,7 +5177,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         firstDo:true,
                         priority:10,
                         filter:function(event,player){
-                            if(event.parent.parent.name!='shiShenZhouShu') return false;
+                            if(event.getParent(2).name!='shiShenZhouShu') return false;
                             return true;
                         },
                         firstDo:true,
@@ -6327,7 +6327,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     if(!player.isLinked()) return false;
                     if(event.getParent('phaseUse').qiHeiZhiQiang==false) return false;
                     if(!player.canBiShaShuiJing()) return false;
-                    if(!get.is.zhuDongGongJi(event.parent)) return false;
+                    if(!get.is.zhuDongGongJi(event.getParent())) return false;
                     if(event.target.countCards('h')!=1&&event.target.countCards('h')!=2) return false;
                     return true;
                 },
@@ -6443,7 +6443,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             baiGuiYeXing:{
                 trigger:{player:'useCardToTargeted'},
                 filter:function(event,player){
-                    if(!get.is.zhuDongGongJi(event.parent)) return false;
+                    if(!get.is.zhuDongGongJi(event.getParent())) return false;
                     return player.getExpansions('yaoLi').length>0;
                 },
                 content:function(){
@@ -7143,7 +7143,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         trigger:{player:'useCardToTargeted'},
                         filter:function(event,player){
                             if(!player.canBiShaShuiJing()) return false;
-                            return get.is.zhuDongGongJi(event.parent);
+                            return get.is.zhuDongGongJi(event.getParent());
                         },
                         content:function(){
                             'step 0'
@@ -7502,7 +7502,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         trigger:{player:'useCardToTargeted'},
                         forced:true,
                         filter:function(event,player){
-                            return get.is.zhuDongGongJi(event.parent)&&get.mingGe(event.card)=='sheng';
+                            return get.is.zhuDongGongJi(event.getParent())&&get.mingGe(event.card)=='sheng';
                         },
                         content:function(){
                             player.addZhiShiWu('xinYang')
@@ -8001,7 +8001,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             jianQiZhan:{
                 trigger:{player:'useCardToTargeted'},
                 filter:function(event,player){
-                    return get.is.zhuDongGongJi(event.parent)&&player.countZhiShiWu('jianQi')>0;
+                    return get.is.zhuDongGongJi(event.getParent())&&player.countZhiShiWu('jianQi')>0;
                 },
                 direct:true,
                 priority:1,
@@ -8070,7 +8070,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     gongJiMingZhong:{
                         trigger:{player:'useCardToTargeted'},
                         filter:function(event,player){
-                            return event.parent.storage.tianShiZhiHun;
+                            return event.getParent().storage.tianShiZhiHun;
                         },
                         direct:true,
                         content:function(){
@@ -8113,7 +8113,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     gongJiMingZhong:{
                         trigger:{player:'useCardToTargeted'},
                         filter:function(event,player){
-                            return event.parent.storage.eMoZhiHun;
+                            return event.getParent().storage.eMoZhiHun;
                         },
                         direct:true,
                         content:function(){
@@ -8204,7 +8204,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     1:{
                         trigger:{player:'useCardToPlayer'},
                         filter:function(event,player){
-                            return player.storage.yiJiWuNian==false&&get.is.gongJiXingDong(event.parent);
+                            return player.storage.yiJiWuNian==false&&get.is.gongJiXingDong(event.getParent());
                         },
                         direct:true,
                         content:function(){
@@ -8236,7 +8236,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         forced:true,
                         trigger:{player:'useCardToTargeted'},
                         filter:function(event,player){
-                            return (!player.isLinked())&&get.is.zhuDongGongJi(event.parent);
+                            return (!player.isLinked())&&get.is.zhuDongGongJi(event.getParent());
                         },
                         content:function(){
                             player.addZhiShiWu('shouHun',1);
@@ -8389,7 +8389,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         trigger:{player:'useCardToTargeted'},
                         forced:true,
                         filter:function(event,player){
-                            return typeof event.parent.storage.niFanJuHeZhan_num=='number';
+                            return typeof event.getParent().storage.niFanJuHeZhan_num=='number';
                         },
                         content:function(){
                             'step 0'

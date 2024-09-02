@@ -47,7 +47,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 trigger:{player:'useCardToTargeted'},
                 forced:true,
                 filter:function(event,player){
-                    return get.is.zhuDongGongJi(event.parent);
+                    return get.is.zhuDongGongJi(event.getParent());
                 },
                 content:function(){
                     player.changeZhiLiao(1);
@@ -434,7 +434,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 enable:'phaseUse',
                 type:'teShu',
                 filter:function(event,player){
-                    if(event.parent.canTeShu==false) return false;
+                    if(event.getParent().canTeShu==false) return false;
                     var side=player.side;
                     if(side==true){
                         if(game.hongZhanJi.length==0) return false;
@@ -806,7 +806,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     mingZhong:{
                         trigger:{player:'useCardToTargeted'},
                         filter:function(event,player){
-                            return get.is.zhuDongGongJi(event.parent)&&player.storage.fuMoDaJi==0;
+                            return get.is.zhuDongGongJi(event.getParent())&&player.storage.fuMoDaJi==0;
                         },
                         content:function(){
                             player.storage.faShu++;
@@ -1554,7 +1554,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     var num=player.getExpansions('moLiPing').length;
                     if(num>=4) return false;
 
-                    return get.is.zhuDongGongJi(event.parent);
+                    return get.is.zhuDongGongJi(event.getParent());
                 },
                 direct:true,
                 content:function(){
@@ -1612,7 +1612,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         lastDo:true,
                         direct:true,
                         filter:function(event,player){
-                            return event.parent.name=='damage'&&event.parent.source==player;
+                            return event.getParent().name=='damage'&&event.getParent().source==player;
                         },
                         content:function(){
                             trigger.num--;
@@ -1624,7 +1624,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         trigger:{global:'drawAfter'},
                         direct:true,
                         filter:function(event,player){
-                            return event.parent.name=='damage'&&event.parent.source==player;
+                            return event.getParent().name=='damage'&&event.getParent().source==player;
                         },
                         content:function(){
                             game.log(trigger.player,'获得了',player.storage.guanYinDuRen.length,'张牌');

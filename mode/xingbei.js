@@ -548,7 +548,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 								}
 								this.backup=_status.event.dialog;
 								_status.event.dialog.close();
-								_status.event.dialog=_status.event.parent.dialogxx;
+								_status.event.dialog=_status.event.getParent().dialogxx;
 								this.dialog=_status.event.dialog;
 								this.dialog.open();
 								game.uncheck();
@@ -3138,7 +3138,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
                 trigger:{target:'useCardToPlayered'},
                 forced:true,
                 filter:function(event,player){
-                    if(event.parent.canShengDun==false) return false;
+                    if(event.getParent().canShengDun==false) return false;
 					if(player.hasZhiShiWu('jueJieX')) return false;
 
                     if(get.type(event.card)=='gongJi'||event.card.name=='moDan'){
@@ -3152,9 +3152,9 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					'step 1'
                     if(get.type(trigger.card)=='gongJi'){
 						event.source=trigger.player;
-						event.yingZhan=trigger.parent.yingZhan;
+						event.yingZhan=trigger.getParent().yingZhan;
 						event.source_card=trigger.card;
-						event.storage=trigger.parent.storage;
+						event.storage=trigger.getParent().storage;
                         event.trigger('gongJiWeiMingZhong');
                     }else if(trigger.card.name=='moDan') game.resetMoDan();
                     trigger.cancel();
@@ -3165,15 +3165,15 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
                 forced:true,
 				firstDo:true,
                 filter:function(event,player){
-                    if(event.parent.canYingZhan==false&&event.parent.canShengGuang==false) return false;
+                    if(event.getParent().canYingZhan==false&&event.getParent().canShengGuang==false) return false;
 					return get.type(event.card)=='gongJi' 
                 },
                 content:function(){
 					'step 0'
 					event.source=trigger.player;
-					event.yingZhan=trigger.parent.yingZhan;
+					event.yingZhan=trigger.getParent().yingZhan;
 					event.source_card=trigger.card;
-					event.storage=trigger.parent.storage;
+					event.storage=trigger.getParent().storage;
 					var name=get.translation(event.source);
 					var propmt=`受到${name}的`;
 					if(event.yingZhan){
@@ -3208,8 +3208,8 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					next.set('trigger_card',trigger.card);
                     next.set('trigger_player',event.source);
                     next.set('yingZhan',true);
-					next.set('canYingZhan',trigger.parent.canYingZhan);
-					next.set('canShengGuang',trigger.parent.canShengGuang);
+					next.set('canYingZhan',trigger.getParent().canYingZhan);
+					next.set('canShengGuang',trigger.getParent().canShengGuang);
 					'step 1'
                     if(result.bool){
                         trigger.getParent().targets.remove(player);
@@ -3253,15 +3253,15 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
                 forced:true,
 				firstDo:true,
                 filter:function(event,player){
-                    return (event.parent.parent.name=='_yingZhan'||event.parent.parent.name=='shiShenZhouShu')&&event.card.name!='shengGuang';
+                    return (event.getParent(2).name=='_yingZhan'||event.getParent(2).name=='shiShenZhouShu')&&event.card.name!='shengGuang';
                 },
                 content:function(){
 					'step 0'
-                    event.source=trigger.parent.parent.source;
-                    event.player=trigger.parent.player;
-					event.yingZhan=trigger.parent.parent.yingZhan;
-					event.source_card=trigger.parent.trigger_card;
-					event.storage=trigger.parent.parent.storage;
+                    event.source=trigger.getParent(2).source;
+                    event.player=trigger.getParent().player;
+					event.yingZhan=trigger.getParent(2).yingZhan;
+					event.source_card=trigger.getParent().trigger_card;
+					event.storage=trigger.getParent(2).storage;
 					'step 1'
                     event.trigger('gongJiWeiMingZhong');
                 }
@@ -3271,7 +3271,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
                 forced:true,
 				firstDo:true,
                 filter:function(event,player){
-                    return (event.parent.parent.name=='_yingZhan'||event.parent.parent.name=='shiShenZhouShu')&&event.card.name!='shengGuang';
+                    return (event.getParent(2).name=='_yingZhan'||event.getParent(2).name=='shiShenZhouShu')&&event.card.name!='shengGuang';
                 },
 				content:function(){
 					trigger.yingZhan=true;

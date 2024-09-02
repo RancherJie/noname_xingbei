@@ -12698,8 +12698,8 @@
 						return;
 					}
 					if(info.type=='qiDong'){
-						event.parent.parent.canTeShu=false;
-						event.parent.parent.qiDong=true;
+						event.getParent(2).canTeShu=false;
+						event.getParent(2).qiDong=true;
 					}
 
 					if(info.popup!=false&&!info.direct){
@@ -16806,18 +16806,18 @@
 					}
 
 					//xingBei
-					if(event.parent&&!event.action){
-						event.action=event.parent.action;
+					if(event.getParent()&&!event.action){
+						event.action=event.getParent().action;
 					}
 					if(event.action){
 						var type=get.info(event.skill).type;
 						if(type=='teShu'){
 							player.storage.all--;
 						}else if(type=='qiDong'){
-							event.parent.parent.qiDong=true;
+							event.getParent(2).qiDong=true;
 						}else if(type=='wuFaXingDong'){//使用无法行动时的设置
-							event.parent.parent.flag=false;
-							event.parent.parent.canTeShu=false
+							event.getParent(2).flag=false;
+							event.getParent(2).canTeShu=false
 						}else if(type=='faShu'){
 							if(player.storage.faShu>0){
 								player.storage.faShu--;

@@ -656,7 +656,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 forced:true,
                 trigger:{global:'useCardToTargeted'},
                 filter:function(event,player){
-                    if(!get.is.gongJi(event.parent)) return false;
+                    if(!get.is.gongJi(event.getParent())) return false;
 
                     var cards=player.getExpansions('jieJie');
                     if(cards.length==0) return false;
