@@ -2680,6 +2680,125 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					game.swapPlayer(player);
 				}
 			},
+
+			//星杯增加设置系别用
+			setXiBie:(item,xiBie)=>{
+				item.xiBie=xiBie;
+				return item.xiBie;
+			},
+
+			changeShiQi:function(num,side){
+				if(side==true){
+					game.hongShiQi+=num;
+					if(num>0){
+						game.log('<span style="color:red;">红方</span>士气增加',num);
+					}else if(num<0){
+						num=-num;
+						game.log('<span style="color:red;">红方</span>士气减少',num);
+					}
+				}else if(side==false){
+					game.lanShiQi+=num;
+					if(num>0){
+						game.log('<span style="color:blue;">蓝方</span>士气增加',num);
+					}else if(num<0){
+						num=-num;
+						game.log('<span style="color:blue;">蓝方</span>士气减少',num);
+					}
+				}
+				ui.updateShiQiInfo();
+				game.broadcast(function(hongShiQi,lanShiQi){
+					game.hongShiQi=hongShiQi;
+					game.lanShiQi=lanShiQi;
+					ui.updateShiQiInfo();
+				},game.hongShiQi,game.lanShiQi);
+	
+				game.checkResult();
+			},
+			changeZhanJi:function(color,num,side){
+				if(color=="r"){
+					var xingShi='宝石';
+				}else if(color=="b"){
+					var xingShi='水晶';
+				}
+				if(num>0){
+					if(side==true){
+						for(let i=0;i<num;i++){
+							game.hongZhanJi.push(xingShi);
+							game.log('<span style="color:red;">红方</span>战绩区增加',xingShi);
+						}
+					}else if(side==false){
+						for(let i=0;i<num;i++){
+							game.lanZhanJi.push(xingShi);
+							game.log('<span style="color:blue;">蓝方</span>战绩区增加',xingShi);
+						}
+					}
+				}else if(num<0){
+					num=-num;
+					if(side==true){
+						for(let i=0;i<num;i++){
+							let index = game.hongZhanJi.indexOf(xingShi);  
+							if (index !== -1) {  
+								game.hongZhanJi.splice(index, 1);  
+								game.log('<span style="color:red;">红方</span>战绩区移除',xingShi);
+							}
+						}
+					}else if(side==false){
+						for(let i=0;i<num;i++){
+							let index = game.lanZhanJi.indexOf(xingShi);  
+							if (index !== -1) {  
+								game.lanZhanJi.splice(index, 1);  
+								game.log('<span style="color:blue;">蓝方</span>战绩区移除',xingShi);
+							}
+						}
+					}
+				}
+				game.hongZhanJi.sort();
+				game.lanZhanJi.sort();
+				ui.updateShiQiInfo();
+				game.broadcast(function(hongZhanJi,lanZhanJi){
+					game.hongZhanJi=hongZhanJi;
+					game.lanZhanJi=lanZhanJi;
+					ui.updateShiQiInfo();
+				},game.hongZhanJi,game.lanZhanJi);
+	
+				game.checkResult();
+			},
+			changeXingBei:function(num,side){
+				if(side==true){
+					game.hongXingBei+=num;
+					if(num>0){
+						game.log('<span style="color:red;">红方</span>星杯数量增加',num);
+					}else{
+						num=-num;
+						game.log('<span style="color:red;">红方</span>星杯数量减少',num);
+					}
+				}else if(side==false){
+					game.lanXingBei+=num;
+					if(num>0){
+						game.log('<span style="color:blue;">蓝方</span>星杯数量增加',num);
+					}else{
+						num=-num;
+						game.log('<span style="color:blue;">蓝方</span>星杯数量减少',num);
+					}
+				}
+				ui.updateShiQiInfo();
+				game.broadcast(function(hongXingBei,lanXingBei){
+					game.hongXingBei=hongXingBei;
+					game.lanXingBei=lanXingBei;
+					ui.updateShiQiInfo();
+				},game.hongXingBei,game.lanXingBei);
+	
+				game.checkResult();
+			},
+			resetMoDan:function(){
+				//结算后重置数据
+				game.moDan=2;
+				game.moDan_shunShiZhen=false;
+				game.broadcast(function(){
+					game.moDan=2;
+					game.moDan_shunShiZhen=false;
+				})
+			},
 		},
 		
 
