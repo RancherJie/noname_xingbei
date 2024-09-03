@@ -3759,9 +3759,19 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					}
 				},
 				ai:{
-					order:3.55,
+					order:function(item,player){
+						var num=Math.random();
+						return 3.8-num;
+					},
 					result:{
 						player:function(player){
+							var xingShi;
+							if(player.side==true){
+								xingShi=game.hongZhanJi.length;
+							}else{
+								xingShi=game.lanZhanJi.length;
+							}
+							if(xingShi<=1) return 0;
 							if(!(player.hasSkillTag('baoShi')||player.hasSkillTag('shuiJing'))) return -1;
 							var num=player.getNengLiangLimit()-player.countNengLiangAll();
 							if(num>=2) return 2;
