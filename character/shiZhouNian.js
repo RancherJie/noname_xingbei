@@ -8667,7 +8667,23 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                 if(i>trigger.num) break;
                                 list.push(i);
                             }
-                            player.chooseControl(list).set('prompt','选择转移伤害量，目前伤害量为'+trigger.num);
+
+                            //计算移除量
+                            var num1=player.getHandcardLimit()-player.countCards('h');
+                            var num2=player.storage.lingHunLianJie_player.getHandcardLimit()-player.storage.lingHunLianJie_player.countCards('h');
+                            if(trigger.player==player){
+                                var yiChu=trigger.num-num1;
+                                yiChu=Math.min(yiChu,list.length);
+                                yiChu=Math.min(yiChu,num2);
+                            }else{
+                                var yiChu=trigger.num-num2;
+                                yiChu=Math.min(yiChu,list.length);
+                                yiChu=Math.min(yiChu,num1);
+                            }
+
+                            player.chooseControl(list).set('prompt','选择转移伤害量，目前伤害量为'+trigger.num).set('ai',function(player){
+                                return _status.event.num-1;
+                            }).set('num',yiChu);
                             'step 1'
                             event.num=result.control;
                             player.removeZhiShiWu('lanSeLingHun',event.num)
@@ -8703,6 +8719,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         check:function(event,player){
                             if(event.player.name=='xianZhe'&&event.faShu==true){
                                 if(event.num==1||event.num==4) return false;
+                            }
+                            var num1=player.getHandcardLimit()-player.countCards('h');
+                            var num2=player.storage.lingHunLianJie_player.getHandcardLimit()-player.storage.lingHunLianJie_player.countCards('h');
+                            if(event.player==player){ 
+                                if(event.num<=num1) return false
+                            }else{
+                                if(event.num<=num2) return false
                             }
                             return true;
                         }
