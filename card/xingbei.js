@@ -61,7 +61,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 				ai:{
 					basic:{
 						useful:[8,3,1],
-						value:[6,3,1],
+						value:[6,4,3],
 					},
 					order:function(item,player){
 						return 3.05;
