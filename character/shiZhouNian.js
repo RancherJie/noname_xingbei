@@ -2847,7 +2847,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     result:{
                         target:-1,
                     }
-                }
+                },
+                check: function (card) {
+					return 6 - get.value(card);
+				},
             },
             qiangYun:{
                 trigger:{player:'useSkill'},
