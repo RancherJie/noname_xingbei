@@ -8681,7 +8681,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                 yiChu=Math.min(yiChu,num1);
                             }
 
-                            player.chooseControl(list).set('prompt','选择转移伤害量，目前伤害量为'+trigger.num).set('ai',function(player){
+                            player.chooseControl(list).set('prompt','\u9009\u62e9\u8f6c\u79fb\u4f24\u5bb3\u91cf\uff0c\u76ee\u524d\u4f24\u5bb3\u91cf\u4e3a'+trigger.num).set('ai',function(player){
                                 return _status.event.num-1;
                             }).set('num',yiChu);
                             'step 1'
