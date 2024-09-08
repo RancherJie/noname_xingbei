@@ -1728,9 +1728,6 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					var chooseSide=lib.configOL.chooseSide;
 					if(chooseSide){
 						var ref=game.players.randomGet();
-						while (ref.side!=true) {//确保红队第一个
-							ref=ref.next;
-						}
 						var red=0;
 						var blue=0;
 						for(var i=0;i<event.number;i++){
@@ -1744,6 +1741,9 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 								ref.side=true;
 								blue--;
 							}
+							ref=ref.next;
+						}
+						while (ref.side!=true) {//确保红队第一个
 							ref=ref.next;
 						}
 						if(team_sequence!='random') game.moveSeat(event.list,ref);
