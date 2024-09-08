@@ -1677,71 +1677,68 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					//var ref=game.players[0];
 					event.number=lib.configOL.number;
 					event.choose_number=parseInt(lib.configOL.BPchoose_number);
-
 					var team_sequence=lib.configOL.team_sequence;
-
-					var ref=game.players.randomGet();
-					var bool=true;
-					var bool2=false;
 					if(event.number==4){
-						if(team_sequence=='near'){
-							ref.side=bool;
-							ref.next.side=bool2;
-							ref.next.next.side=bool2;
-							ref.previous.side=bool;
+						if(team_sequence=='CM'){
+							event.list=[true,false,false,true];
+						}else if(team_sequence=='near'){
+							event.list=[true,true,false,false];
 						}else if(team_sequence=='crossed'){
-							ref.side=bool;
-							ref.next.side=bool2;
-							ref.next.next.side=bool;
-							ref.previous.side=bool2;
-						}else if(team_sequence=='random'){
-							var sideList=[true,true,false,false];
-							sideList.randomSort();
-							for(var i=0;i<event.number;i++){
-								game.players[i].side=sideList[i];
-							}
-							while(ref.side!=true){
-								ref=game.players.randomGet();
-							}
-						}else if(team_sequence=='CM'){
-							ref.side=bool;
-							ref.next.side=bool2;
-							ref.next.next.side=bool2;
-							ref.next.next.next.side=bool;
+							event.list=[true,false,true,false];
+						}else{
+							event.list=[true,false,false,true];
+							event.list.randomSort();
 						}
 					}else{
-						if(team_sequence=='crossed'){
-							ref.side=bool;
-							ref.next.side=bool2;
-							ref.next.next.side=bool2;
-							ref.next.next.next.side=bool;
-							ref.next.next.next.next.side=bool;
-							ref.next.next.next.next.next.side=bool2;
+						if(team_sequence=='CM'){
+							event.list=[true,false,false,true,true,false];
 						}else if(team_sequence=='near'){
-							ref.side=bool;
-							ref.next.side=bool;
-							ref.next.next.side=bool;
-							ref.next.next.next.side=bool2;
-							ref.next.next.next.next.side=bool2;
-							ref.next.next.next.next.next.side=bool2;
-						}else if(team_sequence=='random'){
-							var sideList=[true,true,false,false,true,false];
-							sideList.randomSort();
-							for(var i=0;i<event.number;i++){
-								game.players[i].side=sideList[i];
-							} 
-							while(ref.side!=true){
-								ref=game.players.randomGet();
-							}
-						}else if(team_sequence=='CM'){
-							ref.side=bool;
-							ref.next.side=bool2;
-							ref.next.next.side=bool2;
-							ref.next.next.next.side=bool;
-							ref.next.next.next.next.side=bool;
-							ref.next.next.next.next.next.side=bool2;
+							event.list=[true,true,true,false,false,false];
+						}else if(team_sequence=='crossed'){
+							event.list=[true,false,true,false,true,false];
+						}else{
+							event.list=[true,true,true,false,false,false];
+							event.list.randomSort();
 						}
 					}
+
+					var chooseSide=lib.configOL.chooseSide;
+					if(chooseSide){//自由选择队伍
+						game.chooseSide();
+					}
+					'step 1'
+					var team_sequence=lib.configOL.team_sequence;
+					var chooseSide=lib.configOL.chooseSide;
+					if(chooseSide){
+						var ref=game.players.randomGet();
+						while (ref.side!=true) {//确保红队第一个
+							ref=ref.next;
+						}
+						var red=0;
+						var blue=0;
+						for(var i=0;i<event.number;i++){
+							if(ref.side==true) red++;
+							else blue++;
+							if(red>event.number/2){
+								ref.side=false;
+								red--;
+							}
+							else if(blue>event.number/2){
+								ref.side=true;
+								blue--;
+							}
+							ref=ref.next;
+						}
+						if(team_sequence!='random') game.moveSeat(event.list,ref);
+					}else{
+						var ref=game.players.randomGet();
+						for(var i=0;i<event.number;i++){
+							ref.side=event.list[i];
+							ref=ref.next;
+						}
+					}
+					
+					
 
 					event.red_list=[];
 					event.blue_list=[];
@@ -1792,14 +1789,13 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 								player.node.identity.dataset.color=player.side+'zhu';
 							}
 						}
-						ui.arena.classList.add('choose-character');
 					}
 
 
 					game.broadcastAll(func,map);
 
 
-					'step 1'
+					'step 2'
 					//ban角色
 					//角色列表
 					var list = get.charactersOL();
@@ -1846,7 +1842,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						event.blue_ban
 					];
 
-					'step 2'
+					'step 3'
 					var next = event.choosing.chooseButton(event.videoId, 1, true);
 					next.set("filterButton", function (button) {
 						if (_status.event.selected.includes(button.link)) return false;
@@ -1856,7 +1852,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					next.set("ai", function () {
 						return Math.random();
 					});
-					'step 3'
+					'step 4'
 					game.broadcastAll(
 						function (links, choosing, first, id) {
 							var dialog = get.idDialog(id);
@@ -1901,11 +1897,11 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 
 					event.num++;
 					if (event.num<=2) {
-						event.goto(2);
+						event.goto(3);
 					}
-					'step 4'
-					game.delay(2);
 					'step 5'
+					game.delay(2);
+					'step 6'
 					game.broadcastAll(function (id) {
 						ui.arena.classList.remove("playerhidden");
 						var dialog = get.idDialog(id);
@@ -1914,7 +1910,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						}
 					}, event.videoId);
 
-					'step 6'
+					'step 7'
 					//为各方选择角色
 					//设置第一次提示
 					//console.log(event.choosed.node.name.innerHTML);
@@ -1958,7 +1954,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						event.red_chooseList,
 						event.blue_chooseList
 					];
-					"step 7"
+					"step 8"
 					//console.log('选择角色');
 					game.delay(1);
 					event.choosing=event.choose_list.shift();
@@ -1971,7 +1967,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					next.set("ai", function () {
 						return Math.random();
 					});
-					"step 8";
+					"step 9";
 					event.selected.push(result.links[0]);
 					if(event.choosing.side==true){
 						event.red_chooseList.push(result.links[0]);
@@ -2038,12 +2034,12 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						next_side
 					);
 					if (event.choose_list.length>0) {
-						event.goto(7);
+						event.goto(8);
 					}
 					game.delay(1);
-					'step 9'
-					game.delay(3);
 					'step 10'
+					game.delay(3);
+					'step 11'
 					game.broadcastAll(function (id) {
 						ui.arena.classList.remove("playerhidden");
 						var dialog = get.idDialog(id);
@@ -2052,7 +2048,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						}
 					}, event.videoId);
 					
-					'step 11'
+					'step 12'
 					for(var i=0;i<game.players.length;i++){
 						game.players[i].storage.moDan=false;
 						game.players[i].storage.zhongDu=[];
