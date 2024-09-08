@@ -2818,17 +2818,6 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 			
 		},
 		skill:{
-			_test:{
-				enable:'phaseUse',
-				content:function(){
-					var player1=player;
-					var player2=player.next;
-					game.broadcastAll(function(player1,player2){
-						game.swapSeat(player1,player2,false,false,true);
-					},player1,player2);
-				}
-			},
-
 			_gongJiRiZhi:{
 				trigger:{player:'useCardToTarget'},
                 filter:function(event,player){
