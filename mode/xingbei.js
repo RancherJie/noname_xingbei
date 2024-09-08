@@ -618,13 +618,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						game.players[i].storage.zhongDu=[];
 					}
 
-
-					if(get.is.phoneLayout()){
-						ui.shiQiInfo=ui.create.div('.touchinfo.bottom-right',ui.window);
-					}
-					else{
-						ui.shiQiInfo=ui.create.div('.touchinfo.bottom-right',ui.window);
-					}
+					ui.shiQiInfo=ui.create.div('.touchinfo.bottom-right',ui.window);
 					ui.updateShiQiInfo();
 
 
@@ -816,12 +810,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 							}
 						}
 						
-						if(get.is.phoneLayout()){
-							ui.shiQiInfo=ui.create.div('.touchinfo.bottom-right',ui.window);
-						}
-						else{
-							ui.shiQiInfo=ui.create.div('.touchinfo.bottom-right',ui.window);
-						}
+						ui.shiQiInfo=ui.create.div('.touchinfo.bottom-right',ui.window);
 						ui.updateShiQiInfo();
 					}];
 					
@@ -1036,12 +1025,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					}
 
 					game.broadcastAll(function(){
-						if(get.is.phoneLayout()){
-							ui.shiQiInfo=ui.create.div('.touchinfo.bottom-right',ui.window);
-						}
-						else{
-							ui.shiQiInfo=ui.create.div('.touchinfo.bottom-right',ui.window);
-						}
+						ui.shiQiInfo=ui.create.div('.touchinfo.bottom-right',ui.window);
 						ui.updateShiQiInfo();
 					})
 
@@ -1804,12 +1788,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						game.players[i].storage.zhongDu=[];
 					}
 					game.broadcastAll(function(){
-						if(get.is.phoneLayout()){
-							ui.shiQiInfo=ui.create.div('.touchinfo.bottom-right',ui.window);
-						}
-						else{
-							ui.shiQiInfo=ui.create.div('.touchinfo.bottom-right',ui.window);
-						}
+						ui.shiQiInfo=ui.create.div('.touchinfo.bottom-right',ui.window);
 						ui.updateShiQiInfo();
 					})
 
@@ -1823,13 +1802,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 								players[i].node.identity.firstChild.innerHTML='蓝';
 							}
 						}
-						
-						if(get.is.phoneLayout()){
-							ui.shiQiInfo=ui.create.div('.touchinfo.bottom-right',ui.window);
-						}
-						else{
-							ui.shiQiInfo=ui.create.div('.touchinfo.bottom-right',ui.window);
-						}
+						ui.shiQiInfo=ui.create.div('.touchinfo.bottom-right',ui.window);
 						ui.updateShiQiInfo();
 					}];
 
@@ -2230,12 +2203,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						game.players[i].storage.zhongDu=[];
 					}
 					game.broadcastAll(function(){
-						if(get.is.phoneLayout()){
-							ui.shiQiInfo=ui.create.div('.touchinfo.bottom-right',ui.window);
-						}
-						else{
-							ui.shiQiInfo=ui.create.div('.touchinfo.bottom-right',ui.window);
-						}
+						ui.shiQiInfo=ui.create.div('.touchinfo.bottom-right',ui.window);
 						ui.updateShiQiInfo();
 					})
 
@@ -2250,12 +2218,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 							}
 						}
 						
-						if(get.is.phoneLayout()){
-							ui.shiQiInfo=ui.create.div('.touchinfo.bottom-right',ui.window);
-						}
-						else{
-							ui.shiQiInfo=ui.create.div('.touchinfo.bottom-right',ui.window);
-						}
+						ui.shiQiInfo=ui.create.div('.touchinfo.bottom-right',ui.window);
 						ui.updateShiQiInfo();
 					}];
 
@@ -2656,12 +2619,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						game.players[i].storage.zhongDu=[];
 					}
 					game.broadcastAll(function(){
-						if(get.is.phoneLayout()){
-							ui.shiQiInfo=ui.create.div('.touchinfo.bottom-right',ui.window);
-						}
-						else{
-							ui.shiQiInfo=ui.create.div('.touchinfo.bottom-right',ui.window);
-						}
+						ui.shiQiInfo=ui.create.div('.touchinfo.bottom-right',ui.window);
 						ui.updateShiQiInfo();
 					})
 
@@ -2676,12 +2634,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 							}
 						}
 						
-						if(get.is.phoneLayout()){
-							ui.shiQiInfo=ui.create.div('.touchinfo.bottom-right',ui.window);
-						}
-						else{
-							ui.shiQiInfo=ui.create.div('.touchinfo.bottom-right',ui.window);
-						}
+						ui.shiQiInfo=ui.create.div('.touchinfo.bottom-right',ui.window);
 						ui.updateShiQiInfo();
 					}];
 
