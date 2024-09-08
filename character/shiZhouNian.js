@@ -5880,7 +5880,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                     player.chooseTarget('对其造成的伤害额外+'+event.num,true,function(card,player,target){
                                         return target.side!=player.side;
                                     }).set('ai',function(target){
-                                        return get.damageEffect(2,target);
+                                        return get.damageEffect(target,2);
                                     });
                                 }else{
                                     event.finish();
