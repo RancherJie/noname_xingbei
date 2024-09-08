@@ -740,30 +740,31 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					'step 1'
 					var team_sequence=lib.configOL.team_sequence;
 					var chooseSide=lib.configOL.chooseSide;
+					var number=lib.configOL.number;
 					if(chooseSide){
 						var ref=game.players.randomGet();
-						while (ref.side!=true) {//确保红队第一个
-							ref=ref.next;
-						}
 						var red=0;
 						var blue=0;
-						for(var i=0;i<event.number;i++){
+						for(var i=0;i<number;i++){
 							if(ref.side==true) red++;
 							else blue++;
-							if(red>event.number/2){
+							if(red>number/2){
 								ref.side=false;
 								red--;
 							}
-							else if(blue>event.number/2){
+							else if(blue>number/2){
 								ref.side=true;
 								blue--;
 							}
 							ref=ref.next;
 						}
+						while (ref.side!=true) {//确保红队第一个
+							ref=ref.next;
+						}
 						if(team_sequence!='random') game.moveSeat(event.list,ref);
 					}else{
 						var ref=game.players.randomGet();
-						for(var i=0;i<event.number;i++){
+						for(var i=0;i<number;i++){
 							ref.side=event.list[i];
 							ref=ref.next;
 						}
@@ -771,7 +772,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					
 					
 
-					var number=lib.configOL.number;
+					
 					var choose_number=parseInt(lib.configOL.choose_number);
 					
 					var firstChoose=ref;
