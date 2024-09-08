@@ -736,22 +736,38 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					var chooseSide=lib.configOL.chooseSide;
 					if(chooseSide){//自由选择队伍
 						game.chooseSide();
-					}else{//固定队伍
-						var ref=game.players.randomGet();
-						for(var i=0;i<number;i++){
-							ref.side=event.list[i];
-							ref=ref.next;
-						}
 					}
 					'step 1'
 					var team_sequence=lib.configOL.team_sequence;
 					var chooseSide=lib.configOL.chooseSide;
-					var ref=game.players.randomGet();
-					while (ref.side!=true) {//确保红队第一个
-						ref=ref.next;
+					if(chooseSide){
+						var ref=game.players.randomGet();
+						while (ref.side!=true) {//确保红队第一个
+							ref=ref.next;
+						}
+						var red=0;
+						var blue=0;
+						for(var i=0;i<event.number;i++){
+							if(ref.side==true) red++;
+							else blue++;
+							if(red>event.number/2){
+								ref.side=false;
+								red--;
+							}
+							else if(blue>event.number/2){
+								ref.side=true;
+								blue--;
+							}
+							ref=ref.next;
+						}
+						if(team_sequence!='random') game.moveSeat(event.list,ref);
+					}else{
+						var ref=game.players.randomGet();
+						for(var i=0;i<event.number;i++){
+							ref.side=event.list[i];
+							ref=ref.next;
+						}
 					}
-					//按顺位调整位置
-					if(team_sequence!='random') game.moveSeat(event.list,ref);
 					
 					
 
