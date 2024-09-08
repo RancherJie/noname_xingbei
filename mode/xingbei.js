@@ -716,7 +716,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						}else if(team_sequence=='crossed'){
 							event.list=[true,false,true,false];
 						}else{
-							event.list=[true,false,false,false];
+							event.list=[true,false,false,true];
 							event.list.randomSort();
 						}
 					}else{
