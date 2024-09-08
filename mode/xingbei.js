@@ -657,7 +657,6 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					'step 0'
 					var sides=['红','蓝'];
 					var list=game.players.map(player=>[player,['选择阵营',[sides,'tdnodes']],true]);
-					console.log(list);
 					game.me.chooseButtonOL(list,function(){},function(){return 1+Math.random()}).set('switchToAuto',function(){
 						_status.event.result='ai';
 					}).set('processAI',function(){
@@ -678,7 +677,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				});
 			},
 
-			moveSeat:function(team_sequence,list,ref){
+			moveSeat:function(list,ref){
 				var players=game.players;
 				let trueToSwap = [];
 				let falseToSwap = [];
@@ -752,7 +751,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						ref=ref.next;
 					}
 					//按顺位调整位置
-					if(team_sequence!='random') game.moveSeat(team_sequence,event.list,ref);
+					if(team_sequence!='random') game.moveSeat(event.list,ref);
 					
 					
 
@@ -1071,6 +1070,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 
 				});
 			},
+
 			chooseCharacterOLCM02:function(){
 				var next=game.createEvent('chooseCharacterOL');
 				next.setContent(function(){
@@ -1080,34 +1080,56 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					event.number=lib.configOL.number;
 					event.choose_number=18;
 
-					var ref=game.players.randomGet();
-					var bool=true;
-					var bool2=false;
+					if(event.number==4){
+						event.list=[true,false,false,true];
+					}else{
+						event.list=[true,false,false,true,true,false];
+					}
+
+					var chooseSide=lib.configOL.chooseSide;
+					if(chooseSide){
+						game.chooseSide();
+					}else{
+						var ref=game.players.randomGet();
+						var bool=true;
+						var bool2=false;
+						if(event.number==4){
+							ref.side=bool;
+							ref.next.side=bool2;
+							ref.next.next.side=bool2;
+							ref.next.next.next.side=bool;
+						}else{
+							ref.side=bool;
+							ref.next.side=bool2;
+							ref.next.next.side=bool2;
+							ref.next.next.next.side=bool;
+							ref.next.next.next.next.side=bool;
+							ref.next.next.next.next.next.side=bool2;
+						}
+						event.ref=ref;
+					}
+					'step 1'
+					var chooseSide=lib.configOL.chooseSide;
+					var ref=event.ref;
+					if(chooseSide){
+						ref=game.players.randomGet();
+						while (ref.side!=true) {//确保红队第一个
+							ref=ref.next;
+						}
+						game.moveSeat(event.list,ref);
+					}
+					
 					if(event.number==4){
 						event.red_list=[ref,ref.previous];
 						event.blue_list=[ref.next,ref.next.next];
-						
-
-						ref.side=bool;
-						ref.next.side=bool2;
-						ref.next.next.side=bool2;
-						ref.next.next.next.side=bool;
 						var R1=ref;
 						var R2=ref.next.next.next;
 						var B1=ref.next;
 						var B2=ref.next.next;
 						event.choose_list=[R1,B1,B2,R2];
-
 					}else{
 						event.red_list=[ref,ref.next.next.next,ref.next.next.next.next];
 						event.blue_list=[ref.next,ref.next.next,ref.previous];
-						
-						ref.side=bool;
-						ref.next.side=bool2;
-						ref.next.next.side=bool2;
-						ref.next.next.next.side=bool;
-						ref.next.next.next.next.side=bool;
-						ref.next.next.next.next.next.side=bool2;
 						var R1=ref;
 						var R2=ref.next.next.next;
 						var R3=ref.next.next.next.next;
@@ -1116,6 +1138,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						var B3=ref.previous;
 						event.choose_list=[R1,B1,R2,B2,B3,R3];
 					}
+					
 
 					var firstChoose=ref;
 
@@ -1150,14 +1173,13 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 								player.node.identity.dataset.color=player.side+'zhu';
 							}
 						}
-						ui.arena.classList.add('choose-character');
 					}
 
 
 					game.broadcastAll(func,map);
 
 
-					'step 1'
+					'step 2'
 					if(event.number==4){
 						event.red_vote=[0,0];
 						event.blue_vote=[0,0];
@@ -1166,202 +1188,44 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						event.blue_vote=[0,0,0];
 					}
 
-					var choose={};
 					
-					for(var i=0;i<game.players.length;i++){
-						let player=game.players[i];
+					var list=game.players.map(function(player){
 						let dialog;
 						if(player.side==true){
-							/*
-							if(event.number==4) dialog=["R1", "R2"];
-							else dialog=["R1", "R2", "R3"];*/
 							if(event.number==4) dialog=["一号位", "四号位"];
 							else dialog=["一号位", "四号位", "五号位"];
 						}else{
-							/*
-							if(event.number==4) dialog=["B1", "B2"];
-							else dialog=["B1", "B2", "B3"];*/
 							if(event.number==4) dialog=["二号位", "三号位"];
 							else dialog=["二号位", "三号位", "六号位"];
 						}
-						choose[game.players[i].playerid]=dialog;
-						
-					}
-					//投票
-					game._voteChoose=choose;
-					event._vote=[];
-					event.videoId=lib.status.videoId++;
-					game.broadcastAll(function(id,choice,listx){
-						game._voteDialogID=id;
-						game._voteList=choice;
-						game._voteListx=listx;
-						var dialog=ui.create.dialog('投票选择队长');
-						dialog.videoId=id;
-						var text;
-						var player=game.me;
-						for(var i in choice){
-							var current=lib.playerOL[i];
-							if(current==player) text=choice[i];
+						return [player,['投票选择队长',[dialog,'tdnodes']],true];
+					});
+					game.me.chooseButtonOL(list).set('switchToAuto',function(){
+						_status.event.result='ai';
+					}).set('processAI',function(){
+						var buttons=_status.event.dialog.buttons;
+						return {
+							bool:true,
+							links:[buttons.randomGet().link],
 						}
-						var buttons=ui.create.div('.buttons',dialog.content);
-						dialog.text=ui.create.buttons(text,'tdnodes',buttons);
-						dialog.buttons=dialog.buttons.concat(dialog.text);
-					},event.videoId,choose,[event.red_list,event.blue_list]);
-					
-					var send=function(){
-						var next=game.me.chooseButton([1,2],true);
-						next.set('dialog',game._voteDialogID);
-						next.set('callback',function(player,result){
-							var button=game._playerChoice;
-							button.classList.remove('glow2');
-							button.classList.add('selected');
-							delete game._playerChoice;
-						});
-						//托管选择
-						next.set('ai',function(button){
-							//优先选择活人
-							var player=_status.event.player;
-							if(player.side==true){
-								var list=_status.event.listx[0];
-							}else{
-								var list=_status.event.listx[1];
-							}
-							for(var i=0;i<list.length;i++){
-								if(list[i].side==player.side&&(list[i].isOnline()||list[i]==game.me)) return i;	
-							}
-							return 0;
-						});
-						next.set('listx',game._voteListx);
-						//修改点击按钮后的反应
-						next.set('custom',{replace:{
-							button:function(button){
-								var dialog=get.idDialog(game._voteDialogID);
-								//选择按钮时自动取消选择上一个按钮
-								if(dialog.text.contains(button)){
-									if(!button.classList.contains('selected')){
-										button.classList.add('selected');
-										ui.selected.buttons.add(button);
-										game._playerChoice=button;
-										for(var other of dialog.text){
-											if(other!=button&&other.classList.contains('selected')){
-												other.classList.remove('selected');
-												ui.selected.buttons.remove(other);
-											}
-										}
-									}
-									game.check();
-								}
-							}
-						},add:{}});
-						if(game.online) game.resume();
-					}
+					});
 
-					//确认后的回传函数
-					event.confirm=function(player,choice){
-						if(game._voteDialogID==undefined) return;
-						var dialog=get.idDialog(game._voteDialogID);
-						if(!dialog) return;
-					}
-					//处理result
-					var sendback=function(result,player){
-						//处理确认选将
-						if(result){
-							var choice=result.links[0];
-							event._vote.push(choice);
-						}
-					}
-					event.sendback=sendback;
-
-					event.ai_targets=[];
-					for(var i=0;i<game.players.length;i++){
-						if(game.players[i].isOnline()){
-							event.withol_vote=true;
-							game.players[i].send(send);
-							game.players[i].wait(sendback);
-						}
-						else if(game.players[i]==game.me){
-							event.withme_vote=true;
-							send();
-							game.me.wait(sendback);
-						}
-						else{
-							event.ai_targets.push(game.players[i]);
-							game.players[i].showTimer();
-						}
-					}
-					//模拟AI思考后选择
-					if(event.ai_targets.length){
-						event.ai_targets.randomSort();
-						setTimeout(function(){
-							event.interval=setInterval(function(){
-								var target=event.ai_targets.shift();
-								//ai优先选择真人玩家
-								var list=game._voteList[target.playerid];
-								if(target.side==true){
-									var listx=event.red_list;
-								}else{
-									var listx=event.blue_list;
-								}
-								var index=0;
-								for(var i=0;i<listx.length;i++){
-									if(listx[i].side==target.side&&(listx[i].isOnline()||listx[i]==game.me)){
-										index=i;
-										break;
-									}
-								}
-								var choice=list[index];
-								event.sendback({
-									result:bool,
-									links:[choice],
-								},target);
-								target.hideTimer();
-								if(!event.ai_targets.length){
-									clearInterval(event.interval);
-									if(event.withai_vote) game.resume();
-								}
-							},1000);
-						},6000)
-					}
-
-					'step 2'
-					if(event.withme_vote){
-						game.me.unwait(result);
-					}
 					'step 3'
-					if(event.withol_vote&&!event.resultOL){
-						game.pause();
-					}
-					'step 4'
-					if(event.ai_targets.length>0){
-						event.withai_vote=true;
-						game.pause();
-					}
-					
-					'step 5'
-					game.broadcastAll(function(id){
-						var dialog=get.idDialog(id);
-						if(dialog){
-							dialog.close();
-							clearInterval(dialog.delay);
-						}
-					},event.videoId);
-					var result=event._vote;
+					var list=[];
 					for(var i in result){
-						/*
-						if(result[i][0]=='R'){
-							event.red_vote[result[i][1]-1]++;
-						}else{
-							event.blue_vote[result[i][1]-1]++;
-						}*/
+						list.push(result[i].links[0]);
+					}
+					var result=list;
+					for(var i of result){
 						if(event.number==4){
-							switch(result[i]){
+							switch(i){
 								case "一号位":event.red_vote[0]++;break;
 								case "四号位":event.red_vote[1]++;break;
 								case "二号位":event.blue_vote[0]++;break;
 								case "三号位":event.blue_vote[1]++;break;
 							}
 						}else{
-							switch(result[i]){
+							switch(i){
 								case "一号位":event.red_vote[0]++;break;
 								case "四号位":event.red_vote[1]++;break;
 								case "五号位":event.red_vote[2]++;break;
@@ -1372,16 +1236,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						}
 					}
 
-					game.broadcast(function(){
-						setTimeout(function(){
-							ui.arena.classList.remove('choose-character');
-						},500)
-					});
-					setTimeout(function(){
-						ui.arena.classList.remove('choose-character');
-					},500);
-
-					'step 6'
+					'step 4'
 					var red_index=0;
 					var red_max=0;
 					var blue_index=0;
@@ -1407,7 +1262,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						game.blue_leader=blue_leader;
 					},event.red_leader,event.blue_leader);
 					game.delay(4);
-					'step 7'//ban角色
+					'step 5'//ban角色
 					//角色列表
 					var list = get.charactersOL();
 					event.list = get.characterGets(list,event.choose_number);
@@ -1453,7 +1308,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						event.red_chooseList,
 						event.blue_chooseList
 					];
-					'step 8'
+					'step 6'
 					var next = event.choosing.chooseButton(event.videoId, event.num, true);
 					next.set("filterButton", function (button) {
 						if (_status.event.selected.includes(button.link)) return false;
@@ -1463,7 +1318,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					next.set("ai", function () {
 						return Math.random();
 					});
-					'step 9'
+					'step 7'
 					game.broadcastAll(
 						function (links, choosing, first, id) {
 							var dialog = get.idDialog(id);
@@ -1509,11 +1364,11 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					}
 					event.num++;
 					if (event.num<=2) {
-						event.goto(8);
+						event.goto(6);
 					}
-					'step 10'
+					'step 8'
 					game.delay(2);
-					'step 11'
+					'step 9'
 					game.broadcastAll(function (id) {
 						ui.arena.classList.remove("playerhidden");
 						var dialog = get.idDialog(id);
@@ -1522,7 +1377,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						}
 					}, event.videoId);
 					//为各方队友选择角色
-					'step 12'
+					'step 10'
 					//设置第一次提示
 					event.choosed=event.choose_list[0];
 					//console.log(event.choosed.node.name.innerHTML);
@@ -1569,7 +1424,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						event.red_chooseList,
 						event.blue_chooseList
 					];
-					"step 13"//插入ban角色
+					"step 11"//插入ban角色
 					event.choosed=event.choose_list.shift();
 					if(event.choosed.side==true){
 						event.choosing=game.red_leader;
@@ -1607,7 +1462,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 							return Math.random();
 						});
 					}
-					'step 14'
+					'step 12'
 					//console.log(result.bool);
 					if(result.bool){
 						if(event.choosing==game.blue_leader){
@@ -1675,7 +1530,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						);
 					}
 					
-					'step 15'
+					'step 13'
 					//console.log('选择角色');
 					var next = event.choosing.chooseButton(event.videoId, 1, true);
 					next.set("filterButton", function (button) {
@@ -1686,7 +1541,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					next.set("ai", function () {
 						return Math.random();
 					});
-					"step 16";
+					"step 14";
 					event.selected.push(result.links[0]);
 					if(event.choosing==game.red_leader){
 						event.red_chooseList.push(result.links[0]);
@@ -1768,12 +1623,12 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 
 					);
 					if (event.choose_list.length>0) {
-						event.goto(13);
+						event.goto(11);
 					}
 					game.delay(1);
-					'step 17'
+					'step 15'
 					game.delay(2);
-					'step 18'
+					'step 16'
 					game.broadcastAll(function (id) {
 						ui.arena.classList.remove("playerhidden");
 						var dialog = get.idDialog(id);
@@ -1782,7 +1637,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						}
 					}, event.videoId);
 					
-					'step 19'
+					'step 17'
 					for(var i=0;i<game.players.length;i++){
 						game.players[i].storage.moDan=false;
 						game.players[i].storage.zhongDu=[];
