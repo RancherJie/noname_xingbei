@@ -657,85 +657,121 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				}
 			},
 			
+			chooseSide:function(){
+				var next=game.createEvent('chooseSide');
+				next.setContent(function(){
+					'step 0'
+					var sides=['红','蓝'];
+					var list=game.players.map(player=>[player,['选择阵营',[sides,'tdnodes']],true]);
+					console.log(list);
+					game.me.chooseButtonOL(list,function(){},function(){return 1+Math.random()}).set('switchToAuto',function(){
+						_status.event.result='ai';
+					}).set('processAI',function(){
+						var buttons=_status.event.dialog.buttons;
+						return {
+							bool:true,
+							links:[buttons.randomGet().link],
+						}
+					});
+					'step 1'
+					for (var i in result) {
+						if (result[i].links[0] == "红") {
+							lib.playerOL[i].side=true;
+						}else{
+							lib.playerOL[i].side=false;
+						}
+					}
+				});
+			},
+
+			moveSeat:function(team_sequence,list,ref){
+				var players=game.players;
+				let trueToSwap = [];
+				let falseToSwap = [];
+
+				for (let i = 0; i < players.length; i++) {
+					if (ref.side !== list[i]) {
+						if (list[i] === true && ref.side === false) {
+							trueToSwap.push(ref);
+						} else if (list[i] === false && ref.side === true) {
+							falseToSwap.push(ref);
+						}
+					}
+					ref=ref.next;
+				}
+				while (trueToSwap.length > 0 && falseToSwap.length > 0) {
+					const truePlayer = trueToSwap.pop();
+					const falsePlayer = falseToSwap.pop();
+					game.broadcastAll(function(truePlayer,falsePlayer){
+						game.swapSeat(truePlayer,falsePlayer,false,false,true);
+					},truePlayer,falsePlayer)
+				}
+			},
+
 			chooseCharacterOLDuoXuanYi:function(){
 				var next=game.createEvent('chooseCharacterOL');
 				next.setContent(function(){
 					'step 0'
-					//var ref=game.players[0];
+					//获取顺位
 					var number=lib.configOL.number;
-					var choose_number=parseInt(lib.configOL.choose_number);
 					var team_sequence=lib.configOL.team_sequence;
-
-					var ref=game.players.randomGet();
-					var bool=true;
-					var bool2=false;
 					if(number==4){
-						if(team_sequence=='near'){
-							ref.side=bool;
-							ref.next.side=bool2;
-							ref.next.next.side=bool2;
-							ref.previous.side=bool;
+						if(team_sequence=='CM'){
+							event.list=[true,false,false,true];
+						}else if(team_sequence=='near'){
+							event.list=[true,true,false,false];
 						}else if(team_sequence=='crossed'){
-							ref.side=bool;
-							ref.next.side=bool2;
-							ref.next.next.side=bool;
-							ref.previous.side=bool2;
-						}else if(team_sequence=='random'){
-							var sideList=[true,true,false,false];
-							sideList.randomSort();
-							for(var i=0;i<number;i++){
-								game.players[i].side=sideList[i];
-							}
-							while(ref.side!=true){
-								ref=game.players.randomGet();
-							}
-						}else if(team_sequence=='CM'){
-							ref.side=bool;
-							ref.next.side=bool2;
-							ref.next.next.side=bool2;
-							ref.next.next.next.side=bool;
+							event.list=[true,false,true,false];
+						}else{
+							event.list=[true,false,false,false];
+							event.list.randomSort();
 						}
 					}else{
-						if(team_sequence=='crossed'){
-							ref.side=bool;
-							ref.next.side=bool2;
-							ref.next.next.side=bool2;
-							ref.next.next.next.side=bool;
-							ref.next.next.next.next.side=bool;
-							ref.next.next.next.next.next.side=bool2;
+						if(team_sequence=='CM'){
+							event.list=[true,false,false,true,true,false];
 						}else if(team_sequence=='near'){
-							ref.side=bool;
-							ref.next.side=bool;
-							ref.next.next.side=bool;
-							ref.next.next.next.side=bool2;
-							ref.next.next.next.next.side=bool2;
-							ref.next.next.next.next.next.side=bool2;
-						}else if(team_sequence=='random'){
-							var sideList=[true,true,false,false,true,false];
-							sideList.randomSort();
-							for(var i=0;i<number;i++){
-								game.players[i].side=sideList[i];
-							} 
-							while(ref.side!=true){
-								ref=game.players.randomGet();
-							}
-						}else if(team_sequence=='CM'){
-							ref.side=bool;
-							ref.next.side=bool2;
-							ref.next.next.side=bool2;
-							ref.next.next.next.side=bool;
-							ref.next.next.next.next.side=bool;
-							ref.next.next.next.next.next.side=bool2;
+							event.list=[true,true,true,false,false,false];
+						}else if(team_sequence=='crossed'){
+							event.list=[true,false,true,false,true,false];
+						}else{
+							event.list=[true,true,true,false,false,false];
+							event.list.randomSort();
 						}
 					}
 
-					var firstChoose=ref;
+					
+					var chooseSide=lib.configOL.chooseSide;
+					if(chooseSide){//自由选择队伍
+						game.chooseSide();
+					}else{//固定队伍
+						var ref=game.players.randomGet();
+						for(var i=0;i<number;i++){
+							ref.side=event.list[i];
+							ref=ref.next;
+						}
+					}
+					'step 1'
+					var team_sequence=lib.configOL.team_sequence;
+					var chooseSide=lib.configOL.chooseSide;
+					var ref=game.players.randomGet();
+					while (ref.side!=true) {//确保红队第一个
+						ref=ref.next;
+					}
+					//按顺位调整位置
+					if(team_sequence!='random') game.moveSeat(team_sequence,event.list,ref);
+					
+					
 
+					var number=lib.configOL.number;
+					var choose_number=parseInt(lib.configOL.choose_number);
+					
+					var firstChoose=ref;
 					_status.firstAct=firstChoose;
 					for(var i=0;i<number;i++){
 						firstChoose.node.name.innerHTML=get.verticalStr(get.cnNumber(i+1,true)+'号位');
 						firstChoose=firstChoose.next;
 					}
+
 					for(var i=0;i<game.players.length;i++){
 						if(game.players[i].side==true){
 							game.players[i].node.identity.firstChild.innerHTML='红';
@@ -969,7 +1005,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 								else choice=list.randomGet();
 								if(lib.characterReplace[choice]) choice=lib.characterReplace[choice].randomGet();
 								event.sendback({
-									result:bool,
+									result:true,
 									links:[choice],
 								},target);
 								target.hideTimer();
@@ -981,15 +1017,15 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						},6000)
 					}
 					
-					'step 1'
+					'step 2'
 					if(event.withme){
 						game.me.unwait(result);
 					}
-					'step 2'
+					'step 3'
 					if(event.withol&&!event.resultOL){
 						game.pause();
 					}
-					'step 3'
+					'step 4'
 					if(event.ai_targets.length>0){
 						event.withai=true;
 						game.pause();
@@ -1010,7 +1046,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					})
 
 					
-					'step 4'
+					'step 5'
 					game.broadcastAll(function(id){
 						var dialog=get.idDialog(id);
 						if(dialog){
@@ -2829,6 +2865,17 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 			
 		},
 		skill:{
+			_test:{
+				enable:'phaseUse',
+				content:function(){
+					var player1=player;
+					var player2=player.next;
+					game.broadcastAll(function(player1,player2){
+						game.swapSeat(player1,player2,false,false,true);
+					},player1,player2);
+				}
+			},
+
 			_gongJiRiZhi:{
 				trigger:{player:'useCardToTarget'},
                 filter:function(event,player){

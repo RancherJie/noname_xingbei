@@ -4636,6 +4636,14 @@
 						},
 						frequent:true,
 					},
+					connect_chooseSide:{
+						name:'手动选择队伍',
+						init:false,
+						onclick:function(bool){
+							game.saveConfig('connect_chooseSide',bool,this._link.config.mode);
+						},
+						frequent:true,
+					}
 				},
 				config:{
 					update:function(config,map){
