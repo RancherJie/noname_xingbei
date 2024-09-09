@@ -5774,8 +5774,13 @@
 			globalId:0,
 		},
 		help:{
-			
+
 		},
+		//xingbei
+		sponsor:{
+			爱发电:'泽度哥摧毁停车场<br>爱发电用户_8888d<br>爱发电用户_68NS',
+		},
+
 		path:{},
 		getErrorTip:msg=>{
 			if(typeof msg!='string'){
@@ -48103,7 +48108,69 @@
 						if(!get.config('menu_loadondemand')) node._initLink();
 					}());
 
+					//xingbei
+					for(var i in lib.sponsor){
+						var page=ui.create.div('');
+						var node=ui.create.div('.menubutton.large',i,start.firstChild,clickMode);
+						node.type='sponsor';
+						node.link=page;
+						node.style.display='none';
+						page.classList.add('menu-help');
+						page.innerHTML=lib.sponsor[i];
+					}
 
+					(function(){
+						var node=ui.create.div('.menubutton.large','感谢名单',start.firstChild,function(){
+							var activex=start.firstChild.querySelector('.active');
+							if(this.innerHTML=='感谢名单'){
+								cheatButton.style.display='none';
+								runButton.style.display='none';
+								clearButton.style.display='none';
+								playButton.style.display='none';
+								saveButton.style.display='none';
+								deleteButton.style.display='none';
+
+								this.innerHTML='返回';
+								for(var i=0;i<start.firstChild.childElementCount;i++){
+									var nodex=start.firstChild.childNodes[i];
+									if(nodex==node) continue;
+									if(nodex.type=='sponsor'){
+										nodex.style.display='';
+										if(activex&&activex.type!='sponsor'){
+											activex.classList.remove('active');
+											activex.link.remove();
+											activex=null;
+											nodex.classList.add('active');
+											rightPane.appendChild(nodex.link);
+										}
+									}
+									else{
+										nodex.style.display='none';
+									}
+								}
+							}
+							else{
+								this.innerHTML='感谢名单';
+								for(var i=0;i<start.firstChild.childElementCount;i++){
+									var nodex=start.firstChild.childNodes[i];
+									if(nodex==node) continue;
+									if(nodex.type!='sponsor'){
+										nodex.style.display='';
+										if(activex&&activex.type=='sponsor'){
+											activex.classList.remove('active');
+											activex.link.remove();
+											activex=null;
+											clickMode.call(nodex);
+										}
+									}
+									else{
+										nodex.style.display='none';
+									}
+								}
+							}
+						});
+					}())
+					
 					for(var i in lib.help){
 						var page=ui.create.div('');
 						var node=ui.create.div('.menubutton.large',i,start.firstChild,clickMode);
@@ -48149,7 +48216,7 @@
 								for(var i=0;i<start.firstChild.childElementCount;i++){
 									var nodex=start.firstChild.childNodes[i];
 									if(nodex==node) continue;
-									if(nodex.type!='help'){
+									if(nodex.type!='help'&&nodex.type!='sponsor'){
 										nodex.style.display='';
 										if(activex&&activex.type=='help'){
 											activex.classList.remove('active');
@@ -48165,7 +48232,6 @@
 							}
 						});
 					}
-
 					var active=start.firstChild.querySelector('.active');
 					if(!active){
 						active=start.firstChild.firstChild;
