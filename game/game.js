@@ -1047,7 +1047,7 @@
 					},
 					update_link:{
 						name:'更新地址',
-						init:'gitmirror',
+						init:'gitee',
 						unfrequent:true,
 						item:{
 							gitee:'gitee',
