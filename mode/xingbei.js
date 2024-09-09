@@ -215,6 +215,10 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					case true:uiintro.add('<div class="text chat">可见队友手牌：是');break;
 					case false:uiintro.add('<div class="text chat">可见队友手牌：否');break;
 				}
+				switch(lib.configOL.chooseSide){
+					case true:uiintro.add('<div class="text chat">手动选择选队：是');break;
+					case false:uiintro.add('<div class="text chat">手动选择选队：否');break;
+				}
 				var last=uiintro.add('<div class="text chat">出牌时限：'+lib.configOL.choose_timeout+'秒');
 				// uiintro.add('<div class="text chat">屏蔽弱将：'+(lib.configOL.ban_weak?'开启':'关闭'));
 				// var last=uiintro.add('<div class="text chat">屏蔽强将：'+(lib.configOL.ban_strong?'开启':'关闭'));
