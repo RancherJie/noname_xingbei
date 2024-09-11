@@ -1195,6 +1195,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     if(result.control=='_zhongDu'){
                         player.chooseCardButton(target.getExpansions('_zhongDu'),true,'选择要获得的中毒')
                     }else{
+                        game.log(player,'获得了',target.getExpansions(result.control));
                         player.gain(target.getExpansions(result.control));
                         if(!game.jiChuXiaoGuo.pai.includes(result.control)){
                             target.removeSkill(result.control);
@@ -1206,6 +1207,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     var list=target.getExpansions('_zhongDu');
                     var index=list.indexOf(card);
                     target.storage.zhongDu.splice(index, 1);
+                    game.log(player,'获得了',card);
                     player.gain(card);
                 },
                 ai:{
