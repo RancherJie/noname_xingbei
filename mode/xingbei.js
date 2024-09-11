@@ -671,11 +671,46 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						}
 					});
 					'step 1'
-					for (var i in result) {
+					var red=0;
+					var blue=0;
+					var number=lib.configOL.number;
+					for (var i in result) {//优先计算真人的选择
+						if(result[i].confirm!='ok') continue;
 						if (result[i].links[0] == "红") {
 							lib.playerOL[i].side=true;
 						}else{
 							lib.playerOL[i].side=false;
+						}
+
+						if(lib.playerOL[i].side==true) red++;
+						else blue++;
+						if(red>number/2){
+							lib.playerOL[i].side=false;
+							red--;
+						}
+						else if(blue>number/2){
+							lib.playerOL[i].side=true;
+							blue--;
+						}
+					}
+
+					for (var i in result) {//计算ai的选择
+						if(result[i].confirm=='ok') continue;
+						if (result[i].links[0] == "红") {
+							lib.playerOL[i].side=true;
+						}else{
+							lib.playerOL[i].side=false;
+						}
+
+						if(lib.playerOL[i].side==true) red++;
+						else blue++;
+						if(red>number/2){
+							lib.playerOL[i].side=false;
+							red--;
+						}
+						else if(blue>number/2){
+							lib.playerOL[i].side=true;
+							blue--;
 						}
 					}
 				});
@@ -704,7 +739,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					},truePlayer,falsePlayer)
 				}
 			},
-
+			
 			chooseCharacterOLDuoXuanYi:function(){
 				var next=game.createEvent('chooseCharacterOL');
 				next.setContent(function(){
@@ -746,22 +781,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					var chooseSide=lib.configOL.chooseSide;
 					var number=lib.configOL.number;
 					if(chooseSide){
-						var ref=game.players.randomGet();
-						var red=0;
-						var blue=0;
-						for(var i=0;i<number;i++){
-							if(ref.side==true) red++;
-							else blue++;
-							if(red>number/2){
-								ref.side=false;
-								red--;
-							}
-							else if(blue>number/2){
-								ref.side=true;
-								blue--;
-							}
-							ref=ref.next;
-						}
+						var ref=game.players.randomGet();;
 						while (ref.side!=true) {//确保红队第一个
 							ref=ref.next;
 						}
@@ -1732,21 +1752,6 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					var chooseSide=lib.configOL.chooseSide;
 					if(chooseSide){
 						var ref=game.players.randomGet();
-						var red=0;
-						var blue=0;
-						for(var i=0;i<event.number;i++){
-							if(ref.side==true) red++;
-							else blue++;
-							if(red>event.number/2){
-								ref.side=false;
-								red--;
-							}
-							else if(blue>event.number/2){
-								ref.side=true;
-								blue--;
-							}
-							ref=ref.next;
-						}
 						while (ref.side!=true) {//确保红队第一个
 							ref=ref.next;
 						}
@@ -2144,21 +2149,6 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					var chooseSide=lib.configOL.chooseSide;
 					if(chooseSide){
 						var ref=game.players.randomGet();
-						var red=0;
-						var blue=0;
-						for(var i=0;i<event.number;i++){
-							if(ref.side==true) red++;
-							else blue++;
-							if(red>event.number/2){
-								ref.side=false;
-								red--;
-							}
-							else if(blue>event.number/2){
-								ref.side=true;
-								blue--;
-							}
-							ref=ref.next;
-						}
 						while (ref.side!=true) {//确保红队第一个
 							ref=ref.next;
 						}
