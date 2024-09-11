@@ -1375,13 +1375,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             'step 0'
                             player.chooseTarget('天使羁绊：选择一名角色+1[治疗]',true).set('ai',function(target){
                                 var player=_status.event.player;
-                                if(target.side==player.side&&target.zhiLiao<target.getZhiLiaoLimit()){
-                                    return 2;
-                                }else if(target.side==player.side&&target.zhiLiao==target.getZhiLiaoLimit()){
-                                    return 1;
-                                }else{
-                                    return -1;
-                                }
+                                return get.zhiLiaoEffect2(target,player,1);
                             });
                             'step 1'
                             if(result.bool){
@@ -1402,13 +1396,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             'step 0'
                             player.chooseTarget('天使羁绊：选择一名角色+1[治疗]',true).set('ai',function(target){
                                 var player=_status.event.player;
-                                if(target.side==player.side&&target.zhiLiao<target.getZhiLiaoLimit()){
-                                    return 2;
-                                }else if(target.side==player.side&&target.zhiLiao==target.getZhiLiaoLimit()){
-                                    return 1;
-                                }else{
-                                    return -1;
-                                }
+                                return get.zhiLiaoEffect2(target,player,1);
                             });
                             'step 1'
                             if(result.bool){
@@ -1986,8 +1974,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						}
 					}
                     player.chooseTarget(1,true,'选择一个目标角色+'+number+'[治疗]').set('ai',function(){
-                        return get.attitude(player, target)
-                    });
+                        var player=_status.event.player;
+                        var number=_status.event.number;
+                        return get.zhiLiaoEffect2(target,player,number);
+                    }).set('number',number);
                     'step 3'
                     game.log(player,'选择了',result.targets[0]);
                     player.line(result.targets[0],'blue');
@@ -2012,6 +2002,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         },
                         filterTarget:true,
                         prompt:"<span class='tiaoJian'>(若你额外弃置1张法术牌[展示])</span>目标角色+1[治疗]",
+                        ai1(card) {
+                            return 6- get.value(card);
+                        },
+                        ai2(target) {
+                            return get.zhiLiaoEffect2(target,player,1);
+                        },
                     });
                     'step 3'
                     if(result.bool){
@@ -2163,7 +2159,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     target.damageFaShu(event.num,player);
                     'step 2'
                     player.chooseTarget(1,'冰冻：选择1名角色+1[治疗]',true).set('ai',function(target){
-                        return get.attitude(player, target)
+                        var player=_status.event.player;
+                        return get.zhiLiaoEffect2(target,player,1);
                     });
                     'step 3'
                     if(result.bool){
@@ -2516,7 +2513,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     event.trigger('yiChuAnYue');
                     'step 4'
                     player.chooseTarget(1,'目标角色+1[治疗]',true).set('ai',function(target){
-                        return get.attitude(player, target)
+                        var player=_status.event.player;
+                        return get.zhiLiaoEffect2(target,player,1);
                     });
                     'step 5'
                     if(result.bool){
@@ -3440,7 +3438,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         content:function(){
                             'step 0'
                             player.chooseTarget('目标角色+1[治疗]',true).set('ai',function(){
-                                return get.attitude(player, target)
+                                var player=_status.event.player;
+                                return get.zhiLiaoEffect2(target,player,1);
                             });
                             'step 1'
                             game.log(player,'选择了',result.targets[0]);
@@ -5055,7 +5054,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.chooseTarget('目标队友+1[治疗]',true,function(card,player,target){
                         return target.side==player.side&&target!=player;
                     }).set('ai',function(target){
-                        return get.zhiLiaoEffect(target,1);
+                        var player=_status.event.player;
+                        return get.zhiLiaoEffect2(target,player,1);
                     });
                     'step 6'
                     if(result.bool){

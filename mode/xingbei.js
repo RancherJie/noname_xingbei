@@ -4501,6 +4501,19 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					return target.getZhiLiaoLimit()-target.zhiLiao
 				}
 			},
+			zhiLiaoEffect2:function(target,player,num){
+				if(target.side!=player.side) return -1;
+				if(target.getZhiLiaoLimit()-target.zhiLiao<=0) return 0.1;
+				if(!num){
+					num=1;
+				}
+				var chaZhi=target.getZhiLiaoLimit()-target.zhiLiao-num;
+				if(chaZhi>0){
+					return chaZhi;
+				}else{
+					return target.getZhiLiaoLimit()-target.zhiLiao
+				}
+			},
 			damageEffect:function(target,num){
 				if(!target) return 0;
 				if(!num) num=2;

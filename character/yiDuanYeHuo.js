@@ -406,7 +406,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             var next=player.chooseTarget(true,'目标角色+1[治疗]');
                             next.set('ai',function(target){
                                 var player=_status.event.player;
-                                return get.attitude(player,target);
+                                return get.zhiLiaoEffect2(target,player,1);
                             });
                             'step 1'
                             game.log(player,'选择了',result.targets[0]);
