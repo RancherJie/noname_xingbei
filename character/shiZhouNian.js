@@ -1166,7 +1166,31 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             }
                         }
                     }
-                    player.chooseControl(list).set('prompt','选择要获得的基础效果');
+                    player.chooseControl(list).set('prompt','选择要获得的基础效果').set('ai',function(){
+                        var player=_status.event.player;
+                        var target=_status.event.targetX;
+                        var list=_status.event.listX;
+                        if(target.side==player.side){
+                            if(list.includes('_xuRuo')) return '_xuRuo';
+                            for(var xiaoGuo of game.jiChuXiaoGuo[fengYinShi]){
+                                if(list.includes(xiaoGuo)){
+                                    return xiaoGuo;
+                                }
+                            }
+                            if(list.includes('_zhongDu')&&!target.hasSkillTag('one_damage')) return '_zhongDu';
+                            return 0;
+                        }else{
+                            if(list.includes('_shengDun')){
+                                return '_shengDun';
+                            }
+                            for(var xiaoGuo of game.jiChuXiaoGuo[qiDaoShi]){
+                                if(list.includes(xiaoGuo)){
+                                    return xiaoGuo;
+                                }
+                            }
+                            return 0;
+                        }
+                    }).set('targetX',target).set('listX',list);
                     'step 2'
                     if(result.control=='_zhongDu'){
                         player.chooseCardButton(target.getExpansions('_zhongDu'),true,'选择要获得的中毒')
@@ -1184,16 +1208,15 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     target.storage.zhongDu.splice(index, 1);
                     player.gain(card);
                 },
-                /*
                 ai:{
                     shuiJing:true,
-                    order:3.4,
+                    order:3.5,
                     result:{
                         target:function(player,target){
-                            return 1;
+                            return get.jiChuXiaoGuoEffect(target);
                         }
                     }
-                }*/
+                }
             },
 
             //天使
@@ -1242,7 +1265,31 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             }
                         }
                     }
-                    player.chooseControl(list).set('prompt','选择要移除的基础效果');
+                    player.chooseControl(list).set('prompt','选择要移除的基础效果').set('ai',function(){
+                        var player=_status.event.player;
+                        var target=_status.event.targetX;
+                        var list=_status.event.listX;
+                        if(target.side==player.side){
+                            if(list.includes('_xuRuo')) return '_xuRuo';
+                            for(var xiaoGuo of game.jiChuXiaoGuo[fengYinShi]){
+                                if(list.includes(xiaoGuo)){
+                                    return xiaoGuo;
+                                }
+                            }
+                            if(list.includes('_zhongDu')&&!target.hasSkillTag('one_damage')) return '_zhongDu';
+                            return 0;
+                        }else{
+                            if(list.includes('_shengDun')){
+                                return '_shengDun';
+                            }
+                            for(var xiaoGuo of game.jiChuXiaoGuo[qiDaoShi]){
+                                if(list.includes(xiaoGuo)){
+                                    return xiaoGuo;
+                                }
+                            }
+                            return 0;
+                        }
+                    }).set('targetX',target).set('listX',list);
                     'step 1'
                     if(result.control=='_zhongDu'){
                         player.chooseCardButton(target.getExpansions('_zhongDu'),true,'选择要移除的中毒')
@@ -1261,6 +1308,14 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     target.storage.zhongDu.splice(index, 1);
                     target.loseToDiscardpile(card);
                     event.trigger('yiChuJiChuXiaoGuo');
+                },
+                ai:{
+                    order:3.5,
+                    result:{
+                        target:function(player,target){
+                            return get.jiChuXiaoGuoEffect(target);
+                        }
+                    }
                 }
             },
             tianShiZhuFu:{
@@ -1411,7 +1466,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         }
                     });
                     next.set('ai',function(target){
-                        return false;
+                        var player=_status.event.player;
+                        if(target.side==player.side){
+                            return get.jiChuXiaoGuoEffect(target);
+                        }else{
+                            return -get.jiChuXiaoGuoEffect(target);
+                        }
                     });
                     next.set('prompt',get.prompt('tianShiZhiGe'));
                     next.set('prompt2',lib.translate.tianShiZhiGe_info);
@@ -1431,7 +1491,31 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                 }
                             }
                         }
-                        player.chooseControl(list).set('prompt','选择要移除的基础效果');
+                        player.chooseControl(list).set('prompt','选择要移除的基础效果').set('ai',function(){
+                            var player=_status.event.player;
+                            var target=_status.event.targetX;
+                            var list=_status.event.listX;
+                            if(target.side==player.side){
+                                if(list.includes('_xuRuo')) return '_xuRuo';
+                                for(var xiaoGuo of game.jiChuXiaoGuo[fengYinShi]){
+                                    if(list.includes(xiaoGuo)){
+                                        return xiaoGuo;
+                                    }
+                                }
+                                if(list.includes('_zhongDu')&&!target.hasSkillTag('one_damage')) return '_zhongDu';
+                                return 0;
+                            }else{
+                                if(list.includes('_shengDun')){
+                                    return '_shengDun';
+                                }
+                                for(var xiaoGuo of game.jiChuXiaoGuo[qiDaoShi]){
+                                    if(list.includes(xiaoGuo)){
+                                        return xiaoGuo;
+                                    }
+                                }
+                                return 0;
+                            }
+                        }).set('targetX',target).set('listX',list);
                     }else{
                         event.finish();
                     }
@@ -1453,6 +1537,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     target.storage.zhongDu.splice(index, 1);
                     target.loseToDiscardpile(card);
                     event.trigger('yiChuJiChuXiaoGuo');
+                },
+                ai:{
+                    shuiJing:true,
                 }
             },
             shenZhiBiHu:{

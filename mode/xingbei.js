@@ -4533,7 +4533,31 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					dict[xiBie]++;
 				}
 				return Object.keys(dict).length;
-			}
+			},
+			jiChuXiaoGuoEffect:function(target){
+				if(target.hasExpansions('_shengDun')){
+					return -1;
+				}
+				if(target.hasExpansions('_zhongDu')&&!target.hasSkillTag('one_damage')){
+					return 1;
+				}
+				if(target.hasExpansions('_xuRuo')){
+					return 2;
+				}
+				//封印师
+				for(var xiaoGuo of game.jiChuXiaoGuo[fengYinShi]){
+					if(target.hasExpansions(xiaoGuo)){
+						return 1;
+					}
+				}
+				//赐福
+				for(var xiaoGuo of game.jiChuXiaoGuo[qiDaoShi]){
+					if(target.hasExpansions(xiaoGuo)){
+						return -1;
+					}
+				}
+				return 0;
+			},
 		},
 		help:{
 			
