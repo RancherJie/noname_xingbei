@@ -1676,7 +1676,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         player.chooseTarget(`对${event.faShu}个目标对手造成1点法术伤害③`,true,event.faShu,function(card,player,target){
                             return target.side!=player.side;
                         }).set('ai',function(target){
-                            return get.damageEffect(target,1);
+                            return -get.damageEffect(target,1);
                         });
                     }else{
                         event.goto(6);
@@ -1698,7 +1698,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         player.chooseTarget(`对目标角色造成1点法术伤害③`,true).set('ai',function(target){
                             var player=_status.event.player;
                             if(target.side==player.side) return -1;
-                            return get.damageEffect(target,1);
+                            return -get.damageEffect(target,1);
                         });
                     }else{
                         event.finish();

@@ -4510,6 +4510,15 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				else if(chaZhi-3<num) return -1;
 				else return -0.5;
 			},
+			damageEffect2:function(target,player,num){
+				if(!target) return 0;
+				if(!num) num=2;
+				if(target.side==player.side){
+					return -1;
+				}else{
+					return -get.damageEffect(target,num);
+				}
+			},
 			countTongXiPai:function(cards){
 				var dict={};
 				for(var i=0;i<cards.length;i++){

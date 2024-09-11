@@ -4075,7 +4075,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.chooseTarget('对目标对手造成1点法术伤害③',true,function(card,player,target){
                         return target.side!=player.side;
                     }).set('ai',function(target){
-                        return get.damageEffect(target,1);
+                        return -get.damageEffect(target,1);
                     })
                     'step 2'
                     if(result.bool){
@@ -5972,7 +5972,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                     player.chooseTarget('对其造成的伤害额外+'+event.num,true,function(card,player,target){
                                         return target.side!=player.side;
                                     }).set('ai',function(target){
-                                        return get.damageEffect(target,2);
+                                        return -get.damageEffect(target,2);
                                     });
                                 }else{
                                     event.finish();
@@ -7918,7 +7918,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.chooseTarget(true,function(card,player,target){
                         return target.side==player.side;
                     }).set('prompt','我方目标角色+1[治疗]').set('ai',function(target){
-                        return get.damageEffect(target,1);
+                        return get.zhiLiaoEffect(target,1);
                     });
                     'step 2'
                     game.log(player,'选择了',result.targets[0]);

@@ -104,7 +104,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         player.chooseTarget('对2名目标对手各造成1点法术伤害③',2,true,function(card,player,target){
                             return target.side!=player.side;
                         }).set('ai',function(target){
-                            return get.damageEffect(target,1);
+                            return -get.damageEffect(target,1);
                         });
                     }
                     'step 7'
@@ -125,8 +125,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     if(event.yong>0){
                         player.chooseTarget(`对${event.yong}名目标角色各造成1点法术伤害③`,true,event.yong).set('ai',function(target){
                             var player=_status.event.player;
-                            if(player.side==target.side) return -5;
-                            else return get.damageEffect(target,1);
+                            return get.damageEffect2(target,player,1);
                         });
                     }
                     'step 10'
