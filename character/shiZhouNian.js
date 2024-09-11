@@ -1215,6 +1215,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     order:3.5,
                     result:{
                         target:function(player,target){
+                            var shiQi=get.shiQi(player.side);
+                            if(shiQi<=5&&player.countEmptyCards<=0) return false; 
+
                             return get.jiChuXiaoGuoEffect(target);
                         }
                     }
