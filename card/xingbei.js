@@ -102,6 +102,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 						value:[5,3,1],
 					},
 					order:function(item,player){
+						if(player.hasExpansions('shuiLianZhan_xiaoGuo')) return 2.5;
 						return 3.05;
 					},
 					result:{
@@ -140,6 +141,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 						value:[5,3,1],
 					},
 					order:function(item,player){
+						if(player.hasExpansions('huoYanZhan_xiaoGuo')) return 2.5;
 						return 3.05;
 					},
 					result:{
@@ -178,6 +180,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 						value:[5,3,1],
 					},
 					order:function(item,player){
+						if(player.hasExpansions('fengShenZhan_xiaoGuo')) return 2.5;
 						return 3.05;
 					},
 					result:{
@@ -216,6 +219,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 						value:[5,3,1],
 					},
 					order:function(item,player){
+						if(player.hasExpansions('leiGuangZhan_xiaoGuo')) return 2.5;
 						return 3.05;
 					},
 					result:{
@@ -253,6 +257,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 						value:[5,3,1],
 					},
 					order:function(item,player){
+						if(player.hasExpansions('diLieZhan_xiaoGuo')) return 2.5;
 						return 3.05;
 					},
 					result:{
