@@ -4386,7 +4386,11 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 							break;
 						}
 					}
-				}
+				},
+				countEmptyCards:function(){
+					return this.getHandcardLimit()-this.countCards('h');
+				},
+				
 			}
 		},
 		get:{
