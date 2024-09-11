@@ -5671,6 +5671,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     event.target.damageFaShu(event.num-1,player);
                     'step 3'
                     player.damageFaShu(event.num,player);
+                },
+                ai:{
+                    one_damage:true,
                 }
             },
             moDaoFaDian:{

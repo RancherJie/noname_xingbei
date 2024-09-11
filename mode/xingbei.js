@@ -4505,7 +4505,8 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				if(!target) return 0;
 				if(!num) num=2;
 				var chaZhi=target.getHandcardLimit()-target.countCards('h');
-				if(chaZhi<num) return -3;
+				if(target.hasSkillTag('one_damage')) return 0;
+				if(chaZhi<num) return -2;
 				else if(chaZhi-3<num) return -1;
 				else return -0.5;
 			},
