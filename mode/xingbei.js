@@ -4580,6 +4580,35 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				}
 				return 0;
 			},
+
+			shiQi:function(side){
+				if(side==true){
+					return game.hongShiQi;
+				}else if(side==false){
+					return game.lanShiQi;
+				}
+			},
+			zhanJi:function(side){
+				if(side==true){
+					return game.hongZhanJi;
+				}else if(side==false){
+					return game.lanZhanJi;
+				}
+			},
+			xingBei:function(side){
+				if(side==true){
+					return game.hongXingBei;
+				}else if(side==false){
+					return game.lanXingBei;
+				}
+			},
+			getEmptyZhanJi:function(side){
+				if(side==true){
+					return game.zhanJiMax-game.hongZhanJi.length;
+				}else if(side==false){
+					return game.zhanJiMax-game.lanZhanJi.length;
+				}
+			},
 		},
 		help:{
 			
