@@ -739,6 +739,14 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					},truePlayer,falsePlayer)
 				}
 			},
+
+			getFirstRed:function(){
+				var ref=game.players.randomGet();;
+				while (ref.side!=true) {//确保红队第一个
+					ref=ref.next;
+				}
+				return ref
+			},
 			
 			chooseCharacterOLDuoXuanYi:function(){
 				var next=game.createEvent('chooseCharacterOL');
@@ -781,10 +789,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					var chooseSide=lib.configOL.chooseSide;
 					var number=lib.configOL.number;
 					if(chooseSide){
-						var ref=game.players.randomGet();;
-						while (ref.side!=true) {//确保红队第一个
-							ref=ref.next;
-						}
+						var ref=game.getFirstRed();
 						if(team_sequence!='random') game.moveSeat(event.list,ref);
 					}else{
 						var ref=game.players.randomGet();
@@ -1153,10 +1158,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					var chooseSide=lib.configOL.chooseSide;
 					var ref=event.ref;
 					if(chooseSide){
-						ref=game.players.randomGet();
-						while (ref.side!=true) {//确保红队第一个
-							ref=ref.next;
-						}
+						ref=game.getFirstRed();
 						game.moveSeat(event.list,ref);
 					}
 					
@@ -1751,10 +1753,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					var team_sequence=lib.configOL.team_sequence;
 					var chooseSide=lib.configOL.chooseSide;
 					if(chooseSide){
-						var ref=game.players.randomGet();
-						while (ref.side!=true) {//确保红队第一个
-							ref=ref.next;
-						}
+						var ref=game.getFirstRed();
 						if(team_sequence!='random') game.moveSeat(event.list,ref);
 					}else{
 						var ref=game.players.randomGet();
@@ -2148,10 +2147,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					var team_sequence=lib.configOL.team_sequence;
 					var chooseSide=lib.configOL.chooseSide;
 					if(chooseSide){
-						var ref=game.players.randomGet();
-						while (ref.side!=true) {//确保红队第一个
-							ref=ref.next;
-						}
+						var ref=game.getFirstRed();
 						if(team_sequence!='random') game.moveSeat(event.list,ref);
 					}else{ 
 						var ref=game.players.randomGet();
