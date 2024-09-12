@@ -4571,13 +4571,13 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					return 2;
 				}
 				//封印师
-				for(var xiaoGuo of game.jiChuXiaoGuo[fengYinShi]){
+				for(var xiaoGuo of game.jiChuXiaoGuo['fengYinShi']){
 					if(target.hasExpansions(xiaoGuo)){
 						return 1;
 					}
 				}
 				//赐福
-				for(var xiaoGuo of game.jiChuXiaoGuo[qiDaoShi]){
+				for(var xiaoGuo of game.jiChuXiaoGuo['qiDaoShi']){
 					if(target.hasExpansions(xiaoGuo)){
 						return -1;
 					}
