@@ -1976,7 +1976,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 							player.changeZhanJi('b',-1);
 						}
 					}
-                    player.chooseTarget(1,true,'选择一个目标角色+'+number+'[治疗]').set('ai',function(){
+                    player.chooseTarget(1,true,'选择一个目标角色+'+number+'[治疗]').set('ai',function(target){
                         var player=_status.event.player;
                         var number=_status.event.number;
                         return get.zhiLiaoEffect2(target,player,number);
@@ -3440,7 +3440,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         },
                         content:function(){
                             'step 0'
-                            player.chooseTarget('目标角色+1[治疗]',true).set('ai',function(){
+                            player.chooseTarget('目标角色+1[治疗]',true).set('ai',function(target){
                                 var player=_status.event.player;
                                 return get.zhiLiaoEffect2(target,player,1);
                             });
