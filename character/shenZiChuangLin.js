@@ -54,6 +54,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         event.targets=result.targets.sortBySeat(player);
                         game.log(player,'选择了',event.targets);
                         event.cards=[];
+                        event.targetsX=event.targets.slice(0);
                     }else{
                         event.cards=result;
                         player.showGaiPai(result);
@@ -78,10 +79,16 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         event.target.showCards(result.cards);
                         event.cards.push(result.cards[0]);
                     }
-                    'step 4'
-                    event.target.draw();
                     if(event.targets.length>0){
                         event.goto(2);
+                    }
+                    'step 4'
+                    var target=event.targetsX.shift();
+                    if(target){
+                        target.draw();
+                    }
+                    if(event.cards.length>0){
+                        event.redo();
                     }
 
                     'step 5'
