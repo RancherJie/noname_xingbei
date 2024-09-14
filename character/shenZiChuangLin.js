@@ -16,7 +16,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             jinGuiZhiNv:['female','yong',3,['gaoLingZhiHua','moFaRuMen','Magic','qiangYuYuanXing','youQingJiBan'],],
             nvPuZhang:['female','ji',5,['yingZhiXue','miShu','shun','yingFeng','shiFengZhiDao','jinShu','fengXue','zhen','ying','mi'],],
             jieJieShi:['female','huan',5,['jieJieYiShi','huangShenZhiLi','huangShenJiYi','jinMoJing','liuLiJing','jueJie','fuMoJing','jieJie','jiX'],],
-            //shenMiXueZhe:['female','yong',4,[],],
+            shenMiXueZhe:['female','yong',4,['yanLingShu','shouHuLing','zhenYanShu','jinJiMiFa','yaoJingMiShu','zhenYanYaZhi','yanLing','miShu'],],
             //wuRanZhe:['female','xue',4,[],],
 		},
         characterIntro:{
@@ -944,6 +944,287 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 markimage:'image/card/hong.png',
             },
 
+            //神秘学者
+            yanLingShu:{
+                type:'faShu',
+                enable:['chooseToUse','faShu'],
+                filter:function(event,player){
+                    return player.countCards('h')>0;
+                },
+                selectCard:[1,2],
+                filterCard:true,
+                prepare:'showCards',
+                discard:false,
+                content:function(){
+                    'step 0'
+                    player.addToExpansion('draw',cards,'log').gaintag.add('yanLing');
+                    'step 1'
+                    player.draw();
+                    'step 2'
+                    var yanLing=player.getExpansions('yanLing');
+                    var xiBie=[];
+                    for(var i=0;i<yanLing.length;i++){
+                        if(!xiBie.includes(get.xiBie(yanLing[i]))){
+                            xiBie.push(get.xiBie(yanLing[i]));
+                        }
+                    }
+                    var next=player.chooseToDiscard('h','是否额外弃1张与现存【言灵】系别相同的牌【展示】',function(card){
+                        var xiBie=_status.event.xiBie;
+                        return xiBie.includes(get.xiBie(card));
+                    }).set('xiBie',xiBie);
+                    next.set('ai',function(card){
+                        return 7-get.value(card);
+                    });
+                    'step 3'
+                    if(result.bool){
+                        player.showCards(result.cards);
+                    }else{
+                        event.finish();
+                    }
+                    'step 4'
+                    player.addZhiShiWu('miShu');
+                },
+                ai:{
+                    order:3.8,
+                    result:{
+                        player:function(player){
+                            var cards=player.getExpansions('yanLing');
+                            if(cards.length==0) return 1;
+                            if(cards.length==1) return 1.5;
+                            if(cards.length==2) return 0;
+                            return 0;
+                        }
+                    }
+                }
+            },
+            shouHuLing:{
+                forced:true,
+                trigger:{target:'useCardToTargeted'},
+                firstDo:true,
+                filter:function(event,player){
+                    return get.is.zhuDongGongJi(event.getParent())&&player.getExpansions('yanLing').length>0;
+                },
+                content:function(){
+                    'step 0'
+                    var cards=player.getExpansions('yanLing');
+                    player.chooseCardButton(cards,true,'移除1个【言灵】').set('ai',function(){
+                        return Math.random();
+                    });
+                    'step 1'
+                    player.discard(result.links,'yanLing');
+                    'step 2'
+                    if(player.countZhiShiWu('miShu')>0){
+                        var list=['是','否'];
+                        player.chooseControl(list).set('prompt','是否额外移除1点【秘术】');
+                    }else{
+                        event.finish();
+                    }
+                    'step 3'
+                    if(result.control=='是'){
+                        player.removeZhiShiWu('miShu');
+                    }else{
+                        event.finish();
+                    }
+                    'step 4'
+                    if(player.countCards('h')>0){
+                        player.chooseCard('h',true,'将1张手牌面朝上放置在你的角色旁【展示】作为【言灵】');
+                    }
+                    'step 5'
+                    player.showCards(result.cards);
+                    event.cards=result.cards;
+                    'step 6'
+                    player.addToExpansion('draw',event.cards,'log').gaintag.add('yanLing');
+                }
+            },
+            zhenYanShu:{
+                type:'faShu',
+                enable:['chooseToUse','faShu'],
+                filter:function(event,player){
+                    var yanLing=player.getExpansions('yanLing');
+                    var cards=[];
+                    for(var i=0;i<yanLing.length;i++){
+                        if(get.xiBie(yanLing[i])!='guang') cards.push(yanLing[i]);
+                    }
+                    return cards.length>0;
+                },
+                content:function(){
+                    'step 0'
+                    var yanLing=player.getExpansions('yanLing');
+                    player.chooseCardButton(yanLing,true,'选择1个除光系外的【言灵】').set('ai',function(card){
+                        return Math.random();
+                    }).set('filterButton',function(button){
+                        return get.xiBie(button)!='guang';
+                    });
+                    'step 1'
+                    player.storage.zhenYanShu=result.links[0];
+                    'step 2'
+                    player.chooseUseTarget(player.storage.zhenYanShu,true);
+                },
+                contentAfter:function(){
+                    'step 0'
+                    var card=player.storage.zhenYanShu;
+                    var type=get.type(card);
+                    var mingGe=get.mingGe(card);
+                    var bool=false;
+                    if(mingGe=='yong'||type=='faShu'){
+                        bool=true;
+                        event.bool=true;
+                    }
+                    if(!bool&&player.countZhiShiWu('miShu')>0){
+                        var list=['是','否'];
+                        player.chooseControl(list).set('prompt','是否额外移除1点【秘术】');
+                    }else if(!bool){
+                        event.finish();
+                    }
+                    'step 1'
+                    if(result.control=='是'){
+                        player.removeZhiShiWu('miShu');
+                    }
+                    if(event.bool||result.control=='是'){
+                        player.chooseTarget('对目标对手造成1点法术伤害③',true,function(card,player,target){
+                            return player.side!=target.side;
+                        }).set('ai',function(target){
+                            var player=_status.event.player;
+                            return get.damageEffect2(target,player,1);
+                        });
+                    }else{
+                        event.finish();
+                    }
+                    'step 2'
+                    var target=result.targets[0];
+                    game.log(player,'选择了',target);
+                    target.damageFaShu(1,player);
+                },
+                ai:{
+                    order:3.9,
+                    result:{
+                        player:1,
+                    }
+                }
+            },
+            jinJiMiFa:{
+                trigger:{player:'phaseBefore'},
+                filter:function(event,player){
+                    return player.countZhiShiWu('miShu')>=3;
+                },
+                content:function(){
+                    'step 0'
+                    player.removeZhiShiWu('miShu',3);
+                    player.chooseTarget(2,true).set('ai',function(target){
+                        return Math.random();
+                    });
+                    'step 1'
+                    game.log(player,'选择了',result.targets);
+                    event.targets=result.targets.sortBySeat(player);
+                    'step 2'
+                    event.target=event.targets.shift();
+                    if(event.target.countCards('h')>0){
+                        event.target.chooseToDiscard('h',true);
+                    }
+                    'step 3'
+                    if(result.cards){
+                        player.showGaiPai(result.cards);
+                        player.addToExpansion('draw',result.cards,'log').gaintag.add('yanLing');
+                    }
+                    if(event.targets.length>0){
+                        event.goto(2);
+                    }
+                }
+            },
+            yaoJingMiShu:{
+                usable:1,
+                trigger:{player:['useSkillAfter','zhenYanYaZhi']},
+                filter:function(event,player){
+                    if(event.name=='useSkill'){
+                        return event.skill=='zhenYanShu'&&event.selected!=true;
+                    }else{
+                        return true;
+                    }
+                },
+                content:function(){
+                    'step 0'
+                    trigger.selected=true;
+                    player.addTempSkill('yaoJingMiShu_gongJi');
+                    player.gongJi().set('bool',true);
+                },
+                subSkill:{
+                    gongJi:{
+                        trigger:{player:'useCardToTargeted'},
+                        filter:function(event,player){
+                            return event.getParent('gongJi').bool;
+                        },
+                        direct:true,
+                        content:function(){
+                            'step 0'
+                            player.addZhiShiWu('miShu',2);
+                        }
+                    }
+                }
+            },
+            zhenYanYaZhi:{
+                trigger:{player:'useSkillAfter'},
+                filter:function(event,player){
+                    if(!player.canBiShaShuiJing()) return false;
+                    return event.skill=='zhenYanShu'&&event.selected!=true;
+                },
+                content:function(){
+                    'step 0'
+                    player.removeBiShaShuiJing();
+                    trigger.selected=true;
+                    player.chooseTarget(true).set('ai',function(target){
+                        var player=_status.event.player;
+                        return get.damageEffect2(target,player,1);
+                    });
+                    'step 1'
+                    game.log(player,'选择了',result.targets);
+                    var target=result.targets[0];
+                    target.damage(1,player);
+                    'step 2'
+                    var yanLing=player.getExpansions('yanLing');
+                    var cards=[];
+                    for(var i=0;i<yanLing.length;i++){
+                        if(get.xiBie(yanLing[i])!='guang') cards.push(yanLing[i]);
+                    }
+                    var list=['否'];
+                    if(cards.length>0){
+                        list.unshift('是');
+                    }
+                    player.chooseControl(list).set('prompt','是否立即执行一次【真言术】');
+                    'step 3'
+                    if(result.control=='是'){
+                        player.useSkill('zhenYanShu');
+                    }
+                    'step 4'
+                    event.player=player;
+                    event.trigger('zhenYanYaZhi');
+                }
+            },
+            yanLing:{
+                intro:{
+					content:'expansion',
+					markcount:'expansion',
+				},
+                direct:true,
+                trigger:{player:'addToExpansionEnd'},
+                filter:function(event,player){
+                    return player.getExpansions('yanLing').length>3;
+                },
+                content:function(){
+                    'step 0'
+                    var cards=player.getExpansions('yanLing');
+                    var next=player.chooseCardButton(cards,true,cards.length-3,`舍弃${cards.length-3}张【言灵】`);
+                    'step 1'
+                    player.discard(result.links);
+                }
+            },
+            miShu:{
+                intro:{
+                    content:'mark',
+                    max:4,
+                },
+                markimage:'image/card/hong.png',
+            },
+
         },
 		
 		translate:{
@@ -1026,6 +1307,24 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             jiX:"祭",
             jiX_info:"【祭】为结界师专有指示物，上限为3。",
 
+            //神秘学者
+            yanLingShu:"[法术]言灵术",
+            yanLingShu_info:"<span class='tiaoJian'>(将1-2张手牌面朝上放置在你角色旁[展示]作为【言灵】)</span>你摸1张牌[强制]︔<span class='tiaoJian'>(摸牌后，若你额外弃1张与现存【言灵】系别相同的牌[展示])</span>你+1【秘术】。",
+            shouHuLing:"[被动]守护灵",
+            shouHuLing_info:"<span class='tiaoJian'>(你被主动攻击命中时②，其他角色结算效果前)</span>移除1个【言灵】；<span class='tiaoJian'>(若你额外移除1点【秘术】)</span>将1张手牌面朝上放置在你角色旁[展示]作为【言灵】。",
+            zhenYanShu:"[法术]真言术",
+            zhenYanShu_backup:'[法术]真言术',
+            zhenYanShu_info:"<span class='tiaoJian'>(将1个除光系外的【言灵】视为手牌使用)</span>执行相应的行动；<span class='tiaoJian'>(若使用的【言灵】为咏类命格或法术牌，或你额外移除1点【秘术】)</span>本次相应行动执行完成后，对目标对手造成1点法术伤害③。",
+            jinJiMiFa:"[响应]禁忌秘法",
+            jinJiMiFa_info:"<span class='tiaoJian'>(你的回合开始前，移除3点【秘术】发动)</span>指定2名目标角色各弃1张牌，你将弃牌面朝上放置在你角色旁[展示]作为【言灵】。",
+            yaoJingMiShu:"[响应]妖精秘术[回合限定]",
+            yaoJingMiShu_info:"<span class='tiaoJian'>(【真言术】或【真言压制】结算后发动)</span>立即执行一次[攻击行动]︔<span class='tiaoJian'>(若本次执行的攻击命中②)</span>你+2【秘术】。",
+            zhenYanYaZhi:"[响应]真言压制",
+            zhenYanYaZhi_info:"[水晶]<span class='tiaoJian'>(【真言术】结算后发动)</span>对目标角色造成1点法术伤害③，你可立即执行一次【真言术】。",
+            yanLing:"言灵",
+            yanLing_info:"【言灵】为神秘学者专有展示盖牌，上限为3。",
+            miShu:"秘术",
+            miShu_info:"【秘术】为神秘学者专有指示物，上限为4。",
         },
 	};
 });
