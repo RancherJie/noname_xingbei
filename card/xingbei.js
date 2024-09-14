@@ -458,16 +458,6 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 					},
 				}	
 			},
-			faShu:{
-				fullskin:true,
-				type:'faShu',
-				enable:true,
-				selectTarget:0,
-				filterTarget:function(target){
-					return true
-				},
-				content:function(){}
-			}
 		},
 		translate:{
 			anMie:"暗灭",
@@ -493,7 +483,6 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 			moDan:"魔弹",
 			moDan_info:"（将此牌传递给右手边最近的一名对手）若命中，对他造成2点法术伤害；对方可以选择打出一张【魔弹】将此效果传递下去，若如此做，则对他视为未命中且视为【魔弹】的传递者为他。每传递一次伤害额外+1。在同一轮传递中每一名角色只能参与一次。【魔弹】可以被【圣光】或【圣盾】抵挡，效果会因此终止。",
 
-			faShu_info:"独有法术专用",
 
 			//牌可转化的技能
             'xueYingKuangDao|xueZhiBeiMing':"血影狂刀<br>血之悲鸣",
