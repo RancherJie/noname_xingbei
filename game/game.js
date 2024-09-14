@@ -10536,7 +10536,9 @@
 			'4星':'4星',
 			'4.5星':'4.5星',
 			'5星':'5星',
-
+			shiZhouNian:'十周年',
+			yiDuanYeHuo:'异端业火',
+			shenZiChuangLin:'神子创临',
 		},
 		element:{
 			content:{
@@ -20202,9 +20204,10 @@
 						str+=('　('+info[0].slice(0,12)+' 的房间)');
 						if(config.mode!='guozhan'&&(config.mode!='doudizhu'||config.doudizhu_mode!='online')){
 							str+='【';
-							for(var i=0;i<config.cardPack.length;i++){
-								str+=(get.translation(config.cardPack[i]+'_card_config').slice(0,2));
-								if(i<config.cardPack.length-1) str+='+';
+							for(var i=0;i<config.characterPack.length;i++){
+								console.log(config.characterPack[i]);
+								str+=(get.translation(config.characterPack[i]));
+								if(i<config.characterPack.length-1) str+='+';
 							}
 							str+='】';
 						}
