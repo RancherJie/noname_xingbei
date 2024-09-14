@@ -1,10 +1,10 @@
 'use strict';
 game.import('character',function(lib,game,ui,get,ai,_status){
 	return {
-		name:'shenZiJiangLin',
+		name:'shenZiChuangLin',
 		connect:true,
         characterSort:{
-            shenZiJiangLin:{
+            shenZiChuangLin:{
                 "3星":['jinGuiZhiNv'],
                 "3.5星":[],
                 "4星":['shenMiXueZhe','wuRanZhe'],

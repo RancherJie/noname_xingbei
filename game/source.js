@@ -4,7 +4,7 @@ window.noname_source_list=[
 	'character/rank.js',
 	'character/shiZhouNian.js',
 	'character/yiDuanYeHuo.js',
-	'character/shenZiJiangLin.js',
+	'character/shenZiChuangLin.js',
 	'font/motoyamaru.woff2',
 	'font/suits.woff2',
 	'game/asset.js',
