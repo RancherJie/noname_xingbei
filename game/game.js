@@ -55371,39 +55371,7 @@
 				lanZhanJi_str += images;
 			});
 		
-			/*
-			ui.shiQiInfo.innerHTML = '士气' +
-				'<span style="color:red;">' + game.hongShiQi + '</span>' + '/' +
-				'<span style="color:blue;">' + game.lanShiQi + '</span>' + '|战绩' +
-				hongZhanJi_str + '/' +
-				lanZhanJi_str + '|星杯' +
-				'<span style="color:red;">' + game.hongXingBei + '</span>' + '/' +
-				'<span style="color:blue;">' + game.lanXingBei + '</span>';
-			*/
-			/*
-			ui.shiQiInfo.innerHTML = `
-				<table>
-				<tr>
-					<td>士气</td>
-					<td><span style="color:red;">${game.hongShiQi}</span></td>
-					<td>/</td>
-					<td><span style="color:blue;">${game.lanShiQi}</span></td>
-				</tr>
-				<tr>
-					<td>战绩</td>
-					<td>${hongZhanJi_str}</td>
-					<td>/</td>
-					<td>${lanZhanJi_str}</td>
-				</tr>
-				<tr>
-					<td>星杯</td>
-					<td><span style="color:red;">${game.hongXingBei}</span></td>
-					<td>/</td>
-					<td><span style="color:blue;">${game.lanXingBei}</span></td>
-				</tr>
-				</table>
-				`;
-			*/
+			
 			ui.shiQiInfo.innerHTML = `
 				<table>
 				<tr>
