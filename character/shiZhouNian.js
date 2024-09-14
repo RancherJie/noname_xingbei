@@ -739,7 +739,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             if(event.name=='showCards'){
                                 if(event.gaiPai==true) return false;
                             }
+                            
                             for(var card of event.cards){
+                                if(event.name!='showCards'){
+                                    if(card.original != "h") continue;
+                                }
                                 if(get.xiBie(card)=='di'){
                                     return true;
                                 }
@@ -810,6 +814,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                 if(event.gaiPai==true) return false;
                             }
                             for(var card of event.cards){
+                                if(event.name!='showCards'){
+                                    if(card.original != "h") continue;
+                                }
                                 if(get.xiBie(card)=='shui'){
                                     return true;
                                 };
@@ -880,6 +887,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                 if(event.gaiPai==true) return false;
                             }
                             for(var card of event.cards){
+                                if(event.name!='showCards'){
+                                    if(card.original != "h") continue;
+                                }
                                 if(get.xiBie(card)=='huo'){
                                     return true;
                                 };
@@ -950,6 +960,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                 if(event.gaiPai==true) return false;
                             }
                             for(var card of event.cards){
+                                if(event.name!='showCards'){
+                                    if(card.original != "h") continue;
+                                }
                                 if(get.xiBie(card)=='feng'){
                                     return true;
                                 };
@@ -1020,6 +1033,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                 if(event.gaiPai==true) return false;
                             }
                             for(var card of event.cards){
+                                if(event.name!='showCards'){
+                                    if(card.original != "h") continue;
+                                }
                                 if(get.xiBie(card)=='lei'){
                                     return true;
                                 };
