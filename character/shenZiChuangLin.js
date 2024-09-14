@@ -14,7 +14,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
         },
 		character:{
             jinGuiZhiNv:['female','yong',3,['gaoLingZhiHua','moFaRuMen','Magic','qiangYuYuanXing','youQingJiBan'],],
-            nvPuZhang:['female','ji',5,['yingZhiXue','miShu','shun','yingFeng','shiFengZhiDao','jinShu','fengXue','zhen','ying','mi'],],
+            nvPuZhang:['female','ji',5,['yingZhiXue','miShuMuYing','shun','yingFeng','shiFengZhiDao','jinShu','fengXue','zhen','ying','mi'],],
             jieJieShi:['female','huan',5,['jieJieYiShi','huangShenZhiLi','huangShenJiYi','jinMoJing','liuLiJing','jueJie','fuMoJing','jieJie','jiX'],],
             shenMiXueZhe:['female','yong',4,['yanLingShu','shouHuLing','zhenYanShu','jinJiMiFa','yaoJingMiShu','zhenYanYaZhi','yanLing','miShu'],],
             //wuRanZhe:['female','xue',4,[],],
@@ -326,7 +326,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     return player.countCards('h')>0;
                 }
             },
-            miShu:{
+            miShuMuYing:{
                 trigger:{player:'useCardToTargeted'},
                 filter:function(event,player){
                     return get.is.zhuDongGongJi(event.getParent())&&!player.usedSkill('shun');
@@ -1256,8 +1256,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             //女仆长
             yingZhiXue:"[启动]影之穴",
             yingZhiXue_info:"<span class='tiaoJian'>(移除1点【糸】)</span>将【风穴】转移或放置于目标对手前，他弃1张牌。",
-            miShu:"[响应]秘术·摹影",
-            miShu_info:"<span class='tiaoJian'>(主动攻击命中时发动②)</span>将本次攻击牌面朝下放置在你角色旁作为【影】。",
+            miShuMuYing:"[响应]秘术·摹影",
+            miShuMuYing_info:"<span class='tiaoJian'>(主动攻击命中时发动②)</span>将本次攻击牌面朝下放置在你角色旁作为【影】。",
             shun:"[响应]瞬·影·杀[回合限定]",
             shun_info:"<span class='tiaoJian'>(主动攻击未命中时发动②，移除1个【影】)</span>额外+1[攻击行动]，本回合你的主动攻击无法应战但无法发动【秘术·摹影】。",
             yingFeng:"[响应]影缝",
