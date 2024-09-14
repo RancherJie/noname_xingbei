@@ -5778,7 +5778,7 @@
 		},
 		//xingbei
 		sponsor:{
-			爱发电:'泽度哥摧毁停车场<br>爱发电用户_8888d<br>爱发电用户_68NS',
+			爱发电:'<a href="https://ifdian.net/a/noname_xingbei">爱发电链接</a><br>泽度哥摧毁停车场<br>爱发电用户_8888d<br>爱发电用户_68NS<br>爱发电用户_EQXG',
 		},
 
 		path:{},
