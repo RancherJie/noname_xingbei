@@ -9936,7 +9936,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             jinPiLiJin:"[被动]精疲力竭",
             mingJingZhiShui:"[响应]明镜止水",
             tiaoXin:"(专)[法术]挑衅",
-            tiaoXinX:"挑衅",
+            tiaoXinX:"挑衅 结束回合",
             tiaoXinX_kaiShi:"挑衅 开始",
             tiaoXinX_qiDongQian:"挑衅 启动前",
             tiaoXinX_qiDongHou:"挑衅 启动后",
