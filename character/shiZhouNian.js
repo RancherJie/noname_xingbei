@@ -4527,12 +4527,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 filter:function(event,player){
                     if(!player.canBiShaShuiJing()) return false;
                     if(!player.isLinked()) return false;
-                    if(event.name=='useCard'){
-                        return !(event.getParent().name=='chooseToUse_qiTa'||event.getParent().name=='chooseToUse_yingZhan');
-                    }else if(event.name=='useSkill'){
-                        var info=get.info(event.skill);
-                        return info.type=='faShu';
-                    }
+
+                    if(event.selected) return false;
+                    return get.is.gongJiXingDong(event)||get.is.faShuXingDong(event);
                 },
                 content:function(){
                     'step 0'
@@ -4540,6 +4537,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 1'
                     player.chongZhi();
                     'step 2'
+                    trigger.selected=true;
                     player.storage.all++;
                 },
                 check:function(event,player){
