@@ -6220,7 +6220,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             //魔枪
             anZhiJieFang:{
                 type:'qiDong',
-                priority:1,
+                //priority:1,
                 trigger:{player:'phaseUseBegin'},
                 filter:function(event,player){
                     if(event.qiDong) return false;
