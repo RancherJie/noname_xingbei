@@ -6055,10 +6055,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             },
             chongNeng:{
                 type:'qiDong',
-                priority:1,
+                //priority:1,
                 trigger:{player:'phaseUseBegin'},
                 filter:function(event,player){
-                    return player.canBiShaShuiJing();
+                    return player.canBiShaShuiJing()&&event.qiDong!=true;
                 },
                 content:function(){
                     'step 0'
