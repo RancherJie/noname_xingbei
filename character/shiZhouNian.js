@@ -8240,12 +8240,14 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             buQuYiZhi:{
                 trigger:{player:'useCardEnd'},
                 filter:function(event,player){
+                    if(event.selected) return false;
                     return get.is.gongJiXingDong(event)&&player.canBiShaShuiJing();
                 },
                 content:function(){
                     'step 0'
                     player.removeBiShaShuiJing();
                     'step 1'
+                    trigger.selected=true;
                     player.draw();
                     player.addZhiShiWu('jianQi',1);
                     player.storage.gongJi++;
