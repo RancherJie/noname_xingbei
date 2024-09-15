@@ -128,12 +128,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 trigger:{player:"useCardAfter"},
                 //priority:1,
                 filter:function(event,player){
-                    if(event.selected) return false;
+                    //if(event.selected) return false;
                     return get.is.gongJiXingDong(event);
                 },
                 content:function(player){
                     "step 0"
-                    trigger.selected=true;
+                    //trigger.selected=true;
 					var str='风怒追击：风系[攻击行动]';
 					var next=player.gongJi(function(card,player,event){
                         if(get.xiBie(card)!='feng') return false;
@@ -256,11 +256,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 trigger:{player:'useCardAfter'},
                 //priority:0,
                 filter:function(event,player){
-                    if(event.selected) return false;
+                    //if(event.selected) return false;
                     return get.is.gongJiXingDong(event)&&player.canBiShaShuiJing();
                 },
                 content:function(player){
-                    trigger.selected=true;
+                    //trigger.selected=true;
                     player.removeBiShaShuiJing();
                     player.storage.gongJi++;
                 },
@@ -667,11 +667,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             faShuJiDang:{
                 trigger:{player:['useCardAfter','useSkillAfter']},
                 filter:function(event,player){
-                    if(event.selected) return false;
+                    //if(event.selected) return false;
                     return get.is.faShuXingDong(event);
                 },
                 content:function(){
-                    trigger.selected=true;
+                    //trigger.selected=true;
                     player.storage.gongJi++;
                 }
             },
@@ -3791,11 +3791,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 usable:1,
                 trigger:{player:"useCardAfter"},
                 filter:function(event,player){
-                    if(event.selected) return false;
+                    //if(event.selected) return false;
                     return get.is.gongJiXingDong(event);
                 },
                 content:function(player){
-                    trigger.selected=true;
+                    //trigger.selected=true;
 					var str='修罗连斩：火系[攻击行动]';
 					var next=player.gongJi('h',function(card,player,event){
                         if(get.xiBie(card)!='huo') return false;
@@ -3982,12 +3982,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             chiSeYiShan:{
                 trigger:{player:'useCardAfter'},
                 filter:function(event,player){
-                    if(event.selected) return false;
+                    //if(event.selected) return false;
                     if(player.countZhiShiWu('xianXue')<1) return false;
                     return get.is.gongJiXingDong(event);
                 },
                 content:function(){
-                    trigger.selected=true;
+                    //trigger.selected=true;
                     player.removeZhiShiWu('xianXue');
                     player.damageFaShu(2,player);
                     player.storage.gongJi++;
@@ -4306,12 +4306,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             if(!player.hasExpansions('xunJieCiFu_xiaoGuo')) return false;
                             if(player.hasZhiShiWu('jueJieX')) return false;
                             
-                            if(event.selected) return false;
+                            //if(event.selected) return false;
 
                             return get.is.zhuDongGongJi(event)||get.is.faShuXingDong(event);
                         },
                         content:function(){
-                            trigger.selected=true;
+                            //trigger.selected=true;
                             player.loseToDiscardpile(player.getExpansions('xunJieCiFu_xiaoGuo'));
                             player.storage.gongJi++;
                             player.removeSkill('xunJieCiFu_xiaoGuo');
@@ -4528,7 +4528,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     if(!player.canBiShaShuiJing()) return false;
                     if(!player.isLinked()) return false;
 
-                    if(event.selected) return false;
+                    //if(event.selected) return false;
                     return get.is.gongJiXingDong(event)||get.is.faShuXingDong(event);
                 },
                 content:function(){
@@ -4537,7 +4537,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 1'
                     player.chongZhi();
                     'step 2'
-                    trigger.selected=true;
+                    //trigger.selected=true;
                     player.storage.all++;
                 },
                 check:function(event,player){
@@ -8240,14 +8240,14 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             buQuYiZhi:{
                 trigger:{player:'useCardEnd'},
                 filter:function(event,player){
-                    if(event.selected) return false;
+                    //if(event.selected) return false;
                     return get.is.gongJiXingDong(event)&&player.canBiShaShuiJing();
                 },
                 content:function(){
                     'step 0'
                     player.removeBiShaShuiJing();
                     'step 1'
-                    trigger.selected=true;
+                    //trigger.selected=true;
                     player.draw();
                     player.addZhiShiWu('jianQi',1);
                     player.storage.gongJi++;
@@ -8299,12 +8299,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             yiJiWuNian:{
                 trigger:{player:'useCardAfter'},
                 filter:function(event,player){
-                    if(event.selected) return false;
+                    //if(event.selected) return false;
                     return get.is.gongJiXingDong(event)&&player.countZhiShiWu('canXin')>=4;
                 },
                 content:function(){
                     player.removeZhiShiWu('canXin',4);
-                    trigger.selected=true;
+                    //trigger.selected=true;
                     player.storage.gongJi++;
                     player.storage.yiJiWuNian=false;
                     player.addTempSkill('yiJiWuNian_1');
