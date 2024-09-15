@@ -11622,7 +11622,7 @@
 							bool:true,
 							targets:event.targets2||result.targets,
 						};
-						var next=player.useCard(card,event.targets2||result.targets);
+						var next=player.useCard(card,event.targets2||result.targets).set('action',true);
 						next.oncard=event.oncard;
 						if(cards) next.cards=cards.slice(0);
 						if(event.nopopup) next.nopopup=true;
