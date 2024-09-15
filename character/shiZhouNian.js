@@ -3995,12 +3995,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             chiSeYiShan:{
                 trigger:{player:'useCardAfter'},
                 filter:function(event,player){
-                    if(event.yingZhan==true) return false;
-                    if(get.type(event.card)!='gongJi') return false;
+                    if(event.selected) return false;
                     if(player.countZhiShiWu('xianXue')<1) return false;
-                    return true;
+                    return get.is.gongJiXingDong(event);
                 },
                 content:function(){
+                    trigger.selected=true;
                     player.removeZhiShiWu('xianXue');
                     player.damageFaShu(2,player);
                     player.storage.gongJi++;
