@@ -665,28 +665,15 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             
             //封印师
             faShuJiDang:{
-                group:['faShuJiDang_1','faShuJiDang_2'],
-                subSkill:{
-                    1:{
-                        trigger:{player:'useCardAfter'},
-                        filter:function(event,player){
-                            return get.type(event.card)=='faShu'&&get.is.xiDong(event.getParent());
-                        },
-                        content:function(){
-                            player.storage.gongJi++;
-                        }
-                    },
-                    2:{
-                        trigger:{player:'useSkillAfter'},
-                        filter:function(event){
-                            var info=get.info(event.skill);
-                            return info.type=='faShu';
-                        },
-                        content:function(player){
-                            player.storage.gongJi++;
-                        }
-                    },
+                trigger:{player:['useCardAfter','useSkillAfter']},
+                filter:function(event,player){
+                    if(event.selected) return false;
+                    return get.is.faShuXingDong(event);
                 },
+                content:function(){
+                    trigger.selected=true;
+                    player.storage.gongJi++;
+                }
             },
             diZhiFengYin:{
                 type:'faShu',
