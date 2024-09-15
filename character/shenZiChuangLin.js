@@ -295,7 +295,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             yingZhiXue:{
                 type:'qiDong',
                 trigger:{player:'phaseUseBegin'},
-                priority:1,
+                //priority:1,
                 filter:function(event,player){
                     if(event.qiDong==true) return false;
                     return player.countZhiShiWu('mi')>=1;
