@@ -4614,15 +4614,17 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             },
             nuHuoYaZhi:{
                 trigger:{source:'gongJiWeiMingZhong'},
-                priority:1,
+                //priority:1,
                 filter:function(event,player){
                     if(event.yingZhan==true) return false;
+                    if(event.selected) return false;
                     return player.countZhiShiWu('zhanWen')>=1;
                 },
                 content:function(){
+                    trigger.selected=true;
                     player.removeZhiShiWu('zhanWen');
                     player.addZhiShiWu('moWen'); 
-                    trigger.cancel();
+                    //trigger.cancel();
                 },
                 check:function(event,player){
                     var num=Math.random();
@@ -4697,6 +4699,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     if(player.countZhiShiWu('moWen')<1) return false;
                     if(event.yingZhan==true) return false;
                     if(!player.countCards('h')>1) return false;
+
+                    if(event.selected) return false;
+
                     if(_status.connectMode) return true;
                     var cards=player.getCards('h');
                     var dict={};
@@ -4724,6 +4729,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					}
                     'step 1'
                     if(result.bool){
+                        trigger.selected=true;
                         player.logSkill(event.name,trigger.player);
                         player.removeZhiShiWu('moWen');
                         player.addZhiShiWu('zhanWen');
