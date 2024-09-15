@@ -4300,20 +4300,18 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         intro:{
                             content:'expansion',
                         },
-                        priority:1,
+                        //priority:1,
                         trigger:{player:['useCardAfter','useSkillAfter']},
                         filter:function(event,player){
                             if(!player.hasExpansions('xunJieCiFu_xiaoGuo')) return false;
                             if(player.hasZhiShiWu('jueJieX')) return false;
                             
-                            if(event.name=='useCard'){
-                                return !(event.getParent().name=='chooseToUse_qiTa'||event.getParent().name=='chooseToUse_yingZhan');
-                            }else if(event.name=='useSkill'){
-                                var info=get.info(event.skill);
-                                return info.type=='faShu';
-                            }
+                            if(event.selected) return false;
+
+                            return get.is.zhuDongGongJi(event)||get.is.faShuXingDong(event);
                         },
                         content:function(){
+                            trigger.selected=true;
                             player.loseToDiscardpile(player.getExpansions('xunJieCiFu_xiaoGuo'));
                             player.storage.gongJi++;
                             player.removeSkill('xunJieCiFu_xiaoGuo');
