@@ -16797,7 +16797,11 @@
 					str+='发动了';
 					*/
 					if(!info.direct&&info.log!==false){
-						game.log(player,'对',targets,'发动了','【'+get.skillTranslation(skill,player)+'】');
+						if(targets){
+							game.log(player,'对',targets,'发动了','【'+get.skillTranslation(skill,player)+'】');
+						}else{
+							game.log(player,'发动了','【'+get.skillTranslation(skill,player)+'】');
+						}
 						if(info.logv!==false) game.logv(player,skill,targets);
 						player.trySkillAnimate(skill,skill,checkShow);
 					}
