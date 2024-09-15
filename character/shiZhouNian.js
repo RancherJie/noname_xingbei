@@ -8724,7 +8724,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             lingHunLianJie:{
                 type:'qiDong',
                 trigger:{player:'phaseUseBegin'},
-                priority:1,
+                //priority:1,
                 filter:function(event,player){
                     if(event.qiDong) return false;
                     if(game.players.length==4) return false;
