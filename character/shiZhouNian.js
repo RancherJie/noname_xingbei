@@ -7437,7 +7437,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     if(event.qiDong) return false;
                     return player.countZhiShiWu('douQi')>=3;
                 },
-                priority:1,
+                //priority:1,
                 content:function(){
                     player.removeZhiShiWu('douQi',3);
                     if(!player.isLinked()) player.storage.baiShiHuanLongQuan=[];
