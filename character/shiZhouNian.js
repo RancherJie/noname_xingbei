@@ -8299,10 +8299,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             yiJiWuNian:{
                 trigger:{player:'useCardAfter'},
                 filter:function(event,player){
+                    if(event.selected) return false;
                     return get.is.gongJiXingDong(event)&&player.countZhiShiWu('canXin')>=4;
                 },
                 content:function(){
                     player.removeZhiShiWu('canXin',4);
+                    trigger.selected=true;
                     player.storage.gongJi++;
                     player.storage.yiJiWuNian=false;
                     player.addTempSkill('yiJiWuNian_1');
