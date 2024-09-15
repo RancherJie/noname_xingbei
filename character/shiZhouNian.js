@@ -126,17 +126,14 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             fengNuZhuiJi:{
                 usable:1,
                 trigger:{player:"useCardAfter"},
-                priority:1,
+                //priority:1,
                 filter:function(event,player){
-                    if(event.yingZhan==true) return false;
-                    if(get.type(event.card)=='gongJi'){
-                        return true;
-                    }else{
-                        return false;
-                    }
+                    if(event.selected) return false;
+                    return get.is.gongJiXingDong(event);
                 },
                 content:function(player){
                     "step 0"
+                    trigger.selected=true;
 					var str='风怒追击：风系[攻击行动]';
 					var next=player.gongJi(function(card,player,event){
                         if(get.xiBie(card)!='feng') return false;
@@ -257,16 +254,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             jianYing:{
                 usable:1,
                 trigger:{player:'useCardAfter'},
-                priority:0,
+                //priority:0,
                 filter:function(event,player){
-                    if(event.yingZhan==true) return false;
-                    if(get.type(event.card)=='gongJi'){
-                        return player.canBiShaShuiJing();
-                    }else{
-                        return false;
-                    }
+                    if(event.selected) return false;
+                    return get.is.gongJiXingDong(event)&&player.canBiShaShuiJing();
                 },
                 content:function(player){
+                    trigger.selected=true;
                     player.removeBiShaShuiJing();
                     player.storage.gongJi++;
                 },
