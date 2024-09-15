@@ -7366,17 +7366,20 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             },
             xuLiYiji:{
                 trigger:{player:"useCard"},
-                priority:1,
+                //priority:1,
                 filter:function(event,player){
                     if(player.countZhiShiWu('douQi')>=lib.skill.douQi.intro.max) return false;
+
+                    if(event.selected) return false;
+
                     return get.is.zhuDongGongJi(event);
                 },
                 firstDo:true,
                 content:function(){
+                    trigger.selected=true;
                     player.addZhiShiWu('douQi');
                     trigger.baseDamage+=1;
                     player.storage.xuLiYiji=trigger.card;
-                    trigger.xuLiYiji=true;
                 },
                 check:function(event,player){
                     if(!player.isLinked()) return true;
@@ -7518,11 +7521,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             qiJueBengJi:{
                 trigger:{player:"useCard"},
                 filter:function(event,player){
-                    if(event.xuLiYiji==true) return false;
+                    if(event.selected) return false;
                     if(!player.hasZhiShiWu('douQi')) return false;
                     return get.is.zhuDongGongJi(event);
                 },
                 content:function(){
+                    trigger.selected=true;
                     player.removeZhiShiWu('douQi');
                     trigger.canYingZhan=false;
                     trigger.qiJueBengJi=true;
