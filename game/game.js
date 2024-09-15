@@ -12552,15 +12552,19 @@
 					for(var i=0;i<event.choice.length;i++){
 						controls.push(event.choice[i][0]);
 					}
+					//xingBei
+					controls.push('cancel2');
 					event.current.chooseControl(controls)
 					.set('prompt','选择下一个触发的技能').set('forceDie',true).set('arrangeSkill',true).set('includeOut',true)
 					'step 5'
-					if(result.control){
+					if(result.control!='cancel2'){
 						for(var i=0;i<event.doing.list.length;i++){
 							if(event.doing.list[i][0]==result.control&&event.doing.list[i][1]==event.current){
 								event.num=i;break;
 							}
 						}
+					}else{
+						event.finish();
 					}
 					'step 6'
 					var info=event.doing.list[event.num];
