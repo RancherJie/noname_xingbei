@@ -8783,7 +8783,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                 yiChu=Math.min(yiChu,list.length);
                                 yiChu=Math.min(yiChu,num1);
                             }
-
+                            yiChu=Math.max(yiChu,1);
                             player.chooseControl(list).set('prompt','\u9009\u62e9\u8f6c\u79fb\u4f24\u5bb3\u91cf\uff0c\u76ee\u524d\u4f24\u5bb3\u91cf\u4e3a'+trigger.num).set('ai',function(player){
                                 return _status.event.num-1;
                             }).set('num',yiChu);
