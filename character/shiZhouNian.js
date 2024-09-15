@@ -3804,14 +3804,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 usable:1,
                 trigger:{player:"useCardAfter"},
                 filter:function(event,player){
-                    if(event.yingZhan==true) return false;
-                    if(get.type(event.card)=='gongJi'){
-                        return true;
-                    }else{
-                        return false;
-                    }
+                    if(event.selected) return false;
+                    return get.is.gongJiXingDong(event);
                 },
                 content:function(player){
+                    trigger.selected=true;
 					var str='修罗连斩：火系[攻击行动]';
 					var next=player.gongJi('h',function(card,player,event){
                         if(get.xiBie(card)!='huo') return false;
