@@ -7066,7 +7066,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 }
             },
             mingJingZhiShui:{
-                trigger:{player:'useCardBefore'},
+                //trigger:{player:'useCardBefore'},
+                trigger:{player:'useCard'},
                 filter:function(event,player){
                     if(player.countZhiShiWu('zhiXing')<4) return false;
                     return get.is.zhuDongGongJi(event);
