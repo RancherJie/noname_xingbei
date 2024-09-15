@@ -7159,10 +7159,17 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						filter:function(event,player){
 							return lib.skill.tiaoXinX.filterx(event,player,1);
 						},
+                        direct:true,
                         content:function(){
-                            player.removeZhiShiWu('tiaoXinX')
-                            player.removeSkill('tiaoXinX');
-                            trigger.cancel();
+                            'step 0'
+                            var list=['继续回合','跳过回合'];
+                            player.chooseControl(list).set('prompt','启动前：你被挑衅了');
+                            'step 1'
+                            if(result.control=='跳过回合'){
+                                player.removeZhiShiWu('tiaoXinX')
+                                player.removeSkill('tiaoXinX');
+                                trigger.cancel();
+                            }
                         },
                     },
                     qiDongHou:{
@@ -7171,10 +7178,17 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						filter:function(event,player){
 							return lib.skill.tiaoXinX.filterx(event,player,1);
 						},
+                        direct:true,
                         content:function(){
-                            player.removeZhiShiWu('tiaoXinX')
-                            player.removeSkill('tiaoXinX');
-                            trigger.cancel();
+                            'step 0'
+                            var list=['继续回合','跳过回合'];
+                            player.chooseControl(list).set('prompt','启动后：你被挑衅了');
+                            'step 1'
+                            if(result.control=='跳过回合'){
+                                player.removeZhiShiWu('tiaoXinX')
+                                player.removeSkill('tiaoXinX');
+                                trigger.cancel();
+                            }
                         },
                     },
                     kaiShi:{
@@ -7183,10 +7197,17 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						filter:function(event,player){
 							return lib.skill.tiaoXinX.filterx(event,player);
 						},
+                        direct:true,
                         content:function(){
-                            player.removeZhiShiWu('tiaoXinX')
-                            player.removeSkill('tiaoXinX');
-                            trigger.cancel();
+                            'step 0'
+                            var list=['继续回合','跳过回合'];
+                            player.chooseControl(list).set('prompt','开始：你被挑衅了');
+                            'step 1'
+                            if(result.control=='跳过回合'){
+                                player.removeZhiShiWu('tiaoXinX')
+                                player.removeSkill('tiaoXinX');
+                                trigger.cancel();
+                            }
                         },
                     },
                     sheZhi:{
