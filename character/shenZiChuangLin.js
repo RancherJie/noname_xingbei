@@ -1190,7 +1190,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 1'
                     game.log(player,'选择了',result.targets);
                     var target=result.targets[0];
-                    target.damage(1,player);
+                    target.damageFaShu(1,player);
                     'step 2'
                     var yanLing=player.getExpansions('yanLing');
                     var cards=[];
