@@ -29,7 +29,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             zhongCaiZhe:['female','xue','3/4',['zhongCaiFaZe','yiShiZhongDuan','moRiShenPan','shenPanLangChao','zhongCaiYiShi','panJueTianPing','shenPan'],],
             shenGuan:['female','sheng',4,['shenShengQiShi','shenShengQiFu','shuiZhiShenLi','shengShiShouHu','shenShengQiYue','shenShengLingYu'],],
             qiDaoShi:['female','yong',4,['guangHuiXinYang','heiAnZuZhou','weiLiCiFu','xunJieCiFu','qiDao','faLiChaoXi','qiDaoFuWen'],],
-            xianZhe:['male','yong',4,['zhiHuiFaDian','faShuFangTan','moDaoFaDian','shengJieFaDian'],],
+            xianZhe:['male','yong',4,['zhiHuiFaDian','faShuFanTan','moDaoFaDian','shengJieFaDian'],],
             lingFuShi:['female','yong',4,['lingFu_leiMing','lingFu_fengXing','nianZhou','baiGuiYeXing','lingLiBengJie','yaoLi'],],
             jianDi:['female','ji','4/5',['jianHunShouHu','yangGong','jianQiZhan','tianShiZhiHun','eMoZhiHun','buQuYiZhi','jianHun','jianQi'],],
             geDouJia:['female','ji','4/5',['nianQiLiChang','xuLiYiji','nianDan','baiShiHuanLongQuan','qiJueBengJi','douShenTianQu','douQi'],],
@@ -5737,7 +5737,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                 }
             },
-            faShuFangTan:{
+            faShuFanTan:{
                 trigger:{player:'damageEnd'},
                 priority:1,
                 filter:function(event,player){
@@ -5758,8 +5758,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         selectCard:[2,Infinity],
                         filterTarget:true,
                         complexCard:true,
-                        prompt:get.prompt('faShuFangTan'),
-                        prompt2:lib.translate.faShuFangTan_info,
+                        prompt:get.prompt('faShuFanTan'),
+                        prompt2:lib.translate.faShuFanTan_info,
+                        ai1(card) {
+                            return 6- get.value(card);
+                        },
                         ai2:function(target){
 							var player=_status.event.player;
 							return target.side!=player.side;
@@ -9877,8 +9880,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             //贤者
             zhiHuiFaDian:"[被动]智慧法典",
             zhiHuiFaDian_info:"你的【能量】上限+1；<span class='tiaoJian'>(你每次承受法术伤害时⑥，若该伤害>3)</span>你+2[宝石]并弃1张牌。",
-            faShuFangTan:"[响应]法术反弹",
-            faShuFangTan_info:"<span class='tiaoJian'>(你每次承受法术伤害时⑥，若该伤害仅为1点，则可以弃X张同系牌[展示](X>1))</span>对目标角色造成(X-1)点法术伤害③，并对自己造成X点法术伤害③。",
+            faShuFanTan:"[响应]法术反弹",
+            faShuFanTan_info:"<span class='tiaoJian'>(你每次承受法术伤害时⑥，若该伤害仅为1点，则可以弃X张同系牌[展示](X>1))</span>对目标角色造成(X-1)点法术伤害③，并对自己造成X点法术伤害③。",
             moDaoFaDian:"[法术]魔道法典",
             moDaoFaDian_info:"[宝石]<span class='tiaoJian'>(弃X张异系牌[展示](X>1))</span>对目标角色和自己各造成(X-1)点法术伤害③。",
             shengJieFaDian:"[法术]圣洁法典",
