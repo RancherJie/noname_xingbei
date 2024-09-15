@@ -72,7 +72,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             },
             shenWei:{
                 trigger:{player:'useCardBefore'},
-                priority:1,
+                //priority:1,
                 filter:function(event,player){
                     if(event.getParent('phaseUse').shenWei==false) return false;
                     return player.countZhiShiWu('shengYin')>=2&&get.is.zhuDongGongJi(event);
