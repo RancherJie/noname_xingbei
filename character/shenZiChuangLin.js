@@ -83,13 +83,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         event.goto(2);
                     }
                     'step 4'
-                    var target=event.targetsX.shift();
-                    if(target){
-                        target.draw();
-                    }
-                    if(event.cards.length>0){
-                        event.redo();
-                    }
+                    
 
                     'step 5'
                     if(event.cards.length>0){
@@ -166,6 +160,17 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         var target=event.targets.shift();
                         target.changeZhiLiao(1);
                         if(event.targets.length>0){
+                            event.redo();
+                        }
+                    }
+
+                    'step 15'
+                    if(event.targetsX){
+                        var target=event.targetsX.shift();
+                        if(target){
+                            target.draw();
+                        }
+                        if(event.targetsX.length>0){
                             event.redo();
                         }
                     }
