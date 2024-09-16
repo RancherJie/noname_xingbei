@@ -20214,7 +20214,6 @@
 						if(config.mode!='guozhan'&&(config.mode!='doudizhu'||config.doudizhu_mode!='online')){
 							str+='【';
 							for(var i=0;i<config.characterPack.length;i++){
-								console.log(config.characterPack[i]);
 								str+=(get.translation(config.characterPack[i]));
 								if(i<config.characterPack.length-1) str+='+';
 							}
