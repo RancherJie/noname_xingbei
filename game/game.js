@@ -41545,7 +41545,6 @@
 									input.innerHTML='无';
 								}
 								input.innerHTML=input.innerHTML.slice(0,12);
-								console.log(input.innerHTML);
 								game.saveConfig('connect_remark',input.innerHTML);
 								game.saveConfig('connect_remark',input.innerHTML,'xingbei');
 							}
