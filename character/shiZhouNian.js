@@ -583,7 +583,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     var list=['是','否'];
                     player.chooseControl(list).set('prompt','潜行：是否摸一张牌').set('ai',function(){
                         var player=_status.event.player;
-                        if(player.countCards('h')+3<=player.getHandcardLimit()) return 0;
+                        if(player.countCards('h')+2<=player.getHandcardLimit()) return 0;
                         return 1;
                     });
                     'step 1'
