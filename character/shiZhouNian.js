@@ -5263,7 +5263,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 group:'shiShenZhouShu_tiaoJian',
                 subSkill:{
                     tiaoJian:{
-                        trigger:{player:'useCard1'},
+                        trigger:{player:'useCardBefore'},
                         direct:true,
                         firstDo:true,
                         priority:10,
