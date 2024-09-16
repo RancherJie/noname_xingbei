@@ -1457,7 +1457,7 @@
 					},
 					splash_style:{
 						name:'启动页',
-						init:'style1',
+						init:'style2',
 						item:{
 							style1:'样式一',
 							style2:'样式二',
