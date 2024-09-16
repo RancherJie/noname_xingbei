@@ -239,7 +239,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
  					case 'two':str2='2v2';break;
  					case 'three':str2='3v3';break;
 				}
-				if(game.side==true) str2+='（红方）';
+				if(game.me.side==true) str2+='（红方）';
 				else str2+='（蓝方）';
 
 				return [str,str2];
