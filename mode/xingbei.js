@@ -233,23 +233,15 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 			},
 			getVideoName:function(){
 				var str=get.translation(game.me.name1);
-				if(game.me.name2){
-					str+='/'+get.translation(game.me.name2);
-				}
+				
 				var str2;
-				if(game.versusVideoName) str2=game.versusVideoName;
-				else{
  				switch(_status.mode){
  					case 'two':str2='2v2';break;
- 					//case 'endless':str2='无尽模式';break;
  					case 'three':str2='3v3';break;
- 					//case 'siguo':str2='同舟共济';break;
- 					//case 'jiange':str2='守卫剑阁';break;
- 					//case 'four':str2='对决 - 4v4';break;
- 					//case 'guandu':str2='官渡之战';break;
- 					//default:str2='对决 - '+lib.storage.number+'v'+lib.storage.number
- 				}
 				}
+				if(game.side==true) str2+='（红方）';
+				else str2+='（蓝方）';
+
 				return [str,str2];
 			},
 			addRecord:function(bool){
