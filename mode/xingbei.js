@@ -246,36 +246,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 
 				return [str,str2];
 			},
-			addRecord:function(bool){
-				if(typeof bool=='boolean'){
-					var data=lib.config.gameRecord.xingbei.data;
-					//var identity=get.cnNumber(lib.storage.number)+'人';
-					if(game.players.length==4){
-						var identity='2v2';
-					}else{
-						var identity='3v3';
-					}
-					
-					if(!data[identity]){
-						data[identity]=[0,0];
-					}
-					if(bool){
-						data[identity][0]++;
-					}
-					else{
-						data[identity][1]++;
-					}
-					var list=['2v2','3v3'];
-					var str='';
-					for(var i=0;i<list.length;i++){
-						if(data[list[i]]){
-							str+=list[i]+'：'+data[list[i]][0]+'胜'+' '+data[list[i]][1]+'负<br>';
-						}
-					}
-					lib.config.gameRecord.xingbei.str=str;
-					game.saveConfig('gameRecord',lib.config.gameRecord);
-				}
-			},
+			
 			
 			chooseCharacter:function(){
 				switch(get.config('choose_mode')){
