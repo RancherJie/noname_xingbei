@@ -17123,7 +17123,8 @@
 					}else{
 						game.log(player,'弃置了',cards.length,'张牌');//星杯暗置弃牌日志
 					}
-					event.done=player.lose(cards,event.position,'visible');
+					//event.done=player.lose(cards,event.position,'visible');
+					event.done=player.lose(cards,event.position);
 					event.done.type='discard';
 					if(event.discarder) event.done.discarder=event.discarder;
 					"step 1"
