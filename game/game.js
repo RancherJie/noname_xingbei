@@ -1607,7 +1607,7 @@
 					},
 					image_background:{
 						name:'游戏背景',
-						init:'default',
+						init:'xingBei_bg',
 						item:{},
 						visualBar:function(node,item,create){
 							if(node.created){

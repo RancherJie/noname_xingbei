@@ -81,7 +81,7 @@ window.config={
 	hp_style:'xingbei',
 
 	image_character:'default',
-	image_background:'default',
+	image_background:'xingBei_bg',
 
 	asset_image:true,
 	asset_font:true,
