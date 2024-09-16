@@ -1769,7 +1769,8 @@
 					},
 					image_background_blur:{
 						name:'背景模糊',
-						init:false,
+						//init:false,
+						init:true,
 						onclick:function(bool){
 							game.saveConfig('image_background_blur',bool);
 							if(lib.config.image_background_blur){
