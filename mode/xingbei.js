@@ -249,7 +249,13 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 			addRecord:function(bool){
 				if(typeof bool=='boolean'){
 					var data=lib.config.gameRecord.xingbei.data;
-					var identity=get.cnNumber(lib.storage.number)+'人';
+					//var identity=get.cnNumber(lib.storage.number)+'人';
+					if(game.players.length==4){
+						var identity='2v2';
+					}else{
+						var identity='3v3';
+					}
+					
 					if(!data[identity]){
 						data[identity]=[0,0];
 					}
@@ -259,7 +265,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					else{
 						data[identity][1]++;
 					}
-					var list=['一人','两人','三人'];
+					var list=['2v2','3v3'];
 					var str='';
 					for(var i=0;i<list.length;i++){
 						if(data[list[i]]){
