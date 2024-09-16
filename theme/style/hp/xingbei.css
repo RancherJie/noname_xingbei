@@ -1,5 +1,5 @@
 .hp:not(.text):not(.actcount):not(.treasure)[data-condition="high"]>div:not(.lost):not(.shield){
-    background: url('image/xingbei.png');
+    background: url('image/xingbei1.png');
     box-shadow: none;
     border: none;
     background-size: 100% 100%;
@@ -8,7 +8,7 @@
     border-radius: 0px;
 }
 .hp:not(.text):not(.actcount):not(.treasure)[data-condition="mid"]>div:not(.lost):not(.shield){
-    background: url('image/xingbei.png');
+    background: url('image/xingbei2.png');
     box-shadow: none;
     border: none;
     background-size: 100% 100%;
@@ -17,7 +17,7 @@
     border-radius: 0px;
 }
 .hp:not(.text):not(.actcount):not(.treasure)[data-condition="low"]>div:not(.lost):not(.shield){
-    background: url('image/xingbei.png');
+    background: url('image/xingbei3.png');
     box-shadow: none;
     border: none;
     background-size: 100% 100%;
@@ -26,7 +26,7 @@
     border-radius: 0px;
 }
 .hp:not(.text):not(.actcount):not(.treasure)>.lost{
-    background: url('image/xingbei_bg.png');
+    background: url('image/xingbei4.png');
     box-shadow: none;
     border: none;
     background-size: 100% 100%;
