@@ -1014,14 +1014,18 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 trigger:{target:'useCardToTargeted'},
                 firstDo:true,
                 filter:function(event,player){
-                    return get.is.zhuDongGongJi(event.getParent())&&player.getExpansions('yanLing').length>0;
+                    return get.is.zhuDongGongJi(event.getParent())&&(player.getExpansions('yanLing').length>0||player.countZhiShiWu('miShu')>0);
                 },
                 content:function(){
                     'step 0'
                     var cards=player.getExpansions('yanLing');
-                    player.chooseCardButton(cards,true,'移除1个【言灵】').set('ai',function(){
-                        return Math.random();
-                    });
+                    if(cards.length>0){
+                        player.chooseCardButton(cards,true,'移除1个【言灵】').set('ai',function(){
+                            return Math.random();
+                        });
+                    }else{
+                        event.goto(2);
+                    }
                     'step 1'
                     player.discard(result.links,'yanLing');
                     'step 2'
