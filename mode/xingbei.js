@@ -23,6 +23,8 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				var store=lib.db.transaction(['video'],'readwrite').objectStore('video');
 				store.get(parseInt(playback)).onsuccess=function(e){
 					if(e.target.result){
+						ui.shiQiInfo=ui.create.div('.touchinfo.bottom-right',ui.window);
+						ui.updateShiQiInfo();
 						game.playVideoContent(e.target.result.video);
 					}
 					else{
@@ -3618,11 +3620,13 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				changeXingBei:function(){
 					num=event.num;
 					side=event.side;
+					var numx=num;
 					if(side==true){
 						game.hongXingBei+=num;
 						if(num>0){
 							game.log('<span style="color:red;">红方</span>星杯数量增加',num);
 						}else{
+							num=-num;
 							game.log('<span style="color:red;">红方</span>星杯数量减少',num);
 						}
 					}else if(side==false){
@@ -3630,6 +3634,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						if(num>0){
 							game.log('<span style="color:blue;">蓝方</span>星杯数量增加',num);
 						}else{
+							num=-num;
 							game.log('<span style="color:blue;">蓝方</span>星杯数量减少',num);
 						}
 					}
@@ -3640,6 +3645,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						ui.updateShiQiInfo();
 					},game.hongXingBei,game.lanXingBei);
 
+					game.addVideo('changeXingBei',null,[numx,side]);
 					game.checkResult();
 					
 
@@ -3666,7 +3672,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						}
 						
 					}
-
+					var numx=num;
 					if(side==true){
 						game.hongShiQi+=num;
 						if(num>0){
@@ -3691,6 +3697,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						ui.updateShiQiInfo();
 					},game.hongShiQi,game.lanShiQi);
 
+					game.addVideo('changeShiQi',null,[numx,side]);
 					game.checkResult();
 				},
 				changeZhanJi:function(){
@@ -3702,6 +3709,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					}else if(color=="b"){
 						var xingShi='水晶';
 					}
+					var numx=num;
 					if(num>0){
 						if(side==true){
 							for(let i=0;i<num;i++){
@@ -3744,7 +3752,8 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						game.hongZhanJi=hongZhanJi;
 						ui.updateShiQiInfo();
 					},game.hongZhanJi,game.lanZhanJi);
-
+				
+					game.addVideo('changeZhanJi',null,[numx,color,side]);
 					game.checkResult();
 				},
 

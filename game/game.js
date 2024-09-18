@@ -12856,7 +12856,7 @@
 					'step 2'
 					if(event.video.length){
 						var content=event.video.shift();
-						// console.log(content);
+						console.log(content);
 						if(content.type=='delay'){
 							game.delay(content.content);
 						}
@@ -36059,6 +36059,70 @@
 						if(ui.historybar) ui.historybar.style.borderRadius='0 0 0 4px';
 					}
 				}
+			},
+
+			changeShiQi:function(content){
+				var side=content[1];
+				var num=content[0];
+				if(side==true){
+					game.hongShiQi+=num;
+				}else if(side==false){
+					game.lanShiQi+=num;
+				}
+				ui.updateShiQiInfo();
+			},
+			changeZhanJi:function(content){
+				var num=content[0];
+				var color=content[1];
+				var side=content[2];
+				if(color=="r"){
+					var xingShi='宝石';
+				}else if(color=="b"){
+					var xingShi='水晶';
+				}
+				if(num>0){
+					if(side==true){
+						for(let i=0;i<num;i++){
+							game.hongZhanJi.push(xingShi);
+						}
+					}else if(side==false){
+						for(let i=0;i<num;i++){
+							game.lanZhanJi.push(xingShi);
+						}
+					}
+				}else if(num<0){
+					num=-num;
+					if(side==true){
+						for(let i=0;i<num;i++){
+							let index = game.hongZhanJi.indexOf(xingShi);  
+							if (index !== -1) {  
+								game.hongZhanJi.splice(index, 1);  
+							}
+						}
+						
+					}else if(side==false){
+						for(let i=0;i<num;i++){
+							let index = game.lanZhanJi.indexOf(xingShi);  
+							if (index !== -1) {  
+								game.lanZhanJi.splice(index, 1);  
+							}
+						}
+						
+					}	
+				}
+				game.hongZhanJi.sort();
+				game.lanZhanJi.sort();
+				ui.updateShiQiInfo();
+			},
+			changeXingBei:function(content){
+				var num=content[0];
+				var side=content[1];
+				if(side==true){
+					game.hongXingBei+=num;
+				}else if(side==false){
+					game.lanXingBei+=num;
+				}
+				ui.updateShiQiInfo();
 			}
 		},
 		reload:function(){
