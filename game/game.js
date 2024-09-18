@@ -12856,7 +12856,7 @@
 					'step 2'
 					if(event.video.length){
 						var content=event.video.shift();
-						console.log(content);
+						//console.log(content);
 						if(content.type=='delay'){
 							game.delay(content.content);
 						}
