@@ -3404,8 +3404,8 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 							var num=0.1;
 							num+=(0.2*(player.countEmptyCards()-3));
 							var numx=Math.random();
-							if(numx<=num) return 0;
-							else return 1;
+							if(numx<=num) return 1;
+							else return 0;
 						},
 					},
 					maixie:true,
