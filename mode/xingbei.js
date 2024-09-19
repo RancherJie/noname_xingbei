@@ -3393,9 +3393,20 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					}
 				},
 				ai:{
-					order:4,
+					order:function(item,player){
+						var num=3;
+						num+=(0.15*get.emptyZhanJi(player.side));
+						return num;
+					},
 					result:{
-						player:2,
+						player:function(player){
+							if(get.emptyZhanJi(player.side)<2) return 0;
+							var num=0.1;
+							num+=(0.2*(player.countEmptyCards()-3));
+							var numx=Math.random();
+							if(numx<=num) return 0;
+							else return 1;
+						},
 					},
 					maixie:true,
 				}
