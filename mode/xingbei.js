@@ -4586,7 +4586,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					return game.lanXingBei;
 				}
 			},
-			getEmptyZhanJi:function(side){
+			emptyZhanJi:function(side){
 				if(side==true){
 					return game.zhanJiMax-game.hongZhanJi.length;
 				}else if(side==false){
