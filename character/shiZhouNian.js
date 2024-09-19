@@ -8907,9 +8907,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     next.set('ai',function(target){
                         var player=_status.event.player;
                         if(target==player) return -1;
-                        if(player.isLinked()&&target.side==player.side) return 1;
-                        else if(!player.isLinked()&&target.side!=player.side) return 1;
-                        else return 0;
+                        if(target.side==player.side) return -1;
+                        else return 2;
                     })
                     'step 2'
                     if(result.bool){
@@ -9117,9 +9116,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     },
                     result:{
                         target:function(player,target){
-                            if(target==player) return 0;
-                            if(player.isLinked()) return 2;
-                            else return -1;
+                            return -1;
                         },
                     }
                 }
