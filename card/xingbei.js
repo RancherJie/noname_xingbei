@@ -305,7 +305,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 							return current.side==player.side&&current.countCards('h')+2>=current.getHandcardLimit();
 						});
 						if(num.length>=1){
-							return 4;
+							return 3.5;
 						}else{
 							return 3;
 						}
