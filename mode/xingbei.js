@@ -3591,11 +3591,14 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				},
 				ai:{
 					order:function(item,player){
-						var num=Math.random();
-						return 3.8-num;
+						var num=3.2;
+						num+=(0.1*player.countNengLiangAll());
+						return num;
 					},
 					result:{
 						player:function(player){
+							if(!(player.hasSkillTag('baoShi')||player.hasSkillTag('shuiJing'))) return -1;
+
 							var xingShi;
 							if(player.side==true){
 								xingShi=game.hongZhanJi.length;
@@ -3603,10 +3606,13 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 								xingShi=game.lanZhanJi.length;
 							}
 							if(xingShi<=1) return 0;
-							if(!(player.hasSkillTag('baoShi')||player.hasSkillTag('shuiJing'))) return -1;
+
 							var num=player.getNengLiangLimit()-player.countNengLiangAll();
-							if(num>=2) return 2;
-							return 0;
+							if(num<=1) return 0;
+
+							var numx=Math.random();
+							if(numx<=0.5) return 1;
+							else return 0;
 						},
 					},
 				}
