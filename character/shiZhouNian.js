@@ -8908,8 +8908,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         var player=_status.event.player;
                         if(target==player) return -1;
                         if(target.side==player.side) return -1;
-                        else return 2;
-                    })
+                        else return target.countCards('h')-player.storage.tongShengGongSi_target.countCards('h');
+                    });
                     'step 2'
                     if(result.bool){
                         player.storage.tongShengGongSi_target.removeZhiShiWu('tongShengGongSi');
@@ -9116,7 +9116,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     },
                     result:{
                         target:function(player,target){
-                            return -1;
+                            return -target.countCards('h');
                         },
                     }
                 }
