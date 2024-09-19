@@ -394,7 +394,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     list.push('cancel2');
                     player.chooseControl(list).set('prompt','是否发动【影缝】？<br>移除X点【糸】，他弃x张牌').set('ai',function(){
                         return _status.event.x;
-                    }).set('x',list.length-1);
+                    }).set('x',list.length-2);
                     'step 1'
                     if(result.control!='cancel2'){
                         player.logSkill(event.name,trigger.player);
