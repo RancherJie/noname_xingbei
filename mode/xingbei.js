@@ -3477,18 +3477,24 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					}
 				},
 				ai:{
-					order:7.5,
+					order:function(item,player){
+						var num=3;
+						var shiQi=get.shiQi(!player.side);
+						if(shiQi>5) return 0;
+						num+=(0.4*(shiQi-5));
+						return num;
+					},
 					result:{
 						player:function(player){
-                            if(player.side){
-                                if(game.hongZhanJi.length>=3){
-                                    return 3;
-                                }
-                            }else{
-                                if(game.lanZhanJi.length>=3){
-                                    return 3;
-                                }
-                            }
+                            var num=get.zhanJi(player.side).length;
+							if(num>=3) return 0;
+
+							num=0.3;
+							num+=(0.2*(player.countEmptyCards()-3));
+
+							var numx=Math.random();
+							if(numx<=num) return 1;
+							else return 0;
                         },
 					},
 					maixie:true,
