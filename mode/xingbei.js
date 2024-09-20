@@ -3479,21 +3479,23 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				},
 				ai:{
 					order:function(item,player){
-						var num=3;
+						var num=3.6;
 						var shiQi=get.shiQi(!player.side);
 						if(shiQi>5) return 0;
 						num+=(0.4*(shiQi-5));
+						num+=(0.1*(get.zhanJi(player.side).length)-3);
 						return num;
 					},
 					result:{
 						player:function(player){
 							if(player.countCards('h')==0) return 1;
 
-                            var num=get.zhanJi(player.side).length;
-							if(num>=4) return 1;
+                            var zhanJi=get.zhanJi(player.side);
+							if(zhanJi.length>=4) return 1;
+							if(!zhanJi.includes('水晶')) return 0;
 
-							num=0.3;
-							num+=(0.2*(player.countEmptyCards()-3));
+							var num=0.3;
+							num+=(0.2*(player.countEmptyCards()));
 
 							var numx=Math.random();
 							if(numx<=num) return 1;
