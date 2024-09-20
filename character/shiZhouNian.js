@@ -5565,8 +5565,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             return player.isLinked();
                         },
                         content:function(){
+                            'step 0'
                             player.chongZhi();
                             player.removeSkill('moNvZhiNu_xiBie');
+                            'step 1'
                             player.qiPai();
                         }
                     },
