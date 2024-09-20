@@ -3597,7 +3597,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				},
 				ai:{
 					order:function(item,player){
-						var num=3.2;
+						var num=3.1;
 						num+=(0.05*(player.getNengLiangLimit()-player.countNengLiangAll()));
 						num+=(0.1*get.zhanJi(player.side).length);
 						return num;
