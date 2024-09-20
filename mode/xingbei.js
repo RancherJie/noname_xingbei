@@ -3490,7 +3490,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 							if(player.countCards('h')==0) return 1;
 
                             var num=get.zhanJi(player.side).length;
-							if(num>=3) return 0;
+							if(num>=4) return 1;
 
 							num=0.3;
 							num+=(0.2*(player.countEmptyCards()-3));
