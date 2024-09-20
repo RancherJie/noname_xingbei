@@ -3479,10 +3479,11 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				},
 				ai:{
 					order:function(item,player){
-						var num=3.6;
+						var num=3.5;
 						var shiQi=get.shiQi(!player.side);
-						if(shiQi>5) return 0;
-						num+=(0.4*(shiQi-5));
+						if(shiQi<=5){
+							num+=(0.4*(5-shiQi));
+						}
 						num+=(0.1*(get.zhanJi(player.side).length)-3);
 						return num;
 					},
@@ -3597,7 +3598,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				ai:{
 					order:function(item,player){
 						var num=3.2;
-						num+=(0.1*(player.getNengLiangLimit()-player.countNengLiangAll()));
+						//num+=(0.1*(player.getNengLiangLimit()-player.countNengLiangAll()));
 						num+=(0.1*get.zhanJi(player.side).length);
 						return num;
 					},
