@@ -249,6 +249,16 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 content:function(event,target){
                     player.storage.gongJi++;
+                },
+                mod:{
+                    aiOrder:function(player,item,num){
+                        if(get.type(item)!='gongJi') return;
+                        if(item.hasNature('jiFengJi')){
+                            return num+=0.7;
+                        }else{
+                            return;
+                        }
+                    },
                 }
             },
             jianYing:{
