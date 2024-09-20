@@ -144,6 +144,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 check:function(event,player){
                     var num=player.countCards('h',card=>get.xiBie(card)=='feng'&&get.type(card)=='gongJi');
                     return num>0
+                },
+                mod:{
+                    aiOrder:function(player,item,num){
+                        if(get.type(item)!='gongJi') return;
+                        if(get.xiBie(item)=='feng') return num-=0.2;
+                        else return;
+                    },
                 }
             },
             shengJian:{
