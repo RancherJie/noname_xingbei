@@ -47698,7 +47698,7 @@
 						//var noderevive=ui.create.div('.menubutton','复活',row1,clickrow1);
 						//var nodereplace=ui.create.div('.menubutton','换人',row1,clickrow1);
 						var nodeaddZhiLiao=ui.create.div('.menubutton','增疗',row1,clickrow1);
-						var noderemoveZhiLaio=ui.create.div('.menubutton','减疗',row1,clickrow1);
+						var noderemoveZhiLiao=ui.create.div('.menubutton','减疗',row1,clickrow1);
 						var nodeaddHong=ui.create.div('.menubutton','加红',row1,clickrow1);
 						var noderemoveHong=ui.create.div('.menubutton','减红',row1,clickrow1);
 						var nodeaddLan=ui.create.div('.menubutton','加蓝',row1,clickrow1);
