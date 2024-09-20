@@ -3487,6 +3487,8 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					},
 					result:{
 						player:function(player){
+							if(player.countCards('h')==0) return 1;
+
                             var num=get.zhanJi(player.side).length;
 							if(num>=3) return 0;
 
