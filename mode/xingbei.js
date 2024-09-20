@@ -3597,7 +3597,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				},
 				ai:{
 					order:function(item,player){
-						var num=3.1;
+						var num=3.15;
 						num+=(0.05*(player.getNengLiangLimit()-player.countNengLiangAll()));
 						num+=(0.1*get.zhanJi(player.side).length);
 						return num;
@@ -4163,6 +4163,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				getZhiLiaoLimit:function(){
 					var num=game.zhiLiaoMax;
 					num=game.checkMod(this,num,'maxZhiLiao',this);
+					num=game.checkMod(this,num,'maxZhiLiaoFinal',this);
 					return Math.max(0,num);
 				},
 				getNengLiangLimit:function(){
@@ -4503,6 +4504,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 
 			//xingbei
 			zhiLiaoEffect:function(target,num){
+				if(target.hasSkillTag('noZhiLiao')) return 0;
 				if(target.getZhiLiaoLimit()-target.zhiLiao<=0) return 0.1;
 				if(!num){
 					num=1;
@@ -4516,6 +4518,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 			},
 			zhiLiaoEffect2:function(target,player,num){
 				if(target.side!=player.side) return -1;
+				if(target.hasSkillTag('noZhiLiao')) return 0;
 				if(target.getZhiLiaoLimit()-target.zhiLiao<=0) return 0.1;
 				if(!num){
 					num=1;
