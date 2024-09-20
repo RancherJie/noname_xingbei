@@ -3602,14 +3602,13 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					result:{
 						player:function(player){
 							if(!(player.hasSkillTag('baoShi')||player.hasSkillTag('shuiJing'))) return -1;
+							
+							var zhanJi=get.zhanJi(player.side);
+							if(zhanJi.length<=1) return 0;
 
-							var xingShi;
-							if(player.side==true){
-								xingShi=game.hongZhanJi.length;
-							}else{
-								xingShi=game.lanZhanJi.length;
+							if(player.hasSkillTag('shuiJing')&&!player.hasSkillTag('baoShi')){
+								if(!zhanJi.includes('水晶')) return 0;
 							}
-							if(xingShi<=1) return 0;
 
 							var num=player.getNengLiangLimit()-player.countNengLiangAll();
 							if(num<=1) return 0;
