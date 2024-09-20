@@ -7,7 +7,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             shenZiChuangLin:{
                 "3星":['jinGuiZhiNv'],
                 "3.5星":[],
-                "4星":['shenMiXueZhe','wuRanZhe'],
+                "4星":['shenMiXueZhe','ranWuZhe'],
                 "4.5星":[],
                 '5星':['nvPuZhang','jieJieShi'],
             }
@@ -17,7 +17,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             nvPuZhang:['female','ji',5,['yingZhiXue','miShuMuYing','shun','yingFeng','shiFengZhiDao','jinShu','fengXue','zhen','ying','mi'],],
             jieJieShi:['female','huan',5,['jieJieYiShi','huangShenZhiLi','huangShenJiYi','jinMoJing','liuLiJing','jueJie','fuMoJing','jieJie','jiX'],],
             shenMiXueZhe:['female','yong',4,['yanLingShu','shouHuLing','zhenYanShu','jinJiMiFa','yaoJingMiShu','zhenYanYaZhi','yanLing','miShu'],],
-            wuRanZhe:['female','xue',4,['shenQiZhiYi','liRuQuanYong','kuangLiZhiXin','kuangLiZhiTi','shenZhiWuRan','niuQuZhiAi','liQi'],],
+            ranWuZhe:['female','xue',4,['shenQiZhiYi','liRuQuanYong','kuangLiZhiXin','kuangLiZhiTi','shenZhiWuRan','niuQuZhiAi','liQi'],],
 		},
         characterIntro:{
             jinGuiZhiNv:`\u662f\u4e00\u4e2a\u8fd8\u5728\u5b66\u4e60\u9b54\u6cd5\u7684\u8d35\u65cf\u5927\u5c0f\u59d0~\u3002\u5e73\u65f6\u4eba\u7f18\u8fd8\u4e0d\u9519\uff0c\u4f46\u8fc7\u4e8e\u5355\u7eaf\uff0c\u5f88\u5bb9\u6613\u88ab\u5229\u7528\uff1b\u672c\u8eab\u5c31\u662f\u4e00\u4e2a\u50bb\u767d\u751c\uff0c\u53ea\u6709\u5355\u7eaf\u7684\u540c\u60c5\u4e4b\u5fc3<br>            \u7ea2\u83b2\u4e8b\u4ef6\u4e4b\u540e\uff0c\u827e\u4e3d\u5361\u7684\u7236\u4eb2\u4e0e\u5c3c\u5415\u514b\u6d3e\uff0c\u4e3a\u4e86\u6269\u5f20\u81ea\u5df1\u7684\u6d3e\u7cfb\u4e0e\u5f71\u54cd\u529b\uff0c\u5229\u7528\u4e86\u5979\u7684\u5355\u7eaf\u4e0e\u540c\u60c5\u5fc3\uff0c\u5c06\u5979\u63a8\u4e0a\u4e86\u201c\u5723\u5973\u201d\u8fd9\u6837\u4e00\u4e2a\u6559\u5ef7\u5076\u50cf\u822c\u7684\u4f4d\u7f6e\uff1b\u7b56\u5212\u4e86\u4e00\u51fa\u7ed1\u67b6\u6848\u4f5c\u4e3a\u63a9\u62a4\uff0c\u5b9e\u9645\u4e0a\u662f\u5b9e\u65bd\u865a\u5047\u7684\u661f\u75d5\u70d9\u5370\u4eea\u5f0f\uff0c\u76ee\u7684\u5c31\u662f\u5bf9\u5979\u5b9e\u65bd\u4eba\u5de5\u661f\u75d5\u7684\u5f3a\u884c\u70d9\u5370\u3002<br>            \u56e0\u4e3a\u827e\u4e3d\u5361\u7684\u5355\u7eaf\uff0c\u4e0d\u80fd\u8ba9\u5979\u77e5\u9053\u81ea\u5df1\u53ea\u662f\u4e2a\u5047\u7684\u795e\u4e4b\u5b50\uff0c\u9700\u8981\u5236\u9020\u4e00\u4e2a\u620f\u5267\u6027\u7684\u4e8b\u4ef6\u8ba9\u5979\u81ea\u5df1\u53d1\u73b0\u81ea\u5df1\u5f97\u5230\u201c\u795e\u7684\u8d4b\u4e88\u201d\uff0c\u6240\u4ee5\u6b64\u65f6\u9664\u4e86\u5979\u7236\u4eb2\u548c\u7ea2\u8863\u4e3b\u6559\u77e5\u9053\u4ee5\u5916\uff0c\u5e76\u672a\u5bf9\u5916\u516c\u5f00\uff0c\u4e5f\u6ca1\u6709\u8ba9\u5176\u4ed6\u4eba\u77e5\u9053\u3002\u7531\u6b64\u5f15\u53d1\u4e86\u4e00\u573a\u201c\u95f9\u5267\u201d
@@ -1246,7 +1246,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 markimage:'image/card/hong.png',
             },
 
-            //污染者
+            //染污者
             shenQiZhiYi:{
                 group:['shenQiZhiYi_kaiShi','shenQiZhiYi_huoDe','shenQiZhiYi_shangHai'],
                 subSkill:{
@@ -1475,7 +1475,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             nvPuZhang:'女仆长',
             jieJieShi:'结界师',
             shenMiXueZhe:'神秘学者',
-            wuRanZhe:'污染者',
+            ranWuZhe:'染污者',
 
             //矜贵之女
             gaoLingZhiHua:"[被动]高岭之花",
@@ -1569,7 +1569,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             miShu:"秘术",
             miShu_info:"【秘术】为神秘学者专有指示物，上限为4。",
 
-            //污染者
+            //染污者
             shenQiZhiYi:"[被动]神弃之裔",
             shenQiZhiYi_info:"游戏初始时，你+1[水晶]。你的[治疗]上限为0[恒定]，你始终无法获得或使用[治疗]，你对拥有[治疗]的角色伤害额外+1。",
             liRuQuanYong:"[响应]戾如泉涌[回合限定]",
