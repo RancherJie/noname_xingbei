@@ -3403,7 +3403,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 							if(get.emptyZhanJi(player.side)<2) return 0;
 							if(player.countCards('h')==0) return 1;
 							var num=0.1;
-							num+=(0.2*(player.countEmptyCards()-3));
+							num+=(0.2*(player.countEmptyCards()));
 							var numx=Math.random();
 							if(numx<=num) return 1;
 							else return 0;
