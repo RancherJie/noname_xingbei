@@ -6014,7 +6014,14 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                 },
                 ai:{
-                    order:3.7,
+                    order:function(item,player){
+                        var cards=player.getExpansions('chongNengPai');
+                        var num=1.5;
+                        for(var i=0;i<cards.length;i++){
+                            if(get.xiBie(cards[i])=='lei') num+=0.7;
+                        }
+                        return num;
+                    },
                     result:{
                         player:1,
                     }
