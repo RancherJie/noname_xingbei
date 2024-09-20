@@ -1,5 +1,5 @@
 window.noname_asset_list=[
-	'v0.7.4',
+	'v0.7.5',
 	/*audio start*/
 	'audio/background/Made_in_Abyss.mp3',
 	/*cardaudio start*/
@@ -173,7 +173,7 @@ window.noname_asset_list=[
 	'image/character/nvPuZhang.jpg',
 	'image/character/jieJieShi.jpg',
 	'image/character/shenMiXueZhe.jpg',
-	'image/character/wuRanZhe.jpg',
+	'image/character/ranWuZhe.jpg',
 	/*character image end*/
 	
 	'image/emotion/shibing_emotion/1.gif',
