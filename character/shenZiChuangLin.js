@@ -1172,7 +1172,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     gongJi:{
                         trigger:{player:'useCardToTargeted'},
                         filter:function(event,player){
-                            return event.getParent('gongJi').bool;
+                            return event.getParent(2).bool;
                         },
                         direct:true,
                         content:function(){
