@@ -31406,7 +31406,9 @@
 				priority:-100,
 				lastDo:true,
 				filter:function(event){
-					return !event._cleared&&event.card.name!='wuxie';
+					//xingbei
+					//return !event._cleared&&event.card.name!='wuxie';
+					return !event._cleared;
 				},
 				content:function(){
 					game.broadcastAll(function(){
