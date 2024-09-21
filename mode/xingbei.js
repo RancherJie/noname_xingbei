@@ -3146,11 +3146,12 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					'step 1'
                     if(result.bool){
                         trigger.getParent().targets.remove(player);
+						/*
 						if(get.type(trigger.card)=='gongJi'){
 							if(get.name(result.used)=='shengGuang'){
 								event.trigger('gongJiWeiMingZhong');
 							}
-                        }
+                        }*/
                         trigger.cancel();
                     }
 					/*
@@ -3190,11 +3191,11 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
                 },
                 content:function(){
 					'step 0'
-                    event.source=trigger.getParent(2).source;
-                    event.player=trigger.getParent().player;
-					event.yingZhan=trigger.getParent(2).yingZhan;
-					event.source_card=trigger.getParent().trigger_card;
-					event.storage=trigger.getParent(2).storage;
+                    event.source=trigger.getParent(2).source;//攻击来源
+                    event.player=trigger.getParent().player;//应战者
+					event.yingZhan=trigger.getParent(2).yingZhan;//判断未命中的攻击是否为应战攻击
+					event.source_card=trigger.getParent().trigger_card;//攻击来源牌
+					event.storage=trigger.getParent(2).storage;//自定义变量
 					'step 1'
                     event.trigger('gongJiWeiMingZhong');
                 }
@@ -3208,6 +3209,24 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
                 },
 				content:function(){
 					trigger.yingZhan=true;
+				}
+			},
+			_shengGuang:{
+				trigger:{player:'useCard2'},
+				direct:true,
+				firstDo:true,
+                filter:function(event,player){
+                    return (event.getParent(2).name=='_yingZhan'||event.getParent(2).name=='shiShenZhouShu')&&event.card.name=='shengGuang';
+                },
+				content:function(){
+					'step 0'
+					event.source=trigger.getParent(2).source;
+                    event.player=trigger.getParent().player;
+					event.yingZhan=trigger.getParent(2).yingZhan;
+					event.source_card=trigger.getParent().trigger_card;
+					event.storage=trigger.getParent(2).storage;
+					'step 1'
+                    event.trigger('gongJiWeiMingZhong');
 				}
 			},
 			/*
