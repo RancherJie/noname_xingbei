@@ -3094,7 +3094,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						event.storage=trigger.getParent().storage;
                         event.trigger('gongJiWeiMingZhong');
                     }else if(trigger.card.name=='moDan') game.resetMoDan();
-                    trigger.cancel();
+                    //trigger.cancel();
                 }
             },
             _yingZhan:{
@@ -3156,7 +3156,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 								event.trigger('gongJiWeiMingZhong');
 							}
                         }*/
-                        trigger.cancel();
+                        //trigger.cancel();
                     }
 					/*
                     'step 0'
@@ -3310,7 +3310,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					if(result.bool){
                         trigger.getParent().targets.remove(player);
 						if(get.name(result.used)=='shengGuang') game.resetMoDan();
-                        trigger.cancel();
+                        //trigger.cancel();
 					}else{
                         game.broadcastAll(function(){
                             game.moDan--;

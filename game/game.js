@@ -16358,6 +16358,7 @@
 								game.log(player,'对',str,'使用了',card,'（',cards,'，指向',event.addedTargets,'）');
 							}
 							else{
+								//xingbei
 								var yingZhan_str='';
 								if(get.type(card)=='gognJi'){
 									if(event.yingZhan==true){
@@ -37486,19 +37487,20 @@
 						}
 						td.innerHTML=num;
 						tr.appendChild(td);
+						/*
 						td=document.createElement('td');
 						num=0;
-						/*
 						for(j=0;j<game.players[i].stat.length;j++){
 							if(game.players[i].stat[j].kill!=undefined) num+=game.players[i].stat[j].kill;
 						}
-						td.innerHTML=num;*/
-						tr.appendChild(td);
+						td.innerHTML=num;
+						tr.appendChild(td);*/
 						table.appendChild(tr);
 					}
 					dialog.add(ui.create.div('.placeholder'));
 					dialog.content.appendChild(table);
 				}
+				/*
 				if(game.dead.length){
 					table=document.createElement('table');
 					table.style.opacity='0.5';
@@ -37555,20 +37557,20 @@
 								num+=game.dead[i].stat[j].card[k];
 							}
 						}
-						/*td.innerHTML=num;
+						td.innerHTML=num;
 						tr.appendChild(td);
 						td=document.createElement('td');
 						num=0;
 						for(j=0;j<game.dead[i].stat.length;j++){
 							if(game.dead[i].stat[j].kill!=undefined) num+=game.dead[i].stat[j].kill;
 						}
-						td.innerHTML=num;*/
+						td.innerHTML=num;
 						tr.appendChild(td);
 						table.appendChild(tr);
 					}
 					dialog.add(ui.create.div('.placeholder'));
 					dialog.content.appendChild(table);
-				}
+				}*/
 				if(game.additionaldead&&game.additionaldead.length){
 					table=document.createElement('table');
 					table.style.opacity='0.5';
@@ -37607,13 +37609,14 @@
 						}
 						td.innerHTML=num;
 						tr.appendChild(td);
+						/*
 						td=document.createElement('td');
 						num=0;
 						for(j=0;j<game.additionaldead[i].stat.length;j++){
-							//if(game.additionaldead[i].stat[j].kill!=undefined) num+=game.additionaldead[i].stat[j].kill;
+							if(game.additionaldead[i].stat[j].kill!=undefined) num+=game.additionaldead[i].stat[j].kill;
 						}
 						td.innerHTML=num;
-						tr.appendChild(td);
+						tr.appendChild(td);*/
 						table.appendChild(tr);
 					}
 					dialog.add(ui.create.div('.placeholder'));
