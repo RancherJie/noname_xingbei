@@ -3079,7 +3079,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					if(player.hasZhiShiWu('jueJieX')) return false;
 
                     if(get.type(event.card)=='gongJi'||event.card.name=='moDan'){
-                        return player.hasExpansions('_shengDun');
+                        return player.hasExpansions('_shengDun')&&event.getParent().targets.includes(player);
                     }
                 },
                 content:function(){
@@ -3103,7 +3103,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				firstDo:true,
                 filter:function(event,player){
                     if(event.getParent().canYingZhan==false&&event.getParent().canShengGuang==false) return false;
-					return get.type(event.card)=='gongJi' 
+					return get.type(event.card)=='gongJi'&&event.getParent().targets.includes(player);
                 },
                 content:function(){
 					'step 0'
