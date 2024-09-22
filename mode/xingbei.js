@@ -2500,6 +2500,10 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				item.xiBie=xiBie;
 				return item.xiBie;
 			},
+			setMingGe:(item,mingGe)=>{
+				item.number=mingGe;
+				return item.mingGe;
+			},
 
 			changeShiQi:function(num,side){
 				if(side==true){
