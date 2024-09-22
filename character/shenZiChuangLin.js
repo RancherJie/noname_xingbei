@@ -1487,7 +1487,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             qiangYuYuanXing:"[启动]强予愿行",
             qiangYuYuanXing_info:"[水晶]将你的手牌调整为4张[强制]；<span class='tiaoJian'>(若你额外移除我方[战绩区]1星石)</span>将一名其他角色手牌调整为4张[强制]。",
             youQingJiBan:"[响应]友情羁绊[回合限定]",
-            youQingJiBan_info:"[宝石]<span class='tiaoJian'>(发动[魔法入门]时发动)</span>将“你摸1张牌[强制][展示]”改为“我方2名角色各弃1张牌[强制][展示]，然后各摸1张牌[强制]”。",
+            youQingJiBan_info:"[宝石]<span class='tiaoJian'>(发动[魔法入门]时发动)</span>将“你摸1张牌[强制][展示]”改为“我方2名角色各弃1张牌[强制][展示]，效果结算后各摸1张牌[强制]”。",
 
             //女仆长
             yingZhiXue:"[启动]影之穴",
