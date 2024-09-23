@@ -6804,6 +6804,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                 }
                                 
 							},
+                            ai:{
+                                result:{
+                                    target:function(player,target){
+                                        return -1;
+                                    }
+                                }
+                            }
 						}
 					},
                     prompt:function(links,player){
@@ -6819,6 +6826,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         }else{
                             return `你和目标角色各弃${buXieHeXian_num}张牌`
                         }
+                    }
+                },
+                ai:{
+                    order:3.5,
+                    result:function(player,target){
+                        return -1;
                     }
                 }
                 
