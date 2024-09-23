@@ -347,7 +347,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						if(game.players[i].side==true){
 							game.players[i].node.identity.firstChild.innerHTML='红';
 						}
-						else{
+						else if(game.players[i].side==false){
 							game.players[i].node.identity.firstChild.innerHTML='蓝';
 						}
 						game.players[i].node.identity.dataset.color=game.players[i].side+'zhu';
@@ -407,7 +407,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 									if(game.players[i].side==true){
 										game.players[i].node.identity.firstChild.innerHTML='红';
 									}
-									else{
+									else if(game.players[i].side==false){
 										game.players[i].node.identity.firstChild.innerHTML='蓝';
 									}
 									game.players[i].node.identity.dataset.color=game.players[i].side+'zhu';
@@ -788,7 +788,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						if(game.players[i].side==true){
 							game.players[i].node.identity.firstChild.innerHTML='红';
 						}
-						else{
+						else if(game.players[i].side==false){
 							game.players[i].node.identity.firstChild.innerHTML='蓝';
 						}
 						game.players[i].node.identity.dataset.color=game.players[i].side+'zhu';
@@ -1167,7 +1167,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						if(game.players[i].side==true){
 							game.players[i].node.identity.firstChild.innerHTML='红';
 						}
-						else{
+						else if(game.players[i].side==false){
 							game.players[i].node.identity.firstChild.innerHTML='蓝';
 						}
 						game.players[i].node.identity.dataset.color=game.players[i].side+'zhu';
@@ -1765,7 +1765,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						if(game.players[i].side==true){
 							game.players[i].node.identity.firstChild.innerHTML='红';
 						}
-						else{
+						else if(game.players[i].side==false){
 							game.players[i].node.identity.firstChild.innerHTML='蓝';
 						}
 						game.players[i].node.identity.dataset.color=game.players[i].side+'zhu';
@@ -2157,7 +2157,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						if(game.players[i].side==true){
 							game.players[i].node.identity.firstChild.innerHTML='红';
 						}
-						else{
+						else if(game.players[i].side==false){
 							game.players[i].node.identity.firstChild.innerHTML='蓝';
 						}
 						game.players[i].node.identity.dataset.color=game.players[i].side+'zhu';
