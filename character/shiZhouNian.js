@@ -2077,7 +2077,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.storage.faShu++;
                 },
                 ai:{
-                    order:3.5,
+                    order:3.7,
                     result:{
                         target:function(player,target){
                             return get.damageEffect(target,2);
@@ -2128,7 +2128,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.faShu('陨石：[法术行动]');
                 },
                 ai:{
-                    order:3.8,
+                    order:3.5,
                     result:{
                         target:function(player,target){
                             return get.damageEffect(target);
@@ -2188,7 +2188,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                 },
                 ai:{
-                    order:3.8,
+                    order:3.5,
                     result:{
                         target:function(player,target){
                             return get.damageEffect(target);
@@ -2241,7 +2241,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     target.damageFaShu(event.num,player);
                 },
                 ai:{
-                    order:3.8,
+                    order:3.5,
                     result:{
                         target:function(player,target){
                             return get.damageEffect(target,2);
@@ -2292,7 +2292,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.gongJi('风刃：[攻击行动]');
                 },
                 ai:{
-                    order:3.8,
+                    order:3.5,
                     result:{
                         target:function(player,target){
                             return get.damageEffect(target);
@@ -2351,7 +2351,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                 },
                 ai:{
-                    order:3.8,
+                    order:3.5,
                     result:{
                         target:function(player,target){
                             return get.damageEffect(target);
@@ -2380,7 +2380,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 ai:{
                     baoShi:true,
                     order:function(item,player){
-                        return 3.4+player.countNengLiangAll()-1;
+                        return 3.4+(player.countNengLiangAll()-1)*0.1;
                     },
                     result:{
                         target:function(player,target){
