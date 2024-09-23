@@ -7477,7 +7477,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         player.damageFaShu(player.countZhiShiWu('douQi'),player);
                     }
                     
-                }
+                },
+                check:function(event,player){
+                    return player.countZhiShiWu('douQi')<=3;
+                },
             },
             baiShiHuanLongQuan:{
                 type:'qiDong',
