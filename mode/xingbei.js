@@ -2647,6 +2647,24 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 			
 		},
 		skill:{
+			_test:{
+				enable:['chooseToUse','faShu','gongJi'],
+				content:function(){
+					'step 0'
+					game.addGlobalSkill('renSkill_moRen');
+                    game.addGlobalSkill('renSkill_yiRen');
+                    game.addGlobalSkill('renSkill_addToExpansion');
+                    for(var i=0;i<game.players.length;i++){
+                        game.players[i].storage.ren_player=player;
+                    }
+					player.gain(game.createCard2("moRenCard", "", ''));
+					'step 1'
+					player.chooseToDiscard(1);
+					'step 2'
+					player.showCards(result.cards);
+				}
+			},
+
 			_gongJiRiZhi:{
 				trigger:{player:'useCardToTarget'},
                 filter:function(event,player){

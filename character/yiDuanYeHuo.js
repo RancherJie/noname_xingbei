@@ -762,10 +762,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 selectCard:2,
                 filterCard:function(card){
+                    var xiBie=get.xiBie(card);
+                    if(!xiBie) return false;
                     if(!ui.selected.cards.length){
                         return true;
                     }
-                    var xiBie=get.xiBie(card);
                     if(get.xiBie(ui.selected.cards[0])!=xiBie){
                         return false;
                     }

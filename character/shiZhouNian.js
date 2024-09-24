@@ -2905,10 +2905,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 selectCard:[2,3],
                 prepare:'showCards',
                 filterCard:function(card){
+                    var xiBie=get.xiBie(card);
+                    if(!xiBie) return false;
                     if(!ui.selected.cards.length){
                         return true;
                     }
-                    var xiBie=get.xiBie(card);
                     if(get.xiBie(ui.selected.cards[0])!=xiBie){
                         return false;
                     }
@@ -3730,10 +3731,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             selectCard:[2,Infinity],
                             prepare:'showCards',
                             filterCard:function(card){
+                                var xiBie=get.xiBie(card);
+                                if(!xiBie) return false;
                                 if(!ui.selected.cards.length){
                                     return true;
                                 }
-                                var xiBie=get.xiBie(card);
+                                
                                 if(get.xiBie(ui.selected.cards[0])!=xiBie){
                                     return false;
                                 }
@@ -4672,6 +4675,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 content:function(){
                     'step 0'
                     var next=player.chooseToDiscard('h',[2,Infinity],function(card){
+                        var xiBie=get.xiBie(card);
+                        if(!xiBie) return false;
                         if(!ui.selected.cards.length) return true;
                         return get.xiBie(card)==get.xiBie(ui.selected.cards[0])
                     });
@@ -5410,6 +5415,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         },
                         selectCard:2,
                         filterCard:function(card,player){
+                            var mingGe=get.mingGe(card);
+                            if(!mingGe) return false;
                             if(ui.selected.cards.length==0) return true;
                             if(get.mingGe(card)==get.mingGe(ui.selected.cards[0])) return true;
                             return false;
@@ -5751,6 +5758,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                    'step 0'
                     player.chooseCardTarget({
                         filterCard:function(card){
+                            var xiBie=get.xiBie(card);
+                            if(!xiBie) return false;
                             if(ui.selected.cards.length==0) return true;
                             if(get.xiBie(card)==get.xiBie(ui.selected.cards[0])) return true;
                             return false;
@@ -5798,6 +5807,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 filterTarget:true,
                 selectCard:[2,Infinity],
                 filterCard:function(card,player){
+                    var xiBie=get.xiBie(card);
+                    if(!xiBie) return false;
                     if(!ui.selected.cards.length) return true;
                     for(var i=0;i<ui.selected.cards.length;i++){
                         if(get.xiBie(ui.selected.cards[i])==get.xiBie(card)) return false;
@@ -5831,6 +5842,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     return player.countYiXiPai()>2;
                 },
                 filterCard:function(card,player){
+                    var xiBie=get.xiBie(card);
+                    if(!xiBie) return false;
                     if(!ui.selected.cards.length) return true;
                     for(var i=0;i<ui.selected.cards.length;i++){
                         if(get.xiBie(ui.selected.cards[i])==get.xiBie(card)) return false;
@@ -6675,6 +6688,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 0'
                     if(!player.isLinked()){
                         var next=player.chooseToDiscard('h',2,function(card){
+                            var xiBie=get.xiBie(card);
+                            if(!xiBie) return false;
                             if(ui.selected.cards.length==0) return true;
                             return get.xiBie(card)==get.xiBie(ui.selected.cards[0]);
                         });

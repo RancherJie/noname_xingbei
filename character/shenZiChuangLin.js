@@ -13,6 +13,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             }
         },
 		character:{
+            shiShenZhe:['female','xue',5,['yuRen','qingKe','shiMie','shangMie','tongDiao','ren','gongZhen','zhuShenZhongYan'],],
             jinGuiZhiNv:['female','yong',3,['gaoLingZhiHua','moFaRuMen','Magic','qiangYuYuanXing','youQingJiBan'],],
             nvPuZhang:['female','ji',5,['yingZhiXue','miShuMuYing','shun','yingFeng','shiFengZhiDao','jinShu','fengXue','zhen','ying','mi'],],
             jieJieShi:['female','huan',5,['jieJieYiShi','huangShenZhiLi','huangShenJiYi','jinMoJing','liuLiJing','jueJie','fuMoJing','jieJie','jiX'],],
@@ -27,8 +28,579 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             shenMiXueZhe:`\u827e\u4e3d\u5361\u7684\u79c1\u4eba\u5bb6\u5ead\u6559\u5e08\uff0c\u53d7\u8058\u6559\u6388\u827e\u4e3d\u5361\u9b54\u6cd5\uff0c\u4e0e\u7d22\u5c14\u65af\u6709\u5173\uff1b\u827e\u4e3d\u5361\u5931\u8e2a\u65f6\uff0c\u4e0e\u5973\u4ec6\u4e4b\u957f\u7b49\u4eba\u4e00\u8d77\u53bb\u5bfb\u627e\uff0c\u867d\u7136\u51ed\u501f\u7cbe\u7075\u654f\u9510\u7684\u9b54\u6cd5\u611f\u5e94\u627e\u5230\u4e86\u7ed3\u754c\uff0c\u4f46\u7531\u4e8e\u4e0d\u6e05\u695a\u539f\u7406\uff0c\u65e0\u6cd5\u7b2c\u4e00\u65f6\u95f4\u7834\u9664\u7ed3\u754c<br>            \u8a00\u7075\u662f\u4e00\u79cd\u901a\u8fc7\u5492\u8bed\u9b54\u6cd5\u83b7\u5f97\u751f\u547d\u7279\u5f81\u7684\u5143\u7d20\u7c7b\u751f\u547d\u4f53\uff0c\u5c5e\u4e8e\u65e0\u673a\u7269\u7269\u7ea7\u522b\uff0c\u8a00\u662f\u6307\u5492\u8bed\u64cd\u4f5c\uff0c\u7075\u5219\u662f\u7c7b\u751f\u547d\u7684\u5143\u7d20\u4f53`,
             wuRanZhe:`\u6597\u517d\u573a\u91cc\u7684\u6218\u58eb\uff0c\u8981\u4e0e\u522b\u4eba\u6216\u731b\u517d\u640f\u6597\u4f9b\u8fbe\u5b98\u8d35\u65cf\u53d6\u4e50\uff0c\u8eab\u5f62\u53cd\u800c\u6bd4\u8f83\u7626\u5c0f\uff0c\u8eab\u8fb9\u7ecf\u5e38\u8513\u5ef6\u7740\u4e0d\u660e\u7684\u623e\u6c14\u3002\u56e0\u53d7\u8fc7\u827e\u4e3d\u5361\u7684\u201c\u5e2e\u52a9\u201d\u800c\u5fc3\u5b58\u611f\u6fc0\uff0c\u4e3a\u6b64\u6b21\u201c\u8425\u6551\u201d\u827e\u4e3d\u5361\u800c\u51fa\u529b\u3002\u672c\u6765\u56e0\u827e\u4e3d\u5361\u7684\u201c\u5e2e\u52a9\u201d\u800c\u6446\u8131\u4e86\u5974\u96b6\u7684\u8eab\u4efd\uff0c\u4e0d\u8fc7\u540e\u56e0\u957f\u65f6\u95f4\u4f5c\u4e3a\u6218\u58eb\uff0c\u65e0\u6cd5\u7ee7\u7eed\u878d\u5165\u793e\u4f1a\u800c\u9009\u62e9\u91cd\u65b0\u56de\u5230\u6597\u517d\u573a\u4f5c\u4e3a\u81ea\u7531\u4eba\u6218\u58eb\u6765\u751f\u6d3b\uff0c\u7ecf\u5e38\u4e0e\u566c\u795e\u8005\u7ec4\u961f`,
         },
+        card:{
+            moRenCard:{
+                fullskin:true,
+                onLose:function(){
+                    'step 0'
+                    var evt2=event.getParent(2);
+                    if(evt2.name=='useCard'||evt2.name=='discard'){
+                        player.logSkill('shenShi');
+                        player.damage(3,player.storage.ren_player).set('faShu',true).set('shenShi',true);
+                    }
+
+                    'step 1'
+                    var evt2=event.getParent(2);
+                    if(evt2.name=='useCard'){
+                        game.setXiBie(card,evt2.card.xiBie);
+                        game.setMingGe(card,evt2.card.number);
+
+                        event.goto(3);
+                    }else if(evt2.name=='discard'){
+                        var list = [['huo','xue','huoYanZhan'],['shui','xue','shuiLianZhan']];
+                        player.chooseButton(['选择视为的牌',[list,'vcard'],true]);
+                    }else{
+                        event.finish();
+                    }
+                    'step 2'
+                    var selected = result.links[0];
+                    game.setXiBie(card,selected[0]);
+                    game.setMingGe(card,selected[1]);
+                    'step 3'
+                    player.storage.ren_player.storage.moRen=null;
+                    card.fix();
+                    card.remove();
+                    card.destroyed = true;
+                    game.log(card, "被移除了");
+                },
+                ai:{
+					basic:{
+						useful:4,
+						value:[4,2,0],
+					},
+				}
+            },
+            yiRenCard:{
+                fullskin:true,
+                onLose:function(){
+                    'step 0'
+                    var evt2=event.getParent(2);
+                    if(evt2.name=='useCard'||evt2.name=='discard'){
+                        player.logSkill('shenShi');
+                        player.damage(3,player.storage.ren_player).set('faShu',true).set('shenShi',true);
+                    }
+
+                    'step 1'
+                    var evt2=event.getParent(2);
+                    if(evt2.name=='useCard'){
+                        game.setXiBie(card,evt2.card.xiBie);
+                        game.setMingGe(card,evt2.card.number);
+
+                        event.goto(3);
+                    }else if(evt2.name=='discard'){
+                        var list = [['lei','xue','leiGuangZhan'],['feng','xue','fengShenZhan']];
+                        player.chooseButton(['选择视为的牌',[list,'vcard'],true]);
+                    }else{
+                        event.finish();
+                    }
+                    'step 2'
+                    var selected = result.links[0];
+                    game.setXiBie(card,selected[0]);
+                    game.setMingGe(card,selected[1]);
+                    'step 3'
+                    player.storage.ren_player.storage.yiRen=null;
+                    card.fix();
+                    card.remove();
+                    card.destroyed = true;
+                    game.log(card, "被移除了");
+                },
+                ai:{
+					basic:{
+						useful:4,
+						value:[4,2,0],
+					},
+				}
+            }
+        },
 		
 		skill:{
+            //噬神者
+            yuRen:{
+                type:'qiDong',
+                trigger:{player:'phaseUseBegin'},
+                filter:function(event,player){
+                    var bool1,bool2;
+                    if(player.storage.moRen) bool1=true;
+                    if(player.storage.yiRen) bool2=true;
+                    return !(bool1&&bool2);
+                },
+                content:function(){
+                    'step 0'
+                    var bool1,bool2;
+                    if(player.storage.moRen) bool1=true;
+                    if(player.storage.yiRen) bool2=true;
+
+                    var list=[];
+                    if(!bool1){
+                        list.push('moRenCard');
+                    }
+                    if(!bool2){
+                        list.push('yiRenCard');
+                    }
+                    player.chooseControl(list).set('prompt','请选择要获得的【刃】');
+                    'step 1'
+                    var card;
+                    if(result.control=='moRenCard'){
+                        card=game.createCard2("moRenCard", "", '');
+                        player.storage.moRen=card;
+                    }else if(result.control=='yiRenCard'){
+                        card=game.createCard2("yiRenCard", "", '');
+                        player.storage.yiRen=card;
+                    }
+                    if(card){
+                        game.log(player, "获得了1张【刃】")
+                        player.gain(card,'draw');
+                    }
+                }
+            },
+            qingKe:{
+                trigger:{player:'useCardToTargeted'},
+                filter:function(event,player){
+                    if(!get.is.gongJi(event.getParent())) return false;
+                    var bool=false;
+                    for(var i=0;i<event.cards.length;i++){
+                        if(event.cards[i].name=='moRenCard'){
+                            bool=true;
+                        }else if(event.cards[i].name=='yiRenCard'){
+                            bool=true;
+                        }
+                        if(bool) break;
+                    }
+                    return bool;
+                },
+                content:function(){
+                    var card;
+                    for(var i=0;i<trigger.cards.length;i++){
+                        if(trigger.cards[i].name=='moRenCard'){
+                            card=game.createCard2("moRenCard", "", '');
+                            player.storage.moRen=card;
+                        }else if(trigger.cards[i].name=='yiRenCard'){
+                            card=game.createCard2("yiRenCard", "", '');
+                            player.storage.yiRen=card;
+                        }
+                        if(card) break;
+                    }
+                    game.log(trigger.target,'获得了',card);
+                    trigger.target.gain(card,'draw');
+                }
+            },
+            shiMie:{
+                trigger:{player:"useCard1"},
+                filter:function(event,player){
+                    var bool=false;
+                    for(var i=0;i<event.cards.length;i++){
+                        if(event.cards[i].name=='moRenCard'){
+                            bool=true;
+                            break;
+                        }
+                    }
+                    return bool&&player.countCards('h')>0;
+                },
+                direct:true,
+                content:function(){
+                    'step 0'
+                    var next=player.chooseCard('h',function(card){
+                        var xiBie=get.xiBie(card);
+                        return xiBie=='shui'||xiBie=='huo';
+                    }).set('ai',function(){
+                        var target=_status.event.target;
+                        if(target.zhiLiao>0){
+                            return Math.random;
+                        }else{
+                            return 0;
+                        }
+                    }).set('target',trigger.targets[0]);
+                    next.set('prompt',get.prompt('shiMie'));
+                    next.set('prompt2',lib.translate.shiMie_info);
+                    'step 1'
+                    if(result.bool){
+                        player.logSkill(event.name);
+                        event.card=result.cards[0];
+                    }else{
+                        event.finish();
+                    }
+                    'step 2'
+                    player.discard(event.card);
+                    'step 3'
+                    player.showCards(event.card);
+                    'step 4'
+                    trigger.targets[0].changeZhiLiao(-1);
+                }
+            },
+            shangMie:{
+                trigger:{player:"useCard1"},
+                filter:function(event,player){
+                    var bool=false;
+                    for(var i=0;i<event.cards.length;i++){
+                        if(event.cards[i].name=='yiRenCard'){
+                            bool=true;
+                            break;
+                        }
+                    }
+                    return bool&&player.countCards('h')>0;
+                },
+                direct:true,
+                content:function(){
+                    'step 0'
+                    var bool=false;
+                    var side=player.side;
+                    for(var i=0;i<game.players.length;i++){
+                        if(game.players[i].side==side) continue;
+                        if(game.players[i].zhiLiao>0){
+                            bool=true;
+                            break;
+                        }
+                    }
+
+                    var next=player.chooseCard('h',function(card){
+                        var xiBie=get.xiBie(card);
+                        return xiBie=='feng'||xiBie=='lei';
+                    }).set('ai',function(){
+                        if(bool) return Math.random;
+                        else return 0;
+                    }).set('bool',bool);
+                    next.set('prompt',get.prompt('shangMie'));
+                    next.set('prompt2',lib.translate.shangMie_info);
+                    'step 1'
+                    if(result.bool){
+                        player.logSkill(event.name);
+                        event.card=result.cards[0];
+                    }else{
+                        event.finish();
+                    }
+                    'step 2'
+                    player.discard(event.card);
+                    'step 3'
+                    player.showCards(event.card);
+                    'step 4'
+                    player.chooseTarget('移除除该攻击目标外的敌方角色1[治疗]',1,true,function(card,player,target){
+                        var targetx=_status.event.targetx;
+                        if(targetx==target) return false;
+                        return target.side!=player.side;
+                    }).set('ai',function(target){
+                        return target.zhiLiao;
+                    }).set('targetx',trigger.targets[0]);
+                    'step 5'
+                    var target=result.targets[0];
+                    game.log(player,'选择了',target);
+                    event.target=target;
+                    'step 6'
+                    event.target.changeZhiLiao(-1);
+                }
+            },
+            tongDiao:{
+                trigger:{player:'damageBegin0'},
+                filter:function(event,player){
+                    return event.shenShi;
+                },
+                priority:1,
+                forced:true,
+                content:function(){
+                    trigger.num=1;
+                }
+            },
+            ren:{
+                trigger:{global:'phaseBefore'},
+                direct:true,
+                filter:function(event,player){
+                    return game.phaseNumber==0;
+                },
+                content:function(){
+                    game.addGlobalSkill('renSkill_moRen');
+                    game.addGlobalSkill('renSkill_yiRen');
+                    game.addGlobalSkill('renSkill_addToExpansionBegin');
+                    for(var i=0;i<game.players.length;i++){
+                        game.players[i].storage.ren_player=player;
+                    }
+                },
+            },
+            gongZhen:{
+                trigger:{player:'damageBegin0'},
+                filter:function(event,player){
+                    return player.canBiShaShuiJing()&&event.faShu;
+                },
+                content:function(){
+                    'step 0'
+                    player.removeBiShaShuiJing();
+                    'step 1'
+                    var num=player.countTongXiPai();
+                    if(num>=2){
+                        var next=player.chooseToDiscard('弃2-3张同系牌[展示]',[2,3],true,function(card){
+                            var xiBie2=get.xiBie(card);
+                            if(!xiBie2) return false;
+                            if(!ui.selected.cards.length) return true;
+                            var xiBie1=get.xiBie(ui.selected.cards[0]);
+                            return xiBie1==xiBie2;
+                        });
+                        next.set('complexCard',true);
+                        next.ai=function(card){
+                            return 1;
+                        };
+                        next.set('filterOk',function(){
+                            return ui.selected.cards.length>=2;
+                        });
+                    }else if(num>=1){
+                        var next=player.chooseToDiscard('弃2-3张同系牌[展示]',1,true,function(card){
+                            var xiBie2=get.xiBie(card);
+                            if(!xiBie2) return false;
+                            else return true;
+                        });
+                        next.ai=function(card){
+                            return 1;
+                        };
+                    }else{
+                        event.goto(3);
+                    }
+                    'step 2'
+                    player.showCards(result.cards);
+                    'step 3'
+                    var bool1,bool2;
+                    if(player.storage.moRen) bool1=true;
+                    if(player.storage.yiRen) bool2=true;
+                    var list=[];
+                    if(!bool1){
+                        list.push('moRenCard');
+                    }
+                    if(!bool2){
+                        list.push('yiRenCard');
+                    }
+
+                    var next=player.chooseButton(['选择获得的【刃】',[list,'vcard']]);
+                    next.set('selectButton',[1,2]);
+                    next.set('forced',true);
+                    'step 4'
+                    for(var i=0;i<result.links.length;i++){
+                        var card;
+                        if(result.links[i][2]=='moRenCard'){
+                            card=game.createCard('moRenCard','','');
+                        }else if(result.links[i][2]=='yiRenCard'){
+                            card=game.createCard('yiRenCard','','');
+                        }
+                        game.log(player,'获得了1张【刃】');
+                        player.gain(card,'draw');
+                    }
+                },
+                ai:{
+                    shuiJing:true,
+                }
+            },
+            zhuShenZhongYan:{
+                type:'faShu',
+                enable:['chooseToUse','faShu'],
+                filter:function(event,player){
+                    return player.canBiShaShuiJing();
+                },
+                content:function(){
+                    'step 0'
+                    player.removeBiShaShuiJing();
+                    'step 1'
+                    player.damageFaShu(2,player);
+                    'step 2'
+                    var player1,player2;
+                    var bool1,bool2;
+                    for(var i=0;i<game.players.length;i++){
+                        var cards=game.players[i].getCards('h');
+                        for(var j=0;j<cards.length;j++){
+                            if(cards[j].name=='moRenCard'){
+                                player1=game.players[i];
+                                bool1=true;
+
+                                player.storage.moRen=null;
+                                let card=cards[j];
+                                player1.lose(card);
+                                card.fix();
+                                card.remove();
+                                card.destroyed = true;
+                                game.log(card, "被移除了");
+                            }else if(cards[j].name=='yiRenCard'){
+                                player2=game.players[i];
+                                bool2=true;
+
+                                player.storage.yiRen=null;
+                                let card=cards[j];
+                                player2.lose(card);
+                                card.fix();
+                                card.remove();
+                                card.destroyed = true;
+                                game.log(card, "被移除了");
+                            }
+                            if(bool1&&bool2) break;
+                        }
+                        if(bool1&&bool2) break;
+                    }
+                    if(bool1&&bool2){
+                        event.list=[player1,player2].sortBySeat(player);
+                    }else if(bool1||bool2){
+                        if(bool1){
+                            event.list=[player1];
+                        }else{
+                            event.list=[player2];
+                        }
+                    }else{
+                        event.finish();
+                    }
+                    'step 3'
+                    var target=event.list.shift();
+                    target.damageFaShu(3,player);
+                    if(event.list.length){
+                        event.redo();
+                    }
+                    'step 4'
+                    if(event.list.length>=2){
+                        var next=player.chooseTarget('对1名目标对手造成2点法术伤害③',true,function(card,player,target){
+                            return target.side!=player.side;
+                        });
+                    }else{
+                        event.finish();
+                    }
+                    'step 5'
+                    game.log(player,'选择了',result.targets);
+                    result.targets[0].damageFaShu(2,player);
+                },
+                ai:{
+                    shuiJing:true,
+                    order:function(event,player){
+                        var num=player.countCards('h',card=>card.nmae=='moRenCard'||card.name=='yiRenCard');
+                        if(num>0) return 0;
+                        if((!player.storage.yiRen)&&(!player.storage.moRen)) return 0;
+                        return 3.6;
+                    },
+                    result:{
+                        player:1,
+                    }
+                }
+            },
+
+            
+            renSkill:{
+                subSkill:{
+                    moRen:{
+                        enable:['chooseToUse','gongJi','chooseToUse_yingZhan'],
+                        filter:function(event,player){ 
+                            return player.countCards('h',card=>card.name=='moRenCard')>0;
+                        },
+                        chooseButton: {
+                            dialog: function (event, player) {
+                                var list = [['huo','xue','huoYanZhan'],['shui','xue','shuiLianZhan']];
+                                return ui.create.dialog("魔刃", [list, "vcard"]);
+                            },
+                            check: function (button) {
+                                return Math.random();
+                            },
+                            backup: function (links, player) {
+                                return {
+                                    filterCard:function(card){
+                                        return card.name=='moRenCard';
+                                    },
+                                    position: "h",
+                                    viewAs: { name: links[0][2], xiBie: links[0][0], number: links[0][1]},
+                                };
+                            },
+                            prompt: function (links, player) {
+                                return "将【魔刃】当做"  + get.translation(links[0][2]) + "使用";
+                            },
+                        },
+                        ai:{
+                            order:2,
+                            result:{
+                                player:1,
+                            }
+                        }
+                    },
+                    yiRen:{
+                        enable:['chooseToUse','gongJi','chooseToUse_yingZhan'],
+                        filter:function(event,player){ 
+                            return player.countCards('h',card=>card.name=='yiRenCard')>0;
+                        },
+                        chooseButton: {
+                            dialog: function (event, player) {
+                                var list = [['lei','xue','leiGuangZhan'],['feng','xue','fengShenZhan']];
+                                return ui.create.dialog("异刃", [list, "vcard"]);
+                            },
+                            check: function (button) {
+                                return Math.random();
+                            },
+                            backup: function (links, player) {
+                                return {
+                                    filterCard:function(card){
+                                        return card.name=='yiRenCard';
+                                    },
+                                    position: "h",
+                                    viewAs: { name: links[0][2], xiBie: links[0][0], number: links[0][1]},
+                                };
+                            },
+                            prompt: function (links, player) {
+                                return "将【异刃】当做"  + get.translation(links[0][2]) + "使用";
+                            },
+                        },
+                        ai:{
+                            order:2,
+                            result:{
+                                player:1,
+                            }
+                        }
+                    },
+                    addToExpansionBegin:{
+                        trigger:{player:'addToExpansionBegin'},
+                        forced:true,
+                        filter:function(event,player){
+                            var bool=false;
+                            for(var i=0;i<event.cards.length;i++){
+                                if(event.cards[i].name=="moRenCard"){
+                                    bool=true;
+                                }else if(event.cards[i].name=='yiRenCard'){
+                                    bool=true;
+                                }
+                                if(bool) break;
+                            }
+                            return bool;
+                        },
+                        content:function(){
+                            'step 0'
+                            var cards=[];
+                            for(var i=0;i<trigger.cards.length;i++){
+                                if(trigger.cards[i].name=='moRenCard'){
+                                    cards.push(trigger.cards[i]);
+                                }else if(trigger.cards[i].name=='yiRenCard'){
+                                    cards.push(trigger.cards[i]);
+                                }
+                                if(cards.length>=2) break;
+                            }
+                            event.cards=cards;
+                            'step 1'
+                            player.damageFaShu(1,player.storage.ren_player);
+                            'step 2'
+                            var card=event.cards.shift();
+                            card.fix();
+                            card.remove();
+                            card.destroyed = true;
+                            game.log(card, "被移除了");
+                            if(event.cards.length>0) event.goto(1);
+                        }
+                    },
+                    yiChu:{
+                        trigger:{player:['useCard1','discard']},
+                        priority:10,
+                        filter:function(event,player){
+                            if(event.cards.length==0) return false;
+                            var bool=false;
+                            for(var i=0;i<event.cards.length;i++){
+                                if(event.cards[i].name=='moRenCard'){
+                                    bool=true;
+                                }else if(event.cards[i].name=='yiRenCard'){
+                                    bool=true;
+                                }
+                                if(bool) break;
+                            }
+                            return bool;
+                        },
+                        content:function(){
+                            
+                        }
+                    }
+                }
+            },
+
             //矜贵之女
             gaoLingZhiHua:{
                 trigger:{player:'_tiLian_backupEnd'},
@@ -1471,11 +2043,55 @@ game.import('character',function(lib,game,ui,get,ai,_status){
         },
 		
 		translate:{
+            shiShenZhe:'噬神者',
             jinGuiZhiNv:'矜贵之女',
             nvPuZhang:'女仆长',
             jieJieShi:'结界师',
             shenMiXueZhe:'神秘学者',
             ranWuZhe:'染污者',
+
+            //噬神者
+            moRenCard:'魔刃',
+            moRenCard_info:`<span class="greentext">[被动]魔刃</span><br>
+            <span class='tiaoJian'>(此卡视为手牌，若你拥有【魔刃】，使用、打出或弃置【魔刃】时)</span>你选择此卡视为火系或水系的血类命格攻击牌。<br>
+            <span class="greentext">[被动]渗蚀</span><br>
+            <span class='tiaoJian'>(若你拥有【刃】，使用、打出或弃置【刃】时)</span>噬神者对你造成3点法术伤害③，然后移除【刃】。 <span class='tiaoJian'>(【刃】因技能放置在角色旁时)</span>对该角色造成1点法术伤害③，然后移除【刃】。
+            `,
+            yiRenCard:'异刃',
+            yiRenCard_info:`<span class="greentext">[被动]异刃</span><br>
+            <span class='tiaoJian'>(此卡视为手牌，若你拥有【异刃】，使用、打出或弃置【异刃】时)</span>你选择此卡视为雷系或风系的血类命格攻击牌。<br>
+            <span class="greentext">[被动]渗蚀</span><br>
+            <span class='tiaoJian'>(若你拥有【刃】，使用、打出或弃置【刃】时)</span>噬神者对你造成3点法术伤害③，然后移除【刃】。 <span class='tiaoJian'>(【刃】因技能放置在角色旁时)</span>对该角色造成1点法术伤害③，然后移除【刃】`,
+
+            renSkill_moRen:"[被动]魔刃",
+            renSkill_yiRen:"[被动]异刃",
+            shenShi:"[被动]渗蚀",
+            renSkill_addToExpansion:"[被动]渗蚀",
+
+            yuRen:'[启动]御刃',
+            yuRen_info:"<span class='tiaoJian'>(当【魔刃】或【异刃】未在场时)</span>将【魔刃】或【异刃】加入你手牌[强制]。",
+            qingKe:"[响应]侵刻",
+            qingKe_info:"<span class='tiaoJian'>(使用【魔刃】或【异刃】攻击命中时发动②)</span>将该卡加入攻击目标手牌[强制]。",
+            shiMie:"[响应]噬灭",
+            shiMie_info:"<span class='tiaoJian'>(当你使用【魔刃】对目标角色攻击时发动①，额外弃1张水系或火系牌[展示])</span>移除该攻击目标1[治疗]。",
+            shangMie:"[响应]殇灭",
+            shangMie_info:"<span class='tiaoJian'>(当你使用【异刃】对目标角色攻击时发动①，额外弃1张风系或雷系牌[展示])</span>移除该攻击目标外1名敌方角色1[治疗]。",
+            tongDiao:"[被动]同调",
+            tongDiao_info:"<span class='tiaoJian'>(你触发【渗蚀】时)</span>3点法术伤害变更为1点法术伤害。",
+            ren:"(专)刃",
+            ren_info:`
+            <span class="greentext">[被动]魔刃</span><br>
+            <span class='tiaoJian'>(此卡视为手牌，若你拥有【魔刃】，使用、打出或弃置【魔刃】时)</span>你选择此卡视为火系或水系的血类命格攻击牌。<br>
+            <span class="greentext">[被动]异刃</span><br>
+            <span class='tiaoJian'>(此卡视为手牌，若你拥有【异刃】，使用、打出或弃置【异刃】时)</span>你选择此卡视为雷系或风系的血类命格攻击牌。<br>
+            <span class="greentext">[被动]渗蚀</span><br>
+            <span class='tiaoJian'>(若你拥有【刃】，使用、打出或弃置【刃】时)</span>噬神者对你造成3点法术伤害③，然后移除【刃】。 <span class='tiaoJian'>(【刃】因技能放置在角色旁时)</span>对该角色造成1点法术伤害③，然后移除【刃】。
+            `,
+            gongZhen:"[被动]共振",
+            gongZhen_info:"[水晶]<span class='tiaoJian'>(目标角色对你造成法术伤害时发动③)</span>弃2-3张同系牌[展示]，你可将未在场的【魔刃】和【异刃】加入你手牌[强制]。",
+            zhuShenZhongYan:"[法术]诸神终焉",
+            zhuShenZhongYan_info:"[水晶]<span class='tiaoJian'>(对自己造成2点法术伤害③)</span>移除【魔刃】和【异刃】，对原持有【魔刃】和【异刃】的目标角色各造成3点法术伤害③；<span class='tiaoJian'>(若以此法同时移除【魔刃】和【异刃】)</span>对1名目标对手造成2点法术伤害③。",
+
 
             //矜贵之女
             gaoLingZhiHua:"[被动]高岭之花",

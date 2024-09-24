@@ -17860,6 +17860,13 @@
 					event.xs=xs;
 					"step 2"
 					if(num<cards.length){
+						//xingbei
+						var info=get.info(cards[num]);
+						if(info.onLose&&(!info.filterLose||info.filterLose(cards[num],player))){
+							event.goto(3);
+							return;
+						}
+						/*
 						if(event.es.contains(cards[num])){
 							event.loseEquip=true;
 							player.removeEquipTrigger(cards[num]);
@@ -17868,7 +17875,7 @@
 								event.goto(3);
 								return;
 							}
-						}
+						}*/
 						event.num++;
 						event.redo();
 					}
