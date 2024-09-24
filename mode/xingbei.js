@@ -4186,7 +4186,6 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				getZhiLiaoLimit:function(){
 					var num=game.zhiLiaoMax;
 					num=game.checkMod(this,num,'maxZhiLiao',this);
-					num=game.checkMod(this,num,'maxZhiLiaoFinal',this);
 					return Math.max(0,num);
 				},
 				getNengLiangLimit:function(){

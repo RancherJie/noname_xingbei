@@ -1248,7 +1248,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 
             //染污者
             shenQiZhiYi:{
-                group:['shenQiZhiYi_kaiShi','shenQiZhiYi_huoDe','shenQiZhiYi_shangHai'],
+                group:['shenQiZhiYi_kaiShi','shenQiZhiYi_huoDe','shenQiZhiYi_shangHai','shenQiZhiYi_shiYong'],
                 subSkill:{
                     kaiShi:{
                         trigger:{global:'phaseBefore'},
@@ -1279,10 +1279,18 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         content:function(){
                             trigger.num++;
                         }
-                    }
+                    },
+                    shiYong:{
+                        trigger:{player:'zhiLiao'},
+                        firstDo:true,
+                        forced:true,
+                        content:function(){
+                            trigger.cancel();
+                        }
+                    },
                 },
                 mod:{
-                    maxZhiLiaoFinal:function(player,num){
+                    maxZhiLiao:function(player,num){
                         return 0;
                     },
                     aiOrder:function(player,item,num){
