@@ -32480,6 +32480,7 @@
 						lib.inpile=state.inpile;
 						lib.inpile_nature=state.inpile_nature;
 
+						//xingbei
 						game.lanShiQi=state.lanShiQi;
 						game.hongShiQi=state.hongShiQi;
 						game.lanZhanJi=state.lanZhanJi;
@@ -32489,6 +32490,9 @@
 						game.moDan=state.moDan;
 						game.moDan_shunShiZhen=state.moDan_shunShiZhen;
 						
+						game.zhanJiMax=state.zhanJiMax;
+						game.shiQiMax=state.shiQiMax;
+						game.xingBeiMax=state.xingBeiMax;
 
 						var pos=state.players[observe||game.onlineID].position;
 						for(var i in state.players){
@@ -56878,6 +56882,7 @@
 				inpile:lib.inpile,
 				inpile_nature:lib.inpile_nature,
 				renku:_status.renku,
+				//xingbei
 				lanShiQi:game.lanShiQi,
 				hongShiQi:game.hongShiQi,
 				hongZhanJi:game.hongZhanJi,
@@ -56887,6 +56892,9 @@
 				moDan:game.moDan,
 				moDan_shunShiZhen:game.moDan_shunShiZhen,
 
+				zhanJiMax:game.zhanJiMax,
+				shiQiMax:game.shiQiMax,
+				xingBeiMax:game.xingBeiMax,
 			};
 			for(var i in lib.playerOL){
 				state.players[i]=lib.playerOL[i].getState();
