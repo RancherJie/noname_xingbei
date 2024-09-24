@@ -165,17 +165,17 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 		game:{
 			checkResult:function(me){
 				if(game.players[0].side==true){
-					if(game.hongShiQi<=0||game.lanXingBei>=5){
+					if(game.hongShiQi<=0||game.lanXingBei>=game.xingBeiMax){
 						game.over(false);
-					}else if(game.lanShiQi<=0||game.hongXingBei>=5){
+					}else if(game.lanShiQi<=0||game.hongXingBei>=game.xingBeiMax){
 						game.over(true);
 					}
 
 				}
 				else if(game.players[0].side==false){
-					if(game.lanShiQi<=0||game.hongXingBei==5){
+					if(game.lanShiQi<=0||game.hongXingBei>=game.xingBeiMax){
 						game.over(false);
-					}else if(game.hongShiQi<=0||game.lanXingBei==5){
+					}else if(game.hongShiQi<=0||game.lanXingBei>=game.xingBeiMax){
 						game.over(true);
 					}
 				}
