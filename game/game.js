@@ -40575,13 +40575,15 @@
 		shuffleNumber:0,
 
 
-		lanShiQi:15,
-		hongShiQi:15,
+		lanShiQi:0,
+		hongShiQi:0,
 		shiQiMax:15,
 		hongZhanJi:[],
 		lanZhanJi:[],
+		zhanJiMax:5,
 		hongXingBei:0,
 		lanXingBei:0,
+		xingBeiMax:5,
 		moDan:2,
 		moDan_shunShiZhen:false,
 		jiChuXiaoGuo:{
