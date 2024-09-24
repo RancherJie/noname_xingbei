@@ -3819,6 +3819,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         if(get.xiBie(card)!='huo') return false;
                         return lib.filter.cardEnabled(card,player,'forceEnable');
 					},str);
+                },
+                mod:{
+                    aiUseful(player, card, num) {
+                        if (get.xiBie(card, player) === "huo"&&get.type(card) === "gongJi") {
+                            return num + 1;
+                        }
+                    },
                 }
             },
             anYingNingJu:{
