@@ -55485,6 +55485,38 @@
 			});
 		
 			
+			const highlightRedTeam=game.me.side;
+			// 定义布尔变量
+
+			// 根据布尔变量值修改表格内容
+			ui.shiQiInfo.innerHTML = `
+				<table>
+					<tr>
+						<td>士气</td>
+						<td>星石</td>
+						<td>星杯</td>
+					</tr>
+					<tr class="${highlightRedTeam ? 'highlight' : ''}">
+						<td>
+							<span style="color:red;">${game.hongShiQi}</span>
+						</td>
+						<td style="width: 100px;">${hongZhanJi_str}</td>
+						<td>
+							<span style="color:red;">${game.hongXingBei}</span>
+						</td>
+					</tr>
+					<tr class="${!highlightRedTeam ? 'highlight' : ''}">
+						<td>
+							<span style="color:blue;">${game.lanShiQi}</span>
+						</td>
+						<td style="width: 100px;">${lanZhanJi_str}</td>
+						<td>
+							<span style="color:blue;">${game.lanXingBei}</span>
+						</td>
+					</tr>
+				</table>
+			`;
+			/*
 			ui.shiQiInfo.innerHTML = `
 				<table>
 				<tr>
@@ -55504,13 +55536,7 @@
 				</tr>
 				</table>
 				`;
-
-
-
-
-
-
-				
+			*/
 		}
 	};
 	const get={
