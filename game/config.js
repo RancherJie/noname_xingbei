@@ -54,7 +54,7 @@ window.config={
 	background_music:'Made_in_Abyss',
 	background_audio:true,
 	background_speak:true,
-	glow_phase:'yellow',
+	glow_phase:'purple',
 	die_move:'flip',
 
 	skin:{},

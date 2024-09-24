@@ -2984,7 +2984,7 @@
 					glow_phase:{
 						name:'当前回合角色高亮',
 						unfrequent:true,
-						init:'yellow',
+						init:'purple',
 						intro:'设置当前回合角色的边框颜色',
 						item:{
 							none:'无',
