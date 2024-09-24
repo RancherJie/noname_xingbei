@@ -3652,9 +3652,9 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				firstDo:true,
 				filter:function(event,player){
 					if(player.side==true){
-						return game.hongZhanJi.length<5&&get.type(event.card)=="gongJi";
+						return game.hongZhanJi.length<game.zhanJiMax&&get.type(event.card)=="gongJi";
 					}else if(player.side==false){
-						return game.lanZhanJi.length<5&&get.type(event.card)=="gongJi";
+						return game.lanZhanJi.length<game.zhanJiMax&&get.type(event.card)=="gongJi";
 					}
 				},
 				content:function(event,player){
@@ -4144,14 +4144,21 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				},
 				changeZhanJi:function(color,num,side){//xingbei
 					var next=game.createEvent('changeZhanJi');
-					next.num=num;
+					if(typeof num!='number'||!num) num=1;
 					next.player=this;
 					next.color=color;
+					var sidex;
 					if(side==undefined){
-						next.side=this.side;
+						sidex=this.side;
 					}else{
-						next.side=side;
+						sidex=side;
 					}
+					next.side=sidex;
+					var zhanJi=get.zhanJi(sidex).length;
+					if(num>0&&(zhanJi+num>game.zhanJiMax)){
+						num=Math.max(0,game.zhanJiMax-zhanJi);
+					}
+					next.num=num;
 					next.setContent('changeZhanJi');
 					return next;
 				},
@@ -4308,27 +4315,12 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				},
 				addZhanJi:function(color,num){//增加战绩
 					if(typeof num!='number'||!num) num=1;
-					if(this.side==true){
-						if(!(game.hongZhanJi.length+num<=5)){
-							num=5-game.hongZhanJi.length;
-						}
-					}else if(this.side==false){
-						if(!(game.lanZhanJi.length+num<=5)){
-							num=5-game.lanZhanJi.length;
-						}
-					}
-					if(num>0){
-						this.changeZhanJi(color,num);
-					}
+					this.changeZhanJi(color,num);
 				},
 				removeZhanJi:function(color,num){//移除战绩
 					if(typeof num!='number'||!num) num=-1;
 					if(num>0) num=-num;
-					if(this.side==true){
-						this.changeZhanJi(color,num);
-					}else if(this.side==false){
-						this.changeZhanJi(color,num);
-					}
+					this.changeZhanJi(color,num);
 				},
 				chongZhi:function(){//重置
 					if(this.isLinked()){

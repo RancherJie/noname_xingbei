@@ -1751,15 +1751,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 prepare:'showCards',
                 contentBefore:function(){
-                    if(player.side==true){
-                        if(game.hongZhanJi.length<5){
-                            player.changeZhanJi('r',1);
-                        }
-                    }else if(player.side==false){
-                        if(game.lanZhanJi.length<5){
-                            player.changeZhanJi('r',1);
-                        }
-                    }
+                    player.changeZhanJi('r',1);
                 },
                 content:function(){
                     'step 0'
@@ -2340,15 +2332,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 1'
                     target.damageFaShu(event.num,player);
                     'step 2'
-                    if(player.side==true){
-                        if(game.hongZhanJi.length<5){
-                            player.changeZhanJi('r',1);
-                        }
-                    }else if(player.side==false){
-                        if(game.lanZhanJi.length<5){
-                            player.changeZhanJi('r',1);
-                        }
-                    }
+                    player.changeZhanJi('r',1);
                 },
                 ai:{
                     order:3.5,
