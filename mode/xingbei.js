@@ -3403,28 +3403,19 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					'step 1'
 					var side=player.side;
 					var num=0;
-					if(side==true){
-						if(game.hongZhanJi.length<=3){
-							num=2;
-						}else if(game.hongZhanJi.length==5){
-							num=0;
-						}else{
-							num=1;
-						}
-					}else if(side==false){
-						if(game.lanZhanJi.length<=3){
-							num=2;
-						}else if(game.lanZhanJi.length==5){
-							num=0;
-						}else{
-							num=1;
-						}
+					var emptyZhanJi=get.emptyZhanJi(player.side);
+					if(emptyZhanJi>=2){
+						num=2;
+					}else if(emptyZhanJi>=1){
+						num=1;
 					}
+
 					if(num==0){
 						event.finish();
 					}else if(num==2){
 						player.addZhanJi('r',1);
 						player.addZhanJi('b',1);
+						event.finish();
 					}else if(num==1){
 						var list=['宝石','水晶'];
 						player.chooseControl(list).set('prompt','选择获得的星石').set('ai',function(){return 0;});
