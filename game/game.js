@@ -55487,7 +55487,19 @@
 			});
 		
 			
-			const highlightRedTeam=game.me.side;
+			if(game.me){
+				var highlightRedTeam=game.me.side;
+			}else{
+				var highlightRedTeam=null;
+			}
+			if(highlightRedTeam!=null){
+				var teamClass1=(highlightRedTeam ? 'highlight' : '');
+				var teamClass2=(highlightRedTeam ? '' : 'highlight');
+			}else{
+				var teamClass1='';
+				var teamClass2='';
+			}
+
 			// 定义布尔变量
 
 			// 根据布尔变量值修改表格内容
@@ -55498,7 +55510,7 @@
 						<td>星石</td>
 						<td>星杯</td>
 					</tr>
-					<tr class="${highlightRedTeam ? 'highlight' : ''}">
+					<tr class="${teamClass1}">
 						<td>
 							<span style="color:red;">${game.hongShiQi}</span>
 						</td>
@@ -55507,7 +55519,7 @@
 							<span style="color:red;">${game.hongXingBei}</span>
 						</td>
 					</tr>
-					<tr class="${!highlightRedTeam ? 'highlight' : ''}">
+					<tr class="${teamClass2}">
 						<td>
 							<span style="color:blue;">${game.lanShiQi}</span>
 						</td>
