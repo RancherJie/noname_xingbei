@@ -40594,7 +40594,7 @@
 		handcardLimit:6,
 		zhiLiaoMax:2,
 		nengLiangMax:3,
-		zhanJiMax:5,
+
 
 		addRecord:function(bool){
 			if(!(_status.connectMode||game.online)) return;	
