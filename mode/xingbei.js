@@ -86,6 +86,9 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 			}
 			game.addVideo('init',null,info);
 			event.trigger('gameStart');
+			game.changeShiQi(game.shiQiMax,true,false);
+			game.changeShiQi(game.shiQiMax,false,false);
+
 			if(_status.connectMode){
 				if(_status.mode=='1v1'){
 					_status.first_less=true;
@@ -2505,22 +2508,28 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				return item.mingGe;
 			},
 
-			changeShiQi:function(num,side){
+			changeShiQi:function(num,side,log){
+				var numx=num;
 				if(side==true){
 					game.hongShiQi+=num;
-					if(num>0){
-						game.log('<span style="color:red;">红方</span>士气增加',num);
-					}else if(num<0){
-						num=-num;
-						game.log('<span style="color:red;">红方</span>士气减少',num);
+					if(log!=false){
+						if(num>0){
+							game.log('<span style="color:red;">红方</span>士气增加',num);
+						}else if(num<0){
+							num=-num;
+							game.log('<span style="color:red;">红方</span>士气减少',num);
+						}
 					}
+					
 				}else if(side==false){
 					game.lanShiQi+=num;
-					if(num>0){
-						game.log('<span style="color:blue;">蓝方</span>士气增加',num);
-					}else if(num<0){
-						num=-num;
-						game.log('<span style="color:blue;">蓝方</span>士气减少',num);
+					if(log!=false){
+						if(num>0){
+							game.log('<span style="color:blue;">蓝方</span>士气增加',num);
+						}else if(num<0){
+							num=-num;
+							game.log('<span style="color:blue;">蓝方</span>士气减少',num);
+						}
 					}
 				}
 				ui.updateShiQiInfo();
@@ -2529,10 +2538,10 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					game.lanShiQi=lanShiQi;
 					ui.updateShiQiInfo();
 				},game.hongShiQi,game.lanShiQi);
-	
-				game.checkResult();
+				game.addVideo('changeShiQi',null,[numx,side]);
 			},
-			changeZhanJi:function(color,num,side){
+			changeZhanJi:function(color,num,side,log){
+				var numx=num;
 				if(color=="r"){
 					var xingShi='宝石';
 				}else if(color=="b"){
@@ -2542,12 +2551,16 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					if(side==true){
 						for(let i=0;i<num;i++){
 							game.hongZhanJi.push(xingShi);
-							game.log('<span style="color:red;">红方</span>战绩区增加',xingShi);
+							if(log!=false){
+								game.log('<span style="color:red;">红方</span>战绩区增加',xingShi);
+							}
 						}
 					}else if(side==false){
 						for(let i=0;i<num;i++){
 							game.lanZhanJi.push(xingShi);
-							game.log('<span style="color:blue;">蓝方</span>战绩区增加',xingShi);
+							if(log!=false){
+								game.log('<span style="color:blue;">蓝方</span>战绩区增加',xingShi);
+							}
 						}
 					}
 				}else if(num<0){
@@ -2556,16 +2569,20 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						for(let i=0;i<num;i++){
 							let index = game.hongZhanJi.indexOf(xingShi);  
 							if (index !== -1) {  
-								game.hongZhanJi.splice(index, 1);  
-								game.log('<span style="color:red;">红方</span>战绩区移除',xingShi);
+								game.hongZhanJi.splice(index, 1);
+								if(log!=false){
+									game.log('<span style="color:red;">红方</span>战绩区移除',xingShi);
+								}
 							}
 						}
 					}else if(side==false){
 						for(let i=0;i<num;i++){
 							let index = game.lanZhanJi.indexOf(xingShi);  
 							if (index !== -1) {  
-								game.lanZhanJi.splice(index, 1);  
-								game.log('<span style="color:blue;">蓝方</span>战绩区移除',xingShi);
+								game.lanZhanJi.splice(index, 1);
+								if(log!=false){
+									game.log('<span style="color:blue;">蓝方</span>战绩区移除',xingShi);
+								}
 							}
 						}
 					}
@@ -2578,25 +2595,30 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					game.lanZhanJi=lanZhanJi;
 					ui.updateShiQiInfo();
 				},game.hongZhanJi,game.lanZhanJi);
-	
-				game.checkResult();
+				game.addVideo('changeZhanJi',null,[numx,color,side]);
 			},
-			changeXingBei:function(num,side){
+			changeXingBei:function(num,side,log){
+				var numx=num;
 				if(side==true){
 					game.hongXingBei+=num;
-					if(num>0){
-						game.log('<span style="color:red;">红方</span>星杯数量增加',num);
-					}else{
-						num=-num;
-						game.log('<span style="color:red;">红方</span>星杯数量减少',num);
+					if(log!=false){
+						if(num>0){
+							game.log('<span style="color:red;">红方</span>星杯数量增加',num);
+						}else{
+							num=-num;
+							game.log('<span style="color:red;">红方</span>星杯数量减少',num);
+						}
 					}
+					
 				}else if(side==false){
 					game.lanXingBei+=num;
-					if(num>0){
-						game.log('<span style="color:blue;">蓝方</span>星杯数量增加',num);
-					}else{
-						num=-num;
-						game.log('<span style="color:blue;">蓝方</span>星杯数量减少',num);
+					if(log!=false){
+						if(num>0){
+							game.log('<span style="color:blue;">蓝方</span>星杯数量增加',num);
+						}else{
+							num=-num;
+							game.log('<span style="color:blue;">蓝方</span>星杯数量减少',num);
+						}
 					}
 				}
 				ui.updateShiQiInfo();
@@ -2605,8 +2627,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					game.lanXingBei=lanXingBei;
 					ui.updateShiQiInfo();
 				},game.hongXingBei,game.lanXingBei);
-	
-				game.checkResult();
+				game.addVideo('changeXingBei',null,[numx,side]);
 			},
 			resetMoDan:function(){
 				//结算后重置数据
