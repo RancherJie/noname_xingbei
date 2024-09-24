@@ -32635,12 +32635,7 @@
 									}
 								}
 							}
-							if(get.is.phoneLayout()){
-								ui.shiQiInfo=ui.create.div('.touchinfo.bottom-right',ui.window);
-							}
-							else{
-								ui.shiQiInfo=ui.create.div('.touchinfo.bottom-right',ui.window);
-							}
+							ui.shiQiInfo=ui.create.div('.touchinfo.bottom-right',ui.window);
 							ui.updateShiQiInfo();
 						}
 						else{
