@@ -5031,7 +5031,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.line(result.targets[0],'blue');
 					if(event.zhiLiaonum>0){
 						player.changeZhiLiao(-event.zhiLiaonum);
-                        target.changeZhiLiao(event.zhiLiaonum,4);
+                        target.changeZhiLiao(event.zhiLiaonum,4).set('zhuanYi',true);
 					}
                 },
                 ai:{

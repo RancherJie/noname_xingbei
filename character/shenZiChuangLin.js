@@ -1264,7 +1264,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         trigger:{player:"changeZhiLiaoBefore"},
                         forced:true,
                         filter:function(event,player){
-                            return event.num>=0;
+                            return event.num>=0&&(!event.zhuanYi);
                         },
                         content:function(){
                             trigger.cancel();
