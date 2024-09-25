@@ -275,9 +275,9 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				if(lib.configOL.bannedcards.length){
 					last=uiintro.add('<div class="text chat">禁用卡牌：'+get.translation(lib.configOL.bannedcards));
 				}*/
-				last=uiintro.add('<div class="text chat">士气初始值：'+get.translation(lib.configOL.shiQiMax));
-				last=uiintro.add('<div class="text chat">战绩区上限：'+get.translation(lib.configOL.zhanJiMax));
-				last=uiintro.add('<div class="text chat">星杯上限：'+get.translation(lib.configOL.xingBeiMax));
+				last=uiintro.add('<div class="text chat">士气初始值：'+get.translation(lib.configOL.shiQiMax||game.shiQiMax));
+				last=uiintro.add('<div class="text chat">战绩区上限：'+get.translation(lib.configOL.zhanJiMax||game.zhanJiMax));
+				last=uiintro.add('<div class="text chat">星杯上限：'+get.translation(lib.configOL.xingBeiMax||game.xingBeiMax));
 
 				last.style.paddingBottom='8px';
 			},

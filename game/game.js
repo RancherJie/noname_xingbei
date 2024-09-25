@@ -55595,7 +55595,7 @@
 						<td>
 							<span style="color:red;">${game.hongShiQi}</span>
 						</td>
-						<td style="width: ${20*game.zhanJiMax}px;">${hongZhanJi_str}</td>
+						<td style="width: 100px;">${hongZhanJi_str}</td>
 						<td>
 							<span style="color:red;">${game.hongXingBei}</span>
 						</td>
@@ -55604,7 +55604,7 @@
 						<td>
 							<span style="color:blue;">${game.lanShiQi}</span>
 						</td>
-						<td style="width: ${20*game.zhanJiMax}px;">${lanZhanJi_str}</td>
+						<td style="width: 100px;">${lanZhanJi_str}</td>
 						<td>
 							<span style="color:blue;">${game.lanXingBei}</span>
 						</td>
