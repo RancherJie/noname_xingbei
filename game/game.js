@@ -4644,7 +4644,22 @@
 							game.saveConfig('connect_chooseSide',bool,this._link.config.mode);
 						},
 						frequent:true,
-					}
+					},
+					connect_shiQiMax:{
+						name:'士气初始值',
+						input:true,
+						connect:true,
+					},
+					connect_zhanJiMax:{
+						name:'战绩区上限',
+						input:true,
+						connect:true,
+					},
+					connect_xingBeiMax:{
+						name:'星杯上限',
+						input:true,
+						connect:true,
+					},
 				},
 				config:{
 					update:function(config,map){
@@ -4719,6 +4734,21 @@
 							}
 						},
 						frequent:true,
+					},
+					shiQiMax:{
+						name:'士气初始值',
+						input:true,
+						connect:false,
+					},
+					zhanJiMax:{
+						name:'战绩区上限',
+						input:true,
+						connect:false,
+					},
+					xingBeiMax:{
+						name:'星杯上限',
+						input:true,
+						connect:false,
 					},
 
 					free_choose:{
@@ -41656,6 +41686,51 @@
 								input.innerHTML=input.innerHTML.slice(0,12);
 								game.saveConfig('connect_remark',input.innerHTML);
 								game.saveConfig('connect_remark',input.innerHTML,'xingbei');
+							}
+						}else if(config.name=='士气初始值'){
+							input.innerHTML=config.init||game.shiQiMax;
+							input.onblur=function(){
+								input.innerHTML=input.innerHTML.replace(/<br>/g,'');
+								if(!input.innerHTML||get.is.banWords(input.innerHTML)){
+									input.innerHTML=game.shiQiMax;
+								}
+								if(config.connect){
+									game.saveConfig('connect_shiQiMax',input.innerHTML);
+									game.saveConfig('connect_shiQiMax',input.innerHTML,'xingbei');
+								}else{
+									game.saveConfig('shiQiMax',input.innerHTML);
+									game.saveConfig('shiQiMax',input.innerHTML,'xingbei');
+								}
+							}
+						}else if(config.name=='战绩区上限'){
+							input.innerHTML=config.init||game.zhanJiMax;
+							input.onblur=function(){
+								input.innerHTML=input.innerHTML.replace(/<br>/g,'');
+								if(!input.innerHTML||get.is.banWords(input.innerHTML)){
+									input.innerHTML=game.zhanJiMax;
+								}
+								if(config.connect){
+									game.saveConfig('connect_zhanJiMax',input.innerHTML);
+									game.saveConfig('connect_zhanJiMax',input.innerHTML,'xingbei');
+								}else{
+									game.saveConfig('zhanJiMax',input.innerHTML);
+									game.saveConfig('zhanJiMax',input.innerHTML,'xingbei');
+								}
+							}
+						}else if(config.name=='星杯上限'){
+							input.innerHTML=config.init||game.xingBeiMax;
+							input.onblur=function(){
+								input.innerHTML=input.innerHTML.replace(/<br>/g,'');
+								if(!input.innerHTML||get.is.banWords(input.innerHTML)){
+									input.innerHTML=game.xingBeiMax;
+								}
+								if(config.connect){
+									game.saveConfig('connect_xingBeiMax',input.innerHTML);
+									game.saveConfig('connect_xingBeiMax',input.innerHTML,'xingbei');
+								}else{
+									game.saveConfig('xingBeiMax',input.innerHTML);
+									game.saveConfig('xingBeiMax',input.innerHTML,'xingbei');
+								}
 							}
 						}
 						else{

@@ -12,6 +12,47 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 			if(lib.config.test_game){
 				_status.mode='standard';
 			}
+
+			if(_status.connectMode){
+				let defaultShiQiMax=game.shiQiMax;
+				let defaultZhanJiMax=game.zhanJiMax;
+				let defaultXingBeiMax=game.xingBeiMax;
+
+				let shiQiMax=lib.configOL.shiQiMax||game.shiQiMax;
+				shiQiMax=parseInt(shiQiMax);
+				game.shiQiMax=shiQiMax;
+
+				let zhanJiMax=lib.configOL.zhanJiMax||game.zhanJiMax;
+				zhanJiMax=parseInt(zhanJiMax);
+				game.zhanJiMax=zhanJiMax;
+
+				let xingBeiMax=lib.configOL.xingBeiMax||game.xingBeiMax;
+				xingBeiMax=parseInt(xingBeiMax);
+				game.xingBeiMax=xingBeiMax;
+
+				if(defaultShiQiMax!=shiQiMax||defaultZhanJiMax!=zhanJiMax||defaultXingBeiMax!=xingBeiMax){
+					game.default=false;
+				}
+
+				game.broadcast(function(shiQiMax,zhanJiMax,xingBeiMax){
+					game.shiQiMax=shiQiMax;
+					game.zhanJiMax=zhanJiMax;
+					game.xingBeiMax=xingBeiMax;
+				},shiQiMax,zhanJiMax,xingBeiMax);
+			}else{
+				let shiQiMax=get.config('shiQiMax')||game.shiQiMax;
+				shiQiMax=parseInt(shiQiMax);
+				game.shiQiMax=shiQiMax;
+
+				let zhanJiMax=get.config('zhanJiMax')||game.zhanJiMax;
+				zhanJiMax=parseInt(zhanJiMax);
+				game.zhanJiMax=zhanJiMax;
+
+				let xingBeiMax=get.config('xingBeiMax')||game.xingBeiMax;
+				xingBeiMax=parseInt(xingBeiMax);
+				game.xingBeiMax=xingBeiMax;
+			}
+
 			"step 1"
 			var playback=localStorage.getItem(lib.configprefix+'playback');
 			if(playback){
@@ -234,6 +275,10 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				if(lib.configOL.bannedcards.length){
 					last=uiintro.add('<div class="text chat">禁用卡牌：'+get.translation(lib.configOL.bannedcards));
 				}*/
+				last=uiintro.add('<div class="text chat">士气初始值：'+get.translation(lib.configOL.shiQiMax));
+				last=uiintro.add('<div class="text chat">战绩区上限：'+get.translation(lib.configOL.zhanJiMax));
+				last=uiintro.add('<div class="text chat">星杯上限：'+get.translation(lib.configOL.xingBeiMax));
+
 				last.style.paddingBottom='8px';
 			},
 			getVideoName:function(){
