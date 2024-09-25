@@ -1014,7 +1014,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 }
             },
             xingKe:{
-                trigger:{player:['useCardAfter','useSkillAfter']},
+                trigger:{player:['useCardEnd','useSkillEnd']},
                 filter:function(event,player){
                     return get.is.zhuDongGongJi(event)||get.is.faShuXingDong(event);
                 },
@@ -1790,7 +1790,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             xingHuan:"[法术]星环[回合限定]",
             xingHuan_info:"<span class='tiaoJian'>(弃X张地系牌[展示])</span>指定(X-1)名角色与你各+1[治疗]并各摸1张牌[强制]，你+1[法术行动]。",
             xingKe:"[响应]星刻",
-            xingKe_info:"<span class='tiaoJian'>([攻击行动]或[法术行动]结束后)</span>将牌库顶1张牌面朝下放置在你角色旁，作为【卢恩】。",
+            xingKe_info:"<span class='tiaoJian'>([攻击行动]或[法术行动]结束时)</span>将牌库顶1张牌面朝下放置在你角色旁，作为【卢恩】。",
             qunXingQiShi:"[启动]群星启示",
             qunXingQiShi_info:"你选择以下一项发动:<br>·<span class='tiaoJian'>(将1张手牌面朝下放置在你角色旁，作为【卢恩】。选择1个【律法】放置于你面前)</span>你摸0-1张牌。<br>·<span class='tiaoJian'>(移除X个【卢恩】[展示])</span>发动任意符合条件的【律法】，然后移除1个【律法】。",
             huangJinLv:"[响应]黄金律",
