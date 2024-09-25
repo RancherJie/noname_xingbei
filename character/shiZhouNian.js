@@ -134,12 +134,17 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 content:function(player){
                     "step 0"
                     //trigger.selected=true;
-					var str='风怒追击：风系[攻击行动]';
-					var next=player.gongJi(function(card,player,event){
-                        if(get.xiBie(card)!='feng') return false;
-                        return lib.filter.cardEnabled(card,player,'forceEnable');
-					},str);
-					next.autodelay=true;
+                    trigger.getParent().insertAfter(function(){
+                        var str='风怒追击：风系[攻击行动]';
+                        var next=player.gongJi(function(card,player,event){
+                            if(get.xiBie(card)!='feng') return false;
+                            return lib.filter.cardEnabled(card,player,'forceEnable');
+                        },str);
+                        next.autodelay=true;
+                    },{
+                        player:player,
+                    });
+					
                 },
                 check:function(event,player){
                     var num=player.countCards('h',card=>get.xiBie(card)=='feng'&&get.type(card)=='gongJi');
@@ -1718,7 +1723,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.removeBiShaShuiJing();
                     'step 1'
                     target.drawTo(5);
-                    player.gongJi('狙击：[攻击行动]');
+                    player.storage.gongJi++;
                 },
                 ai:{
                     shuiJing:true,
@@ -2117,7 +2122,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 1'
                     target.damageFaShu(event.num,player);
                     'step 2'
-                    player.faShu('陨石：[法术行动]');
+                    player.storage.faShu++;
                 },
                 ai:{
                     order:3.5,
@@ -2281,7 +2286,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 1'
                     target.damageFaShu(event.num,player);
                     'step 2'
-                    player.gongJi('风刃：[攻击行动]');
+                    player.storage.gongJi++;
                 },
                 ai:{
                     order:3.5,
@@ -2610,7 +2615,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 3'
                     player.removeMark('shiHua',3);
                     player.addSkill('cangBaiZhiYue1');
-                    player.gongJi('[攻击行动]');
+                    player.storage.gongJi++;
                     'step 4'
                     player.insertPhase();
                     'step 5'
@@ -3798,11 +3803,18 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 content:function(player){
                     //trigger.selected=true;
-					var str='修罗连斩：火系[攻击行动]';
-					var next=player.gongJi('h',function(card,player,event){
+
+                    trigger.getParent().insertAfter(function(){
+                        var str='修罗连斩：火系[攻击行动]';
+					    var next=player.gongJi('h',function(card,player,event){
                         if(get.xiBie(card)!='huo') return false;
                         return lib.filter.cardEnabled(card,player,'forceEnable');
-					},str);
+					    },str);
+                    },{
+                        player:player,
+                    });
+
+					
                 },
                 mod:{
                     aiUseful(player, card, num) {
