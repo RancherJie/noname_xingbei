@@ -37242,6 +37242,8 @@
 				dialog.content.innerHTML=result;
 				dialog.forcebutton=true;
 				var result2=arguments[1];
+				var tongJi=arguments[2];
+
 				if(result2==true){
 					dialog.content.firstChild.innerHTML='战斗胜利';
 				}
@@ -37286,7 +37288,7 @@
 					delete ui.giveup;
 				}
 				//星杯记录战绩
-				if(game.addRecord){
+				if(game.addRecord&&tongJi!=false){
 					game.addRecord(result2);
 				}
 
@@ -37665,9 +37667,9 @@
 			for(var i=0;i<clients.length;i++){
 				if(clients[i].isOnline2()){
 					if(clients[i].side==game.players[0].side){
-						clients[i].send(game.over,dialog.content.innerHTML,resultbool);
+						clients[i].send(game.over,dialog.content.innerHTML,resultbool,game.tongJi);
 					}else{
-						clients[i].send(game.over,dialog.content.innerHTML,!resultbool);
+						clients[i].send(game.over,dialog.content.innerHTML,!resultbool,game.tongJi);
 					}
 				}
 			}
@@ -37859,7 +37861,7 @@
 			for(var i=0;i<lib.onover.length;i++){
 				lib.onover[i](resultbool);
 			}
-			if(game.addRecord){
+			if(game.addRecord&&game.tongJi!=false){
 				game.addRecord(resultbool);
 			}
 			if(window.isNonameServer){
