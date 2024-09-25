@@ -8306,7 +8306,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 }
             },
             buQuYiZhi:{
-                trigger:{player:'useCardEnd'},
+                trigger:{player:'useCardAfter'},
                 filter:function(event,player){
                     //if(event.selected) return false;
                     return get.is.gongJiXingDong(event)&&player.canBiShaShuiJing();
