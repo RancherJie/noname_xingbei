@@ -547,9 +547,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 group:['fengXueX_yingZhiFeng1','fengXueX_yingZhiFeng2','fengXueX_fengZhi'],
                 subSkill:{
                     yingZhiFeng1:{
-                        trigger:{player:'useCardAfter'},
-                        lastDo:true,
-                        priority:-50,
+                        trigger:{player:'useCardEnd'},
+                        priority:-1,
                         filter:function(event,player){
                             if(!player.hasZhiShiWu('fengXueX')) return false;
                             return get.is.zhuDongGongJi(event)&&event.card.isCard&&event.targets.length>0;
@@ -564,6 +563,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         filter:function(event,player){
                             return get.is.gongJiXingDong(event);
                         },
+                        priority:-2,
                         forced:true,
                         content:function(){
                             player.storage.fengXue_player.addZhiShiWu('mi');
