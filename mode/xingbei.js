@@ -30,10 +30,6 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				xingBeiMax=parseInt(xingBeiMax);
 				game.xingBeiMax=xingBeiMax;
 
-				if(defaultShiQiMax!=shiQiMax||defaultZhanJiMax!=zhanJiMax||defaultXingBeiMax!=xingBeiMax){
-					game.tongJi=false;
-				}
-
 				game.broadcast(function(shiQiMax,zhanJiMax,xingBeiMax){
 					game.shiQiMax=shiQiMax;
 					game.zhanJiMax=zhanJiMax;

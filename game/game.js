@@ -40631,39 +40631,6 @@
 		zhiLiaoMax:2,
 		nengLiangMax:3,
 
-
-		addRecord:function(bool){
-			if(!(_status.connectMode||game.online)) return;	
-			if(typeof bool=='boolean'){
-				var data=lib.config.gameRecord.xingbei.data;
-				//var identity=get.cnNumber(lib.storage.number)+'人';
-				if(game.players.length==4){
-					var identity='2v2';
-				}else{
-					var identity='3v3';
-				}
-				
-				if(!data[identity]){
-					data[identity]=[0,0];
-				}
-				if(bool){
-					data[identity][0]++;
-				}
-				else{
-					data[identity][1]++;
-				}
-				var list=['2v2','3v3'];
-				var str='';
-				for(var i=0;i<list.length;i++){
-					if(data[list[i]]){
-						str+=list[i]+'：'+data[list[i]][0]+'胜'+' '+data[list[i]][1]+'负<br>';
-					}
-				}
-				lib.config.gameRecord.xingbei.str=str;
-				game.saveConfig('gameRecord',lib.config.gameRecord);
-			}
-		},
-
 	};
 	window['b'+'ann'+'e'+'dE'+'x'+'ten'+'s'+'i'+'o'+'ns']=['\u4fa0\u4e49','\u5168\u6559\u7a0b'];
 	const ui={
@@ -48080,6 +48047,7 @@
 						};
 						if(!get.config('menu_loadondemand')) node._initLink();
 					}());
+					/*
 					(function(){
 						var page=ui.create.div('');
 						var node=ui.create.div('.menubutton.large','战绩',start.firstChild,clickMode);
@@ -48116,6 +48084,7 @@
 						};
 						if(!get.config('menu_loadondemand')) node._initLink();
 					}());
+					*/
 					(function(){
 						if(!window.indexedDB||window.nodb) return;
 						var page=ui.create.div('');
