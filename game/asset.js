@@ -349,7 +349,7 @@ window.noname_asset_list=[
 ];
 window.noname_skin_list={
 	cangYanMoNv:1,
-	dieWuZhe:1,
+	dieWuZhe:2,
 	fengYinShi:1,
 	geDouJia:1,
 	hongLianQiShi:1,
@@ -379,4 +379,5 @@ window.noname_skin_list={
 	yueZhiNvShen:1,
 	jianDi:1,
 	moFaShaoNv:2,
+	lingHunShuShi:1,
 };
