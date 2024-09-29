@@ -79,7 +79,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						case '2v2':lib.configOL.number=4;break;
 						case '3v3':lib.configOL.number=6;break;
 						//case '3v3':lib.configOL.number=6;break;
-						//case '4v4':case 'guandu':lib.configOL.number=8;break;
+						case '4v4':lib.configOL.number=8;break;
 					}
 				});
 			}
@@ -87,6 +87,8 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				game.prepareArena(4);
 			}else if(_status.mode=='three'){
 				game.prepareArena(6);
+			}else if(_status.mode=='four'){
+				game.prepareArena(8);
 			}
 			// game.delay();
 			"step 2"
@@ -96,7 +98,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 			if(_status.connectMode){
 				game.randomMapOL();
 			}
-			else if(_status.mode=='two'||_status.mode=='three'){
+			else if(_status.mode=='two'||_status.mode=='three'||_status.mode=='four'){
 				for(var i=0;i<game.players.length;i++){
 					game.players[i].getId();
 				}
@@ -115,7 +117,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				});
 			}
 			_status.videoInited=true;
-			if(_status.connectMode||_status.mode=='two'||_status.mode=='three'){
+			if(_status.connectMode||_status.mode=='two'||_status.mode=='three'||_status.mode=='four'){
 				info.push(false);
 			}
 			else{
@@ -168,7 +170,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					game.gameDraw(_status.firstAct,4);
 					game.phaseLoop(_status.firstAct);
 				}
-				else if(_status.mode=='two'||_status.mode=='three'){
+				else if(_status.mode=='two'||_status.mode=='three'||_status.mode=='four'){
 					_status.first_less=true;
 					_status.first_less_forced=true;
 					var firstChoose=_status.firstAct;
@@ -233,25 +235,29 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				else if(lib.configOL.versus_mode=='2v2'||lib.configOL.versus_mode=='3v3'){
 					uiintro.add('<div class="text chat">四号位换牌：'+(lib.configOL.replace_handcard?'开启':'关闭'));
 				}*/
-				switch(lib.configOL.choose_mode){
-					case '多选1':uiintro.add('<div class="text chat">选角模式：多选1');break;
-					case 'CM02':uiintro.add('<div class="text chat">选角模式：CM02');break;
-					case 'BP01':uiintro.add('<div class="text chat">选角模式：BP01');break;
-					case 'BP02':uiintro.add('<div class="text chat">选角模式：BP02');break;
-				}
-				if(lib.configOL.choose_mode!='CM02'){
-					switch(lib.configOL.team_sequence){
-						case 'random':uiintro.add('<div class="text chat">队伍顺序：随机');break;
-						case 'near':uiintro.add('<div class="text chat">队伍顺序：临近');break;
-						case 'crossed':uiintro.add('<div class="text chat">队伍顺序：交叉');break;
-						case 'CM':uiintro.add('<div class="text chat">队伍顺序：CM');break;
-					}
-					if(lib.configOL.choose_mode=='BP02'||lib.configOL.choose_mode=='BP01'){
-						var last=uiintro.add('<div class="text chat">可选角色数：'+lib.configOL.BPchoose_number);
-					}else{
-						var last=uiintro.add('<div class="text chat">侯选角色数：'+lib.configOL.choose_number);
-					}
+				if(lib.configOL.versus_mode=='4v4'){
+					uiintro.add('<div class="text chat">队伍顺序：随机');
 					
+				}else{
+					switch(lib.configOL.choose_mode){
+						case '多选1':uiintro.add('<div class="text chat">选角模式：多选1');break;
+						case 'CM02':uiintro.add('<div class="text chat">选角模式：CM02');break;
+						case 'BP01':uiintro.add('<div class="text chat">选角模式：BP01');break;
+						case 'BP02':uiintro.add('<div class="text chat">选角模式：BP02');break;
+					}
+					if(lib.configOL.choose_mode!='CM02'){
+						switch(lib.configOL.team_sequence){
+							case 'random':uiintro.add('<div class="text chat">队伍顺序：随机');break;
+							case 'near':uiintro.add('<div class="text chat">队伍顺序：临近');break;
+							case 'crossed':uiintro.add('<div class="text chat">队伍顺序：交叉');break;
+							case 'CM':uiintro.add('<div class="text chat">队伍顺序：CM');break;
+						}
+						if(lib.configOL.choose_mode=='BP02'||lib.configOL.choose_mode=='BP01'){
+							var last=uiintro.add('<div class="text chat">可选角色数：'+lib.configOL.BPchoose_number);
+						}else{
+							var last=uiintro.add('<div class="text chat">侯选角色数：'+lib.configOL.choose_number);
+						}
+					}
 				}
 				switch(lib.configOL.viewHandcard){
 					case true:uiintro.add('<div class="text chat">可见队友手牌：是');break;
@@ -284,8 +290,10 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
  				switch(_status.mode){
  					case 'two':str2='2v2';break;
  					case 'three':str2='3v3';break;
+					case 'four':str2='4v4';break;
 					case '2v2':str2='2v2';break;
 					case '3v3':str2='3v3';break;
+					case '4v4':str2='4v4';break;
 				}
 				if(game.me.side==true) str2+='（红方）';
 				else str2+='（蓝方）';
@@ -346,7 +354,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 							ref.next.next.side=bool2;
 							ref.next.next.next.side=bool;
 						}
-					}else{
+					}else if(number==6){
 						if(team_sequence=='crossed'){
 							ref.side=bool;
 							ref.next.side=bool2;
@@ -378,7 +386,16 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 							ref.next.next.next.next.side=bool;
 							ref.next.next.next.next.next.side=bool2;
 						}
-					}	
+					}else if(number==8){
+						var sideList=[true,true,false,false,true,false,true,false];
+						sideList.randomSort();
+						for(var i=0;i<number;i++){
+							game.players[i].side=sideList[i];
+						}
+						while(ref.side!=true){
+							ref=game.players.randomGet();
+						}
+					}
 					
 					var firstChoose=ref;
 					_status.firstAct=firstChoose;
@@ -664,11 +681,15 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 			},
 
 			chooseCharacterOL:function(){
-				switch(lib.configOL.choose_mode){
-					case '多选1':game.chooseCharacterOLDuoXuanYi();break;
-					case 'CM02':game.chooseCharacterOLCM02();break;
-					case 'BP01':game.chooseCharacterOLBP01();break;
-					case 'BP02':game.chooseCharacterOLBP02();break;
+				if(!lib.configOL.versus_mode=='4v4'){
+					game.chooseCharacterOLDuoXuanYi();
+				}else{
+					switch(lib.configOL.choose_mode){
+						case '多选1':game.chooseCharacterOLDuoXuanYi();break;
+						case 'CM02':game.chooseCharacterOLCM02();break;
+						case 'BP01':game.chooseCharacterOLBP01();break;
+						case 'BP02':game.chooseCharacterOLBP02();break;
+					}	
 				}
 			},
 			
@@ -783,7 +804,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 							event.list=[true,false,false,true];
 							event.list.randomSort();
 						}
-					}else{
+					}else if(number==6){
 						if(team_sequence=='CM'){
 							event.list=[true,false,false,true,true,false];
 						}else if(team_sequence=='near'){
@@ -794,6 +815,9 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 							event.list=[true,true,true,false,false,false];
 							event.list.randomSort();
 						}
+					}else if(number==8){
+						event.list=[true,true,true,false,false,false,true,false];
+						event.list.randomSort();
 					}
 
 					
@@ -807,7 +831,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					var number=lib.configOL.number;
 					if(chooseSide){
 						var ref=game.getFirstRed();
-						if(team_sequence!='random') game.moveSeat(event.list,ref);
+						if(team_sequence!='random'&&number!=8) game.moveSeat(event.list,ref);
 					}else{
 						var ref=game.players.randomGet();
 						for(var i=0;i<number;i++){

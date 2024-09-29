@@ -4567,6 +4567,15 @@
 						}else{
 							map.connect_BPchoose_number.hide();
 						}
+						if(config.connect_versus_mode=='4v4'){
+							map.connect_team_sequence.hide();
+							map.connect_choose_mode.hide();
+							map.connect_choose_number.show();
+							map.connect_BPchoose_number.hide();
+						}else{
+							map.connect_team_sequence.show();
+							map.connect_choose_mode.show();
+						}	
 					},
 					connect_remark:{
 						name:'房间备注',
@@ -4580,7 +4589,7 @@
 							//'1v1':'1v1',
 							'2v2':'2v2',
 							'3v3':'3v3',
-							//'4v4':'4v4',
+							'4v4':'4v4',
 							//'guandu':'官渡',
 						},
 						frequent:true
@@ -4668,6 +4677,11 @@
 						}else{
 							map.choose_number.hide();
 						}
+						if(config.versus_mode=='four'){
+							map.team_sequence.hide();
+						}else{
+							map.team_sequence.show();
+						}
 					},
 					versus_mode:{
 						name:'游戏模式',
@@ -4675,6 +4689,7 @@
 						item:{
 							three:'3v3',
 							two:'2v2',
+							four:'4v4',
 						},
 						restart:true,
 						frequent:true,
