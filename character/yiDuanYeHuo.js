@@ -949,7 +949,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 }
             },
 
-            //星坠巫女
+            //星坠女巫
             mingDingZhiLi:{
                 trigger:{global:'phaseBefore'},
                 filter:function(event,player){
@@ -1052,7 +1052,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     if(bool2) list.push('选项二');
                     var choiceList=["<span class='tiaoJian'>(将1张手牌面朝下放置在你角色旁，作为【卢恩】。选择1个【律法】放置于你面前)</span>你摸0-1张牌。","<span class='tiaoJian'>(移除X个【卢恩】[展示])</span>发动任意符合条件的【律法】，然后移除1个【律法】。"];
 
-                    player.chooseControl(list).set('prompt','选择以下一项发动').set('choiceList',choiceList);
+                    player.chooseControl(list).set('prompt','选择以下一项发动').set('choiceList',choiceList).set('ai',function(){
+                        var bool1=_status.event.bool1;
+                        var bool2=_status.event.bool2;
+                        var player=_status.event.player;
+                        if(player.getExpansions('luEn').length>2&&bool2) return '选项二';
+                        if(bool1) return '选项一';
+                    }).set('bool1',bool1).set('bool2',bool2);
                     'step 1'
                     if(result.control=='选项一'){
                         event.goto(2)
