@@ -19782,8 +19782,11 @@
 					},player,name,popname);
 					if(lib.animate.skill[name]) lib.animate.skill[name].apply(this,arguments);
 					else{
+						var skillName=get.skillTranslation(name,this);
+						var reg=new RegExp(/\[.{2}\]/g,'g');
+						skillName=skillName.replace(reg,'');
 						if(popname!=name) this.popup(popname,'water',false);
-						else this.popup(get.skillTranslation(name,this),'water',false);
+						else this.popup(skillName,'water',false);
 					}
 				},
 				tryCardAnimate:function(card,name,nature,popname){
