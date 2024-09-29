@@ -2807,7 +2807,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						
 					}
 					//判断是否有可使用手牌
-					var cards=player.getCards('h').push(player.getCards('e'));
+					var cards=player.getCards('h').concat(player.getCards('e'));
 					for(var i=0;i<cards.length;i++){
 						if(player.hasUseTarget(cards[i])) return false;
 					}
