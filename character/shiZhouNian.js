@@ -2093,6 +2093,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         return get.xiBie(card)=='di'
                     }
                 },
+                discard:false,
                 filterOk:function(){
                     return ui.selected.cards[0].hasNature('yunShi')
                 },
@@ -2148,6 +2149,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     return ui.selected.cards[0].hasNature('bingDong');
                 },
                 complexCard:true,
+                discard:false,
                 prepare:function(cards,player,targets){
                     if(cards.length==1){
                         player.useCard(cards);
@@ -2212,6 +2214,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                 },
                 complexCard:true,
+                discard:false,
                 prepare:function(cards,player,targets){
                     if(cards.length==1){
                         player.useCard(cards);
@@ -2261,6 +2264,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     return ui.selected.cards[0].hasNature('fengRen')
                 },
                 complexCard:true,
+                discard:false,
                 prepare:function(cards,player,targets){
                     if(cards.length==1){
                         player.useCard(cards);
@@ -2312,6 +2316,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     return ui.selected.cards[0].hasNature('leiJi')
                 },
                 complexCard:true,
+                discard:false,
                 prepare:function(cards,player,targets){
                     if(cards.length==1){
                         player.useCard(cards);
