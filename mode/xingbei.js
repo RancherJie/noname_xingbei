@@ -514,11 +514,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					var basenum=1;
 					var basestr='选择角色';
 					if(get.config('phaseswap')){
-						if(number==4){
-							basenum=2;
-						}else{
-							basenum=3;
-						}
+						basenum =number/2;
 						basestr='选择你和队友的角色';
 						event.phaseswap=true;
 					}
