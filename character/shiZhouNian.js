@@ -4465,7 +4465,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.chooseTarget(function(card,player,target){
                         if(target==player) return false;
                         return target.side==player.side;
-                    },[1,num],true,prompt);
+                    },[1,num],true,prompt).set('ai',function(target){
+                        var player=_status.event.player;
+                        return get.zhiLiaoEffect2(target,player,1);
+                    });
                     'step 3'
                     game.log(player,'选择了',result.targets);
                     player.line(result.targets,'blue');
