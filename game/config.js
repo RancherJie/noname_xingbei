@@ -130,7 +130,7 @@ window.config={
 
 	cards:['xingbei'],
 	characters:['shiZhouNian'],
-	connect_characters:['yiDuanYeHuo'],
+	connect_characters:['yiDuanYeHuo','shenZiChuangLin'],
 	connect_cards:[],
 	plays:[], 
 	extensions:[],
