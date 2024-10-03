@@ -606,6 +606,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     });
                     next.set('prompt',get.prompt('jingHuaZhiShu'));
                     next.set('prompt2',lib.translate.jingHuaZhiShu_info);
+                    next.set('ai',function(card){
+                        return 7-get.value(card);
+                    });
                     'step 1'
                     if(result.bool){
                         player.logSkill(event.name);
