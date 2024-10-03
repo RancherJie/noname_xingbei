@@ -1110,11 +1110,23 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                     }
                                 }
                             }
+                            var num;
+                            num=2+event.x;
+
                             var list=[`摸2+${event.x}张牌`,'跳过行动阶段'];
                             if(player.hasExpansions('_xuRuo')){
                                 list[0]=`摸2+3+${event.x}张牌`;
+                                num+=3;
                             }
-                            player.chooseControl().set('choiceList',list).set('prompt','五系束缚：选择一项').set('ai',function(){return 1;});
+                            player.chooseControl().set('choiceList',list).set('prompt','五系束缚：选择一项').set('ai',function(){
+                                var player=_status.event.player;
+                                var num=_status.event.num;
+                                if(player.countCards('h')+num>player.getHandcardLimit()){
+                                    return 1;
+                                }else{
+                                    return 0;
+                                }
+                            }).set('num',num);
                             'step 1'
                             if(result.index==1){
                                 player.addTempSkill('xuRuo_xiaoGuo');
