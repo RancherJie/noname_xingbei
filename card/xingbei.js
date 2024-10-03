@@ -311,8 +311,8 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 						}
 					},
 					basic:{
-						useful:5,
-						value:[5,2,0],
+						useful:4,
+						value:[3,2,0],
 					},
 					result:{
 						target:function(player,target,card,isLink){
