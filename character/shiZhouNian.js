@@ -6767,6 +6767,23 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     return player.countZhiShiWu('lingGan')>1;
                 },
                 chooseButton:{
+                    check:function (button) {
+                        var player = _status.event.player;
+                        if(typeof button.link=="number"){
+                            var num=player.getHandcardLimit()-player.countCards('h');
+                            if(num>=button.link-1) return button.link;
+                        }else if(typeof button.link=="string"){
+                            var num=player.getHandcardLimit()-player.countCards('h');
+                            if(num>=2&&button.link=='摸'){
+                                return 1;
+                            }
+                            if(num<2&&button.link=='弃'){
+                                return 1;
+                            }
+                        }
+                        return 0.5;
+                    },
+
                     dialog:function(event,player){
 						var dialog=ui.create.dialog('不谐和弦：移除X点【灵感】','hidden');
                         var list=[];
@@ -6795,7 +6812,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                 for(var i=0;i<links.length;i++){
                                     if(typeof links[i]=='number'){
                                         event.buXieHeXian_num=links[i]-1;
-                                    }else if(typeof links[i]=='string'){
                                         event.buXieHeXian=links[i];
                                     }
                                 }
@@ -6830,7 +6846,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             ai:{
                                 result:{
                                     target:function(player,target){
-                                        return -1;
+                                        var num=player.getHandcardLimit()-player.countCards('h');
+                                        if(num>=2) return -target.countCards('h');
+                                        else return target.countCards('h');
                                     }
                                 }
                             }
@@ -6852,9 +6870,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                 },
                 ai:{
-                    order:3.5,
-                    result:function(player,target){
-                        return -1;
+                    order:function(item,player){
+                        var num=3+player.countZhiShiWu('lingGan')*0.5;
+                        return num;
+                    },
+                    result:{
+                        player:1,
                     }
                 }
                 
