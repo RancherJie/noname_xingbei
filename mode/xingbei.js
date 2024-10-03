@@ -3579,7 +3579,10 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						var shiQi=get.shiQi(!player.side);
 						if(shiQi<=5){
 							num+=(0.4*(5-shiQi));
+							if(shiQi<=1) num+=10;
 						}
+						var xingBei=get.xingBei(player.side);
+						if(xingBei+1>=game.xingBeiMax) num+=10;
 						num+=(0.1*(get.zhanJi(player.side).length)-3);
 						return num;
 					},
