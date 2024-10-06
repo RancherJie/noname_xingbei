@@ -134,75 +134,30 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					game.gameDraw(_status.firstChoose.next);
 					game.phaseLoop(_status.firstChoose.next);
 				}
-				else if(_status.mode=='2v2'||_status.mode=='3v3'){
+				else if(_status.mode=='2v2'||_status.mode=='3v3'||_status.mode=='4v4'){
 					_status.first_less=true;
 					var firstChoose=(_status.firstAct||game.players.randomGet());
 					if(firstChoose.next.side==firstChoose.side){
 						firstChoose=firstChoose.next;
 					}
 					game.gameDraw(firstChoose,function(player){
-						/*
-						if(lib.configOL.replace_handcard&&player==firstChoose.previousSeat){
-							return 5;
-						}*/
 						return 4;
 					});
 					game.phaseLoop(firstChoose);
-				}
-				else if(_status.mode=='guandu'){
-					game.gameDraw(_status.firstAct);
-					game.phaseLoop(_status.firstAct);
-				}
-				else if(_status.mode=='4v4'){
-					game.gameDraw(_status.firstAct,function(player){
-						if(player==_status.firstAct.previousSeat){
-							return 5;
-						}
-						return 4;
-					});
-					game.replaceHandcards(_status.firstAct.previous,_status.firstAct.previous.previous);
-					game.phaseLoop(_status.firstAct);
 				}
 				event.finish();
 			}
 			else{
-				if(_status.mode=='guandu'){
-					game.gameDraw(_status.firstAct,4);
-					game.phaseLoop(_status.firstAct);
-				}
-				else if(_status.mode=='two'||_status.mode=='three'||_status.mode=='four'){
+				if(_status.mode=='two'||_status.mode=='three'||_status.mode=='four'){
 					_status.first_less=true;
 					_status.first_less_forced=true;
 					var firstChoose=_status.firstAct;
 					game.gameDraw(firstChoose,function(player){
-						/*
-						if(player==_status.firstAct.previousSeat&&get.config('replace_handcard_two')){
-							return 5;
-						}*/
 						return 4;
 					});
 					game.phaseLoop(firstChoose);
 				}
-				
-				if(_status.mode!='four'){
-					event.finish();
-				}
 			}
-			"step 4"
-			if(event.replaceCard&&result.bool){
-				var hs=game.me.getCards('h');
-				for(var i=0;i<hs.length;i++){
-					hs[i].discard(false);
-				}
-				game.me.directgain(get.cards(hs.length));
-			}
-			if(_status.ladder){
-				lib.storage.ladder.current-=40;
-				_status.ladder_tmp=true;
-				game.save('ladder',lib.storage.ladder);
-				game.addGlobalSkill('versus_ladder');
-			}
-			game.phaseLoop(_status.firstAct);
 		},
 		game:{
 			checkResult:function(me){
