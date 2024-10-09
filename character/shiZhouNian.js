@@ -33,7 +33,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             lingFuShi:['female','yong',4,['lingFu_leiMing','lingFu_fengXing','nianZhou','baiGuiYeXing','lingLiBengJie','yaoLi'],],
             jianDi:['female','ji','4/5',['jianHunShouHu','yangGong','jianQiZhan','tianShiZhiHun','eMoZhiHun','buQuYiZhi','jianHun','jianQi'],],
             geDouJia:['female','ji','4/5',['nianQiLiChang','xuLiYiji','nianDan','baiShiHuanLongQuan','qiJueBengJi','douShenTianQu','douQi'],],
-            yongZhe:['male','xue','4/5',['yongZheZhiXin','nuHou','jinPiLiJin','mingJingZhiShui','tiaoXin','jinDuanZhiLi','siDou','','nuQi','zhiXing'],],
+            yongZhe:['male','xue','4/5',['yongZheZhiXin','nuHou','jinPiLiJin','mingJingZhiShui','tiaoXin','jinDuanZhiLi','siDou','nuQi','zhiXing'],],
             lingHunShuShi:['female','huan','4/5',["lingHunTunShi","lingHunZhaoHuan",'lingHunZhuanHuan',"lingHunJingXiang","lingHunZhenBao","lingHunFuYu","lingHunLianJie","lingHunZengFu","huangSeLingHun","lanSeLingHun"],],
             xueZhiWuNv:['female','xue',5,['xueZhiAiShang','liuXue','niLiu','xueZhiBeiMing','tongShengGongSi','xueZhiZuZhou'],],
             dieWuZhe:['female','yong',5,['shengMingZhiHuo','wuDong','duFen','chaoSheng','jingHuaShuiYue','diaoLing','yongHua','daoNiZhiDie','jian','DWZyong'],],
