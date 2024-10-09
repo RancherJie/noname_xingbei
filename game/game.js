@@ -14638,7 +14638,9 @@
 									translation=translation.slice(1,3);
 								}
 								else{
-									translation=translation.slice(0,2);
+									//xingbei
+									//translation=translation.slice(0,2);
+									translation=translation;
 								}
 								var item=dialog.add('<div class="popup pointerdiv" style="width:80%;display:inline-block"><div class="skill">【'+
 								translation+'】</div><div>'+lib.translate[list[i]+'_info']+'</div></div>');
@@ -17575,7 +17577,10 @@
 				addToExpansion:function(){
 					"step 0"
 					if(event.animate=='give') event.visible=true;
-					if(cards){
+					//xingbei
+					var bool=player.hasSkill(event.gaintag[0]);
+					if(event.gaintag[0][0]=='_') bool=true;
+					if(cards&&bool){
 						var map={};
 						for(var i of cards){
 							var owner=get.owner(i,'judge');

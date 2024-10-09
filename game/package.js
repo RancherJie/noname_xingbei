@@ -4,6 +4,7 @@ window.noname_package={
 		shiZhouNian:"十周年",
 		yiDuanYeHuo:"异端业火",
 		shenZiChuangLin:"神子创临",
+		zhiMengZhe:'织梦者'
 	},
 	card:{
 		//standard:'标准',
