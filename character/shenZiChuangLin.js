@@ -216,6 +216,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 type:'qiDong',
                 trigger:{player:'phaseUseBegin'},
                 filter:function(event,player){
+                    if(event.qiDong==true) return false;
                     return player.canBiShaShuiJing();
                 },
                 content:function(){
@@ -1422,6 +1423,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 type:'qiDong',
                 trigger:{player:'phaseUseBegin'},
                 filter:function(event,player){
+                    if(event.qiDong==true) return false;
                     return player.canBiShaBaoShi();
                 },
                 content:function(){

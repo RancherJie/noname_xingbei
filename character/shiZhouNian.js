@@ -472,6 +472,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 type:'qiDong',
                 trigger:{player:'phaseUseBegin'},
                 filter:function(event,player){
+                    if(event.qiDong==true) return false;
                     return player.canBiShaBaoShi();
                 },
                 content:function(){
@@ -597,6 +598,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 type:'qiDong',
                 trigger:{player:'phaseUseBegin'},
                 filter:function(event,player){
+                    if(event.qiDong==true) return false;
                     return player.canBiShaBaoShi();
                 },
                 content:function(){
@@ -3534,6 +3536,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 type:'qiDong',
                 trigger:{player:'phaseUseBegin'},
                 filter:function(event,player){
+                    if(event.qiDong==true) return false;
                     return player.canBiShaBaoShi()&&!player.isLinked(); 
                 },
                 content:function(){
@@ -3845,6 +3848,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 type:'qiDong',
                 trigger:{player:'phaseUseBegin'},
                 filter:function(event,player){
+                    if(event.qiDong==true) return false;
                     return !player.isLinked(); 
                 },
                 content:function(){
@@ -4138,6 +4142,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 type:'qiDong',
                 trigger:{player:'phaseUseBegin'},
                 filter:function(event,player){
+                    if(event.qiDong==true) return false;
                     return player.canBiShaShuiJing();
                 },
                 content:function(){
@@ -4452,6 +4457,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 type:'qiDong',
                 trigger:{player:'phaseUseBegin'},
                 filter:function(event,player){
+                    if(event.qiDong==true) return false;
                     return player.zhiLiao>0;
                 },
                 content:function(){
@@ -5022,6 +5028,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 type:'qiDong',
                 trigger:{player:'phaseUseBegin'},
                 filter:function(event,player){
+                    if(event.qiDong==true) return false;
                     return player.canBiShaShuiJing()&&player.zhiLiao>0;
                 },
                 content:function(){
@@ -6108,6 +6115,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 //priority:1,
                 trigger:{player:'phaseUseBegin'},
                 filter:function(event,player){
+                    if(event.qiDong==true) return false;
                     return player.canBiShaShuiJing()&&event.qiDong!=true;
                 },
                 content:function(){
@@ -6179,6 +6187,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 type:'qiDong',
                 trigger:{player:'phaseUseBegin'},
                 filter:function(event,player){
+                    if(event.qiDong==true) return false;
                     return player.canBiShaBaoShi()&&event.qiDong!=true;
                 },
                 content:function(){
@@ -6899,6 +6908,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 type:'qiDong',
                 trigger:{player:'phaseUseBegin'},
                 filter:function(event,player){
+                    if(event.qiDong==true) return false;
                     return player.canBiShaShuiJing();
                 },
                 content:function(){
@@ -8626,6 +8636,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 type:'qiDong',
                 trigger:{player:'phaseUseBegin'},
                 filter:function(event,player){
+                    if(event.qiDong==true) return false;
                     return player.canBiShaBaoShi();
                 },
                 content:function(){
@@ -8981,6 +8992,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 type:'qiDong',
                 trigger:{player:'phaseUseBegin'},
                 filter:function(event,player){
+                    if(event.qiDong==true) return false;
                     return player.storage.tongShengGongSi_use;
                 },
                 content:function(){
