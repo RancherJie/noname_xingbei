@@ -1,5 +1,5 @@
 window.noname_asset_list=[
-	'v0.7.5',
+	'v0.7.6',
 	/*audio start*/
 	'audio/background/Made_in_Abyss.mp3',
 	/*cardaudio start*/
