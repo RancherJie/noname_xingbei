@@ -2063,13 +2063,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             yuanSuXiShou:{
                 trigger:{source:'damageBegin0'},
                 filter:function(event,player){
-                    if(player.countMark('yuanSu')>=3) return false;
                     if(event.faShu!=true) return false;
                     if(event.yuanSuDianRan==true) return false;
                     return true;
                 },
                 content:function(){
-                    player.addMark('yuanSu');
+                    player.addZhiShiWu('yuanSu');
                 }
             },
             yuanSuDianRan:{
@@ -2082,7 +2081,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 filterTarget:true,
                 content:function(){
                     'step 0'
-                    player.removeMark('yuanSu',3);
+                    player.removeZhiShiWu('yuanSu',3);
                     'step 1'
                     target.damage(2,player).set('faShu',true).set('yuanSuDianRan',true);
                     'step 2'
@@ -2402,6 +2401,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 intro:{
                     name:'元素',
                     content:'mark',
+                    max:3,
                 },
                 onremove:'storage',
                 markimage:'image/card/hong.png',
