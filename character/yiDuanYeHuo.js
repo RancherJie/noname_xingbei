@@ -602,7 +602,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 direct:true,
                 content:function(){
                     'step 0'
-                    var next=player.chooseToDiscard('h',function(card){
+                    var next=player.chooseCard('h',function(card){
                         return get.type(card)=='faShu';
                     });
                     next.set('prompt',get.prompt('jingHuaZhiShu'));
@@ -613,14 +613,17 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 1'
                     if(result.bool){
                         player.logSkill(event.name);
-                        player.showCards(result.cards);
-                        player.changeZhiLiao(1);
-                        player.draw(1);
-                        event.flag=true;
+                        event.cards=result.cards;
+                        player.discard(result.cards);
                     }else{
                         event.finish();
                     }
                     'step 2'
+                    player.showCards(event.cards);
+                    player.changeZhiLiao(1);
+                    player.draw(1);
+                    event.flag=true;
+                    'step 3'
                     if(event.flag){
                         lib.skill.yiDuanCaiJueSuo.removeZhiLiao(player,1);
                     }
