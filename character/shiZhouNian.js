@@ -4429,9 +4429,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 usable:1,
                 trigger:{player:'useCard'},
                 filter:function(event,player){
-                    if(get.type(event.card)!='gongJi') return false;
-                    if(event.yingZhan==true) return false;
-                    return true;
+                    return get.is.zhuDongGongJi(event);
                 },
                 content:function(){
                     player.changeZhiLiao(1);
