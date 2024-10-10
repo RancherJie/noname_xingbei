@@ -3639,6 +3639,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					},
                     
                 },
+                onremove:function(player, skill) {
+                    const cards = player.getCards('s',function(card){
+                        return card.hasGaintag('zhuFu');
+                    });
+                    if (cards.length) player.loseToDiscardpile(cards);
+                },
             },
 
             //瘟疫法师
