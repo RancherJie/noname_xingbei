@@ -732,6 +732,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         intro:{
                             content:'expansion',
                         },
+                        onremove:function(player, skill) {
+                            const cards = player.getExpansions(skill);
+                            if (cards.length) player.loseToDiscardpile(cards);
+                        },
                         trigger:{player:['useCard1','showCardsEnd']},
                         forced:true,
                         firstDo:true,
@@ -805,6 +809,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         marktext:"水",
                         intro:{
                             content:'expansion',
+                        },
+                        onremove:function(player, skill) {
+                            const cards = player.getExpansions(skill);
+                            if (cards.length) player.loseToDiscardpile(cards);
                         },
                         trigger:{player:['useCard1','showCardsEnd']},
                         forced:true,
@@ -952,6 +960,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         intro:{
                             content:'expansion',
                         },
+                        onremove:function(player, skill) {
+                            const cards = player.getExpansions(skill);
+                            if (cards.length) player.loseToDiscardpile(cards);
+                        },
                         trigger:{player:['useCard1','showCardsEnd']},
                         forced:true,
                         firstDo:true,
@@ -1024,6 +1036,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         marktext:"雷",
                         intro:{
                             content:'expansion',
+                        },
+                        onremove:function(player, skill) {
+                            const cards = player.getExpansions(skill);
+                            if (cards.length) player.loseToDiscardpile(cards);
                         },
                         trigger:{player:['useCard1','showCardsEnd']},
                         forced:true,
@@ -4309,6 +4325,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         intro:{
                             content:'expansion',
                         },
+                        onremove:function(player, skill) {
+                            const cards = player.getExpansions(skill);
+                            if (cards.length) player.loseToDiscardpile(cards);
+                        },
                         trigger:{player:'useCardToTargeted'},
                         filter:function(event,player){
                             if(!get.is.gongJi(event.getParent())) return false;
@@ -4360,6 +4380,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         marktext:"迅",
                         intro:{
                             content:'expansion',
+                        },
+                        onremove:function(player, skill) {
+                            const cards = player.getExpansions(skill);
+                            if (cards.length) player.loseToDiscardpile(cards);
                         },
                         //priority:1,
                         trigger:{player:['useCardAfter','useSkillAfter']},
