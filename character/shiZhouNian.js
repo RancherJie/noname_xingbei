@@ -1099,6 +1099,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.removeBiShaShuiJing();
                     'step 1'
                     target.addSkill('wuXiShuFu_xiaoGuo')
+                    'step 2'
 					target.addMark('wuXiShuFu_xiaoGuo');
                 },
                 subSkill:{
@@ -7261,11 +7262,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     return player.side!=target.side;
                 },
                 content:function(){
+                    'step 0'
                     player.removeZhiShiWu('nuQi');
                     player.addZhiShiWu('zhiXing');
                     if(!target.hasSkill('tiaoXinX')){
                         target.addSkill('tiaoXinX');
                     }
+                    'step 1'
                     target.addZhiShiWu('tiaoXinX');
                     target.storage.tiaoXinX_player=player;
                 },
@@ -9086,10 +9089,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     });
                     'step 2'
                     if(result.bool){
-                        player.storage.tongShengGongSi_target.removeZhiShiWu('tongShengGongSi');
+                        player.storage.tongShengGongSi_target.removeZhiShiWu('tongShengGongSi_xiaoGuo');
                         event.target=result.targets[0];
                     }else{
-                        player.storage.tongShengGongSi_target.removeZhiShiWu('tongShengGongSi');
+                        player.storage.tongShengGongSi_target.removeZhiShiWu('tongShengGongSi_xiaoGuo');
                         player.storage.tongShengGongSi_use=false;
                     }
                     'step 3'
@@ -9101,13 +9104,14 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         event.finish();
                     }
                     'step 5'
-                    event.target.addZhiShiWu('tongShengGongSi');
                     if(!target.hasSkill('tongShengGongSi_xiaoGuo')){
                         event.target.storage.tongShengGongSi_player=player;
                         event.target.addSkill('tongShengGongSi_xiaoGuo');                        
                     }
                     player.storage.tongShengGongSi_target=event.target;
                     'step 6'
+                    event.target.addZhiShiWu('tongShengGongSi_xiaoGuo');
+                    'step 7'
                     event.target.qiPai();
                 },
                 check:function(event,player){
@@ -9232,12 +9236,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 }
             },
             tongShengGongSi:{
-                intro:{
-                    content:"<span class='tiaoJian'>(在【普通形态】下)</span>你和他手牌上限各-2。 <span class='tiaoJian'>(在【流血形态】下)</span>你和他手牌上限各+1。",
-                    nocount:true,
-                },
-                onremove:'storage',
-                markimage:'image/card/tongShengGongSi.png',
                 type:'faShu',
                 enable:['chooseToUse','faShu'],
                 filter:function(event,player){
@@ -9251,19 +9249,29 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 1'
                     player.storage.tongShengGongSi_target=target;
                     player.storage.tongShengGongSi_use=true;
-                    target.addZhiShiWu('tongShengGongSi');
+                    
                     if(!target.hasSkill('tongShengGongSi_xiaoGuo')){
                         target.storage.tongShengGongSi_player=player;
                         target.addSkill('tongShengGongSi_xiaoGuo');
                     }
                     'step 2'
-                    player.qiPai();
+                    target.addZhiShiWu('tongShengGongSi_xiaoGuo');
                     'step 3'
+                    player.qiPai();
+                    'step 4'
                     target.qiPai();
+
                 },
                 group:'tongShengGongSi_xiaoGuo',
                 subSkill:{
                     xiaoGuo:{
+                        intro:{
+                            content:"<span class='tiaoJian'>(在【普通形态】下)</span>你和他手牌上限各-2。 <span class='tiaoJian'>(在【流血形态】下)</span>你和他手牌上限各+1。",
+                            nocount:true,
+                        },
+                        onremove:'storage',
+                        markimage:'image/card/tongShengGongSi.png',
+
                         mod:{
                             maxHandcard:function(player,num){
                                 if(player.storage.tongShengGongSi_use){

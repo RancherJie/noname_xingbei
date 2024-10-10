@@ -326,9 +326,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     var target=event.target;
                     player.storage.fengXue_target=target;
                     target.storage.fengXue_player=player;
-                    target.addZhiShiWu('fengXueX');
                     target.addSkill('fengXueX');
                     'step 4'
+                    target.addZhiShiWu('fengXueX');
+                    'step 5'
                     event.target.chooseToDiscard('弃置1张牌',true);
                 },
                 check:function(event,player){
@@ -755,9 +756,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 2'
                     player.storage.jueJie_target=target;
                     target.addSkill('jueJieX');
+                    'step 3'
                     target.addZhiShiWu('jueJieX').set('jieJie',true);
                     target.storage.jueJie_player=player;
-                    'step 3'
+                    'step 4'
                     if(player.countCards('h')>0){
                         player.chooseToDiscard(1,true);
                     }
