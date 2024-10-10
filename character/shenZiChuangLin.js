@@ -207,9 +207,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 check:function(event,player){
                     var num=player.countSkill('moFaRuMen');
                     if(num==3) return true;
-                    return player.countSkill('moFaRuMen')<4&&(
-                        event.faShu==false&&event.yong==0&&event.shui==0
-                    );
+                    return player.countSkill('moFaRuMen')<4;
                 }
             },
             qiangYuYuanXing:{
