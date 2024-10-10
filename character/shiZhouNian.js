@@ -6271,7 +6271,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         }
                         return true;
                     }).set('ai',function(target){
-                        return Math.random();
+                        var player=_status.event.player;
+                        if(target.side==player.side){
+                            return 0;
+                        }
+                        return target.countCards('h');
                     });
                     'step 4'
                     game.log(player,'选择了',result.targets[0]);
