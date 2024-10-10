@@ -2715,6 +2715,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						else return '共有'+cards.length+'张牌';
 					},
                 },
+                onremove:function(player, skill) {
+                    const cards = player.getExpansions(skill);
+                    if (cards.length) player.loseToDiscardpile(cards);
+                },
             },
 
             //仲裁者
@@ -6272,6 +6276,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						else return '共有'+cards.length+'张牌';
 					},
                 },
+                onremove:function(player, skill) {
+                    const cards = player.getExpansions(skill);
+                    if (cards.length) player.loseToDiscardpile(cards);
+                },
             },
 
             //魔枪
@@ -6677,6 +6685,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						if(player.isUnderControl(true)) dialog.addAuto(cards);
 						else return '共有'+cards.length+'张牌';
 					},
+                },
+                onremove:function(player, skill) {
+                    const cards = player.getExpansions(skill);
+                    if (cards.length) player.loseToDiscardpile(cards);
                 },
             },
 
@@ -8380,6 +8392,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					},
                     max:3,
                 },
+                onremove:function(player, skill) {
+                    const cards = player.getExpansions(skill);
+                    if (cards.length) player.loseToDiscardpile(cards);
+                },
                 tianShiZhiHun:function(player){
                     if(player.countNengLiangAll()==0) return 0;
                     else if(player.countNengLiangAll()%2==1) return player.getExpansions('jianHun').length;
@@ -9568,6 +9584,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						if(player.isUnderControl(true)) dialog.addAuto(cards);
 						else return '共有'+cards.length+'张牌';
 					},
+                },
+                onremove:function(player, skill) {
+                    const cards = player.getExpansions(skill);
+                    if (cards.length) player.loseToDiscardpile(cards);
                 },
                 contentx:function(){
                     'step 0'

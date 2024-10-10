@@ -1476,6 +1476,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						else return '共有'+cards.length+'张牌';
 					},
                 },
+                onremove:function(player, skill) {
+                    const cards = player.getExpansions(skill);
+                    if (cards.length) player.loseToDiscardpile(cards);
+                },
                 direct:true,
                 trigger:{player:'addToExpansionEnd'},
                 filter:function(event,player){
@@ -1732,6 +1736,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						if(player.isUnderControl(true)) dialog.addAuto(cards);
 						else return '共有'+cards.length+'张牌';
 					},
+                },
+                onremove:function(player, skill) {
+                    const cards = player.getExpansions(skill);
+                    if (cards.length) player.loseToDiscardpile(cards);
                 },
             },
 
