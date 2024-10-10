@@ -545,6 +545,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     nocount:true,
                 },
                 markimage:'image/card/fengXue.png',
+                onremove:'storage',
                 group:['fengXueX_yingZhiFeng1','fengXueX_yingZhiFeng2','fengXueX_fengZhi'],
                 subSkill:{
                     yingZhiFeng1:{
@@ -641,6 +642,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     content:'mark',
                     max:4,
                 },
+                onremove:'storage',
                 markimage:'image/card/hong.png',
             },
 
@@ -820,6 +822,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     <span class='tiaoJian'>(若你拥有【绝界】)</span>你拥有的基础效果无法触发。`,
                 },
                 markimage:'image/card/juejie.png',
+                onremove:'storage',
                 group:['jueJieX_zero','jueJieX_remove','jueJieX_attack'],
                 subSkill:{
                     zero:{
@@ -967,6 +970,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     content:'mark',
                     max:3,
                 },
+                onremove:'storage',
                 markimage:'image/card/hong.png',
             },
 
@@ -1256,6 +1260,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     content:'mark',
                     max:4,
                 },
+                onremove:'storage',
                 markimage:'image/card/hong.png',
             },
 
@@ -1487,6 +1492,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     content:'mark',
                     max:2,
                 },
+                onremove:'storage',
                 markimage:'image/card/hong.png',
             },
 

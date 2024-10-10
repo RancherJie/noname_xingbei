@@ -372,6 +372,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     content:'mark',
                     max:2,
                 },
+                onremove:'storage',
                 markimage:'image/card/hong.png',
             },
 
@@ -720,6 +721,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     content:'共有#个[治疗]',
                     max:4,
                 },
+                onremove:'storage',
                 mark:true,
                 markimage:'image/card/yiDuanCaiJueSuo.png',
                 addZhiLiao:function(player,num){
@@ -753,6 +755,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     content:'mark',
                     max:3,
                 },
+                onremove:'storage',
                 markimage:'image/card/hong.png',
             },
 
@@ -1196,6 +1199,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     content:"<span class='tiaoJian'>(当移除的【卢恩】包含4个不同系别或4个不同命格)</span>对所有对手各造成1点法术伤害③；<span class='tiaoJian'>(若移除的【卢恩】包含4个不同系别与4个不同命格)</span>目标队友额外+1[宝石]。",
                     nocount:true,
                 },
+                onremove:'storage',
                 markimage:'image/card/fanXing.png',
                 trigger:{player:'yiChuLuEn'},
                 filter:function(event,player){
@@ -1255,6 +1259,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     content:"<span class='tiaoJian'>(当移除的【卢恩】包含X对相同系别的【卢恩】，X>1)</span>对目标角色造成X点法术伤害③。<span class='tiaoJian'>(当移除的【卢恩】包含X对相同命格的【卢恩】，X>1)</span>任意分配X点[治疗]给1~2位我方角色。",
                     nocount:true,
                 },
+                onremove:'storage',
                 markimage:'image/card/yingYue.png',
                 trigger:{player:'yiChuLuEn'},
                 filter:function(event,player){
@@ -1372,6 +1377,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     content:"<span class='tiaoJian'>(当移除的【卢恩】包含每3个相同系别的【卢恩】)</span>你+1[宝石]。<span class='tiaoJian'>(当移除的【卢恩】包含每3个相同命格的【卢恩】)</span>我方【战绩区】+1[宝石]。",
                     nocount:true,
                 },
+                onremove:'storage',
                 markimage:'image/card/shiRi.png',
                 trigger:{player:'yiChuLuEn'},
                 filter:function(event,player){

@@ -1095,6 +1095,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             content:'(将【五系束缚】放置于目标对手面前)该对手跳过其下个行动阶段。在其下个行动阶段开始前他可以选择摸(2+X)张牌来取消【五系束缚】的效果。X为场上封印的数量，X最高为2。无论效果是否发动，触发后移除此牌。',
                             nocount:true,
                         },
+                        onremove:'storage',
                         filter:function(event,player){
                             return player.hasMark('wuXiShuFu_xiaoGuo');
                         },
@@ -2402,6 +2403,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     name:'元素',
                     content:'mark',
                 },
+                onremove:'storage',
                 markimage:'image/card/hong.png',
             },
 
@@ -2695,6 +2697,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     content:'mark',
                     max:2,
                 },
+                onremove:'storage',
                 markimage:'image/card/hong.png',
             },
             shiHua:{
@@ -2703,6 +2706,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     content:'mark',
                     max:3,
                 },
+                onremove:'storage',
                 markimage:'image/card/lan.png',
             },
             anYue:{
@@ -2891,6 +2895,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     content:'mark',
                     max:4,
                 },
+                onremove:'storage',
                 markimage:'image/card/hong.png',
             },
 
@@ -3632,6 +3637,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						});
                         return cards.length;
 					},
+                    
                 },
             },
 
@@ -4132,6 +4138,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     content:"<span class='tiaoJian'>(此卡在场时)</span>所有角色的[治疗]无法用于抵御伤害；<span class='tiaoJian'>(血色剑灵的回合结束时)</span>移除此卡。",
                     nocount:true,
                 },
+                onremove:'storage',
                 markimage:'image/card/xueQiangWeiTingYuan.png',
                 trigger:{player:'phaseEnd'},
                 forced:true,
@@ -4191,6 +4198,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     content:'mark',
                     max:3,
                 },
+                onremove:'storage',
                 markimage:'image/card/hong.png',
             },
 
@@ -4425,6 +4433,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     content:'mark',
                     max:3,
                 },
+                onremove:'storage',
                 markimage:'image/card/hong.png',
             },
 
@@ -4647,6 +4656,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     content:'mark',
                     max:2,
                 },
+                onremove:'storage',
                 markimage:'image/card/hong.png',
             },
 
@@ -4915,6 +4925,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     name:'战纹',
                     content:'mark',
                 },
+                onremove:'storage',
                 markimage:'image/card/zhanWen.png',
             },
             moWen:{
@@ -4923,6 +4934,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     name:'魔纹',
                     content:'mark',
                 },
+                onremove:'storage',
                 markimage:'image/card/moWen.png',
             },
 
@@ -5477,6 +5489,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     content:'mark',
                     max:3,
                 },
+                onremove:'storage',
                 markimage:'image/card/hong.png',
             },
 
@@ -5743,6 +5756,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     name:'重生',
                     max:4,
                 },
+                onremove:'storage',
                 markimage:'image/card/hong.png',
 
             },
@@ -6992,6 +7006,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     max:3,
                     content:'mark',
                 },
+                onremove:'storage',
                 markimage:'image/card/hong.png'
             },
             yongHengYueZhang:{
@@ -7233,6 +7248,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     content:'你在下个行动阶段必须且只能主动攻击勇者，否则你跳过该行动阶段，触发后移除此牌。',
                     nocount:true,
                 },
+                onremove:'storage',
                 markimage:'image/card/tiaoXin.png',
 
                 filterx:function(event,player,num){
@@ -7469,6 +7485,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     max:4,
                     content:'mark',
                 },
+                onremove:'storage',
                 markimage:'image/card/hong.png',
             },
             zhiXing:{
@@ -7476,6 +7493,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     max:4,
                     content:'mark',
                 },
+                onremove:'storage',
                 markimage:'image/card/lan.png',
             },
 
@@ -7701,6 +7719,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     content:'mark',
                     max:6,
                 },
+                onremove:'storage',
                 markimage:'image/card/hong.png',
             },
 
@@ -8195,6 +8214,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     content:'mark',
                     max:10,
                 },
+                onremove:'storage',
                 markimage:'image/card/hong.png',
             },
             shengHuangHuiGuangPaoX:{
@@ -8203,6 +8223,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     max:1,
                     nocount:true,
                 },
+                onremove:'storage',
                 markimage:'image/card/lan.png',
             },
 
@@ -8415,6 +8436,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     content:'mark',
                     max:5,
                 },
+                onremove:'storage',
                 markimage:'image/card/hong.png',
             },
 
@@ -8682,6 +8704,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     content:'mark',
                     max:2,
                 },
+                onremove:'storage',
                 markimage:'image/card/lan.png',
             },
             canXin:{
@@ -8689,6 +8712,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     content:'mark',
                     max:4,
                 },
+                onremove:'storage',
                 markimage:'image/card/hong.png',
             },
 
@@ -8883,6 +8907,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     content:"<span class='tiaoJian'>(每当你们之间有人承受伤害时⑥，移除X点【蓝色灵魂】)</span>将X点伤害转移给另1人，转移后的伤害为法术伤害⑥。",  
                     nocount:true,
                 },
+                onremove:'storage',
                 markimage:'image/card/lingHunLianJie.png',
                 group:'lingHunLianJie_xiaoGuo',
                 subSkill:{
@@ -8991,6 +9016,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     content:'mark',
                     max:6
                 },
+                onremove:'storage',
                 markimage:'image/card/hong.png',
             },
             lanSeLingHun:{
@@ -8998,6 +9024,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     content:'mark',
                     max:6
                 },
+                onremove:'storage',
                 markimage:'image/card/lan.png',
             },
 
@@ -9175,6 +9202,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     content:"<span class='tiaoJian'>(在【普通形态】下)</span>你和他手牌上限各-2。 <span class='tiaoJian'>(在【流血形态】下)</span>你和他手牌上限各+1。",
                     nocount:true,
                 },
+                onremove:'storage',
                 markimage:'image/card/tongShengGongSi.png',
                 type:'faShu',
                 enable:['chooseToUse','faShu'],
@@ -9606,6 +9634,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 intro:{
                     content:'mark',
                 },
+                onremove:'storage',
                 markimage:'image/card/hong.png'
             },
 
