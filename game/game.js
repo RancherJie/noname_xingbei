@@ -17578,9 +17578,9 @@
 					"step 0"
 					if(event.animate=='give') event.visible=true;
 					//xingbei
-					var bool=player.hasSkill(event.gaintag[0]);
-					if(event.gaintag[0][0]=='_') bool=true;
-					if(cards&&bool){
+					//var bool=player.hasSkill(event.gaintag[0]);
+					//if(event.gaintag[0][0]=='_') bool=true;
+					if(cards){
 						var map={};
 						for(var i of cards){
 							var owner=get.owner(i,'judge');

@@ -4307,7 +4307,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					this.damage(num,source).set('faShu',true);
 				},
 				addZhiShiWu:function(zhiShiWu,num,max){//添加指示物
-					if(!this.hasSkill(zhiShiWu)) return;
+					//(!this.hasSkill(zhiShiWu)) return;
 
 					if(typeof num!='number'||!num) num=1;
 					var info=get.info(zhiShiWu);
