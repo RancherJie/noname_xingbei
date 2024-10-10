@@ -173,7 +173,6 @@ window.noname_asset_list=[
 	'image/character/yuanSuShi.jpg',
 	'image/character/yueZhiNvShen.jpg',
 	'image/character/zhanDouFaShi.jpg',
-	'image/character/zhiMengZheC.jpg',
 	'image/character/zhongCaiZhe.jpg',
 	/*character image end*/
 	
