@@ -90,7 +90,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         
                         var skils=player.additionalSkills['mengJing'];
                         var list=[];
-                        for(i=0;i<skils.length;i++){
+                        for(var i=0;i<skils.length;i++){
                             if(lib.translate[skils[i]+'_info']){
                                 var translation=get.translation(skils[i]);
 
