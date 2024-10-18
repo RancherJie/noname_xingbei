@@ -4229,7 +4229,7 @@
 					},
 					volumn_audio:{
 						name:'音效音量',
-						init:8,
+						init:4,
 						item:{
 							'0':'〇',
 							'1':'一',
@@ -4247,7 +4247,7 @@
 					},
 					volumn_background:{
 						name:'音乐音量',
-						init:8,
+						init:4,
 						item:{
 							'0':'〇',
 							'1':'一',
