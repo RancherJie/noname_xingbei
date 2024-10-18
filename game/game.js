@@ -16846,7 +16846,7 @@
 					str+='发动了';
 					*/
 					if(!info.direct&&info.log!==false){
-						if(targets){
+						if(targets.length){
 							game.log(player,'对',targets,'发动了','【'+get.skillTranslation(skill,player)+'】');
 						}else{
 							game.log(player,'发动了','【'+get.skillTranslation(skill,player)+'】');
