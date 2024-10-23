@@ -664,7 +664,8 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					var blue=0;
 					var number=lib.configOL.number;
 					for (var i in result) {//优先计算真人的选择
-						if(result[i].confirm!='ok') continue;
+						//if(result[i].confirm!='ok') continue;
+						if(!lib.playerOL[i].isOnline()) continue;
 						if (result[i].links[0] == "红") {
 							lib.playerOL[i].side=true;
 						}else{
@@ -684,7 +685,8 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					}
 
 					for (var i in result) {//计算ai的选择
-						if(result[i].confirm=='ok') continue;
+						//if(result[i].confirm=='ok') continue;
+						if(lib.playerOL[i].isOnline()) continue;
 						if (result[i].links[0] == "红") {
 							lib.playerOL[i].side=true;
 						}else{
