@@ -2668,8 +2668,8 @@ div:not(.handcards)>.card>.info>span,
 	z-index: 4
 }
 .judges>div,.marks>div {
-	width: 24px;
-	height: 24px;
+	width: 28px;
+	height: 28px;
 	margin: 0;
 	left: 0;
 	top: 0;
