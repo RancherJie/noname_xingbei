@@ -58047,7 +58047,15 @@
 			}
 			if(arg=='skill'){
 				if(lib.translate[str+'_ab']) return lib.translate[str+'_ab'];
-				if(lib.translate[str]) return lib.translate[str].slice(0,2);
+				//xingbei
+				let reg=new RegExp(/[\[\(\)].{1,5}[\]\)]/g,'g');
+				let name_ori=lib.translate[str];
+				let name_ret;
+				if(name_ori.replace){
+					name_ret=name_ori.replace(reg,'');
+				}
+				if(lib.translate[str]) return name_ret;
+				//if(lib.translate[str]) return lib.translate[str].slice(0,2);
 				return str;
 			}
 			else if(arg=='info'){
