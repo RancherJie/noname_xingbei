@@ -531,7 +531,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 contentAfter:function(){
                     player.storage.shengLiao=0;
-                    player.chooseToUse();
+                    player.storage.all++;
                 },
                 ai: {
                     shuiJing:true,
