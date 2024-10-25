@@ -9280,7 +9280,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                     }else{
                                         return num-2;
                                     }
-                                }else if(player.hasZhiShiWu('tongShengGongSi')){
+                                }else if(player.hasZhiShiWu('tongShengGongSi_xiaoGuo')){
                                         if(player.storage.tongShengGongSi_player.isLinked()){
                                             return num+1;
                                         }else{
