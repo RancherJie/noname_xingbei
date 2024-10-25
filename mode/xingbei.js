@@ -576,6 +576,8 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						}
 					}
 					event.list.remove(game.me.name1);
+
+					let count=0;
 					for(var i=0;i<game.players.length;i++){
 						if(game.players[i]!=game.me){
 							if(_status.brawl&&_status.brawl.chooseCharacter){
@@ -585,12 +587,8 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 							}
 							else{
 								if(event.phaseswap&&game.players[i].side==game.me.side){
-									if(flag!=true){
-										var flag=true;
-										game.players[i].init(result.links[1]);
-									}else{
-										game.players[i].init(result.links[2]);
-									}
+									count++;
+									game.players[i].init(result.links[count]);
 								}
 								else{
 									var name=event.list.randomRemove();
