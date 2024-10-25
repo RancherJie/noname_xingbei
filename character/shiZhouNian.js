@@ -8938,9 +8938,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 2'
                     var target=result.targets[0];
                     player.storage.lingHunLianJie_player=target;
-                    target.addZhiShiWu('lingHunLianJie');
+                    target.addZhiShiWu('lingHunLianJie',1,1,true);
                 },
                 intro:{
+                    name:'[专属]灵幻链接',
                     content:"<span class='tiaoJian'>(每当你们之间有人承受伤害时⑥，移除X点【蓝色灵魂】)</span>将X点伤害转移给另1人，转移后的伤害为法术伤害⑥。",  
                     nocount:true,
                 },
