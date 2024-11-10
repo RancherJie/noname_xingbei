@@ -207,15 +207,14 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 check:function(event,player){
                     var num=player.countSkill('moFaRuMen');
                     if(num==3) return true;
-                    return player.countSkill('moFaRuMen')<4&&(
-                        event.faShu==false&&event.yong==0&&event.shui==0
-                    );
+                    return player.countSkill('moFaRuMen')<4;
                 }
             },
             qiangYuYuanXing:{
                 type:'qiDong',
                 trigger:{player:'phaseUseBegin'},
                 filter:function(event,player){
+                    if(event.qiDong==true) return false;
                     return player.canBiShaShuiJing();
                 },
                 content:function(){
@@ -327,9 +326,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     var target=event.target;
                     player.storage.fengXue_target=target;
                     target.storage.fengXue_player=player;
-                    target.addZhiShiWu('fengXueX');
                     target.addSkill('fengXueX');
                     'step 4'
+                    target.addZhiShiWu('fengXueX');
+                    'step 5'
                     event.target.chooseToDiscard('弃置1张牌',true);
                 },
                 check:function(event,player){
@@ -544,12 +544,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     nocount:true,
                 },
                 markimage:'image/card/fengXue.png',
+                onremove:'storage',
                 group:['fengXueX_yingZhiFeng1','fengXueX_yingZhiFeng2','fengXueX_fengZhi'],
                 subSkill:{
                     yingZhiFeng1:{
-                        trigger:{player:'useCardAfter'},
-                        lastDo:true,
-                        priority:-50,
+                        trigger:{player:'useCardEnd'},
+                        priority:-1,
                         filter:function(event,player){
                             if(!player.hasZhiShiWu('fengXueX')) return false;
                             return get.is.zhuDongGongJi(event)&&event.card.isCard&&event.targets.length>0;
@@ -564,6 +564,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         filter:function(event,player){
                             return get.is.gongJiXingDong(event);
                         },
+                        priority:-2,
                         forced:true,
                         content:function(){
                             player.storage.fengXue_player.addZhiShiWu('mi');
@@ -618,6 +619,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						else return '共有'+cards.length+'张牌';
 					},
                 },
+                onremove:function(player, skill) {
+                    const cards = player.getExpansions(skill);
+                    if (cards.length) player.loseToDiscardpile(cards);
+                },
                 direct:true,
                 trigger:{player:'addToExpansionEnd'},
                 filter:function(event,player){
@@ -636,6 +641,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     content:'mark',
                     max:4,
                 },
+                onremove:'storage',
                 markimage:'image/card/hong.png',
             },
 
@@ -750,9 +756,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 2'
                     player.storage.jueJie_target=target;
                     target.addSkill('jueJieX');
+                    'step 3'
                     target.addZhiShiWu('jueJieX').set('jieJie',true);
                     target.storage.jueJie_player=player;
-                    'step 3'
+                    'step 4'
                     if(player.countCards('h')>0){
                         player.chooseToDiscard(1,true);
                     }
@@ -815,6 +822,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     <span class='tiaoJian'>(若你拥有【绝界】)</span>你拥有的基础效果无法触发。`,
                 },
                 markimage:'image/card/juejie.png',
+                onremove:'storage',
                 group:['jueJieX_zero','jueJieX_remove','jueJieX_attack'],
                 subSkill:{
                     zero:{
@@ -952,12 +960,17 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					content:'expansion',
 					markcount:'expansion',
 				},
+                onremove:function(player, skill) {
+                    const cards = player.getExpansions(skill);
+                    if (cards.length) player.loseToDiscardpile(cards);
+                },
             },
             jiX:{
                 intro:{
                     content:'mark',
                     max:3,
                 },
+                onremove:'storage',
                 markimage:'image/card/hong.png',
             },
 
@@ -1225,6 +1238,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					content:'expansion',
 					markcount:'expansion',
 				},
+                onremove:function(player, skill) {
+                    const cards = player.getExpansions(skill);
+                    if (cards.length) player.loseToDiscardpile(cards);
+                },
                 direct:true,
                 trigger:{player:'addToExpansionEnd'},
                 filter:function(event,player){
@@ -1243,6 +1260,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     content:'mark',
                     max:4,
                 },
+                onremove:'storage',
                 markimage:'image/card/hong.png',
             },
 
@@ -1422,6 +1440,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 type:'qiDong',
                 trigger:{player:'phaseUseBegin'},
                 filter:function(event,player){
+                    if(event.qiDong==true) return false;
                     return player.canBiShaBaoShi();
                 },
                 content:function(){
@@ -1473,6 +1492,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     content:'mark',
                     max:2,
                 },
+                onremove:'storage',
                 markimage:'image/card/hong.png',
             },
 

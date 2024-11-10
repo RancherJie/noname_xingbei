@@ -3839,8 +3839,8 @@
 						},
 					},*/
 					character_dialog_tool:{
-						name:'自由选将显示',
-						intro:'点击自由选将时默认显示的条目',
+						name:'自由选角显示',
+						intro:'点击自由选角时默认显示的条目',
 						init:'最近',
 						item:{
 							'收藏':'收藏',
@@ -3851,7 +3851,7 @@
 					},
 					recent_character_number:{
 						name:'最近使用角色',
-						intro:'自由选将对话框中最近使用角色的数量',
+						intro:'自由选角对话框中最近使用角色的数量',
 						init:'12',
 						item:{
 							'6':'6',
@@ -3869,7 +3869,7 @@
 					},
 					filternode_button:{
 						name:'触屏筛选按钮',
-						intro:'设置自由选将对话框中筛选按钮的样式',
+						intro:'设置自由选角对话框中筛选按钮的样式',
 						init:true,
 						unfrequent:true,
 					},
@@ -4229,7 +4229,7 @@
 					},
 					volumn_audio:{
 						name:'音效音量',
-						init:8,
+						init:4,
 						item:{
 							'0':'〇',
 							'1':'一',
@@ -4247,7 +4247,7 @@
 					},
 					volumn_background:{
 						name:'音乐音量',
-						init:8,
+						init:4,
 						item:{
 							'0':'〇',
 							'1':'一',
@@ -4567,6 +4567,15 @@
 						}else{
 							map.connect_BPchoose_number.hide();
 						}
+						if(config.connect_versus_mode=='4v4'){
+							map.connect_team_sequence.hide();
+							map.connect_choose_mode.hide();
+							map.connect_choose_number.show();
+							map.connect_BPchoose_number.hide();
+						}else{
+							map.connect_team_sequence.show();
+							map.connect_choose_mode.show();
+						}	
 					},
 					connect_remark:{
 						name:'房间备注',
@@ -4580,7 +4589,7 @@
 							//'1v1':'1v1',
 							'2v2':'2v2',
 							'3v3':'3v3',
-							//'4v4':'4v4',
+							'4v4':'4v4',
 							//'guandu':'官渡',
 						},
 						frequent:true
@@ -4644,7 +4653,22 @@
 							game.saveConfig('connect_chooseSide',bool,this._link.config.mode);
 						},
 						frequent:true,
-					}
+					},
+					connect_shiQiMax:{
+						name:'士气初始值',
+						input:true,
+						connect:true,
+					},
+					connect_zhanJiMax:{
+						name:'战绩区上限',
+						input:true,
+						connect:true,
+					},
+					connect_xingBeiMax:{
+						name:'星杯上限',
+						input:true,
+						connect:true,
+					},
 				},
 				config:{
 					update:function(config,map){
@@ -4653,6 +4677,11 @@
 						}else{
 							map.choose_number.hide();
 						}
+						if(config.versus_mode=='four'){
+							map.team_sequence.hide();
+						}else{
+							map.team_sequence.show();
+						}
 					},
 					versus_mode:{
 						name:'游戏模式',
@@ -4660,6 +4689,7 @@
 						item:{
 							three:'3v3',
 							two:'2v2',
+							four:'4v4',
 						},
 						restart:true,
 						frequent:true,
@@ -4720,9 +4750,24 @@
 						},
 						frequent:true,
 					},
+					shiQiMax:{
+						name:'士气初始值',
+						input:true,
+						connect:false,
+					},
+					zhanJiMax:{
+						name:'战绩区上限',
+						input:true,
+						connect:false,
+					},
+					xingBeiMax:{
+						name:'星杯上限',
+						input:true,
+						connect:false,
+					},
 
 					free_choose:{
-						name:'自由选将',
+						name:'自由选角',
 						init:true,
 						onclick:function(bool){
 							game.saveConfig('free_choose',bool,this._link.config.mode);
@@ -4741,6 +4786,16 @@
 						onclick:function(bool){
 							game.saveConfig('change_identity',bool,this._link.config.mode);
 							if(!_status.event.getParent().showConfig&&!_status.event.showConfig) return;
+
+							var dialog;
+							if(ui.cheat2&&ui.cheat2.backup) dialog=ui.cheat2.backup;
+							else dialog=_status.event.dialog;
+							if(!_status.brawl||!_status.brawl.noAddSetting){
+								if(!dialog.querySelector('table')&&get.config('change_identity')) _status.event.getParent().addSetting(dialog);
+								else _status.event.getParent().removeSetting(dialog);
+							}
+							ui.update();
+							/*
 							if(_status.mode=='four'){
 								if(get.config('four_assign')||get.config('four_phaseswap')) return;
 								if(bool){
@@ -4768,10 +4823,11 @@
 								}
 								ui.update();
 							}
+							*/
 						}
 					},
 					change_choice:{
-						name:'开启换将卡',
+						name:'开启换角卡',
 						init:true,
 						onclick:function(bool){
 							game.saveConfig('change_choice',bool,this._link.config.mode);
@@ -4836,7 +4892,7 @@
 				name:'挑战',
 				config:{
 					free_choose:{
-						name:'自由选将',
+						name:'自由选角',
 						init:true,
 						frequent:true,
 						onclick:function(bool){
@@ -4850,7 +4906,7 @@
 						}
 					},
 					change_choice:{
-						name:'开启换将卡',
+						name:'开启换角卡',
 						init:true,
 						onclick:function(bool){
 							game.saveConfig('change_choice',bool,this._link.config.mode);
@@ -5008,7 +5064,7 @@
 						restart:true,
 					},
 					free_choose:{
-						name:'自由选将',
+						name:'自由选角',
 						init:true,
 						onclick:function(bool){
 							game.saveConfig('free_choose',bool,this._link.config.mode);
@@ -5037,7 +5093,7 @@
 						}
 					},
 					change_choice:{
-						name:'开启换将卡',
+						name:'开启换角卡',
 						init:true,
 						onclick:function(bool){
 							game.saveConfig('change_choice',bool,this._link.config.mode);
@@ -5437,7 +5493,7 @@
 						frequent:true,
 					},
 					free_choose:{
-						name:'自由选将',
+						name:'自由选角',
 						init:true,
 						onclick:function(bool){
 							game.saveConfig('free_choose',bool,this._link.config.mode);
@@ -5450,7 +5506,7 @@
 						},
 					},
 					change_choice:{
-						name:'开启换将卡',
+						name:'开启换角卡',
 						init:true,
 						onclick:function(bool){
 							game.saveConfig('change_choice',bool,this._link.config.mode);
@@ -5724,7 +5780,7 @@
 						}
 					},
 					free_choose:{
-						name:'自由选将',
+						name:'自由选角',
 						init:true,
 						onclick:function(bool){
 							game.saveConfig('free_choose',bool,this._link.config.mode);
@@ -5738,7 +5794,7 @@
 						},
 					},
 					change_choice:{
-						name:'开启换将卡',
+						name:'开启换角卡',
 						init:true,
 						onclick:function(bool){
 							game.saveConfig('change_choice',bool,this._link.config.mode);
@@ -5779,8 +5835,9 @@
 		},
 		//xingbei
 		sponsor:{
-			爱发电:'<a href="https://ifdian.net/a/noname_xingbei">爱发电链接</a><br>泽度哥摧毁停车场<br>爱发电用户_8888d<br>爱发电用户_68NS<br>wang<br>爱发电用户_VE6t',
-			引力圈:'<a href="https://app.unifans.io/c/nong_jie">引力圈链接</a>'
+			爱发电:'<a href="https://ifdian.net/a/noname_xingbei">爱发电链接</a><br>泽度哥摧毁停车场<br>爱发电用户_8888d<br>爱发电用户_68NS<br>wang<br>爱发电用户_VE6t<br>Sylen<br>北风',
+			引力圈:'<a href="https://app.unifans.io/c/nong_jie">引力圈链接</a>',
+			服务器:'提供者：上杉隐月',
 		},
 
 		path:{},
@@ -12009,7 +12066,7 @@
 							game.send('server','config',lib.configOL);
 						}
 					}
-					game.log();
+					game.log('————————————————————');
 					game.log(player,'的回合开始');
 					player._noVibrate=true;
 					if(get.config('identity_mode')!='zhong'&&get.config('identity_mode')!='purple'&&!_status.connectMode){
@@ -14593,7 +14650,9 @@
 									translation=translation.slice(1,3);
 								}
 								else{
-									translation=translation.slice(0,2);
+									//xingbei
+									//translation=translation.slice(0,2);
+									translation=translation;
 								}
 								var item=dialog.add('<div class="popup pointerdiv" style="width:80%;display:inline-block"><div class="skill">【'+
 								translation+'】</div><div>'+lib.translate[list[i]+'_info']+'</div></div>');
@@ -16799,7 +16858,7 @@
 					str+='发动了';
 					*/
 					if(!info.direct&&info.log!==false){
-						if(targets){
+						if(targets.length){
 							game.log(player,'对',targets,'发动了','【'+get.skillTranslation(skill,player)+'】');
 						}else{
 							game.log(player,'发动了','【'+get.skillTranslation(skill,player)+'】');
@@ -17530,7 +17589,11 @@
 				addToExpansion:function(){
 					"step 0"
 					if(event.animate=='give') event.visible=true;
-					if(cards){
+					//xingbei
+					var bool=player.hasSkill(event.gaintag[0]);
+					if(event.gaintag[0][0]=='_') bool=true;
+					//if(cards){
+					if(cards&&bool){
 						var map={};
 						for(var i of cards){
 							var owner=get.owner(i,'judge');
@@ -19752,8 +19815,15 @@
 					},player,name,popname);
 					if(lib.animate.skill[name]) lib.animate.skill[name].apply(this,arguments);
 					else{
+						
+
+						var skillName=get.skillTranslation(name,this);
+						var reg=new RegExp(/[\[\(\)].{1,5}[\]\)]/g,'g');
+						if(skillName.replace){
+							skillName=skillName.replace(reg,'');
+						}
 						if(popname!=name) this.popup(popname,'water',false);
-						else this.popup(get.skillTranslation(name,this),'water',false);
+						else this.popup(skillName,'water',false);
 					}
 				},
 				tryCardAnimate:function(card,name,nature,popname){
@@ -37212,6 +37282,8 @@
 				dialog.content.innerHTML=result;
 				dialog.forcebutton=true;
 				var result2=arguments[1];
+				var tongJi=arguments[2];
+
 				if(result2==true){
 					dialog.content.firstChild.innerHTML='战斗胜利';
 				}
@@ -37256,7 +37328,7 @@
 					delete ui.giveup;
 				}
 				//星杯记录战绩
-				if(game.addRecord){
+				if(game.addRecord&&tongJi!=false){
 					game.addRecord(result2);
 				}
 
@@ -37635,9 +37707,9 @@
 			for(var i=0;i<clients.length;i++){
 				if(clients[i].isOnline2()){
 					if(clients[i].side==game.players[0].side){
-						clients[i].send(game.over,dialog.content.innerHTML,resultbool);
+						clients[i].send(game.over,dialog.content.innerHTML,resultbool,game.tongJi);
 					}else{
-						clients[i].send(game.over,dialog.content.innerHTML,!resultbool);
+						clients[i].send(game.over,dialog.content.innerHTML,!resultbool,game.tongJi);
 					}
 				}
 			}
@@ -37829,7 +37901,7 @@
 			for(var i=0;i<lib.onover.length;i++){
 				lib.onover[i](resultbool);
 			}
-			if(game.addRecord){
+			if(game.addRecord&&game.tongJi!=false){
 				game.addRecord(resultbool);
 			}
 			if(window.isNonameServer){
@@ -39279,7 +39351,7 @@
 							}
 						}
 					};
-					event.freechoosenode=ui.create.system('自由选将',function(){
+					event.freechoosenode=ui.create.system('自由选角',function(){
 						if(this.classList.contains('hidden')) return;
 						if(!event.imchoosing){
 							event.prompt('请等待敌方选将');
@@ -40599,39 +40671,6 @@
 		zhiLiaoMax:2,
 		nengLiangMax:3,
 
-
-		addRecord:function(bool){
-			if(!(_status.connectMode||game.online)) return;	
-			if(typeof bool=='boolean'){
-				var data=lib.config.gameRecord.xingbei.data;
-				//var identity=get.cnNumber(lib.storage.number)+'人';
-				if(game.players.length==4){
-					var identity='2v2';
-				}else{
-					var identity='3v3';
-				}
-				
-				if(!data[identity]){
-					data[identity]=[0,0];
-				}
-				if(bool){
-					data[identity][0]++;
-				}
-				else{
-					data[identity][1]++;
-				}
-				var list=['2v2','3v3'];
-				var str='';
-				for(var i=0;i<list.length;i++){
-					if(data[list[i]]){
-						str+=list[i]+'：'+data[list[i]][0]+'胜'+' '+data[list[i]][1]+'负<br>';
-					}
-				}
-				lib.config.gameRecord.xingbei.str=str;
-				game.saveConfig('gameRecord',lib.config.gameRecord);
-			}
-		},
-
 	};
 	window['b'+'ann'+'e'+'dE'+'x'+'ten'+'s'+'i'+'o'+'ns']=['\u4fa0\u4e49','\u5168\u6559\u7a0b'];
 	const ui={
@@ -41656,6 +41695,51 @@
 								input.innerHTML=input.innerHTML.slice(0,12);
 								game.saveConfig('connect_remark',input.innerHTML);
 								game.saveConfig('connect_remark',input.innerHTML,'xingbei');
+							}
+						}else if(config.name=='士气初始值'){
+							input.innerHTML=config.init||game.shiQiMax;
+							input.onblur=function(){
+								input.innerHTML=input.innerHTML.replace(/<br>/g,'');
+								if(!input.innerHTML||get.is.banWords(input.innerHTML)){
+									input.innerHTML=game.shiQiMax;
+								}
+								if(config.connect){
+									game.saveConfig('connect_shiQiMax',input.innerHTML);
+									game.saveConfig('connect_shiQiMax',input.innerHTML,'xingbei');
+								}else{
+									game.saveConfig('shiQiMax',input.innerHTML);
+									game.saveConfig('shiQiMax',input.innerHTML,'xingbei');
+								}
+							}
+						}else if(config.name=='战绩区上限'){
+							input.innerHTML=config.init||game.zhanJiMax;
+							input.onblur=function(){
+								input.innerHTML=input.innerHTML.replace(/<br>/g,'');
+								if(!input.innerHTML||get.is.banWords(input.innerHTML)){
+									input.innerHTML=game.zhanJiMax;
+								}
+								if(config.connect){
+									game.saveConfig('connect_zhanJiMax',input.innerHTML);
+									game.saveConfig('connect_zhanJiMax',input.innerHTML,'xingbei');
+								}else{
+									game.saveConfig('zhanJiMax',input.innerHTML);
+									game.saveConfig('zhanJiMax',input.innerHTML,'xingbei');
+								}
+							}
+						}else if(config.name=='星杯上限'){
+							input.innerHTML=config.init||game.xingBeiMax;
+							input.onblur=function(){
+								input.innerHTML=input.innerHTML.replace(/<br>/g,'');
+								if(!input.innerHTML||get.is.banWords(input.innerHTML)){
+									input.innerHTML=game.xingBeiMax;
+								}
+								if(config.connect){
+									game.saveConfig('connect_xingBeiMax',input.innerHTML);
+									game.saveConfig('connect_xingBeiMax',input.innerHTML,'xingbei');
+								}else{
+									game.saveConfig('xingBeiMax',input.innerHTML);
+									game.saveConfig('xingBeiMax',input.innerHTML,'xingbei');
+								}
 							}
 						}
 						else{
@@ -48003,6 +48087,7 @@
 						};
 						if(!get.config('menu_loadondemand')) node._initLink();
 					}());
+					/*
 					(function(){
 						var page=ui.create.div('');
 						var node=ui.create.div('.menubutton.large','战绩',start.firstChild,clickMode);
@@ -48039,6 +48124,7 @@
 						};
 						if(!get.config('menu_loadondemand')) node._initLink();
 					}());
+					*/
 					(function(){
 						if(!window.indexedDB||window.nodb) return;
 						var page=ui.create.div('');
@@ -55790,7 +55876,7 @@
 			//星杯
 			xiDong:function(event){
 				//判断事件是否为行动事件
-				return event.action==true||event.getParent().action==true||event.getParent().name=='chooseTouse'||event.getParent().name=='gongJi'||event.getParent().name=='faShu';
+				return event.action==true||event.getParent().action==true||event.getParent().name=='chooseToUse'||event.getParent().name=='gongJi'||event.getParent().name=='faShu';
 			},
 			//useSkill||useCard
 			gongJi:function(event){
@@ -57973,7 +58059,15 @@
 			}
 			if(arg=='skill'){
 				if(lib.translate[str+'_ab']) return lib.translate[str+'_ab'];
-				if(lib.translate[str]) return lib.translate[str].slice(0,2);
+				//xingbei
+				let reg=new RegExp(/[\[\(\)].{1,5}[\]\)]/g,'g');
+				let name_ori=lib.translate[str];
+				let name_ret;
+				if(name_ori.replace){
+					name_ret=name_ori.replace(reg,'');
+				}
+				if(lib.translate[str]) return name_ret;
+				//if(lib.translate[str]) return lib.translate[str].slice(0,2);
 				return str;
 			}
 			else if(arg=='info'){

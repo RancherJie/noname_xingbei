@@ -140,7 +140,8 @@
 }
 #arena:not(.single-handcard):not(.chess)>#me #handcards1{
     left: 150px !important;
-    width: calc(100% - 150px) !important;
+    /*xingbei*/
+    width: calc(100% - 380px) !important;
 }
 #arena:not(.single-handcard):not(.chess)>#me #handcards1>.handcards{
     left: 0 !important;

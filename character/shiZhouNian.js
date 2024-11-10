@@ -33,7 +33,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             lingFuShi:['female','yong',4,['lingFu_leiMing','lingFu_fengXing','nianZhou','baiGuiYeXing','lingLiBengJie','yaoLi'],],
             jianDi:['female','ji','4/5',['jianHunShouHu','yangGong','jianQiZhan','tianShiZhiHun','eMoZhiHun','buQuYiZhi','jianHun','jianQi'],],
             geDouJia:['female','ji','4/5',['nianQiLiChang','xuLiYiji','nianDan','baiShiHuanLongQuan','qiJueBengJi','douShenTianQu','douQi'],],
-            yongZhe:['male','xue','4/5',['yongZheZhiXin','nuHou','jinPiLiJin','mingJingZhiShui','tiaoXin','jinDuanZhiLi','siDou','','nuQi','zhiXing'],],
+            yongZhe:['male','xue','4/5',['yongZheZhiXin','nuHou','jinPiLiJin','mingJingZhiShui','tiaoXin','jinDuanZhiLi','siDou','nuQi','zhiXing'],],
             lingHunShuShi:['female','huan','4/5',["lingHunTunShi","lingHunZhaoHuan",'lingHunZhuanHuan',"lingHunJingXiang","lingHunZhenBao","lingHunFuYu","lingHunLianJie","lingHunZengFu","huangSeLingHun","lanSeLingHun"],],
             xueZhiWuNv:['female','xue',5,['xueZhiAiShang','liuXue','niLiu','xueZhiBeiMing','tongShengGongSi','xueZhiZuZhou'],],
             dieWuZhe:['female','yong',5,['shengMingZhiHuo','wuDong','duFen','chaoSheng','jingHuaShuiYue','diaoLing','yongHua','daoNiZhiDie','jian','DWZyong'],],
@@ -134,12 +134,17 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 content:function(player){
                     "step 0"
                     //trigger.selected=true;
-					var str='风怒追击：风系[攻击行动]';
-					var next=player.gongJi(function(card,player,event){
-                        if(get.xiBie(card)!='feng') return false;
-                        return lib.filter.cardEnabled(card,player,'forceEnable');
-					},str);
-					next.autodelay=true;
+                    trigger.getParent().insertAfter(function(){
+                        var str='风怒追击：风系[攻击行动]';
+                        var next=player.gongJi(function(card,player,event){
+                            if(get.xiBie(card)!='feng') return false;
+                            return lib.filter.cardEnabled(card,player,'forceEnable');
+                        },str);
+                        next.autodelay=true;
+                    },{
+                        player:player,
+                    });
+					
                 },
                 check:function(event,player){
                     var num=player.countCards('h',card=>get.xiBie(card)=='feng'&&get.type(card)=='gongJi');
@@ -467,6 +472,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 type:'qiDong',
                 trigger:{player:'phaseUseBegin'},
                 filter:function(event,player){
+                    if(event.qiDong==true) return false;
                     return player.canBiShaBaoShi();
                 },
                 content:function(){
@@ -525,7 +531,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 contentAfter:function(){
                     player.storage.shengLiao=0;
-                    player.chooseToUse();
+                    player.storage.all++;
                 },
                 ai: {
                     shuiJing:true,
@@ -592,6 +598,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 type:'qiDong',
                 trigger:{player:'phaseUseBegin'},
                 filter:function(event,player){
+                    if(event.qiDong==true) return false;
                     return player.canBiShaBaoShi();
                 },
                 content:function(){
@@ -725,6 +732,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         intro:{
                             content:'expansion',
                         },
+                        onremove:function(player, skill) {
+                            const cards = player.getExpansions(skill);
+                            if (cards.length) player.loseToDiscardpile(cards);
+                        },
                         trigger:{player:['useCard1','showCardsEnd']},
                         forced:true,
                         firstDo:true,
@@ -798,6 +809,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         marktext:"水",
                         intro:{
                             content:'expansion',
+                        },
+                        onremove:function(player, skill) {
+                            const cards = player.getExpansions(skill);
+                            if (cards.length) player.loseToDiscardpile(cards);
                         },
                         trigger:{player:['useCard1','showCardsEnd']},
                         forced:true,
@@ -945,6 +960,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         intro:{
                             content:'expansion',
                         },
+                        onremove:function(player, skill) {
+                            const cards = player.getExpansions(skill);
+                            if (cards.length) player.loseToDiscardpile(cards);
+                        },
                         trigger:{player:['useCard1','showCardsEnd']},
                         forced:true,
                         firstDo:true,
@@ -1018,6 +1037,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         intro:{
                             content:'expansion',
                         },
+                        onremove:function(player, skill) {
+                            const cards = player.getExpansions(skill);
+                            if (cards.length) player.loseToDiscardpile(cards);
+                        },
                         trigger:{player:['useCard1','showCardsEnd']},
                         forced:true,
                         firstDo:true,
@@ -1076,6 +1099,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.removeBiShaShuiJing();
                     'step 1'
                     target.addSkill('wuXiShuFu_xiaoGuo')
+                    'step 2'
 					target.addMark('wuXiShuFu_xiaoGuo');
                 },
                 subSkill:{
@@ -1088,6 +1112,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             content:'(将【五系束缚】放置于目标对手面前)该对手跳过其下个行动阶段。在其下个行动阶段开始前他可以选择摸(2+X)张牌来取消【五系束缚】的效果。X为场上封印的数量，X最高为2。无论效果是否发动，触发后移除此牌。',
                             nocount:true,
                         },
+                        onremove:'storage',
                         filter:function(event,player){
                             return player.hasMark('wuXiShuFu_xiaoGuo');
                         },
@@ -1105,11 +1130,23 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                     }
                                 }
                             }
+                            var num;
+                            num=2+event.x;
+
                             var list=[`摸2+${event.x}张牌`,'跳过行动阶段'];
                             if(player.hasExpansions('_xuRuo')){
                                 list[0]=`摸2+3+${event.x}张牌`;
+                                num+=3;
                             }
-                            player.chooseControl().set('choiceList',list).set('prompt','五系束缚：选择一项').set('ai',function(){return 1;});
+                            player.chooseControl().set('choiceList',list).set('prompt','五系束缚：选择一项').set('ai',function(){
+                                var player=_status.event.player;
+                                var num=_status.event.num;
+                                if(player.countCards('h')+num>player.getHandcardLimit()){
+                                    return 1;
+                                }else{
+                                    return 0;
+                                }
+                            }).set('num',num);
                             'step 1'
                             if(result.index==1){
                                 player.addTempSkill('xuRuo_xiaoGuo');
@@ -1718,7 +1755,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.removeBiShaShuiJing();
                     'step 1'
                     target.drawTo(5);
-                    player.gongJi('狙击：[攻击行动]');
+                    player.storage.gongJi++;
                 },
                 ai:{
                     shuiJing:true,
@@ -2043,13 +2080,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             yuanSuXiShou:{
                 trigger:{source:'damageBegin0'},
                 filter:function(event,player){
-                    if(player.countMark('yuanSu')>=3) return false;
                     if(event.faShu!=true) return false;
                     if(event.yuanSuDianRan==true) return false;
                     return true;
                 },
                 content:function(){
-                    player.addMark('yuanSu');
+                    player.addZhiShiWu('yuanSu');
                 }
             },
             yuanSuDianRan:{
@@ -2062,7 +2098,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 filterTarget:true,
                 content:function(){
                     'step 0'
-                    player.removeMark('yuanSu',3);
+                    player.removeZhiShiWu('yuanSu',3);
                     'step 1'
                     target.damage(2,player).set('faShu',true).set('yuanSuDianRan',true);
                     'step 2'
@@ -2088,6 +2124,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         return get.xiBie(card)=='di'
                     }
                 },
+                discard:false,
                 filterOk:function(){
                     return ui.selected.cards[0].hasNature('yunShi')
                 },
@@ -2117,7 +2154,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 1'
                     target.damageFaShu(event.num,player);
                     'step 2'
-                    player.faShu('陨石：[法术行动]');
+                    player.storage.faShu++;
                 },
                 ai:{
                     order:3.5,
@@ -2143,6 +2180,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     return ui.selected.cards[0].hasNature('bingDong');
                 },
                 complexCard:true,
+                discard:false,
                 prepare:function(cards,player,targets){
                     if(cards.length==1){
                         player.useCard(cards);
@@ -2207,6 +2245,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                 },
                 complexCard:true,
+                discard:false,
                 prepare:function(cards,player,targets){
                     if(cards.length==1){
                         player.useCard(cards);
@@ -2256,6 +2295,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     return ui.selected.cards[0].hasNature('fengRen')
                 },
                 complexCard:true,
+                discard:false,
                 prepare:function(cards,player,targets){
                     if(cards.length==1){
                         player.useCard(cards);
@@ -2281,7 +2321,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 1'
                     target.damageFaShu(event.num,player);
                     'step 2'
-                    player.gongJi('风刃：[攻击行动]');
+                    player.storage.gongJi++;
                 },
                 ai:{
                     order:3.5,
@@ -2307,6 +2347,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     return ui.selected.cards[0].hasNature('leiJi')
                 },
                 complexCard:true,
+                discard:false,
                 prepare:function(cards,player,targets){
                     if(cards.length==1){
                         player.useCard(cards);
@@ -2377,7 +2418,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 intro:{
                     name:'元素',
                     content:'mark',
+                    max:3,
                 },
+                onremove:'storage',
                 markimage:'image/card/hong.png',
             },
 
@@ -2610,7 +2653,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 3'
                     player.removeMark('shiHua',3);
                     player.addSkill('cangBaiZhiYue1');
-                    player.gongJi('[攻击行动]');
+                    player.storage.gongJi++;
                     'step 4'
                     player.insertPhase();
                     'step 5'
@@ -2671,6 +2714,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     content:'mark',
                     max:2,
                 },
+                onremove:'storage',
                 markimage:'image/card/hong.png',
             },
             shiHua:{
@@ -2679,6 +2723,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     content:'mark',
                     max:3,
                 },
+                onremove:'storage',
                 markimage:'image/card/lan.png',
             },
             anYue:{
@@ -2690,6 +2735,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						if(player.isUnderControl(true)) dialog.addAuto(cards);
 						else return '共有'+cards.length+'张牌';
 					},
+                },
+                onremove:function(player, skill) {
+                    const cards = player.getExpansions(skill);
+                    if (cards.length) player.loseToDiscardpile(cards);
                 },
             },
 
@@ -2863,6 +2912,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     content:'mark',
                     max:4,
                 },
+                onremove:'storage',
                 markimage:'image/card/hong.png',
             },
 
@@ -3512,6 +3562,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 type:'qiDong',
                 trigger:{player:'phaseUseBegin'},
                 filter:function(event,player){
+                    if(event.qiDong==true) return false;
                     return player.canBiShaBaoShi()&&!player.isLinked(); 
                 },
                 content:function(){
@@ -3603,6 +3654,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						});
                         return cards.length;
 					},
+                    
+                },
+                onremove:function(player, skill) {
+                    const cards = player.getCards('s',function(card){
+                        return card.hasGaintag('zhuFu');
+                    });
+                    if (cards.length) player.loseToDiscardpile(cards);
                 },
             },
 
@@ -3798,11 +3856,18 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 content:function(player){
                     //trigger.selected=true;
-					var str='修罗连斩：火系[攻击行动]';
-					var next=player.gongJi('h',function(card,player,event){
+
+                    trigger.getParent().insertAfter(function(){
+                        var str='修罗连斩：火系[攻击行动]';
+					    var next=player.gongJi('h',function(card,player,event){
                         if(get.xiBie(card)!='huo') return false;
                         return lib.filter.cardEnabled(card,player,'forceEnable');
-					},str);
+					    },str);
+                    },{
+                        player:player,
+                    });
+
+					
                 },
                 mod:{
                     aiUseful(player, card, num) {
@@ -3816,6 +3881,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 type:'qiDong',
                 trigger:{player:'phaseUseBegin'},
                 filter:function(event,player){
+                    if(event.qiDong==true) return false;
                     return !player.isLinked(); 
                 },
                 content:function(){
@@ -4095,6 +4161,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     content:"<span class='tiaoJian'>(此卡在场时)</span>所有角色的[治疗]无法用于抵御伤害；<span class='tiaoJian'>(血色剑灵的回合结束时)</span>移除此卡。",
                     nocount:true,
                 },
+                onremove:'storage',
                 markimage:'image/card/xueQiangWeiTingYuan.png',
                 trigger:{player:'phaseEnd'},
                 forced:true,
@@ -4109,6 +4176,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 type:'qiDong',
                 trigger:{player:'phaseUseBegin'},
                 filter:function(event,player){
+                    if(event.qiDong==true) return false;
                     return player.canBiShaShuiJing();
                 },
                 content:function(){
@@ -4153,6 +4221,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     content:'mark',
                     max:3,
                 },
+                onremove:'storage',
                 markimage:'image/card/hong.png',
             },
 
@@ -4257,6 +4326,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         intro:{
                             content:'expansion',
                         },
+                        onremove:function(player, skill) {
+                            const cards = player.getExpansions(skill);
+                            if (cards.length) player.loseToDiscardpile(cards);
+                        },
                         trigger:{player:'useCardToTargeted'},
                         filter:function(event,player){
                             if(!get.is.gongJi(event.getParent())) return false;
@@ -4308,6 +4381,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         marktext:"迅",
                         intro:{
                             content:'expansion',
+                        },
+                        onremove:function(player, skill) {
+                            const cards = player.getExpansions(skill);
+                            if (cards.length) player.loseToDiscardpile(cards);
                         },
                         //priority:1,
                         trigger:{player:['useCardAfter','useSkillAfter']},
@@ -4387,6 +4464,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     content:'mark',
                     max:3,
                 },
+                onremove:'storage',
                 markimage:'image/card/hong.png',
             },
 
@@ -4395,9 +4473,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 usable:1,
                 trigger:{player:'useCard'},
                 filter:function(event,player){
-                    if(get.type(event.card)!='gongJi') return false;
-                    if(event.yingZhan==true) return false;
-                    return true;
+                    return get.is.zhuDongGongJi(event);
                 },
                 content:function(){
                     player.changeZhiLiao(1);
@@ -4423,6 +4499,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 type:'qiDong',
                 trigger:{player:'phaseUseBegin'},
                 filter:function(event,player){
+                    if(event.qiDong==true) return false;
                     return player.zhiLiao>0;
                 },
                 content:function(){
@@ -4448,7 +4525,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.chooseTarget(function(card,player,target){
                         if(target==player) return false;
                         return target.side==player.side;
-                    },[1,num],true,prompt);
+                    },[1,num],true,prompt).set('ai',function(target){
+                        var player=_status.event.player;
+                        return get.zhiLiaoEffect2(target,player,1);
+                    });
                     'step 3'
                     game.log(player,'选择了',result.targets);
                     player.line(result.targets,'blue');
@@ -4607,6 +4687,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     content:'mark',
                     max:2,
                 },
+                onremove:'storage',
                 markimage:'image/card/hong.png',
             },
 
@@ -4875,6 +4956,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     name:'战纹',
                     content:'mark',
                 },
+                onremove:'storage',
                 markimage:'image/card/zhanWen.png',
             },
             moWen:{
@@ -4883,6 +4965,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     name:'魔纹',
                     content:'mark',
                 },
+                onremove:'storage',
                 markimage:'image/card/moWen.png',
             },
 
@@ -4990,6 +5073,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 type:'qiDong',
                 trigger:{player:'phaseUseBegin'},
                 filter:function(event,player){
+                    if(event.qiDong==true) return false;
                     return player.canBiShaShuiJing()&&player.zhiLiao>0;
                 },
                 content:function(){
@@ -5436,6 +5520,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     content:'mark',
                     max:3,
                 },
+                onremove:'storage',
                 markimage:'image/card/hong.png',
             },
 
@@ -5702,6 +5787,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     name:'重生',
                     max:4,
                 },
+                onremove:'storage',
                 markimage:'image/card/hong.png',
 
             },
@@ -6076,6 +6162,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 //priority:1,
                 trigger:{player:'phaseUseBegin'},
                 filter:function(event,player){
+                    if(event.qiDong==true) return false;
                     return player.canBiShaShuiJing()&&event.qiDong!=true;
                 },
                 content:function(){
@@ -6147,6 +6234,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 type:'qiDong',
                 trigger:{player:'phaseUseBegin'},
                 filter:function(event,player){
+                    if(event.qiDong==true) return false;
                     return player.canBiShaBaoShi()&&event.qiDong!=true;
                 },
                 content:function(){
@@ -6184,7 +6272,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         }
                         return true;
                     }).set('ai',function(target){
-                        return Math.random();
+                        var player=_status.event.player;
+                        if(target.side==player.side){
+                            return 0;
+                        }
+                        return target.countCards('h');
                     });
                     'step 4'
                     game.log(player,'选择了',result.targets[0]);
@@ -6232,6 +6324,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						if(player.isUnderControl(true)) dialog.addAuto(cards);
 						else return '共有'+cards.length+'张牌';
 					},
+                },
+                onremove:function(player, skill) {
+                    const cards = player.getExpansions(skill);
+                    if (cards.length) player.loseToDiscardpile(cards);
                 },
             },
 
@@ -6639,6 +6735,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						else return '共有'+cards.length+'张牌';
 					},
                 },
+                onremove:function(player, skill) {
+                    const cards = player.getExpansions(skill);
+                    if (cards.length) player.loseToDiscardpile(cards);
+                },
             },
 
 
@@ -6735,6 +6835,23 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     return player.countZhiShiWu('lingGan')>1;
                 },
                 chooseButton:{
+                    check:function (button) {
+                        var player = _status.event.player;
+                        if(typeof button.link=="number"){
+                            var num=player.getHandcardLimit()-player.countCards('h');
+                            if(num>=button.link-1) return button.link;
+                        }else if(typeof button.link=="string"){
+                            var num=player.getHandcardLimit()-player.countCards('h');
+                            if(num>=2&&button.link=='摸'){
+                                return 1;
+                            }
+                            if(num<2&&button.link=='弃'){
+                                return 1;
+                            }
+                        }
+                        return 0.5;
+                    },
+
                     dialog:function(event,player){
 						var dialog=ui.create.dialog('不谐和弦：移除X点【灵感】','hidden');
                         var list=[];
@@ -6763,7 +6880,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                 for(var i=0;i<links.length;i++){
                                     if(typeof links[i]=='number'){
                                         event.buXieHeXian_num=links[i]-1;
-                                    }else if(typeof links[i]=='string'){
                                         event.buXieHeXian=links[i];
                                     }
                                 }
@@ -6798,7 +6914,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             ai:{
                                 result:{
                                     target:function(player,target){
-                                        return -1;
+                                        var num=player.getHandcardLimit()-player.countCards('h');
+                                        if(num>=2) return -target.countCards('h');
+                                        else return target.countCards('h');
                                     }
                                 }
                             }
@@ -6820,9 +6938,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                 },
                 ai:{
-                    order:3.5,
-                    result:function(player,target){
-                        return -1;
+                    order:function(item,player){
+                        var num=3+player.countZhiShiWu('lingGan')*0.5;
+                        return num;
+                    },
+                    result:{
+                        player:1,
                     }
                 }
                 
@@ -6846,6 +6967,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 type:'qiDong',
                 trigger:{player:'phaseUseBegin'},
                 filter:function(event,player){
+                    if(event.qiDong==true) return false;
                     return player.canBiShaShuiJing();
                 },
                 content:function(){
@@ -6919,6 +7041,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     max:3,
                     content:'mark',
                 },
+                onremove:'storage',
                 markimage:'image/card/hong.png'
             },
             yongHengYueZhang:{
@@ -7139,11 +7262,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     return player.side!=target.side;
                 },
                 content:function(){
+                    'step 0'
                     player.removeZhiShiWu('nuQi');
                     player.addZhiShiWu('zhiXing');
                     if(!target.hasSkill('tiaoXinX')){
                         target.addSkill('tiaoXinX');
                     }
+                    'step 1'
                     target.addZhiShiWu('tiaoXinX');
                     target.storage.tiaoXinX_player=player;
                 },
@@ -7160,6 +7285,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     content:'你在下个行动阶段必须且只能主动攻击勇者，否则你跳过该行动阶段，触发后移除此牌。',
                     nocount:true,
                 },
+                onremove:'storage',
                 markimage:'image/card/tiaoXin.png',
 
                 filterx:function(event,player,num){
@@ -7396,6 +7522,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     max:4,
                     content:'mark',
                 },
+                onremove:'storage',
                 markimage:'image/card/hong.png',
             },
             zhiXing:{
@@ -7403,6 +7530,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     max:4,
                     content:'mark',
                 },
+                onremove:'storage',
                 markimage:'image/card/lan.png',
             },
 
@@ -7628,6 +7756,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     content:'mark',
                     max:6,
                 },
+                onremove:'storage',
                 markimage:'image/card/hong.png',
             },
 
@@ -8122,6 +8251,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     content:'mark',
                     max:10,
                 },
+                onremove:'storage',
                 markimage:'image/card/hong.png',
             },
             shengHuangHuiGuangPaoX:{
@@ -8130,6 +8260,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     max:1,
                     nocount:true,
                 },
+                onremove:'storage',
                 markimage:'image/card/lan.png',
             },
 
@@ -8294,7 +8425,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 }
             },
             buQuYiZhi:{
-                trigger:{player:'useCardEnd'},
+                trigger:{player:'useCardAfter'},
                 filter:function(event,player){
                     //if(event.selected) return false;
                     return get.is.gongJiXingDong(event)&&player.canBiShaShuiJing();
@@ -8319,6 +8450,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					},
                     max:3,
                 },
+                onremove:function(player, skill) {
+                    const cards = player.getExpansions(skill);
+                    if (cards.length) player.loseToDiscardpile(cards);
+                },
                 tianShiZhiHun:function(player){
                     if(player.countNengLiangAll()==0) return 0;
                     else if(player.countNengLiangAll()%2==1) return player.getExpansions('jianHun').length;
@@ -8338,6 +8473,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     content:'mark',
                     max:5,
                 },
+                onremove:'storage',
                 markimage:'image/card/hong.png',
             },
 
@@ -8573,6 +8709,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 type:'qiDong',
                 trigger:{player:'phaseUseBegin'},
                 filter:function(event,player){
+                    if(event.qiDong==true) return false;
                     return player.canBiShaBaoShi();
                 },
                 content:function(){
@@ -8604,6 +8741,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     content:'mark',
                     max:2,
                 },
+                onremove:'storage',
                 markimage:'image/card/lan.png',
             },
             canXin:{
@@ -8611,6 +8749,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     content:'mark',
                     max:4,
                 },
+                onremove:'storage',
                 markimage:'image/card/hong.png',
             },
 
@@ -8799,12 +8938,14 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 2'
                     var target=result.targets[0];
                     player.storage.lingHunLianJie_player=target;
-                    target.addZhiShiWu('lingHunLianJie');
+                    target.addZhiShiWu('lingHunLianJie',1,1,true);
                 },
                 intro:{
+                    name:'[专属]灵幻链接',
                     content:"<span class='tiaoJian'>(每当你们之间有人承受伤害时⑥，移除X点【蓝色灵魂】)</span>将X点伤害转移给另1人，转移后的伤害为法术伤害⑥。",  
                     nocount:true,
                 },
+                onremove:'storage',
                 markimage:'image/card/lingHunLianJie.png',
                 group:'lingHunLianJie_xiaoGuo',
                 subSkill:{
@@ -8913,6 +9054,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     content:'mark',
                     max:6
                 },
+                onremove:'storage',
                 markimage:'image/card/hong.png',
             },
             lanSeLingHun:{
@@ -8920,6 +9062,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     content:'mark',
                     max:6
                 },
+                onremove:'storage',
                 markimage:'image/card/lan.png',
             },
 
@@ -8928,6 +9071,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 type:'qiDong',
                 trigger:{player:'phaseUseBegin'},
                 filter:function(event,player){
+                    if(event.qiDong==true) return false;
                     return player.storage.tongShengGongSi_use;
                 },
                 content:function(){
@@ -8946,10 +9090,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     });
                     'step 2'
                     if(result.bool){
-                        player.storage.tongShengGongSi_target.removeZhiShiWu('tongShengGongSi');
+                        player.storage.tongShengGongSi_target.removeZhiShiWu('tongShengGongSi_xiaoGuo');
                         event.target=result.targets[0];
                     }else{
-                        player.storage.tongShengGongSi_target.removeZhiShiWu('tongShengGongSi');
+                        player.storage.tongShengGongSi_target.removeZhiShiWu('tongShengGongSi_xiaoGuo');
                         player.storage.tongShengGongSi_use=false;
                     }
                     'step 3'
@@ -8961,13 +9105,14 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         event.finish();
                     }
                     'step 5'
-                    event.target.addZhiShiWu('tongShengGongSi');
                     if(!target.hasSkill('tongShengGongSi_xiaoGuo')){
                         event.target.storage.tongShengGongSi_player=player;
                         event.target.addSkill('tongShengGongSi_xiaoGuo');                        
                     }
                     player.storage.tongShengGongSi_target=event.target;
                     'step 6'
+                    event.target.addZhiShiWu('tongShengGongSi_xiaoGuo');
+                    'step 7'
                     event.target.qiPai();
                 },
                 check:function(event,player){
@@ -9092,11 +9237,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 }
             },
             tongShengGongSi:{
-                intro:{
-                    content:"<span class='tiaoJian'>(在【普通形态】下)</span>你和他手牌上限各-2。 <span class='tiaoJian'>(在【流血形态】下)</span>你和他手牌上限各+1。",
-                    nocount:true,
-                },
-                markimage:'image/card/tongShengGongSi.png',
                 type:'faShu',
                 enable:['chooseToUse','faShu'],
                 filter:function(event,player){
@@ -9110,19 +9250,29 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 1'
                     player.storage.tongShengGongSi_target=target;
                     player.storage.tongShengGongSi_use=true;
-                    target.addZhiShiWu('tongShengGongSi');
+                    
                     if(!target.hasSkill('tongShengGongSi_xiaoGuo')){
                         target.storage.tongShengGongSi_player=player;
                         target.addSkill('tongShengGongSi_xiaoGuo');
                     }
                     'step 2'
-                    player.qiPai();
+                    target.addZhiShiWu('tongShengGongSi_xiaoGuo');
                     'step 3'
+                    player.qiPai();
+                    'step 4'
                     target.qiPai();
+
                 },
                 group:'tongShengGongSi_xiaoGuo',
                 subSkill:{
                     xiaoGuo:{
+                        intro:{
+                            content:"<span class='tiaoJian'>(在【普通形态】下)</span>你和他手牌上限各-2。 <span class='tiaoJian'>(在【流血形态】下)</span>你和他手牌上限各+1。",
+                            nocount:true,
+                        },
+                        onremove:'storage',
+                        markimage:'image/card/tongShengGongSi.png',
+
                         mod:{
                             maxHandcard:function(player,num){
                                 if(player.storage.tongShengGongSi_use){
@@ -9131,7 +9281,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                     }else{
                                         return num-2;
                                     }
-                                }else if(player.hasZhiShiWu('tongShengGongSi')){
+                                }else if(player.hasZhiShiWu('tongShengGongSi_xiaoGuo')){
                                         if(player.storage.tongShengGongSi_player.isLinked()){
                                             return num+1;
                                         }else{
@@ -9506,6 +9656,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						else return '共有'+cards.length+'张牌';
 					},
                 },
+                onremove:function(player, skill) {
+                    const cards = player.getExpansions(skill);
+                    if (cards.length) player.loseToDiscardpile(cards);
+                },
                 contentx:function(){
                     'step 0'
                     var num=player.getExpansions('jian').length;
@@ -9523,6 +9677,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 intro:{
                     content:'mark',
                 },
+                onremove:'storage',
                 markimage:'image/card/hong.png'
             },
 
@@ -9829,11 +9984,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             weiLiCiFu:"(独)[法术]威力赐福",
             weiLiCiFu_info:"<span class='tiaoJian'>(将威力赐福放置于目标队友面前)</span>该队友获得<span class='tiaoJian'>(攻击命中后可以移除此牌发动②)</span>本次攻击伤害额外+2。",
             xunJieCiFu:"(独)[法术]迅捷赐福",
-            xunJieCiFu_info:"<span class='tiaoJian'>(将迅捷赐福放置于目标队友面前)</span>该队友获得<span class='tiaoJian'>([法术行动]或[攻击行动]结束时可以移除此牌发动)</span>额外+1[攻击行动]。",
+            xunJieCiFu_info:"<span class='tiaoJian'>(将迅捷赐福放置于目标队友面前)</span>该队友获得<span class='tiaoJian'>([法术行动]或[攻击行动]结束后可以移除此牌发动)</span>额外+1[攻击行动]。",
             qiDao:"[启动]祈祷[持续]",
             qiDao_info:"[宝石][横置]转为【祈祷形态】，在此形态下，你每发动一次主动攻击①，你+2<span class='hong'>【</span>祈祷符文<span class='hong'>】</span>。",
             faLiChaoXi:"[响应]法力潮汐[回合限定]",
-            faLiChaoXi_info:"[水晶]<span class='tiaoJian'>([法术行动]结束时发动)</span>额外+1[法术行动]。",
+            faLiChaoXi_info:"[水晶]<span class='tiaoJian'>([法术行动]结束后发动)</span>额外+1[法术行动]。",
             qiDaoFuWen:"祈祷符文",
             qiDaoFuWen_info:"<span class='hong'>【</span>祈祷符文<span class='hong'>】</span>为祈祷师专有指示物，其上限为3。",
             
@@ -9849,7 +10004,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             reXueFeiTeng:"[被动]热血沸腾",
             reXueFeiTeng_info:"<span class='tiaoJian'>(当你因承受伤害而导致我方士气下降时强制发动[强制])</span>[横置]转发【热血沸腾状态】，该形态你因承受伤害不会导致我方士气下降[强制]。在你的回合结束阶段，若你处于此形态，[重置]并脱离此形态[强制],你+2[治疗]。",
             jieJiaoJieZao:"[响应]戒骄戒躁",
-            jieJiaoJieZao_info:"[水晶]<span class='tiaoJian'>(仅【热血沸腾状态】下，[攻击行动]或[法术行动]结束时发动)</span>[重置]并脱离此形态，额外+1[攻击行动]或[法术行动]。",
+            jieJiaoJieZao_info:"[水晶]<span class='tiaoJian'>(仅【热血沸腾状态】下，[攻击行动]或[法术行动]结束后发动)</span>[重置]并脱离此形态，额外+1[攻击行动]或[法术行动]。",
             xingHongShiZi:"[法术]猩红十字",
             xingHongShiZi_info:"[水晶]<span class='tiaoJian'>(移除1点</span><span class='hong'>【</span>血印<span class='hong'>】</span><span class='tiaoJian'>弃2张法术牌[展示]，对自己造成4点法术伤害)</span>对目标角色造成3点法术伤害③。",
             xueYin:"血印",
@@ -9935,7 +10090,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             leiGuangSanShe_backup:"[法术]雷光散射",
             leiGuangSanShe_info:"<span class='tiaoJian'>(移除1个雷系【充能】[展示])</span>对所有对手造成1点法术伤害③；<span class='tiaoJian'>(若你额外移除X个雷系【充能】[展示])</span>指定一名对手，本次对其攻击伤害额外+X③。",
             duoChongSheJi:"[响应]多重射击",
-            duoChongSheJi_info:"<span class='tiaoJian'>([攻击行动]结束时发动，移除1个风系【充能】[展示])</span>视为一次暗系的主动攻击，但不能攻击上次的目标且本次攻击伤害-1；本回合你不能发动【魔贯冲击】。",
+            duoChongSheJi_info:"<span class='tiaoJian'>([攻击行动]结束后发动，移除1个风系【充能】[展示])</span>视为一次暗系的主动攻击，但不能攻击上次的目标且本次攻击伤害-1；本回合你不能发动【魔贯冲击】。",
             chongNeng:"[启动]充能",
             chongNeng_info:"[水晶]你弃到4张牌，摸X张牌[强制]，可将自己至多X张手牌面朝下放置在你的角色旁，作为【充能】(X<5)；本回合你不能发动【魔贯冲击】和【雷光散射】。",
             moYan:"[启动]魔眼",
@@ -10067,7 +10222,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             jianQiZhan_info:"<span class='tiaoJian'>(主动攻击命中后发动②，移除X点【剑气】，X最高为3)</span>对除你所攻击的目标以外的任意一名角色造成X点法术伤害③。",
             tianShiZhiHun_info:"<span class='tiaoJian'>(主动攻击前发动①，移除1张【天使之魂】)</span>本次攻击若命中②，你+2[治疗]；若未命中②，我方+1士气；不能和【剑魂守护】同时发动。",
             eMoZhiHun_info:"<span class='tiaoJian'>(主动攻击前发动①，移除1张【恶魔之魂】)</span>本次攻击伤害额外+1；若未命中②，你+2【剑气】；不能和【剑魂守护】同时发动。",
-            buQuYiZhi_info:"[水晶]<span class='tiaoJian'>([攻击行动]结束时发动)</span>你摸1张[强制]，+1【剑气】，额外+1[攻击行动]。",
+            buQuYiZhi_info:"[水晶]<span class='tiaoJian'>([攻击行动]结束后发动)</span>你摸1张[强制]，+1【剑气】，额外+1[攻击行动]。",
             jianHun_info:"【剑魂】为剑帝专有盖牌，上限为3。",
             jianQi_info:"【剑气】为剑帝专有指示物，上限为5。",
           
@@ -10101,7 +10256,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             lingHunJingXiang:"[法术]灵魂镜像",
             lingHunZhenBao:"(独)[法术]灵魂震爆",
             lingHunFuYu:"(独)[法术]灵魂赋予",
-            lingHunLianJie:"(专)[启动]灵魂链接(2v2禁用)",
+            lingHunLianJie:"(专)[启动]灵魂链接",
             lingHunZengFu:"[启动]灵魂增幅",
             huangSeLingHun:"黄色灵魂",
             lanSeLingHun:"蓝色灵魂",
@@ -10112,7 +10267,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             lingHunJingXiang_info:"<span class='tiaoJian'>(移除2点【黄色灵魂】)</span>你弃2张牌，目标角色摸2张牌[强制]，但最多补到其手牌上限。",
             lingHunZhenBao_info:"<span class='tiaoJian'>(移除3点【黄色灵魂】)</span>对目标角色造成3点法术伤害③，若他手牌<3且手牌上限>5，则本次伤害额外+2。",
             lingHunFuYu_info:"<span class='tiaoJian'>(移除3点【蓝色灵魂】)</span>目标角色+2[宝石]。",
-            lingHunLianJie_info:"<span class='tiaoJian'>(移除1点【黄色灵魂】和1点【蓝色灵魂】)</span>将【灵魂链接】放置于一名队友面前，<span class='tiaoJian'>(每当你们之间有人承受伤害时⑥，移除X点【蓝色灵魂】)</span>将X点伤害转移给另1人，转移后的伤害为法术伤害⑥。",
+            lingHunLianJie_info:"(2v2禁用)<span class='tiaoJian'>(移除1点【黄色灵魂】和1点【蓝色灵魂】)</span>将【灵魂链接】放置于一名队友面前，<span class='tiaoJian'>(每当你们之间有人承受伤害时⑥，移除X点【蓝色灵魂】)</span>将X点伤害转移给另1人，转移后的伤害为法术伤害⑥。",
             lingHunZengFu_info:"[宝石]你+2【黄色灵魂】和2【蓝色灵魂】。",
             huangSeLingHun_info:"【黄色灵魂】为灵魂术士专有指示物，上限为6。",
             lanSeLingHun_info:"【蓝色灵魂】为灵魂术士专有指示物，上限为6。",

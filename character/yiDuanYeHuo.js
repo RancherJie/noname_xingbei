@@ -372,6 +372,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     content:'mark',
                     max:2,
                 },
+                onremove:'storage',
                 markimage:'image/card/hong.png',
             },
 
@@ -396,7 +397,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 group:'kuangXinTu_zhiLiao',
                 subSkill:{
                     zhiLiao:{
-                        trigger:{player:'useCardAfter'},
+                        trigger:{player:'useCardEnd'},
                         filter:function(event,player){
                             return get.is.gongJiXingDong(event);
                         },
@@ -601,22 +602,28 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 direct:true,
                 content:function(){
                     'step 0'
-                    var next=player.chooseToDiscard('h',function(card){
+                    var next=player.chooseCard('h',function(card){
                         return get.type(card)=='faShu';
                     });
                     next.set('prompt',get.prompt('jingHuaZhiShu'));
                     next.set('prompt2',lib.translate.jingHuaZhiShu_info);
+                    next.set('ai',function(card){
+                        return 7-get.value(card);
+                    });
                     'step 1'
                     if(result.bool){
                         player.logSkill(event.name);
-                        player.showCards(result.cards);
-                        player.changeZhiLiao(1);
-                        player.draw(1);
-                        event.flag=true;
+                        event.cards=result.cards;
+                        player.discard(result.cards);
                     }else{
                         event.finish();
                     }
                     'step 2'
+                    player.showCards(event.cards);
+                    player.changeZhiLiao(1);
+                    player.draw(1);
+                    event.flag=true;
+                    'step 3'
                     if(event.flag){
                         lib.skill.yiDuanCaiJueSuo.removeZhiLiao(player,1);
                     }
@@ -638,6 +645,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 type:'qiDong',
                 trigger:{player:'phaseUseBegin'},
                 filter:function(event,player){
+                    if(event.qiDong==true) return false;
                     return player.canBiShaShuiJing();
                 },
                 content:function(){
@@ -716,6 +724,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     content:'共有#个[治疗]',
                     max:4,
                 },
+                onremove:'storage',
                 mark:true,
                 markimage:'image/card/yiDuanCaiJueSuo.png',
                 addZhiLiao:function(player,num){
@@ -749,6 +758,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     content:'mark',
                     max:3,
                 },
+                onremove:'storage',
                 markimage:'image/card/hong.png',
             },
 
@@ -949,7 +959,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 }
             },
 
-            //星坠巫女
+            //星坠女巫
             mingDingZhiLi:{
                 trigger:{global:'phaseBefore'},
                 filter:function(event,player){
@@ -1014,7 +1024,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 }
             },
             xingKe:{
-                trigger:{player:['useCardAfter','useSkillAfter']},
+                trigger:{player:['useCardEnd','useSkillEnd']},
                 filter:function(event,player){
                     return get.is.zhuDongGongJi(event)||get.is.faShuXingDong(event);
                 },
@@ -1027,6 +1037,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 type:'qiDong',
                 trigger:{player:'phaseUseBegin'},
                 filter:function(event,player){
+                    if(event.qiDong==true) return false;
+                    
                     var bool1,bool2;
                     var x=player.countZhiShiWu('fanXing')+player.countZhiShiWu('yingYue')+player.countZhiShiWu('shiRi');
                     if(x<3&&player.countCards('h')>0) bool1=true;
@@ -1052,7 +1064,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     if(bool2) list.push('选项二');
                     var choiceList=["<span class='tiaoJian'>(将1张手牌面朝下放置在你角色旁，作为【卢恩】。选择1个【律法】放置于你面前)</span>你摸0-1张牌。","<span class='tiaoJian'>(移除X个【卢恩】[展示])</span>发动任意符合条件的【律法】，然后移除1个【律法】。"];
 
-                    player.chooseControl(list).set('prompt','选择以下一项发动').set('choiceList',choiceList);
+                    player.chooseControl(list).set('prompt','选择以下一项发动').set('choiceList',choiceList).set('ai',function(){
+                        var bool1=_status.event.bool1;
+                        var bool2=_status.event.bool2;
+                        var player=_status.event.player;
+                        if(player.getExpansions('luEn').length>2&&bool2) return '选项二';
+                        if(bool1) return '选项一';
+                    }).set('bool1',bool1).set('bool2',bool2);
                     'step 1'
                     if(result.control=='选项一'){
                         event.goto(2)
@@ -1184,6 +1202,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     content:"<span class='tiaoJian'>(当移除的【卢恩】包含4个不同系别或4个不同命格)</span>对所有对手各造成1点法术伤害③；<span class='tiaoJian'>(若移除的【卢恩】包含4个不同系别与4个不同命格)</span>目标队友额外+1[宝石]。",
                     nocount:true,
                 },
+                onremove:'storage',
                 markimage:'image/card/fanXing.png',
                 trigger:{player:'yiChuLuEn'},
                 filter:function(event,player){
@@ -1243,6 +1262,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     content:"<span class='tiaoJian'>(当移除的【卢恩】包含X对相同系别的【卢恩】，X>1)</span>对目标角色造成X点法术伤害③。<span class='tiaoJian'>(当移除的【卢恩】包含X对相同命格的【卢恩】，X>1)</span>任意分配X点[治疗]给1~2位我方角色。",
                     nocount:true,
                 },
+                onremove:'storage',
                 markimage:'image/card/yingYue.png',
                 trigger:{player:'yiChuLuEn'},
                 filter:function(event,player){
@@ -1360,6 +1380,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     content:"<span class='tiaoJian'>(当移除的【卢恩】包含每3个相同系别的【卢恩】)</span>你+1[宝石]。<span class='tiaoJian'>(当移除的【卢恩】包含每3个相同命格的【卢恩】)</span>我方【战绩区】+1[宝石]。",
                     nocount:true,
                 },
+                onremove:'storage',
                 markimage:'image/card/shiRi.png',
                 trigger:{player:'yiChuLuEn'},
                 filter:function(event,player){
@@ -1463,6 +1484,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						if(player.isUnderControl(true)) dialog.addAuto(cards);
 						else return '共有'+cards.length+'张牌';
 					},
+                },
+                onremove:function(player, skill) {
+                    const cards = player.getExpansions(skill);
+                    if (cards.length) player.loseToDiscardpile(cards);
                 },
                 direct:true,
                 trigger:{player:'addToExpansionEnd'},
@@ -1721,6 +1746,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						else return '共有'+cards.length+'张牌';
 					},
                 },
+                onremove:function(player, skill) {
+                    const cards = player.getExpansions(skill);
+                    if (cards.length) player.loseToDiscardpile(cards);
+                },
             },
 
         },
@@ -1764,7 +1793,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             yiDuanCaiJueSuo:"异端裁决所",
             caiJue:"裁决",
 
-            kuangXinTu_info:"游戏初始时你拥有【异端裁决所】。 <span class='tiaoJian'>(我方队友存在圣类命格时)</span>你的[治疗]上限+1。 <span class='tiaoJian'>(你的[攻击行动]结束后)</span>目标角色+1[治疗]。",
+            kuangXinTu_info:"游戏初始时你拥有【异端裁决所】。 <span class='tiaoJian'>(我方队友存在圣类命格时)</span>你的[治疗]上限+1。 <span class='tiaoJian'>(你的[攻击行动]结束时)</span>目标角色+1[治疗]。",
             caiJueLunDing_info:"<span class='tiaoJian'>(我方目标角色[治疗]溢出时)</span>【异端裁决所】+1[治疗]；<span class='tiaoJian'>(若因此【异端裁决所】[治疗]增加)</span>你+1[水晶]。",
             enDianShenShou_info:"<span class='tiaoJian'>(你执行[提炼]时，移除我方角色合计2[治疗]或【异端裁决所】3[治疗])</span>将提炼出的[宝石]和[水晶]全部交给目标队友，你弃1张牌；<span class='tiaoJian'>(若该弃牌为圣类命格，可展示之[展示])</span>对目标对手造成1点法术伤害③。",
             jingHuaZhiShu_info:"<span class='tiaoJian'>(你承受伤害⑥并结算完成后，弃1张法术牌[展示])</span>你+1[治疗]，摸1张牌[强制]，然后移除【异端裁决所】上1[治疗]。",
@@ -1790,7 +1819,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             xingHuan:"[法术]星环[回合限定]",
             xingHuan_info:"<span class='tiaoJian'>(弃X张地系牌[展示])</span>指定(X-1)名角色与你各+1[治疗]并各摸1张牌[强制]，你+1[法术行动]。",
             xingKe:"[响应]星刻",
-            xingKe_info:"<span class='tiaoJian'>([攻击行动]或[法术行动]结束后)</span>将牌库顶1张牌面朝下放置在你角色旁，作为【卢恩】。",
+            xingKe_info:"<span class='tiaoJian'>([攻击行动]或[法术行动]结束时)</span>将牌库顶1张牌面朝下放置在你角色旁，作为【卢恩】。",
             qunXingQiShi:"[启动]群星启示",
             qunXingQiShi_info:"你选择以下一项发动:<br>·<span class='tiaoJian'>(将1张手牌面朝下放置在你角色旁，作为【卢恩】。选择1个【律法】放置于你面前)</span>你摸0-1张牌。<br>·<span class='tiaoJian'>(移除X个【卢恩】[展示])</span>发动任意符合条件的【律法】，然后移除1个【律法】。",
             huangJinLv:"[响应]黄金律",
