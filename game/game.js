@@ -4827,7 +4827,7 @@
 						}
 					},
 					change_choice:{
-						name:'开启换将卡',
+						name:'开启换角卡',
 						init:true,
 						onclick:function(bool){
 							game.saveConfig('change_choice',bool,this._link.config.mode);
@@ -4906,7 +4906,7 @@
 						}
 					},
 					change_choice:{
-						name:'开启换将卡',
+						name:'开启换角卡',
 						init:true,
 						onclick:function(bool){
 							game.saveConfig('change_choice',bool,this._link.config.mode);
@@ -5093,7 +5093,7 @@
 						}
 					},
 					change_choice:{
-						name:'开启换将卡',
+						name:'开启换角卡',
 						init:true,
 						onclick:function(bool){
 							game.saveConfig('change_choice',bool,this._link.config.mode);
@@ -5506,7 +5506,7 @@
 						},
 					},
 					change_choice:{
-						name:'开启换将卡',
+						name:'开启换角卡',
 						init:true,
 						onclick:function(bool){
 							game.saveConfig('change_choice',bool,this._link.config.mode);
@@ -5794,7 +5794,7 @@
 						},
 					},
 					change_choice:{
-						name:'开启换将卡',
+						name:'开启换角卡',
 						init:true,
 						onclick:function(bool){
 							game.saveConfig('change_choice',bool,this._link.config.mode);
