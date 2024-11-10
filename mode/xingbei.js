@@ -375,6 +375,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					
 
 					var addSetting=function(dialog){
+						console.log(1);
 						dialog.add('选择座位').classList.add('add-setting');
 						var seats=document.createElement('table');
 						seats.classList.add('add-setting');

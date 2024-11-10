@@ -4786,6 +4786,16 @@
 						onclick:function(bool){
 							game.saveConfig('change_identity',bool,this._link.config.mode);
 							if(!_status.event.getParent().showConfig&&!_status.event.showConfig) return;
+
+							var dialog;
+							if(ui.cheat2&&ui.cheat2.backup) dialog=ui.cheat2.backup;
+							else dialog=_status.event.dialog;
+							if(!_status.brawl||!_status.brawl.noAddSetting){
+								if(!dialog.querySelector('table')&&get.config('change_identity')) _status.event.getParent().addSetting(dialog);
+								else _status.event.getParent().removeSetting(dialog);
+							}
+							ui.update();
+							/*
 							if(_status.mode=='four'){
 								if(get.config('four_assign')||get.config('four_phaseswap')) return;
 								if(bool){
@@ -4813,6 +4823,7 @@
 								}
 								ui.update();
 							}
+							*/
 						}
 					},
 					change_choice:{
