@@ -3839,8 +3839,8 @@
 						},
 					},*/
 					character_dialog_tool:{
-						name:'自由选将显示',
-						intro:'点击自由选将时默认显示的条目',
+						name:'自由选角显示',
+						intro:'点击自由选角时默认显示的条目',
 						init:'最近',
 						item:{
 							'收藏':'收藏',
@@ -3851,7 +3851,7 @@
 					},
 					recent_character_number:{
 						name:'最近使用角色',
-						intro:'自由选将对话框中最近使用角色的数量',
+						intro:'自由选角对话框中最近使用角色的数量',
 						init:'12',
 						item:{
 							'6':'6',
@@ -3869,7 +3869,7 @@
 					},
 					filternode_button:{
 						name:'触屏筛选按钮',
-						intro:'设置自由选将对话框中筛选按钮的样式',
+						intro:'设置自由选角对话框中筛选按钮的样式',
 						init:true,
 						unfrequent:true,
 					},
@@ -4767,7 +4767,7 @@
 					},
 
 					free_choose:{
-						name:'自由选将',
+						name:'自由选角',
 						init:true,
 						onclick:function(bool){
 							game.saveConfig('free_choose',bool,this._link.config.mode);
@@ -4892,7 +4892,7 @@
 				name:'挑战',
 				config:{
 					free_choose:{
-						name:'自由选将',
+						name:'自由选角',
 						init:true,
 						frequent:true,
 						onclick:function(bool){
@@ -5064,7 +5064,7 @@
 						restart:true,
 					},
 					free_choose:{
-						name:'自由选将',
+						name:'自由选角',
 						init:true,
 						onclick:function(bool){
 							game.saveConfig('free_choose',bool,this._link.config.mode);
@@ -5493,7 +5493,7 @@
 						frequent:true,
 					},
 					free_choose:{
-						name:'自由选将',
+						name:'自由选角',
 						init:true,
 						onclick:function(bool){
 							game.saveConfig('free_choose',bool,this._link.config.mode);
@@ -5780,7 +5780,7 @@
 						}
 					},
 					free_choose:{
-						name:'自由选将',
+						name:'自由选角',
 						init:true,
 						onclick:function(bool){
 							game.saveConfig('free_choose',bool,this._link.config.mode);
@@ -39351,7 +39351,7 @@
 							}
 						}
 					};
-					event.freechoosenode=ui.create.system('自由选将',function(){
+					event.freechoosenode=ui.create.system('自由选角',function(){
 						if(this.classList.contains('hidden')) return;
 						if(!event.imchoosing){
 							event.prompt('请等待敌方选将');

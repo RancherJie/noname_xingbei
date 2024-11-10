@@ -516,7 +516,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						event.dialogxx=ui.create.characterDialog('heightset');
 					}
 					ui.create.cheat2=function(){
-						ui.cheat2=ui.create.control('自由选将',function(){
+						ui.cheat2=ui.create.control('自由选角',function(){
 							if(this.dialog==_status.event.dialog){
 								if(game.changeCoin){
 									game.changeCoin(50);
