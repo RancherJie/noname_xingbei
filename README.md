@@ -30,4 +30,4 @@ github：[RancherJie/noname_xingbei (github.com)](https://github.com/RancherJie/
 本  体&&安卓懒人包 ：链接：https://pan.baidu.com/s/18bzceoyW2H20XtfBJIelcQ?pwd=0ped 提取码：0ped
 
 
-## [无名杀仓库]（https://github.com/libccy/noname）
+## [无名杀仓库](https://github.com/libccy/noname)
