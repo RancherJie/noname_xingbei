@@ -1506,7 +1506,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     game.broadcastAll(function(){
                         game.moDanFangXiang='zuo';
                     });
-                    if(game.zhanJiList) game.zhanJiList['moDanFangXiang']='zuo';
                 },
                 mod:{
                     playerEnabled:function(card,player,target){

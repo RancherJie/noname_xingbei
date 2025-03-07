@@ -7955,7 +7955,13 @@ export class Game extends GameCompatible {
 				avatar.appendChild(avatar2);
 				avatar.style.opacity = 0.6;
 			} else {
-				node.node.text = ui.create.div("", get.translation(card, "skill"), avatar);
+				var str=get.translation(card, "skill");
+				var reg=new RegExp(/[\[\(\)].{1,5}[\]\)]/g,'g');
+				if(str.replace){
+					str=str.replace(reg,'');
+				}
+				str=str.slice(0, 4);
+				node.node.text = ui.create.div("", str, avatar);
 				node.node.text.dataset.nature = "water";
 				node.skill = card;
 			}
@@ -7965,10 +7971,7 @@ export class Game extends GameCompatible {
 				player = targets;
 				if (!player.isUnseen(0)) avatar = player.node.avatar.cloneNode();
 				else if (!player.isUnseen(1)) avatar = player.node.avatar2.cloneNode();
-				else if (get.mode() == "guozhan" && player.node && player.node.name_seat) {
-					avatar = ui.create.div(".avatar.cardbg");
-					avatar.innerHTML = player.node.name_seat.innerHTML[0];
-				} else return;
+				else return;
 				avatar.style.transform = "";
 				node.node.avatar2 = avatar;
 				avatar.classList.add("avatar2");
@@ -7979,15 +7982,7 @@ export class Game extends GameCompatible {
 			card = card[0];
 			const info = [card.xiBie || "", card.mingGe || "", card.name || "", card.duYou || ""];
 			if (!Array.isArray(node.cards) || !node.cards.length) node.cards = [ui.create.card(node, "noclick", true).init(info)];
-			if (card.name == "wuxie") {
-				if (ui.historybar.firstChild && ui.historybar.firstChild.type == "wuxie") {
-					ui.historybar.firstChild.players.push(player);
-					ui.historybar.firstChild.cards.addArray(node.cards);
-					return;
-				}
-				node.type = "wuxie";
-				node.players = [player];
-			}
+
 			if (card.copy) card.copy(node, false);
 			else {
 				card = ui.create.card(node, "noclick", true);
@@ -7996,10 +7991,7 @@ export class Game extends GameCompatible {
 			let avatar;
 			if (!player.isUnseen(0)) avatar = player.node.avatar.cloneNode();
 			else if (!player.isUnseen(1)) avatar = player.node.avatar2.cloneNode();
-			else if (get.mode() == "guozhan" && player.node && player.node.name_seat) {
-				avatar = ui.create.div(".avatar.cardbg");
-				avatar.innerHTML = player.node.name_seat.innerHTML[0];
-			} else return;
+			else return;
 			node.node.avatar = avatar;
 			avatar.style.transform = "";
 			avatar.classList.add("avatar2");
@@ -8010,10 +8002,7 @@ export class Game extends GameCompatible {
 					const target = targets[0];
 					if (!target.isUnseen(0)) avatar2 = target.node.avatar.cloneNode();
 					else if (!player.isUnseen(1)) avatar2 = target.node.avatar2.cloneNode();
-					else if (get.mode() == "guozhan" && target.node && target.node.name_seat) {
-						avatar2 = ui.create.div(".avatar.cardbg");
-						avatar2.innerHTML = target.node.name_seat.innerHTML[0];
-					} else return;
+					else return;
 					node.node.avatar2 = avatar2;
 					avatar2.style.transform = "";
 					avatar2.classList.add("avatar2");
@@ -8832,6 +8821,177 @@ export class Game extends GameCompatible {
 			let target = sortedTargets[i];
 			await Promise.resolve(asyncFunc(target, i));
 		}
+	}
+
+	//xingBie
+	/**
+	 * 设置卡牌的系别
+	 * @param {*} item 卡牌
+	 * @param {string} xiBie 系别
+	 * @returns 
+	 */
+	setXiBie(item,xiBie){
+		item.xiBie=xiBie;
+		return item.xiBie;
+	}
+	/**
+	 * 设置卡牌的命格
+	 * @param {*} item 卡牌
+	 * @param {string} mingGe 命格
+	 * @returns 
+	 */
+	setMingGe(item,mingGe){
+		item.mingGe=mingGe;
+		return item.mingGe;
+	}
+	/**
+	 * 更改士气
+	 * @param {number} num 士气改变值
+	 * @param {bool} side 阵营
+	 * @param {bool} log 是否输出日志
+	 */
+	changeShiQi(num,side,log){
+		var numx=num;
+		if(side==true){
+			game.hongShiQi+=num;
+			if(log!=false){
+				if(num>0){
+					game.log('<span style="color:red;">红方</span>士气增加',num);
+				}else if(num<0){
+					num=-num;
+					game.log('<span style="color:red;">红方</span>士气减少',num);
+				}
+			}
+			
+		}else if(side==false){
+			game.lanShiQi+=num;
+			if(log!=false){
+				if(num>0){
+					game.log('<span style="color:lightblue;">蓝方</span>士气增加',num);
+				}else if(num<0){
+					num=-num;
+					game.log('<span style="color:lightblue;">蓝方</span>士气减少',num);
+				}
+			}
+		}
+
+		ui.updateShiQiInfo();
+		game.broadcast(function(hongShiQi,lanShiQi){
+			game.hongShiQi=hongShiQi;
+			game.lanShiQi=lanShiQi;
+			ui.updateShiQiInfo();
+		},game.hongShiQi,game.lanShiQi);
+		game.addVideo('changeShiQi',null,[numx,side]);
+	}
+	/**
+	 * 更改战绩星石
+	 * @param {string} xingShi 星石类别
+	 * @param {number} num 数量
+	 * @param {bool} side 阵营
+	 * @param {bool} log 是否输出日志
+	 */
+	changeZhanJi(xingShi,num,side,log){
+		var numx=num;
+		var name=get.translation(xingShi);
+		if(num>0){
+			if(side==true){
+				for(let i=0;i<num;i++){
+					game.hongZhanJi.push(xingShi);
+					if(log!=false){
+						game.log('<span style="color:red;">红方</span>战绩区增加',name);
+					}
+				}
+			}else if(side==false){
+				for(let i=0;i<num;i++){
+					game.lanZhanJi.push(xingShi);
+					if(log!=false){
+						game.log('<span style="color:lightblue;">蓝方</span>战绩区增加',name);
+					}
+				}
+			}
+		}else if(num<0){
+			num=-num;
+			if(side==true){
+				for(let i=0;i<num;i++){
+					let index = game.hongZhanJi.indexOf(xingShi);  
+					if (index !== -1) {  
+						game.hongZhanJi.splice(index, 1);
+						if(log!=false){
+							game.log('<span style="color:red;">红方</span>战绩区移除',name);
+						}
+					}
+				}
+			}else if(side==false){
+				for(let i=0;i<num;i++){
+					let index = game.lanZhanJi.indexOf(xingShi);  
+					if (index !== -1) {  
+						game.lanZhanJi.splice(index, 1);
+						if(log!=false){
+							game.log('<span style="color:lightblue;">蓝方</span>战绩区移除',name);
+						}
+					}
+				}
+			}
+		}
+		game.hongZhanJi.sort();
+		game.lanZhanJi.sort();
+
+		ui.updateShiQiInfo();
+		game.broadcast(function(hongZhanJi,lanZhanJi){
+			game.hongZhanJi=hongZhanJi;
+			game.lanZhanJi=lanZhanJi;
+			ui.updateShiQiInfo();
+		},game.hongZhanJi,game.lanZhanJi);
+		game.addVideo('changeZhanJi',null,[numx,xingShi,side]);
+	}
+	/**
+	 * 更改星杯数量
+	 * @param {number} num 
+	 * @param {bool} side 
+	 * @param {bool} log 
+	 */
+	changeXingBei(num,side,log){
+		var numx=num;
+		if(side==true){
+			game.hongXingBei+=num;
+			if(log!=false){
+				if(num>0){
+					game.log('<span style="color:red;">红方</span>星杯数量增加',num);
+				}else{
+					num=-num;
+					game.log('<span style="color:red;">红方</span>星杯数量减少',num);
+				}
+			}
+			
+		}else if(side==false){
+			game.lanXingBei+=num;
+			if(log!=false){
+				if(num>0){
+					game.log('<span style="color:lightblue;">蓝方</span>星杯数量增加',num);
+				}else{
+					num=-num;
+					game.log('<span style="color:lightblue;">蓝方</span>星杯数量减少',num);
+				}
+			}
+		}
+
+		ui.updateShiQiInfo();
+		game.broadcast(function(hongXingBei,lanXingBei){
+			game.hongXingBei=hongXingBei;
+			game.lanXingBei=lanXingBei;
+			ui.updateShiQiInfo();
+		},game.hongXingBei,game.lanXingBei);
+		game.addVideo('changeXingBei',null,[numx,side]);
+	}
+	/**
+	 * 魔弹重置数据
+	 */
+	resetMoDan(){
+		//结算后重置数据
+		game.moDan=2;
+		game.broadcastAll(function(){
+			game.moDanFangXiang='you';
+		});
 	}
 }
 

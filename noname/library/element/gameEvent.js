@@ -803,10 +803,10 @@ export class GameEvent {
 			_status.gameStarted = true;
 			game.showHistory();
 		}
-		if (!lib.hookmap[name] && !lib.config.compatiblemode) return;
-		if (!game.players || !game.players.length) return;
 		const event = this;
 		if (event.filterStop && event.filterStop()) return;
+		if (!lib.hookmap[name] && !lib.config.compatiblemode) return;
+		if (!game.players || !game.players.length) return;
 		let start = [_status.currentPhase, event.source, event.player, game.me, game.players[0]].find(i => get.itemtype(i) == "player");
 		if (!start) return;
 		if (!game.players.includes(start) && !game.dead.includes(start)) start = game.findNext(start);
@@ -1307,6 +1307,65 @@ export class GameEvent {
 		let result = true;
 		while (result) {
 			result = await input();
+		}
+	}
+	//xingBei
+	weiMingZhong(){
+		this.target=undefined;
+	}
+	/**
+	 * @param {num} num 伤害改变量 
+	 */
+	changeDamageNum(num){
+		if(typeof num != 'number' || !num) num = 1;
+		if(this.name=='zhiLiao'){
+			this.getParent().num+=num;
+			return;
+		}
+		if(typeof this.damageNum == 'number' || typeof this.num == 'number'){
+			if(typeof this.damageNum == 'number') this.damageNum += num;
+			if(typeof this.num == 'number') this.num += num;
+			if(this.damageNum < 0) this.damageNum = 0;
+			if(this.num < 0) this.num = 0
+		}else if(typeof this.getParent().damageNum=='number'){
+			this.getParent().damageNum += num;
+			if(this.getParent().damageNum < 0) this.getParent().damageNum = 0;
+		}
+	}
+	/** 
+	 * 设置攻击效果 主要在攻击设置/攻击前时机调用
+	*/
+	qiangZhiMingZhong(){
+		if(this.canYingZhan!=undefined){
+			this.canYingZhan=false;
+			this.canShengGuang=false;
+			this.canShengDun=false;
+		}else{
+			this.getParent().canYingZhan=false;
+			this.getParent().canShengGuang=false;
+			this.getParent().canShengDun=false;1
+		}
+		
+	}
+	wuFaYingZhan(){
+		if(this.canYingZhan!=undefined){
+			this.canYingZhan=false;
+		}else{
+			this.getParent().canYingZhan=false;
+		}
+	}
+	wuFaShengGuang(){
+		if(this.canShengGuang!=undefined){
+			this.canShengGuang=false;
+		}else{
+			this.getParent().canShengGuang=false;
+		}
+	}
+	wuFaShengDun(){
+		if(this.canShengDun!=undefined){
+			this.canShengDun=false;
+		}else{
+			this.getParent().canShengDun=false;
 		}
 	}
 }

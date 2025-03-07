@@ -2079,7 +2079,6 @@ export class Player extends HTMLDivElement {
 	 * @param { 'main' | 'vice' | boolean } checkShow
 	 */
 	trySkillAnimate(name, popname, checkShow) {
-		game.callHook("checkSkillAnimate", [this, name, popname]);
 		if (!game.online && lib.config.skill_animation_type != "off" && lib.skill[name] && lib.skill[name].skillAnimation) {
 			if (lib.config.skill_animation_type == "default") {
 				checkShow = checkShow || "main";
@@ -2103,8 +2102,14 @@ export class Player extends HTMLDivElement {
 		);
 		if (lib.animate.skill[name]) lib.animate.skill[name].apply(this, arguments);
 		else {
-			if (popname != name) this.popup(popname, "water", false);
-			else this.popup(get.skillTranslation(name, this), "water", false);
+			var skillName=get.skillTranslation(name,this);
+			var reg=new RegExp(/[\[\(\)].{1,5}[\]\)]/g,'g');
+			if(skillName.replace){
+				skillName=skillName.replace(reg,'');
+			}
+			if(popname!=name) this.popup(popname,'water',false);
+			else this.popup(skillName,'water',false);
+
 		}
 	}
 	/**
@@ -3631,7 +3636,7 @@ export class Player extends HTMLDivElement {
 			var info = get.info(i);
 			if (info && info.intro && (info.intro.name || info.intro.name2)) str = info.intro.name2 || info.intro.name;
 			else str = lib.translate[i];
-			if (str) game.log(this, "移去了", get.cnNumber(num), "个", "#g【" + str + "】");
+			if (str) game.log(this, "移去了", num, "个", "#g【" + str + "】");
 		}
 		this.syncStorage(i);
 		this[this.storage[i] || (lib.skill[i] && lib.skill[i].mark) ? "markSkill" : "unmarkSkill"](i);
@@ -3651,7 +3656,7 @@ export class Player extends HTMLDivElement {
 			var info = get.info(i);
 			if (info && info.intro && (info.intro.name || info.intro.name2)) str = info.intro.name2 || info.intro.name;
 			else str = lib.translate[i];
-			if (str) game.log(this, "获得了", get.cnNumber(num), "个", "#g【" + str + "】");
+			if (str) game.log(this, "获得了", num, "个", "#g【" + str + "】");
 		}
 		this.syncStorage(i);
 		this.markSkill(i);
@@ -4821,6 +4826,8 @@ export class Player extends HTMLDivElement {
 				next.filterCard = get.filter(arguments[i]);
 			} else if (typeof arguments[i] == "string") {
 				if (arguments[i] == "chooseonly") next.chooseonly = true;
+				else if(arguments[i] == "showCards") next.showCards = true;
+				else if(arguments[i] == "showHiddenCards") next.showHiddenCards = true;
 				else get.evtprompt(next, arguments[i]);
 			}
 			if (arguments[i] === null) {
@@ -6547,7 +6554,6 @@ export class Player extends HTMLDivElement {
 	 */
 	damage() {
 		const next = game.createEvent("damage");
-		//next.forceDie=true;
 		next.player = this;
 		let noCard, noSource;
 		const event = _status.event;
@@ -6563,12 +6569,7 @@ export class Player extends HTMLDivElement {
 				next._triggered = null;
 				next.notrigger = true;
 			} else if (argument == "unreal") next.unreal = true;
-			else if (argument == "nohujia") next.nohujia = true;
-			else if (get.itemtype(argument) == "nature" && argument != "stab") next.nature = argument;
-			else if (get.itemtype(argument) == "natures") {
-				const natures = argument.split(lib.natureSeparator).remove("stab");
-				if (natures.length) next.nature = natures.join(lib.natureSeparator);
-			}
+			else if (argument == "noZhiLiao") next.canZhiLiao = true;
 		}
 		if (!next.card && !noCard) next.card = event.card;
 		if (!next.cards && !noCard) next.cards = event.cards;
@@ -6579,16 +6580,6 @@ export class Player extends HTMLDivElement {
 		if (typeof next.num != "number") next.num = (event.baseDamage || 1) + (event.extraDamage || 0);
 		next.original_num = next.num;
 		next.change_history = [];
-		/*
-		next.hasNature = function (nature) {
-			if (!nature) return Boolean(this.nature && this.nature.length > 0);
-			let natures = get.natureList(nature),
-				naturesx = get.natureList(this.nature);
-			if (nature == "linked") return naturesx.some(n => lib.linked.includes(n));
-			return get.is.sameNature(natures, naturesx);
-		};
-		if (next.hasNature("poison")) delete next._triggered;
-		*/
 		if (next.unreal) next._triggered = 2;
 		next.setContent("damage");
 		next.filterStop = function () {
@@ -6604,6 +6595,16 @@ export class Player extends HTMLDivElement {
 				return true;
 			}
 		};
+		return next;
+	}
+	faShuDamage(...args){//法术伤害
+		var next=this.damage(...args);
+		next.set('faShu',true);
+		return next;
+	}
+	damageFaShu(...args){//法术伤害
+		var next=this.damage(...args);
+		next.set('faShu',true);
 		return next;
 	}
 	/**
@@ -7400,14 +7401,7 @@ export class Player extends HTMLDivElement {
 		if (lib.translate[name]) {
 			this.trySkillAnimate(name, popname, checkShow);
 			if (Array.isArray(targets) && targets.length) {
-				var str;
-				if (targets[0] == this) {
-					str = "#b自己";
-					if (targets.length > 1) {
-						str += "、";
-						str += get.translation(targets.slice(1));
-					}
-				} else str = targets;
+				var str =targets;
 				game.log(this, "对", str, "发动了", "【" + get.skillTranslation(name, this) + "】");
 			} else {
 				game.log(this, "发动了", "【" + get.skillTranslation(name, this) + "】");
@@ -10473,6 +10467,871 @@ export class Player extends HTMLDivElement {
 		}
 		return null;
 	}
+
+	//xingbei
+	isHengZhi(){
+		return this.isLinked();
+	}
+	wuFaXingDong(){
+		var next=game.createEvent('wuFaXingDong',false);
+		next.player = this;
+		next.setContent(lib.skill._wuFaXingDong.contentx);
+	}
+	moDan(use){
+		var next=game.createEvent('moDan',false);
+		next.player = this;
+		if (arguments.length == 1 && get.objtype(arguments[0]) == "object") {
+			for (var i in use) {
+				next[i] = use[i];
+			}
+		} else {
+			for (var i = 0; i < arguments.length; i++) {
+				if (typeof arguments[i] == "number" || get.itemtype(arguments[i]) == "select") {
+					next.selectTarget = arguments[i];
+				} else if ((typeof arguments[i] == "object" && arguments[i]) || typeof arguments[i] == "function") {
+					if (get.itemtype(arguments[i]) == "player" || next.filterCard) {
+						next.filterTarget = arguments[i];
+					} else next.filterCard = arguments[i];
+				} else if (typeof arguments[i] == "boolean") {
+					next.forced = arguments[i];
+				} else if (typeof arguments[i] == "string") {
+					next.prompt = arguments[i];
+				}
+			}
+		}
+		if (typeof next.filterCard == "object") {
+			next.filterCard = get.filter(next.filterCard);
+		}
+		if (typeof next.filterTarget == "object") {
+			next.filterTarget = get.filter(next.filterTarget, 2);
+		}
+		if (next.filterCard == undefined) {
+			next.filterCard = lib.filter.filterCard;
+		}
+		if (next.selectCard == undefined) {
+			next.selectCard = [1, 1];
+		}
+		if (next.filterTarget == undefined) {
+			next.filterTarget = lib.filter.filterTarget;
+		}
+		if (next.selectTarget == undefined) {
+			next.selectTarget = lib.filter.selectTarget;
+		}
+		if (next.position == undefined) {
+			next.position = "hs";
+		}
+		if (next.ai1 == undefined) next.ai1 = get.cacheOrder;
+		if (next.ai2 == undefined) next.ai2 = get.cacheEffectUse;
+		next.setContent("chooseToUse");
+		next._args = Array.from(arguments);
+		return next;
+	}
+
+	yingZhan(use){
+		var next=game.createEvent('yingZhan',false);
+		next.player = this;
+		if (arguments.length == 1 && get.objtype(arguments[0]) == "object") {
+			for (var i in use) {
+				next[i] = use[i];
+			}
+		} else {
+			for (var i = 0; i < arguments.length; i++) {
+				if (typeof arguments[i] == "number" || get.itemtype(arguments[i]) == "select") {
+					next.selectTarget = arguments[i];
+				} else if ((typeof arguments[i] == "object" && arguments[i]) || typeof arguments[i] == "function") {
+					if (get.itemtype(arguments[i]) == "player" || next.filterCard) {
+						next.filterTarget = arguments[i];
+					} else next.filterCard = arguments[i];
+				} else if (typeof arguments[i] == "boolean") {
+					next.forced = arguments[i];
+				} else if (typeof arguments[i] == "string") {
+					next.prompt = arguments[i];
+				}
+			}
+		}
+		if (typeof next.filterCard == "object") {
+			next.filterCard = get.filter(next.filterCard);
+		}
+		if (typeof next.filterTarget == "object") {
+			next.filterTarget = get.filter(next.filterTarget, 2);
+		}
+		if (next.filterCard == undefined) {
+			next.filterCard = lib.filter.filterCard;
+		}
+		if (next.selectCard == undefined) {
+			next.selectCard = [1, 1];
+		}
+		if (next.filterTarget == undefined) {
+			next.filterTarget = lib.filter.filterTarget;
+		}
+		if (next.selectTarget == undefined) {
+			next.selectTarget = lib.filter.selectTarget;
+		}
+		if (next.position == undefined) {
+			next.position = "hs";
+		}
+		if (next.ai1 == undefined) next.ai1 = get.cacheOrder;
+		if (next.ai2 == undefined) next.ai2 = get.cacheEffectUse;
+		next.setContent("chooseToUse");
+		next._args = Array.from(arguments);
+		return next;
+	}
+	gongJiOrFaShu(use){
+		var next=game.createEvent('gongJiOrFaShu',false);
+		next.player = this;
+		if (arguments.length == 1 && get.objtype(arguments[0]) == "object") {
+			for (var i in use) {
+				next[i] = use[i];
+			}
+		} else {
+			for (var i = 0; i < arguments.length; i++) {
+				if (typeof arguments[i] == "number" || get.itemtype(arguments[i]) == "select") {
+					next.selectTarget = arguments[i];
+				} else if ((typeof arguments[i] == "object" && arguments[i]) || typeof arguments[i] == "function") {
+					if (get.itemtype(arguments[i]) == "player" || next.filterCard) {
+						next.filterTarget = arguments[i];
+					} else next.filterCard = arguments[i];
+				} else if (typeof arguments[i] == "boolean") {
+					next.forced = arguments[i];
+				} else if (typeof arguments[i] == "string") {
+					next.prompt = arguments[i];
+				}
+			}
+		}
+		if (typeof next.filterCard == "object") {
+			next.filterCard = get.filter(next.filterCard);
+		}
+		if (typeof next.filterTarget == "object") {
+			next.filterTarget = get.filter(next.filterTarget, 2);
+		}
+		if (next.filterCard == undefined) {
+			next.filterCard = lib.filter.filterCard;
+		}
+		if (next.selectCard == undefined) {
+			next.selectCard = [1, 1];
+		}
+		if (next.filterTarget == undefined) {
+			next.filterTarget = lib.filter.filterTarget;
+		}
+		if (next.selectTarget == undefined) {
+			next.selectTarget = lib.filter.selectTarget;
+		}
+		if (next.position == undefined) {
+			next.position = "hs";
+		}
+		if (next.ai1 == undefined) next.ai1 = get.cacheOrder;
+		if (next.ai2 == undefined) next.ai2 = get.cacheEffectUse;
+		next.setContent("chooseToUse");
+		next._args = Array.from(arguments);
+		return next;
+	}
+	gongJi(use){
+		var next=game.createEvent('gongJi',false);
+		next.player = this;
+		if (arguments.length == 1 && get.objtype(arguments[0]) == "object") {
+			for (var i in use) {
+				next[i] = use[i];
+			}
+		} else {
+			for (var i = 0; i < arguments.length; i++) {
+				if (typeof arguments[i] == "number" || get.itemtype(arguments[i]) == "select") {
+					next.selectTarget = arguments[i];
+				} else if ((typeof arguments[i] == "object" && arguments[i]) || typeof arguments[i] == "function") {
+					if (get.itemtype(arguments[i]) == "player" || next.filterCard) {
+						next.filterTarget = arguments[i];
+					} else next.filterCard = arguments[i];
+				} else if (typeof arguments[i] == "boolean") {
+					next.forced = arguments[i];
+				} else if (typeof arguments[i] == "string") {
+					next.prompt = arguments[i];
+				}
+			}
+		}
+		if (typeof next.filterCard == "object") {
+			next.filterCard = get.filter(next.filterCard);
+		}
+		if (typeof next.filterTarget == "object") {
+			next.filterTarget = get.filter(next.filterTarget, 2);
+		}
+		if (next.filterCard == undefined) {
+			next.filterCard = lib.filter.filterCard;
+		}
+		if (next.selectCard == undefined) {
+			next.selectCard = [1, 1];
+		}
+		if (next.filterTarget == undefined) {
+			next.filterTarget = lib.filter.filterTarget;
+		}
+		if (next.selectTarget == undefined) {
+			next.selectTarget = lib.filter.selectTarget;
+		}
+		if (next.position == undefined) {
+			next.position = "hs";
+		}
+		if (next.ai1 == undefined) next.ai1 = get.cacheOrder;
+		if (next.ai2 == undefined) next.ai2 = get.cacheEffectUse;
+		next.setContent("chooseToUse");
+		next._args = Array.from(arguments);
+		return next;
+	}
+	faShu(use){
+		var next=game.createEvent('faShu',false);
+		next.player = this;
+		if (arguments.length == 1 && get.objtype(arguments[0]) == "object") {
+			for (var i in use) {
+				next[i] = use[i];
+			}
+		} else {
+			for (var i = 0; i < arguments.length; i++) {
+				if (typeof arguments[i] == "number" || get.itemtype(arguments[i]) == "select") {
+					next.selectTarget = arguments[i];
+				} else if ((typeof arguments[i] == "object" && arguments[i]) || typeof arguments[i] == "function") {
+					if (get.itemtype(arguments[i]) == "player" || next.filterCard) {
+						next.filterTarget = arguments[i];
+					} else next.filterCard = arguments[i];
+				} else if (typeof arguments[i] == "boolean") {
+					next.forced = arguments[i];
+				} else if (typeof arguments[i] == "string") {
+					next.prompt = arguments[i];
+				}
+			}
+		}
+		if (typeof next.filterCard == "object") {
+			next.filterCard = get.filter(next.filterCard);
+		}
+		if (typeof next.filterTarget == "object") {
+			next.filterTarget = get.filter(next.filterTarget, 2);
+		}
+		if (next.filterCard == undefined) {
+			next.filterCard = lib.filter.filterCard;
+		}
+		if (next.selectCard == undefined) {
+			next.selectCard = [1, 1];
+		}
+		if (next.filterTarget == undefined) {
+			next.filterTarget = lib.filter.filterTarget;
+		}
+		if (next.selectTarget == undefined) {
+			next.selectTarget = lib.filter.selectTarget;
+		}
+		if (next.position == undefined) {
+			next.position = "hs";
+		}
+		if (next.ai1 == undefined) next.ai1 = get.cacheOrder;
+		if (next.ai2 == undefined) next.ai2 = get.cacheEffectUse;
+		next.setContent("chooseToUse");
+		next._args = Array.from(arguments);
+		return next;
+	}
+	qiTa(use){
+		var next=game.createEvent('qiTa');
+		next.player = this;
+		if (arguments.length == 1 && get.objtype(arguments[0]) == "object") {
+			for (var i in use) {
+				next[i] = use[i];
+			}
+		} else {
+			for (var i = 0; i < arguments.length; i++) {
+				if (typeof arguments[i] == "number" || get.itemtype(arguments[i]) == "select") {
+					next.selectTarget = arguments[i];
+				} else if ((typeof arguments[i] == "object" && arguments[i]) || typeof arguments[i] == "function") {
+					if (get.itemtype(arguments[i]) == "player" || next.filterCard) {
+						next.filterTarget = arguments[i];
+					} else next.filterCard = arguments[i];
+				} else if (typeof arguments[i] == "boolean") {
+					next.forced = arguments[i];
+				} else if (typeof arguments[i] == "string") {
+					next.prompt = arguments[i];
+				}
+			}
+		}
+		if (typeof next.filterCard == "object") {
+			next.filterCard = get.filter(next.filterCard);
+		}
+		if (typeof next.filterTarget == "object") {
+			next.filterTarget = get.filter(next.filterTarget, 2);
+		}
+		if (next.filterCard == undefined) {
+			next.filterCard = lib.filter.filterCard;
+		}
+		if (next.selectCard == undefined) {
+			next.selectCard = [1, 1];
+		}
+		if (next.filterTarget == undefined) {
+			next.filterTarget = lib.filter.filterTarget;
+		}
+		if (next.selectTarget == undefined) {
+			next.selectTarget = lib.filter.selectTarget;
+		}
+		if (next.position == undefined) {
+			next.position = "hs";
+		}
+		if (next.ai1 == undefined) next.ai1 = get.cacheOrder;
+		if (next.ai2 == undefined) next.ai2 = get.cacheEffectUse;
+		next.setContent("chooseToUse");
+		next._args = Array.from(arguments);
+		return next;
+	}
+
+	changeShiQi(num,side){//xingbei
+		var next=game.createEvent('changeShiQi',false);
+		next.player=this;
+		if(side==undefined){
+			next.side=this.side;
+		}else{
+			next.side=side;
+		}
+
+		var shiQi;
+		switch(next.side){
+			case true:
+				shiQi=game.hongShiQi;break;
+			case false:
+				shiQi=game.lanShiQi;break;
+		}
+		if(num>0&&(shiQi+num>game.shiQiMax)){
+			num=Math.max(0,game.shiQiMax-shiQi);
+		}
+		next.num=num;
+		next.setContent('changeShiQi');
+		next.filterStop=function(){
+			if (this.num == 0) {
+				delete this.filterStop;
+				this.finish();
+				this._triggered = null;
+				return true;
+			}
+		};
+		return next;
+	}
+	changeZhanJi(xingShi,num,side){//xingbei
+		var sidex;
+		if(side==undefined){
+			sidex=this.side;
+		}else{
+			sidex=side;
+		}
+		var zhanJi=get.zhanJi(sidex);
+		if(num>0&&(zhanJi.length+num>game.zhanJiMax)){
+			num=Math.max(0,game.zhanJiMax-zhanJi.length);
+		}
+		if(num<0){
+			var numx = -zhanJi.filter(function(item) {
+				return item === xingShi;
+			}).length;
+			num=Math.max(num,numx);
+		}
+		if(num!=0){
+			var next=game.createEvent('changeZhanJi');
+			if(typeof num!='number'||!num) num=1;
+			next.player=this;
+			next.xingShi=xingShi;
+			next.side=sidex;
+			next.num=num;
+			next.setContent('changeZhanJi');
+			return next;
+		}
+	}
+	changeXingBei(num,side){//xingbei
+		var next=game.createEvent('changeXingBei');
+		next.num=num;
+		next.player=this;
+		if(side==undefined){
+			next.side=this.side;
+		}else{
+			next.side=side;
+		}
+		next.setContent('changeXingBei');
+		return next;
+	}
+	showHiddenCards(cards,str){
+		var next=game.createEvent('showHiddenCards');
+		next.player=this;
+		next.str=str;
+		if(typeof cards=='string'){
+			str=cards;
+			cards=next.str;
+			next.str=str;
+		}
+		if(get.itemtype(cards)=='card') next.cards=[cards];
+		else if(get.itemtype(cards)=='cards') next.cards=cards.slice(0);
+		else _status.event.next.remove(next);
+		next.setContent('showCards');
+		next._args=Array.from(arguments);
+		return next;
+	}
+	getZhiLiaoLimit(){
+		var num=game.zhiLiaoMax;
+		num=game.checkMod(this,num,'maxZhiLiao',this);
+		return Math.max(0,num);
+	}
+	getNengLiangLimit(){
+		var num=game.nengLiangMax;
+		num=game.checkMod(this,num,'maxNengLiang',this);
+		return Math.max(0,num);
+	}
+	getHandcardLimit(){
+		var num=game.handcardLimit;
+		num=game.checkMod(this,num,'maxHandcardBase',this);
+		num=game.checkMod(this,num,'maxHandcard',this);
+		num=game.checkMod(this,num,'maxHandcardFinal',this);
+		num=game.checkMod(this,num,'maxHandcardWuShi',this);
+		return Math.max(0,num);
+	}
+
+	canBiShaShuiJing(){//能够使用必杀星石
+		return this.hasNengLiang('shuiJing')||this.hasNengLiang('baoShi');
+	}
+	canBiShaBaoShi(){//能否使用必杀宝石
+		return this.hasNengLiang('baoShi');
+	}
+	removeBiShaShuiJing(){//移除星石
+		if(this.hasNengLiang('shuiJing')&&this.hasNengLiang('baoShi')){
+			var next=game.createEvent('removeBiShaShuiJing',false);
+			next.player=this;
+			next.setContent('removeBiShaShuiJing');
+			return next;
+		}else{
+			if(this.hasNengLiang('shuiJing')){
+				this.removeNengLiang('shuiJing');
+			}else if(this.hasNengLiang('baoShi')){
+				this.removeNengLiang('baoShi');
+			}
+		}
+	}
+	removeBiShaBaoShi(){//移除宝石
+		this.removeNengLiang('baoShi');
+	}
+	changeNengLiang(xingShi,num){//改变能量
+		if(xingShi==undefined) return;
+		if(typeof num!='number'||!num) num=1;
+		if(num>0){
+			var max=this.getNengLiangLimit();
+			var current=this.countNengLiangAll();
+			if(current+num>max){
+				num=Math.max(0,max-current);
+			}
+		}else if(num<0){
+			var current=this.countNengLiang(xingShi);
+			if(current+num<0){
+				num=-current;
+			}
+		}
+		if(num!=0){
+			var next=game.createEvent('changeNengLiang');
+			next.player=this;
+			next.xingShi=xingShi;
+			next.num=num;
+			next.setContent('changeNengLiang');
+			return next;
+		}
+	}
+	addNengLiang(xingShi,num){//添加能量
+		if(typeof num!='number'||!num) num=1;
+		this.changeNengLiang(xingShi,num);
+	}
+	removeNengLiang(xingShi,num){//移除能量
+		if(typeof num!='number'||!num) num=-1;
+		if(num>0) num=-num;
+		this.changeNengLiang(xingShi,num);
+	}
+	countNengLiang(xingShi){//统计某个能量数
+		if(xingShi==undefined) return 0;
+		return this.countMark('_tiLian_'+xingShi);
+	}
+	hasNengLiang(xingShi){//是否拥有某个能量
+		if(xingShi==undefined) return this.countNengLiangAll()>0;
+		else return this.countNengLiang(xingShi)>0;
+	}
+	countNengLiangAll(){//统计所有能量数
+		return this.countMark('_tiLian_baoShi')+this.countMark('_tiLian_shuiJing');
+	}
+	
+
+	/**
+	 * 
+	 * @param {*} zhiShiWu 指示物名
+	 * @param {*} num 数量
+	 * @param {*} max 临时最大值
+	 * @param {*} forced 是否强制
+	 * @returns 
+	*/
+	changeZhiShiWu () {
+		var num_flag=0;
+		for(var i=0;i<arguments.length;i++){
+			if(typeof arguments[i]=='number'){
+				if(num_flag==0){
+					var num=arguments[i];
+					var num_flag=1;
+				}else if(num_flag==1){
+					var max=arguments[i];
+				}
+			}
+			else if(typeof arguments[i]=='string'){
+				var zhiShiWu=arguments[i];
+			}
+			else if(typeof arguments[i]=='boolean'){
+				var forced=arguments[i];
+			}
+		}
+		if(!this.hasSkill(zhiShiWu)&&!forced) return;
+		if(typeof num!='number'||!num) num=1;
+		var info=get.info(zhiShiWu);
+		if(num>0){
+			if(typeof max=='number'){
+				var max=max;
+			}else if(info&&info.intro&&info.intro.max){
+				var max=info.intro.max;
+			}else{
+				var max=Infinity;
+			}
+			var current=this.countMark(zhiShiWu);
+			if(current+num>max){
+				num=Math.max(0,max-current);
+			}
+		}else if(num<0){
+			var current=this.countMark(zhiShiWu);
+			if(current+num<0){
+				num=-current;
+			}
+		}
+		if(num!=0){
+			var next=game.createEvent('changeZhiShiWu');
+			next.player=this;
+			next.zhiShiWu=zhiShiWu;
+			next.num=num;
+			next.setContent('changeZhiShiWu');
+			return next;
+		}
+	}
+	addZhiShiWu(...args){//添加指示物
+		this.changeZhiShiWu(...args);
+	}
+	countZhiShiWu(zhiShiWu){//统计指示物
+		return this.countMark(zhiShiWu);
+	}
+	removeZhiShiWu(){//移除指示物
+		for(var i=0;i<arguments.length;i++){
+			if(typeof arguments[i]=='number'){
+				var num=arguments[i];
+			}else if(typeof arguments[i]=='string'){
+				var zhiShiWu=arguments[i];
+			}
+		}
+		if(!num) num=-1;
+		if(num>0) num=-num;
+		this.changeZhiShiWu(zhiShiWu,num,true);
+	}
+	//指示物是否到达上限
+	isZhiShiWuMax(zhiShiWu){
+		if(!zhiShiWu) return false;
+		var info=get.info(zhiShiWu);
+		if(info&&info.intro&&info.intro.max){
+			return this.countMark(zhiShiWu)>=info.intro.max;
+		}
+		return false;
+	}
+
+	setZhiShiWu(zhiShiWu, num) {
+		const count = this.countMark(zhiShiWu);
+		if (count > num) this.removeZhiShiWu(zhiShiWu, count - num);
+		else if (count < num) this.addZhiShiWu(zhiShiWu, num - count);
+	}
+	hasZhiShiWu(zhiShiWu){//是否拥有指示物
+		return this.hasMark(zhiShiWu);
+	}
+
+	addZhanJi(xingShi,num){//增加战绩
+		if(typeof num!='number'||!num) num=1;
+		this.changeZhanJi(xingShi,num);
+	}
+	removeZhanJi(xingShi,num){//移除战绩
+		if(typeof num!='number'||!num) num=-1;
+		if(num>0) num=-num;
+		this.changeZhanJi(xingShi,num);
+	}
+	chongZhi(){//重置
+		if(this.isLinked()){
+			var next=game.createEvent('chongZhi');
+			next.player=this;
+			next.setContent('link');
+			return next;
+		}
+	}
+	hengZhi(){//横置
+		if(!this.isLinked()){
+			var next=game.createEvent('hengZhi');
+			next.player=this;
+			next.setContent('link');
+			return next;
+		}
+	}
+	qiPai(){//执行一次超出手牌上限的弃牌
+		var num=this.needsToDiscard();
+		if(num>0){
+			this.chooseToDiscard(num,true).set('useCache',true).set('baoPai',true);
+		}
+	}
+	countTongXiPai(type){//统计同系牌数
+		var h=this.getCards('h');
+		var dict={};
+		for(var i=0;i<h.length;i++){
+			if(type&&get.type(h[i])!=type) continue;
+			var xiBie=get.xiBie(h[i]);
+			if(!dict[xiBie]) dict[xiBie]=0;
+			dict[xiBie]++;
+		}
+		let maxValue=-Infinity;  
+		for(let key in dict) {  
+			if (dict[key] > maxValue) {  
+				maxValue = dict[key];  
+			}     
+		}
+		return maxValue;  
+	}
+	countYiXiPai(){//统计异系牌数
+		var h=this.getCards('h');
+		var dict={};
+		for(var i=0;i<h.length;i++){
+			var xiBie=get.xiBie(h[i]);
+			if(!dict[xiBie]) dict[xiBie]=0;
+			dict[xiBie]++;
+		}
+		return Object.keys(dict).length;
+	}
+	countTongMingPai(){//统计同命格牌数
+		var h=this.getCards('h');
+		var dict={};
+		for(var i=0;i<h.length;i++){
+			var mingGe=get.mingGe(h[i]);
+			if(!dict[mingGe]) dict[mingGe]=0;
+			dict[mingGe]++;
+		}
+		let maxValue=-Infinity;  
+		for(let key in dict) {  
+			if (dict[key] > maxValue) {  
+				maxValue = dict[key];  
+			}     
+		}
+		return maxValue;  
+	}
+	countYiMingPai(){//统计异命格牌数
+		var h=this.getCards('h');
+		var dict={};
+		for(var i=0;i<h.length;i++){
+			var mingGe=get.mingGe(h[i]);
+			if(!dict[mingGe]) dict[mingGe]=0;
+			dict[mingGe]++;
+		}
+		return Object.keys(dict).length;
+	}
+	usedSkill(skill){//是否使用过技能
+		if(!skill) return false;
+		return this.countSkill(skill)>0;
+	}
+
+	changeHong(num,max){//改变红点
+		if(typeof num!='number'||!num) num=1;
+		var skills=this.getSkills();
+		for(var i=0;i<skills.length;i++){
+			var skill=skills[i];
+			var info=get.info(skill);
+			if(info.intro&&info.markimage=='image/card/zhiShiWu/hong.png'){
+				this.changeZhiShiWu(skill,num,max);
+				break;
+			}
+		}
+	}
+	changeLan(num,max){//改变蓝点
+		if(typeof num!='number'||!num) num=1;
+		var skills=this.getSkills();
+		for(var i=0;i<skills.length;i++){
+			var skill=skills[i];
+			var info=get.info(skill);
+			if(info.intro&&info.markimage=='image/card/zhiShiWu/lan.png'){
+				this.changeZhiShiWu(skill,num,max);
+				break;
+			}
+		}
+	}
+	addHong(num,max){//添加红点
+		if(typeof num!='number'||!num) num=1;
+		this.changeHong(num,max);
+	}
+	removeHong(num){//移除红点
+		if(typeof num!='number'||!num) num=-1;
+		if(num>0) num=-num;
+		this.changeHong(num);
+	}
+	addLan(num,max){//添加蓝点
+		if(typeof num!='number'||!num) num=1;
+		this.changeLan(num,max);
+	}
+	removeLan(num){//移除蓝点
+		if(typeof num!='number'||!num) num=-1;
+		if(num>0) num=-num;
+		this.changeLan(num);
+	}
+	/**
+	 * 
+	 * @param {*} num 治疗改变量
+	 * @param {*} limit 临时最大值
+	 * @param {*} source 治疗来源
+	 * @returns 
+	 */
+	changeZhiLiao(){
+		var num,limit,source;
+		var numBool=true;
+		for (const argument of arguments) {
+			if (typeof argument == "number"){
+				if(numBool){
+					num=argument;
+					numBool=false;
+				}else{
+					limit=argument;
+				}
+			}
+			else if (get.itemtype(argument) == "player") source = argument;
+		}
+
+		var next=game.createEvent('changeZhiLiao');
+		if(typeof num!='number'){
+			num=1;
+		}
+		next.player=this;
+		next.setContent('changeZhiLiao');
+		if(typeof limit!='number'){
+			limit=this.getZhiLiaoLimit();
+		}
+		if(source!=undefined) next.source=source;
+		if(num>0&&this.zhiLiao+num>limit){
+			if(this.zhiLiao>=limit){
+				num=0;
+			}else{
+				num=limit-this.zhiLiao;
+			}
+			next.yiChu=true;
+		}else{
+			next.yiChu=false;
+		}
+		next.num=num;
+		return next;
+	}
+	addZhiLiao(num,limit){
+		this.changeZhiLiao(num,limit);
+	}
+	removeZhiLiao(num){
+		if(typeof num!='number') num=-1;
+		if(num>0) num=-num;
+		this.changeZhiLiao(num);
+	}
+
+	countEmptyCards(){
+		return this.getHandcardLimit()-this.countCards('h');
+	}
+	countEmptyNengLiang(){
+		return this.getNengLiangLimit()-this.countNengLiangAll();
+	}
+
+	/**
+	 * 
+	 * @param {*} num 选择可摸牌数 0~num
+	 * @param {*} bool 是否包含0~num中间的数字
+	 * @returns 
+	 */
+	chooseDraw(num,bool){
+		if(typeof num!='number' || !num) num=1;
+		var next=game.createEvent('chooseDraw');
+		next.player=this;
+		next.num=num;
+		next.bool=bool;
+		next.setContent('chooseDraw');
+		return next;
+	}
+	
+	addGongJiOrFaShu(num){
+		if(typeof num!='number') num=1;
+		this.storage.gongJiOrFaShu+=num;
+	}
+	addGongJi(num){
+		if(typeof num!='number') num=1;
+		this.storage.gongJi+=num;
+	}
+	addFaShu(num){
+		if(typeof num!='number') num=1;
+		this.storage.faShu+=num;
+	}
+
+	gainJiChuXiaoGuo(target){
+		var next=game.createEvent('gainJiChuXiaoGuo',false);
+		next.player=this;
+		next.target=target;
+		next.setContent('gainJiChuXiaoGuo');
+		return next;
+	}
+	removeJiChuXiaoGuo(target){
+		var next=game.createEvent('removeJiChuXiaoGuo',false);
+		next.player=this;
+		next.target=target;
+		next.setContent('removeJiChuXiaoGuo');
+		return next;
+	}
+	hasJiChuXiaoGuo(){
+		var skill=this.getSkills().concat(lib.skill.global);
+		for(var i=0;i<skill.length;i++){
+			let info=get.info(skill[i]);
+			if(info&&info.tag&&info.tag.jiChuXiaoGuo&&this.hasExpansions(skill[i])){
+				return true;
+			}
+		}
+		return false;
+	}
+	jiChuXiaoGuoList(){
+		var list=[];
+		var skill=this.getSkills().concat(lib.skill.global);
+		for(var i=0;i<skill.length;i++){
+			let info=get.info(skill[i]);
+			if(info&&info.tag&&info.tag.jiChuXiaoGuo&&this.hasExpansions(skill[i])){
+				list.push(skill[i]);
+			}
+		}
+		return list;
+	}
+
+	canFaShu(){
+		return this.canXingDong('faShu');
+	}
+	canGongJi(){
+		return this.canXingDong('gongJi');
+	}
+	canXingDong(type){
+		var player=this;
+		if(!type) return player.canXingDong('gongJi')||player.canXingDong('faShu')||player.canXingDong('teShu');
+		//获取所有技能
+		var skills = game.expandSkills(player.getSkills("invisible").concat(lib.skill.global));
+		//判断是否有可触发的技能
+		for(var i=0;i<skills.length;i++){
+			let info = get.info(skills[i]);
+			if(!info) continue;
+			if(info.type==type){
+				var enable=lib.skill[skills[i]].filter(event, player);
+			}else continue;
+			if(enable) return true;
+		}
+		//判断是否有可使用的卡牌
+		var cards=player.getCards('h').concat(player.getCards('e'));
+		for(var i=0;i<cards.length;i++){
+			let info = get.info(cards[i]);
+			if(!info) continue;
+			if(info.type==type){
+				if(player.hasUseTarget(cards[i])) var enable=true;
+			}else continue;
+			if(enable) return true;
+		}
+		return false;
+	}
+
+
 	$drawAuto(cards, target) {
 		if (this.isUnderControl(true, target)) {
 			this.$draw(cards);

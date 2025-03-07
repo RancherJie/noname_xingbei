@@ -1374,6 +1374,14 @@ export class Get extends GetCompatible {
 			inpile: lib.inpile,
 			inpile_nature: lib.inpile_nature,
 			renku: _status.renku,
+			//xingBei
+			hongZhanJi: game.hongZhanJi,
+			lanZhanJi: game.lanZhanJi,
+			hongShiQi: game.hongShiQi,
+			lanShiQi: game.lanShiQi,
+			hongXingBei: game.hongXingBei,
+			lanXingBei: game.lanXingBei,
+			moDanFangXiang: game.moDanFangXiang,
 		};
 		for (var i in lib.playerOL) {
 			state.players[i] = lib.playerOL[i].getState();
@@ -2894,17 +2902,7 @@ export class Get extends GetCompatible {
 			} else {
 				str2 = get.translation(str.name);
 			}
-			if (str2 == "杀") {
-				str2 = "";
-				if (typeof str.nature == "string") {
-					let natures = str.nature.split(lib.natureSeparator).sort(lib.sort.nature);
-					for (let nature of natures) {
-						str2 += lib.translate["nature_" + nature] || lib.translate[nature] || "";
-					}
-				}
-				str2 += "杀";
-			}
-			if (get.itemtype(str) == "card" || str.isCard) {
+			if (get.itemtype(str) == "card" || str.isCard || str.mingGe || str.xiBie) {
 				if (_status.cardtag && str.cardid) {
 					var tagstr = "";
 					for (var i in _status.cardtag) {
@@ -2916,17 +2914,15 @@ export class Get extends GetCompatible {
 						str2 += "·" + tagstr;
 					}
 				}
-				if ((str.suit && str.number) || str.isCard) {
-					var mingGe = get.translation(get.mingGe(str, false)) || "";
-					if (arg == "viewAs" && str.viewAs != str.name && str.viewAs) {
-						str2 += "（" + get.translation(str) + "）";
-					} else {
-						str2 += "【" + get.translation(get.xiBie(str, false)) + mingGe + "】";
-						// var len=str2.length-1;
-						// str2=str2.slice(0,len)+'<span style="letter-spacing: -2px">'+str2[len]+'·</span>'+get.translation(str.suit)+str.number;
-					}
+				var mingGe = get.translation(get.mingGe(str, false)) || "";
+				var xiBie = get.translation(get.xiBie(str, false)) || "";
+				if (arg == "viewAs" && str.viewAs != str.name && str.viewAs) {
+					str2 += "（" + get.translation(str)+ xiBie + mingGe + "）";
+				} else {
+					str2 += "【" + xiBie + mingGe + "】";
 				}
 			}
+
 			return str2;
 		}
 		if (Array.isArray(str)) {
@@ -2946,7 +2942,6 @@ export class Get extends GetCompatible {
 		}
 		if (arg == "skill") {
 			if (lib.translate[str + "_ab"]) return lib.translate[str + "_ab"];
-			//if (lib.translate[str]) return lib.translate[str].slice(0, 2);
 			if (lib.translate[str]) return lib.translate[str];
 			return str;
 		} else if (arg == "info") {
@@ -5492,29 +5487,24 @@ export class Get extends GetCompatible {
 		}
 		return final;
 	}
-	damageEffect(target, player, viewer, nature) {
-		/*
-		if (get.itemtype(nature) == "natures") {
-			var natures = get.duYouList(nature);
-			return natures.map(n => get.damageEffect(target, player, viewer, n)).reduce((p, c) => p + c, 0) / (natures.length || 1);
-		}*/
-		if (!player) {
-			player = target;
+	damageEffect(target,num){
+		if(!target) return 0;
+		if(!num) num=2;
+		if(target.hasSkillTag('noShiQiXiaJiang')) return 0;
+		var chaZhi=target.getHandcardLimit()-target.countCards('h');
+		if(target.hasSkillTag('one_damage')) return 0;
+		if(chaZhi<num) return -2;
+		else if(chaZhi-3<num) return -1;
+		else return -0.5;
+	}
+	damageEffect2(target,player,num){
+		if(!target) return 0;
+		if(!num) num=2;
+		if(target.side==player.side){
+			return -1;
+		}else{
+			return -get.damageEffect(target,num);
 		}
-		if (!viewer) {
-			viewer = target;
-		}
-		var name = "damage";
-		if (nature == "fire") {
-			name = "firedamage";
-		} else if (nature == "thunder") {
-			name = "thunderdamage";
-		} else if (nature == "ice") {
-			name = "icedamage";
-		}
-		var eff = get.effect(target, { name: name }, player, viewer);
-		if (eff > 0 && target.zhiLiao > 0) return eff / 1.3;
-		return eff;
 	}
 	/**
 	 *
@@ -5705,6 +5695,186 @@ export class Get extends GetCompatible {
 	blobFromUrl(url) {
 		let link = url instanceof URL ? url : new URL(url);
 		return link.protocol == "file:" ? game.promises.readFile(get.relativePath(link)).then(buffer => new Blob([buffer])) : fetch(link).then(response => response.blob());
+	}
+	//xingbei
+	characterGets(list,num){
+		var result=[];
+		if(!num){
+			return list;
+		}else{
+			result=list.randomRemove(num);
+		}
+		if(result.includes('hongLianQiShi')&&result.includes('shengDianQiShi')){
+			var num=Math.random();
+			if(num<0.5){
+				result=result.filter(item=>item!='hongLianQiShi');
+			}else{
+				result=result.filter(item=>item!='shengDianQiShi');
+			}
+			result.push(list.randomRemove());
+		}
+		if(result.includes('shengNv')&&result.includes('jinGuiZhiNv')){
+			var num=Math.random();
+			if(num<0.5){
+				result=result.filter(item=>item!='shengNv');
+			}else{
+				result=result.filter(item=>item!='jinGuiZhiNv');
+			}
+			result.push(list.randomRemove());
+		}
+		return result;
+	}
+	zhiLiaoEffect(target,num){
+		if(target.hasSkillTag('noZhiLiao')) return 0;
+		if(target.getZhiLiaoLimit()-target.zhiLiao<=0){
+			if(target.hasSkillTag('zhiLiaoYiChu')) return 0.2;
+			return 0.1;
+		}
+		if(!num){
+			num=1;
+		}
+		var chaZhi=target.getZhiLiaoLimit()-target.zhiLiao-num;
+		if(chaZhi>0){
+			return chaZhi;
+		}else{
+			
+			return target.getZhiLiaoLimit()-target.zhiLiao
+		}
+	}
+	zhiLiaoEffect2(target,player,num){
+		if(target.side!=player.side) return -1;
+		return get.zhiLiaoEffect(target,num);
+	}
+	countTongXiPai(cards){
+		var dict={};
+		for(var i=0;i<cards.length;i++){
+			var xiBie=get.xiBie(cards[i]);
+			if(!xiBie) continue;
+			if(!dict[xiBie]) dict[xiBie]=0;
+			dict[xiBie]++;
+		}
+		let maxValue=-Infinity;  
+		for(let key in dict) {  
+			if (dict[key] > maxValue) {  
+				maxValue = dict[key];  
+			}     
+		}
+		return maxValue;
+	}
+	countYiXiPai(cards){
+		var dict={};
+		for(var i=0;i<cards.length;i++){
+			var xiBie=get.xiBie(cards[i]);
+			if(!xiBie) continue;
+			if(!dict[xiBie]) dict[xiBie]=0;
+			dict[xiBie]++;
+		}
+		return Object.keys(dict).length;
+	}
+	jiChuXiaoGuoEffect(target){
+		if(target.hasExpansions('_shengDun')){
+			return -1;
+		}
+		if(target.hasExpansions('_zhongDu')&&!target.hasSkillTag('one_damage')){
+			return 1;
+		}
+		if(target.hasExpansions('_xuRuo')){
+			return 2;
+		}
+		//封印师
+		for(var xiaoGuo of game.jiChuXiaoGuo['fengYinShi']){
+			if(target.hasExpansions(xiaoGuo)){
+				return 1;
+			}
+		}
+		//赐福
+		for(var xiaoGuo of game.jiChuXiaoGuo['qiDaoShi']){
+			if(target.hasExpansions(xiaoGuo)){
+				return -1;
+			}
+		}
+		return 0;
+	}
+
+	shiQi(side){
+		if(side==true){
+			return game.hongShiQi;
+		}else if(side==false){
+			return game.lanShiQi;
+		}
+	}
+	zhanJi(side){
+		if(side==true){
+			return game.hongZhanJi;
+		}else if(side==false){
+			return game.lanZhanJi;
+		}
+	}
+	xingBei(side){
+		if(side==true){
+			return game.hongXingBei;
+		}else if(side==false){
+			return game.lanXingBei;
+		}
+	}
+	emptyZhanJi(side){
+		if(side==true){
+			return game.zhanJiMax-game.hongZhanJi.length;
+		}else if(side==false){
+			return game.zhanJiMax-game.lanZhanJi.length;
+		}
+	}
+	xuanZeTongXiPai(card){
+		if(ui.selected.cards.length==0) return true;
+		else{
+			var xiBie=get.xiBie(card);
+			if(!xiBie) return false;
+			if(get.xiBie(ui.selected.cards[0])==xiBie) return true;
+			else return false;
+		}
+	}
+	xuanZeYiXiPai(card){
+		if(ui.selected.cards.length==0) return true;
+		else{
+			var xiBie1=get.xiBie(card);
+			if(!xiBie1) return false;
+			for(var i=0;i<ui.selected.cards.length;i++){
+				var xiBie2=get.xiBie(ui.selected.cards[i]);
+				if(xiBie1==xiBie2) return false;
+			}
+			return true;
+		}
+	}
+	xuanZeTongMingPai(card){
+		if(ui.selected.cards.length==0) return true;
+		else{
+			var mingGe=get.mingGe(card);
+			if(!mingGe) return false;
+			if(get.mingGe(ui.selected.cards[0])==mingGe) return true;
+			else return false;
+		}
+	}
+	xuanZeYiMingPai(card){
+		if(ui.selected.cards.length==0) return true;
+		else{
+			var mingGe1=get.mingGe(card);
+			if(!mingGe1) return false;
+			for(var i=0;i<ui.selected.cards.length;i++){
+				var mingGe2=get.mingGe(ui.selected.cards[i]);
+				if(mingGe1==mingGe2) return false;
+			}
+			return true;
+		}
+	}
+	colorName(player){
+		if(player.side==true){
+			var c='red';
+		}else{
+			var c='lightblue'
+		}
+		var name=player.name;
+		var str=`<span style="color:${c};">${get.translation(name)}</span>`;
+		return str;
 	}
 }
 

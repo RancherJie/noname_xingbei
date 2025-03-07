@@ -131,7 +131,7 @@ window.config = {
 	cards: ["xingBei"],
 	characters: ['shiZhouNian'],
 	moderned_chracters: [],
-	connect_characters: ['yiDuanYeHuo','shenZiChuangLin'],
+	connect_characters: ['yiDuanYeHuo','shenZiChuangLin','sanBan','siBan'],
 	connect_cards: [],
 	plays: [],
 	extensions: [],

@@ -35,7 +35,7 @@ export class Library {
 	updateURLS = updateURLs;
 	updateURL = updateURLs.github;
 	mirrorURL = updateURLs.coding;
-	hallURL = "ssyy.tech:58080";
+	hallURL = "agserver.ssyy.tech:50000";
 	assetURL = assetURL;
 	userAgent = userAgentLowerCase;
 	characterDefaultPicturePath = characterDefaultPicturePath;
@@ -6691,7 +6691,7 @@ export class Library {
 				},
 				wss_mode: {
 					name: "使用WSS协议",
-					init: false,
+					init: true,
 					frequent: true,
 					intro: "在用户填写的IP地址没有直接指定使用WS/WSS协议的情况下，默认使用WSS协议，而非WS协议来连接到联机服务器。<br>请不要轻易勾选此项！",
 				},
@@ -9755,6 +9755,30 @@ export class Library {
 		'4xing':'4星',
 		'4.5xing':'4.5星',
 		'5xing':'5星',
+
+		trueColor:"zhu",
+		falseColor:"wei",
+
+		_wuFaXingDong:'无法行动',
+		_wuFaXingDong_qiDongQian:'无法行动-启动前',
+		_wuFaXingDong_qiDongHou:'无法行动-启动后',
+		
+		//公共技能
+		_xuRuo:"虚弱",
+		_zhongDu:"中毒",
+		_shengDun:"圣盾",
+		//_shengGuang:"圣光",
+		//_yingZhan:"应战",
+		//_moDan:"魔弹",
+		_heCheng:"合成",
+		_gouMai:"购买",
+		_tiLian:"提炼",
+		//_gongJiXingShi:"攻击星石",
+
+		_tiLian_backup:'提炼',
+		_heCheng_backup:'合成',
+		baoShi:'宝石',
+		shuiJing:'水晶',
 	};
 
 	experimental = Experimental;
@@ -12302,6 +12326,800 @@ export class Library {
 				lib.skill._recasting.ai = ai;
 			},
 		},*/
+		//xingBei
+		_qiDong:{
+			trigger:{player:'triggerEnd'},
+			direct:true,
+			filter:function(event,player){
+				if(event.skill=='_qiDong') return false;
+				return get.info(event.skill)&&get.info(event.skill).type=='qiDong';
+			},
+			content:function(){
+				trigger.getParent('phaseUse').canTeShu=false;
+				trigger.getParent('phaseUse').qiDongGuo=true;
+			},
+		},
+		_wuFaXingDong:{
+			filterx:function(event,player){
+				//console.log('--------------------------------');
+				//拥有挑衅直接false
+				//无可启动技跳过启动前后无法行动
+				if(event.name=='phaseUse'){
+					if(event.canQiDong==false) return false;
+					var next=game.createEvent('gongJiOrFaShu',false);
+					next.setContent('emptyEvent');
+					if(event.firstAction){
+						next.set('type','phase');
+						next.set('firstAction',event.firstAction)
+					}
+					next.set('canTeShu',event.canTeShu);
+				}
+				//获取所有技能
+				var skills = game.expandSkills(player.getSkills("invisible").concat(lib.skill.global));
+				//判断是否有可触发的技能
+				for(var i=0;i<skills.length;i++){
+					//排除提炼和无法行动（避免判断可触发时循环嵌套）
+					if(skills[i]=='_tiLian' || skills[i]=='_wuFaXingDong') continue;
+					if(event.name=='phaseUse') var enable=lib.filter.filterEnable(next, player, skills[i]);
+					else var enable=lib.filter.filterEnable(event, player, skills[i]);
+					if(enable) return false;
+				}
+
+				//判断是否有可使用手牌
+				var cards=player.getCards('h').concat(player.getCards('e'));
+				for(var i=0;i<cards.length;i++){
+					if(player.hasUseTarget(cards[i])) return false;
+				}
+				return true;
+			},
+			enable:'wuFaXingDong',
+			type:'wuFaXingDong',
+			filter:function(event,player){
+				return lib.skill._wuFaXingDong.filterx(event,player);
+			},
+			content:function(){
+				"step 0"
+				player.wuFaXingDong();
+				player.addGongJiOrFaShu();
+			},
+			contentx:function(){
+				"step 0"
+				event.dict={'认可':0,'否认':0};
+				event.targetsx=game.filterPlayer(i=>i!=player).sortBySeat(_status.currentPhase);
+				var name=get.translation(player.name);
+				event.contentx=[name+'宣言无法行动',player.getCards('h').slice()];
+				event.listx=['认可','否认'];
+				"step 1"
+				event.target=event.targetsx.shift();
+				if(event.contentx[1].length==0){
+					event.target.chooseControl(event.listx).set('dialog',[event.contentx[0]]).set('ai',function(){
+						return 1;
+					});
+				}else{
+					event.target.chooseControl(event.listx).set('dialog',event.contentx).set('ai',function(){
+						if(_status.event.dialog[1].length==0){
+							return 1;
+						}
+						return 0;
+					});
+				}
+				"step 2"
+				if(result.control=='认可'){
+					event.target.popup('认可');
+					game.log(event.target,'认可');
+					event.dict[result.control]++;
+				}else if(result.control=='否认'){
+					event.target.popup('否认');
+					game.log(event.target,'否认');
+					event.dict[result.control]++;
+				}
+				if(event.targetsx.length>0) event.goto(1);
+				"step 3"
+				if(event.dict['认可']>=event.dict['否认']){
+					event.getParent('phaseUse').canTeShu=false;
+					event.getParent('phaseUse').firstAction=true;
+					player.storage.gongJiOrFaShu++;
+					var num=player.getCards('h').length;
+					player.discard(player.getCards('h'));
+					player.draw(num);
+				}else{
+					if(game.players[0].side==player.side){
+						game.over(false);
+					}else{
+						game.over(true);
+					}
+				}
+			},
+			ai:{
+				order:1,
+				result:{
+					player:1,
+				},
+			},
+			group:['_wuFaXingDong_qiDongQian','_wuFaXingDong_qiDongHou'],
+			subSkill:{
+				qiDongQian:{
+					trigger:{player:'qiDong'},
+					priority:2,
+					filter:function(event,player){
+						return lib.skill._wuFaXingDong.filterx(event,player);
+					},
+					content:function(){
+						"step 0"
+						player.wuFaXingDong();
+					}
+				},
+				qiDongHou:{
+					trigger:{player:'qiDong'},
+					filter:function(event,player){
+						return lib.skill._wuFaXingDong.filterx(event,player);
+					},
+					priority:-1,
+					content:function(){
+						"step 0"
+						player.wuFaXingDong();
+					}
+				}
+			}
+		},
+		_faShuXianZhi:{
+			mod:{
+				cardEnabled:function(card){
+					if(_status.event.name=='faShu'){
+						if(get.type(card)!='faShu') return false;
+					}
+				}
+			},
+		},
+		_gongJiXianZhi:{
+			mod:{
+				cardEnabled:function(card){
+					if(_status.event.name=='gongJi'){
+						if(get.type(card)!='gongJi') return false;
+					}
+				}    
+			}
+		},
+		_gongJiXingShi:{//攻击获得星石
+			trigger:{source:'gongJiMingZhong'},
+			direct:true,
+			firstDo:true,
+			filter:function(event,player){
+				var zhanJi=get.zhanJi(player.side);
+				return zhanJi.length<game.zhanJiMax;
+			},
+			content:function(){
+				if(trigger.yingZhan==true){
+					player.changeZhanJi('shuiJing',1)
+				}else{
+					player.changeZhanJi('baoShi',1)
+				}
+			},
+		},
+		_gongJiRiZhi:{
+			trigger:{player:'gongJiSheZhi'},
+			direct:true,
+			lastDo:true,
+			filter:function(event,player){
+				return event.canYingZhan==false||event.canShengGuang==false||event.canShengDun==false;
+			},
+			content:function(){
+				var canYingZhan=trigger.canYingZhan;
+				var canShengGuang=trigger.canShengGuang;
+				var canShengDun=trigger.canShengDun;
+
+				var str='本次攻击';
+				if(canYingZhan==false&&canShengGuang==false&&canShengDun==false){
+					str+='强制命中';
+				}else{
+					var list=[canYingZhan,canShengGuang,canShengDun];
+					for(var i=0;i<list.length;i++){
+						if(i==0){
+							if(list[i]==false) str+='无法应战';
+						}else if(i==1){
+							if(list[i]==false) str+='无法被圣光抵消';
+						}else{
+							if(list[i]==false) str+='无法被圣盾抵消';
+						}
+						if(i<list.length-1){
+							if(list[i+1]==false) str+='，';
+						}
+					}
+				}
+				game.log(str);
+			}
+		},
+		_zhiLiao:{
+			trigger:{player:"zhiLiao"},
+			forced:true,
+			lastDo:true,
+			init:function(player){
+				player.storage.zhongDu=[];
+			},
+			filter:function(event,player){
+				if(player.zhiLiao<=0) return false;
+				return true;
+			},
+			content:function(){
+				'step 0'
+				event.trigger('zhiLiaoSheZhi');
+				"step 1"
+				var num=trigger.getParent().num;
+				var list=[];
+				for(var i=0;i<=player.zhiLiao;i++){
+					if(i>num) break;
+					if(i>event.zhiLiaoLimit) break;
+					list.push(i);
+				}
+				var  zhiLiao=list.length-1;//使用几点治疗，默认取最大值
+				var chaZhi=player.getHandcardLimit()-player.countCards('h');
+				if(chaZhi>=num+1) zhiLiao=0;
+				player.chooseControl(list).set('prompt','选择使用多少[治疗]，目前伤害量'+num).set('ai',function(){
+					var num=_status.event.num;
+					return num;
+				}).set('num',zhiLiao);
+				"step 2"
+				var zhiLiaonum=result.control;
+				if(zhiLiaonum>0){
+					trigger.getParent().num-=zhiLiaonum;
+					game.log(player,'的','[治疗]','抵挡了'+zhiLiaonum+'点伤害');
+					player.changeZhiLiao(-zhiLiaonum).type='damage';
+				}
+			}
+		},
+		_gouMai:{
+			enable:'phaseUse',
+			type:'teShu',
+			filter:function(event,player){
+				return player.countCards('h')+3<=player.getHandcardLimit();
+			},
+			content:function(){
+				'step 0'
+				player.draw(3).set('cause','teShuXingDong');
+				event.trigger('gouMai');
+				'step 1'
+				var num=0;
+				var emptyZhanJi=get.emptyZhanJi(player.side);
+				if(emptyZhanJi>=2){
+					num=2;
+				}else if(emptyZhanJi>=1){
+					num=1;
+				}
+
+				if(num==0){
+					event.finish();
+				}else if(num==2){
+					player.addZhanJi('baoShi',1);
+					player.addZhanJi('shuiJing',1);
+					event.finish();
+				}else if(num==1){
+					var list=['baoShi','shuiJing'];
+					player.chooseControl(list).set('prompt','选择获得的星石').set('ai',function(){return 0;});
+				}
+				'step 2'
+				if(result.control=='baoShi'){
+					player.addZhanJi('baoShi',1);
+				}else if(result.control=='shuiJing'){
+					player.addZhanJi('shuiJing',1);
+				}
+			},
+			ai:{
+				order:function(item,player){
+					var num=3;
+					num+=(0.15*get.emptyZhanJi(player.side));
+					return num;
+				},
+				result:{
+					player:function(player){
+						if(get.emptyZhanJi(player.side)<2) return 0;
+						if(player.countCards('h')==0) return 1;
+						var num=0.1;
+						num+=(0.2*(player.countEmptyCards()));
+						var numx=Math.random();
+						if(numx<=num) return 1;
+						else return 0;
+					},
+				},
+				maixie:true,
+			}
+		},
+		_heCheng:{
+			enable:'phaseUse',
+			type:'teShu',
+			filter:function(event,player){
+				var xingShi=get.zhanJi(player.side);
+				return xingShi.length>=3&&player.countCards('h')+3<=player.getHandcardLimit();
+			},
+			chooseButton:{
+				dialog:function(event,player){
+					var dialog=ui.create.dialog('合成：选择星石','hidden');
+					var list=get.zhanJi(player.side);
+					var listx=[];
+					for(var i=0;i<list.length;i++){
+						listx.push([list[i],get.translation(list[i])]);
+					}
+					dialog.add([
+						listx,'tdnodes'
+					]);
+					return dialog;
+				},
+				backup:function(links,player){
+					return{
+						links:links,
+						type:'teShu',
+						content:function(){
+							'step 0'
+							event.links=lib.skill._heCheng_backup.links;
+							event.trigger('heCheng');
+							'step 1'
+							player.draw(3).set('cause','teShuXingDong');
+							'step 2'
+							var dict={};
+							for(var i=0;i<event.links.length;i++){
+								if(event.links[i]=='baoShi'){
+									dict['baoShi']=(dict['baoShi']||0)+1;
+								}else if(event.links[i]=='shuiJing'){
+									dict['shuiJing']=(dict['shuiJing']||0)+1;
+								}
+							}
+							if(dict['baoShi']>0){
+								var next=player.removeZhanJi('baoShi',dict['baoShi']);
+							}
+							if(dict['shuiJing']>0){
+								var next=player.removeZhanJi('shuiJing',dict['shuiJing']);
+							}
+							'step 3'
+							player.changeXingBei(1);
+							'step 4'
+							player.changeShiQi(-1,!player.side);
+						},
+					}
+				},
+				select:3,
+				check:function(button,player){
+					switch(button.link){
+						case 'shuiJing':{
+							return 2;
+						}
+						case 'baoShi':{
+							return 1;
+						}
+					}
+				}
+			},
+			ai:{
+				order:function(item,player){
+					var num=3.5;
+					var shiQi=get.shiQi(!player.side);
+					if(shiQi<=5){
+						num+=(0.4*(5-shiQi));
+						if(shiQi<=1) num+=10;
+					}
+					var xingBei=get.xingBei(player.side);
+					if(xingBei+1>=game.xingBeiMax) num+=10;
+					num+=(0.1*(get.zhanJi(player.side).length)-3);
+					return num;
+				},
+				result:{
+					player:function(player){
+						if(player.countCards('h')==0) return 1;
+
+						var zhanJi=get.zhanJi(player.side);
+						if(zhanJi.length>=4) return 1;
+						if(!zhanJi.includes('水晶')) return 0;
+
+						var num=0.3;
+						num+=(0.2*(player.countEmptyCards()));
+
+						var numx=Math.random();
+						if(numx<=num) return 1;
+						else return 0;
+					},
+				},
+				maixie:true,
+			}
+		},
+		_tiLian:{
+			subSkill:{
+				baoShi:{
+					intro:{
+						name:'宝石',
+						content:'mark',
+					},
+					markimage:'image/card/xingShi/baoShi.png',
+				},
+				shuiJing:{
+					intro:{
+						name:'水晶',
+						content:'mark',
+					},
+					markimage:'image/card/xingShi/shuiJing.png',
+				},
+			},
+			enable:'phaseUse',
+			type:'teShu',
+			filter:function(event,player){
+				var nengLiang_num=player.countNengLiangAll();
+				var empty_nengLiang=player.getNengLiangLimit()-nengLiang_num;
+				var zhanJi=get.zhanJi(player.side);
+				return zhanJi.length>=1&&empty_nengLiang>=1;
+			},
+			chooseButton:{
+				dialog:function(event,player){
+					var dialog=ui.create.dialog('提炼：选择星石','hidden');
+					var list=get.zhanJi(player.side);
+					var listx=[];
+					for(var i=0;i<list.length;i++){
+						listx.push([list[i],get.translation(list[i])]);
+					}
+					dialog.add([listx,'tdnodes']);
+					return dialog;
+					
+				},
+				backup:function(links,player){
+					return{
+						links:links,
+						type:'teShu',
+						content:function(){
+							'step 0'
+							event.links=lib.skill._tiLian_backup.links;
+							event.trigger('tiLian');
+							'step 1'
+							event.dict={"baoShi":0,"shuiJing":0};
+							for(var i=0;i<event.links.length;i++){
+								if(event.links[i]=='baoShi'){
+									event.dict['baoShi']=event.dict['baoShi']+1;
+								}else if(event.links[i]=='shuiJing'){
+									event.dict['shuiJing']=event.dict['shuiJing']+1;
+								}
+							}
+							'step 2'
+							if(event.dict['baoShi']>0){
+								player.removeZhanJi('baoShi',event.dict['baoShi']);
+							}
+							if(event.dict['shuiJing']>0){
+								player.removeZhanJi('shuiJing',event.dict['shuiJing']);
+							}
+							'step 3'
+							if(event.dict['baoShi']>0){
+								player.addNengLiang('baoShi',event.dict['baoShi']);
+							}
+							if(event.dict['shuiJing']>0){
+								player.addNengLiang('shuiJing',event.dict['shuiJing']);
+							}
+						},
+					}
+				},
+				select:function(){
+					var player=_status.event.player;
+					var nengLiang_num=player.countNengLiangAll();
+					if(player.getNengLiangLimit()-nengLiang_num==1){
+						var range=[1,1];
+					}else if(player.getNengLiangLimit()-nengLiang_num>=2){
+						var range=[1,2];
+					}
+					return range;
+				},
+				check:function(button){
+					var player=_status.event.player;
+					if(player.hasSkillTag('baoShi')&&!player.hasSkillTag('shuiJing')){
+						if(button.link=='baoShi') return 5;
+						else return -1;
+					}
+					if(player.hasSkillTag('shuiJing')&&!player.hasSkillTag('baoShi')){
+						if(button.link=='shuiJing') return 5;
+						else return 2;
+					}
+					//既有水晶也有宝石
+					return 2;
+
+				}
+			},
+			ai:{
+				order:function(item,player){
+					var num=3.15;
+					num+=(0.05*(player.getNengLiangLimit()-player.countNengLiangAll()));
+					num+=(0.1*get.zhanJi(player.side).length);
+					return num;
+				},
+				result:{
+					player:function(player){
+						if(!(player.hasSkillTag('baoShi')||player.hasSkillTag('shuiJing'))) return -1;
+						
+						var zhanJi=get.zhanJi(player.side);
+						if(zhanJi.length<=1) return 0;
+
+						if(player.hasSkillTag('shuiJing')&&!player.hasSkillTag('baoShi')){
+							if(!zhanJi.includes('shuiJing')) return 0;
+						}
+
+						var num=player.getNengLiangLimit()-player.countNengLiangAll();
+						if(num<=1) return 0;
+
+						var numx=Math.random();
+						if(numx<=0.5) return 1;
+						else return 0;
+					},
+				},
+			}
+		},
+
+		_xuRuo:{
+			priority:1,//优先级大的先执行
+			trigger:{player:'xingDongBefore'},
+			forced:true,
+			//marktext:"虚",
+			markimage:'image/card/xuRuo.png',
+			intro:{
+				content:'expansion',
+			},
+			filter:function(event,player){
+				return player.hasExpansions('_xuRuo');
+			},
+			content:function(){
+				'step 0'
+				var list=['摸三张牌','跳过行动阶段'];
+				player.chooseControl().set('choiceList',list).set('prompt','虚弱：选择一项').set('ai',function(){
+					var player=_status.event.player;
+					if(player.countCards('h')+3<=player.getHandcardLimit()) return 0;
+					return 1;
+				});
+				'step 1'
+				if(result.control=='选项二'){
+					trigger.xuRuo=true;
+				}else if(result.control=="选项一"){
+					player.draw(3);
+				}
+				player.discard(player.getExpansions('_xuRuo'),'_xuRuo').set('visible',true);
+			},
+			subSkill:{
+				xiaoGuo:{
+					direct:true,
+					priority:-1,
+					lastDo:true,
+					trigger:{player:'xingDongBefore'},
+					filter:function(event,player){
+						return event.xuRuo==true;
+					},
+					content:function(){
+						trigger.cancel();
+					}
+				},
+			},
+			tag:{
+				jiChuXiaoGuo:true,
+			}
+		},
+		_zhongDu:{
+			priority:3,
+			//marktext:"毒",
+			markimage:'image/card/zhongDu.png',
+			intro:{
+				content:'expansion',
+				markcount:'expansion',
+			},
+			trigger:{player:'xingDongBefore'},
+			forced:true,
+			filter:function(event,player){
+				return player.hasExpansions('_zhongDu');
+			},
+			content:async function(event,trigger,player){
+				var target;
+				while(player.storage.zhongDu.length){
+					target=player.storage.zhongDu.pop();
+					var next=player.faShuDamage(target);
+					await next;
+				}
+				player.discard(player.getExpansions('_zhongDu'),'_zhongDu').set('visible',true);
+			},
+			tag:{
+				jiChuXiaoGuo:true,
+			}
+		},
+		_shengDun:{
+			//marktext:"盾",
+			markimage:'image/card/shengDun.png',
+			intro:{
+				content:'expansion',
+			},
+			trigger:{target:['shouDaoGongJi','shouDaoMoDan']},
+			direct:true,
+			lastDo:true,
+			filter:function(event,player){
+				if(event.canShengDun==false) return false;
+				return player.hasExpansions('_shengDun');
+			},
+			content:function(){
+				'step 0'
+				player.discard(player.getExpansions('_shengDun'),'_shengDun').set('visible',true);
+				trigger.weiMingZhong();
+				'step 1'
+				if(get.type(trigger.card)=='gongJi'){
+					event.source=trigger.player;
+					event.yingZhan=trigger.yingZhan;
+					event.card=trigger.card;
+					event.customArgs=trigger.customArgs;
+					event.trigger('gongJiWeiMingZhong');
+				}else if(trigger.card.name=='moDan') game.resetMoDan();
+			},
+			tag:{
+				jiChuXiaoGuo:true,
+			}
+		},
+		_yingZhan:{
+			trigger:{target:'shouDaoGongJi'},
+			direct:true,
+			filter:function(event,player){
+				if(event.canYingZhan==false&&event.canShengGuang==false) return false;
+				return true;
+			},
+			content:function(){
+				'step 0'
+				event.source=trigger.player;
+				event.yingZhan=trigger.yingZhan;
+				event.card=trigger.card;
+				var name=get.translation(event.source);
+				var propmt=`受到${name}的`;
+				propmt+=get.translation(get.xiBie(event.card))+'系';
+				if(event.yingZhan){
+					propmt+='应战攻击';
+				}else{
+					propmt+='主动攻击';
+				}
+				var next=player.yingZhan(propmt);
+				next.set('filterCard',function(card,player,event){
+					if(get.type(card)=='gongJi'){
+						if(_status.event.canYingZhan==false) return false;//不能应战设置
+						if(get.name(card)!='anMie'&&get.xiBie(card)!=get.xiBie(_status.event.card)) return false;
+					}else if(get.type(card)=='faShu'){
+						if(_status.event.canShengGuang==false) return false;
+						if(get.name(card)!='shengGuang') return false;
+					}
+					return lib.filter.cardEnabled(card,player,'forceEnable');
+				});
+				next.set('filterTarget',function(card,player,target){
+					if(target==_status.event.source) return false;
+					if(target.side==player.side) return false;
+					return lib.filter.targetEnabled(card,player,target);
+				});
+				next.set('card',event.card);
+				next.set('source',event.source);
+				next.set('yingZhan',true);
+				next.set('canYingZhan',trigger.canYingZhan);
+				next.set('canShengGuang',trigger.canShengGuang);
+				'step 1'
+				if(result.bool){
+					trigger.weiMingZhong();
+				}
+			},
+			ai:{
+				yingZhan:true,
+			}
+		},
+		_yingZhan_weiMingZhong:{
+			trigger:{player:'gongJiBefore'},
+			direct:true,
+			firstDo:true,
+			filter:function(event,player){
+				return event.getParent().name=='yingZhan'&&event.card.name!='shengGuang';
+			},
+			content:function(){
+				'step 0'
+				trigger.yingZhan=true;//设置本次攻击为应战攻击
+
+				event.customArgs=trigger.getParent(5).customArgs;
+				event.source=trigger.getParent().source;//攻击来源
+				event.player=trigger.getParent().player;//应战者
+				event.yingZhan=trigger.getParent(2).yingZhan;//判断未命中的攻击是否为应战攻击
+				event.card=trigger.getParent().card;//攻击来源牌
+				'step 1'
+				event.trigger('gongJiWeiMingZhong');
+			}
+		},
+		_shengGuang_weiMingZhong:{
+			trigger:{player:'shengGuang'},
+			direct:true,
+			firstDo:true,
+			filter:function(event,player){
+				return event.getParent().name=='yingZhan'&&event.card.name=='shengGuang';
+			},
+			content:function(){
+				'step 0'
+				event.customArgs=trigger.getParent(5).customArgs;
+				event.source=trigger.getParent().source;//攻击来源
+				event.player=trigger.getParent().player;//应战者
+				event.yingZhan=trigger.getParent(2).yingZhan;//判断未命中的攻击是否为应战攻击
+				event.card=trigger.getParent().card;//攻击来源牌
+				'step 1'
+				event.trigger('gongJiWeiMingZhong');
+			}
+		},
+		_moDan:{
+			trigger:{target:'shouDaoMoDan'},
+			direct:true,
+			init:function(player){
+				player.storage.moDan=false;
+			},
+			content:function(){
+				"step 0"
+				player.storage.moDan=true;//是否已经被魔弹
+				
+				//所有玩家有魔弹标记重置标记
+				var num=0;
+				for(var i=0;i<game.players.length;i++){
+					if(game.players[i].storage.moDan==true){
+						num++;
+					}
+				}
+				if(num>=game.players.length){
+					for(var i=0;i<game.players.length;i++){
+						game.players[i].storage.moDan=false;
+					}
+				}
+				
+				var name=get.translation(trigger.player);
+				var str='受到'+name+'的魔弹';
+				var next=player.moDan(str,function(card,player,event){
+					if(!(get.name(card)=='moDan'||get.name(card)=='shengGuang')) return false;
+					return lib.filter.cardEnabled(card,player,'forceEnable');
+				});
+				next.autodelay=true; 
+				game.moDan++;
+
+				"step 1"
+				if(result.bool){
+					trigger.weiMingZhong();
+					game.resetMoDan();
+				}else{
+					game.moDan--;
+				}
+				
+				player.storage.moDan=false;
+			},
+			subSkill:{
+				before:{//第一个使用魔弹的角色增加魔弹标记
+					trigger:{player:'useCardBefore'},
+					direct:true,
+					lastDo:true,
+					filter:function(event,player){
+						if(player.storage.moDan!=true&&(event.card&&event.card.name=='moDan')){
+							return true;
+						}else{
+							return false;
+						}
+					},
+					content:function(){
+						player.storage.moDan=true;
+					}
+				},
+				after:{//第一个使用魔弹的角色删除魔弹标记
+					trigger:{player:'useCardAfter'},
+					direct:true,
+					lastDo:true,
+					filter:function(event,player){
+						if(player.storage.moDan!=false&&(event.card&&event.card.name=='moDan')){
+							return true;
+						}else{
+							return false;
+						}
+					},
+					content:function(){
+						player.storage.moDan=false;
+					}
+				},
+			}
+		},
+		_baoPai:{
+			trigger:{global:['hengZhiAfter','chongZhiAfter','changeZhiShiWuAfter','changeNengLiangAfter','changeZhiLiaoAfter','addToExpansionAfter','loseToDiscardpileAfter','changeZhanJiAfter','changeXingBeiAfter','changeShiQiAfter']},
+			direct:true,
+			lastDo:true,
+			filter:function(event,player){
+				return player.needsToDiscard()>0;
+			},
+			content:function(){
+				player.qiPai();
+			}
+		},
 	};
 	/** @type {Object<string, import("./element/character.js").Character>} */
 	character = new Proxy(
@@ -13209,6 +14027,15 @@ export class Library {
 					_status.renku = state.renku;
 					lib.inpile = state.inpile;
 					lib.inpile_nature = state.inpile_nature;
+					//xingBei
+					game.hongShiQi = state.hongShiQi;
+					game.lanShiQi = state.lanShiQi;
+					game.hongZhanJi = state.hongZhanJi;
+					game.lanZhanJi = state.lanZhanJi;
+					game.hongXingBei = state.hongXingBei;
+					game.lanXingBei = state.lanXingBei;
+					game.moDanFangXiang = state.moDanFangXiang;
+					
 					var pos = state.players[observe || game.onlineID].position;
 					for (var i in state.players) {
 						var info = state.players[i];
