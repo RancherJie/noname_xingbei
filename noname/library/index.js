@@ -12863,7 +12863,16 @@ export class Library {
 				},
 			}
 		},
-
+		
+		_init:{
+			trigger:{global:'gameStart'},
+			direct:true,
+			firstDo:true,
+			content:function(){
+				player.storage.zhongDu=[];
+				player.storage.moDan=false;
+			}
+		},
 		_xuRuo:{
 			priority:1,//优先级大的先执行
 			trigger:{player:'xingDongBefore'},
@@ -12917,9 +12926,6 @@ export class Library {
 			intro:{
 				content:'expansion',
 				markcount:'expansion',
-			},
-			init:function(player){
-				player.storage.zhongDu=[];
 			},
 			trigger:{player:'xingDongBefore'},
 			forced:true,
@@ -13060,9 +13066,6 @@ export class Library {
 		_moDan:{
 			trigger:{target:'shouDaoMoDan'},
 			direct:true,
-			init:function(player){
-				player.storage.moDan=false;
-			},
 			content:function(){
 				"step 0"
 				player.storage.moDan=true;//是否已经被魔弹

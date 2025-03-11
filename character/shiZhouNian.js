@@ -7576,7 +7576,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 0'
                     player.discard(event.cost_data,'jianHun');
                     trigger.customArgs.eMoZhiHun=true;
-                    trigger.changeDamageNum(2);
+                    trigger.changeDamageNum(1);
                 },
                 group:['eMoZhiHun_gongJiWeiMingZhong'],
                 subSkill:{

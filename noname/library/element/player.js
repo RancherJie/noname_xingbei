@@ -5984,6 +5984,10 @@ export class Player extends HTMLDivElement {
 				next.position = arguments[i];
 			} else if (arguments[i] == "notBySelf") {
 				next.notBySelf = true;
+			}else if(typeof arguments[i] == "string"){
+				if(arguments[i] == "showCards") next.showCards = true;
+				else if(arguments[i] == "showHiddenCards") next.showHiddenCards = true;
+				else next.gaiPai = arguments[i];
 			}
 		}
 		if (next.cards == undefined) {

@@ -131,7 +131,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 }
             },
             Magic:{
-                trigger:{player:'moFaRuMenEnd'},
+                trigger:{player:['moFaRuMenEnd']},
                 content:function(){
                     'step 0'
                     if(trigger.faShu==false&&trigger.yong==0&&trigger.shui==0){
@@ -1503,6 +1503,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             await target.draw();
                         }
                     }
+                    await event.trigger('moFaRuMenEnd');
                 },
                 ai:{
                     order:function(card,player){

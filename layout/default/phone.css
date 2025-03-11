@@ -118,3 +118,29 @@ div.finish_game {
 
 @media screen and (orientation: portrait) {
 }
+
+/*--------位置(7人)手机------*/
+[data-number="7"] > .player[data-position="1"] {
+	top: calc(55% - 135px);
+	left: calc(100% - 150px);
+}
+[data-number="7"] > .player[data-position="2"] {
+	top: calc(10% - 50px);
+	left: calc(85% - 155px);
+}
+[data-number="7"] > .player[data-position="3"] {
+	top: 0;
+	left: calc(53% - 6px);
+}
+[data-number="7"] > .player[data-position="4"] {
+	top: 0;
+	left: calc(35% - 8px);
+}
+[data-number="7"] > .player[data-position="5"] {
+	top: calc(10% - 50px);
+	left: calc(16%);
+}
+[data-number="7"] > .player[data-position="6"] {
+	top: calc(55% - 135px);
+	left: 0;
+}

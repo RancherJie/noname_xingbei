@@ -2095,7 +2095,9 @@ export class Game extends GameCompatible {
 						pageInStart.remove();
 						if (active) {
 							start.firstChild.classList.add("active");
-							start.nextSibling.appendChild(start.firstChild.link);
+							//并不是一个合理的解决方法，只是让它不容易报错了
+							game.editExtension();
+							//start.nextSibling.appendChild(start.firstChild.link);
 						}
 					}
 				}
