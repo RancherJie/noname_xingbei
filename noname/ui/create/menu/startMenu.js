@@ -73,6 +73,11 @@ export const startMenuData = {
 		if (infoconfig) {
 			const config = lib.config.mode_config[mode] || {};
 			if (connectMenu) {
+				if (!infoconfig.connect_remark) infoconfig.connect_remark = {
+					name:'房间备注',
+					input:true,
+					frequent:true,
+				};
 				if (!infoconfig.connect_choose_timeout) infoconfig.connect_choose_timeout = {
 					name: "出牌时限",
 					init: "30",

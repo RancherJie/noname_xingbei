@@ -55,7 +55,7 @@
 	left: calc(-150% / 47 + 120px);
 }
 #arena:not(.mobile).single-handcard #handcards1 {
-	width: calc(100% - 120px);
+	width: calc(100% - 360px);
 }
 #window.rightbar #system,
 #window.leftbar #system {

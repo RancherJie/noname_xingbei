@@ -3119,6 +3119,7 @@ export const Content = {
 			current = current.next;
 			num++;
 		}
+		game.$initZhanJi();
 		"step 1";
 		for (var i = 0; i < lib.onphase.length; i++) {
 			lib.onphase[i]();
@@ -10820,6 +10821,10 @@ export const Content = {
 		event.forceDie=true;
 		event.trigger('zaoChengShangHai');
 		'step 1'
+		if(event.zaoChengShangHaiMax<event.num){
+			num=event.zaoChengShangHaiMax;
+			event.num=event.zaoChengShangHaiMax;
+		}
 		event.trigger('shouDaoShangHai');
 		event.numx=num;
 		var str=`造成的${num}点${event.faShu?'法术':'攻击'}伤害`;
@@ -10840,10 +10845,20 @@ export const Content = {
 			next.num=num;
 		}
 		"step 3"
+		if(event.shouDaoShangHaiMax<event.num){
+			event.num=event.shouDaoShangHaiMax;
+		}
 		event.trigger('chanShengShangHai');
 		"step 4"
+		if(event.chanShengShangHaiMax<event.num){
+			event.num=event.chanShengShangHaiMax;
+		}
 		event.trigger('chengShouShangHai');
 		"step 5"
+		if(event.chengShouShangHaiMax<event.num){
+			num=event.chengShouShangHaiMax;
+			event.num=event.chengShouShangHaiMax;
+		}
 		game.broadcastAll(function(num){
 			if(lib.config.background_audio) game.playAudio('effect','damage'+(num>2?'2':''));
 		},num);
@@ -10931,7 +10946,7 @@ export const Content = {
 			}
 		}
 		"step 7"
-		event.trigger('chengShouShangHaiAftrer');
+		event.trigger('chengShouShangHaiAfter');
 		'step 8'
 		event.trigger('shouDaoShangHaiAfter');
 	},

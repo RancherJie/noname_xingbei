@@ -2832,10 +2832,14 @@ export class Player extends HTMLDivElement {
 					}
 					str += "】";
 				}*/
-				if(config.mode=='xingBei'){
+				if(config.characterPack.length>0){
 					str+='【';
 					for(var i=0;i<config.characterPack.length;i++){
-						str+=(get.translation(config.characterPack[i]+'_character_config'));
+						let enNameOri=config.characterPack[i];
+						let enName=enNameOri+'_character_config';
+						let name=get.translation(enName);
+						if(enName==name) name=enNameOri;
+						str+=name;
 						if(i<config.characterPack.length-1) str+='+';
 					}
 					str+='】';
@@ -9830,19 +9834,10 @@ export class Player extends HTMLDivElement {
 		if (_status.connectMode) return false;
 		//if (lib.config.mode == "versus") {
 		if (lib.config.mode == "xingBei") {
-			//if (_status.mode == "three") return this.side == me.side;
-			//if (_status.mode == "standard") return lib.storage.single_control && this.side == me.side;
-			//if (_status.mode == "four") return get.config("four_phaseswap") && this.side == me.side;
-			if (_status.mode == "two" || _status.mode=='three') return get.config("phaseswap") && this.side == me.side;
-			return false;
+			return get.config("phaseswap") && this.side == me.side;
 		} else if (lib.config.mode == "boss") {
 			if (me.side) return false;
 			return this.side == me.side && get.config("single_control");
-		} else if (game.chess) {
-			if (lib.config.mode == "chess") {
-				if (_status.mode == "combat" && !get.config("single_control")) return false;
-			}
-			return this.side == me.side;
 		}
 		return false;
 	}

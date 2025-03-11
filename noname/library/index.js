@@ -4105,6 +4105,7 @@ export class Library {
 						}
 					},
 				},
+				/*
 				show_playerids: {
 					name: "显示身份按钮",
 					init: true,
@@ -4117,7 +4118,7 @@ export class Library {
 							ui.playerids.style.display = "none";
 						}
 					},
-				},
+				},*/
 				show_sortcard: {
 					name: "显示整理手牌按钮",
 					init: true,
@@ -4196,16 +4197,15 @@ export class Library {
 						}
 					},
 				},
-				/*
 				show_handcardbutton: {
 					name: "显示手牌按钮",
+					intro: "在多控情况下右上角显示所有我方角色手牌",
 					init: true,
 					unfrequent: true,
 					onclick(bool) {
 						game.saveConfig("show_handcardbutton", bool);
 					},
 				},
-				*/
 				/*
 				show_giveup: {
 					name: "显示投降按钮",
@@ -4765,11 +4765,12 @@ export class Library {
 						map.connect_choose_mode.show();
 					}	
 				},
+				/*
 				connect_remark:{
 					name:'房间备注',
 					input:true,
 					frequent:true,
-				},
+				},*/
 				connect_versus_mode:{
 					name:'游戏模式',
 					init:'2v2',
@@ -4854,6 +4855,15 @@ export class Library {
 						map.team_sequence.hide();
 					}else{
 						map.team_sequence.show();
+					}
+					if(config.phaseswap==true){
+						map.change_identity.hide();
+						map.free_choose.hide();
+						map.viewHandcard.hide();
+					}else{
+						map.change_identity.show();
+						map.free_choose.show();
+						map.viewHandcard.show();
 					}
 				},
 				versus_mode:{
@@ -9750,6 +9760,7 @@ export class Library {
 
 		zhiLiao:"治疗",
 
+		FAQ:'FAQ',
 		'3xing':'3星',
 		'3.5xing':'3.5星',
 		'4xing':'4星',
@@ -12327,6 +12338,15 @@ export class Library {
 			},
 		},*/
 		//xingBei
+		viewHandcard:{
+			ai:{
+				viewHandcard:true,
+				skillTagFilter:function(player,tag,target){
+					return player.side==target.side;
+				},
+			},
+		},
+
 		_qiDong:{
 			trigger:{player:'triggerEnd'},
 			direct:true,
@@ -12897,6 +12917,9 @@ export class Library {
 			intro:{
 				content:'expansion',
 				markcount:'expansion',
+			},
+			init:function(player){
+				player.storage.zhongDu=[];
 			},
 			trigger:{player:'xingDongBefore'},
 			forced:true,
@@ -14035,7 +14058,7 @@ export class Library {
 					game.hongXingBei = state.hongXingBei;
 					game.lanXingBei = state.lanXingBei;
 					game.moDanFangXiang = state.moDanFangXiang;
-					
+                    
 					var pos = state.players[observe || game.onlineID].position;
 					for (var i in state.players) {
 						var info = state.players[i];
@@ -14154,6 +14177,9 @@ export class Library {
 					}
 					game.arrangePlayers();
 					ui.create.me(true);
+					//xingBei更新战绩区
+					ui.shiQiInfo=ui.create.div('.touchinfo.bottom-right',ui.window);
+                    ui.updateShiQiInfo();
 
 					_status.event = lib.element.GameEvent.initialGameEvent();
 					_status.paused = false;
@@ -15074,6 +15100,20 @@ export class Library {
 				showName: "四",
 				color: "#ffff99",
 				nature: "firemm",
+			},
+		],
+		[
+			"FAQ",
+			{
+				getSpan: () => {
+					const span = document.createElement("span"),
+						style = span.style;
+					style.fontFamily = "MotoyaLMaru";
+					style.fontSize = "10px";
+					style.color = "#E9F0F6";
+					span.textContent = "FAQ";
+					return span.outerHTML;
+				},
 			},
 		],
 	]);

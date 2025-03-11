@@ -195,6 +195,11 @@ export const startMenu = function (connectMenu) {
 				var hiddenNodes = [];
 				var config = lib.config.mode_config[mode] || {};
 				if (connectMenu) {
+					infoconfig.connect_remark = {
+						name:'房间备注',
+						input:true,
+						frequent:true,
+					};
 					infoconfig.connect_choose_timeout = {
 						name: "出牌时限",
 						init: "30",

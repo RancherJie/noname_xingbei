@@ -5,6 +5,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 		connect:true,
         characterSort:{
             shiZhouNian:{
+                'FAQ':['FAQ_xianZhe','FAQ_geDouJia','FAQ_yueZhiNvShen'],
                 "3xing":['fengZhiJianSheng','kuangZhanShi','shenJianShou','fengYinShi','anShaZhe','shengNv','tianShi','moFaShaoNv'],
                 "3.5xing":['moJianShi','shengQiangQiShi','yuanSuShi','maoXianJia','wenYiFaShi','zhongCaiZhe','jingLingSheShou','nvWuShen'],
                 "4xing":['shenGuan','yingLingRenXing','yinYangShi','moGong','xianZhe','lingFuShi','cangYanMoNv','moQiang','xueSeJianLing','qiDaoShi','hongLianQiShi'],
@@ -50,6 +51,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             yueZhiNvShen:['yueZhiNvShen_name','shengGroup',5,['xinYueBiHu','anYueZuZhou','meiDuShaZhiYan','yueZhiLunHui','yueDu','anYueZhan','cangBaiZhiYue','xinYue','shiHua','anYue'],],
             shouLingWuShi:['shouLingWuShi_name','jiGroup','4/5',['wuZheCanXin','yiJiWuNian','shouHunYiNian','shouHunJingJie','shouFan','yuHunLiuJuHeXingTai','niFanJuHeZhan','yuHunLiuJuHeShi','shouHun','canXin'],],
             shengGong:['shengGong_name','shengGroup','4/5',['tianZhiGong','shengXieJuBao','shengHuangJiangLin','shengGuangBaoLie','liuXingShengDan','shengHuangHuiGuangPao','ziDongTianChong','xinYang','shengHuangHuiGuangPaoX'],],
+
+            FAQ_xianZhe:['xianZhe_name','yongGroup',4,['zhiHuiFaDian','FAQ_faShuFanTan','moDaoFaDian','shengJieFaDian'],['character:xianZhe']],
+            FAQ_geDouJia:['geDouJia_name','jiGroup','4/5',['nianQiLiChang','xuLiYiji','nianDan','baiShiHuanLongQuan','FAQ_qiJueBengJi','douShenTianQu','douQi'],['character:geDouJia']],
+            FAQ_yueZhiNvShen:['yueZhiNvShen_name','shengGroup',5,['xinYueBiHu','anYueZuZhou','FAQ_meiDuShaZhiYan','yueZhiLunHui','yueDu','anYueZhan','cangBaiZhiYue','xinYue','shiHua','anYue'],['character:yueZhiNvShen']],
+
 		},
 
         characterIntro: {
@@ -135,7 +141,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             //风之剑圣
             fengNuZhuiJi:{
                 usable:1,
-                frequent:true,
                 trigger:{player:"gongJiAfter"},
                 filter:function(event,player){
                     return event.yingZhan!=true;
@@ -209,7 +214,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             },
             lieFengJi:{
                 trigger:{player:'gongJiShi'},
-                frequent:true,
                 filter:function(event,player){
                     return event.card.hasDuYou('lieFengJi')&&event.target.hasExpansions('_shengDun');
                 },
@@ -221,7 +225,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             },
             jiFengJi:{
                 trigger:{player:'gongJiShi'},
-                frequent:true,
                 filter:function(event,player){
                     return event.card.hasDuYou('jiFengJi')&&event.yingZhan!=true;
                 },
@@ -275,7 +278,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             },
             xueYingKuangDao:{
                 trigger:{player:'gongJiShi'},
-                frequent:true,
                 group:['xueYingKuangDao_gongJiMingZhong'],
                 filter:function(event,player){
                     return event.yingZhan!=true&&event.card.hasDuYou('xueYingKuangDao');
@@ -304,7 +306,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             },
             xueXingPaoXiao:{
                 trigger:{player:'gongJiShi'},
-                frequent:true,
+
                 filter:function(event,player){
                     return event.card.hasDuYou('xueXingPaoXiao')&&event.yingZhan!=true&&event.target.zhiLiao==2;
                 },
@@ -594,7 +596,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             //封印师
             faShuJiDang:{
                 trigger:{player:'faShuAfter'},
-                frequent:true,
                 content:function(){
                     player.addGongJi();
                 }
@@ -1729,7 +1730,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             //元素师
             yuanSuXiShou:{
                 trigger:{source:'zaoChengShangHai'},
-                frequent:true,
                 filter:function(event,player){
                     if(event.faShu!=true) return false;
                     if(event.yuanSuDianRan==true) return false;
@@ -3142,7 +3142,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             //瘟疫法师
             buXiu:{
                 trigger:{player:'faShuEnd'},
-                frequent:true,
                 filter:function(event,player){
                     return event.skill!='siWangZhiChu_backup';
                 },
@@ -3289,7 +3288,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             //魔剑士
             xiuLuoLianZhan:{
                 usable:1,
-                frequent:true,
                 trigger:{player:"gongJiAfter"},
                 filter:function(event,player){
                     return event.yingZhan!=true;
@@ -3917,7 +3915,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             //红莲骑士
             xingHongShengYue:{
                 usable:1,
-                frequent:true,
                 trigger:{player:'gongJiShi'},
                 filter:function(event,player){
                     return event.yingZhan!=true;
@@ -4380,7 +4377,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             //神官
             shenShengQiShi:{
                 trigger:{player:'teShuEnd'},
-                frequent:true,
                 content:function(){
                     player.changeZhiLiao(1);
                 }
@@ -6740,12 +6736,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 forced:true,
                 content:function(){
-                    trigger.num=4
+                    trigger.zaoChengShangHaiMax=4
                 }
             },
             xuLiYiji:{
                 trigger:{player:"gongJiBefore"},
                 filter:function(event,player){
+                    if(!player.hasSkill('douQi')) return false;
                     if(player.countZhiShiWu('douQi')>=lib.skill.douQi.intro.max) return false;
                     if(event.customArgs.qiJueBengJi) return false;
                     return event.yingZhan!=true;
@@ -6778,6 +6775,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             nianDan:{
                 trigger:{player:['faShuEnd']},
                 filter:function(event,player){
+                    if(!player.hasSkill('douQi')) return false;
                     if(player.countZhiShiWu('douQi')>=lib.skill.douQi.intro.max) return false;
                     return true;
                 },
@@ -7653,7 +7651,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             //兽灵武士
             wuZheCanXin:{
                 usable:1,
-                frequent:true,
                 trigger:{player:'gongJiEnd'},
                 filter:function(event,player){
                     return get.is.gongJiXingDong(event);
@@ -8659,6 +8656,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 type:'faShu',
                 enable:['faShu'],
                 filter:function(event,player){
+                    if(!player.hasSkill('DWZyong')) return false;
                     return player.canBiShaBaoShi();
                 },
                 content:function(){
@@ -8743,7 +8741,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     return event.gaintag.includes('jian')&&player.getExpansions('jian').length>8;
                 },
                 direct:true,
-                contentx:function(){
+                content:function(){
                     'step 0'
                     var num=player.getExpansions('jian').length;
                     var cards=player.getExpansions('jian');
@@ -8758,6 +8756,126 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 onremove:'storage',
                 markimage:'image/card/zhiShiWu/hong.png'
+            },
+
+            FAQ_faShuFanTan:{
+                trigger:{player:'chengShouShangHaiAfter'},
+                filter:function(event,player){
+                    if(event.faShu!=true) return false;
+                    if(event.num!=1) return false;
+                    return player.countCards('h')>1;
+                },
+                async cost(event,trigger,player){
+                    event.result=await player.chooseCardTarget({
+                        filterCard:function(card){
+                            if(ui.selected.cards.length==0) return true;
+                            if(get.xiBie(card)==get.xiBie(ui.selected.cards[0])) return true;
+                            return false;
+                        },
+                        selectCard:[2,Infinity],
+                        filterTarget:true,
+                        complexCard:true,
+                        prompt:get.prompt('FAQ_faShuFanTan'),
+                        prompt2:lib.translate.FAQ_faShuFanTan_info,
+                        ai1(card) {
+                            return 6- get.value(card);
+                        },
+                        ai2:function(target){
+							var player=_status.event.player;
+                            return get.damageEffect2(target,player,1);
+						},
+                    }).forResult();
+                },
+                content:function(){
+                   'step 0'
+                    player.discard(event.cards).set('showCards',true);
+                    event.num=event.cards.length;
+                    event.target=event.targets[0];
+                    'step 2'
+                    event.target.faShuDamage(event.num-1,player);
+                    'step 3'
+                    player.faShuDamage(event.num,player);
+                },
+                ai:{
+                    one_damage:true,
+                }
+            },
+            FAQ_qiJueBengJi:{
+                trigger:{player:"gongJiBefore"},
+                filter:function(event,player){
+                    if(!player.hasZhiShiWu('douQi')) return false;
+                    if(event.customArgs.xuLiYiji) return false;
+                    return event.yingZhan!=true;
+                },
+                content:function(){
+                    'step 0'
+                    trigger.customArgs.qiJueBengJi=true;
+                    player.removeZhiShiWu('douQi');
+                    trigger.wuFaYingZhan();
+                },
+                group:'FAQ_qiJueBengJi_ranHou',
+                subSkill:{
+                    ranHou:{
+                        trigger:{player:'gongJiAfter'},
+                        direct:true,
+                        filter:function(event,player){
+                            return event.customArgs.qiJueBengJi;
+                        },
+                        content:function(){
+                            player.faShuDamage(player.countZhiShiWu('douQi'),player);
+                        }
+                    }
+                },
+            },
+
+            FAQ_meiDuShaZhiYan:{
+                trigger:{global:'gongJiShi'},
+                filter:function(event,player){
+                    if(event.player.side==player.side) return false;
+                    if(event.cards.length==0||(!event.card.isCard)) return false;
+                    var anYue=player.getExpansions('anYue');
+                    return anYue.length>0;
+                },
+                async cost(event, trigger, player) {
+                    var result = await player.chooseCardButton(player.getExpansions('anYue'),'是否发动【美杜莎之眼】<br>'+lib.translate.meiDuShaZhiYan_info)
+                    .set('filterButton',function(button){
+                        return get.xiBie(button.link)==_status.event.xiBie;
+                    })
+                    .set('xiBie',get.xiBie(trigger.card)).forResult();
+                    event.result = {
+                        bool: result.bool,
+                        cost_data: result.links,
+                    }
+                },
+                content:function(){
+                    'step 0'
+                    var card=event.cost_data[0];
+                    event.card=card;
+                    player.discard(card,'anYue').set('showHiddenCards',true);
+                    'step 1'
+                    player.changeZhiLiao(1);
+                    'step 2'
+                    player.addZhiShiWu('shiHua');
+                    'step 3'
+                    if(get.type(event.card)=='faShu'){
+                        if(player.countCards('h')>0){
+                            player.chooseToDiscard('h',true);
+                        }
+                    }else event.finish();
+                    'step 4'
+                    var next=player.chooseTarget(1,'美杜莎之眼：目标对手造成1点法术伤害③',true,function(card,player,target){
+                        return target.side!=player.side;
+                    });
+                    next.set('ai',function(target){
+                        var player=_status.event.player;
+                        return get.damageEffect2(target,player,1);
+                    });
+                    'step 5'
+                    if(result.bool){
+                        result.targets[0].damage(1,player).set('faShu',true);
+                    }
+                }
+
             },
         },
 		
@@ -9437,6 +9555,20 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             jian_info:"【茧】为蝶舞者专有盖牌，上限为8。",
             DWZyong_info:"<span class='hong'>【蛹】</span>为蝶舞者专有指示物，无上限。",
 
+            FAQ_xianZhe:'FAQ贤者',
+            FAQ_xianZhe_prefix: "FAQ",
+            FAQ_faShuFanTan:"[响应]法术反弹",
+            FAQ_faShuFanTan_info:"<span class='tiaoJian'>(你每次承受法术伤害后⑥，若该伤害仅为1点，则可以弃X张同系牌[展示](X>1))</span>对目标角色造成(X-1)点法术伤害③，并对自己造成X点法术伤害③。",
+            
+            FAQ_geDouJia:"FAQ格斗家",
+            FAQ_geDouJia_prefix: "FAQ",
+            FAQ_qiJueBengJi:"[响应]气绝崩击",
+            FAQ_qiJueBengJi_info:"<span class='tiaoJian'>(主动攻击前发动①，移除1点</span><span class='hong'>【斗气】</span><span class='tiaoJian'>)</span>本次攻击对方无法应战，本次攻击结束后对自己造成X点法术伤害③，X为你的<span class='hong'>【斗气】</span>数；不能和【蓄力一击】同时发动。",
+
+            FAQ_yueZhiNvShen:"FAQ月之女神",
+            FAQ_yueZhiNvShen_prefix: "FAQ",
+            FAQ_meiDuShaZhiYan:"[响应]美杜莎之眼",
+            FAQ_meiDuShaZhiYan_info:"<span class='tiaoJian'>(目标对手使用实体牌攻击时①，移除1个与攻击牌系别相应的系别的【暗月】[展示])</span>你+1[治疗]，你+1<span class='lan'>【石化】</span>。<span class='tiaoJian'>(若该【暗月】为法术牌)</span>你弃1张牌，对目标对手造成1点法术伤害③。",
 		},
 	};
 });

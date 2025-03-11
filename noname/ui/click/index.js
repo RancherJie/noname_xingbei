@@ -2753,7 +2753,7 @@ export class Click {
 				if (game.onlinezhu) {
 					if (!this.playerid && game.connectPlayers) {
 						//if (lib.configOL.mode == "versus" || lib.configOL.mode == "doudizhu") return;
-						if (lib.configOL.mode == "xingBei") return;
+						if (lib.configOL.guDingRenShu) return;
 						if (lib.configOL.mode == "identity" && lib.configOL.identity_mode == "zhong") return;
 						if (!this.classList.contains("unselectable2") && lib.configOL.number <= 2) return;
 						this.classList.toggle("unselectable2");
@@ -2796,10 +2796,7 @@ export class Click {
 				}
 			} else {
 				if (
-					//lib.configOL.mode == "versus" ||
-					lib.configOL.mode == "xingBei" ||
-					lib.configOL.mode == "doudizhu" ||
-					lib.configOL.mode == "single"
+					lib.configOL.guDingRenShu
 				)
 					return;
 				if (

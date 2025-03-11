@@ -22,24 +22,16 @@
 
 	// 使用到的文本
 	const globalText = {
-		GPL_ALERT: ["欢迎来到《星杯传说》！","① 项目开发：农杰(代码) & 上杉隐月(维护与服务器)","② 项目发布地址：https://github.com/RancherJie/noname_xingbei","③ 开源声明：本项目基于支持GPLv3协议的《无名杀》底层开发https://www.gnu.org/licenses/gpl-3.0.html。","点击“确定”即代表您知晓并接受上述信息。"].join("\n"),
+		GPL_ALERT: ["欢迎来到《星杯传说》网页对战平台！\n","·项目开发·农杰(代码)&上杉隐月(运营维护)\n","·发布地址·https://github.com/RancherJie/noname_xingbei。\n","·开源声明·本项目基于支持GPLv3协议的《无名杀》底层开发https://www.gnu.org/licenses/gpl-3.0.html。\n\n","【初次启动请等待资源加载】","*若长时间无内容请刷新网页*\n\n","点击“确定”即代表您知晓并接受上述信息。\n"].join("\n"),
 		LOAD_ENTRY_FAILED: ["您使用的浏览器或《星杯传说》客户端加载内容失败！", "请检查是否缺少游戏文件！隔版本更新请下载完整包而不是离线包！", "目前使用的浏览器UA信息为: ", userAgentLowerCase, "若您使用的客户端为自带内核的旧版“兼容版”，请及时更新客户端版本！"].join("\n"),
 		REDIRECT_TIP: ["您使用的浏览器或星杯传说客户端的版本或内核版本过低，已经无法正常运行星杯传说！", "目前使用的浏览器UA信息为: ", userAgentLowerCase, "如果你使用的是浏览器，请更新你的浏览器内核！"].join("\n"),
 		SAFARI_VERSION_NOT_SUPPORT: ["您使用的Safari浏览器无法支持当前星杯传说所需的功能，请至少升级至15.0.0！", "当前浏览器的UA为: ", userAgentLowerCase, "稍后您的星杯传说将自动退出（可能的话）"].join("\n"),
-		SERVICE_WORKER_NOT_SUPPORT: ["您使用的客户端或浏览器不支持启用serviceWorker", "请确保您的客户端或浏览器使用http://localhost或https协议打开《星杯传说》并且启用serviceWorker！"].join("\n"),
-		SERVICE_WORKER_LOAD_FAILED: ["serviceWorker加载失败！", "游戏内容或许会因此加载失败！"].join("\n"),
 	};
 
 	// 不支持file协议
 	if (location.protocol.startsWith("file")) {
 		return alert(globalText.REDIRECT_TIP);
 	}
-
-	// 必须启用serviceWorker
-	/*
-	if (!("serviceWorker" in navigator)) {
-		return alert(globalText.SERVICE_WORKER_NOT_SUPPORT);
-	}*/
 
 	// 检查 window 对象中是否存在 "__core-js_shared__" 属性
 	if (!("__core-js_shared__" in window)) {
@@ -148,45 +140,6 @@
 			// @ts-ignore
 			module._compile(require("fs").readFileSync(filename, "utf8"), filename);
 		};
-	}
-
-	// 使serviceWorker加载完成后，再加载entry.js
-	if ("serviceWorker" in navigator) {
-		let scope = new URL("./", location.href).toString();
-		let registrations = await navigator.serviceWorker.getRegistrations();
-		let findServiceWorker = registrations.find(registration => {
-			return registration && registration.active && registration.active.scriptURL == `${scope}service-worker.js`;
-		});
-
-		try {
-			const registration_1 = await navigator.serviceWorker.register(`${scope}service-worker.js`, {
-				type: "module",
-				updateViaCache: "all",
-				scope,
-			});
-			// 初次加载worker，需要重新启动一次
-			if (!findServiceWorker) location.reload();
-			// 接收消息，暂时没用到
-			navigator.serviceWorker.addEventListener("message", e => {
-				if (e.data?.type === "reload") {
-					window.location.reload();
-				}
-			});
-			// 发送消息
-			// navigator.serviceWorker.controller.postMessage({ action: "reload" });
-			registration_1.update().catch(e => console.error("worker update失败", e));
-			if (!sessionStorage.getItem("canUseTs")) {
-				await import("./canUse.ts")
-					.then(({ text }) => console.log(text))
-					.catch(() => {
-						sessionStorage.setItem("canUseTs", "1");
-						location.reload();
-					});
-			}
-		} catch (e_1) {
-			console.log("serviceWorker加载失败: ", e_1);
-			return alert(globalText.SERVICE_WORKER_LOAD_FAILED);
-		}
 	}
 
 	// 创建一个新的 <script> 元素
