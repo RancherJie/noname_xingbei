@@ -623,6 +623,9 @@ export default () => {
 						}
 						player=player.next;
 					}
+					if(get.config('phaseswap')){
+						game.addGlobalSkill('autoswap');
+					}
 					game.onSwapControl();
 				});
 			},

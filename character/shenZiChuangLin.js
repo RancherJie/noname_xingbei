@@ -47,6 +47,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 type:'faShu',
                 enable:['faShu'],
                 content:async function(event,trigger,player){
+                    if(!event.getParent('phaseUse').moFaRuMen) event.getParent('phaseUse').moFaRuMen=1;
+                    else event.getParent('phaseUse').moFaRuMen++;
                     var cards=[];
                     if(event.bool){
                         let targets=await player.chooseTarget('我方2名角色各弃置1张牌',2,true,function(card,player,target){
@@ -126,7 +128,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         return 4;
                     },
                     result:{
-                        player:1,
+                        player:function(player){
+                            if(player.countCards('h')>=player.getHandcardLimit()) return -1;
+                            else return 1;
+                        },
                     }
                 }
             },
@@ -140,14 +145,14 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         player.chooseToDiscard(2,true);
                     }
                     'step 1'
-                    if(player.countSkill('moFaRuMen')==3){
+                    if(event.getParent('phaseUse').moFaRuMen==3){
                         player.addZhanJi('baoShi',2);
                     }
                 },
                 check:function(event,player){
-                    var num=player.countSkill('moFaRuMen');
+                    var num=event.getParent('phaseUse').moFaRuMen;
                     if(num==3) return true;
-                    return player.countSkill('moFaRuMen')<4;
+                    return num<4;
                 }
             },
             qiangYuYuanXing:{
@@ -1430,6 +1435,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 type:'faShu',
                 enable:['faShu'],
                 content:async function(event,trigger,player){
+                    if(!event.getParent('phaseUse').moFaRuMen) event.getParent('phaseUse').moFaRuMen=1;
+                    else event.getParent('phaseUse').moFaRuMen++;
                     var cards=[];
                     if(event.bool){
                         let targets=await player.chooseTarget('我方2名角色各弃置1张牌',2,true,function(card,player,target){
