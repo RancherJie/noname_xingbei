@@ -3640,7 +3640,9 @@ export class Player extends HTMLDivElement {
 			var info = get.info(i);
 			if (info && info.intro && (info.intro.name || info.intro.name2)) str = info.intro.name2 || info.intro.name;
 			else str = lib.translate[i];
-			if (str) game.log(this, "移去了", num, "个", "#g【" + str + "】");
+			if(info.markimage.includes('hong')) var colorStr='#r【'+str+'】';
+			else if(info.markimage.includes('lan')) var colorStr='#b【'+str+'】';
+			if (colorStr) game.log(this, "移去了", num, "个",colorStr);
 		}
 		this.syncStorage(i);
 		this[this.storage[i] || (lib.skill[i] && lib.skill[i].mark) ? "markSkill" : "unmarkSkill"](i);
@@ -3660,7 +3662,9 @@ export class Player extends HTMLDivElement {
 			var info = get.info(i);
 			if (info && info.intro && (info.intro.name || info.intro.name2)) str = info.intro.name2 || info.intro.name;
 			else str = lib.translate[i];
-			if (str) game.log(this, "获得了", num, "个", "#g【" + str + "】");
+			if(info.markimage.includes('hong')) var colorStr='#r【'+str+'】';
+			else if(info.markimage.includes('lan')) var colorStr='#b【'+str+'】';
+			if (colorStr) game.log(this, "获得了", num, "个", colorStr);
 		}
 		this.syncStorage(i);
 		this.markSkill(i);

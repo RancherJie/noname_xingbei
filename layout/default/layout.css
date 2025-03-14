@@ -3482,11 +3482,17 @@ div:not(.handcards) > .card > .info > span,
 .tiaoJian {
     color: rgb(131, 109, 31); 
 }
+.hongtext {
+	color: rgb(224, 43, 23); 
+}
 .hong {
-	color: rgb(160, 72, 36); 
+	color: rgb(203, 105, 11); 
+}
+.lantext {
+	color: rgb(80, 186, 239);
 }
 .lan {
-	color: rgb(0, 133, 160);
+	color: rgb(12, 156, 230);
 }
 
 /*--------动画--------*/

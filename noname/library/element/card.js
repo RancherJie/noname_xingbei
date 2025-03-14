@@ -531,7 +531,7 @@ export class Card extends HTMLDivElement {
 		}
 		if (info.subtype) this.classList.add(info.subtype);
 		this.node.range.innerHTML = "";
-		if(get.type(this)=='gongJi'){
+		if(this.duYou){
 			this.node.range.innerHTML=get.translation(this.duYou);
 		}
 		switch (get.subtype(this, false)) {

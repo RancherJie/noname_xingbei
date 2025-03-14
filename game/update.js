@@ -1,14 +1,13 @@
 window.noname_update = {
-	version: "1.0.4",
-	update: "1.0.4", //新版本更新文件较多，直接强制进行全量更新
+	version: "1.0.6",
+	update: "1.0.6", //新版本更新文件较多，直接强制进行全量更新
 	changeLog: [
-		'修复FAQ魔法入门无法正确触发Magic增加星石',
-		'优化魔法入门使用ai',
-		'修复多控响应技能无法进行选择触发',
+		'修复战纹碎击可能导致卡住',
+		'优化增加指示物日志颜色',
+		'修复逆反居合斩未正确移除兽魂',
+		'修复圣光未显示独有',
 	],
 	files: [
-		'game/update.js',
-		'mode/xingBei.js',
-		'character/shenZiChuangLin.js',
+
 	],
 };

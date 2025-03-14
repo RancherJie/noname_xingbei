@@ -7764,10 +7764,10 @@ export class Game extends GameCompatible {
 			str2 = "",
 			logvid = null;
 		const color = new Map([
-			["r", "fire"],
+			["r", "hong"],
 			["y", "yellow"],
 			["g", "green"],
-			["b", "lightblue"],
+			["b", "lan"],
 		]);
 		Array.from(arguments).forEach(value => {
 			const itemtype = get.itemtype(value);
