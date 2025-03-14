@@ -480,7 +480,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 markimage:'image/card/zhuanShu/fengXue.png',
                 onremove:'storage',
-                global:'fengXueX_yingZhiFeng1_1',
                 group:['fengXueX_yingZhiFeng1_1','fengXueX_yingZhiFeng1_2','fengXueX_yingZhiFeng2','fengXueX_fengZhi'],
                 subSkill:{
                     yingZhiFeng1_1:{
@@ -1526,7 +1525,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 ai:{
                     baoShi:true,
                 },
-                trigger:{player:'moFaRuMenBegin'},
+                trigger:{player:'FAQ_moFaRuMenBegin'},
                 usable:1,
                 filter:function(event,player){
                     return player.canBiShaBaoShi();

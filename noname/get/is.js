@@ -13,7 +13,7 @@ export class Is {
 	}
 	//useSkill||useCard
 	gongJi(event){
-		return get.type(event.card)=='gongJi'&&event.oriTargets.length>0	;
+		return get.type(event.card)=='gongJi'&&event.oriTarget;
 	}
 	yingZhanGongJi(event){
 		//if(!get.is.gongJi(event)) return false;

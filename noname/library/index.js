@@ -4081,8 +4081,8 @@ export class Library {
 					},
 				},
 				show_sex: {
-					name: "显示角色性别",
-					intro: "在角色的右键菜单中显示角色性别",
+					name: "显示角色名字",
+					intro: "在角色的右键菜单中显示角色名字",
 					init: true,
 					unfrequent: true,
 				},

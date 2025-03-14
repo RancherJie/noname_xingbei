@@ -797,6 +797,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         intro:{
                             content:'expansion',
                         },
+                        onremove:function(player, skill) {
+                            const cards = player.getExpansions(skill);
+                            if (cards.length) player.loseToDiscardpile(cards);
+                        },
                         trigger:{player:['daChuPai','showCardsEnd']},
                         forced:true,
                         priority:1,
@@ -1297,7 +1301,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         list.push(['baoShi','宝石']);
                     }
                     for(var i=0;i<player.countNengLiang('shuiJing');i++){
-                        list.push('shuiJing','水晶');
+                        list.push(['shuiJing','水晶']);
                     }
                     var result = await player.chooseButton(['是否发动【神之庇护】<br>'+lib.translate.shenZhiBiHu_info,[list,'tdnodes']])
                     .set('selectButton',[1,-trigger.num])
@@ -1423,13 +1427,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     result:{
                         target:function(player,target){
                             var num=target.countCards('h');
-                            if(num<5) return -5;
+                            if(num<5&&player.canGongJi()) return -5;
                             else return 0;
                         },
-                        player:function(player,target){
-                            if(player.canGongJi()) return 1;
-                            else return -10;
-                        }
                     }
                 }
             },
@@ -2192,7 +2192,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             },
             yueDu:{
                 usable:1,
-                trigger:{source:'chengShouShangHai'},
+                trigger:{source:'chengShouShangHaiAfter'},
                 filter:function(event,player){
                     return event.faShu==true&&player.zhiLiao>0;
                 },
@@ -2216,7 +2216,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     return player.isHengZhi()&&player.canBiShaShuiJing()&&player.getExpansions('anYue').length>0;
                 },
                 async cost(event, trigger, player) {
-                    var result=await player.chooseCardButton(player.getExpansions('anYue'),true,'是否发动【暗月斩】<br>'+lib.translate.anYueZhan_info).forResult();
+                    var result=await player.chooseCardButton(player.getExpansions('anYue'),'是否发动【暗月斩】<br>'+lib.translate.anYueZhan_info,[1, 2]).forResult();
                     event.result = {
                         bool: result.bool,
                         cost_data: result.links,
@@ -2288,7 +2288,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         },
                         content:function(){
                             'step 0'
-                            player.canYingZhan=true;
+                            trigger.wuFaYingZhan();
                             'step 1'
                             player.removeSkill('cangBaiZhiYue_wuFaYingZhan');
                         }
@@ -3523,7 +3523,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         event.target=result.targets[0];
                         if(result.targets[0].countNengLiang('shuiJing')){
                             event.target.removeNengLiang('shuiJing');
-                        }
+                        }else event.finish();
                     }else event.finish()
                     'step 3'
                     event.target.addNengLiang('baoShi');
@@ -4175,9 +4175,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 trigger:{source:'gongJiWeiMingZhong'},
                 filter:function(event,player){
                     if(event.yingZhan==true) return false;
+                    if(event.nuHuoYaZhi==false) return false;
                     return player.countZhiShiWu('zhanWen')>=1;
                 },
-                priority:1,
                 content:function(){
                     lib.skill.zhanWenZhangWo.fanZhuanZhanWen(player,1);
                     trigger.moWenRongHe=false
@@ -4209,24 +4209,24 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         .forResult();
                 },
                 content:async function(event, trigger, player){
-                    'step 0'
                     var num=event.cards.length-1;
-                    await player.discard(event.cards).set('showCards',true);
-                    await lib.skill.zhanWenZhangWo.fanZhuanZhanWen(player,1);
-                    if(player.isHengZhi()&&player.countZhiShiWu('zhanWen')>0){
+                    var zhanWenNum=1;
+                    if(player.isHengZhi()&&player.countZhiShiWu('zhanWen')>1){
                         var list=[];
-                        for(var i=0;i<=player.countZhiShiWu('zhanWen');i++){
+                        for(var i=0;i<=player.countZhiShiWu('zhanWen')-1;i++){
                             list.push(i);
                         }
-                        var control=await player.chooseControl(list).set('prompt','额外翻转【战纹】数量').set('ai',function(){
+                        var control=await player.chooseControl(list).set('prompt',`额外翻转Y个【战纹】，本次攻击伤害额外+(${num}+Y)`).set('ai',function(){
                             return list.length;
                         }).set('num',list.length).forResultControl();
                         if(control>0){
                             num+=control;
-                            await lib.skill.zhanWenZhangWo.fanZhuanZhanWen(player,control);
+                            zhanWenNum+=control;
                         }
                     }
-                    trigger.changeDamageNum(num);
+                    await lib.skill.zhanWenZhangWo.fanZhuanZhanWen(player,zhanWenNum);
+                    await player.discard(event.cards).set('showCards',true);
+                    await trigger.changeDamageNum(num);
                 }
             },
             moWenRongHe:{
@@ -4248,24 +4248,25 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         .forResult();
                 },
                 content:async function(event, trigger, player){
-                    await lib.skill.zhanWenZhangWo.fanZhuanMoWen(player,1);
-                    await player.discard(event.cards).set('showCards',true);
+                    trigger.nuHuoYaZhi=false;
                     var num=event.cards.length-1;
-                    if(player.isHengZhi()&&player.countZhiShiWu('moWen')>0){
+                    var moWenNum=1;
+                    if(player.isHengZhi()&&player.countZhiShiWu('moWen')>1){
                         var list=[];
-                        for(var i=0;i<=player.countZhiShiWu('moWen');i++){
+                        for(var i=0;i<=player.countZhiShiWu('moWen')-1;i++){
                             list.push(i);
                         }
-                        var control=await player.chooseControl(list).set('prompt','额外翻转【魔纹】数量').set('ai',function(){
+                        var control=await player.chooseControl(list).set('prompt',`额外翻转Y个【魔纹】，本次法术伤害为${num}+Y`).set('ai',function(){
                             return list.length;
                         }).set('num',list.length).forResultControl();
                         if(control>0){
                             num+=control;
-                            await lib.skill.zhanWenZhangWo.fanZhuanMoWen(player,control);
+                            moWenNum+=control;
                         }
                     }
-                    'step 4'
-                    trigger.player.faShuDamage(num,player);
+                    await lib.skill.zhanWenZhangWo.fanZhuanMoWen(player,moWenNum);
+                    await player.discard(event.cards).set('showCards',true);
+                    await trigger.player.faShuDamage(num,player);
                 }
             },
             fuWenGaiZao:{
@@ -4554,7 +4555,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             //阴阳师
             shiShenJiangLin:{
                 type:'faShu',
-                enable:['chooseToUse','faShu'],
+                enable:['faShu'],
                 filter:function(event,player){
                     if(player.isHengZhi()) return false;
                     return player.countTongMingPai()>=2;
@@ -5846,7 +5847,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             //灵符师
             lingFu_leiMing:{
                 type:'faShu',
-                enable:['chooseToUse','faShu'],
+                enable:['faShu'],
                 filter:function(event,player){
                     return player.countCards('h',card=>lib.skill.lingFu_leiMing.filterCard(card))>0;
                 },
@@ -6268,6 +6269,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     content:"[响应]激昂狂想曲：<span class='tiaoJian'>(回合开始时若你拥有【永恒乐章】)</span>选择以下一项执行：<br>·吟游诗人对2名目标对手各造成1点法术伤害③。 <br>·你弃2张牌。<br>[响应]胜利交响诗：<span class='tiaoJian'>(回合结束时若你拥有【永恒乐章】)</span>选择以下一项执行<br>·将我方【战绩区】的1个星石提炼成为你的能量。<br>·为我方【战绩区】+1[宝石]，你+1[治疗]。",
                     nocount:true,
                 },
+                onremove:'storage',
                 group:['yongHengYueZhang_jiAngKuangXiangQu','yongHengYueZhang_shengLiJiaoXiangShi'],
                 markimage:'image/card/zhuanShu/yongHengYueZhang.png',
                 subSkill:{
@@ -6642,7 +6644,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                 await player.addZhiShiWu('nuQi',nuQi);
                             }
                             if(num>0){
-                                trigger.getParent().changeDamageNum(num);
+                                trigger.changeDamageNum(num);
                                 await player.faShuDamage(num,player);
                             }
                             await event.trigger('jinDuanZhiLi');
@@ -7128,7 +7130,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             },
             shengGuangBaoLie:{
                 type:'faShu',
-                enable:['chooseToUse','faShu'],
+                enable:['faShu'],
                 filter:function(event,player){
                     return player.isHengZhi();
                 },
@@ -7660,7 +7662,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 }
             },
             yiJiWuNian:{
-                trigger:{player:'gongJiEnd'},
+                trigger:{player:'gongJiAfter'},
                 filter:function(event,player){
                     return get.is.gongJiXingDong(event)&&player.countZhiShiWu('canXin')>=4;
                 },
@@ -7697,7 +7699,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     return event.zhiShiWu=='shouHun'&&event.num<0;
                 },
                 content:function(){
-                    player.addZhiShiWu('canXin',trigger.num);
+                    player.addZhiShiWu('canXin',-trigger.num);
                 },
                 group:'shouHunYiNian_zhuDongGongJiMingZhong',
                 subSkill:{
@@ -8696,7 +8698,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         var targets=await player.chooseTarget("对目标角色造成1点法术伤害③，该伤害不能用[治疗]抵御",true)
                         .set('ai',function(target){
                             var player=_status.event.player;
-                            return gat.damageEffect2(target,player,1);
+                            return get.damageEffect2(target,player,1);
                         }).forResultTargets();
                         var target=targets[0];
                         await target.faShuDamage(1,player).set('canZhiLiao',false);

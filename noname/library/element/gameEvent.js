@@ -1312,6 +1312,7 @@ export class GameEvent {
 	//xingBei
 	weiMingZhong(){
 		this.target=undefined;
+		return this;
 	}
 	/**
 	 * @param {num} num 伤害改变量 
@@ -1320,7 +1321,7 @@ export class GameEvent {
 		if(typeof num != 'number' || !num) num = 1;
 		if(this.name=='zhiLiao'){
 			this.getParent().num+=num;
-			return;
+			return this;
 		}
 		if(typeof this.damageNum == 'number' || typeof this.num == 'number'){
 			if(typeof this.damageNum == 'number') this.damageNum += num;
@@ -1331,6 +1332,7 @@ export class GameEvent {
 			this.getParent().damageNum += num;
 			if(this.getParent().damageNum < 0) this.getParent().damageNum = 0;
 		}
+		return this;
 	}
 	/** 
 	 * 设置攻击效果 主要在攻击设置/攻击前时机调用
@@ -1345,7 +1347,7 @@ export class GameEvent {
 			this.getParent().canShengGuang=false;
 			this.getParent().canShengDun=false;1
 		}
-		
+		return this;
 	}
 	wuFaYingZhan(){
 		if(this.canYingZhan!=undefined){
@@ -1353,6 +1355,7 @@ export class GameEvent {
 		}else{
 			this.getParent().canYingZhan=false;
 		}
+		return this;
 	}
 	wuFaShengGuang(){
 		if(this.canShengGuang!=undefined){
@@ -1360,6 +1363,7 @@ export class GameEvent {
 		}else{
 			this.getParent().canShengGuang=false;
 		}
+		return this;
 	}
 	wuFaShengDun(){
 		if(this.canShengDun!=undefined){
@@ -1367,5 +1371,6 @@ export class GameEvent {
 		}else{
 			this.getParent().canShengDun=false;
 		}
+		return this;
 	}
 }

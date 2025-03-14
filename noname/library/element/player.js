@@ -3531,7 +3531,7 @@ export class Player extends HTMLDivElement {
 				hp.classList.add("text");
 			} else if (get.is.newLayout() && (maxHp > 9 || (maxHp > 5 && this.classList.contains("minskin")) || ((game.layout == "mobile" || game.layout == "long") && this.dataset.position == 0 && maxHp > 7))) {
 			 */
-			} else if (maxHp > 5) {
+			} else if (maxHp > 8) {
 				hp.innerHTML = this.hp + "<br>/<br>" + maxHp + "<div></div>";
 				if (this.hp == 0) {
 					hp.lastChild.classList.add("lost");
@@ -10475,6 +10475,7 @@ export class Player extends HTMLDivElement {
 		var next=game.createEvent('wuFaXingDong',false);
 		next.player = this;
 		next.setContent(lib.skill._wuFaXingDong.contentx);
+		return next;
 	}
 	moDan(use){
 		var next=game.createEvent('moDan',false);
@@ -10892,14 +10893,14 @@ export class Player extends HTMLDivElement {
 			return next;
 		}else{
 			if(this.hasNengLiang('shuiJing')){
-				this.removeNengLiang('shuiJing');
+				return this.removeNengLiang('shuiJing');
 			}else if(this.hasNengLiang('baoShi')){
-				this.removeNengLiang('baoShi');
+				return this.removeNengLiang('baoShi');
 			}
 		}
 	}
 	removeBiShaBaoShi(){//移除宝石
-		this.removeNengLiang('baoShi');
+		return this.removeNengLiang('baoShi');
 	}
 	changeNengLiang(xingShi,num){//改变能量
 		if(xingShi==undefined) return;
@@ -10927,12 +10928,12 @@ export class Player extends HTMLDivElement {
 	}
 	addNengLiang(xingShi,num){//添加能量
 		if(typeof num!='number'||!num) num=1;
-		this.changeNengLiang(xingShi,num);
+		return this.changeNengLiang(xingShi,num);
 	}
 	removeNengLiang(xingShi,num){//移除能量
 		if(typeof num!='number'||!num) num=-1;
 		if(num>0) num=-num;
-		this.changeNengLiang(xingShi,num);
+		return this.changeNengLiang(xingShi,num);
 	}
 	countNengLiang(xingShi){//统计某个能量数
 		if(xingShi==undefined) return 0;
@@ -10957,20 +10958,21 @@ export class Player extends HTMLDivElement {
 	*/
 	changeZhiShiWu () {
 		var num_flag=0;
+		var num,max,zhiShiWu,forced;
 		for(var i=0;i<arguments.length;i++){
 			if(typeof arguments[i]=='number'){
 				if(num_flag==0){
-					var num=arguments[i];
-					var num_flag=1;
+					num=arguments[i];
+					num_flag=1;
 				}else if(num_flag==1){
-					var max=arguments[i];
+					max=arguments[i];
 				}
 			}
 			else if(typeof arguments[i]=='string'){
-				var zhiShiWu=arguments[i];
+				zhiShiWu=arguments[i];
 			}
 			else if(typeof arguments[i]=='boolean'){
-				var forced=arguments[i];
+				forced=arguments[i];
 			}
 		}
 		if(!this.hasSkill(zhiShiWu)&&!forced) return;
@@ -10978,11 +10980,11 @@ export class Player extends HTMLDivElement {
 		var info=get.info(zhiShiWu);
 		if(num>0){
 			if(typeof max=='number'){
-				var max=max;
+				max=max;
 			}else if(info&&info.intro&&info.intro.max){
-				var max=info.intro.max;
+				max=info.intro.max;
 			}else{
-				var max=Infinity;
+				max=Infinity;
 			}
 			var current=this.countMark(zhiShiWu);
 			if(current+num>max){
@@ -11001,10 +11003,32 @@ export class Player extends HTMLDivElement {
 			next.num=num;
 			next.setContent('changeZhiShiWu');
 			return next;
+		}else{
+			return;
 		}
 	}
-	addZhiShiWu(...args){//添加指示物
-		this.changeZhiShiWu(...args);
+	addZhiShiWu(){//添加指示物
+		var num_flag=0;
+		var num,max,zhiShiWu,forced;
+		for(var i=0;i<arguments.length;i++){
+			if(typeof arguments[i]=='number'){
+				if(num_flag==0){
+					num=arguments[i];
+					num_flag=1;
+				}else if(num_flag==1){
+					max=arguments[i];
+				}
+			}
+			else if(typeof arguments[i]=='string'){
+				zhiShiWu=arguments[i];
+			}
+			else if(typeof arguments[i]=='boolean'){
+				forced=arguments[i];
+			}
+		}
+		if(typeof num!='number'||!num) num=1;
+		if(num<0) num=-num;
+		return this.changeZhiShiWu(num,max,zhiShiWu,forced);
 	}
 	countZhiShiWu(zhiShiWu){//统计指示物
 		return this.countMark(zhiShiWu);
@@ -11019,7 +11043,7 @@ export class Player extends HTMLDivElement {
 		}
 		if(!num) num=-1;
 		if(num>0) num=-num;
-		this.changeZhiShiWu(zhiShiWu,num,true);
+		return this.changeZhiShiWu(zhiShiWu,num,true);
 	}
 	//指示物是否到达上限
 	isZhiShiWuMax(zhiShiWu){
@@ -11033,8 +11057,8 @@ export class Player extends HTMLDivElement {
 
 	setZhiShiWu(zhiShiWu, num) {
 		const count = this.countMark(zhiShiWu);
-		if (count > num) this.removeZhiShiWu(zhiShiWu, count - num);
-		else if (count < num) this.addZhiShiWu(zhiShiWu, num - count);
+		if (count > num) return this.removeZhiShiWu(zhiShiWu, count - num);
+		else if (count < num) return this.addZhiShiWu(zhiShiWu, num - count);
 	}
 	hasZhiShiWu(zhiShiWu){//是否拥有指示物
 		return this.hasMark(zhiShiWu);
@@ -11042,12 +11066,12 @@ export class Player extends HTMLDivElement {
 
 	addZhanJi(xingShi,num){//增加战绩
 		if(typeof num!='number'||!num) num=1;
-		this.changeZhanJi(xingShi,num);
+		return this.changeZhanJi(xingShi,num);
 	}
 	removeZhanJi(xingShi,num){//移除战绩
 		if(typeof num!='number'||!num) num=-1;
 		if(num>0) num=-num;
-		this.changeZhanJi(xingShi,num);
+		return this.changeZhanJi(xingShi,num);
 	}
 	chongZhi(){//重置
 		if(this.isLinked()){
@@ -11068,7 +11092,7 @@ export class Player extends HTMLDivElement {
 	qiPai(){//执行一次超出手牌上限的弃牌
 		var num=this.needsToDiscard();
 		if(num>0){
-			this.chooseToDiscard(num,true).set('useCache',true).set('baoPai',true);
+			return this.chooseToDiscard(num,true).set('useCache',true).set('baoPai',true);
 		}
 	}
 	countTongXiPai(type){//统计同系牌数
@@ -11136,8 +11160,7 @@ export class Player extends HTMLDivElement {
 			var skill=skills[i];
 			var info=get.info(skill);
 			if(info.intro&&info.markimage=='image/card/zhiShiWu/hong.png'){
-				this.changeZhiShiWu(skill,num,max);
-				break;
+				return this.changeZhiShiWu(skill,num,max);
 			}
 		}
 	}
@@ -11148,28 +11171,27 @@ export class Player extends HTMLDivElement {
 			var skill=skills[i];
 			var info=get.info(skill);
 			if(info.intro&&info.markimage=='image/card/zhiShiWu/lan.png'){
-				this.changeZhiShiWu(skill,num,max);
-				break;
+				return this.changeZhiShiWu(skill,num,max);
 			}
 		}
 	}
 	addHong(num,max){//添加红点
 		if(typeof num!='number'||!num) num=1;
-		this.changeHong(num,max);
+		return this.changeHong(num,max);
 	}
 	removeHong(num){//移除红点
 		if(typeof num!='number'||!num) num=-1;
 		if(num>0) num=-num;
-		this.changeHong(num);
+		return this.changeHong(num);
 	}
 	addLan(num,max){//添加蓝点
 		if(typeof num!='number'||!num) num=1;
-		this.changeLan(num,max);
+		return this.changeLan(num,max);
 	}
 	removeLan(num){//移除蓝点
 		if(typeof num!='number'||!num) num=-1;
 		if(num>0) num=-num;
-		this.changeLan(num);
+		return this.changeLan(num);
 	}
 	/**
 	 * 
@@ -11217,12 +11239,14 @@ export class Player extends HTMLDivElement {
 		return next;
 	}
 	addZhiLiao(num,limit){
-		this.changeZhiLiao(num,limit);
+		if(num==undefined) num=1;
+		if(num<0) num=-num;
+		return this.changeZhiLiao(num,limit);
 	}
 	removeZhiLiao(num){
 		if(typeof num!='number') num=-1;
 		if(num>0) num=-num;
-		this.changeZhiLiao(num);
+		return this.changeZhiLiao(num);
 	}
 
 	countEmptyCards(){
@@ -11250,15 +11274,15 @@ export class Player extends HTMLDivElement {
 	
 	addGongJiOrFaShu(num){
 		if(typeof num!='number') num=1;
-		this.storage.gongJiOrFaShu+=num;
+		return this.storage.gongJiOrFaShu+=num;
 	}
 	addGongJi(num){
 		if(typeof num!='number') num=1;
-		this.storage.gongJi+=num;
+		return this.storage.gongJi+=num;
 	}
 	addFaShu(num){
 		if(typeof num!='number') num=1;
-		this.storage.faShu+=num;
+		return this.storage.faShu+=num;
 	}
 
 	gainJiChuXiaoGuo(target){

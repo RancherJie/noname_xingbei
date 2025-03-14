@@ -842,6 +842,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     nocount:true,
                 },
                 group:['san_yongHengYueZhang_jiAngKuangXiangQu','san_yongHengYueZhang_shengLiJiaoXiangShi'],
+                onremove:'storage',
                 markimage:'image/card/zhuanShu/yongHengYueZhang.png',
                 subSkill:{
                     jiAngKuangXiangQu:{

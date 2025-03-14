@@ -470,13 +470,15 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 
                     if(player.countCards('h')>0){
                         var cards=await player.chooseToDiscard('h',1,true).forResultCards();
-                        result=await player.chooseCardButton(cards,'是否展示,对目标角色造成1点法术伤害③')
+                        result=await player.chooseCardButton(cards,'是否展示,对目标对手造成1点法术伤害③')
                         .set('filterButton',function(button){
                             return get.mingGe(button.link)=='sheng';
                         }).forResult();
                         if(result.bool){
                             await player.showCards(result.links);
                             var targets=await player.chooseTarget('对目标对手造成1点法术伤害③',true,function(card,player,target){
+                                return target.side!=player.side;
+                            }).set('ai',function(target){
                                 var player=_status.event.player;
                                 return get.damageEffect2(target,player,1);
                             }).forResultTargets();

@@ -8539,7 +8539,7 @@ export const Content = {
 		if(event.targets.length>0){
 			event.target=event.targets[0];
 			event.source=player;
-			event.oriTargets=event.target;
+			event.oriTarget=event.target;
 		}
 		if(event.getParent().firstAction) event.firstAction=true;
 		var type=get.type(card);
