@@ -387,7 +387,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				},
 				prompt:'指定最多3名角色各+1[治疗]。',
                 filterTarget:true,
-                selectTarget:[0,3],
+                selectTarget:[1,3],
                 useCard:true,
                 content:function(){
                     if(target){
@@ -5228,7 +5228,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 discard:false,
                 lose:false,
                 selectTarget:function(){
-                    return [0,ui.selected.cards.length-2];
+                    return [1,ui.selected.cards.length-2];
                 },
                 filterTarget:true,
                 filterOk:function(event,player){
@@ -8083,7 +8083,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 type:'qiDong',
                 trigger:{player:'qiDong'},
                 filter:function(event,player){
-                    //if(game.players.length==4) return false;
+                    if(game.players.length==4) return false;
                     if(player.storage.lingHunLianJieTarget) return false;
                     return player.hasZhiShiWu('huangSeLingHun')&&player.hasZhiShiWu('lanSeLingHun');
                 },

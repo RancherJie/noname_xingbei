@@ -10610,11 +10610,11 @@ export class Library {
 		group: function (a, b) {
 			const groupSort = function (group) {
 				let base = 0;
-				if (group == "ji") return base;
-				if (group == "huan") return base + 1;
-				if (group == "xue") return base + 2;
-				if (group == "yong") return base + 3;
-				if (group == "sheng") return base + 4;
+				if (group == "jiGroup") return base;
+				if (group == "huanGroup") return base + 1;
+				if (group == "xueGroup") return base + 2;
+				if (group == "yongGroup") return base + 3;
+				if (group == "shengGroup") return base + 4;
 				//if (group == "key") return base + 5;
 				//if (group == "western") return base + 6;
 				//if (group == "shen") return base + 7;
@@ -11763,7 +11763,7 @@ export class Library {
 				return true;
 			},
 			content: function () {
-				console.log("autoswap", trigger);
+				//console.log("autoswap", trigger);
 				game.swapPlayerAuto(player);
 			},
 		},
