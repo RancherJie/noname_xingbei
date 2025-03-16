@@ -1348,7 +1348,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     if (cards.length) player.loseToDiscardpile(cards);
                 },
                 direct:true,
-                trigger:{player:'addToExpansionEnd'},
+                trigger:{player:'addToExpansionAfter'},
                 filter:function(event,player){
                     return player.getExpansions('luEn').length>6;
                 },

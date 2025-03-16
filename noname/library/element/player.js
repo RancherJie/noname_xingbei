@@ -10532,7 +10532,7 @@ export class Player extends HTMLDivElement {
 	}
 
 	yingZhan(use){
-		var next=game.createEvent('yingZhan',false);
+		var next=game.createEvent('yingZhan');
 		next.player = this;
 		if (arguments.length == 1 && get.objtype(arguments[0]) == "object") {
 			for (var i in use) {
@@ -11205,7 +11205,7 @@ export class Player extends HTMLDivElement {
 	 * @returns 
 	 */
 	changeZhiLiao(){
-		var num,limit,source;
+		var num,limit,source,yiChu;
 		var numBool=true;
 		for (const argument of arguments) {
 			if (typeof argument == "number"){
@@ -11219,27 +11219,37 @@ export class Player extends HTMLDivElement {
 			else if (get.itemtype(argument) == "player") source = argument;
 		}
 
-		var next=game.createEvent('changeZhiLiao');
+		
 		if(typeof num!='number'){
 			num=1;
 		}
-		next.player=this;
-		next.setContent('changeZhiLiao');
+		
+		
 		if(typeof limit!='number'){
 			limit=this.getZhiLiaoLimit();
 		}
-		if(source!=undefined) next.source=source;
+		
 		if(num>0&&this.zhiLiao+num>limit){
 			if(this.zhiLiao>=limit){
 				num=0;
 			}else{
 				num=limit-this.zhiLiao;
 			}
-			next.yiChu=true;
-		}else{
-			next.yiChu=false;
+			yiChu=true;
+		}else if(num>0&&this.zhiLiao+num<=limit){
+			yiChu=false;
 		}
-		next.num=num;
+		if(num<0&&this.zhiLiao+num<0){
+			num=-this.zhiLiao;
+		}
+		if(yiChu||num!=0){
+			var next=game.createEvent('changeZhiLiao');
+			next.player=this;
+			next.setContent('changeZhiLiao');
+			next.num=num;
+			next.yiChu=yiChu;
+			if(source!=undefined) next.source=source;
+		}
 		return next;
 	}
 	addZhiLiao(num,limit){
