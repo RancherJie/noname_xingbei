@@ -4143,6 +4143,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 fanZhuanZhanWen:function(player,num){
                     var num=num||1;
+                    if(!player.hasZhiShiWu('zhanWen')) return;
                     var next=game.createEvent('fanZhuanZhanWen');
                     next.player=player;
                     if(num>player.countZhiShiWu('zhanWen')) num=player.countZhiShiWu('zhanWen');
@@ -4157,6 +4158,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 fanZhuanMoWen:function(player,num){
                     var num=num||1;
+                    if(!player.hasZhiShiWu('moWen')) return;
                     var next=game.createEvent('fanZhuanMoWen');
                     next.player=player;
                     if(num>player.countZhiShiWu('moWen')) num=player.countZhiShiWu('moWen');
