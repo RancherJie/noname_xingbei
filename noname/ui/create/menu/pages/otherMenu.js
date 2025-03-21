@@ -687,7 +687,7 @@ export const otherMenu = function (/** @type { boolean | undefined } */ connectM
 		var span3_br = ui.create.node("br");
 		li2.lastChild.appendChild(span3_br);
 
-		var span3 = ui.create.div("", `音效素材（${lib.config.asset_audio_size || "350MB"}）`);
+		var span3 = ui.create.div("", `音效素材（${lib.config.asset_audio_size || "7.8MB"}）`);
 		span3.style.fontSize = "small";
 		span3.style.lineHeight = "16px";
 		li2.lastChild.appendChild(span3);
@@ -718,7 +718,7 @@ export const otherMenu = function (/** @type { boolean | undefined } */ connectM
 		// 	game.saveConfig('asset_skin', this.checked);
 		// };
 		// li2.lastChild.appendChild(span2_check);
-		var span5 = ui.create.div("", `图片素材（${lib.config.asset_image_size || "363MB"}）`);
+		var span5 = ui.create.div("", `图片素材（${lib.config.asset_image_size || "54.8MB"}）`);
 		span5.style.fontSize = "small";
 		span5.style.lineHeight = "16px";
 		li2.lastChild.appendChild(span5);

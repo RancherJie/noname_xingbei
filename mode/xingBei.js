@@ -557,6 +557,23 @@ export default () => {
 					else{
 						event.dialogxx=ui.create.characterDialog('heightset');
 					}
+					ui.create.cheat=function(){
+						_status.createControl=ui.cheat2;
+						ui.cheat=ui.create.control('更换',function(){
+							if(ui.cheat2&&ui.cheat2.dialog==_status.event.dialog){
+								return;
+							}
+							var buttons=ui.create.div('.buttons');
+							var node=_status.event.dialog.buttons[0].parentNode;
+							_status.event.dialog.buttons=ui.create.buttons(list.randomGets(choose_number),'character',buttons);
+							_status.event.dialog.content.insertBefore(buttons,node);
+							buttons.addTempClass('start');
+							node.remove();
+							game.uncheck();
+							game.check();
+						});
+						delete _status.createControl;
+					};
 					ui.create.cheat2=function(){
 						ui.cheat2=ui.create.control('自由选角',function(){
 							if(this.dialog==_status.event.dialog){
@@ -587,6 +604,9 @@ export default () => {
 						ui.cheat2.classList.add('disabled');
 					}
 					if(!_status.brawl||!_status.brawl.chooseCharacterFixed){
+						if(!ui.cheat&&get.config('change_choice')){
+							ui.create.cheat();
+						}
 						if(!ui.cheat2&&get.config('free_choose')){
 							ui.create.cheat2();
 						}
@@ -595,6 +615,10 @@ export default () => {
 					setTimeout(function(){
 						ui.arena.classList.remove('choose-character');
 					},500);
+					if(ui.cheat){
+						ui.cheat.close();
+						delete ui.cheat;
+					}
 					if(ui.cheat2){
 						ui.cheat2.close();
 						delete ui.cheat2;

@@ -1,6 +1,6 @@
 window.noname_asset_list =
 [
-	"v1.0.0",
+	"v1.0.1",
 	"audio/background/music_default.mp3",
 	"audio/card/default.mp3",
 	"audio/voice/female/0.mp3",
@@ -72,6 +72,8 @@ window.noname_asset_list =
 	"image/card/fengShenZhan.png",
 	"image/card/huoYanZhan.png",
 	"image/card/leiGuangZhan.png",
+	"image/card/moRen.png",
+	"image/card/yiRen.png",
 	
 	'image/card/xingShi/baoShi.png',
 	'image/card/xingShi/shuiJing.png',
@@ -139,6 +141,7 @@ window.noname_asset_list =
 	'image/character/yueZhiNvShen.jpg',
 	'image/character/zhanDouFaShi.jpg',
 	'image/character/zhongCaiZhe.jpg',
+	'image/character/shiShenZhe.jpg',
 	
 	"image/emotion/xingBei_emotion/1.gif",
 	"image/emotion/xingBei_emotion/2.gif",

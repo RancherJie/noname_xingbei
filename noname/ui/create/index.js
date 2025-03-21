@@ -2724,7 +2724,7 @@ export class Create {
 						game.saveConfig("asset_version", "无");
 					} else {
 						var func = function () {
-							if (confirm("是否下载图片和字体素材？（约386.6MB）")) {
+							if (confirm("是否下载图片和字体素材？（约90MB）")) {
 								if (!ui.arena.classList.contains("menupaused")) {
 									ui.click.configMenu();
 									ui.click.menuTab("其它");

@@ -126,7 +126,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         },
                         content:function(){
                             var num=player.countNengLiangAll();
-                            trigger.changeDamageNum(num);
+                            if(num>0) trigger.changeDamageNum(num);
                             trigger.wuFaYingZhan();
                         }
                     }
@@ -393,7 +393,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                 },
                 forced:true,
-                trigger:{player:'chengShouShangHai'},
+                trigger:{player:'chengShouShangHaiAfter'},
                 filter:function(event,player){
                     if(event.faShu!=true) return false;
                     return event.num>3;

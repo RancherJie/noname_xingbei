@@ -5,7 +5,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 		connect:true,
         characterSort:{
             yiDuanYeHuo:{
-                'FAQ':['FAQ_lieWuRen'],
                 "3xing":['zhanDouFaShi'],
                 "3.5xing":['lieWuRen'],
                 "4xing":['shengTingJianChaShi','shengDianQiShi'],
@@ -18,9 +17,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             shengTingJianChaShi:['shengTingJianChaShi_name','shengGroup',4,['kuangXinTu','caiJueLunDing','enDianShenShou','jingHuaZhiShu','biHuLingYu','caiJueZhe','shenShengBianCe','caiJue'],],
             lieWuRen:['lieWuRen_name','jiGroup','3/4',['zhuanHuan','shouMoCi','faShuBoLi','guanYinDuRen','touXi','moLiPing'],],
             shengDianQiShi:['shengDianQiShi_name','shengGroup',4,['shenXuanZhe','shenWei','shengCai','shengYu','shenZhiZi','shenLinShengQi','shengYanQiFu','shengYin'],],
-
-            FAQ_lieWuRen:['lieWuRen_name','jiGroup','3/4',['zhuanHuan','shouMoCi','faShuBoLi','FAQ_guanYinDuRen','touXi','moLiPing'],['character:lieWuRen']],
-
 		},
         characterIntro:{
             zhanDouFaShi:`路尔莉嘉不擅长高深莫测的魔法，归因于她对战斗的直觉和创造性。但你如果因此小看她，则她会用符文法术的小把戏让你吃尽苦头`,
@@ -1472,7 +1468,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 async cost(event,trigger,player){
                     var cards=player.getExpansions('moLiPing');
-                    var result=await player.chooseCardButton(cards,`是否发动【灌银毒刃】，移除1个【魔力瓶】,本次伤害-1，将移除的【魔力瓶】加入他手牌[强制]，你+1[治疗]`).forResult();
+                    var result=await player.chooseCardButton(cards,`是否发动【灌银毒刃】，移除1个【魔力瓶】,本次伤害-1，其摸牌后将移除的【魔力瓶】加入他手牌[强制]，你+1[治疗]`).forResult();
                     event.result={
                         bool:result.bool,
                         cost_data:result.links
@@ -1483,10 +1479,26 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.discard(event.cost_data,'moLiPing');
                     trigger.changeDamageNum(-1);
                     'step 1'
-                    game.log(trigger.player,'获得了一张牌');
-                    trigger.player.gain(event.cost_data,'draw');
-                    'step 2'
-                    player.changeZhiLiao(1);
+                    player.addTempSkill('guanYinDuRen_gain');
+                    player.storage.guanYinDuRen=event.cost_data;
+                    trigger.guanYinDuRen=true;
+                },
+                subSkill:{
+                    gain:{
+                        trigger:{global:['drawAfter','damageZero']},
+                        direct:true,
+                        filter:function(event,player){
+                            return event.getParent('damage').guanYinDuRen||event.guanYinDuRen;
+                        },
+                        content:function(){
+                            'step 0'
+                            game.log(trigger.player,'获得了',player.storage.guanYinDuRen.length,'张牌');
+                            trigger.player.gain(player.storage.guanYinDuRen,'draw');
+                            player.removeSkill('guanYinDuRen_gain');
+                            'step 1'
+                            player.changeZhiLiao(1);
+                        }
+                    }
                 },
             },
             touXi:{
@@ -1503,62 +1515,46 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         cost_data:result.links
                     }
                 },
-                content:function(){
-                    'step 0'
-                    player.removeBiShaShuiJing();
-                    'step 1'
-                    player.discard(event.cost_data,'moLiPing','showHiddenCards');
-                    event.cards=event.cost_data;
+                content:async function(event,trigger,player){
+                    await player.removeBiShaShuiJing();
+                    await player.discard(event.cost_data,'moLiPing','showHiddenCards');
+                    var cards=event.cost_data;
 
-                    'step 2'
-                    event.faShu=0;
-                    event.gongJi=0;
-                    event.tongXi=false;
+                    var faShu=0;
+                    var gongJi=0;
+                    var tongXi=false;
 
-                    for(var i=0;i<event.cards.length;i++){
-                        var card=event.cards[i];
+                    for(let card of cards){
                         if(get.type(card)=='faShu'){
-                            event.faShu++;
+                            faShu++;
                         }else if(get.type(card)=='gongJi'){
-                            event.gongJi++;
+                            gongJi++;
                         }
                     }
-                    if(get.xiBie(event.cards[0])==get.xiBie(event.cards[1])) event.tongXi=true;
+                    if(get.xiBie(cards[0])==get.xiBie(cards[1])) tongXi=true;
 
-                    'step 3'
-                    if(event.faShu>=1){
-                        player.chooseTarget(`对${event.faShu}个目标对手造成1点法术伤害③`,true,event.faShu,function(card,player,target){
+                    if(faShu>=1){
+                        let targets=await player.chooseTarget(`对${faShu}个目标对手造成1点法术伤害③`,true,faShu,function(card,player,target){
                             return target.side!=player.side;
                         }).set('ai',function(target){
                             return -get.damageEffect(target,1);
-                        });
-                    }else{
-                        event.goto(6);
+                        }).forResultTargets();
+                        targets.sortBySeat(player);
+                        game.log(player,'选择了',targets);
+                        for(let target of targets){
+                            await target.faShuDamage(1,player);
+                        }
                     }
-                    'step 4'
-                    game.log(player,'选择了',result.targets);
-
-                    event.targets=result.targets;
-                    'step 5'
-                    var target=event.targets.shift();
-                    target.faShuDamage(1,player);
-                    if(event.targets.length>0) event.redo();
-
-                    'step 6'
-                    if(event.gongJi>=2) player.addGongJi();
+                    if(gongJi>=2) player.addGongJi();
                     
-                    'step 7'
-                    if(event.tongXi){
-                        player.chooseTarget(`对目标角色造成1点法术伤害③`,true).set('ai',function(target){
+                    if(tongXi){
+                        let targets=await player.chooseTarget(`对目标角色造成1点法术伤害③`,true).set('ai',function(target){
                             var player=_status.event.player;
                             if(target.side==player.side) return -1;
                             return -get.damageEffect(target,1);
-                        });
-                    }else{
-                        event.finish();
+                        }).forResultTargets();
+                        await targets[0].faShuDamage(1,player);
                     }
-                    'step 8'
-                    result.targets[0].faShuDamage(1,player);
                 },
                 ai:{
                     shuiJing:true,
@@ -1576,47 +1572,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 onremove:function(player, skill) {
                     const cards = player.getExpansions(skill);
                     if (cards.length) player.loseToDiscardpile(cards);
-                },
-            },
-            
-            FAQ_guanYinDuRen:{
-                trigger:{source:'chengShouShangHai'},
-                filter:function(event,player){
-                    return player.getExpansions('moLiPing').length>=1;
-                },
-                async cost(event,trigger,player){
-                    var cards=player.getExpansions('moLiPing');
-                    var result=await player.chooseCardButton(cards,`是否发动【灌银毒刃】，移除1个【魔力瓶】,本次伤害-1，其摸牌后将移除的【魔力瓶】加入他手牌[强制]，你+1[治疗]`).forResult();
-                    event.result={
-                        bool:result.bool,
-                        cost_data:result.links
-                    }
-                },
-                content:function(){
-                    'step 0'
-                    player.discard(event.cost_data,'moLiPing');
-                    trigger.changeDamageNum(-1);
-                    'step 1'
-                    player.addTempSkill('FAQ_guanYinDuRen_gain');
-                    player.storage.FAQ_guanYinDuRen=event.cost_data;
-                    trigger.FAQ_guanYinDuRen=true;
-                },
-                subSkill:{
-                    gain:{
-                        trigger:{global:'drawAfter'},
-                        direct:true,
-                        filter:function(event,player){
-                            return event.getParent('damage').FAQ_guanYinDuRen;
-                        },
-                        content:function(){
-                            'step 0'
-                            game.log(trigger.player,'获得了',player.storage.FAQ_guanYinDuRen.length,'张牌');
-                            trigger.player.gain(player.storage.FAQ_guanYinDuRen,'draw');
-                            player.removeSkill('FAQ_guanYinDuRen_gain');
-                            'step 1'
-                            player.changeZhiLiao(1);
-                        }
-                    }
                 },
             },
         },
@@ -1716,17 +1671,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             faShuBoLi:"[响应]法术剥离",
             faShuBoLi_info:"<span class='tiaoJian'>(主动攻击命中时②发动)</span>目标角色弃1张牌，将弃牌面朝下放置于你的角色旁，作为【魔力瓶】。",
             guanYinDuRen:"[响应]灌银毒刃",
-            guanYinDuRen_info:"<span class='tiaoJian'>(目标角色将要承受你造成的伤害时⑥发动，移除1个【魔力瓶】)</span>本次伤害-1，将移除的【魔力瓶】加入他手牌[强制]，你+1[治疗]。",
+            guanYinDuRen_info:"<span class='tiaoJian'>(目标角色将要承受你造成的伤害时⑥发动，移除1个【魔力瓶】)</span>本次伤害-1，其摸牌后将移除的【魔力瓶】加入他手牌[强制]，你+1[治疗]。",
             touXi:"[响应]偷袭[回合限定]",
             touXi_info:"[水晶]<span class='tiaoJian'>([攻击行动]结束时，移除2个【魔力瓶】[展示])</span>每有X张法术牌，对X名目标对手造成1点法术伤害③；<span class='tiaoJian'>(若有2张攻击牌)</span>额外+1[攻击行动]。 <span class='tiaoJian'>(若为同系牌)</span>对目标角色造成1点法术伤害③。",
             moLiPing:"魔力瓶",
             moLiPing_info:"【魔力瓶】为猎巫人专有盖牌，上限为4；若【魔力瓶】达到上限，则不能发动【狩魔刺】、【法术剥离】",
-
-            FAQ_lieWuRen:"FAQ猎巫人",
-            FAQ_lieWuRen_prefix: "FAQ",
-            FAQ_guanYinDuRen:"[响应]灌银毒刃",
-            FAQ_guanYinDuRen_info:"<span class='tiaoJian'>(目标角色将要承受你造成的伤害时⑥发动，移除1个【魔力瓶】)</span>本次伤害-1，其摸牌后将移除的【魔力瓶】加入他手牌[强制]，你+1[治疗]。",
-
         },
 	};
 });

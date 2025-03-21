@@ -56,6 +56,7 @@ window.config = {
 	background_speak: true,
 	glow_phase: "yellow",
 	die_move: "flip",
+	link_style2:'rotate',
 
 	skin: {},
 	gameRecord: {},
