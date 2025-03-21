@@ -4436,6 +4436,7 @@ export const Content = {
 		player.storage.gongJiOrFaShu=1;
 		player.storage.faShu=0;
 		player.storage.gongJi=0;
+		player.storage.extraXingDong=[];
 		//判断是否有可启动技
 		var skills=player.skills;
 		var flag=false;
@@ -4487,9 +4488,23 @@ export const Content = {
 		}else if(player.storage.faShu>0){
 			event.xingDong='faShu';
 			var next=player.faShu().set('action',true).set('prompt','法术行动');
+			next.set('filterCard',function(card,player,event){
+				if(get.type(card)!='faShu') return false;
+                return lib.filter.cardEnabled(card,player,'forceEnable');
+			});
 		}else if(player.storage.gongJi>0){
 			event.xingDong='gongJi';
 			var next=player.gongJi().set('action',true).set('prompt','攻击行动');
+			next.set('filterCard',function(card,player,event){
+				if(get.type(card)!='gongJi') return false;
+                return lib.filter.cardEnabled(card,player,'forceEnable');
+			});
+		}
+		if(!next&&player.storage.extraXingDong.length>0){
+			let extraXingDong=player.storage.extraXingDong.shift();
+			event.xingDong=extraXingDong.xingDong;
+			event.extraXingDong=true;
+			var next=player[event.xingDong](extraXingDong).set('action',true);
 		}
 		if(next){
 			if(!lib.config.show_phaseuse_prompt){
@@ -4506,14 +4521,17 @@ export const Content = {
 		}
 
 		"step 5";
-		if(event.xingDong=='gongJiOrFaShu'){
-			player.storage.gongJiOrFaShu--;
-		}else if(event.xingDong=='faShu'){
-			player.storage.faShu--;
-		}else if(event.xingDong=='gongJi'){
-			player.storage.gongJi--;
+		if(event.extraXingDong) event.extraXingDong=false;
+		else{
+			if(event.xingDong=='gongJiOrFaShu'){
+				player.storage.gongJiOrFaShu--;
+			}else if(event.xingDong=='faShu'){
+				player.storage.faShu--;
+			}else if(event.xingDong=='gongJi'){
+				player.storage.gongJi--;
+			}
 		}
-		if(!event.skipped&&(player.storage.gongJiOrFaShu>0||player.storage.gongJi>0||player.storage.faShu>0)){
+		if(!event.skipped&&(player.storage.extraXingDong.length>0||player.storage.gongJiOrFaShu>0||player.storage.gongJi>0||player.storage.faShu>0)){
 			event.goto(4);
 		}
 		"step 6";
