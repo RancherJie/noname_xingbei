@@ -226,6 +226,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             },
             jianYing:{
                 trigger:{player:'gongJiAfter'},
+                usable:1,
                 filter:function(event,player){
                     return event.yingZhan!=true&&player.canBiShaShuiJing();
                 },
