@@ -5,7 +5,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 		connect:true,
         characterSort:{
             shenZiChuangLin:{
-                'FAQ':['FAQ_jinGuiZhiNv','FAQ_shenMiXueZhe'],
                 "3xing":['jinGuiZhiNv'],
                 "3.5xing":[],
                 "4xing":['shenMiXueZhe','ranWuZhe'],

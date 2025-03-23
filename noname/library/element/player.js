@@ -8042,6 +8042,18 @@ export class Player extends HTMLDivElement {
 		return lib.filter[includecard ? "targetEnabledx" : "targetEnabled"](card, this, target);
 	}
 	/**
+	 * 能否对target使用card 不受是否是攻击行动限制
+	 * @param { Card | VCard | object | string } card
+	 * @param { Player } target
+	 * @returns
+	 */
+	canUseXingBie(card, target) {
+		if (typeof card == "string") card = { name: card, isCard: true };
+		var info = get.info(card);
+		if (info.multicheck && !info.multicheck(card, this)) return false;
+		return lib.filter["targetEnabled"](card, this, target);
+	}
+	/**
 	 * 场上是否存在能对其使用card的目标
 	 * @param { Card | VCard | object | string } card
 	 * @param { false } [distance] false：无距离限制

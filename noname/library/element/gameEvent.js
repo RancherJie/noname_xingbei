@@ -1368,4 +1368,11 @@ export class GameEvent {
 			this.getParent().canShengDun=false;
 		}
 	}
+	wuFaAnMie(){
+		if(this.canAnMie!=undefined){
+			this.canAnMie=false;
+		}else{
+			this.getParent().canAnMie=false;
+		}
+	}
 }

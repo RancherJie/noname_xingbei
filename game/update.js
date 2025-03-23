@@ -1,8 +1,11 @@
 window.noname_update = {
-	version: "1.0.13",
-	update: "1.0.13", 
+	version: "1.0.14",
+	update: "1.0.14", 
 	changeLog: [
-		'修复激昂协奏曲特定情况下不移除永恒乐章',
+		'增加canUseXingBie，不受XX行动限制使用牌',
+		'修复法术行动可以使用圣光',
+		'优化攻击日志',
+		'删除无用代码',
 	],
 	files: [
 

@@ -9888,7 +9888,6 @@ export class Library {
 				}
 			}
 		},
-		/*
 		_faShuXianZhi:{
 			mod:{
 				cardEnabled:function(card){
@@ -9906,7 +9905,7 @@ export class Library {
 					}
 				}    
 			}
-		},*/
+		},
 		_gongJiXingShi:{//攻击获得星石
 			trigger:{source:'gongJiMingZhong'},
 			direct:true,
@@ -9928,30 +9927,24 @@ export class Library {
 			direct:true,
 			lastDo:true,
 			filter:function(event,player){
-				return event.canYingZhan==false||event.canShengGuang==false||event.canShengDun==false;
+				return event.canYingZhan==false||event.canShengGuang==false||event.canShengDun==false||event.canAnMie==false;
 			},
 			content:function(){
 				var canYingZhan=trigger.canYingZhan;
 				var canShengGuang=trigger.canShengGuang;
 				var canShengDun=trigger.canShengDun;
+				var canAnMie=trigger.canAnMie;
 
 				var str='本次攻击';
 				if(canYingZhan==false&&canShengGuang==false&&canShengDun==false){
 					str+='强制命中';
 				}else{
-					var list=[canYingZhan,canShengGuang,canShengDun];
-					for(var i=0;i<list.length;i++){
-						if(i==0){
-							if(list[i]==false) str+='无法应战';
-						}else if(i==1){
-							if(list[i]==false) str+='无法被圣光抵消';
-						}else{
-							if(list[i]==false) str+='无法被圣盾抵消';
-						}
-						if(i<list.length-1){
-							if(list[i+1]==false) str+='，';
-						}
-					}
+					let list=[];
+					if(canYingZhan==false) list.push('无法被应战');
+					if(canAnMie==false) list.push('无法被【暗灭】应战');
+					if(canShengGuang==false) list.push('无法被【圣光】抵消');
+					if(canShengDun==false) list.push('无法被【圣盾】抵消');
+					str+=list.join('，');
 				}
 				game.log(str);
 			}
@@ -10406,7 +10399,11 @@ export class Library {
 				next.set('filterCard',function(card,player,event){
 					if(get.type(card)=='gongJi'){
 						if(_status.event.canYingZhan==false) return false;//不能应战设置
-						if(get.name(card)!='anMie'&&get.xiBie(card)!=get.xiBie(_status.event.card)) return false;
+						if(_status.event.canAnMie==false){
+							if(get.xiBie(card)!=get.xiBie(_status.event.card)) return false;
+						}else{
+							if(get.name(card)!='anMie'&&get.xiBie(card)!=get.xiBie(_status.event.card)) return false;
+						}
 					}else if(get.type(card)=='faShu'){
 						if(_status.event.canShengGuang==false) return false;
 						if(get.name(card)!='shengGuang') return false;
@@ -10423,6 +10420,7 @@ export class Library {
 				next.set('yingZhan',true);
 				next.set('canYingZhan',trigger.canYingZhan);
 				next.set('canShengGuang',trigger.canShengGuang);
+				next.set('canAnMie',trigger.canAnMie);
 				'step 1'
 				if(result.bool){
 					trigger.weiMingZhong();

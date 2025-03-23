@@ -204,6 +204,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
             },
             lieFengJi:{
+                duYou:'lieFengJi',
                 trigger:{player:'gongJiShi'},
                 filter:function(event,player){
                     return event.card.hasDuYou('lieFengJi')&&event.target.hasExpansions('_shengDun');
@@ -215,6 +216,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
             },
             jiFengJi:{
+                duYou:'jiFengJi',
                 trigger:{player:'gongJiShi'},
                 filter:function(event,player){
                     return event.card.hasDuYou('jiFengJi')&&event.yingZhan!=true;
@@ -269,6 +271,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 }
             },
             xueYingKuangDao:{
+                duYou:'xueYingKuangDao',
                 trigger:{player:'gongJiShi'},
                 group:['xueYingKuangDao_gongJiMingZhong'],
                 filter:function(event,player){
@@ -297,8 +300,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
             },
             xueXingPaoXiao:{
+                duYou:'xueXingPaoXiao',
                 trigger:{player:'gongJiShi'},
-
                 filter:function(event,player){
                     return event.card.hasDuYou('xueXingPaoXiao')&&event.yingZhan!=true&&event.target.zhiLiao==2;
                 },
@@ -345,6 +348,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 filterTarget:true,
                 prompt:'目标角色+2[治疗]',
                 position:'h',
+                duYou:'zhiLiaoShu',
                 filterCard:function(card){
                     return card.hasDuYou('zhiLiaoShu');
                 },
@@ -368,6 +372,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             zhiYuZhiGuang:{
                 type:'faShu',
                 enable:'faShu',
+                duYou:'zhiYuZhiGuang',
 				filterCard:function(card){
                     return card.hasDuYou('zhiYuZhiGuang');
 				},
@@ -596,6 +601,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 type:'faShu',
                 enable:'faShu',
 				position:'h',
+                duYou:'diZhiFengYin',
 				filter:function(event,player){
                     var bool1=player.hasCard(function(card){
                         return lib.skill.diZhiFengYin.filterCard(card);
@@ -676,6 +682,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             shuiZhiFengYin:{
                 type:'faShu',
                 enable:'faShu',
+                duYou:'shuiZhiFengYin',
 				filterCard:function(card){
                     return card.hasDuYou('shuiZhiFengYin');
 				},
@@ -756,6 +763,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             huoZhiFengYin:{
                 type:'faShu',
                 enable:'faShu',
+                duYou:'huoZhiFengYin',
 				filterCard:function(card){
                     return card.hasDuYou('huoZhiFengYin');
 				},
@@ -837,6 +845,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             fengZhiFengYin:{
                 type:'faShu',
                 enable:'faShu',
+                duYou:'fengZhiFengYin',
 				filterCard:function(card){
                     return card.hasDuYou('fengZhiFengYin');
 				},
@@ -918,6 +927,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             leiZhiFengYin:{
                 type:'faShu',
                 enable:'faShu',
+                duYou:'leiZhiFengYin',
 				filterCard:function(card){
                     return card.hasDuYou('leiZhiFengYin');
 				},
@@ -1224,6 +1234,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             tianShiZhiQiang:{
                 type:'faShu',
                 enable:'faShu',
+                duYou:'tianShiZhiQiang',
 				filterCard:function(card){
                     return card.hasDuYou('tianShiZhiQiang');
 				},
@@ -1363,6 +1374,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             shanGuangXianJing:{
                 type:'faShu',
                 enable:'faShu',
+                duYou:'shanGuangXianJing',
 				filterCard:function(card){
                     return card.hasDuYou('shanGuangXianJing');
 				},
@@ -1388,6 +1400,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             },
             jingZhunSheJi:{
                 trigger:{player:'gongJiShi'},
+                duYou:'jingZhunSheJi',
                 filter:function(event,player){
                     return event.card.hasDuYou('jingZhunSheJi');
                 },
@@ -1759,6 +1772,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 type:'faShu',
                 enable:'faShu',
                 selectCard:[1,2],
+                duYou:'yunShi',
                 filterCard:function(card){
                     if(ui.selected.cards.length==0){
                         return card.hasDuYou('yunShi');
@@ -1809,6 +1823,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             bingDong:{
                 type:'faShu',
                 enable:'faShu',
+                duYou:'bingDong',
                 selectCard:[1,2],
                 filterCard:function(card){
                     if(ui.selected.cards.length==0){
@@ -1867,6 +1882,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             huoQou:{
                 type:'faShu',
                 enable:'faShu',
+                duYou:'huoQou',
 				selectCard:[1,2],
                 filterCard:function(card){
                     if(ui.selected.cards.length==0){
@@ -1920,6 +1936,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             fengRen:{
                 type:'faShu',
                 enable:'faShu',
+                duYou:'fengRen',
 				selectCard:[1,2],
                 filterCard:function(card){
                     if(ui.selected.cards.length==0){
@@ -1971,6 +1988,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             leiJi:{
                 type:'faShu',
                 enable:'faShu',
+                duYou:'leiJi',
 				selectCard:[1,2],
                 filterCard:function(card){
                     if(ui.selected.cards.length==0){
@@ -3723,6 +3741,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             weiLiCiFu:{
                 type:'faShu',
                 enable:'faShu',
+                duYou:'weiLiCiFu',
                 filter:function(event,player){
                     var bool1=player.hasCard(card=>lib.skill.weiLiCiFu.filterCard(card));
                     var bool2=game.hasPlayer(current=>lib.skill.weiLiCiFu.filterTarget("",player,current));
@@ -3782,6 +3801,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             xunJieCiFu:{
                 type:'faShu',
                 enable:'faShu',
+                duYou:"xunJieCiFu",
                 filter:function(event,player){
                     var bool1=player.hasCard(card=>lib.skill.xunJieCiFu.filterCard(card));
                     var bool2=game.hasPlayer(current=>lib.skill.xunJieCiFu.filterTarget("",player,current));
@@ -7009,7 +7029,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 showCards:true,
                 selectTarget:1,
                 filterTarget:function(card,player,target){
-                    return player.canUse('anMie',target);
+                    return player.canUseXingBie('anMie',target);
                 },
                 content:function(){
                     var xiBie=get.xiBie(cards[0]);
@@ -8031,6 +8051,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             lingHunZhenBao:{
                 type:'faShu',
                 enable:['faShu'],
+                duYou:'lingHunZhenBao',
                 filter:function(event,player){
                     return player.hasCard(card=>lib.skill.lingHunZhenBao.filterCard(card))&&player.countZhiShiWu('huangSeLingHun')>=3;
                 },
@@ -8063,6 +8084,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             lingHunFuYu:{
                 type:'faShu',
                 enable:['faShu'],
+                duYou:'lingHunFuYu',
                 filter:function(event,player){
                     return player.hasCard(card=>lib.skill.lingHunFuYu.filterCard(card))&&player.countZhiShiWu('lanSeLingHun')>=3
                 },
@@ -8368,6 +8390,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             xueZhiBeiMing:{
                 type:'faShu',
                 enable:['faShu'],
+                duYou:'xueZhiBeiMing',
                 filter:function(event,player){
                     return player.isHengZhi()&&player.hasCard(card=>lib.skill.xueZhiBeiMing.filterCard(card));
                 },
