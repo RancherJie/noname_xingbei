@@ -6025,7 +6025,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             },
             //吟游诗人
             chenLunXieZouQu:{
-                trigger:{global:'damageAfter'},//该时机不会因为治疗而被抵消
+                trigger:{global:'shangHaiAfter'},//该时机不会因为治疗而被抵消
                 filter:function(event,player){
                     if(player.isHengZhi()) return false;
                     if(event.faShu!=true) return false;
@@ -6038,6 +6038,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     if(trigger.getParent().name=='yongHengYueZhang_jiAngKuangXiangQu'){
                         await event.trigger('yongHengYueZhang');
                         trigger.getParent().bool=true;
+                        if(player.isHengZhi()) return event.result={bool:false};
                     }
                     event.result=await player.chooseCard('h',2)
                     .set('complexCard',true)

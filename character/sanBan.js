@@ -628,7 +628,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             },
 
             san_chenLunXieZouQu:{
-                trigger:{global:'damageAfter'},
+                trigger:{global:'shangHaiAfter'},
                 filter:function(event,player){
                     if(event.faShu!=true) return false;
                     if(player.countCards('h')<2) return false;

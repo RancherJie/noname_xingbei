@@ -499,7 +499,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 }
             },
             jingHuaZhiShu:{
-                trigger:{player:'damageAfter'},
+                trigger:{player:'shangHaiAfter'},
                 filter:function(event,player){
                     return player.countCards('h')>0;
                 },
@@ -1008,10 +1008,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 filter:function(event,player){
                     return player.countCards('h')<2;
                 },
-                content:function(){
-                    'step 0'
-                    player.draw(1);
-                    'step 1'
+                content: async function(event,trigger,player){
+                    await player.draw(1);
                     var cards = player.getExpansions("luEn");
                     if(cards.length>0){
                         var next = player.chooseToMove("黄金律：是否交换【卢恩】和手牌");
@@ -1040,19 +1038,17 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             if (changed2.includes(from.link)) return true;
                             return changed.includes(to.link);
                         });
-                    }else{
-                        event.finish();
-                    }
-                    "step 2";
-                    if (result.bool) {
+                        var result=await next.forResult();
                         var pushs = result.moved[0],
                             gains = result.moved[1];
                         pushs.removeArray(player.getExpansions("luEn"));
                         gains.removeArray(player.getCards("h"));
                         if (!pushs.length || pushs.length != gains.length) return;
-                        player.addToExpansion(pushs, player, "giveAuto").gaintag.add("luEn");
-                        player.gain(gains, "draw");
-			        }
+                        await player.lose(pushs);
+                        await player.lose(gains);
+                        await player.addToExpansion(pushs, player, "giveAuto").gaintag.add("luEn");
+                        await player.gain(gains, "draw");
+                    }
                 }
             },
             fanXing:{

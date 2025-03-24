@@ -9,7 +9,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 "3.5xing":[],
                 "4xing":['shenMiXueZhe','ranWuZhe'],
                 "4.5xing":[],
-                '5xing':['nvPuZhang','jieJieShi'],
+                '5xing':['nvPuZhang','jieJieShi','shiShenZhe'],
             }
         },
 		character:{
@@ -18,7 +18,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             jieJieShi:['jieJieShi_name','huanGroup',5,['jieJieYiShi','huangShenZhiLi','huangShenJiYi','jinMoJing','liuLiJing','jueJie','fuMoJing','jieJie','jiX'],],
             shenMiXueZhe:['shenMiXueZhe_name','yongGroup',4,['yanLingShu','shouHuLing','zhenYanShu','jinJiMiFa','yaoJingMiShu','zhenYanYaZhi','yanLing','miShu'],],
             ranWuZhe:['ranWuZhe_name','xueGroup',4,['shenQiZhiYi','liRuQuanYong','kuangLiZhiXin','kuangLiZhiTi','shenZhiWuRan','niuQuZhiAi','liQi'],],
-            shiShenZhe: ["shiShenZhe_name","xueGroup",5,["yuRen","qingKe","shiMie","shangMie","tongDiao","ren","gongZhen","zhuShenZhongYan"]],
+            shiShenZhe: ["shiShenZhe_name","xueGroup",5,["yuRen","qingKe","shiMie","shangMie","tongDiao","ren","gongZhen","zhuShenZhongYan"],],
 		},
         characterIntro:{
             jinGuiZhiNv:`身为一位魔法的初学者，艾丽卡施法总是让人提心吊胆，因为连她自己也不知道会发生什么事情。然而她似乎无法体会身旁人的种种暗示，依然我行我素。这样的大小姐，需要队友的多多包容与帮忙`,
