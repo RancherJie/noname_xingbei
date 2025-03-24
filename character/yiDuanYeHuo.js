@@ -499,7 +499,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 }
             },
             jingHuaZhiShu:{
-                trigger:{player:'shangHaiAfter'},
+                trigger:{player:'damageAfter'},
                 filter:function(event,player){
                     return player.countCards('h')>0;
                 },
@@ -818,6 +818,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 0'
                     player.removeBiShaShuiJing();
                     'step 1'
+                    event.shiQiListBefore=[get.shiQi(true),get.shiQi(false)];
                     player.chooseTarget('对目标对手造成1点法术伤害③',true,function(card,player,target){
                         return target.side!=player.side;
                     }).set('ai',function(target){
@@ -826,6 +827,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     });
                     'step 2'
                     result.targets[0].faShuDamage(1,player);
+                    'step 3'
+                    event.shiQiListAfter=[get.shiQi(true),get.shiQi(false)];
+                    if((event.shiQiListBefore[0]==event.shiQiListAfter[0])&&(event.shiQiListBefore[1]==event.shiQiListAfter[1])){
+                        player.addZhanJi('baoShi');
+                    }
                 },
                 ai:{
                     shuiJing:true,
@@ -1635,7 +1641,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             shangBian:"[响应]熵变",
             shangBian_info:"<span class='tiaoJian'>(本回合第三次行动结束时，消耗我方【战绩区】1[宝石]或队友【能量区】1【能量】)</span>对2名目标对手各造成1点法术伤害③。",
             moLiShangZeng:"[响应]魔力熵增",
-            moLiShangZeng_info:"[水晶]<span class='tiaoJian'>(每次额外行动结束时)</span>对目标对手造成1点法术伤害③。",
+            moLiShangZeng_info:"[水晶]<span class='tiaoJian'>(每次额外行动结束时)</span>对目标对手造成1点法术伤害③；<span class='tiaoJian'>(若未因此造成士气下降)</span>我方【战绩区】+1[宝石]。",
             
             //星坠巫女
             mingDingZhiLi:"[被动]命定之理",

@@ -376,41 +376,19 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 filter: function(event,player){
                     return player.canBiShaShuiJing()&&event.faShu;
                 },
-                content: function(){
-                    'step 0'
-                    player.removeBiShaShuiJing();
-                    'step 1'
-                    var num=player.countTongXiPai();
-                    if(num>=2){
-                        var next=player.chooseToDiscard('弃2-3张同系牌[展示]',[2,3],true,function(card){
-                            var xiBie2=get.xiBie(card);
-                            if(!xiBie2) return false;
-                            if(!ui.selected.cards.length) return true;
-                            var xiBie1=get.xiBie(ui.selected.cards[0]);
-                            return xiBie1==xiBie2;
-                        });
-                        next.set('complexCard',true);
-                        next.ai=function(card){
-                            return 1;
-                        };
-                        next.set('filterOk',function(){
-                            return ui.selected.cards.length>=2;
-                        });
-                    }else if(num>=1){
-                        var next=player.chooseToDiscard('弃2-3张同系牌[展示]',1,true,function(card){
-                            var xiBie2=get.xiBie(card);
-                            if(!xiBie2) return false;
-                            else return true;
-                        });
-                        next.ai=function(card){
-                            return 1;
-                        };
-                    }else{
-                        event.goto(3);
-                    }
-                    'step 2'
-                    player.showCards(result.cards);
-                    'step 3'
+                async cost(event,trigger,player){
+                    var next=player.chooseCard('h',[2,3],function(card){
+                        return get.xuanZeTongXiPai(card);
+                    });
+                    next.set('complexCard',true);
+                    next.set('prompt',get.prompt('gongZhen'));
+                    next.set('prompt2',lib.translate.gongZhen_info);
+                    next.set('ai',function(card){return 1;});
+                    event.result=await next.forResult();
+                },
+                content:async function(event,trigger,player){
+                    await player.removeBiShaShuiJing();
+                    await player.discard(event.cards,'showCards');
                     var bool1,bool2;
                     if(player.storage.moRen) bool1=true;
                     if(player.storage.yiRen) bool2=true;
@@ -421,28 +399,35 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     if(!bool2){
                         list.push('yiRen');
                     }
-                    if(list.length==0) event.finish();
+                    if(list.length==0) return;
                     else{
                         var next=player.chooseButton(['选择获得的【刃】',[list,'vcard']]);
                         next.set('selectButton',[1,2]);
-                        next.set('forced',true);
-                    }
-                    'step 4'
-                    var cards=[];
-                    for(var i=0;i<result.links.length;i++){
-                        let card;
-                        if(result.links[i][2]=='moRen'){
-                            card=game.createCard('moRen','huo','xue');
-                            player.storage.moRen=true;
-                        }else if(result.links[i][2]=='yiRen'){
-                            card=game.createCard('yiRen','lei','xue');
-                            player.storage.yiRen=true;
+                        var result=await next.forResult();
+                        if(result.bool){
+                            let cards=[];
+                            for(var i=0;i<result.links.length;i++){
+                                let card;
+                                if(result.links[i][2]=='moRen'){
+                                    card=game.createCard('moRen','huo','xue');
+                                    player.storage.moRen=true;
+                                }else if(result.links[i][2]=='yiRen'){
+                                    card=game.createCard('yiRen','lei','xue');
+                                    player.storage.yiRen=true;
+                                }
+                                card.renMaster=player;
+                                cards.push(card);
+                            }
+                            game.log(player,`获得了${cards.length}张【刃】`);
+                            await player.gain(cards,'draw');
+
+                            var targets=await player.chooseTarget('对1名目标角色造成1点法术伤害③',true).set('ai',function(target){
+                                var player=_status.event.player;
+                                return get.damageEffect2(target,player,1);
+                            }).forResultTargets();
+                            await targets[0].faShuDamage(1,player);
                         }
-                        card.renMaster=player;
-                        cards.push(card);
                     }
-                    game.log(player,`获得了${cards.length}张【刃】`);
-                    player.gain(cards,'draw');
                 },
                 check: function(event,player){
                     return !player.storage.moRen&&!player.storage.yiRen;
@@ -455,10 +440,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 type: "faShu",
                 enable: ["faShu"],
                 filter: function(event,player){
-                    return player.canBiShaShuiJing();
+                    return player.canBiShaBaoShi();
                 },
                 content: async function(event,trigger,player){
-                    await player.removeBiShaShuiJing();
+                    await player.removeBiShaBaoShi();
+                    await player.addNengLiang('shuiJing');
                     await player.faShuDamage(2,player);
                     var players=[];
                     for(var current of game.players){
@@ -504,7 +490,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     
                 },
                 ai: {
-                    shuiJing: true,
+                    baoShi: true,
                     order: function(event,player){
                         var num=player.countCards('h',card=>card.nmae=='moRen'||card.name=='yiRen');
                         if(num>0) return 0;
@@ -1476,16 +1462,14 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 trigger:{target:'gongJiMingZhong'},
                 firstDo:true,
                 filter:function(event,player){
-                    return get.is.zhuDongGongJi(event.getParent())&&(player.getExpansions('yanLing').length>0||player.countZhiShiWu('miShu')>0);
+                    return player.getExpansions('yanLing').length>0&&get.is.zhuDongGongJi(event.getParent())&&(player.getExpansions('yanLing').length>0||player.countZhiShiWu('miShu')>0);
                 },
                 content:function(){
                     'step 0'
-                    if(player.getExpansions('yanLing').length>0){
-                        var cards=player.getExpansions('yanLing');
-                        player.chooseCardButton(cards,true,'移除1个【言灵】').set('ai',function(){
-                            return Math.random();
-                        });
-                    }else event.goto(2);
+                    var cards=player.getExpansions('yanLing');
+                    player.chooseCardButton(cards,true,'移除1个【言灵】').set('ai',function(){
+                        return Math.random();
+                    });
                     'step 1'
                     player.discard(result.links,'yanLing');
                     'step 2'
@@ -1504,7 +1488,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 4'
                     if(player.countCards('h')>0){
                         player.chooseCard('h',true,'将1张手牌面朝上放置在你的角色旁【展示】作为【言灵】');
-                    }
+                    }else event.finish();
                     'step 5'
                     player.showCards(result.cards);
                     event.cards=result.cards;
@@ -1962,9 +1946,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             ren_gaiPai: "[被动]渗蚀",
             ren_info: "<span class=\"greentext\">[被动]魔刃</span><br><span class='tiaoJian'>(此卡视为手牌，若你拥有【魔刃】，使用、打出或弃置【魔刃】时)</span>你选择此卡视为火系或水系的血类命格攻击牌。<br><span class=\"greentext\">[被动]异刃</span><br><span class='tiaoJian'>(此卡视为手牌，若你拥有【异刃】，使用、打出或弃置【异刃】时)</span>你选择此卡视为雷系或风系的血类命格攻击牌。<br><span class=\"greentext\">[被动]渗蚀</span><br><span class='tiaoJian'>(若你拥有【刃】，使用、打出或弃置【刃】时)</span>噬神者对你造成3点法术伤害③，然后移除【刃】。 <span class='tiaoJian'>(【刃】因技能放置在角色旁时)</span>对该角色造成1点法术伤害③，然后移除【刃】。",
             gongZhen: "[被动]共振",
-            "gongZhen_info": "[水晶]<span class='tiaoJian'>(目标角色对你造成法术伤害时发动③)</span>弃2-3张同系牌[展示]，你可将未在场的【魔刃】和【异刃】加入你手牌[强制]。",
+            gongZhen_info: "[水晶]<span class='tiaoJian'>(任何人对你造成法术伤害时发动③，弃2-3张同系牌[展示])</span>你可将未在场的【魔刃】和/或【异刃】加入你手牌[强制]；<span class='tiaoJian'>(若你将未在场的【魔刃】和/或【异刃】加入你手牌[强制])</span>对目标角色造成1点法术伤害③。",
             zhuShenZhongYan: "[法术]诸神终焉",
-            "zhuShenZhongYan_info": "[水晶]<span class='tiaoJian'>(对自己造成2点法术伤害③)</span>移除【魔刃】和【异刃】，对原持有【魔刃】和【异刃】的目标角色各造成3点法术伤害③；<span class='tiaoJian'>(若以此法同时移除【魔刃】和【异刃】)</span>对1名目标对手造成2点法术伤害③。",
+            "zhuShenZhongYan_info": "[宝石]你+1[水晶]，对自己造成2点法术伤害③，将场上的【魔刃】和【异刃】同时移除，然后对原持有【魔刃】和【异刃】的目标角色各造成3点法术伤害③；<span class='tiaoJian'>(若以此法同时移除【魔刃】和【异刃】)</span>对1名目标对手造成2点法术伤害③。",
 
 
             //矜贵之女
@@ -2046,7 +2030,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             yanLingShu:"[法术]言灵术",
             yanLingShu_info:"<span class='tiaoJian'>(将1-2张手牌面朝上放置在你角色旁[展示]作为【言灵】)</span>你摸1张牌[强制]；<span class='tiaoJian'>(摸牌后，若你额外弃1张与现存【言灵】系别相同的牌[展示])</span>你+1<span class='hong'>【秘术】</span>。",
             shouHuLing:"[被动]守护灵",
-            shouHuLing_info:"<span class='tiaoJian'>(你被主动攻击命中时②，其他角色结算效果前)</span>移除1个【言灵】。<span class='tiaoJian'>(你被主动攻击命中时②，其他角色结算效果前，若你移除1点</span><span class='hong'>【秘术】</span><span class='tiaoJian'>)</span>将1张手牌面朝上放置在你角色旁[展示]作为【言灵】。",
+            shouHuLing_info:"<span class='tiaoJian'>(若【言灵】数>0，你被主动攻击命中时②，其他角色结算效果前)</span>移除1个【言灵】；<span class='tiaoJian'>(若你</span><span class='hong'>【秘术】</span>数>0<span class='tiaoJian'>)</span>移除1点<span class='hong'>【秘术】</span>，将1张手牌面朝上放置在你角色旁[展示]作为【言灵】。",
             zhenYanShu:"[法术]真言术",
             zhenYanShu_backup:'[法术]真言术',
             zhenYanShu_info:"<span class='tiaoJian'>(将1个除光系外的【言灵】视为手牌使用)</span>执行相应的行动；<span class='tiaoJian'>(若使用的【言灵】为咏类命格或法术牌，或你额外移除1点</span><span class='hong'>【秘术】</span><span class='tiaoJian'>)</span>本次相应行动执行完成后，对目标对手造成1点法术伤害③。",

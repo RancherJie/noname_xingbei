@@ -12157,29 +12157,32 @@ export const Content = {
 	gainJiChuXiaoGuo:function(){
 		'step 0'
 		var list=target.jiChuXiaoGuoList();
-		player.chooseControl(list).set('prompt','选择要获得的基础效果').set('ai',function(){
-			var player=_status.event.player;
-			var target=_status.event.targetX;
-			var list=_status.event.listX;
-			if(target.side==player.side){
-				if(list.includes('_xuRuo')) return '_xuRuo';
-				for(var xiaoGuo of game.jiChuXiaoGuo['fengYinShi']){
-					if(list.includes(xiaoGuo)){
-						return xiaoGuo;
+		if(list.length==0) event.finish();
+		else{
+			player.chooseControl(list).set('prompt','选择要获得的基础效果').set('ai',function(){
+				var player=_status.event.player;
+				var target=_status.event.targetX;
+				var list=_status.event.listX;
+				if(target.side==player.side){
+					if(list.includes('_xuRuo')) return '_xuRuo';
+					for(var xiaoGuo of game.jiChuXiaoGuo['fengYinShi']){
+						if(list.includes(xiaoGuo)){
+							return xiaoGuo;
+						}
+					}
+					if(list.includes('_zhongDu')&&!target.hasSkillTag('one_damage')) return '_zhongDu';
+				}else{
+					if(list.includes('_shengDun')){
+						return '_shengDun';
+					}
+					for(var xiaoGuo of game.jiChuXiaoGuo['qiDaoShi']){
+						if(list.includes(xiaoGuo)){
+							return xiaoGuo;
+						}
 					}
 				}
-				if(list.includes('_zhongDu')&&!target.hasSkillTag('one_damage')) return '_zhongDu';
-			}else{
-				if(list.includes('_shengDun')){
-					return '_shengDun';
-				}
-				for(var xiaoGuo of game.jiChuXiaoGuo['qiDaoShi']){
-					if(list.includes(xiaoGuo)){
-						return xiaoGuo;
-					}
-				}
-			}
-		}).set('targetX',target).set('listX',list);
+			}).set('targetX',target).set('listX',list);
+		}
 		'step 1'
 		event.control=result.control;
 		if(event.control=='_zhongDu' && target.getExpansions('_zhongDu').length!=1){
@@ -12210,29 +12213,32 @@ export const Content = {
 	removeJiChuXiaoGuo:function(){
 		'step 0'
 		var list=target.jiChuXiaoGuoList();
-		player.chooseControl(list).set('prompt','选择要移除的基础效果').set('ai',function(){
-			var player=_status.event.player;
-			var target=_status.event.targetX;
-			var list=_status.event.listX;
-			if(target.side==player.side){
-				if(list.includes('_xuRuo')) return '_xuRuo';
-				for(var xiaoGuo of game.jiChuXiaoGuo['fengYinShi']){
-					if(list.includes(xiaoGuo)){
-						return xiaoGuo;
+		if(list.length==0) event.finish();
+		else{
+			player.chooseControl(list).set('prompt','选择要移除的基础效果').set('ai',function(){
+				var player=_status.event.player;
+				var target=_status.event.targetX;
+				var list=_status.event.listX;
+				if(target.side==player.side){
+					if(list.includes('_xuRuo')) return '_xuRuo';
+					for(var xiaoGuo of game.jiChuXiaoGuo['fengYinShi']){
+						if(list.includes(xiaoGuo)){
+							return xiaoGuo;
+						}
+					}
+					if(list.includes('_zhongDu')&&!target.hasSkillTag('one_damage')) return '_zhongDu';
+				}else{
+					if(list.includes('_shengDun')){
+						return '_shengDun';
+					}
+					for(var xiaoGuo of game.jiChuXiaoGuo['qiDaoShi']){
+						if(list.includes(xiaoGuo)){
+							return xiaoGuo;
+						}
 					}
 				}
-				if(list.includes('_zhongDu')&&!target.hasSkillTag('one_damage')) return '_zhongDu';
-			}else{
-				if(list.includes('_shengDun')){
-					return '_shengDun';
-				}
-				for(var xiaoGuo of game.jiChuXiaoGuo['qiDaoShi']){
-					if(list.includes(xiaoGuo)){
-						return xiaoGuo;
-					}
-				}
-			}
-		}).set('targetX',target).set('listX',list);
+			}).set('targetX',target).set('listX',list);
+		}
 		'step 1'
 		event.control=result.control;
 		if(event.control=='_zhongDu' && target.getExpansions('_zhongDu').length!=1){

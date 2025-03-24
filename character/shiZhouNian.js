@@ -3190,8 +3190,23 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 filterTarget:function(card,player,target){
                     return target!=player;
                 },
-                content:function(){
-                    target.faShuDamage(1,player);
+                content:async function(event, trigger, player){
+                    var shiQiListBefore=[get.shiQi(true),get.shiQi(false)];
+                    await event.target.faShuDamage(1,player).set('wenYi',true);
+                    var shiQiAfter=[get.shiQi(true),get.shiQi(false)];
+                    if(shiQiListBefore[0]!=shiQiAfter[0]||shiQiListBefore[1]!=shiQiAfter[1]){
+                        player.addTempSkill('wenYi_zhiLiao');
+                    }
+                },
+                subSkill:{
+                    zhiLiao:{
+                        trigger:{player:'phaseEnd'},
+                        direct:true,
+                        content:function(){
+                            player.changeZhiLiao(1);
+                            player.removeSkill('wenYi_zhiLiao');
+                        }
+                    }
                 },
                 ai:{
                     order:3.6,
@@ -3209,7 +3224,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 chooseButton:{
                     dialog:function(event,player){
-						var dialog=ui.create.dialog('死亡之触：移除a点[治疗]','hidden');
+						var dialog=ui.create.dialog('死亡之触：移除X点[治疗]','hidden');
                         var list=[];
                         for(var i=0;i<=player.zhiLiao;i++){
                             if(i<2) continue;
@@ -3252,7 +3267,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					},
                     prompt:function(links,player){
                         var num=links.length;
-						return `弃置b张同系牌[展示]至少2张，对目标角色造成(${num}+b-3)点伤害`;
+						return `弃置Y张同系牌[展示]至少2张，对目标角色造成(${num}+Y-3)点伤害`;
 					},
                     check: function (button) {
                         return button.link;
@@ -6025,7 +6040,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             },
             //吟游诗人
             chenLunXieZouQu:{
-                trigger:{global:'shangHaiAfter'},//该时机不会因为治疗而被抵消
+                trigger:{global:'damageAfter'},//该时机不会因为治疗而被抵消
                 filter:function(event,player){
                     if(player.isHengZhi()) return false;
                     if(event.faShu!=true) return false;
@@ -9103,9 +9118,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             shengDu:"[被动]圣渎",
             shengDu_info:"你的[治疗]不能抵御攻击伤害，你的[治疗]上限+3。",
             wenYi:"[法术]瘟疫",
-            wenYi_info:"<span class='tiaoJian'>(弃1张地系牌[展示])</span>对所有其他角色各造成1点法术伤害③。",
+            wenYi_info:"<span class='tiaoJian'>(弃1张地系牌[展示])</span>对所有其他角色各造成1点法术伤害③；<span class='tiaoJian'>(若因此造成士气下降)</span>回合结束时，你+1[治疗]。",
             siWangZhiChu:"[法术]死亡之触",
-            siWangZhiChu_info:"<span class='tiaoJian'>(移除你的a[治疗]并弃b张同系牌[展示]，a，b的数值由你决定，但每项最少为2)</span>对目标角色造成(a+b-3)点伤害③，不能和【不朽】同时发动。",
+            siWangZhiChu_info:"<span class='tiaoJian'>(移除你的X[治疗]并弃Y张同系牌[展示]，a，b的数值由你决定，但每项最少为2)</span>对目标角色造成(X+Y-3)点伤害③，不能和【不朽】同时发动。",
             siWangZhiChu_backup:"[法术]死亡之触",
             juDuXinXing:"[法术]剧毒新星",
             juDuXinXing_info:"[宝石]对其他角色各造成2点法术伤害③，你+1[治疗]。",
@@ -9436,7 +9451,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             lingHunJingXiang_info:"<span class='tiaoJian'>(移除2点</span><span class='hong'>【黄色灵魂】</span><span class='tiaoJian'>)</span>你弃2张牌，目标角色摸2张牌[强制]，但最多补到其手牌上限。",
             lingHunZhenBao_info:"<span class='tiaoJian'>(移除3点</span><span class='hong'>【黄色灵魂】</span><span class='tiaoJian'>)</span>对目标角色造成3点法术伤害③，若他手牌<3且手牌上限>5，则本次伤害额外+2。",
             lingHunFuYu_info:"<span class='tiaoJian'>(移除3点</span><span class='lan'>【蓝色灵魂】</span><span class='tiaoJian'>)</span>目标角色+2[宝石]。",
-            lingHunLianJie_info:"(2v2禁用)<span class='tiaoJian'>(移除1点</span><span class='hong'>【黄色灵魂】</span><span class='tiaoJian'>和1点【蓝色灵魂】)</span>将【灵魂链接】放置于一名队友面前，<span class='tiaoJian'>(每当你们之间有人承受伤害时⑥，移除X点</span><span class='lan'>【蓝色灵魂】</span><span class='tiaoJian'>)</span>将X点伤害转移给另1人，转移后的伤害为法术伤害⑥。",
+            lingHunLianJie_info:"<span class='tiaoJian'>(若你队友数>1时可发动,移除1点</span><span class='hong'>【黄色灵魂】</span><span class='tiaoJian'>和1点【蓝色灵魂】)</span>将【灵魂链接】放置于一名队友面前，<span class='tiaoJian'>(每当你们之间有人承受伤害时⑥，移除X点</span><span class='lan'>【蓝色灵魂】</span><span class='tiaoJian'>)</span>将X点伤害转移给另1人，转移后的伤害为法术伤害⑥。",
             lingHunZengFu_info:"[宝石]你+2<span class='hong'>【黄色灵魂】</span>和2<span class='lan'>【蓝色灵魂】</span>。",
             huangSeLingHun_info:"<span class='hong'>【黄色灵魂】</span>为灵魂术士专有指示物，上限为6。",
             lanSeLingHun_info:"<span class='lan'>【蓝色灵魂】</span>为灵魂术士专有指示物，上限为6。",

@@ -1,13 +1,13 @@
 window.noname_update = {
-	version: "1.0.15",
-	update: "1.0.15", 
+	version: "1.0.16",
+	update: "1.0.16", 
 	changeLog: [
-		'分类中增加噬神者',
-		'增加噬神者皮肤',
-		'修复满卢恩发动黄金律会舍弃1张卢恩',
-		'修复吟游诗人在满灵感的情况下，触发永恒乐章后仍可响应沉沦协奏曲',
-		'修复dmageEndAfter时机会因治疗失效',
-		'damgaeAfter时机替换为shangHaiAfter',
+		'增加噬神者Q版皮肤',
+		'完善移除/获得基础效果逻辑，无基础效果终止事件',
+		'角色更新到三扩',
+		'shangHaiAfter时机替换回damgaeAfter',
+		'更新灵魂链接描述',
+		'完善守护灵代码',
 	],
 	files: [
 
