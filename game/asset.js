@@ -277,5 +277,6 @@ window.noname_skin_list =
 	shengQiangQiShi:1,
 	xianZhe:1,
 	yongZhe:1,
-	shenShenZhe:2,
+	shenShenZhe:1,
+	ranWuZhe:1,
 };

@@ -1,13 +1,9 @@
 window.noname_update = {
-	version: "1.0.16",
-	update: "1.0.16", 
+	version: "1.0.17",
+	update: "1.0.17", 
 	changeLog: [
-		'增加噬神者Q版皮肤',
-		'完善移除/获得基础效果逻辑，无基础效果终止事件',
-		'角色更新到三扩',
-		'shangHaiAfter时机替换回damgaeAfter',
-		'更新灵魂链接描述',
-		'完善守护灵代码',
+		'增加污染者皮肤，删除噬神者错误皮肤',
+		'修复守护灵灭灯非强制',
 	],
 	files: [
 

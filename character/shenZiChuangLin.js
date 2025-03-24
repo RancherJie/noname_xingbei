@@ -1474,25 +1474,18 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.discard(result.links,'yanLing');
                     'step 2'
                     if(player.countZhiShiWu('miShu')>0){
-                        var list=['是','否'];
-                        player.chooseControl(list).set('prompt',`是否移除1点<span class='hong'>【秘术】</span>，将1张手牌面朝上放置在你角色旁[展示]作为【言灵】`);
-                    }else{
-                        event.finish();
-                    }
-                    'step 3'
-                    if(result.control=='是'){
                         player.removeZhiShiWu('miShu');
                     }else{
                         event.finish();
                     }
-                    'step 4'
+                    'step 3'
                     if(player.countCards('h')>0){
                         player.chooseCard('h',true,'将1张手牌面朝上放置在你的角色旁【展示】作为【言灵】');
                     }else event.finish();
-                    'step 5'
+                    'step 4'
                     player.showCards(result.cards);
                     event.cards=result.cards;
-                    'step 6'
+                    'step 5'
                     player.addToExpansion('draw',event.cards,'log').gaintag.add('yanLing');
                 }
             },
