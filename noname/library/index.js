@@ -9815,6 +9815,7 @@ export class Library {
 				var name=get.translation(player.name);
 				event.contentx=[name+'宣言无法行动',player.getCards('h').slice()];
 				event.listx=['认可','否认'];
+				event.trigger('wuFaXingDongBefore');
 				"step 1"
 				event.target=event.targetsx.shift();
 				if(event.contentx[1].length==0){
@@ -9855,6 +9856,8 @@ export class Library {
 						game.over(true);
 					}
 				}
+				'step 4'
+				event.trigger('wuFaXingDongAfter');
 			},
 			ai:{
 				order:1,

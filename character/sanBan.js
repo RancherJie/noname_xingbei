@@ -135,9 +135,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     baoShi:true,
                 },
                 check:function(event,player){
-                    if(!player.hasCard(function(card){
-                        return get.type(card)=='gongJi';
-                    })) return false;
+                    if(!player.canGongJi()) return false;
                     if(player.countNengLiangAll()<=1) return false;
                     return true;
                 },
@@ -249,11 +247,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                 },
                 check:function(event,player){
+                    if(!(player.canGongJi()||player.canFaShu())) return false;
                     return !player.isHengZhi();
                 },
                 ai:{
                     baoShi:true,
-                    draw:false,
                     skillTagFilter:function(player,tag,arg){
                         if(tag=='baoShi'&&player.isHengZhi()) return false;
                     }
@@ -435,6 +433,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }else if(player.countZhiShiWu('zhanWen')<num){
                         lib.skill.zhanWenZhangWo.fanZhuanMoWen(player,num-player.countZhiShiWu('zhanWen'));
                     }
+                },
+                check:function(event,player){
+                    return player.canGongJi();
                 },
                 group:['san_fuWenGaiZao_chongZhi'],
                 mod:{
@@ -819,6 +820,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 
                     await target.addZhiShiWu('san_yongHengYueZhang');
                     target.storage.yongHengYueZhang_player=player;
+                },
+                check:function(event,player){
+                    return player.canGongJi()||player.canFaShu();
                 },
                 ai:{
                     shuiJing:true,

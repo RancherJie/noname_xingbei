@@ -1045,6 +1045,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             return changed.includes(to.link);
                         });
                         var result=await next.forResult();
+                        if(!result.moved) return;
                         var pushs = result.moved[0],
                             gains = result.moved[1];
                         pushs.removeArray(player.getExpansions("luEn"));

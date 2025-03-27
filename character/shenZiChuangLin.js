@@ -687,6 +687,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 check:function(event,player){
                     if(player.countCards('h')==4) return false;
+                    return player.canGongJi()||player.canFaShu();
                 },
                 ai:{
                     shuiJing:true,
@@ -1027,12 +1028,14 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 0'
                     player.removeBiShaBaoShi();
                     'step 1'
-                    player.chooseCard('h',2,true,'将2张手牌面朝下放置在你角色旁作为【影】');
+                    player.chooseCard('h',2,true,'将2张手牌面朝下放置在你角色旁作为【影】').set('ai',function(card){
+                        return 6-get.value(card);
+                    });
                     'step 2'
                     player.addToExpansion('draw',result.cards,'log').gaintag.add('ying');
                 },
                 check:function(event,player){
-                    return player.countCards('h')>3&&player.countExpansions('ying')<=1;
+                    return player.countCards('h',card=>get.type(card)=='gongJi')>3&&player.countExpansions('ying')<=1;
                 }
             },
             ying:{
@@ -1587,7 +1590,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 0'
                     trigger.selected=true;
                     player.addTempSkill('yaoJingMiShu_gongJi');
-                    player.gongJi().set('bool',true);
+                    player.storage.extraXingDong.push({
+                        xingDong:'gongJi',
+                        bool:true,
+                        prompt:'妖精秘法：攻击行动',
+                    });
                 },
                 subSkill:{
                     gongJi:{
@@ -1862,7 +1869,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     var list=['弃2张牌','摸2张牌'];
                     player.chooseControl(list).set('prompt','选择你的行动').set('ai',function(){
                         var player=_status.event.player;
-                        if(player.countCards('h')>=3) return '弃2张牌';
+                        if(!(player.canGongJi()||player.canFaShu())) return '摸2张牌';
+                        if(player.countCards('h')+2>=player.getHandcardLimit()) return '弃2张牌';
                         else return '摸2张牌';
                     });
                     'step 4'
@@ -1880,7 +1888,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.setZhiShiWu('liQi',result.control);
                 },
                 check:function(event,player){
-                    return Math.random()<0.5;
+                    return player.canGongJi()||player.canFaShu();
                 },
                 ai:{
                     baoShi:1,
@@ -1939,7 +1947,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             ren_gaiPai: "[被动]渗蚀",
             ren_info: "<span class=\"greentext\">[被动]魔刃</span><br><span class='tiaoJian'>(此卡视为手牌，若你拥有【魔刃】，使用、打出或弃置【魔刃】时)</span>你选择此卡视为火系或水系的血类命格攻击牌。<br><span class=\"greentext\">[被动]异刃</span><br><span class='tiaoJian'>(此卡视为手牌，若你拥有【异刃】，使用、打出或弃置【异刃】时)</span>你选择此卡视为雷系或风系的血类命格攻击牌。<br><span class=\"greentext\">[被动]渗蚀</span><br><span class='tiaoJian'>(若你拥有【刃】，使用、打出或弃置【刃】时)</span>噬神者对你造成3点法术伤害③，然后移除【刃】。 <span class='tiaoJian'>(【刃】因技能放置在角色旁时)</span>对该角色造成1点法术伤害③，然后移除【刃】。",
             gongZhen: "[被动]共振",
-            gongZhen_info: "[水晶]<span class='tiaoJian'>(任何人对你造成法术伤害时发动③，弃2-3张同系牌[展示])</span>你可将未在场的【魔刃】和/或【异刃】加入你手牌[强制]；<span class='tiaoJian'>(若你将未在场的【魔刃】和/或【异刃】加入你手牌[强制])</span>对目标角色造成1点法术伤害③。",
+            gongZhen_info: "[水晶]<span class='tiaoJian'>(任何人对你造成法术伤害时发动③，选择2-3张同系牌)</span>弃置之[展示]；<span class='tiaoJian'>(若你将未在场的【魔刃】和/或【异刃】加入你手牌[强制])</span>对目标角色造成1点法术伤害③。",
             zhuShenZhongYan: "[法术]诸神终焉",
             "zhuShenZhongYan_info": "[宝石]你+1[水晶]，对自己造成2点法术伤害③，将场上的【魔刃】和【异刃】同时移除，然后对原持有【魔刃】和【异刃】的目标角色各造成3点法术伤害③；<span class='tiaoJian'>(若以此法同时移除【魔刃】和【异刃】)</span>对1名目标对手造成2点法术伤害③。",
 

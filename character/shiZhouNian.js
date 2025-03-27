@@ -240,8 +240,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 check:function(event,player){
                     if(player.storage.gongJi.zhuDong>=3) return false;
-                    var num=player.countCards('h',card=>get.type(card)=='gongJi');
-                    return num>0
+                    return player.canGongJi();
                 },
                 ai:{
                     shuiJing:true,
@@ -420,11 +419,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                 },
                 check:function(event,player){
+                    if(!(player.canGongJi()||player.canFaShu())) return false;
                     return !player.isHengZhi();
                 },
                 ai:{
                     baoShi:true,
-                    draw:false,
                     skillTagFilter:function(player,tag,arg){
                         if(tag=='baoShi'&&player.isHengZhi()) return false;
                     }
@@ -583,9 +582,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     baoShi:true,
                 },
                 check:function(event,player){
-                    if(!player.hasCard(function(card){
-                        return get.type(card)=='gongJi';
-                    })) return false;
+                    if(!player.canGongJi()) return false;
+                    if(player.countCards('h')>=player.getHandcardLimit()) return false;
                     if(player.countNengLiangAll()<=1) return false;
                     return true;
                 },
@@ -2466,6 +2464,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         }
                     }
                 },
+                check:function(event,player){
+                    return player.canGongJi()||player.canFaShu();
+                },
                 ai:{
                     baoShi:true,
                 }
@@ -3075,11 +3076,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 1'
                     player.hengZhi();
                     'step 2'
+                    game.log(player,'将牌堆顶3张牌作为','【祝福】');
                     var cards=get.cards(3);
                     player.loseToSpecial(cards,'zhuFu',player);
                     player.markSkill('zhuFu');
                 },
-                group:'jingLingMiYi_chongZhi',
+                group:['jingLingMiYi_chongZhi','jingLingMiYi_wuFaXingDongBefore','jingLingMiYi_wuFaXingDongAfter'],
                 subSkill:{
                     chongZhi:{
                         trigger:{player:'phaseEnd'},
@@ -3101,6 +3103,41 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             });
                             'step 1'
                             result.targets[0].faShuDamage(2,player); 
+                        }
+                    },
+                    wuFaXingDongBefore:{
+                        trigger:{player:'wuFaXingDongBefore'},
+                        direct:true,
+                        filter:function(event,player){
+                            var cards=player.getCards('s',function(card){
+                                return card.hasGaintag('zhuFu');
+                            });
+                            return cards.length>0;
+                        },
+                        content:function(){
+                            var cards=player.getCards('s',function(card){
+                                return card.hasGaintag('zhuFu');
+                            });
+                            trigger.contentx[1].concat(cards);
+                        },
+                    },
+                    wuFaXingDongAfter:{
+                        trigger:{player:'wuFaXingDongAfter'},
+                        direct:true,
+                        filter:function(event,player){
+                            var cards=player.getCards('s',function(card){
+                                return card.hasGaintag('zhuFu');
+                            });
+                            return cards.length>0;
+                        },
+                        content:async function(event, trigger, player){
+                            var zhuFu=player.getCards('s',function(card){
+                                return card.hasGaintag('zhuFu');
+                            });
+                            await player.discard(zhuFu,'zhuFu');
+                            game.log(player,`将牌堆顶${zhuFu.length}张牌作为`,'【祝福】');
+                            var cards=get.cards(zhuFu.length);
+                            await player.loseToSpecial(cards,'zhuFu',player);
                         }
                     }
                 },
@@ -3666,6 +3703,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                 },
                 check:function(event,player){
+                    if(!(player.canGongJi()||player.canFaShu())) return false;
                     if(player.countZhiShiWu('xianXue')+2>=3&&!player.canBiShaBaoShi()) return false;
                     return true;
                 },
@@ -3904,6 +3942,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         }
                     }
                 },
+                check:function(event,player){
+                    return player.canGongJi()||player.canFaShu();
+                },
                 ai:{
                     baoShi:true,
                     skillTagFilter:function(player,tag,arg){
@@ -4022,6 +4063,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 7'
                     player.addZhiShiWu('xueYin');
                 },
+                check:function(event,player){
+                    if(player.countZhiShiWu('xueYin')>=lib.skill.xueYin.intro.max) return false;
+                    var zhiLiaoPlayer=game.filterPlayer(function(current){
+                        return current.side==player.side&&current!=player&&current.zhiLiao<current.getZhiLiaoLimit();
+                    });
+                    return zhiLiaoPlayer.length>0;
+                }
             },
             shaLuShengYan:{
                 trigger:{source:'gongJiMingZhong'},
@@ -4328,6 +4376,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         lib.skill.zhanWenZhangWo.fanZhuanMoWen(player,num-player.countZhiShiWu('zhanWen'));
                     }
                 },
+                check:function(event,player){
+                    return player.canGongJi();
+                },
                 group:['fuWenGaiZao_chongZhi'],
                 mod:{
                     maxHandcard:function(player,num){
@@ -4525,6 +4576,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 check:function(event,player){
                     if(player.zhiLiao<=1) return false;
+                    if(!(player.canGongJi()||player.canFaShu())) return false;
                     return game.hasPlayer(function(current){
                         if(current.side!=player.side) return false;
                         if(current.zhiLiao+2<=4) return true;
@@ -5235,6 +5287,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     order:3.7,
                     result:{
                         target:function(player,target){
+                            if(player.countTongXiPai()<4) return 0;
                             return get.damageEffect(target,2);
                         },
                     }
@@ -5277,7 +5330,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 ai:{
                     baoShi:true,
-                    order:3.7,
+                    order:3.3,
                     result:{
                         target:function(player,target){
                             return get.zhiLiaoEffect(target,2);
@@ -6286,6 +6339,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                 },
                 check:function(event,player){
+                    if(!(player.canGongJi()||player.canFaShu())) return false;
                     return player.hasZhiShiWu('lingGan')<3;
                 },
                 ai:{
@@ -7936,7 +7990,14 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     var list=['摸','弃','放弃'];
                     player.chooseControl(list).set('prompt','摸或弃1张牌').set('ai',function(){
                         var player=_status.event.player;
-                        if(player.countCards('h')>=player.getHandcardLimit()) return '弃';
+                        var cards=player.getCards('h');
+                        var bool=false;
+                        for(var card of cards){
+                            if(player.hasUseTarget(card)) bool=true;
+                            if(bool) break;
+                        }
+                        if(bool) return '摸';
+                        if(player.countCards('h')+1>=player.getHandcardLimit()) return '弃';
                         if(player.countCards('h')<player.getHandcardLimit()-2) return '摸';
                         return '放弃';
                     });
@@ -8333,11 +8394,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 check:function(event,player){
                     if(player.isHengZhi()&&player.storage.tongShengGongSi_target.side==player.side) return false;
+                    if(!(player.canGongJi()||player.canFaShu())) return false;
                     var minus=player.getHandcardLimit()-player.countCards('h');
-                    var num=Math.random();
-                    if(player.isHengZhi()&&minus>=1) return num>0.1;
-                    if(minus>=3) return num>0.15;
-                    return false;
+                    return minus>=1;
                 }
             },
             liuXue:{
