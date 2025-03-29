@@ -109,6 +109,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         cost_data:control
                     };
                 },
+                logTarget:'target',
                 content:function(){
                     'step 0'
                     player.removeZhiShiWu('shengYin',event.cost_data);
@@ -329,16 +330,16 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         filter:function(event,player){
                             return get.is.gongJiXingDong(event);
                         },
-                        forced:true,
-                        content:function(){
-                            'step 0'
-                            var next=player.chooseTarget(true,'目标角色+1[治疗]');
-                            next.set('ai',function(target){
+                        //forced:true,
+                        cost:async function(event,trigger,player){
+                            event.result=await player.chooseTarget(true,'狂信徒：目标角色+1[治疗]').set('ai',function(target){
                                 var player=_status.event.player;
                                 return get.zhiLiaoEffect2(target,player,1);
-                            });
-                            'step 1'
-                            result.targets[0].changeZhiLiao(1,player);
+                            }).forResult();
+                        },
+                        content:function(){
+                            'step 0'
+                            event.targets[0].changeZhiLiao(1);
                         }
                     }
                 }
@@ -530,6 +531,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 filter:function(event,player){
                     return player.storage.yiDuanCaiJueSuo>=3&&event.player.side==player.side;
                 },
+                logTarget:'player',
                 content:function(){
                     'step 0'
                     lib.skill.yiDuanCaiJueSuo.removeZhiLiao(player,3);
@@ -1428,6 +1430,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 
                     return get.is.zhuDongGongJi(event)&&event.target.countCards('h')<4&&event.target.countCards('h')>0;
                 },
+                logTarget:'target',
                 content:function(){
                     'step 0'
                     trigger.target.chooseToDiscard(true);
@@ -1477,6 +1480,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         cost_data:result.links
                     }
                 },
+                logTarget:'player',
                 content:function(){
                     'step 0'
                     player.discard(event.cost_data,'moLiPing');

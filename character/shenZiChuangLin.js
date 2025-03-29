@@ -106,7 +106,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         player.storage.yiRen=true;
                     }
                     if(card){
-                        card.renMaster=player;
+                        card.storage.renMaster=player;
                         game.log(player, "获得了1张【刃】")
                         player.gain(card,'draw');
                     }
@@ -129,7 +129,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         card=game.createCard("yiRen", "lei", 'xue');
                         player.storage.yiRen=true;
                     }
-                    card.renMaster=player;
+                    card.storage.renMaster=player;
                     game.log(trigger.target,'获得了',card);
                     trigger.target.gain(card,'draw');
                 },
@@ -209,17 +209,17 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
             },
             ren: {
-                global: ["ren_zhuanHuan1","ren_zhuanHuan2","ren_daChuQiZhi","ren_gaiPai",'ren_biaoJi'],
+                global: ["ren_zhuanHuan1","ren_zhuanHuan2","ren_daChuQiZhi","ren_gaiPai"],
                 contentx: function(){
                     for(var card of event.cards){
-                        if(get.name(card)=='moRen'){
-                            if(get.xiBie(card,false)=='huo') game.setXiBie(card,'shui');
-                            else game.setXiBie(card,'huo');
-                        }else if(get.name(card)=='yiRen'){
-                            if(get.xiBie(card,false)=='lei') game.setXiBie(card,'feng');
-                            else game.setXiBie(card,'lei');
-                        }
                         game.broadcastAll(function(card){
+                            if(get.name(card)=='moRen'){
+                                if(get.xiBie(card,false)=='huo') game.setXiBie(card,'shui');
+                                else game.setXiBie(card,'huo');
+                            }else if(get.name(card)=='yiRen'){
+                                if(get.xiBie(card,false)=='lei') game.setXiBie(card,'feng');
+                                else game.setXiBie(card,'lei');
+                            }
                             card.$init([card.xiBie,card.mingGe,card.name]);
                         },card);
                     }
@@ -290,6 +290,25 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             next.set('prompt','是否转化【刃】的系别');
                             next.set('selectCard',[1,2]);
                             next.set('zhuanHuan',true);
+                            if(event.triggername=='yingZhanBefore'){
+                                next.set('yingZhan',event.triggername=='yingZhanBefore');
+                                next.set('card',trigger.card);
+                            }
+                            next.set('ai',function(card){
+                                if(_status.event.yingZhan){
+                                    let xiBei1=get.xiBie(_status.event.card);
+                                    if(get.name(card)=='moRen'&&(xiBei1=='huo'||xiBei1=='shui')){
+                                        let xiBei2=get.xiBie(card);
+                                        if(xiBei2==xiBei1) return 0;
+                                        else return 1;
+                                    }else if(get.name(card)=='yiRen'&&(xiBei1=='lei'||xiBei1=='feng')){
+                                        let xiBei2=get.xiBie(card);
+                                        if(xiBei2==xiBei1) return 0;
+                                        else return 1;
+                                    }
+                                }
+                                return 0.5;
+                            });
                             event.result=await next.forResult();
                         },
                         content: function(){
@@ -306,6 +325,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 							const cards = [];
 							for(let i = 0; i < event.cards.length; i++) {
                                 if(get.name(event.cards[i]) == 'moRen' || get.name(event.cards[i]) == 'yiRen') {
+                                    if(event.cards[i].destroyed) continue;
                                     cards.push(event.cards[i]);
                                 }
                             }
@@ -323,10 +343,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         },
                         content: function(){
                             'step 0'
-                            player.faShuDamage(event.num||3,event.indexedData.renMaster);
+                            trigger.cards=trigger.cards.remove(event.indexedData);
+                            player.faShuDamage(event.num||3,event.indexedData.storage.renMaster);
                             'step 1'
                             let name=get.name(event.indexedData);
-                            event.indexedData.renMaster.storage[name]=false;
+                            event.indexedData.storage.renMaster.storage[name]=false;
                             event.indexedData.fix();
                             event.indexedData.remove();
                             event.indexedData.destroyed = true;
@@ -334,13 +355,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         },
                     },
                     gaiPai: {
-                        trigger: {
-                            player: "addToExpansionEnd",
-                        },
+                        trigger: {player: "addToExpansionEnd",},
                         getIndex(event, player) {
 							const cards = [];
 							for(let i = 0; i < event.cards.length; i++) {
                                 if(get.name(event.cards[i]) == 'moRen' || get.name(event.cards[i]) == 'yiRen') {
+                                    if(event.cards[i].destroyed) continue;
                                     cards.push(event.cards[i]);
                                 }
                             }
@@ -359,10 +379,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         },
                         content: function(){
                             'step 0'
-                            player.faShuDamage(1,event.indexedData.renMaster);
+                            player.faShuDamage(1,event.indexedData.storage.renMaster);
                             'step 1'
                             let name=get.name(event.indexedData);
-                            event.indexedData.renMaster.storage[name]=false;
+                            event.indexedData.storage.renMaster.storage[name]=false;
                             event.indexedData.fix();
                             event.indexedData.remove();
                             event.indexedData.destroyed = true;
@@ -415,7 +435,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                     card=game.createCard('yiRen','lei','xue');
                                     player.storage.yiRen=true;
                                 }
-                                card.renMaster=player;
+                                card.storage.renMaster=player;
                                 cards.push(card);
                             }
                             game.log(player,`获得了${cards.length}张【刃】`);
@@ -818,6 +838,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         cost_data:control,
                     }
                 },
+                logTarget:'player',
                 content:function(){
                     'step 0'
                     player.removeZhiShiWu('mi',event.cost_data);
@@ -904,6 +925,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 filter:function(event,player){
                     return event.player!=player;
                 },
+                logTarget:'player',
                 content:function(){
                     'step 0'
                     player.addZhiShiWu('mi');
@@ -1941,6 +1963,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             tongDiao_info: "<span class='tiaoJian'>(你触发【渗蚀】时)</span>3点法术伤害变更为1点法术伤害。",
             ren: "(专)刃",
             ren_zhuanHuan1: "转换刃系别",
+            ren_zhuanHuan1_info: "转化【刃】的系别",
             ren_zhuanHuan2: "转换刃系别",
             ren_daChuQiZhi: "[被动]渗蚀",
             ren_biaoJi: "刃",

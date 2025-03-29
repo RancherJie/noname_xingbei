@@ -9404,7 +9404,9 @@ export const Content = {
 		}else{
 			game.log(player,'弃置了',cards.length,'张牌');//星杯暗置弃牌日志
 		}
-		"step 1"
+		'step 1'
+		event.trigger('discard');
+		"step 2"
 		if(event.baoPai==true){
 			if(event.shiQiXiaJiang!=false){
 				var next=player.changeShiQi(-cards.length).set('baoPai',true).set('cards',cards);
@@ -9429,9 +9431,6 @@ export const Content = {
 		}else if(event.showHiddenCards==true){
 			var next=player.showHiddenCards(cards);
 		}
-		'step 2'
-		event.trigger('discard');
-		
 	},
 	loseToDiscardpile:function(){
 		"step 0"

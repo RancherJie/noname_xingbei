@@ -490,6 +490,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 filter:function(event){
                     return event.faShu!=true;
                 },
+                logTarget:'source',
                 content:function(){
                     trigger.source.draw(player);
                 }
@@ -1351,6 +1352,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     if(event.yingZhan==true) return false;
                     return player.countCards('h')>0;
                 },
+                logTarget:'target',
                 async cost(event, trigger, player) {
                     event.result=await player.chooseCard('h',1,function(card){
                         return get.type(card)=='faShu';
@@ -2969,6 +2971,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                     switch(get.xiBie(trigger.card)){
                         case 'huo':
+                            player.logSkill('yuanSuSheJi_huo');
                             trigger.changeDamageNum(1);
                             break;
                         case'shui':
@@ -2978,6 +2981,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             player.addTempSkill('yuanSuSheJi_feng');
                             break;
                         case 'lei':
+                            player.logSkill('yuanSuSheJi_lei');
                             trigger.wuFaYingZhan();
                             break;
                         case 'di':
@@ -2987,25 +2991,28 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 
                 },
                 subSkill:{
+                    huo:{},
+                    lei:{},
                     shui:{
                         trigger:{source:'gongJiMingZhong'},
-                        direct:true,
+                        //direct:true,
                         filter:function(event,player){
                             return event.customArgs.yuanSuSheJi==true&&event.yingZhan!=true;
                         },
-                        content:function(){
-                            'step 0'
-                            player.chooseTarget('目标角色+1[治疗]',true).set('ai',function(target){
+                        async cost(event, trigger, player){
+                            event.result=await player.chooseTarget('水之矢：目标角色+1[治疗]',true).set('ai',function(target){
                                 var player=_status.event.player;
                                 return get.zhiLiaoEffect2(target,player,1);
-                            });
-                            'step 1'
-                            result.targets[0].changeZhiLiao(1,player);
+                            }).forResult();
+                        },
+                        content:function(){
+                            'step 0'
+                            event.targets[0].changeZhiLiao(1);
                         }
                     },
                     feng:{
                         trigger:{player:'gongJiAfter'},
-                        direct:true,
+                        forced:true,
                         filter:function(event,player){
                             return event.customArgs.yuanSuSheJi==true;
                         },
@@ -3015,18 +3022,19 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     },
                     di:{
                         trigger:{source:'gongJiMingZhong'},
-                        direct:true,
+                        //direct:true,
                         filter:function(event,player){
                             return event.customArgs.yuanSuSheJi==true&&event.yingZhan!=true;
                         },
+                        async cost(event, trigger, player){
+                            event.result=await player.chooseTarget('地之矢：对目标角色造成1点法术伤害',true).set('ai',function(target){
+                                var player=_status.event.player;
+                                return get.damageEffect2(target,player,1);
+                            }).forResult();
+                        },
                         content:function(){
                             'step 0'
-                            var next=player.chooseTarget('对目标角色造成1点法术伤害',true);
-                            next.ai=function(target){
-                                return target.side!=player.side;
-                            }
-                            'step 1'
-                            result.targets[0].faShuDamage(1,player);
+                            event.targets[0].faShuDamage(1,player);
                         }
                     }
                 }
@@ -3085,7 +3093,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 subSkill:{
                     chongZhi:{
                         trigger:{player:'phaseEnd'},
-                        forced:true,
+                        //forced:true,
                         filter:function(event,player){
                             if(!player.isHengZhi()) return false;
                             var cards=player.getCards('s',function(card){
@@ -3093,16 +3101,18 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             });
                             return cards.length==0;
                         },
+                        async cost(event, trigger, player) {
+                            event.result=await player.chooseTarget("精灵秘仪：对目标角色造成2点法术伤害",true).set('ai',function(target){
+                                var player=_status.event.player;
+                                return get.damageEffect2(target,player,2);
+                            }).forResult();
+                        },
                         content:function(){
                             'step 0'
                             player.chongZhi();
                             player.unmarkSkill('zhuFu');
-                            player.chooseTarget('对目标角色造成2点法术伤害',true).set('ai',function(target){
-                                var player=_status.event.player;
-                                return get.damageEffect2(target,player,2);
-                            });
                             'step 1'
-                            result.targets[0].faShuDamage(2,player); 
+                            event.targets[0].faShuDamage(2,player); 
                         }
                     },
                     wuFaXingDongBefore:{
@@ -7865,6 +7875,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         cost_data:control,
                     }
                 },
+                logTarget:'source',
                 content:function(){
                     'step 0'
                     event.num=event.cost_data;
@@ -7872,7 +7883,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 1'
                     player.chooseToDiscard('h',true,event.num);
                     'step 2'
-                    trigger.source.chooseToDiscard('h',true).set('showCards',true);
+                    if(trigger.source.countCards('h')>0) trigger.source.chooseToDiscard('h',true).set('showCards',true);
+                    else event.finish();
                     'step 3'
                     if(get.type(result.cards[0])=='faShu'){
                         player.addZhiShiWu('shouHun');
@@ -8652,6 +8664,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         cost_data:result.links,
                     };
                 },
+                logTarget:'player',
                 content:function(){
                     'step 0'
                     player.discard(event.cost_data,'jian').set('jian',true);
@@ -8709,6 +8722,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         cost_data:result.links,
                     }
                 },
+                logTarget:'player',
                 content:function(){
                     'step 0'
                     player.discard(event.cost_data,'jian').set('jian',true).set('showHiddenCards',true);
@@ -9162,6 +9176,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             //精灵射手
             yuanSuSheJi:"[响应]元素射击[回合限定]",
             yuanSuSheJi_info:"<span class='tiaoJian'>(主动攻击时①，若攻击牌非暗系，弃1张法术牌[展示]或移除1个【祝福】)</span>根据攻击牌类别附加以下【元素箭】效果：<br>【火之矢】：本次攻击伤害额外+1。<br>【水之矢】：<span class='tiaoJian'>(主动攻击命中时②)</span>目标角色+1[治疗]。<br>【风之矢】：<span class='tiaoJian'>([攻击行动]结束后)</span>额外+1[攻击行动]。<br>【雷之矢】：本次攻击无法应战。<br>【地之矢】：<span class='tiaoJian'>(主动攻击命中时②)</span>对目标角色造成1点法术伤害③。",
+            yuanSuSheJi_huo:"火之矢",
+            yuanSuSheJi_shui:"水之矢",
+            yuanSuSheJi_feng:"风之矢",
+            yuanSuSheJi_lei:"雷之矢",
+            yuanSuSheJi_di:"地之矢",
             dongWuHuoBan:"[响应]动物伙伴",
             dongWuHuoBan_info:"<span class='tiaoJian'>(你的回合内，目标角色承受你造成的伤害⑥后)</span>你摸1张牌[强制]，你弃1张牌。",
             jingLingMiYi:"[启动]精灵秘仪[持续]",
