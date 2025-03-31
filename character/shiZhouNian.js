@@ -7109,7 +7109,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 showCards:true,
                 selectTarget:1,
                 filterTarget:function(card,player,target){
-                    return player.canUseXingBie('anMie',target);
+                    return player.canUseXingBei('anMie',target);
                 },
                 content:function(){
                     var xiBie=get.xiBie(cards[0]);

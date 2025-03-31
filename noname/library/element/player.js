@@ -8048,7 +8048,7 @@ export class Player extends HTMLDivElement {
 	 * @param { Player } target
 	 * @returns
 	 */
-	canUseXingBie(card, target) {
+	canUseXingBei(card, target) {
 		if (typeof card == "string") card = { name: card, isCard: true };
 		var info = get.info(card);
 		if (info.multicheck && !info.multicheck(card, this)) return false;

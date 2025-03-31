@@ -209,7 +209,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
             },
             ren: {
-                global: ["ren_zhuanHuan1","ren_zhuanHuan2","ren_daChuQiZhi","ren_gaiPai"],
+                global: ["ren_zhuanHuan1","ren_zhuanHuan2","ren_daChuQiZhi","ren_gaiPai","ren_biaoJi"],
                 contentx: function(){
                     for(var card of event.cards){
                         game.broadcastAll(function(card){
@@ -1536,7 +1536,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 1'
                     player.storage.zhenYanShu=result.links[0];
                     'step 2'
-                    player.chooseUseTarget(player.storage.zhenYanShu,true);
+                    player.chooseUseTarget(player.storage.zhenYanShu,true).set('action',true);
                 },
                 contentAfter:function(){
                     'step 0'
