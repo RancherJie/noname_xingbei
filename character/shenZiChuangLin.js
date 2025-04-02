@@ -320,7 +320,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     daChuQiZhi: {
                         trigger: {player: ["daChuPai","discard"],},
                         forced: true,
-                        priority:1,
+                        priority:0.5,
                         getIndex(event, player) {
 							const cards = [];
 							for(let i = 0; i < event.cards.length; i++) {
@@ -1083,7 +1083,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     var cards=player.getExpansions('ying');
                     var next=player.chooseCardButton(cards,true,cards.length-3,`舍弃${cards.length-3}张【影】`);
                     'step 1'
-                    player.discard(result.links);
+                    player.discard(result.links,'ying').set('sheQi',true);
                 }
             },
             mi:{
@@ -1597,7 +1597,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         if(target.countCards('h')>0){
                             let cards=await target.chooseToDiscard('h',true).forResultCards();
                             await player.showCards(cards);
-                            await player.addToExpansion('draw',cards,'log').gaintag.add('yanLing'); 
+                            await player.addToExpansion('draw',cards,'log').set('gaintag',['yanLing']); 
                         }
                     }
                 }
@@ -1688,7 +1688,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     var cards=player.getExpansions('yanLing');
                     var next=player.chooseCardButton(cards,true,cards.length-3,`舍弃${cards.length-3}张【言灵】`);
                     'step 1'
-                    player.discard(result.links);
+                    player.discard(result.links,'yanLing').set('sheQi',true);
                 }
             },
             miShu:{

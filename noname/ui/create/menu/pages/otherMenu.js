@@ -869,10 +869,10 @@ export const otherMenu = function (/** @type { boolean | undefined } */ connectM
 					var target = targets.shift();
 					switch (currentrow1.innerHTML) {
 						case "攻伤":
-							target.damage(num, "nosource");
+							target.damage(num, _status.currentPhase);
 							break;
 						case "法伤":
-							target.faShuDamage(num, "nosource");
+							target.faShuDamage(num, _status.currentPhase);
 							break;
 						case "手牌":
 							if(num>0) target.draw(num);

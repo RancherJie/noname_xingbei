@@ -502,7 +502,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             jingHuaZhiShu:{
                 trigger:{player:'damageAfter'},
                 filter:function(event,player){
-                    return player.countCards('h')>0;
+                    return player.countCards('h')>0&&event.jingHuaZhiShu==true;
                 },
                 async cost(event,trigger,player){
                     event.result=await player.chooseCard('h',function(card){
@@ -523,6 +523,16 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 2'
                     player.draw(1);
                     lib.skill.yiDuanCaiJueSuo.removeZhiLiao(player,1);
+                },
+                group:'jingHuaZhiShu_chengShouShangHai',
+                subSkill:{
+                    chengShouShangHai:{
+                        trigger:{player:'chengShouShangHai'},
+                        direct:true,
+                        content:function(){
+                            trigger.jingHuaZhiShu=true;
+                        }
+                    }
                 }
             },
             biHuLingYu:{
@@ -904,7 +914,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 content:function(){
                     var cards=get.cards();
-                    player.addToExpansion('draw',cards).gaintag.add('luEn');
+                    player.addToExpansion('draw',cards,'log').gaintag.add('luEn');
                 }
             },
             qunXingQiShi:{
@@ -953,7 +963,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 2'
                     player.chooseCard('h',true,'将1张手牌面朝下放置在你角色旁，作为【卢恩】');
                     'step 3'
-                    player.addToExpansion('draw',result.cards).gaintag.add('luEn');
+                    player.addToExpansion('draw',result.cards,'log').gaintag.add('luEn');
                     var list=[];
                     if(!player.hasZhiShiWu('fanXing')) list.push('繁星');
                     if(!player.hasZhiShiWu('yingYue')) list.push('影月');
@@ -1028,34 +1038,42 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         next.set("filterMove", function (from, to, moved) {
                             if (typeof to == "number") return false;
                             var player = _status.event.player;
-                            var hs = player.getCards("h");
-                            var changed = hs.filter(function (card) {
-                                return !moved[1].includes(card);
-                            });
-                            var changed2 = moved[1].filter(function (card) {
-                                return !hs.includes(card);
-                            });
-                            if (changed.length < 1) return true;
-                            var pos1 = moved[0].includes(from.link) ? 0 : 1,
-                                pos2 = moved[0].includes(to.link) ? 0 : 1;
-                            if (pos1 == pos2) return true;
-                            if (pos1 == 0) {
-                                if (changed.includes(from.link)) return true;
-                                return changed2.includes(to.link);
-                            }
-                            if (changed2.includes(from.link)) return true;
-                            return changed.includes(to.link);
+                            //交换前
+                            if (moved[0].length < 1) return true;
+                            //交换回去
+                            if((moved[0].includes(from.link)&&moved[1].includes(to.link))||moved[0].includes(to.link)&&moved[1].includes(from.link)) return true;
+                            var luEn = player.getExpansions("luEn");
+                            //卢恩间交换
+                            if(luEn.includes(from.link)&&luEn.includes(to.link)) return true;
+                            var h=player.getCards("h");
+                            //手牌间交换
+                            if (h.includes(from.link) == h.includes(to.link)) return true;
+                            //移动后，移动的牌在卢恩区交换
+                            if(moved[0].includes(from.link)&&luEn.includes(to.link)) return true;
+                            if(moved[0].includes(to.link)&&luEn.includes(from.link)) return true;
+                            //移动后，移动的牌在手牌区交换
+                            if(moved[1].includes(from.link)&&h.includes(to.link)) return true;
+                            if(moved[1].includes(to.link)&&h.includes(from.link)) return true;
+
+                            return moved[0].length <1;
+                        });
+                        next.set('filterOk',function(moved){
+                            var player=_status.event.player;
+                            var pushs = moved[0],
+                                gains = moved[1];
+                            pushs.removeArray(player.getExpansions("luEn"));
+                            gains.removeArray(player.getCards("h"));
+                            return pushs.length==1;
                         });
                         var result=await next.forResult();
                         if(!result.moved) return;
                         var pushs = result.moved[0],
                             gains = result.moved[1];
-                        pushs.removeArray(player.getExpansions("luEn"));
-                        gains.removeArray(player.getCards("h"));
                         if (!pushs.length || pushs.length != gains.length) return;
                         await player.lose(pushs);
                         await player.lose(gains);
-                        await player.addToExpansion(pushs, player, "giveAuto").gaintag.add("luEn");
+                        await player.addToExpansion(pushs, "draw",'log').set('gaintag',['luEn']);
+                        game.log(player,'获得了1张牌');
                         await player.gain(gains, "draw");
                     }
                 }
@@ -1316,7 +1334,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.chooseCard('h',`将最多${x+1}张手牌面朝下放置在你角色旁，作为【卢恩】`,[1,x+1]);
                     'step 3'
                     if(result.bool){
-                        player.addToExpansion('draw',result.cards).gaintag.add('luEn');
+                        player.addToExpansion('draw',result.cards,'log').gaintag.add('luEn');
                     }
                     player.storage.chuangKeLvDong=false;
                     'step 4'
@@ -1358,7 +1376,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     var cards=player.getExpansions('luEn');
                     var next=player.chooseCardButton(cards,true,cards.length-6,`舍弃${cards.length-6}张【卢恩】`);
                     'step 1'
-                    player.discard(result.links);
+                    player.discard(result.links,'luEn').set('sheQi',true);
                 }
             },
             //猎巫人

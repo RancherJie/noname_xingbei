@@ -639,7 +639,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         },
                         trigger:{player:['daChuPai','showCardsEnd']},
                         forced:true,
-                        firstDo:true,
                         priority:1,
                         filter:function(event,player){
                             if(!player.hasExpansions('diZhiFengYin_xiaoGuo')){
@@ -5698,7 +5697,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.chooseCardButton(cards,'舍弃'+(cards.length-8)+'张【充能】',true,cards.length-8);
                     'step 1'
                     if(result.links){
-                        player.discard(result.links);
+                        player.discard(result.links,'chongNengPai').set('sheQi',true);
                     }
                 }
             },
@@ -8879,7 +8878,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     var cards=player.getExpansions('jian');
                     player.chooseCardButton(num-8,true,cards,`舍弃${num-8}张【茧】`);
                     'step 1'
-                    player.discard(result.links);
+                    player.discard(result.links,'jian').set('sheQi',true);
                 }
             },
             DWZyong:{

@@ -10688,6 +10688,12 @@ export class Library {
 			 */
 			reinited() {
 				this.inited = true;
+				//重连时使标记显示
+				for(var player of game.players){
+					for(var mark in player.marks){
+						player.markSkill(mark);
+					}
+				}
 			},
 			/**
 			 * @this {import("./element/client.js").Client}

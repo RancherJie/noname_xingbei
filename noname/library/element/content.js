@@ -3296,8 +3296,15 @@ export const Content = {
 								const { result } = await next;
 								//千里走单骑全责，把敌人打死可能会打断chooseControl
 								if (result) {
+									//多技能增加取消选项，取消删除本次选择的技能
 									if(result.control=="cancel2"){
-										return;
+										for(let control of skillsToChoose){
+											if(control!="cancel2"){
+												let skill=usableSkills.find(info=>info.skill==control);
+												event.doing.todoList.remove(skill);
+											}
+										}
+										continue;
 									}else event.current = usableSkills.find(info => info.skill == result.control);
 								} else {
 									event.current = usableSkills[0];
@@ -9398,6 +9405,8 @@ export const Content = {
 			let name=get.translation(event.gaiPai);
 			if(event.visible){
 				game.log(player,'移除了',cards.length,'张','【'+name+'】',"(",cards,")");
+			}else if(event.sheQi){
+				game.log(player,'舍弃了',cards.length,'张','【'+name+'】');
 			}else {
 				game.log(player,'移除了',cards.length,'张','【'+name+'】');
 			}
