@@ -11080,28 +11080,6 @@ export const Content = {
 		}
 		event.trigger("changeHp");
 	},
-	changeZhiLiao: function () {
-		if (num > 0) {
-			game.log(player, "获得了" + get.cnNumber(num) + "点治疗");
-		} else if (num < 0) {
-			if (-num > player.zhiLiao) {
-				num = -player.zhiLiao;
-				event.num = num;
-			}
-			switch (
-				event.type //log moved here
-			) {
-				case "damage":
-					game.log(player, "的治疗抵挡了" + get.cnNumber(-num) + "点伤害");
-					break;
-				case "lose":
-					game.log(player, "失去了" + get.cnNumber(-num) + "点治疗");
-					break;
-			}
-		}
-		player.zhiLiao += num;
-		player.update();
-	},
 	dying: function () {
 		"step 0";
 		event.forceDie = true;
@@ -12105,7 +12083,6 @@ export const Content = {
 	changeZhiLiao:function(){
 		'step 0'
 		player.zhiLiao+=num;
-
 		if(num>=0){
 			if(event.yiChu==true){
 				if(event.source) game.log(event.source,'使',player,'获得了'+num+'点','[治疗]','，','[治疗]','溢出');
@@ -12119,14 +12096,15 @@ export const Content = {
 			if(event.source) game.log(event.source,'使',player,'移除了'+num+'点','[治疗]');
 			else game.log(player,'移除了'+num+'点','[治疗]');
 		}
-		'step 2'
+		'step 1'
 		if(player.zhiLiao<0){
 			player.zhiLiao=0;
 		}
+		player.update();
+		'step 2'
 		if(event.yiChu==true){
 			event.trigger('zhiLiaoYiChu');
 		}
-		player.update();
 	},
 
 	chooseDraw:function(){

@@ -2558,7 +2558,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         name='anMie';
                     }
                     var card={name:name,xiBie:xiBie};
-                    await player.useCard(card,event.target);
+                    await player.useCard(card,event.target).set('action',true);
                 },
                 ai:{
                     order:3.7,
@@ -5296,7 +5296,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     order:3.7,
                     result:{
                         target:function(player,target){
-                            if(player.countTongXiPai()<4) return 0;
+                            if(player.countTongXiPai()<3) return 0;
                             return get.damageEffect(target,2);
                         },
                     }
@@ -5342,7 +5342,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     order:3.3,
                     result:{
                         target:function(player,target){
-                            return get.zhiLiaoEffect(target,2);
+                            if(player.side!=target.side) return 0;
+                            return get.zhiLiaoEffect(target,2)-0.1;
                         },
                     }
                 }
@@ -8004,10 +8005,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         var cards=player.getCards('h');
                         var bool=false;
                         for(var card of cards){
-                            if(player.hasUseTarget(card)) bool=true;
+                            if(player.hasUseTargetXingBei(card)) bool=true;
                             if(bool) break;
                         }
-                        if(bool) return '摸';
+                        if(!bool) return '摸';
                         if(player.countCards('h')+1>=player.getHandcardLimit()) return '弃';
                         if(player.countCards('h')<player.getHandcardLimit()-2) return '摸';
                         return '放弃';
@@ -8637,9 +8638,16 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.addToExpansion('draw',cards,'log').gaintag.add('jian');
                 },
                 ai:{
-                    order:4.1,
+                    order:3.6,
                     result:{
-                        player:1,
+                        player:function(player){
+                            return player.getExpansions('jian').length<=6?1:0;
+                        },
+                    }
+                },
+                mod:{
+                    aiOrder:function(player,item,num){
+                        if(item=='_tiLian'&&player.getExpansions('jian').length>4) return num+1;
                     }
                 }
             },
