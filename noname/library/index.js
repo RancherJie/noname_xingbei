@@ -9913,10 +9913,6 @@ export class Library {
 			trigger:{source:'gongJiMingZhong'},
 			direct:true,
 			firstDo:true,
-			filter:function(event,player){
-				var zhanJi=get.zhanJi(player.side);
-				return zhanJi.length<game.zhanJiMax;
-			},
 			content:function(){
 				if(trigger.yingZhan==true){
 					player.changeZhanJi('shuiJing',1)
@@ -9998,9 +9994,10 @@ export class Library {
 			},
 			content:function(){
 				'step 0'
-				player.draw(3).set('cause','teShuXingDong');
 				event.trigger('gouMai');
 				'step 1'
+				player.draw(3).set('cause','teShuXingDong');
+				'step 2'
 				var num=0;
 				var emptyZhanJi=get.emptyZhanJi(player.side);
 				if(emptyZhanJi>=2){
@@ -10019,11 +10016,11 @@ export class Library {
 					var list=['baoShi','shuiJing'];
 					player.chooseControl(list).set('prompt','选择获得的星石').set('ai',function(){return 0;});
 				}
-				'step 2'
+				'step 3'
 				if(result.control=='baoShi'){
-					player.addZhanJi('baoShi',1);
+					player.addZhanJi('baoShi',1).set('yiChu',true);
 				}else if(result.control=='shuiJing'){
-					player.addZhanJi('shuiJing',1);
+					player.addZhanJi('shuiJing',1).set('yiChu',true);
 				}
 			},
 			ai:{

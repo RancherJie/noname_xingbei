@@ -1,10 +1,11 @@
 window.noname_update = {
-	version: "1.0.24",
-	update: "1.0.24", 
+	version: "1.0.25",
+	update: "1.0.25", 
 	changeLog: [
-		'优化贤者、蝶舞者、兽灵武士ai',
-		'增加hasUseTargetXingBei函数',
-		'修复changeZhiLiao错误step',
+		'规范部分代码',
+		'为boss模式铺点路',
+		'完善判断是否有可启动技的逻辑',
+		'优化沉沦协奏曲重置时机',
 	],
 	files: [
 

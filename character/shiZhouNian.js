@@ -6153,7 +6153,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     chongZhi:{
                         trigger:{global:'phaseBefore'},
                         direct:true,
-                        firstDo:true,
+                        priority:1,
                         content:function(){
                             player.storage.chenLunXieZouQu=[];
                         }
