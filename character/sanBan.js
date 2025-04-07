@@ -14,7 +14,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
         },
 		character:{
 			san_fengZhiJianSheng:['fengZhiJianSheng_name','jiGroup',3,['fengNuZhuiJi','san_shengJian','lieFengJi','jiFengJi','jianYing'],['character:fengZhiJianSheng']],
-            san_kuangZhanShi:['kuangZhanShi_name','xueGroup',3,['kuangHua','xueYingKuangDao','xueXingPaoXiao','siLie'],['character:kuangZhanShi']],
+            san_kuangZhanShi:['kuangZhanShi_name','xueGroup',3,['san_kuangHua','xueYingKuangDao','xueXingPaoXiao','siLie'],['character:kuangZhanShi']],
             san_anShaZhe:['anShaZhe_name','jiGroup',3,['fanShi','san_shuiYing','san_qianXing'],['character:anShaZhe']],
             san_shengNv:['shengNv_name','shengGroup',3,['san_bingShuangDaoYan','zhiLiaoShu','zhiYuZhiGuang','san_lianMin','shengLiao'],['character:shengNv']],
             san_shengQiangQiShi:['shengQiangQiShi_name','shengGroup','3/4',['san_shenShengXinYang','huiYao','chengJie','shengJi','tianQiang','diQiang','shengGuangQiYu'],['character:shengQiangQiShi']],

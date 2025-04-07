@@ -11002,6 +11002,7 @@ export class Player extends HTMLDivElement {
 			var current=this.countMark(zhiShiWu);
 			if(current+num>max){
 				num=Math.max(0,max-current);
+				var yiChu=true;
 			}
 		}else if(num<0){
 			var current=this.countMark(zhiShiWu);
@@ -11013,9 +11014,10 @@ export class Player extends HTMLDivElement {
 		next.player=this;
 		next.zhiShiWu=zhiShiWu;
 		next.num=num;
+		if(yiChu) next.yiChu=true;
 		next.setContent('changeZhiShiWu');
 	
-		if(num==0||(!(this.hasSkill(zhiShiWu)||forced||lib.skill.global.includes(zhiShiWu)))){
+		if((num==0&&!yiChu)||(!(this.hasSkill(zhiShiWu)||forced||lib.skill.global.includes(zhiShiWu)))){
 			_status.event.next.remove(next);
 			next.resolve();
 		}

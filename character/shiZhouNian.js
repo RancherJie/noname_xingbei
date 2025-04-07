@@ -5589,7 +5589,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 4'
                     player.chooseCard('h',[1,event.num]).set('prompt',`将至多${event.num}张手牌作为充能`).set('ai',function(card){
                         var player=_status.event.player;
-                        if(ui.selected.cards.length>=player.countCards('h')) return 0;
+                        if(ui.selected.cards.length+1>=player.countCards('h')) return 0;
                         var xiBie=get.xiBie(card);
                         if(xiBie=='lei'||xiBie=='huo'||xiBie=='feng') return 1;
                         return 0;

@@ -9414,12 +9414,13 @@ export const Content = {
 		}else{
 			game.log(player,'弃置了',cards.length,'张牌');//星杯暗置弃牌日志
 		}
+		event.nun=cards.length;
 		'step 1'
 		event.trigger('discard');
 		"step 2"
 		if(event.baoPai==true){
 			if(event.shiQiXiaJiang!=false){
-				var next=player.changeShiQi(-cards.length).set('baoPai',true).set('cards',cards);
+				var next=player.changeShiQi(-event.nun).set('baoPai',true).set('cards',cards);
 				if(event.cause=='damage'){
 					next.set('cause','damage');
 					if(event.faShu){
@@ -11914,7 +11915,7 @@ export const Content = {
 			game.hongXingBei+=num;
 			if(num>0){
 				game.log('<span style="color:red;">红方</span>星杯数量增加',num);
-			}else{
+			}else if(num<0){
 				num=-num;
 				game.log('<span style="color:red;">红方</span>星杯数量减少',num);
 			}
@@ -11922,7 +11923,7 @@ export const Content = {
 			game.lanXingBei+=num;
 			if(num>0){
 				game.log('<span style="color:lightblue;">蓝方</span>星杯数量增加',num);
-			}else{
+			}else if(num<0){
 				num=-num;
 				game.log('<span style="color:lightblue;">蓝方</span>星杯数量减少',num);
 			}
@@ -12081,6 +12082,8 @@ export const Content = {
 		}else if(num<0){
 			player.removeMark(zhiShiWu,-num)
 		}
+		'step 1'
+		if(event.yiChu==true) event.trigger('zhiShiWuYiChu');
 	},
 
 	changeZhiLiao:function(){

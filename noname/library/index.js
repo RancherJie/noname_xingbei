@@ -9792,7 +9792,7 @@ export class Library {
 				}
 
 				//判断是否有可使用手牌
-				var cards=player.getCards('h').concat(player.getCards('e'));
+				var cards=player.getCards('h').concat(player.getCards('s'));
 				for(var i=0;i<cards.length;i++){
 					if(player.hasUseTarget(cards[i])) return false;
 				}
@@ -9807,6 +9807,8 @@ export class Library {
 				"step 0"
 				player.wuFaXingDong();
 				player.addGongJiOrFaShu();
+				event.getParent('phaseUse').canTeShu=false;
+				event.getParent('phaseUse').firstAction=true;
 			},
 			contentx:function(){
 				"step 0"
@@ -9843,9 +9845,6 @@ export class Library {
 				if(event.targetsx.length>0) event.goto(1);
 				"step 3"
 				if(event.dict['认可']>=event.dict['否认']){
-					event.getParent('phaseUse').canTeShu=false;
-					event.getParent('phaseUse').firstAction=true;
-					player.storage.gongJiOrFaShu++;
 					var num=player.getCards('h').length;
 					player.discard(player.getCards('h'));
 					player.draw(num);

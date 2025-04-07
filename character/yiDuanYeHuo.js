@@ -16,7 +16,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             xingZhuiNvWu:['xingZhuiNvWu_name','yongGroup','4/5',['mingDingZhiLi','xingHuan','xingKe','qunXingQiShi','huangJinLv','fanXing','yingYue','shiRi','chuangKeLvDong','luEn'],],
             shengTingJianChaShi:['shengTingJianChaShi_name','shengGroup',4,['kuangXinTu','caiJueLunDing','enDianShenShou','jingHuaZhiShu','biHuLingYu','caiJueZhe','shenShengBianCe','caiJue'],],
             lieWuRen:['lieWuRen_name','jiGroup','3/4',['zhuanHuan','shouMoCi','faShuBoLi','guanYinDuRen','touXi','moLiPing'],],
-            shengDianQiShi:['shengDianQiShi_name','shengGroup',4,['shenXuanZhe','shenWei','shengCai','shengYu','shenZhiZi','shenLinShengQi','shengYanQiFu','shengYin'],],
+            shengDianQiShi:['shengDianQiShi_name','shengGroup',4,['shenXuanZhe','shenWei','shengCai','shengYu','shenZhiZi','shenLinShengQi','shengYanQiYuan','shengYin'],],
 		},
         characterIntro:{
             zhanDouFaShi:`路尔莉嘉不擅长高深莫测的魔法，归因于她对战斗的直觉和创造性。但你如果因此小看她，则她会用符文法术的小把戏让你吃尽苦头`,
@@ -274,18 +274,18 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                 }
             },
-            shengYanQiFu:{
+            shengYanQiYuan:{
                 trigger:{player:'chongZhiEnd'},
                 filter:function(event,player){
                     return player.canBiShaShuiJing();
                 },
                 async cost(event,trigger,player){
                     event.result=player.chooseTarget()
-                    .set('prompt',get.prompt('shengYanQiFu'))
-                    .set('prompt2',lib.translate.shengYanQiFu_info)
+                    .set('prompt',get.prompt('shengYanQiYuan'))
+                    .set('prompt2',lib.translate.shengYanQiYuan_info)
                     .set('ai',function(target){
                         var player=_status.event.player;
-                        return get.zhiLiaoEffect(target,player,2);
+                        return get.zhiLiaoEffect2(target,player,2);
                     })
                     .forResult();
                 },
@@ -1623,7 +1623,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             shengYu_backup:"圣愈",
             shenZhiZi:"[被动]神之子",
             shenLinShengQi:"[法术]神临圣启",
-            shengYanQiFu:"[响应]圣炎祈愿",
+            shengYanQiYuan:"[响应]圣炎祈愿",
             shengYin:'圣印',
             shenXuanZhe_info:"你的[治疗]上限-1。 <span class='tiaoJian'>(主动攻击命中后②)</span>你+1[治疗]。 <span class='tiaoJian'>(当你获得[治疗]并溢出时)</span>你+1<span class='hong'>【圣印】</span>。",
             shenWei_info:"<span class='tiaoJian'>(主动攻击前①，移除2点</span><span class='hong'>【圣印】</span><span class='tiaoJian'>)</span>本次攻击对手无法应战；<span class='tiaoJian'>(若攻击牌为圣类命格)</span>本次攻击伤害额外+1。本回合你与攻击目标无法获得[治疗]。",
@@ -1631,7 +1631,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             shengYu_info:"<span class='tiaoJian'>(移除X点</span><span class='hong'>【圣印】</span><span class='tiaoJian'>)</span>目标队友+X[治疗]，你弃1张牌，额外+1[攻击行动]。",
             shenZhiZi_info:"<span class='tiaoJian'>(当你</span><span class='hong'>【圣印】</span><span class='tiaoJian'>增加时)</span>[横置]移除你的所有[治疗]，持续到你的下个回合结束时，你都处于【圣炎形态】，此形态下我方士气最少为1[强制]。 【神之子】的效果结束时[重置]，脱离【圣炎形态】，然后对目标对手造成1点法术伤害③。 <span class='tiaoJian'>(当【圣炎形态】下你受到伤害时③)</span>抵御本次伤害，改为承受1点来自自身的法术伤害⑥，然后[重置]脱离【圣炎形态】。",
             shenLinShengQi_info:"[水晶]无视你的<span class='hong'>【圣印】</span>上限为你+2<span class='hong'>【圣印】</span>，但你的<span class='hong'>【圣印】</span>最高为4，额外+1[攻击行动]；本回合你不能发动[神威]。",
-            shengYanQiFu_info:"[水晶]<span class='tiaoJian'>([重置]脱离【圣炎形态】时)</span>目标角色+2[治疗]。",
+            shengYanQiYuan_info:"[水晶]<span class='tiaoJian'>([重置]脱离【圣炎形态】时)</span>目标角色+2[治疗]。",
             shengYin_info:"<span class='hong'>【圣印】</span>为圣殿骑士专有指示物，上限为2。",
             
             //圣庭监察士
