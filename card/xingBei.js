@@ -29,7 +29,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 					},
 					result:{
 						target:function(player,target,card,isLink){
-							return get.damageEffect2(player,target,2);
+							return get.damageEffect(target,2);
 						},
 					},
 				},
@@ -60,7 +60,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 					},
 					result:{
 						target:function(player,target,card,isLink){
-							return get.damageEffect2(player,target,2);
+							return get.damageEffect(target,2);
 						},
 					},
 				},
@@ -91,7 +91,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 					},
 					result:{
 						target:function(player,target,card,isLink){
-							return get.damageEffect2(player,target,2);
+							return get.damageEffect(target,2);
 						},
 					},
 				},
@@ -122,7 +122,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 					},
 					result:{
 						target:function(player,target,card,isLink){
-							return get.damageEffect2(player,target,2);
+							return get.damageEffect(target,2);
 						},
 					},
 				},
@@ -153,7 +153,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 					},
 					result:{
 						target:function(player,target,card,isLink){
-							return get.damageEffect2(player,target,2);
+							return get.damageEffect(target,2);
 						},
 					},
 				},
@@ -183,7 +183,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 					},
 					result:{
 						target:function(player,target,card,isLink){
-							return get.damageEffect2(player,target,2);
+							return get.damageEffect(target,2);
 						},
 					},
 				},
