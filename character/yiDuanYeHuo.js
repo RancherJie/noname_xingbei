@@ -1503,17 +1503,19 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 0'
                     player.discard(event.cost_data,'moLiPing');
                     trigger.changeDamageNum(-1);
+                    player.storage.guanYinDuRenPlayer=trigger.player;
                     'step 1'
                     player.addTempSkill('guanYinDuRen_gain');
                     player.storage.guanYinDuRen=event.cost_data;
                     trigger.guanYinDuRen=true;
+                    
                 },
                 subSkill:{
                     gain:{
                         trigger:{global:['drawAfter','damageZero']},
                         direct:true,
                         filter:function(event,player){
-                            return event.getParent('damage').guanYinDuRen||event.guanYinDuRen;
+                            return (event.getParent('damage').guanYinDuRen||event.guanYinDuRen)&&player.storage.guanYinDuRenPlayer==event.player;
                         },
                         content:function(){
                             'step 0'

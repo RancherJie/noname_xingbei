@@ -2115,7 +2115,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 trigger:{global:'gongJiShi'},
                 filter:function(event,player){
                     if(event.player.side==player.side) return false;
-                    if(event.cards.length==0||(!event.card.isCard)) return false;
+                    if(!event.card.isCard) return false;
                     var anYue=player.getExpansions('anYue');
                     return anYue.length>0;
                 },
@@ -2581,6 +2581,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 trigger:{player:'gouMai'},
                 forced:true,
                 content:function(){
+                    'step 0'
+                    player.draw(3).set('cause','teShuXingDong');
+                    'step 1'
                     player.addZhanJi('baoShi',2);
                     trigger.finish();
                 }
@@ -6906,7 +6909,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     
                 },
                 check:function(event,player){
-                    return player.countZhiShiWu('douQi')<=3;
+                    return player.countZhiShiWu('douQi')+player.countCards('h')<=player.getHandcardLimit();
                 },
             },
             baiShiHuanLongQuan:{
@@ -7003,22 +7006,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 content:function(){
                     'step 0'
-                    trigger.customArgs.qiJueBengJi=true;
                     player.removeZhiShiWu('douQi');
                     trigger.wuFaYingZhan();
-                },
-                group:'qiJueBengJi_ranHou',
-                subSkill:{
-                    ranHou:{
-                        trigger:{player:'gongJiAfter'},
-                        direct:true,
-                        filter:function(event,player){
-                            return event.customArgs.qiJueBengJi;
-                        },
-                        content:function(){
-                            player.faShuDamage(player.countZhiShiWu('douQi'),player);
-                        }
-                    }
+                    'step 1'
+                    player.faShuDamage(player.countZhiShiWu('douQi'),player);
                 },
             },
             douShenTianQu:{

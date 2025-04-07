@@ -9458,13 +9458,14 @@ export class Player extends HTMLDivElement {
 	 * 返回玩家的手牌上限
 	 * @returns { number }
 	 */
+	/*
 	getHandcardLimit() {
 		var num = Math.max(this.hp, 0);
 		num = game.checkMod(this, num, "maxHandcardBase", this);
 		num = game.checkMod(this, num, "maxHandcard", this);
 		num = game.checkMod(this, num, "maxHandcardFinal", this);
 		return Math.max(0, num);
-	}
+	}*/
 	getEnemies(func, includeDie) {
 		var player = this;
 		var targets;
