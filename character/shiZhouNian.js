@@ -42,8 +42,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             hongLianQiShi:['hongLianQiShi_name','xueGroup',4,['xingHongShengYue','xingHongXinYang','xueXingDaoYan','shaLuShengYan','reXueFeiTeng','jieJiaoJieZao','xingHongShiZi','xueYin'],],
             yingLingRenXing:['yingLingRenXing_name','yongGroup',4,['zhanWenZhangWo','nuHuoYaZhi','zhanWenSuiJi','moWenRongHe','fuWenGaiZao','shuangChongHuiXiang','zhanWen','moWen'],],
             moQiang:['moQiang_name','huanGroup',4,['anZhiJieFang','huanYingXingChen','heiAnShuFu','anZhiZhangBi','chongYing','qiHeiZhiQiang'],],
-            cangYanMoNv:['cangYanMoNv_name','xueGroup',4,['cangYanFaDian','tianHuoDianKong','moNvZhiNu','tiShenWanOu','yongShengYinShiJi','tongKuLianJie','moNengFanZhuan','chongSheng'],],
-            yinYouShiRen:['yinYouShiRen_name','huanGroup','4/5',['chenLunXieZouQu','buXieHeXian','jinJiShiPian','xiWangFuGeQu','lingGan','yongHengYueZhangX'],],
+            cangYanMoNv:['cangYanMoNv_name','xueGroup',4,['cangYanFaDian','tianHuoDuanKong','moNvZhiNu','tiShenWanOu','yongShengYinShiJi','tongKuLianJie','moNengFanZhuan','chongSheng'],],
+            yinYouShiRen:['yinYouShiRen_name','huanGroup','4/5',['chenLunXieZouQu','buXieHeXian','jinJiShiPian','yongHengYueZhangX','xiWangFuGeQu','lingGan'],],
             jingLingSheShou:['jingLingSheShou_name','jiGroup','3/4',['yuanSuSheJi','dongWuHuoBan','jingLingMiYi','chongWuQiangHua','zhuFu'],],
             yinYangShi:['yinYangShi_name','huanGroup',4,['shiShenJiangLin','yinYangZhanHuan','shiShenZhuanHuan','heiAnJiLi','shiShenZhouShu','shengMingJieJie','guiHuo'],],
             xueSeJianLing:['xueSeJianLing_name','xueGroup',4,['xueSeJingJi','chiSeYiShan','xueRanQiangWei','xueQiPingZhang','xueQiangWeiTingYuan','sanHuaLunWu','xianXue'],],
@@ -4983,7 +4983,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 selectTarget:1,
                 filterTarget:true,
                 discard:true,
-                shwoCards:true,
+                showCards:true,
                 content:function(){
                     'step 0'
                     target.faShuDamage(2,player);
@@ -4999,12 +4999,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                 }
             },
-            tianHuoDianKong:{
+            tianHuoDuanKong:{
                 type:'faShu',
                 enable:'faShu',
                 filter:function(event,player){
                     if(player.countZhiShiWu('chongSheng')<1&&!player.isHengZhi()) return false;
-                    return player.countCards('h',card=>lib.skill.tianHuoDianKong.filterCard(card))>1;
+                    return player.countCards('h',card=>lib.skill.tianHuoDuanKong.filterCard(card))>1;
                 },
                 selectCard:2,
                 filterCard:function(card,player){
@@ -5064,7 +5064,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         return 'huo';
                     }
                 },
-                group:'moNvZhiNu_chongZhi',
+                group:['moNvZhiNu_chongZhi','moNvZhiNu_showCards'],
                 subSkill:{
                     chongZhi:{
                         trigger:{player:'xingDongBefore'},
@@ -5077,6 +5077,26 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             player.chongZhi();
                         }
                     },
+                    showCards:{
+                        trigger:{player:'showCardsBefore'},
+                        filter:function(event,player){
+                            return event.cards.length>0&&player.isHengZhi()&&event.moNvZhiNu!=true;
+                        },
+                        direct:true,
+                        content:async function(event, trigger, player){
+                            var cards=[];
+                            for(var card of trigger.cards){
+                                if (get.type(card) != 'gongJi' || ['shui', 'an', 'huo'].includes(get.xiBie(card))) {
+                                    cards.push(card);
+                                    continue;
+                                }
+                                var tempCard=game.createCard(card.name,'huo',card.mingGe,card.duYou);
+                                cards.push(tempCard);
+                            }
+                            await player.showCards(cards).set('moNvZhiNu',true);
+                            await trigger.finish();
+                        }
+                    }
                 }
             },
             tiShenWanOu:{
@@ -5782,6 +5802,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     },
                 },
                 check:function(event,player){
+                    if(get.shiQi(player.side)<=4) return false;
                     if(game.hasPlayer(function(current){
                         if(current.side==player.side) return false;
                         var num=current.countCards('h');
@@ -6863,8 +6884,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 check:function(event,player){
                     if(!player.isHengZhi()) return true;
+                    if(event.target.countCards('h')>3) return false;
+                    if(player.countZhiShiWu('douQi')>=3) return false;
                     var num=Math.random();
-                    return num>0.9;
+                    return num>0.5;
                 },
                 group:'xuLiYiji_weiMingZhong',
                 subSkill:{
@@ -7011,6 +7034,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 1'
                     player.faShuDamage(player.countZhiShiWu('douQi'),player);
                 },
+                check:function(event,player){
+                    if(player.countZhiShiWu('douQi')-1+player.countCards('h')>=player.getHandcardLimit()) return false;
+                    else return true;
+                }
             },
             douShenTianQu:{
                 type:'qiDong',
@@ -9313,8 +9340,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             //苍炎魔女
             cangYanFaDian:"[法术]苍炎法典",
             cangYanFaDian_info:"<span class='tiaoJian'>(弃1张火系牌[展示])</span>对目标角色和自己造成2点法术伤害③。",
-            tianHuoDianKong:"[法术]天火断空",
-            tianHuoDianKong_info:"<span class='tiaoJian'>(弃2张火系牌[展示]，移除1点</span><span class='hong'>【重生】</span><span class='tiaoJian'>)</span>对目标角色和自己造成3点火焰伤害③，<span class='tiaoJian'>(若我方士气落后于该目标)</span>本次法术伤害额外+1[强制]。",
+            tianHuoDuanKong:"[法术]天火断空",
+            tianHuoDuanKong_info:"<span class='tiaoJian'>(弃2张火系牌[展示]，移除1点</span><span class='hong'>【重生】</span><span class='tiaoJian'>)</span>对目标角色和自己造成3点火焰伤害③，<span class='tiaoJian'>(若我方士气落后于该目标)</span>本次法术伤害额外+1[强制]。",
             moNvZhiNu:"[启动]魔女之怒",
             moNvZhiNu_info:"<span class='tiaoJian'>(手牌<4张时)</span>[横置]摸0-2张牌，数值由你决定，持续到你的下个行动阶段开始前，你都处于【烈焰形态】，在此形态下你的所有除水系和暗系外的攻击牌均视为火系[强制]，你释放【天火断空】时无需消耗<span class='hong'>【重生】</span>，你的手牌上限+(X-2)(X为你的<span class='hong'>【重生】</span>数量)；脱离【烈焰形态】时[重置]。",
             tiShenWanOu:"[响应]替身玩偶",
@@ -9439,8 +9466,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             xuLiYiji_info:"<span class='tiaoJian'>(主动攻击前发动①，+1</span><span class='hong'>【斗气】</span><span class='tiaoJian'>)</span>本次攻击伤害额外+1；<span class='tiaoJian'>(若未命中②)</span>对自己造成X点法术伤害③，X为你所拥有的<span class='hong'>【斗气】</span>数；<span class='tiaoJian'>(若</span><span class='hong'>【斗气】</span><span class='tiaoJian'>已经达到上限)</span>你不能发动【蓄力一击】。",
             nianDan_info:"<span class='tiaoJian'>([法术行动]结束时发动，+1</span><span class='hong'>【斗气】</span><span class='tiaoJian'>)</span>，对目标对手造成1点法术伤害③，<span class='tiaoJian'>(若发动前对方的[治疗]为0)</span>对自己造成X点法术伤害③，X为你拥有的<span class='hong'>【斗气】</span>数；<span class='tiaoJian'>(若</span><span class='hong'>【斗气】</span><span class='tiaoJian'>已达到上限)</span>你不能发动【念弹】。",
             baiShiHuanLongQuan_info:"[持续]<span class='tiaoJian'>(移除3点</span><span class='hong'>【斗气】</span><span class='tiaoJian'>)</span>[横置]你的所有主动攻击伤害额外+2，所有应战攻击伤害额外+1 ；在你接下来的行动阶段，你不能执行[法术行动]和[特殊行动]；你的主动攻击必须以同一名角色为目标，并且不能发动【蓄力一击】；若不如此做，则取消【百式幻龙拳】的效果并[重置]。",
-            qiJueBengJi_info:"<span class='tiaoJian'>(主动攻击前发动①，移除1点</span><span class='hong'>【斗气】</span><span class='tiaoJian'>)</span>本次攻击对方无法应战，本次攻击结束后对自己造成X点法术伤害③，X为你的<span class='hong'>【斗气】</span>数；不能和【蓄力一击】同时发动。",
-
+            qiJueBengJi_info:"<span class='tiaoJian'>(主动攻击前发动①，移除1点</span><span class='hong'>【斗气】</span><span class='tiaoJian'>)</span>本次攻击对方无法应战，然后对自己造成X点法术伤害③，X为你的<span class='hong'>【斗气】</span>数；不能和【蓄力一击】同时发动。",
             douShenTianQu_info:"[水晶]你弃到3张牌，+2[治疗]。",
             douQi_info:"<span class='hong'>【斗气】</span>为格斗家专有指示物，上限为6",
 

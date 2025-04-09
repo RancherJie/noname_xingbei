@@ -3,6 +3,7 @@ window.noname_package = {
 		shiZhouNian:"十周年",
 		yiDuanYeHuo:"异端业火",
 		shenZiChuangLin:"神子创临",
+		zhongMoDaoZhu:'终末祷铸',
 		sanBan:'三版',
 		siBan:'四版',
 	},

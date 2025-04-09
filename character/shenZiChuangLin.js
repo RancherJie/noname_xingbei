@@ -42,10 +42,18 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     target.damage(event.damageNum);
                 },
                 ai: {
-                    basic: {
-                        useful: 4,
-                        value: [4,2,0],
-                    },
+                    basic:{
+						useful:[5,3,1],
+						value:[5,3,1],
+					},
+					order:function(item,player){
+						return 3.05;
+					},
+					result:{
+						target:function(player,target,card,isLink){
+							return get.damageEffect(target,2);
+						},
+					},
                 },
             },
             yiRen: {
@@ -61,10 +69,18 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     target.damage(event.damageNum);
                 },
                 ai: {
-                    basic: {
-                        useful: 4,
-                        value: [4,2,0],
-                    },
+                    basic:{
+						useful:[5,3,1],
+						value:[5,3,1],
+					},
+					order:function(item,player){
+						return 3.05;
+					},
+					result:{
+						target:function(player,target,card,isLink){
+							return get.damageEffect(target,2);
+						},
+					},
                 },
             },
         },

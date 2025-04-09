@@ -24,7 +24,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             san_nvWuShen:['nvWuShen_name','shengGroup','3/4',['shenShengZhuiJi','zhiXuZhiYin','san_hePingXingZhe','san_junShenWeiGuan','san_yingLingZhaoHuan'],['character:nvWuShen']],
             san_yingLingRenXing:['yingLingRenXing_name','yongGroup',4,['zhanWenZhangWo','nuHuoYaZhi','zhanWenSuiJi','moWenRongHe','san_fuWenGaiZao','shuangChongHuiXiang','zhanWen','moWen'],['character:yingLingRenXing']],
             san_moQiang:['moQiang_name','huanGroup',4,['san_anZhiJieFang','huanYingXingChen','heiAnShuFu','anZhiZhangBi','chongYing','qiHeiZhiQiang'],['character:moQiang']],
-            san_yinYouShiRen:['yinYouShiRen_name','huanGroup','4/5',['san_chenLunXieZouQu','san_buXieHeXian','geYongTianFu','baoFengQianZouQu','san_xiWangFuGeQu','san_lingGan','san_yongHengYueZhangX'],['character:yinYouShiRen']],
+            san_yinYouShiRen:['yinYouShiRen_name','huanGroup','4/5',['san_chenLunXieZouQu','san_buXieHeXian','geYongTianFu','baoFengQianZouQu','san_yongHengYueZhangX','san_xiWangFuGeQu','san_lingGan'],['character:yinYouShiRen']],
             san_yongZhe:['yongZhe_name','xueGroup','4/5',['yongZheZhiXin','san_nuHou','jinPiLiJin','san_mingJingZhiShui','tiaoXin','jinDuanZhiLi','san_siDou','nuQi','zhiXing'],['character:yongZhe']],
 		},
 
