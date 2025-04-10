@@ -522,6 +522,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.changeZhiLiao(1);
                     'step 2'
                     player.draw(1);
+                    'step 3'
                     lib.skill.yiDuanCaiJueSuo.removeZhiLiao(player,1);
                 },
                 group:'jingHuaZhiShu_chengShouShangHai',

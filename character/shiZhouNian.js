@@ -7466,10 +7466,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         var shiQiCha=game.hongShiQi-game.lanShiQi;
                         num+=Math.max(0,shiQiCha);
                     }
+                    event.num=num;
                     'step 1'
-                    player.removeZhiShiWu('shengHuangHuiGuangPaoX',num);
+                    player.removeZhiShiWu('shengHuangHuiGuangPaoX',1);
                     'step 2'
-                    player.removeZhiShiWu('xinYang',num);
+                    player.removeZhiShiWu('xinYang',event.num);
                 },
                 content:function(){
                     if(target.countCards('h')>4){
