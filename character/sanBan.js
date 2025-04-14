@@ -298,7 +298,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     if(list.length>=1){
                         choices.push('选项二');
                     }
-                    player.chooseControl(choices).set('prompt','军光神威：选择一项').set('choiceList',choiceList);
+                    player.chooseControl(choices).set('prompt','军神威光：选择一项').set('choiceList',choiceList);
                     'step 1'
                     if(result.index==0){
                         player.changeZhiLiao(1);

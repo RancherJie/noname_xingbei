@@ -4015,7 +4015,7 @@ export class Player extends HTMLDivElement {
 				filter = card => {
 					for (let j in arg2) {
 						var value;
-						if (j == "type" || j == "subtype" || j == "xiBei" || j == "mingGe") {
+						if (j == "type" || j == "subtype" || j == "xiBie" || j == "mingGe") {
 							value = get[j](card);
 						} else if (j == "name") {
 							value = getCardName(card);
@@ -4098,7 +4098,7 @@ export class Player extends HTMLDivElement {
 				filter = card => {
 					for (let j in arg2) {
 						var value;
-						if (j == "type" || j == "subtype" || j == "color" || j == "xiBei" || j == "mingGe") {
+						if (j == "type" || j == "subtype" || j == "color" || j == "xiBie" || j == "mingGe") {
 							value = get[j](card);
 						} else if (j == "name") {
 							value = getCardName(card);
@@ -4448,9 +4448,9 @@ export class Player extends HTMLDivElement {
 										break;
 									}
 								}
-							} else if (j == "xiBei") {
+							} else if (j == "xiBie") {
 								if (typeof arg2[j] == "object") {
-									if (arg2[j].includes(get.xiBei(cards[i])) == false) {
+									if (arg2[j].includes(get.xiBie(cards[i])) == false) {
 										cards.splice(i, 1);
 										i--;
 										break;
@@ -6212,6 +6212,7 @@ export class Player extends HTMLDivElement {
 				cards,
 				gaintag
 			);
+		game.addVideo('addToExpansion',this,[get.cardsInfo(cards),gaintag]);
 		return this;
 	}
 	directgain(cards, broadcast, gaintag) {
@@ -7907,7 +7908,7 @@ export class Player extends HTMLDivElement {
 				node = name.copy("mark");
 				node.classList.add("drawinghidden");
 				this.node.marks.insertBefore(node, this.node.marks.childNodes[1]);
-				node.xiBei = name.xiBei;
+				node.xiBie = name.xiBie;
 				node.mingGe = name.mingGe;
 				// if(name.name&&lib.card[name.name]&&lib.card[name.name].markimage){
 				// 	node.node.image.style.left=lib.card[name.name].markimage;
@@ -9833,6 +9834,7 @@ export class Player extends HTMLDivElement {
 		}
 	}
 	isUnderControl(self, me) {
+		if(_status.playback) return true;//使在录像模式下可以查看其他角色盖牌
 		me = me || game.me;
 		var that = this._trueMe || this;
 		if (that.isMad() || game.notMe) return false;
@@ -12595,16 +12597,16 @@ export class Player extends HTMLDivElement {
 		cardx.style.transform = "";
 		cardx.classList.remove("drawinghidden");
 		delete cardx._transform;
-		const xiBei = get.translation(cardx.xiBei),
+		const xiBie = get.translation(cardx.xiBie),
 			mingGe = get.mingGe(cardx.mingGe);
 		if (isViewAsCard) {
 			cardx.cards = cards || [];
 			cardx.viewAs = card.name;
-			cardx.node.name2.innerHTML = `${xiBei}${mingGe} [${cardShownName}]`;
+			cardx.node.name2.innerHTML = `${xiBie}${mingGe} [${cardShownName}]`;
 			cardx.classList.add("fakeequip");
 		} else {
 			delete cardx.viewAs;
-			cardx.node.name2.innerHTML = `${xiBei}${mingGe} ${cardShownName}`;
+			cardx.node.name2.innerHTML = `${xiBie}${mingGe} ${cardShownName}`;
 			cardx.classList.remove("fakeequip");
 		}
 		let equipped = false,

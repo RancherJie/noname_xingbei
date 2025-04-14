@@ -4063,7 +4063,17 @@ export class Game extends GameCompatible {
 				game.lanXingBei+=num;
 			}
 			ui.updateShiQiInfo();
-		}
+		},
+		addToExpansion:function(player,content){
+			if (player && content) {
+				var cards = content[0];
+				var gaintag = content[1];
+				player.$addToExpansion(get.infoCards(cards),null, gaintag);
+			} else {
+				console.log(player);
+			}
+		},
+
 	};
 	reload() {
 		if (_status) {

@@ -508,7 +508,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						.set("ai",function(card){
 							return 6 - get.value(card);
 						})
-                        .set('showCards',true)
 						.forResult();
 				},
                 content:function(){
@@ -656,11 +655,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         },
                         content:function(){
                             'step 0'
-                            player.faShuDamage(player.storage.fengYin,3);
-                            'step 1'
                             player.discard(player.getExpansions('diZhiFengYin_xiaoGuo'),'diZhiFengYin_xiaoGuo').set('visible',true);
+                            'step 1'
+                            player.removeSkill('diZhiFengYin_xiaoGuo');
                             'step 2'
-                            player.removeSkill('diZhiFengYin_xiaoGuo')
+                            player.faShuDamage(player.storage.fengYin,3); 
                         },
                         tag:{
                             jiChuXiaoGuo:true,
@@ -737,11 +736,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         },
                         content:function(){
                             'step 0'
-                            player.faShuDamage(player.storage.fengYin,3);
-                            'step 1'
                             player.discard(player.getExpansions('shuiZhiFengYin_xiaoGuo'),'shuiZhiFengYin_xiaoGuo').set('visible',true);
+                            'step 1'
+                            player.removeSkill('shuiZhiFengYin_xiaoGuo');
                             'step 2'
-                            player.removeSkill('shuiZhiFengYin_xiaoGuo')
+                            player.faShuDamage(player.storage.fengYin,3); 
                         },
                         tag:{
                             jiChuXiaoGuo:true,
@@ -819,11 +818,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         },
                         content:function(){
                             'step 0'
-                            player.faShuDamage(player.storage.fengYin,3);
-                            'step 1'
                             player.discard(player.getExpansions('huoZhiFengYin_xiaoGuo'),'huoZhiFengYin_xiaoGuo').set('visible',true);
+                            'step 1'
+                            player.removeSkill('huoZhiFengYin_xiaoGuo');
                             'step 2'
-                            player.removeSkill('huoZhiFengYin_xiaoGuo')
+                            player.faShuDamage(player.storage.fengYin,3); 
                         },
                         tag:{
                             jiChuXiaoGuo:true,
@@ -901,11 +900,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         },
                         content:function(){
                             'step 0'
-                            player.faShuDamage(player.storage.fengYin,3);
-                            'step 1'
                             player.discard(player.getExpansions('fengZhiFengYin_xiaoGuo'),'fengZhiFengYin_xiaoGuo').set('visible',true);
+                            'step 1'
+                            player.removeSkill('fengZhiFengYin_xiaoGuo');
                             'step 2'
-                            player.removeSkill('fengZhiFengYin_xiaoGuo')
+                            player.faShuDamage(player.storage.fengYin,3); 
                         },
                         tag:{
                             jiChuXiaoGuo:true,
@@ -984,12 +983,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             return false;
                         },
                         content:function(){
-                            'stpe 0'
-                            player.faShuDamage(player.storage.fengYin,3);
-                            'step 1'
+                            'step 0'
                             player.discard(player.getExpansions('leiZhiFengYin_xiaoGuo'),'leiZhiFengYin_xiaoGuo').set('visible',true);
+                            'step 1'
+                            player.removeSkill('leiZhiFengYin_xiaoGuo');
                             'step 2'
-                            player.removeSkill('leiZhiFengYin_xiaoGuo')
+                            player.faShuDamage(player.storage.fengYin,3);
                         },
                         tag:{
                             jiChuXiaoGuo:true,
@@ -1643,7 +1642,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     if(list.length>=1){
                         choices.push('选项二');
                     }
-                    player.chooseControl(choices).set('prompt','军光神威：选择一项').set('choiceList',choiceList);
+                    player.chooseControl(choices).set('prompt','军神威光：选择一项').set('choiceList',choiceList);
                     'step 1'
                     if(result.index==0){
                         player.changeZhiLiao(1);
@@ -3406,6 +3405,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.hengZhi();                 
                 },
                 check:function(event,player){
+                    if(player.countCards('h',card=>get.type(card)=='faShu')==player.countCards('h')) return true;
                     var num=player.getHandcardLimit()-player.countCards('h');
                     return num>0;
                 },
@@ -3491,6 +3491,21 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     if(dict.baoShi>0) await player.changeZhanJi('baoShi',-dict.baoShi);
                     await player.chongZhi();
                     await player.addNengLiang('baoShi');
+                },
+                group:'anYingLiuXing_wuFaXingDong',
+                subSkill:{
+                    wuFaXingDong:{
+                        trigger:{player:'triggerSkill'},
+                        direct:true,
+                        filter:function(event,player){
+                            if(event.skill=='anYingLiuXing_wuFaXingDong') return false;//需要排除自身，防止嵌套
+                            if(player.countCards('h',card=>get.type(card)=='faShu')!=player.countCards('h')) return false;
+                            return get.info('_wuFaXingDong').group.includes(event.skill);
+                        },
+                        content:function(){
+                            trigger.cancelled=true;
+                        }
+                    }
                 },
                 ai:{
 					order:function(item,player){
@@ -5052,6 +5067,23 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 1'
                     player.chooseDraw(2,true);
                 },
+                check:function(event,player){
+                    var num=player.countCards('h',function(card){
+                        if(get.type(card)!='gongJi') return false;
+                        var xiBie=get.xiBie(card);
+                        if(xiBie=='shui'||xiBie=='an') return false;
+                        return true;
+                    });
+                    if(num>=2){
+                        var players=game.filterPlayer(function(current){
+                            if(current.side==player.side) return false;
+                            let num=current.getHandcardLimit()-current.countCards('h');
+                            return num<=2;
+                        });
+                        return players.length>0;
+                    }
+                    return false;
+                },
                 mod:{
                     maxHandcard:function(player,num){
                         if(player.isHengZhi()){
@@ -5080,7 +5112,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     showCards:{
                         trigger:{player:'showCardsBefore'},
                         filter:function(event,player){
-                            return event.cards.length>0&&player.isHengZhi()&&event.moNvZhiNu!=true;
+                            return event.cards.length>0&&player.isHengZhi()&&event.getParent().name=='discard'&&event.getParent().player==player;
                         },
                         direct:true,
                         content:async function(event, trigger, player){
@@ -5093,8 +5125,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                 var tempCard=game.createCard(card.name,'huo',card.mingGe,card.duYou);
                                 cards.push(tempCard);
                             }
-                            await player.showCards(cards).set('moNvZhiNu',true);
-                            await trigger.finish();
+                            trigger.cards=cards;
                         }
                     }
                 }
@@ -7029,6 +7060,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 content:function(){
                     'step 0'
+                    trigger.storage.qiJueBengJi=true;
                     player.removeZhiShiWu('douQi');
                     trigger.wuFaYingZhan();
                     'step 1'
@@ -8694,7 +8726,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 content:function(){
                     'step 0'
                     player.discard(event.cost_data,'jian').set('jian',true);
-                    'step 2'
+                    'step 1'
                     trigger.changeDamageNum(1);
                 },
             },
@@ -8770,6 +8802,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     var result=await player.chooseCardButton(cards,[1,Infinity],"是否发动【凋零】,展示法术【茧】")
                     .set('filterButton',function(button){
                         return get.type(button)=='faShu';
+                    })
+                    .set('ai',function(button){
+                        var player=_status.event.player;
+                        if(player.countSkill('diaoLing')==1) return 0;
+                        var num=player.getHandcardLimit()-player.countCards('h');
+                        if(num>2) return 1;
+                        else return 0;
                     })
                     .forResult();
                     event.result={
@@ -9073,7 +9112,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             tianShiJiBan_info:"<span class='tiaoJian'>(每当你移除场上任意一个基础效果或使用【圣盾】时)</span>目标角色+1[治疗]。",
             tianShiZhiQiang:"(独)[法术]天使之墙",
             tianShiZhiQiang_info:"可作为【圣盾】使用。",
-            tianShiZhiGe:"[响应]天使之歌(回合限定)",
+            tianShiZhiGe:"[响应]天使之歌[回合限定]",
             tianShiZhiGe_info:"[水晶]<span class='tiaoJian'>(在你的回合开始前发动)</span>移除场上任意一个基础效果。",
             shenZhiBiHu:"[响应]神之庇护",
             shenZhiBiHu_info:"X[水晶]为我方抵御X点因法术伤害而造成的士气下降。",

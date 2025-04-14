@@ -1,6 +1,6 @@
 window.noname_asset_list =
 [
-	"v1.1.0",
+	"v1.1.2",
 	"audio/background/music_default.mp3",
 	"audio/card/default.mp3",
 	"audio/voice/female/0.mp3",
@@ -148,7 +148,7 @@ window.noname_asset_list =
 	'image/character/zhanDouFaShi.jpg',
 	'image/character/zhongCaiZhe.jpg',
 	'image/character/shiShenZhe.jpg',
-	'image/character/tieLvZhe.jpg',
+	'image/character/zhuLvZhe.jpg',
 	'image/character/hongYiZhuJiao.jpg',
 	'image/character/jiLuZhe.jpg',
 	'image/character/chuanJiaoShi.jpg',
@@ -249,6 +249,9 @@ window.noname_asset_list =
 	"image/splash/style1/xingBei.jpg",
 	"image/splash/style2/connect.jpg",
 	"image/splash/style2/xingBei.jpg",
+	"image/splash/style1/tutorial.jpg",
+	"image/splash/style2/tutorial.jpg",
+
 ];
 window.noname_skin_list =
 {

@@ -312,14 +312,14 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             }
                             next.set('ai',function(card){
                                 if(_status.event.yingZhan){
-                                    let xiBei1=get.xiBie(_status.event.card);
-                                    if(get.name(card)=='moRen'&&(xiBei1=='huo'||xiBei1=='shui')){
-                                        let xiBei2=get.xiBie(card);
-                                        if(xiBei2==xiBei1) return 0;
+                                    let xiBie1=get.xiBie(_status.event.card);
+                                    if(get.name(card)=='moRen'&&(xiBie1=='huo'||xiBie1=='shui')){
+                                        let xiBie2=get.xiBie(card);
+                                        if(xiBie2==xiBie1) return 0;
                                         else return 1;
-                                    }else if(get.name(card)=='yiRen'&&(xiBei1=='lei'||xiBei1=='feng')){
-                                        let xiBei2=get.xiBie(card);
-                                        if(xiBei2==xiBei1) return 0;
+                                    }else if(get.name(card)=='yiRen'&&(xiBie1=='lei'||xiBie1=='feng')){
+                                        let xiBie2=get.xiBie(card);
+                                        if(xiBie2==xiBie1) return 0;
                                         else return 1;
                                     }
                                 }
@@ -789,7 +789,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             miShuMuYing:{
                 trigger:{source:'gongJiMingZhong'},
                 filter:function(event,player){
-                    return get.is.zhuDongGongJi(event)&&!player.usedSkill('shun');
+                    return get.is.zhuDongGongJi(event)&&!player.usedSkill('shun')&&event.cards.length>0;
                 },
                 content:function(){
                     'step 0'
@@ -1469,7 +1469,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             xiBie.push(get.xiBie(yanLing[i]));
                         }
                     }
-                    var next=player.chooseToDiscard('h','是否额外弃1张与现存【言灵】系别相同的牌【展示】',function(card){
+                    var next=player.chooseToDiscard('h','showCards','是否额外弃1张与现存【言灵】系别相同的牌【展示】',function(card){
                         var xiBie=_status.event.xiBie;
                         return xiBie.includes(get.xiBie(card));
                     }).set('xiBie',xiBie);
@@ -1478,12 +1478,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     });
                     'step 4'
                     if(result.bool){
-                        player.showCards(result.cards);
-                    }else{
-                        event.finish();
+                        player.addZhiShiWu('miShu');
                     }
-                    'step 5'
-                    player.addZhiShiWu('miShu');
                 },
                 ai:{
                     order:3.8,
@@ -1857,7 +1853,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             kuangLiZhiTi:{
                 trigger:{player:'zaoChengShangHai'},
                 forced:true,
-                priority:-1,
+                //priority:-1,
                 filter:function(event,player){
                     return event.source&&player.isHengZhi()&&player.countZhiShiWu('liQi')>0;
                 },

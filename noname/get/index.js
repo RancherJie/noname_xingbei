@@ -3242,7 +3242,7 @@ export class Get extends GetCompatible {
 							} else if (typeof filter[j] == "string") {
 								if (get.color(arguments[i]) != filter[j]) return false;
 							}
-						} else if (j == "xiBei") {
+						} else if (j == "xiBie") {
 							if (Array.isArray(filter[j])) {
 								if (filter[j].includes(get.xiBie(arguments[i])) == false) return false;
 							} else if (typeof filter[j] == "string") {

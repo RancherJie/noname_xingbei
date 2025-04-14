@@ -1,6 +1,6 @@
 import { menuContainer, menuxpages, menuUpdates, openMenu, clickToggle, clickSwitcher, clickContainer, clickMenuItem, createMenu, createConfig } from "../index.js";
 import { ui, game, get, ai, lib, _status } from "../../../../../noname.js";
-import { parseSize, checkVersion, getRepoTagDescription, request, createProgress, getLatestVersionFromGitHub, getTreesFromGithub } from "../../../../library/update.js";
+import { parseSize, checkVersion, getRepoTagDescriptionGitHub,getRepoTagDescriptionGitCode, request, createProgress, getLatestVersionFromGitHub,getLatestVersionFromGitCode, getTreesFromGithub , getTreesFromGitCode} from "../../../../library/update.js";
 import security from "../../../../util/security.js";
 import dedent from "../../../../../game/dedent.js";
 
@@ -169,9 +169,10 @@ export const otherMenu = function (/** @type { boolean | undefined } */ connectM
 					if (Array.isArray(description.assets) && description.assets.length > 0) {
 						const coreZipData = description.assets.find(v => v.name == "noname.core.zip");
 						if (coreZipData && confirm(`检测到该版本(${description.name})有离线包资源，是否改为下载离线包资源？否则将下载完整包资源`)) {
-							url = "https://ghproxy.cc/" + coreZipData.browser_download_url;
+							url = coreZipData.browser_download_url;
 						}
 					}
+					console.log("下载地址", url);
 					request(url, (receivedBytes, total, filename) => {
 						if (typeof filename == "string") {
 							progress.setFileName(filename);
@@ -181,7 +182,7 @@ export const otherMenu = function (/** @type { boolean | undefined } */ connectM
 						if (total) {
 							max = +(total / (1024 * 1024)).toFixed(1);
 						} else {
-							max = 1000;
+							max = 100;
 						}
 						received = +(receivedBytes / (1024 * 1024)).toFixed(1);
 						if (received > max) max = received;
@@ -267,19 +268,20 @@ export const otherMenu = function (/** @type { boolean | undefined } */ connectM
 				};
 
 				if (!dev) {
-					getLatestVersionFromGitHub()
+					if(lib.config.update_link=='github'){
+						getLatestVersionFromGitHub()
 						.then(tagName => {
 							game.saveConfig("check_version", tagName.slice(1));
-							if (typeof lib.config[`version_description_${tagName}`] == "object") {
+							if (typeof lib.config[`version_descriptionGitHub_${tagName}`] == "object") {
 								/** @type { ReturnType<import('../../../../library/update.js').getRepoTagDescription> } */
-								const description = lib.config[`version_description_${tagName}`];
+								const description = lib.config[`version_descriptionGitHub_${tagName}`];
 								return description;
-							} else return getRepoTagDescription(tagName);
+							} else return getRepoTagDescriptionGitHub(tagName);
 						})
 						.then(description => {
 							// 保存版本信息
-							if (typeof lib.config["version_description_" + description.name] != "object") {
-								game.saveConfig("version_description_" + description.name, description);
+							if (typeof lib.config["version_descriptionGitHub_" + description.name] != "object") {
+								game.saveConfig("version_descriptionGitHub_" + description.name, description);
 							}
 							const versionResult = checkVersion(lib.version, description.name);
 							if (versionResult === 0) {
@@ -312,6 +314,53 @@ export const otherMenu = function (/** @type { boolean | undefined } */ connectM
 							alert("获取更新失败: " + e);
 							refresh();
 						});
+					}else if(lib.config.update_link=='gitcode'){
+						getLatestVersionFromGitCode()
+						.then(tagName => {
+							game.saveConfig("check_version", tagName.slice(1));
+							if (typeof lib.config[`version_descriptionGitCode_${tagName}`] == "object") {
+								/** @type { ReturnType<import('../../../../library/update.js').getRepoTagDescription> } */
+								const description = lib.config[`version_descriptionGitCode_${tagName}`];
+								return description;
+							} else return getRepoTagDescriptionGitCode(tagName);
+						})
+						.then(description => {
+							// 保存版本信息
+							if (typeof lib.config["version_descriptionGitCode_" + description.name] != "object") {
+								game.saveConfig("version_descriptionGitCode_" + description.name, description);
+							}
+							const versionResult = checkVersion(lib.version, description.name);
+							if (versionResult === 0) {
+								// forcecheck: 为false的时候是自动检测更新的调用
+								if (forcecheck === false || !confirm("版本已是最新，是否强制更新？")) {
+									refresh();
+									return;
+								}
+							}
+							const str = versionResult < 0 ? `有新版本${description.name}可用，是否下载？` : `本地版本${lib.version}高于或等于gitcode版本${description.name}，是否强制下载？`;
+							const str2 = description.body;
+							if (navigator.notification && navigator.notification.confirm) {
+								navigator.notification.confirm(
+									str2,
+									function (index) {
+										if (index == 1) {
+											download(description);
+										} else refresh();
+									},
+									str,
+									["确定", "取消"]
+								);
+							} else {
+								if (confirm(str + "\n" + str2)) {
+									download(description);
+								} else refresh();
+							}
+						})
+						.catch(e => {
+							alert("获取更新失败: " + e);
+							refresh();
+						});
+					}
 				} else {
 					if (confirm("将要直接下载dev版本的完整包，是否继续?")) {
 						download({
@@ -353,11 +402,11 @@ export const otherMenu = function (/** @type { boolean | undefined } */ connectM
 				if (lib.config.asset_font) assetDirectories.push("font");
 				if (lib.config.asset_audio) assetDirectories.push("audio");
 				if (lib.config.asset_image) assetDirectories.push("image");
-				const version = await getLatestVersionFromGitHub().catch(e => {
+				const version = await getLatestVersionFromGitCode().catch(e => {
 					refresh();
 					throw e;
 				});
-				const files = await getTreesFromGithub(assetDirectories, version).catch(e => {
+				var files = await getTreesFromGitCode(assetDirectories, version).catch(e => {
 					refresh();
 					throw e;
 				});
@@ -426,69 +475,65 @@ export const otherMenu = function (/** @type { boolean | undefined } */ connectM
 					refresh();
 				};
 				if (result.length > 0) {
-					const progress = createProgress("正在更新素材包.zip");
-					/**
-					 * @type {progress}
-					 */
-					let unZipProgress;
-					request(
-						"https://api.unitedrhythmized.club/noname",
-						(receivedBytes, total, filename) => {
-							if (typeof filename == "string") {
-								progress.setFileName(filename);
-							}
-							let received = 0,
-								max = 0;
-							if (total) {
-								max = +(total / (1024 * 1024)).toFixed(1);
-							} else {
-								max = 1000;
-							}
-							received = +(receivedBytes / (1024 * 1024)).toFixed(1);
-							if (received > max) max = received;
-							progress.setProgressMax(max);
-							progress.setProgressValue(received);
-						},
-						{
-							method: "POST",
-							body: JSON.stringify({
-								action: "downloadAssets",
-								version,
-								fileList: result.concat("game/asset.js"),
-							}),
-						}
-					)
-						.then(async blob => {
-							progress.remove();
-							const zip = await get.promises.zip();
-							zip.load(await blob.arrayBuffer());
-							const entries = Object.entries(zip.files);
-							let root;
-							const hiddenFileFlags = [".", "_"];
-							unZipProgress = createProgress("正在解压" + progress.getFileName(), entries.length);
-							let i = 0;
-							for (const [key, value] of entries) {
-								unZipProgress.setProgressValue(i++);
-								const fileName = typeof root == "string" && key.startsWith(root) ? key.replace(root, "") : key;
-								if (hiddenFileFlags.includes(fileName[0])) continue;
-								if (value.dir) {
-									await game.promises.createDir(fileName);
-									continue;
+					// 将 "game/asset.js" 追加到文件列表中
+					const fileList = result.concat("game/asset.js");
+					const progress = createProgress("正在更新素材包");
+					progress.setProgressMax(fileList.length);
+
+					// 定义一个异步函数处理所有文件下载与写入
+					async function downloadFiles() {
+						let downloadedCount = 0;
+						for (const filePath of fileList) {
+							progress.setFileName(filePath);
+							const apiUrl = `https://api.gitcode.com/api/v5/repos/RancherJie/noname_xingbei/contents/${filePath}?access_token=Ty5Q6szHTc5djipAFXE2JmPo`;
+							try {
+								const response = await fetch(apiUrl, {
+									method: "GET",
+									headers: {
+										Accept: "application/json"
+									},
+									redirect: "follow"
+								});
+								if (!response.ok) {
+									throw new Error(`获取 ${filePath} 失败: ${response.statusText}`);
 								}
-								unZipProgress.setFileName(fileName);
-								const [path, name] = [fileName.split("/").slice(0, -1).join("/"), fileName.split("/").slice(-1).join("/")];
-								game.print(`${fileName}(${i}/${entries.length})`);
-								await game.promises.writeFile(value.asArrayBuffer(), path, name);
+
+								const json = await response.json();
+
+								if (json.type === "file" && json.content) {
+									// 文件内容经过 Base64 编码，需要解码后写入
+									const base64Content = json.content.replace(/\s/g, "");
+									// 使用 atob 将 base64 解码为字符串（二进制数据）
+									const binaryString = atob(base64Content);
+									const len = binaryString.length;
+									const buffer = new Uint8Array(len);
+									for (let i = 0; i < len; i++) {
+										buffer[i] = binaryString.charCodeAt(i);
+									}
+									// 处理路径与文件名：以最后一个斜杠作为分割依据
+									const pathParts = filePath.split("/");
+									const fileName = pathParts.pop();
+									const pathDir = pathParts.join("/");
+									await game.promises.writeFile(buffer.buffer, pathDir, fileName);
+									game.print(`${filePath} (${downloadedCount + 1}/${fileList.length})`);
+								} else if (json.type === "dir") {
+									// 对于目录，直接创建目标目录
+									await game.promises.createDir(filePath);
+								}
+								downloadedCount++;
+								progress.setProgressValue(downloadedCount);
+							} catch (e) {
+								// 出错时清除进度条，并调用刷新方法再抛出错误
+								progress.remove();
+								refresh();
+								throw e;
 							}
-							unZipProgress.remove();
-							await finish();
-						})
-						.catch(e => {
-							if (progress.parentNode) progress.remove();
-							if (unZipProgress && unZipProgress.parentNode) unZipProgress.remove();
-							refresh();
-							throw e;
-						});
+						}
+						progress.remove();
+						await finish();
+					}
+
+					downloadFiles();
 				} else {
 					await finish();
 				}

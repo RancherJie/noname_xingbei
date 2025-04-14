@@ -241,7 +241,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         },
                         content:function(){
                             'step 0'
-                            trigger.cancel();
+                            trigger.num=0;
                             'step 1'
                             player.faShuDamage(1,player).set('step',4);
                             'step 2'
@@ -472,7 +472,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             return get.mingGe(button.link)=='sheng';
                         }).forResult();
                         if(result.bool){
-                            await player.showCards(result.links);
+                            await player.showCards(result.links).set('discard',true);
                             var targets=await player.chooseTarget('对目标对手造成1点法术伤害③',true,function(card,player,target){
                                 return target.side!=player.side;
                             }).set('ai',function(target){

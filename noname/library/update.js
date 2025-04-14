@@ -10,33 +10,56 @@ import { ui, game, lib } from "../../noname.js";
  */
 
 /** @type { HeadersInit } */
-const defaultHeaders = {
+var defaultHeaders = {
 	Accept: "application/vnd.github.v3+json",
 	// 根据GitHub API的要求添加适当的认证头信息
 	// 如果公共仓库则无需认证，私有仓库需提供token
 	// 'Authorization': `token ${YOUR_GITHUB_PERSONAL_ACCESS_TOKEN}`
 };
 
-if (localStorage.getItem("noname_authorization")) {
-	defaultHeaders["Authorization"] = `token ${localStorage.getItem("noname_authorization")}`;
+if (localStorage.getItem("noname_authorizationGitHub")) {
+	defaultHeaders["Authorization"] = `token ${localStorage.getItem("noname_authorizationGitHub")}`;
+}
+if(localStorage.getItem("noname_authorizationGitCode")){
+	defaultHeaders["Authorization"] = `Bearer ${localStorage.getItem("noname_authorizationGitCode")}`;
+}
+
+export async function defaultHeadersGitHub() {
+	defaultHeaders['Accept']="application/vnd.github.v3+json";
+}
+export async function defaultHeadersGitCode() {
+	defaultHeaders['Accept']="application/json";
+	if(!defaultHeaders['Authorization']) defaultHeaders['Authorization']= `Bearer Ty5Q6szHTc5djipAFXE2JmPo`;
+	
 }
 
 /**
  * 获取github授权的token
  */
-export async function gainAuthorization() {
-	if (!localStorage.getItem("noname_authorization") && !sessionStorage.getItem("noname_authorization")) {
+export async function gainAuthorizationGitHub() {
+	if (!localStorage.getItem("noname_authorizationGitHub") && !sessionStorage.getItem("noname_authorizationGitHub")) {
 		const result = await game.promises.prompt("请输入您github的token以解除访问每小时60次的限制(可不输入)");
 		if (typeof result == "string") {
-			localStorage.setItem("noname_authorization", result);
-			defaultHeaders["Authorization"] = `token ${localStorage.getItem("noname_authorization")}`;
+			localStorage.setItem("noname_authorizationGitHub", result);
+			defaultHeaders["Authorization"] = `token ${localStorage.getItem("noname_authorizationGitHub")}`;
 		} else {
-			sessionStorage.setItem("noname_authorization", "false");
+			sessionStorage.setItem("noname_authorizationGitHub", "false");
+		}
+	}
+}
+export async function gainAuthorizationGitCode() {
+	if (!localStorage.getItem("noname_authorizationGitCode") && !sessionStorage.getItem("noname_authorizationGitCode")) {
+		const result = await game.promises.prompt("请输入您gitcode的token以解除访问每小时60次的限制(可不输入)");
+		if (typeof result == "string") {
+			localStorage.setItem("noname_authorizationGitCode", result);
+			defaultHeaders["Authorization"] = `Bearer ${localStorage.getItem("noname_authorizationGitCode")}`;
+		} else {
+			sessionStorage.setItem("noname_authorizationGitCode", "false");
 		}
 	}
 }
 
-const defaultResponse = async (/** @type {Response} */ response) => {
+const defaultResponseGitHub = async (/** @type {Response} */ response) => {
 	const limit = response.headers.get("X-RateLimit-Limit");
 	const remaining = response.headers.get("X-RateLimit-Remaining");
 	const reset = response.headers.get("X-RateLimit-Reset");
@@ -44,8 +67,20 @@ const defaultResponse = async (/** @type {Response} */ response) => {
 	console.log(`剩余请求次数`, remaining);
 	// @ts-ignore
 	console.log(`限制重置时间`, new Date(reset * 1000).toLocaleString());
-	if ((Number(remaining) === 0 && !sessionStorage.getItem("noname_authorization") && confirm(`您达到了每小时${limit}次的访问限制，是否输入您github账号的token以获取更高的请求总量限制`)) || (response.status === 401 && (localStorage.removeItem("noname_authorization"), true) && (alert(`身份验证凭证错误，是否重新输入您github账号的token以获取更高的请求总量限制`), true))) {
-		return gainAuthorization();
+	if ((Number(remaining) === 0 && !sessionStorage.getItem("noname_authorizationGitHub") && confirm(`您达到了每小时${limit}次的访问限制，是否输入您github账号的token以获取更高的请求总量限制`)) || (response.status === 401 && (localStorage.removeItem("noname_authorizationGitHub"), true) && (alert(`身份验证凭证错误，是否重新输入您github账号的token以获取更高的请求总量限制`), true))) {
+		return gainAuthorizationGitHub();
+	}
+};
+const defaultResponseGitCode = async (/** @type {Response} */ response) => {
+	const limit = response.headers.get("X-RateLimit-Limit");
+	const remaining = response.headers.get("X-RateLimit-Remaining");
+	const reset = response.headers.get("X-RateLimit-Reset");
+	console.log(`请求总量限制`, limit);
+	console.log(`剩余请求次数`, remaining);
+	// @ts-ignore
+	console.log(`限制重置时间`, new Date(reset * 1000).toLocaleString());
+	if ((Number(remaining) === 0 && !sessionStorage.getItem("noname_authorizationGitCode") && confirm(`您达到了每小时${limit}次的访问限制，是否输入您gitcode账号的token以获取更高的请求总量限制`)) || (response.status === 401 && (localStorage.removeItem("noname_authorizationGitCode"), true) && (alert(`身份验证凭证错误，是否重新输入您gitcode账号的token以获取更高的请求总量限制`), true))) {
+		return gainAuthorizationGitCode();
 	}
 };
 
@@ -163,10 +198,11 @@ export function checkVersion(ver1, ver2) {
  * });
  * ```
  */
-export async function getRepoTags(options = { username: "RancherJie", repository: "noname_xingbei" }) {
+export async function getRepoTagsGitHub(options = { username: "RancherJie", repository: "noname_xingbei" }) {
 	// if (!localStorage.getItem("noname_authorization")) {
 	// 	await gainAuthorization();
 	// }
+	defaultHeadersGitHub();
 	const { username = "RancherJie", repository = "noname_xingbei", accessToken } = options;
 	const headers = Object.assign({}, defaultHeaders);
 	if (accessToken) {
@@ -174,7 +210,28 @@ export async function getRepoTags(options = { username: "RancherJie", repository
 	}
 	const url = `https://api.github.com/repos/${username}/${repository}/tags`;
 	const response = await fetch(url, { headers });
-	await defaultResponse(response);
+	await defaultResponseGitHub(response);
+	if (response.ok) {
+		const data = await response.json();
+		return data;
+	} else {
+		throw new Error(`Error fetching tags: ${response.statusText}`);
+	}
+}
+
+export async function getRepoTagsGitCode(options = { username: "RancherJie", repository: "noname_xingbei" }) {
+	// if (!localStorage.getItem("noname_authorization")) {
+	// 	await gainAuthorization();
+	// }
+	defaultHeadersGitCode();
+	const { username = "RancherJie", repository = "noname_xingbei", accessToken } = options;
+	const headers = Object.assign({}, defaultHeaders);
+	if (accessToken) {
+		headers["Authorization"] = `Bearer ${accessToken}`;
+	}
+	const url = `https://api.gitcode.com/api/v5/repos/${username}/${repository}/tags`;
+	const response = await fetch(url, { headers });
+	//await defaultResponseGitCode(response);
 	if (response.ok) {
 		const data = await response.json();
 		return data;
@@ -198,10 +255,11 @@ export async function getRepoTags(options = { username: "RancherJie", repository
  * ```
  */
 
-export async function getRepoTagDescription(tagName, options = { username: "RancherJie", repository: "noname_xingbei" }) {
+export async function getRepoTagDescriptionGitHub(tagName, options = { username: "RancherJie", repository: "noname_xingbei" }) {
 	// if (!localStorage.getItem("noname_authorization")) {
 	// 	await gainAuthorization();
 	// }
+	defaultHeadersGitHub();
 	const { username = "RancherJie", repository = "noname_xingbei", accessToken } = options;
 	const headers = Object.assign({}, defaultHeaders);
 	if (accessToken) {
@@ -209,7 +267,7 @@ export async function getRepoTagDescription(tagName, options = { username: "Ranc
 	}
 	const apiUrl = `https://api.github.com/repos/${username}/${repository}/releases/tags/${tagName}`;
 	const response = await fetch(apiUrl, { headers });
-	await defaultResponse(response);
+	await defaultResponseGitHub(response);
 	if (!response.ok) {
 		throw new Error(`Request failed with status ${response.status}`);
 	}
@@ -240,6 +298,50 @@ export async function getRepoTagDescription(tagName, options = { username: "Ranc
 		zipball_url: releaseData.zipball_url,
 	};
 }
+export async function getRepoTagDescriptionGitCode(tagName, options = { username: "RancherJie", repository: "noname_xingbei" }) {
+	// if (!localStorage.getItem("noname_authorization")) {
+	// 	await gainAuthorization();
+	// }
+	defaultHeadersGitCode();
+	const { username = "RancherJie", repository = "noname_xingbei", accessToken } = options;
+	const headers = Object.assign({}, defaultHeaders);
+	if (accessToken) {
+		headers["Authorization"] = `Bearer ${accessToken}`;
+	}
+	const apiUrl = `https://api.gitcode.com/api/v5/repos/${username}/${repository}/releases/tags/${tagName}`;
+
+	const response = await fetch(apiUrl, { headers });
+	//await defaultResponseGitCode(response);
+	if (!response.ok) {
+		throw new Error(`Request failed with status ${response.status}`);
+	}
+	const releaseData = await response.json();
+	// console.log(releaseData);
+	// 从json里拿我们需要的
+	return {
+		/** @type { { browser_download_url: string, content_type: string, name: string, size: number }[] } tag额外上传的素材包 */
+		assets: releaseData.assets,
+		author: {
+			/** @type { string } 用户名 */
+			login: releaseData.author.login,
+			/** @type { string } 用户头像地址 */
+			avatar_url: releaseData.author.avatar_url,
+			/** @type { string } 用户仓库地址 */
+			html_url: releaseData.author.html_url,
+		},
+		/** @type { string } tag描述 */
+		body: releaseData.body,
+		// created_at: (new Date(releaseData.created_at)).toLocaleString(),
+		/** @type { string } tag页面 */
+		html_url: releaseData.html_url,
+		/** @type { string } tag名称 */
+		name: releaseData.name,
+		/** 发布日期 */
+		published_at: new Date(releaseData.published_at).toLocaleString(),
+		/** @type { string } 下载地址 */
+		zipball_url: releaseData.assets.find(v => v.name == `${tagName}.zip`).browser_download_url,
+	};
+}
 
 /**
  *
@@ -258,7 +360,7 @@ export async function getRepoTagDescription(tagName, options = { username: "Ranc
  * 	.catch(error => console.error('Failed to fetch files:', error));
  * ```
  */
-export async function getRepoFilesList(
+export async function getRepoFilesListGitHub(
 	path = "",
 	branch,
 	options = { username: "RancherJie", repository: "noname_xingbei" }
@@ -266,12 +368,13 @@ export async function getRepoFilesList(
 	// if (!localStorage.getItem("noname_authorization")) {
 	// 	await gainAuthorization();
 	// }
+	defaultHeadersGitHub();
 	const { username = "RancherJie", repository = "noname_xingbei", accessToken } = options;
 	const headers = Object.assign({}, defaultHeaders);
 	if (accessToken) {
 		headers["Authorization"] = `token ${accessToken}`;
 	}
-	let url = `https://api.github.com/repos/${username}/${repository}/contents/${path}`;
+	const url = `https://api.github.com/repos/${username}/${repository}/contents/${path}`;
 	if (typeof branch == "string" && branch.length > 0) {
 		const pathURL = new URL(url);
 		const searchParams = new URLSearchParams(pathURL.search.slice(1));
@@ -282,7 +385,48 @@ export async function getRepoFilesList(
 		url = pathURL.origin + pathURL.pathname + "?" + searchParams.toString();
 	}
 	const response = await fetch(url, { headers });
-	await defaultResponse(response);
+	await defaultResponseGitHub(response);
+	if (!response.ok) {
+		throw new Error(`Request failed with status ${response.status}`);
+	}
+	const data = await response.json();
+	// 处理响应数据，返回文件列表
+	return data.map(({ download_url, name, path, sha, size, type }) => ({
+		download_url,
+		name,
+		path,
+		sha,
+		size,
+		type,
+	}));
+}
+
+export async function getRepoFilesListGitCode(
+	path = "",
+	branch,
+	options = { username: "RancherJie", repository: "noname_xingbei" }
+) {
+	// if (!localStorage.getItem("noname_authorization")) {
+	// 	await gainAuthorization();
+	// }
+	defaultHeadersGitCode();
+	const { username = "RancherJie", repository = "noname_xingbei", accessToken } = options;
+	const headers = Object.assign({}, defaultHeaders);
+	if (accessToken) {
+		headers["Authorization"] = `Bearer ${accessToken}`;
+	}
+	const url = `https://api.gitcode.com/api/v5/repos/${username}/${repository}/contents/${path}`;
+	if (typeof branch == "string" && branch.length > 0) {
+		const pathURL = new URL(url);
+		const searchParams = new URLSearchParams(pathURL.search.slice(1));
+		if (searchParams.has("ref")) {
+			throw new TypeError(`设置了branch参数后，不应在path参数内拼接ref`);
+		}
+		searchParams.append("ref", branch);
+		url = pathURL.origin + pathURL.pathname + "?" + searchParams.toString();
+	}
+	const response = await fetch(url, { headers });
+	//await defaultResponseGitCode(response);
 	if (!response.ok) {
 		throw new Error(`Request failed with status ${response.status}`);
 	}
@@ -318,14 +462,16 @@ export async function getRepoFilesList(
  * 	.catch(error => console.error('Failed to fetch files:', error));
  * ```
  */
-export async function flattenRepositoryFiles(
+export async function flattenRepositoryFilesGitHub(
 	path = "",
 	branch,
 	options = { username: "RancherJie", repository: "noname_xingbei" }
 ) {
-	if (!localStorage.getItem("noname_authorization")) {
-		await gainAuthorization();
+	defaultHeadersGitHub();
+	if (!localStorage.getItem("noname_authorizationGitHub")) {
+		await gainAuthorizationGitHub();
 	}
+	
 	/**
 	 * @type { { download_url: string, name: string, path: string, sha: string, size: number, type: 'file' }[] }
 	 */
@@ -340,7 +486,7 @@ export async function flattenRepositoryFiles(
 				flattenedFiles.push(item);
 			} else if (item.type === "dir") {
 				// 获取子目录下的文件列表
-				const subDirFiles = await getRepoFilesList(item.path, branch, options);
+				const subDirFiles = await getRepoFilesListGitHub(item.path, branch, options);
 				// 递归处理子目录中的文件和子目录
 				await traverseDirectory(subDirFiles);
 			}
@@ -349,7 +495,45 @@ export async function flattenRepositoryFiles(
 	}
 
 	// 开始遍历初始dir目录下的内容
-	const allFiles = await traverseDirectory(await getRepoFilesList(path, branch, options));
+	const allFiles = await traverseDirectory(await getRepoFilesListGitHub(path, branch, options));
+
+	// 返回不含文件夹的扁平化文件列表
+	return allFiles;
+}
+export async function flattenRepositoryFilesGitCode(
+	path = "",
+	branch,
+	options = { username: "RancherJie", repository: "noname_xingbei" }
+) {
+	defaultHeadersGitCode();
+	if (!localStorage.getItem("noname_authorizationGitCode")) {
+		await gainAuthorizationGitCode();
+	}
+	
+	/**
+	 * @type { { download_url: string, name: string, path: string, sha: string, size: number, type: 'file' }[] }
+	 */
+	const flattenedFiles = [];
+
+	/**
+	 * @param {({ download_url: string; name: string; path: string; sha: string; size: number; type: "file"; } | { download_url: null; name: string; path: string; sha: string; size: 0; type: "dir"; })[]} contents
+	 */
+	async function traverseDirectory(contents) {
+		for (const item of contents) {
+			if (item.type === "file") {
+				flattenedFiles.push(item);
+			} else if (item.type === "dir") {
+				// 获取子目录下的文件列表
+				const subDirFiles = await getRepoFilesListGitCode(item.path, branch, options);
+				// 递归处理子目录中的文件和子目录
+				await traverseDirectory(subDirFiles);
+			}
+		}
+		return flattenedFiles;
+	}
+
+	// 开始遍历初始dir目录下的内容
+	const allFiles = await traverseDirectory(await getRepoFilesListGitCode(path, branch, options));
 
 	// 返回不含文件夹的扁平化文件列表
 	return allFiles;
@@ -536,7 +720,27 @@ export function createProgress(title, max, fileName, value) {
  * @throws {Error} 如果获取操作失败或找不到有效tag，将抛出错误。
  */
 export async function getLatestVersionFromGitHub(owner = "RancherJie", repo = "noname_xingbei") {
-	const tags = await getRepoTags({
+	const tags = await getRepoTagsGitHub({
+		username: owner,
+		repository: repo,
+	});
+
+	for (const tag of tags) {
+		const tagName = tag.name;
+		if (tagName === "v1998") continue;
+		try {
+			checkVersion(tagName, lib.version);
+			return tagName;
+		} catch {
+			// 非标准版本号
+		}
+	}
+
+	throw new Error("No valid tags found in the repository");
+}
+
+export async function getLatestVersionFromGitCode(owner = "RancherJie", repo = "noname_xingbei") {
+	const tags = await getRepoTagsGitCode({
 		username: owner,
 		repository: repo,
 	});
@@ -573,11 +777,39 @@ export async function getLatestVersionFromGitHub(owner = "RancherJie", repo = "n
  */
 export async function getTreesFromGithub(directories, version, owner = "RancherJie", repo = "noname_xingbei") {
 	// if (!localStorage.getItem("noname_authorization")) await gainAuthorization();
-
+	defaultHeadersGitHub();
 	const treesResponse = await fetch(`https://api.github.com/repos/${owner}/${repo}/git/trees/${version}?recursive=1`, {
 		headers: defaultHeaders,
 	});
-	await defaultResponse(treesResponse);
+	await defaultResponseGithub(treesResponse);
+	if (!treesResponse.ok) throw new Error(`Failed to fetch the GitHub repository tree: HTTP status ${treesResponse.status}`);
+	/**
+	 * @type {{
+	 * 	sha: string;
+	 * 	url: string;
+	 * 	tree: {
+	 * 		path: string;
+	 * 		mode: string;
+	 * 		type: "blob" | "tree";
+	 * 		sha: string;
+	 * 		size: number;
+	 * 		url: string;
+	 * 	}[];
+	 * 	truncated: boolean;
+	 * }}
+	 */
+	const trees = await treesResponse.json();
+	const tree = trees.tree;
+	return directories.map(directory => tree.filter(({ type, path }) => type === "blob" && path.startsWith(directory)));
+}
+
+export async function getTreesFromGitCode(directories, version, owner = "RancherJie", repo = "noname_xingbei") {
+	defaultHeadersGitCode();
+	// if (!localStorage.getItem("noname_authorization")) await gainAuthorization();
+	const treesResponse = await fetch(`https://api.gitcode.com/api/v5/repos/${owner}/${repo}/git/trees/${version}?recursive=1`, {
+		headers: defaultHeaders,
+	});
+	//await defaultResponseGitCode(treesResponse);
 	if (!treesResponse.ok) throw new Error(`Failed to fetch the GitHub repository tree: HTTP status ${treesResponse.status}`);
 	/**
 	 * @type {{
