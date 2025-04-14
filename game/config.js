@@ -1,10 +1,9 @@
 window.config = {
 	extension_sources: {
-		"GitHub Proxy": "https://mirror.ghproxy.com/https://raw.githubusercontent.com/RancherJie/noname_xingbei_extension/master/",
-		gitee: "https://gitee.com/RancherJie/noname_xingbei_extension/raw/master/",
+		GitCode: "https://raw.gitcode.com/RancherJie/noname_xingbei_extension/raw/master/",
 		GitHub: "https://raw.githubusercontent.com/RancherJie/noname_xingbei_extension/master/",
 	},
-	extension_source: "GitHub",
+	extension_source: "GitCode",
 	forbidai: [],
 	forbidai_user: [],
 	forbidall: [],
@@ -19,7 +18,7 @@ window.config = {
 		sgscharacters:['shiZhouNian'],
 		sgscards:['xingBei'],
 		sgsmodes:['connect','xingBei'],
-		stockmode:['connect','xingBei'],
+		stockmode:['connect','xingBei','tutorial'],
 		stockextension:[],
 		layout:['default','newlayout'],
 		theme:['woodden','music','simple'],
@@ -143,17 +142,8 @@ window.config = {
 	customcardpile: {},
 	addedpile: {},
 
-	mode: "xingBei",
+	mode: "tutorial",
 	mode_config: {
-		global: {
-			free_choose:true,
-			change_identity:true,
-			versus_mode:'two',
-			team_sequence:'random',
-			change_choice:true,
-			choose_number:3,
-			choose_mode:"多选1"
-		},
 	},
 	current_mode: {},
 	customforbid: [],

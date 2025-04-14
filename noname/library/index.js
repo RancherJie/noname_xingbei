@@ -1136,12 +1136,14 @@ export class Library {
 				},
 				update_link: {
 					name: "更新地址",
-					init: "coding",
+					init: "gitcode",
 					unfrequent: true,
 					item: {
-						coding: "URC",
+						//coding: "URC",
 						github: "GitHub",
+						gitcode: "GitCode",
 					},
+					intro: "GitHub可同时下载无素材(离线)更新包和完整包，但网络条件要求较高；GitCode尽可更新无素材更新包，素材更新请使用单独的‘检测素材更新’；安卓启动器只能下载完整包，win启动器都可。",
 					onclick(item) {
 						game.saveConfig("update_link", item);
 						lib.updateURL = lib.updateURLS[item] || lib.updateURLS.coding;
@@ -1149,7 +1151,7 @@ export class Library {
 				},
 				extension_source: {
 					name: "获取扩展地址",
-					init: "GitHub",
+					init: "GitCode",
 					unfrequent: true,
 					item: {},
 					intro: () => `获取在线扩展时的地址。当前地址：${document.createElement("br").outerHTML}${lib.config.extension_sources[lib.config.extension_source]}`,
@@ -4979,8 +4981,6 @@ export class Library {
 				},
 			}
 		},
-
-
 		connect: {
 			name: "联机",
 			config: {
@@ -5111,7 +5111,15 @@ export class Library {
 				},
 			},
 		},
-
+		tutorial:{
+			name:'新手向导',
+			config:{
+				information:{
+					name:'相关信息在其他(右上角)->帮助-><br>关于游戏中查看',
+					frequent:true,
+				}
+			}
+		}
 	};
 	status = {
 		running: false,
@@ -5124,10 +5132,18 @@ export class Library {
 		globalId: 0,
 	};
 	help = {
-		关于游戏: '<div style="margin:10px">关于无名星杯</div><ul style="margin-top:0"><li>无名星杯官方发布地址仅有GitHub仓库！<br><a href="https://github.com/RancherJie/noname_xingbei">点击前往Github仓库</a><br><li>无名星杯基于GPLv3开源协议。<br><a href="https://www.gnu.org/licenses/gpl-3.0.html">点击查看GPLv3协议</a>',
+		关于游戏: `<div style="margin:10px">关于无名星杯</div><ul style="margin-top:0">
+        <li>无名星杯官方发布地址仅有GitHub仓库！
+        <br><a href="https://github.com/RancherJie/noname_xingbei" target="_blank">点击前往Github仓库</a>
+        <br><li>无名星杯基于GPLv3开源协议。
+        <br><a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank">点击查看GPLv3协议</a>
+        <br><li>无名星杯交流QQ群966951007
+        <br><li>视频教学BV1Mo4y1q717
+        <br><a href="https://www.bilibili.com/video/BV1Mo4y1q717/" target="_blank">点击前往B站教学视频</a>
+        <br><li>说明书
+        <br><a href="https://docs.qq.com/doc/DVEpvRXJzcWZPaVZP" target="_blank">点击查看说明书</a>`,
 		游戏操作: "<ul><li>长按/鼠标悬停/右键单击显示信息。<li>触屏模式中，双指点击切换暂停；下划显示菜单，上划切换托管。<li>键盘快捷键<br>" + "<table><tr><td>A<td>切换托管<tr><td>W<td>切换不询问无懈<tr><td>空格<td>暂停</table><li>编辑牌堆<br>在卡牌包中修改牌堆后，将自动创建一个临时牌堆，在所有模式中共用，当保存当前牌堆后，临时牌堆被清除。每个模式可设置不同的已保存牌堆，设置的牌堆优先级大于临时牌堆。</ul>",
-		说明书:'<div style="margin:10px">说明书</div><ul style="margin-top:0"><br><a href="https://docs.qq.com/doc/DVEpvRXJzcWZPaVZP">点击查看说明书</a>',
-		赞助:`<div style="margin:10px">赞助</div><ul style="margin-top:0"><li><a href="https://github.com/RancherJie/noname_xingbei">爱发电</a>`
+		赞助:`<div style="margin:10px">赞助</div><ul style="margin-top:0"><li><a href="https://github.com/RancherJie/noname_xingbei target="_blank">爱发电</a>`
 	};
 	/**
 	 * @type {import('path')}
@@ -6256,106 +6272,84 @@ export class Library {
 					b = 0,
 					c = 0,
 					d = 0,
-					e = 0,
-					f = 0,
-					g = 0;
+					e = 0;
+				let sa = 0,
+					sb = 0,
+					sc = 0,
+					sd = 0,
+					se = 0;
+				for (let i in lib.character) {
+					switch (lib.character[i][1]) {
+						case "jiGroup":
+							a++;
+							if (lib.config.banned.includes(i)) sa++;
+							break;
+						case "yongGroup":
+							b++;
+							if (lib.config.banned.includes(i)) sb++;
+							break;
+						case "shengGroup":
+							c++;
+							if (lib.config.banned.includes(i)) sc++;
+							break;
+						case "xueGroup":
+							d++;
+							if (lib.config.banned.includes(i)) sd++;
+							break;
+						case "huanGroup":
+							e++;
+							if (lib.config.banned.includes(i)) se++;
+							break;
+					}
+				}
+				log("技：" + (a - sa) + "/" + a);
+				log("咏：" + (b - sb) + "/" + b);
+				log("圣：" + (c - sc) + "/" + c);
+				log("血：" + (d - sd) + "/" + d);
+				log("幻：" + (e - se) + "/" + e);
+				log("已启用：" + (a + b + c + d + e  - (sa + sb + sc + sd + se )) + "/" + (a + b + c + d + e ));
+			})();
+			(function () {
+				let a = 0,
+					b = 0,
+					c = 0;
+				let aa = 0,
+					bb = 0,
+					cc = 0;
 				let sa = 0,
 					sb = 0,
 					sc = 0,
 					sd = 0,
 					se = 0,
 					sf = 0,
-					sg = 0;
-				for (let i in lib.character) {
-					switch (lib.character[i][1]) {
-						case "wei":
-							a++;
-							if (lib.config.banned.includes(i)) sa++;
-							break;
-						case "shu":
-							b++;
-							if (lib.config.banned.includes(i)) sb++;
-							break;
-						case "wu":
-							c++;
-							if (lib.config.banned.includes(i)) sc++;
-							break;
-						case "qun":
-							d++;
-							if (lib.config.banned.includes(i)) sd++;
-							break;
-						case "jin":
-							g++;
-							if (lib.config.banned.includes(i)) sg++;
-							break;
-						case "western":
-							e++;
-							if (lib.config.banned.includes(i)) se++;
-							break;
-						case "key":
-							f++;
-							if (lib.config.banned.includes(i)) sf++;
-							break;
-					}
-				}
-				log("魏：" + (a - sa) + "/" + a);
-				log("蜀：" + (b - sb) + "/" + b);
-				log("吴：" + (c - sc) + "/" + c);
-				log("群：" + (d - sd) + "/" + d);
-				log("晋：" + (g - sg) + "/" + g);
-				log("西：" + (e - se) + "/" + e);
-				log("键：" + (f - sf) + "/" + f);
-				log("已启用：" + (a + b + c + d + e + f - (sa + sb + sc + sd + se + sf)) + "/" + (a + b + c + d + e + f));
-			})();
-			(function () {
-				let a = 0,
-					b = 0,
-					c = 0,
-					d = 0;
-				let aa = 0,
-					bb = 0,
-					cc = 0,
-					dd = 0;
-				let sa = 0,
-					sb = 0,
-					sc = 0,
-					sd = 0;
-				let sha = 0,
-					shan = 0,
-					tao = 0,
-					jiu = 0,
-					wuxie = 0,
-					heisha = 0,
-					hongsha = 0;
-				let num = {
-					1: 0,
-					2: 0,
-					3: 0,
-					4: 0,
-					5: 0,
-					6: 0,
-					7: 0,
-					8: 0,
-					9: 0,
-					10: 0,
-					11: 0,
-					12: 0,
-					13: 0,
-				};
+					sh = 0;
+				let anMie = 0,
+					huoYanZhan = 0,
+					fengShenZhan = 0,
+					diLieZhan = 0,
+					shuiLianZhan = 0,
+					leiGuangZhan = 0,
+					moDan = 0,
+					shengGuang = 0,
+					xuRuo = 0,
+					zhongDu = 0;
+				let ji=0,
+					yong=0,
+					sheng=0,
+					xue=0,
+					huan=0;
+				let dict={};
 				for (let i in lib.card) {
 					if (get.objtype(lib.card[i]) == "object" && lib.translate[i + "_info"]) {
 						switch (lib.card[i].type) {
-							case "basic":
+							case "gongJi":
 								a++;
 								break;
-							case "trick":
+							case "faShu":
 								b++;
 								break;
-							case "equip":
-								c++;
-								break;
 							default:
-								d++;
+								c++;
 								break;
 						}
 					}
@@ -6363,77 +6357,112 @@ export class Library {
 				for (let i = 0; i < lib.card.list.length; i++) {
 					if (typeof lib.card[lib.card.list[i][2]] == "object") {
 						switch (lib.card[lib.card.list[i][2]].type) {
-							case "basic":
+							case "gongJi":
 								aa++;
 								break;
-							case "trick":
-							case "delay":
+							case "faShu":
 								bb++;
 								break;
-							case "equip":
-								cc++;
-								break;
 							default:
-								dd++;
+								cc++;
 								break;
 						}
 						switch (lib.card.list[i][0]) {
-							case "heart":
+							case "an":
 								sa++;
 								break;
-							case "diamond":
+							case "huo":
 								sb++;
 								break;
-							case "club":
+							case "feng":
 								sc++;
 								break;
-							case "spade":
+							case "di":
 								sd++;
 								break;
+							case "lei":
+								se++;
+								break
+							case "shui":
+								sf++;
+								break;
+							case "guang":
+								sh++;
+								break
 						}
-						if (lib.card.list[i][2] == "sha") {
-							sha++;
-							if (lib.card.list[i][0] == "club" || lib.card.list[i][0] == "spade") {
-								heisha++;
-							} else {
-								hongsha++;
-							}
+						switch (lib.card.list[i][2]) {
+							case "anMie":
+								anMie++;
+								break;
+							case "huoYanZhan":
+								huoYanZhan++;
+								break;
+							case "fengShenZhan":
+								fengShenZhan++;
+								break;
+							case "diLieZhan":
+								diLieZhan++;
+								break;
+							case "shuiLianZhan":
+								shuiLianZhan++;
+								break;
+							case "leiGuangZhan":
+								leiGuangZhan++;
+								break;
+							case "moDan":
+								moDan++;
+								break;
+							case "shengGuang":
+								shengGuang++;
+								break;
+							case "xuRuo":
+								xuRuo++;
+								break;
+							case "zhongDu":
+								zhongDu++;
+								break;
+							default:
+								break;
 						}
-						if (lib.card.list[i][2] == "shan") {
-							shan++;
+						switch (lib.card.list[i][1]) {
+							case "ji":
+								ji++;
+								break;
+							case "yong":
+								yong++;
+								break;
+							case "sheng":
+								sheng++;
+								break;
+							case "xue":
+								xue++;
+								break;
+							case "huan":
+								huan++;
+								break;
+							default:
+								break;
 						}
-						if (lib.card.list[i][2] == "tao") {
-							tao++;
+						if(lib.card.list[i][3]){
+							if(dict[lib.card.list[i][3]]) dict[lib.card.list[i][3]]++;
+							else dict[lib.card.list[i][3]]=1;
 						}
-						if (lib.card.list[i][2] == "jiu") {
-							jiu++;
-						}
-						if (lib.card.list[i][2] == "wuxie") {
-							wuxie++;
-						}
-						num[lib.card.list[i][1]]++;
 					}
 				}
-				let str = "基本牌" + aa + "； " + "锦囊牌" + bb + "； " + "装备牌" + cc + "； " + "其它牌" + dd;
+				let str = "攻击牌" + aa + "； " + "法术牌" + bb + "； " + "其它牌" + cc;
 				log(str);
-				str = "红桃牌" + sa + "； " + "方片牌" + sb + "； " + "梅花牌" + sc + "； " + "黑桃牌" + sd;
+				str = "暗牌" + sa + "； " + "火牌" + sb + "； " + "风牌" + sc + "； " + "地牌" + sd + "； " + "雷牌" + se + "； " + "水牌" + sf + "； " + "光牌" + sh;
 				log(str);
-				str = "杀" + sha + "； " + "黑杀" + heisha + "； " + "红杀" + hongsha + "； " + "闪" + shan + "； " + "桃" + tao + "； " + "酒" + jiu + "； " + "无懈" + wuxie;
+				str = "技牌"+ji+"； "+"咏牌"+yong+"； "+"圣牌"+sheng+"； "+"血牌"+xue+"； "+"幻牌"+huan;
 				log(str);
-				if (arguments[1]) {
-					for (let i = 1; i <= 13; i++) {
-						if (i < 10) {
-							log(i + " ", num[i]);
-						} else {
-							log(i, num[i]);
-						}
-					}
+				str = "暗灭" + anMie + "； " + "火焰斩"+huoYanZhan+"； " + "风神斩"+fengShenZhan+"； " + "地裂斩"+diLieZhan+"； " + "水涟斩"+shuiLianZhan+"； " + "雷光斩"+leiGuangZhan+"； " + "魔弹"+moDan+"； " + "圣光"+shengGuang+"； " + "虚弱"+xuRuo+"； " + "中毒"+zhongDu;
+				log(str);
+				str="";
+				for (let i in dict) {
+					str+=get.translation(i)+":"+dict[i]+"； ";
 				}
-				let arr = [];
-				for (let i = 1; i <= 13; i++) {
-					arr.push(num[i]);
-				}
-				log(a + b + c + d + "/" + (aa + bb + cc + dd), ...arr);
+				log(str);
+				log((a + b + c) +  "/" + (aa + bb + cc ));
 			})();
 		},
 		/**
@@ -6719,14 +6748,14 @@ export class Library {
 		 * ```
 		 */
 		gn(name) {
-			let xiBei = null;
-			let xiBeiList = ["huo", "feng", "shui", "di",'an','lei'];
+			let xiBie = null;
+			let xiBieList = ["huo", "feng", "shui", "di",'an','lei'];
 			let nameList = ['huoYanZhan','fengShenZhan','shuiLianZhan','diLieZhan','anMie','leiGuangZhan'];
 			let mingGeList = ['sheng','xue','yong','ji','huan'];
-			for (let i = 0; i < xiBeiList.length; i++) {
-				if (name.startsWith(xiBeiList[i])) {
-					xiBei = xiBei[i];
-					name = nameList.slice(xiBeiList[i].length);
+			for (let i = 0; i < xiBieList.length; i++) {
+				if (name.startsWith(xiBieList[i])) {
+					xiBie = xiBie[i];
+					name = nameList.slice(xiBieList[i].length);
 					break;
 				}
 			}
@@ -6736,7 +6765,7 @@ export class Library {
 			if (!lib.card[name]) {
 				return null;
 			}
-			return game.createCard(name, xiBei, mingGe);
+			return game.createCard(name, xiBie, mingGe);
 		},
 		/**
 		 * 指定的玩家或自己立即获得诸葛连弩，青龙刀，八卦阵，的卢，赤兔，木牛
