@@ -1230,7 +1230,7 @@ export class Get extends GetCompatible {
 		var list = [];
 		if (filter == "trick") {
 			for (var i = 0; i < lib.inpile.length; i++) {
-				if (get.type(lib.inpile[i], "trick") == type) list.push(lib.inpile[i]);
+				if (get.type(lib.inpile[i] ) == type) list.push(lib.inpile[i]);
 			}
 		} else {
 			for (var i = 0; i < lib.inpile.length; i++) {
@@ -2398,7 +2398,7 @@ export class Get extends GetCompatible {
 	 * @param { Player | false } [player]
 	 * @returns { string }
 	 */
-	type(obj, method, player) {
+	type(obj, player) {
 		if (typeof obj == "string") obj = { name: obj };
 		if (typeof obj != "object") return;
 		var name = get.name(obj, player);
@@ -2412,11 +2412,11 @@ export class Get extends GetCompatible {
 			)
 				return lib.card["sha"].type;
 		}
-		if (method == "trick" && lib.card[name].type == "delay") return "trick";
+		//if (method == "trick" && lib.card[name].type == "delay") return "trick";
 		return lib.card[name].type;
 	}
 	type2(card, player) {
-		return get.type(card, "trick", player);
+		return get.type(card, player);
 	}
 	/**
 	 * 返回牌的副类型
@@ -3368,7 +3368,7 @@ export class Get extends GetCompatible {
 		var func;
 		if (sort == "type_sort") {
 			func = function (card) {
-				var type = get.type(card, null, false);
+				var type = get.type(card,  false);
 				var subtype = get.subtype(card, false);
 				if (lib.cardType[subtype]) {
 					return lib.cardType[subtype];

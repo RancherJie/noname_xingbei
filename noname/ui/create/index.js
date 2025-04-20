@@ -2907,7 +2907,7 @@ export class Create {
 		 */
 		vcard: (item, type, position, noclick, node) => {
 			if (typeof item == "string") {
-				item = [get.type(item), "", item];
+				item = [get.type(item),'', item];
 			}
 			node = ui.create.card(position, "noclick", noclick);
 			node.classList.add("button");

@@ -175,7 +175,7 @@ export const cardPackMenu = function (connectMenu) {
 			var list = [];
 			for (var i = 0; i < info.length; i++) {
 				if (!lib.card[info[i]]) continue;
-				list.push([get.translation(get.type(info[i], "trick")), "", info[i]]);
+				list.push([get.translation(get.type(info[i])), "", info[i]]);
 			}
 			var sortCard = function (card) {
 				var type = lib.card[card[2]].type;

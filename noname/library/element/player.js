@@ -984,7 +984,7 @@ export class Player extends HTMLDivElement {
 	 */
 	getGiftAIResultTarget(card, target) {
 		if (!card || target.refuseGifts(card, this)) return 0;
-		if (get.type(card, null, target) == "equip") return get.effect(target, card, target, target);
+		if (get.type(card, target) == "equip") return get.effect(target, card, target, target);
 		if (card.name == "du") return this.hp > target.hp ? -1 : 0;
 		if (target.hasSkillTag("nogain")) return 0;
 		return Math.max(1, get.value(card, this) - get.value(card, target));
@@ -5011,7 +5011,7 @@ export class Player extends HTMLDivElement {
 			else if (get.itemtype(arguments[i]) == "select" || typeof arguments[i] == "number") select = arguments[i];
 		}
 		for (var i = 0; i < list.length; i++) {
-			list[i] = [notype ? "" : get.subtype(list[i], false) || get.type(list[i]), "", list[i]];
+			list[i] = [notype ? "" : get.subtype(list[i], false) || get.type(list[i]), list[i]];
 		}
 		if (prompt == undefined) prompt = "请选择卡牌";
 		return this.chooseButton(forced, select, "hidden", [prompt, [list, "vcard"], "hidden"]);

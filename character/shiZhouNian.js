@@ -5084,20 +5084,22 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                     return false;
                 },
-                mod:{
-                    maxHandcard:function(player,num){
-                        if(player.isHengZhi()){
-                            return num+player.countZhiShiWu('chongSheng')-2;
-                        }
-                    },
-                    cardXiBie:function(card,player,xiBie){
-                        if(get.type(card)!='gongJi'||!player.isHengZhi()) return;
-                        if(xiBie=='an' ||xiBie=='shui') return;
-                        return 'huo';
-                    }
-                },
-                group:['moNvZhiNu_chongZhi','moNvZhiNu_showCards'],
+                group:['moNvZhiNu_chongZhi','moNvZhiNu_showCards','moNvZhiNu_mod'],
                 subSkill:{
+                    mod:{
+                        mod:{
+                            maxHandcard:function(player,num){
+                                if(player.isHengZhi()){
+                                    return num+player.countZhiShiWu('chongSheng')-2;
+                                }
+                            },
+                            cardXiBie:function(card,player,xiBie){
+                                if(get.type(card)!='gongJi'||!player.isHengZhi()) return;
+                                if(xiBie=='an' ||xiBie=='shui') return;
+                                return 'huo';
+                            }
+                        },
+                    },
                     chongZhi:{
                         trigger:{player:'xingDongBefore'},
                         direct:true,
@@ -5118,11 +5120,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         content:async function(event, trigger, player){
                             var cards=[];
                             for(var card of trigger.cards){
-                                if (get.type(card) != 'gongJi' || ['shui', 'an', 'huo'].includes(get.xiBie(card))) {
+                                if (get.type(card,player) != 'gongJi' || ['shui', 'an', 'huo'].includes(get.xiBie(card,player))) {
                                     cards.push(card);
                                     continue;
                                 }
-                                var tempCard=game.createCard(card.name,'huo',card.mingGe,card.duYou);
+                                var tempCard=game.createCard(card.name,'huo',get.mingGe(card,player),card.duYou);
                                 cards.push(tempCard);
                             }
                             trigger.cards=cards;
@@ -6980,6 +6982,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.hengZhi();
                 },
                 group:['baiShiHuanLongQuan_zhuDong','baiShiHuanLongQuan_yingZhan','baiShiHuanLongQuan_faShuAndTeShu','baiShiHuanLongQuan_gongJi','baiShiHuanLongQuan_xuLiYiji'],
+                mod:{
+                    aiOrder:function(player,card,num){
+                        if(get.type(card)=='gongJi'&&player.isHengZhi()) return num+1;
+                    }
+                },
                 subSkill:{
                     zhuDong:{
                         trigger:{player:'gongJiBefore'},
@@ -7060,7 +7067,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 content:function(){
                     'step 0'
-                    trigger.storage.qiJueBengJi=true;
+                    trigger.customArgs.qiJueBengJi=true;
                     player.removeZhiShiWu('douQi');
                     trigger.wuFaYingZhan();
                     'step 1'

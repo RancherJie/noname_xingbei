@@ -18,7 +18,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             jieJieShi:['jieJieShi_name','huanGroup',5,['jieJieYiShi','huangShenZhiLi','huangShenJiYi','jinMoJing','liuLiJing','jueJie','fuMoJing','jieJie','jiX'],],
             shenMiXueZhe:['shenMiXueZhe_name','yongGroup',4,['yanLingShu','shouHuLing','zhenYanShu','jinJiMiFa','yaoJingMiShu','zhenYanYaZhi','yanLing','miShu'],],
             ranWuZhe:['ranWuZhe_name','xueGroup',4,['shenQiZhiYi','liRuQuanYong','kuangLiZhiXin','kuangLiZhiTi','shenZhiWuRan','niuQuZhiAi','liQi'],],
-            shiShenZhe: ["shiShenZhe_name","xueGroup",5,["yuRen","qingKe","shiMie","shangMie","tongDiao","ren","gongZhen","zhuShenZhongYan"],],
+            shiShenZhe: ["shiShenZhe_name","xueGroup",5,["yuRen","qingKe","shiMie","shangMie","tongDiao","ren","gongZhen","zhuShenZhongYan"]],
 		},
         characterIntro:{
             jinGuiZhiNv:`身为一位魔法的初学者，艾丽卡施法总是让人提心吊胆，因为连她自己也不知道会发生什么事情。然而她似乎无法体会身旁人的种种暗示，依然我行我素。这样的大小姐，需要队友的多多包容与帮忙`,
@@ -30,7 +30,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
         },
         card: {
             moRen: {
-                type: "gongJi",
+                //type: "none",
                 enable: true,
                 selectTarget: 1,
                 filterTarget: function(card,player,target){
@@ -57,7 +57,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
             },
             yiRen: {
-                type: "gongJi",
+                //type: "none",
                 enable: true,
                 selectTarget: 1,
                 filterTarget: function(card,player,target){
@@ -115,10 +115,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 1'
                     var card;
                     if(result.links[0][2]=='moRen'){
-                        card=game.createCard("moRen", "huo", 'xue');
+                        card=game.createCard("moRen", "", '');
+                        card.storage.xiBie='huo';
                         player.storage.moRen=true;
                     }else if(result.links[0][2]=='yiRen'){
-                        card=game.createCard("yiRen", "lei", 'xue');
+                        card=game.createCard("yiRen", "", '');
+                        card.storage.xiBie='lei';
                         player.storage.yiRen=true;
                     }
                     if(card){
@@ -139,10 +141,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 content: function(){
                     var card;
                     if(trigger.card.name=='moRen'){
-                        card=game.createCard("moRen", "huo", 'xue');
+                        card=game.createCard("moRen", "", '');
+                        card.storage.xiBie='huo';
                         player.storage.moRen=true;
                     }else if(trigger.card.name=='yiRen'){
-                        card=game.createCard("yiRen", "lei", 'xue');
+                        card=game.createCard("yiRen", "", '');
+                        card.storage.xiBie='lei';
                         player.storage.yiRen=true;
                     }
                     card.storage.renMaster=player;
@@ -225,33 +229,77 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
             },
             ren: {
-                global: ["ren_zhuanHuan1","ren_zhuanHuan2","ren_daChuQiZhi","ren_gaiPai","ren_biaoJi"],
+                global: ["ren_zhuanHuan1","ren_zhuanHuan2","ren_daChuQiZhi","ren_gaiPai","ren_biaoJi",'ren_cardsDiscardEnd','ren_mod','ren_showCards'],
                 contentx: function(){
                     for(var card of event.cards){
-                        game.broadcastAll(function(card){
-                            if(get.name(card)=='moRen'){
-                                if(get.xiBie(card,false)=='huo') game.setXiBie(card,'shui');
-                                else game.setXiBie(card,'huo');
-                            }else if(get.name(card)=='yiRen'){
-                                if(get.xiBie(card,false)=='lei') game.setXiBie(card,'feng');
-                                else game.setXiBie(card,'lei');
-                            }
-                            card.$init([card.xiBie,card.mingGe,card.name]);
-                        },card);
-                    }
+                        if(card.name=='moRen'){
+                            if(card.storage.xiBie=='huo') card.storage.xiBie='shui';
+                            else card.storage.xiBie='huo';
+                        }else if(card.name=='yiRen'){
+                            if(card.storage.xiBie=='lei') card.storage.xiBie='feng';
+                            else card.storage.xiBie='lei';
+                        }
+                    }   
                 },
                 subSkill: {
+                    showCards:{
+                        priority:1,
+                        trigger:{player:'showCardsBefore'},
+                        filter:function(event,player){
+                            var bool=false;
+                            for(var card of event.cards){
+                                if(card.name=='moRen'||card.name=='yiRen'){
+                                    bool=true;
+                                    break;
+                                }
+                            }
+                            return bool&&event.getParent().name=='discard'&&event.getParent().player==player;
+                        },
+                        direct:true,
+                        content:async function(event, trigger, player){
+                            var cards=[];
+                            for(var card of trigger.cards){
+                                if (card.name=='yiRen'||card.name=='moRen') {
+                                    var tempCard=game.createCard(card.name,card.storage.xiBie,card.storage.mingGe,card.duYou);
+                                    cards.push(tempCard);
+                                }else{
+                                    cards.push(card);
+                                }
+                            }
+                            trigger.cards=cards;
+                        }
+                    },
+                    mod:{
+                        priority:-1,
+                        mod:{
+                            cardname:function(card,player,name){
+                                if(name=='moRen'){
+                                    if(card.storage.xiBie=='huo') return 'huoYanZhan';
+                                    else if(card.storage.xiBie=='shui') return 'shuiLianZhan';
+                                }else if(name=='yiRen'){
+                                    if(card.storage.xiBie=='lei') return 'leiGuangZhan';
+                                    else if(card.storage.xiBie=='feng') return 'fengShenZhan';
+                                }
+                            },
+                            cardMingGe:function(card,player,mingGe){
+                                if(card.name=='moRen'||card.name=='yiRen') return 'xue';
+                            },
+                            cardXiBie:function(card,player,xiBie){
+                                if(card.name=='moRen'||card.name=='yiRen') return card.storage.xiBie;
+                            },
+                        },
+                    },              
                     biaoJi:{
                         intro: {
                             mark:function(dialog,storage,player){
                                 var num=player.countCards('h',function(card){
-                                    return get.name(card)=='moRen'||get.name(card)=='yiRen';
+                                    return card.name=='moRen'||card.name=='yiRen';
                                 });
                                 return '共有'+num+'张刃';
                             },
                             markcount:function(storage,player){
                                 var num=player.countCards('h',function(card){
-                                    return get.name(card)=='moRen'||get.name(card)=='yiRen';
+                                    return card.name=='moRen'||card.name=='yiRen';
                                 });
                                 return num;
                             },
@@ -260,7 +308,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         direct: true,
                         content: function(){
                             if(player.hasCard(function(card){
-                                return get.name(card)=='moRen'||get.name(card)=='yiRen';
+                                return card.name=='moRen'||card.name=='yiRen';
                             })){
                                 player.markSkill('ren_biaoJi');
                             }else{
@@ -272,11 +320,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         enable: ["gongJiOrFaShu"],
                         filter: function(event,player){
                             return player.hasCard(function(card){
-                                return get.name(card)=='moRen'||get.name(card)=='yiRen';
+                                return card.name=='moRen'||card.name=='yiRen';
                             });
                         },
                         filterCard: function(card){
-                            return get.name(card)=='moRen'||get.name(card)=='yiRen';
+                            return card.name=='moRen'||card.name=='yiRen';
                         },
                         selectCard: [1,2],
                         discard: false,
@@ -296,12 +344,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         filter: function(event,player){
                             if(event.zhuanHuan==true) return false;
                             return player.hasCard(function(card){
-                                return get.name(card)=='moRen'||get.name(card)=='yiRen';
+                                return card.name=='moRen'||card.name=='yiRen';
                             });
                         },
                         async cost(event,trigger,player){
                             var next=player.chooseCard('h',function(card){
-                                return get.name(card)=='moRen'||get.name(card)=='yiRen';
+                                return card.name=='moRen'||card.name=='yiRen';
                             });
                             next.set('prompt','是否转化【刃】的系别');
                             next.set('selectCard',[1,2]);
@@ -313,11 +361,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             next.set('ai',function(card){
                                 if(_status.event.yingZhan){
                                     let xiBie1=get.xiBie(_status.event.card);
-                                    if(get.name(card)=='moRen'&&(xiBie1=='huo'||xiBie1=='shui')){
+                                    if(card.name=='moRen'&&(xiBie1=='huo'||xiBie1=='shui')){
                                         let xiBie2=get.xiBie(card);
                                         if(xiBie2==xiBie1) return 0;
                                         else return 1;
-                                    }else if(get.name(card)=='yiRen'&&(xiBie1=='lei'||xiBie1=='feng')){
+                                    }else if(card.name=='yiRen'&&(xiBie1=='lei'||xiBie1=='feng')){
                                         let xiBie2=get.xiBie(card);
                                         if(xiBie2==xiBie1) return 0;
                                         else return 1;
@@ -350,7 +398,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         filter: function(event,player){
                             var bool=false;
                             for(var card of event.cards){
-                                if(get.name(card)=='moRen'||get.name(card)=='yiRen'){
+                                if(card.name=='moRen'||card.name=='yiRen'){
                                     bool=true;
                                     break;
                                 }
@@ -359,7 +407,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         },
                         content: function(){
                             'step 0'
-                            trigger.cards=trigger.cards.remove(event.indexedData);
+                            trigger.cards.remove(event.indexedData);
                             player.faShuDamage(event.num||3,event.indexedData.storage.renMaster);
                             'step 1'
                             let name=get.name(event.indexedData);
@@ -384,9 +432,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						},
                         forced: true,
                         filter: function(event,player){
+                            if(event.special) return false;
                             var bool=false;
                             for(var card of event.cards){
-                                if(get.name(card)=='moRen'||get.name(card)=='yiRen'){
+                                if(card.name=='moRen'||card.name=='yiRen'){
                                     bool=true;
                                     break;
                                 }
@@ -404,6 +453,37 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             event.indexedData.destroyed = true;
                             game.log(event.indexedData, "被移除了");
                         },
+                    },
+                    cardsDiscardEnd:{
+                        trigger:{global:'cardsDiscardEnd'},
+                        direct:true,
+                        getIndex(event, player) {
+							const cards = [];
+							for(let i = 0; i < event.cards.length; i++) {
+                                if(get.name(event.cards[i]) == 'moRen' || get.name(event.cards[i]) == 'yiRen') {
+                                    if(event.cards[i].destroyed) continue;
+                                    cards.push(event.cards[i]);
+                                }
+                            }
+							return cards;
+						},
+                        forced: true,
+                        filter: function(event,player){
+                            var bool=false;
+                            for(var card of event.cards){
+                                if(card.name=='moRen'||card.name=='yiRen'){
+                                    bool=true;
+                                    break;
+                                }
+                            }
+                            return bool;
+                        },
+                        content: async function(event, trigger, player){
+                            event.indexedData.fix();
+                            event.indexedData.remove();
+                            event.indexedData.destroyed = true;
+                            game.log(event.indexedData, "被移除了");
+                        }
                     },
                 },
             },
@@ -445,10 +525,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             for(var i=0;i<result.links.length;i++){
                                 let card;
                                 if(result.links[i][2]=='moRen'){
-                                    card=game.createCard('moRen','huo','xue');
+                                    card=game.createCard('moRen','','');
+                                    card.storage.xiBie='huo';
                                     player.storage.moRen=true;
                                 }else if(result.links[i][2]=='yiRen'){
-                                    card=game.createCard('yiRen','lei','xue');
+                                    card=game.createCard('yiRen','','');
+                                    card.storage.xiBie='lei';
                                     player.storage.yiRen=true;
                                 }
                                 card.storage.renMaster=player;
@@ -528,13 +610,22 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 ai: {
                     baoShi: true,
                     order: function(event,player){
-                        var num=player.countCards('h',card=>card.nmae=='moRen'||card.name=='yiRen');
-                        if(num>0) return 0;
-                        if((!player.storage.yiRen)&&(!player.storage.moRen)) return 0;
-                        return 3.6;
+                        var num=3;
+                        if(player.storage.yiRen) num+=0.2;
+                        if(player.storage.moRen) num+=0.2;
+                        return num;
                     },
                     result: {
-                        player: 1,
+                        player:function(player){
+                            var players=game.filterPlayer(function(current){
+                                if(current.side==player.side) return false;
+                                return current.hasCard(function(card){
+                                    return card.name=='moRen'||card.name=='yiRen';
+                                });
+                            });
+                            if(players.length>0) return 1;
+                            else return 0;
+                        }
                     },
                 },
             },

@@ -9416,8 +9416,14 @@ export const Content = {
 		}
 		event.nun=cards.length;
 		'step 1'
-		event.trigger('discard');
+		if(event.showCards==true){
+			var next=player.showCards(cards).set('discard',true);
+		}else if(event.showHiddenCards==true){
+			var next=player.showHiddenCards(cards);
+		}
 		"step 2"
+		event.trigger('discard');
+		'step 3'
 		if(event.baoPai==true){
 			if(event.shiQiXiaJiang!=false){
 				var next=player.changeShiQi(-event.nun).set('baoPai',true).set('cards',cards);
@@ -9437,10 +9443,6 @@ export const Content = {
 					next.set('source',event.source);
 				}
 			}
-		}else if(event.showCards==true){
-			var next=player.showCards(cards).set('discard',true);
-		}else if(event.showHiddenCards==true){
-			var next=player.showHiddenCards(cards);
 		}
 	},
 	loseToDiscardpile:function(){
