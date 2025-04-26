@@ -8560,7 +8560,7 @@ export const Content = {
 			event.oriTarget=event.target;
 		}
 		if(event.getParent().firstAction) event.firstAction=true;
-		var type=get.type(card);
+		var type=get.type(card,player);
 		if(type=='gongJi' && event.targets.length>0){
 			event.type='gongJi';
 			event.canYingZhan=true;

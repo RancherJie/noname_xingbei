@@ -2402,15 +2402,12 @@ export class Get extends GetCompatible {
 		if (typeof obj == "string") obj = { name: obj };
 		if (typeof obj != "object") return;
 		var name = get.name(obj, player);
-		if (!lib.card[name]) {
-			if (!name.startsWith("sha_")) return;
-			if (
-				name
-					.slice(4)
-					.split("_")
-					.every(n => lib.nature.has(n))
-			)
-				return lib.card["sha"].type;
+		if (!lib.card[name]) return;
+		if (get.itemtype(player) == "player" || (player !== false && get.position(obj) == "h")) {
+			var owner = player || get.owner(obj);
+			if (owner) {
+				return game.checkMod(obj, owner, lib.card[name].type, "cardType", owner);
+			}
 		}
 		//if (method == "trick" && lib.card[name].type == "delay") return "trick";
 		return lib.card[name].type;

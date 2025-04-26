@@ -981,8 +981,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             }else var result={bool:false};
 
                             if(result.bool){
-                                await player.changeZhanJi(result.links,-1);
-                                await player.addNengLiang(result.links,1);
+                                await player.changeZhanJi(result.links[0],-1);
+                                await player.addNengLiang(result.links[0],1);
                             }else{
                                 await player.addZhanJi('baoShi');
                                 await player.changeZhiLiao(1);

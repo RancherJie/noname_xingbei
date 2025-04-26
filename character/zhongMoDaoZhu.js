@@ -65,7 +65,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 content:async function (event,trigger,player){
                     for(var current of game.players) current.update();
                     var cards=get.cards(3);
-                    await player.addToExpansion('draw',cards,'log').gaintag.add('yiJi');
+                    await player.addToExpansion('draw',cards,'log').set('gaintag',['wangQuanBaoZhuX_biaoJi']);
                     await player.showHiddenCards(cards);
                 }
             },
@@ -116,7 +116,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         player.addSkill('shiShuX');
                     }
                     if(!player.hasCard(card=>get.name(card)=='shiShuCard')){
-                        var card=game.createCard('shiShuCard','di','huan');
+                        var card=game.createCard('shiShuCard','','');
+                        game.broadcastAll(function(card){
+                            card.$init(['di','huan',card.name]);
+                        },card);
                         await player.gain(card,'gain2').set('skill','jiGuShiDian');
                     }
                 }
@@ -245,7 +248,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         await player.showHiddenCards([card]);
                         cards.push(card);
                     }
-                    await player.addToExpansion('draw',cards,'log').gaintag.add('yiJi');
+                    await player.addToExpansion('draw',cards,'log').set('gaintag',['yiJi']);
                     if(cards.length>3){
                         var targets=await player.chooseTarget(true,cards.length-3,`对${cards.length-3}名目标角色造成2点法术伤害③。`).set('ai',function(target){
                             var player=_status.event.player;
@@ -269,42 +272,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             },
             shiShu:{},
             shiShuX:{
-                group:['shiShuX_yiShiWeiJing','shiShuX_yinJiBianJian','shiShuX_showCards','shiShuX_mod'],
+                group:['shiShuX_yiShiWeiJing','shiShuX_yinJiBianJian','shiShuX_mod'],
                 subSkill:{
-                    showCards:{
-                        priority:0.5,
-                        trigger:{player:'showCardsBefore'},
-                        filter:function(event,player){
-                            var bool=false;
-                            for(var card of event.cards){
-                                if(card.name=='shiShuCard'){
-                                    bool=true;
-                                    break;
-                                }
-                            }
-                            return bool&&event.getParent().name=='discard'&&event.getParent().player==player;
-                        },
-                        direct:true,
-                        content:async function(event, trigger, player){
-                            var cards=[];
-                            for(var card of trigger.cards){
-                                if (card.name=='shiShuCard') {
-                                    var tempCard=game.createCard(card.name,'di','huan',card.duYou);
-                                    cards.push(tempCard);
-                                }else{
-                                    cards.push(card);
-                                }
-                            }
-                            trigger.cards=cards;
-                        }
-                    },
                     mod:{
                         priority:-1,
                         mod:{
-                            cardname:function(card,player,name){
-                                if(name=='shiShuCard'){
-                                    return 'diLieZhan';
-                                }
+                            cardType:function(card,player,type){
+                                if(card.name=='shiShuCard') return 'gongJi';
                             },
                             cardMingGe:function(card,player,mingGe){
                                 if(card.name=='shiShuCard') return 'huan';
@@ -705,8 +679,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             return player.getExpansions('wangQuanBaoZhuX_biaoJi').length>0;
                         },
                         content:async function (event,trigger,player){
-                            await player.getNext().addToExpansion(player.getExpansions('wangQuanBaoZhuX_biaoJi'),player,'gain2').set('type','zhuanYi').gaintag.add('wangQuanBaoZhuX_biaoJi').set('special',true); 
-                        },     
+                            await player.getNext().addToExpansion(player.getExpansions('wangQuanBaoZhuX_biaoJi'),player,'gain2').set('type','zhuanYi').set('gaintag',['wangQuanBaoZhuX_biaoJi']).set('special',true); 
+                        },
                     },
                     shenYanYongZan2:{
                         trigger:{player:'addToExpansionEnd'},
@@ -780,7 +754,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     await player.addZhiShiWu('shengYiWu',2);
                     if(!player.hasSkill('wangQuanBaoZhuX')) player.addSkill('wangQuanBaoZhuX');
                     for(var current of game.players) current.storage.wangQuanBaoZhuX_player=player;
-                    await player.addToExpansion(event.cards,player,'gain2').set('type','fangZhi').gaintag.add('wangQuanBaoZhuX_biaoJi');
+                    await player.addToExpansion(event.cards,player,'gain2').set('type','fangZhi').set('gaintag',['wangQuanBaoZhuX_biaoJi']);
                 },
                 group:'xinYangChongZhu_teShu',
                 subSkill:{
