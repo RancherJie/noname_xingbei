@@ -65,7 +65,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 content:async function (event,trigger,player){
                     for(var current of game.players) current.update();
                     var cards=get.cards(3);
-                    await player.addToExpansion('draw',cards,'log').set('gaintag',['wangQuanBaoZhuX_biaoJi']);
+                    await player.addToExpansion('draw',cards,'log').set('gaintag',['yiJi']);
                     await player.showHiddenCards(cards);
                 }
             },
@@ -203,7 +203,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 cost: async function (event,trigger,player){
                     var list=lib.xiBie.slice();
                     list.push('cancel2');
-                    var dialog = ui.create.dialog("选淬精炼：选择视为的系别",[[event.indexedData], "card"]);
+                    var dialog = ["选淬精炼：选择视为的系别",[[event.indexedData], "card"]];
                     var next=player.chooseControl(list);
                     next.set('dialog',dialog);
                     next.set('xiBie',trigger.xiBie);
@@ -666,7 +666,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                 await player.draw(2);
                                 await player.changeShiQi(-1,player.storage.wangQuanBaoZhuX_player.side);
                                 if(player.storage.wangQuanBaoZhuX_player.countZhiShiWu('shengYiWu')<1){
-                                    await game.cardsDiscard(player.getExpansions('wangQuanBaoZhuX_biaoJi'));
+                                    await player.loseToDiscardpile(player.getExpansions('wangQuanBaoZhuX_biaoJi'));
                                     player.storage.wangQuanBaoZhuX_player.removeSkill('wangQuanBaoZhuX');
                                 }
                             }
@@ -708,6 +708,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                 game.broadcastAll(function(current){
                                     current.init('hongYiZhuJiao');
                                 },player);
+                                player.update();
                                 if(player.hasZhiShiWu('shengYiWu')) player.markSkill('shengYiWu');
                                 if(player.hasZhiShiWu('yinZhiZiDan')) player.markSkill('yinZhiZiDan');
                             }else if(control=='选项二'){
@@ -725,7 +726,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                 }).forResultTargets();
                                 await targets[0].draw(control); 
                             }
-                            await game.cardsDiscard(player.getExpansions('wangQuanBaoZhuX_biaoJi'));
+                            await player.loseToDiscardpile(player.getExpansions('wangQuanBaoZhuX_biaoJi'));
                             player.storage.wangQuanBaoZhuX_player.removeSkill('wangQuanBaoZhuX');
                         },
                     }

@@ -1707,10 +1707,12 @@ div:not(.handcards) > .card > .info > span,
 	font-family: "huangcao", "xinwei";
 	padding-top: 4px;
 }
-.marks > .card.overflowmark {
+.marks > .card.overflowmark,
+.marks2 > .card.overflowmark {
 	overflow: visible;
 }
-.marks > div > .markcount.menubutton {
+.marks > div > .markcount.menubutton,
+.marks2 > div > .markcount.menubutton {
 	font-family: "xinwei";
 	font-size: 16px;
 	width: 14px;
@@ -2605,6 +2607,26 @@ div:not(.handcards) > .card > .info > span,
 	display: block;
 	background-image: url("../../theme/style/player/bronze3.png");
 }
+#window .player > .framebg[data-auto="true"],
+#window #arena.long.mobile:not(.fewplayer) .player[data-position="0"] > .framebg[data-auto="true"] {
+	display: block;
+	background-image: url("../../theme/style/player/red1.png");
+}
+#window #arena.long:not(.fewplayer) .player > .framebg[data-auto="true"],
+#arena.oldlayout .player > .framebg[data-auto="true"] {
+	display: block;
+	background-image: url("../../theme/style/player/red3.png");
+}
+#window .player > .framebg[data-auto="false"],
+#window #arena.long.mobile:not(.fewplayer) .player[data-position="0"] > .framebg[data-auto="false"] {
+	display: block;
+	background-image: url("../../theme/style/player/blue1.png");
+}
+#window #arena.long:not(.fewplayer) .player > .framebg[data-auto="false"],
+#arena.oldlayout .player > .framebg[data-auto="false"] {
+	display: block;
+	background-image: url("../../theme/style/player/blue3.png");
+}
 
 .avatar {
 	width: 100px;
@@ -2701,10 +2723,12 @@ div:not(.handcards) > .card > .info > span,
 	left: 14px;
 	top: 112px;
 }
-.player > .marks {
+.player > .marks,
+.player > .marks2 {
 	z-index: 4;
 }
 .judges > div,
+.marks2 > div,
 .marks > div {
 	width: 26px;
 	height: 26px;

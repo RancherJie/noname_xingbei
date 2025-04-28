@@ -348,6 +348,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 prompt:'目标角色+2[治疗]',
                 position:'h',
                 duYou:'zhiLiaoShu',
+                useCard:true,
                 filterCard:function(card){
                     return card.hasDuYou('zhiLiaoShu');
                 },
@@ -7063,7 +7064,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 filter:function(event,player){
                     if(!player.hasZhiShiWu('douQi')) return false;
                     if(event.customArgs.xuLiYiji) return false;
-                    return true;
+                    return event.yingZhan!=true;
                 },
                 content:function(){
                     'step 0'
@@ -7957,7 +7958,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     shangHai:{
                         trigger:{source:'zaoChengShangHai'},
                         filter:function(event,player){
-                            return player.isHengZhi()&&event.player.isHengZhi();
+                            return player.isHengZhi()&&event.player.isHengZhi()&&event.faShu!=true;
                         },
                         forced:true,
                         content:function(){

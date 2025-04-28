@@ -444,6 +444,34 @@ export class UI {
 			}
 		}
 	}
+	updatejm2(player, nodes, start, inv) {
+		if (typeof start != "number") {
+			start = 0;
+		}
+		var str;
+		if (get.is.mobileMe(player) || game.layout == "default" || player.classList.contains("linked")) {
+			str = "translateY(";
+			if (inv) {
+				str += "-";
+			}
+		} else {
+			str = "translateX(-";
+		}
+		var num = 0;
+		for (var i = 0; i < nodes.childElementCount; i++) {
+			var node = nodes.childNodes[i];
+			if (i < start) {
+				node.style.transform = "";
+			} else if (node.classList.contains("removing")) {
+				start++;
+			} else {
+				ui.refresh(node);
+				node.classList.remove("drawinghidden");
+				node._transform = str + (i - start) * 29 + "px)";
+				node.style.transform = node._transform;
+			}
+		}
+	}
 	updatem(player) {
 		if (player) {
 			var start = 0;
@@ -451,6 +479,8 @@ export class UI {
 				start = 1;
 			}
 			ui.updatejm(player, player.node.marks, start, get.is.mobileMe(player));
+			//marks2显示红蓝石和红蓝灯，因为无连环标故从0开始
+			ui.updatejm2(player, player.node.marks2, 0, get.is.mobileMe(player));
 		} else {
 			for (var i = 0; i < game.players.length; i++) {
 				ui.updatem(game.players[i]);

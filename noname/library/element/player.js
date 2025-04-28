@@ -57,6 +57,7 @@ export class Player extends HTMLDivElement {
 			equips: ui.create.div(".equips", player).hide(),
 			judges: ui.create.div(".judges", player),
 			marks: ui.create.div(".marks", player),
+			marks2: ui.create.div(".marks2", player),
 			chain: ui.create.div(".chain", "<div></div>", player),
 			handcards1: ui.create.div(".handcards"),
 			handcards2: ui.create.div(".handcards"),
@@ -2659,6 +2660,8 @@ export class Player extends HTMLDivElement {
 		if (this.storage.nohp) {
 			this.node.hp.hide();
 		}
+		//队伍彼边框显示
+		if(lib.config.border_style=='side') this.node.framebg.dataset.auto=this.side;
 
 		return this;
 	}
@@ -7923,7 +7926,10 @@ export class Player extends HTMLDivElement {
 				name = name.name;
 			} else {
 				node = ui.create.div(".card.mark.drawinghidden");
-				this.node.marks.insertBefore(node, this.node.marks.childNodes[1]);
+				//将能量和红蓝灯放到单独的marks2里显示
+				if(name=='_tiLian_baoShi'||name=='_tiLian_shuiJing'||(lib.skill[name] &&(lib.skill[name].markimage=='image/card/zhiShiWu/hong.png'||lib.skill[name].markimage=='image/card/zhiShiWu/lan.png'))){
+					this.node.marks2.appendChild(node);
+				}else this.node.marks.insertBefore(node, this.node.marks.childNodes[1]);
 				if (lib.skill[name] && lib.skill[name].markimage) {
 					node.setBackgroundImage(lib.skill[name].markimage);
 					node.style["box-shadow"] = "none";

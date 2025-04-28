@@ -720,7 +720,7 @@ function initSheet(libConfig) {
 		}
 		Reflect.get(ui, "css").player_stylesheet = lib.init.sheet("#window .player{background-image:" + str + "}");
 	}
-	if (libConfig.border_style && libConfig.border_style != "default" && libConfig.border_style != "custom" && libConfig.border_style != "auto") {
+	if (libConfig.border_style && libConfig.border_style != "default" && libConfig.border_style != "custom" && libConfig.border_style != "auto" && libConfig.border_style != "side") {
 		Reflect.get(ui, "css").border_stylesheet = lib.init.sheet();
 		var bstyle = libConfig.border_style;
 		if (bstyle.startsWith("dragon_")) {

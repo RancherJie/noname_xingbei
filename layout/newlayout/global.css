@@ -178,6 +178,7 @@
 	right: 5px;
 }
 .player .marks,
+.player .marks2,
 .player .judges {
 	width: 36px;
 	text-align: center;
@@ -186,6 +187,11 @@
 .player .marks {
 	left: -21px;
 	top: 5px;
+	height: auto;
+}
+.player .marks2 {
+	right: 25px;
+	bottom: 16px;
 	height: auto;
 }
 .player .judges {
@@ -254,7 +260,7 @@
 }
 .player .count {
 	top: auto;
-	bottom: 13px;
+	bottom: 25px;
 	left: 10px;
 	padding: 2px;
 	line-height: 20px;
@@ -333,6 +339,9 @@
 }
 .player.linked > .judges,
 .player.linked > .marks {
+	transform: rotate(90deg) translate(10px,-4px);
+}
+.player.linked > .marks2 {
 	transform: rotate(90deg) translateX(10px);
 }
 #arena[data-target_shake="shake"] .linked.target {
@@ -366,7 +375,7 @@
 
 .player.linked > .name {
 	transform-origin: top center;
-	transform: rotate(90deg) translate(132px, -96px);
+	transform: rotate(90deg) translate(-5px, -96px);
 }
 .player.linked > .name.name2 {
 	transform: rotate(90deg) translate(110px, -31px);

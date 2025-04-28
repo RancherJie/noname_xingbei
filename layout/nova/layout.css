@@ -286,7 +286,7 @@
 /*--------位置(6人)------*/
 #arena[data-number="6"] > .player[data-position="1"] {
 	top: calc(30% - 128px);
-	left: calc(100% - 130px);
+	left: calc(100% - 140px);
 }
 #arena[data-number="6"] > .player[data-position="2"] {
 	top: 0px;
@@ -307,7 +307,7 @@
 /*--------位置(5人)------*/
 #arena[data-number="5"] > .player[data-position="1"] {
 	top: calc(30% - 128px);
-	left: calc(100% - 120px);
+	left: calc(100% - 140px);
 }
 #arena[data-number="5"] > .player[data-position="2"] {
 	top: 0;
@@ -324,7 +324,7 @@
 /*--------位置(4人)------*/
 #arena[data-number="4"] > .player[data-position="1"] {
 	top: calc(30% - 128px);
-	left: calc(100% - 120px);
+	left: calc(100% - 140px);
 }
 #arena[data-number="4"] > .player[data-position="2"] {
 	top: 0;
