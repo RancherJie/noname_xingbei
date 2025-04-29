@@ -276,7 +276,7 @@ window.noname_skin_list =
 	nvWuShen:4,
 	qiDaoShi:2,
 	shengGong:1,
-	shenGuan:2,
+	shenGuan:3,
 	shenJianShou:2,
 	shouLingWuShi:1,
 	xueSeJianLing:1,
@@ -306,6 +306,5 @@ window.noname_skin_list =
 	zhuLvZhe:1,
 	jieJieShi:2,
 	shengTingJianChaShi:1,
-	shengGuang:1,
 	wenYiFaShi:1,
 };
