@@ -248,13 +248,13 @@ export const Content = {
 					let rawName = rawPairs[i],
 						newName = newPairs[i];
 					if (rawName != newName) {
-						game.log(player, `将${i == 0 ? "主" : "副"}将从`, `#b${get.translation(rawName)}`, "变更为了", `#b${get.translation(newName)}`);
+						game.log(player, `将${i == 0 ? "主" : "副"}角从`, `#b${get.translation(rawName)}`, "变更为了", `#b${get.translation(newName)}`);
 					}
 				}
 			} else if (rawPairs.length == 1 && newPairs.length == 2) {
-				game.log(player, "将单将", `#b${get.translation(rawPairs[0])}`, "变更为了双将", `#b${get.translation(newPairs[0])}+${get.translation(newPairs[1])}`);
+				game.log(player, "将单角", `#b${get.translation(rawPairs[0])}`, "变更为了双角", `#b${get.translation(newPairs[0])}+${get.translation(newPairs[1])}`);
 			} else if (rawPairs.length == 2 && newPairs.length == 1) {
-				game.log(player, "将双将", `#b${get.translation(rawPairs[0])}+${get.translation(rawPairs[1])}`, "变更为了单将", `#b${get.translation(newPairs[0])}`);
+				game.log(player, "将双角", `#b${get.translation(rawPairs[0])}+${get.translation(rawPairs[1])}`, "变更为了单角", `#b${get.translation(newPairs[0])}`);
 			}
 		}
 		//确定要失去和获得的技能
@@ -1092,7 +1092,8 @@ export const Content = {
 		}
 		player.group = group;
 		player.node.name.dataset.nature = get.groupnature(group);
-		if (event.log !== false) game.log(player, "将势力变为了", "#y" + get.translation(group + 2));
+		if (event.log !== false) game.log(player, "将势力变为了", "#y" + get.translation(group));
+		//if (event.log !== false) game.log(player, "将势力变为了", "#y" + get.translation(group + 2));
 	},
 	chooseToDebate: function () {
 		"step 0";

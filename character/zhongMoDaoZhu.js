@@ -558,12 +558,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         }
                     }
                     if(player.zhiLiao>0) await player.changeZhiLiao(-player.zhiLiao);
-                    game.broadcastAll(function(current){
-                        current.init('hongYiZhuJiao');
-                    },player);
-                    player.update();
-                    if(player.hasZhiShiWu('shengYiWu')) player.markSkill('shengYiWu');
-                    if(player.hasZhiShiWu('yinZhiZiDan')) player.markSkill('yinZhiZiDan');
+                    await player.reinitCharacter(player.name1,'hongYiZhuJiao');
                     player.addGongJi();
                 },
                 ai:{
@@ -705,12 +700,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             next.set('bool',list.length>1);
                             var control=await next.forResultControl();
                             if(control=='选项一'){
-                                game.broadcastAll(function(current){
-                                    current.init('hongYiZhuJiao');
-                                },player);
-                                player.update();
-                                if(player.hasZhiShiWu('shengYiWu')) player.markSkill('shengYiWu');
-                                if(player.hasZhiShiWu('yinZhiZiDan')) player.markSkill('yinZhiZiDan');
+                                await player.reinitCharacter(player.name1,'hongYiZhuJiao');
                             }else if(control=='选项二'){
                                 let list=[];
                                 for(let i=1;i<=player.countZhiShiWu('yinZhiZiDan');i++){
@@ -902,12 +892,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                     if(player.zhiLiao>0) await player.changeZhiLiao(-player.zhiLiao);
                     if(player.countCards('h')>4) player.chooseToDiscard('h',true,player.countCards('h')-4);
-                    game.broadcastAll(function(current){
-                        current.init('zhuLvZhe');
-                    },player);
-                    player.update();
-                    if(player.hasZhiShiWu('shengYiWu')) player.markSkill('shengYiWu');
-                    if(player.hasZhiShiWu('yinZhiZiDan')) player.markSkill('yinZhiZiDan');
+                    await player.reinitCharacter(player.name1,'zhuLvZhe');
                 },
                 ai:{
                     order:3.1,
@@ -1372,7 +1357,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     var xiBie2=get.xiBie(card);
                     if(xiBie==xiBie2){
                         await player.discard(card,'yuYan');
-                        await player.addZhanJi('baoShi');
+                        await player.addZhanJi('shuiJing');
                         await event.trigger('xianJi');
                     }
                     else{
@@ -1687,7 +1672,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             <span class="greentext">[被动]圣律威压</span><br>
             <span class='tiaoJian'>(此卡转移或放置到你面前是)</span>选择一下一项发动：<br>·<span class='tiaoJian'>(选择1张与此卡上牌种类相同的牌)</span>弃置之[展示]。<br>·摸2张牌[强制]，铸律者阵营士气-1。<span class='tiaoJian'>(若</span><span class='lan'>【圣遗物】</span><span class='tiaoJian'>数<1)</span>移除此卡。<br>
             <span class="greentext">[被动]神言咏赞</span><br>
-            <span class='tiaoJian'>(【圣律威压】结算完后)</span>将此卡转移到你右手边最近的玩家面前。<span class='tiaoJian'>(若因此转移至铸律者面前)</span>铸律者选择以下一项发动：<br>·将角色卡替换为【红衣主教】，然后移除此卡。<br>·<span class='tiaoJian'>(移除X点</span><span class='hong'>【银质子弹】</span><span class='tiaoJian'>，X<3)</span>目标角色摸X张牌[强制]，然后移除此卡。
+            <span class='tiaoJian'>(【圣律威压】结算完后)</span>将此卡转移到你右手边最近的玩家面前。<span class='tiaoJian'>(若因此转移至铸律者面前)</span>【铸律者】选择以下一项发动：<br>·将角色卡替换为【红衣主教】，然后移除此卡。<br>·<span class='tiaoJian'>(移除X点</span><span class='hong'>【银质子弹】</span><span class='tiaoJian'>，X<3)</span>目标角色摸X张牌[强制]，然后移除此卡。
             `,
             wangQuanBaoZhuX:'(专)王权宝珠',
             wangQuanBaoZhuX_shengLvWeiYa:'[被动]圣律威压',

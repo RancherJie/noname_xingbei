@@ -2495,7 +2495,7 @@ export class Player extends HTMLDivElement {
 		this.group = info.group;
 		this.hp = hp1;
 		this.maxHp = maxHp1;
-		this.zhiLiao = this.zhiLiao? this.zhiLiao : zhiLiao1;
+		this.zhiLiao = zhiLiao1;
 		this.node.intro.innerHTML = lib.config.intro;
 		this.node.name.dataset.nature = get.groupnature(this.group);
 		lib.setIntro(this);
@@ -7927,7 +7927,7 @@ export class Player extends HTMLDivElement {
 			} else {
 				node = ui.create.div(".card.mark.drawinghidden");
 				//将能量和红蓝灯放到单独的marks2里显示
-				if(name=='_tiLian_baoShi'||name=='_tiLian_shuiJing'||(lib.skill[name] &&(lib.skill[name].markimage=='image/card/zhiShiWu/hong.png'||lib.skill[name].markimage=='image/card/zhiShiWu/lan.png'))){
+				if(lib.config.separateEnergyAndMarkers&&(name=='_tiLian_baoShi'||name=='_tiLian_shuiJing'||(lib.skill[name] &&(lib.skill[name].markimage=='image/card/zhiShiWu/hong.png'||lib.skill[name].markimage=='image/card/zhiShiWu/lan.png')))){
 					this.node.marks2.appendChild(node);
 				}else this.node.marks.insertBefore(node, this.node.marks.childNodes[1]);
 				if (lib.skill[name] && lib.skill[name].markimage) {

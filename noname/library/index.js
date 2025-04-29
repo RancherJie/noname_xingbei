@@ -3227,6 +3227,15 @@ export class Library {
 					init: false,
 					unfrequent: true,
 				},
+				separateEnergyAndMarkers: {
+					name: "独立显示能量和红蓝专属",
+					init: false,
+					intro: "开启后将角色能量和红蓝专属指示物单独显示在角色下方",
+					onclick(bool) {
+						game.saveConfig("separateEnergyAndMarkers", bool);
+						lib.init.background();
+					},
+				},
 				card_animation_info: {
 					name: "卡牌动画信息(Beta)",
 					intro: "开启后会在卡牌动画中显示一些信息来源并启用虚拟牌动画(Beta测试功能，如遇异常可关闭该功能)",

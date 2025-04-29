@@ -139,9 +139,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     if(card){
                         player.storage[name]=true;
                         card.storage.renMaster=player;
-                        game.broadcastAll(function(card){
-                            card.$init([card.storage.xiBie,'xue',card.name])
-                        },card);
+                        game.broadcastAll(function(card,xiBie){
+                            card.storage.xiBie=xiBie;
+                            card.$init([xiBie,'xue',card.name])
+                        },card,card.storage.xiBie);
                     }
                     return card;
                 },
@@ -247,9 +248,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             if(card.storage.xiBie=='lei') card.storage.xiBie='feng';
                             else card.storage.xiBie='lei';
                         }
-                        game.broadcastAll(function(card){
-                            card.$init([card.storage.xiBie,'xue',card.name])
-                        },card);
+                        game.broadcastAll(function(card,xiBie){
+                            card.storage.xiBie=xiBie;
+                            card.$init([xiBie,'xue',card.name])
+                        },card,card.storage.xiBie);
                     }
                 },
                 subSkill: {

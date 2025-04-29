@@ -787,8 +787,9 @@ export default () => {
 					}else if(team_sequence=='crossed'){
 						list=[true,false,true,false];
 					}else{
-						list=[true,false,false,true];
+						list=[false,false,true];
 						list.randomSort();
+						list.unshift(true);
 					}
 				}else if(number==6){
 					if(team_sequence=='CM'){
@@ -798,12 +799,14 @@ export default () => {
 					}else if(team_sequence=='crossed'){
 						list=[true,false,true,false,true,false];
 					}else{
-						list=[true,true,true,false,false,false];
+						list=[true,true,false,false,false];
 						list.randomSort();
+						list.unshift(true);
 					}
 				}else if(number==8){
-					list=[true,true,true,false,false,false,true,false];
+					list=[true,true,false,false,false,true,false];
 					list.randomSort();
+					list.unshift(true);
 				}
 				return list;
 			},
