@@ -1,8 +1,42 @@
-window.noname_asset_list =
+window.noname_asset_list=
 [
 	"v1.1.2",
 	"audio/background/music_default.mp3",
 	"audio/card/default.mp3",
+	'audio/card/anMie.mp3',
+	'audio/card/diLieZhan.mp3',
+	'audio/card/huoYanZhan.mp3',
+	'audio/card/leiGuangZhan.mp3',
+	'audio/card/moDan.mp3',
+	'audio/card/shengDun.mp3',
+	'audio/card/shengGuang.mp3',
+	'audio/card/shuiLianZhan.mp3',
+	'audio/card/xuRuo.mp3',
+	'audio/card/zhongDu.mp3',	
+	'audio/effect/lose.mp3',
+	'audio/effect/phaseStart.mp3',
+	'audio/effect/throw_egg1.mp3',
+	'audio/effect/throw_egg2.mp3',
+	'audio/effect/throw_flower1.mp3',
+	'audio/effect/throw_flower2.mp3',
+	'audio/effect/throw_shoe1.mp3',
+	'audio/effect/throw_shoe2.mp3',
+	'audio/effect/throw_wine1.mp3',
+	'audio/effect/throw_wine2.mp3',
+	'audio/effect/tie.mp3',
+	'audio/effect/win.mp3',
+	'audio/effect/damage.mp3',
+	'audio/effect/damage2.mp3',
+	'audio/effect/discard.mp3',
+	'audio/effect/draw.mp3',
+	'audio/effect/drawx.mp3',
+	'audio/effect/heal.mp3',
+	'audio/effect/judge.mp3',
+	'audio/effect/link.mp3',
+	'audio/effect/link_clear.mp3',
+	'audio/skill/_gouMai.mp3',
+	'audio/skill/_heCheng.mp3',
+	'audio/skill/_tiLian.mp3',
 	"audio/voice/female/0.mp3",
 	"audio/voice/female/1.mp3",
 	"audio/voice/female/10.mp3",
@@ -259,7 +293,7 @@ window.noname_asset_list =
 	"image/splash/style2/tutorial.jpg",
 
 ];
-window.noname_skin_list =
+window.noname_skin_list=
 {
 	fengZhiJianSheng:1,
 	cangYanMoNv:2,

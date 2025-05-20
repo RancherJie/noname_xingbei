@@ -207,6 +207,7 @@ export const startMenuData = {
 const connectDisplayMap = {
 	connect_player_number: null,
 	connect_versus_mode: null,
+	connect_phaseswap: null,
 };
 
 const updateConnectDisplayMap = function () {
@@ -216,6 +217,9 @@ const updateConnectDisplayMap = function () {
 		}
 		if (connectDisplayMap.connect_versus_mode) {
 			connectDisplayMap.connect_versus_mode.style.display = "none";
+		}
+		if (connectDisplayMap.connect_phaseswap) {
+			connectDisplayMap.connect_phaseswap.style.display = "none";
 		}
 	}
 };

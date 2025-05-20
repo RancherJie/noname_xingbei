@@ -3522,13 +3522,15 @@ export const Content = {
 			return false;
 		};
 		if (info.direct) {
-			if (player.isUnderControl()) game.swapPlayerAuto(player);
+			if(_status.connectMode&&lib.configOL.phaseswap) game.swapPlayerAuto(player);
+			if (!_status.connectMode&&player.isUnderControl()) game.swapPlayerAuto(player);
 			if (player.isOnline()) void 0;
 			event._result = { bool: true };
 			event._direct = true;
 		} else if (typeof info.cost === "function") {
 			if (checkFrequent(info)) event.frequentSkill = true;
-			if (player.isUnderControl()) game.swapPlayerAuto(player);
+			if(_status.connectMode&&lib.configOL.phaseswap) game.swapPlayerAuto(player);
+			if(!_status.connectMode&&player.isUnderControl()) game.swapPlayerAuto(player);
 			//创建cost事件
 			var next = game.createEvent(`${event.skill}_cost`);
 			next.player = player;
@@ -4205,6 +4207,13 @@ export const Content = {
 			player.getStat().isMe = true;
 		}
 		'step 2';
+		if(player==game.me){
+			game.playAudio('effect', 'phaseStart');	
+		}else{
+			player.send(function(){
+				game.playAudio('effect', 'phaseStart');
+			});
+		}
 		event.trigger("phaseBefore");
 		'step 3';
 		//回合开始后
@@ -4567,8 +4576,9 @@ export const Content = {
 	chooseToUse: function () {
 		"step 0";
 		if (event.responded) return;
-		if (game.modeSwapPlayer && !_status.auto && player.isUnderControl() && !lib.filter.wuxieSwap(event)) {
-			game.modeSwapPlayer(player);
+		if(_status.connectMode&&lib.configOL.phaseswap) game.swapPlayerAuto(player);
+		if (!_status.connectMode && !_status.auto && player.isUnderControl()) {
+			game.swapPlayerAuto(player);
 		}
 		var skills = player.getSkills("invisible").concat(lib.skill.global);
 		game.expandSkills(skills);
@@ -4858,8 +4868,9 @@ export const Content = {
 		if (!_status.connectMode && lib.config.skip_shan && event.autochoose && event.autochoose()) {
 			event.result = { bool: false };
 		} else {
-			if (game.modeSwapPlayer && !_status.auto && player.isUnderControl()) {
-				game.modeSwapPlayer(player);
+			if(_status.connectMode&&lib.configOL.phaseswap) game.swapPlayerAuto(player);
+			if (!_status.connectMode&&!_status.auto && player.isUnderControl()) {
+				game.swapPlayerAuto(player);
 			}
 			if (event.isMine()) {
 				if (event.hsskill && !event.forced && _status.prehidden_skills.includes(event.hsskill)) {
@@ -5338,8 +5349,9 @@ export const Content = {
 		}
 		else{
 			// &&!lib.filter.wuxieSwap(trigger)
-			if(game.modeSwapPlayer&&!_status.auto&&player.isUnderControl()){
-				game.modeSwapPlayer(player);
+			if(_status.connectMode&&lib.configOL.phaseswap) game.swapPlayerAuto(player);
+			if(!_status.connectMode&&!_status.auto&&player.isUnderControl()){
+				game.swapPlayerAuto(player);
 			}
 			event.rangecards=player.getCards(event.position);
 			for(var i=0;i<event.rangecards.length;i++){
@@ -11957,6 +11969,9 @@ export const Content = {
 		'step 0'
 		player.zhiLiao+=num;
 		if(num>=0){
+			game.broadcastAll(function(){
+				game.playAudio("effect", "heal");
+			});
 			if(event.yiChu==true){
 				if(event.source) game.log(event.source,'使',player,'获得了'+num+'点','[治疗]','，','[治疗]','溢出');
 				else game.log(player,'获得了'+num+'点','[治疗]','，','[治疗]','溢出');

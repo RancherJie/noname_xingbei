@@ -955,12 +955,12 @@ export const otherMenu = function (/** @type { boolean | undefined } */ connectM
 										ui.click.auto();
 										setTimeout(function () {
 											ui.click.auto();
-											game.swapPlayer(target);
+											game.swapPlayerAuto(target);
 										}, 500);
 									});
 								}
 							} else {
-								game.swapPlayer(target);
+								game.swapPlayerAuto(target);
 							}
 							break;
 						}

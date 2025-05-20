@@ -2826,6 +2826,9 @@ export class Player extends HTMLDivElement {
 				else str += '人数：<span class="firetext">' + this.hp + "/" + this.maxHp + "</span>";
 
 				str += "　(" + info[0].slice(0, 12) + " 的房间)";
+				if(info[2].remark && info[2].remark!='无'){
+					str+=`备注[${info[2].remark}]`;
+				}
 				/*
 				if (config.mode != "guozhan" && (config.mode != "doudizhu" || config.doudizhu_mode != "online")) {
 					str += "【";
@@ -2846,10 +2849,6 @@ export class Player extends HTMLDivElement {
 						if(i<config.characterPack.length-1) str+='+';
 					}
 					str+='】';
-				}
-
-				if(info[2].remark && info[2].remark!='无'){
-					str+=`备注[${info[2].remark}]`;
 				}
 
 				this.config = config;
@@ -9849,14 +9848,19 @@ export class Player extends HTMLDivElement {
 			return false;
 		}
 		if (that === me || this == me._trueMe) return true;
-		if (_status.connectMode) return false;
+		//if (_status.connectMode) return false;
 		//if (lib.config.mode == "versus") {
-		if (lib.config.mode == "xingBei") {
-			return get.config("phaseswap") && this.side == me.side;
-		} else if (lib.config.mode == "boss") {
-			if (me.side) return false;
-			return this.side == me.side && get.config("single_control");
+		if(_status.connectMode){
+			return lib.configOL.phaseswap && this.side == me.side;
+		}else{
+			if (lib.config.mode == "xingBei") {
+				return (get.config("phaseswap")) && this.side == me.side;
+			} else if (lib.config.mode == "boss") {
+				if (me.side) return false;
+				return this.side == me.side && get.config("single_control");
+			}
 		}
+		
 		return false;
 	}
 	isOnline() {

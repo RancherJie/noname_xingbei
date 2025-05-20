@@ -315,9 +315,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         },
                         content: async function(event, trigger, player){
                             trigger.cards.remove(event.indexedData);
-                            event.indexedData.fix();
-                            event.indexedData.remove();
-                            event.indexedData.destroyed = true;
+                            game.broadcastAll(function(card){
+                                card.fix();
+                                card.remove();
+                                card.destroyed = true;
+                            }, event.indexedData);
                             game.log(event.indexedData, "被移除了");
                         }
                     },
@@ -1034,7 +1036,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }else if(h_num==0){
                         await player.draw();
                     }
-                    var cards1=await player.chooseToDiscard('h',true,1,'showCards').set('selfSkil',true).set('shiFeng',true).forResultCards();
+                    var cards1=await player.chooseToDiscard('h',true,1,'showCards').set('selfSkil',true).set('shiFeng',false).forResultCards();
                     await player.addZhiShiWu('qianCheng',1);
                     var cards2=await player.storage.luBiaoTarget.chooseToDiscard('h',true,1,'showCards').forResultCards();
                     if(cards2.length>0){
@@ -1087,13 +1089,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
             },
             shiFeng:{
-                trigger:{global:['loseAfter','chuanDao']},
+                trigger:{player:['loseAfter','chuanDao','misa']},
                 filter:function (event,player,name){
                     if(name=='loseAfter'){
                         if (event.type != "discard") return false;
-                        if(event.getParent('chooseToDiscard').shiFeng==true) return false;
+                        if(event.getParent('chooseToDiscard').shiFeng==false) return false;
                         return player.zhiLiao>0&&event.getParent('chooseToDiscard').selfSkil&&get.position(event.cards[0], true) === "d";
-                    }else if(name=='chuanDao'){
+                    }else if(name=='chuanDao' || name=='misa'){
                         return player.zhiLiao>0&&event.cards.length>0;
                     }
                 },
@@ -1209,7 +1211,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     var control=await next.forResultControl();
                     if(control=='选项一'){
                         if(player.countCards('h')==0) return;
-                        var cards=await player.chooseToDiscard('h','showCards',1,true).set('selfSkil',true).set('ai',function(card){
+                        var cards=await player.chooseToDiscard('h','showCards',1,true).set('selfSkil',true).set('shiFeng',false).set('ai',function(card){
                             var player=_status.event.player;
                             if(player.side==player.storage.luBiaoTarget.side){
                                 if(get.name(card)=='shengDun') return 1;
@@ -1224,7 +1226,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         if(((name=='xuRuo'||name=='shengDun')&&player.storage.luBiaoTarget.getExpansions("_"+name).length==0)||name=='zhongDu'){
                             await player.storage.luBiaoTarget.addToExpansion(cards,player,'gain2').set('gaintag',["_"+name]);
                             if(name=='zhongDu') player.storage.luBiaoTarget.storage.zhongDu.push(player);
+                            cards=[];
                         }
+                        event.cards=cards;
+                        await event.trigger('miSa');
                     }else if(control=='选项二'){
                         await player.gainJiChuXiaoGuo(player.storage.luBiaoTarget);
                         await player.addZhiShiWu('qianCheng',1);

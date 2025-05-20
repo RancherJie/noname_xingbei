@@ -3829,6 +3829,7 @@ export class Game extends GameCompatible {
 				} else {
 					player.removeLink();
 				}
+				ui.updatem(player);
 			} else {
 				console.log(player);
 			}
@@ -6594,43 +6595,101 @@ export class Game extends GameCompatible {
 	/**
 	 * @param { Player } player
 	 */
-	swapControl(player) {
-		if (player == game.me) return;
-
-		game.me.node.handcards1.remove();
-		game.me.node.handcards2.remove();
-
-		game.me = player;
-		ui.handcards1 = player.node.handcards1.addTempClass("start").fix();
-		ui.handcards2 = player.node.handcards2.addTempClass("start").fix();
-		ui.handcards1Container.insertBefore(ui.handcards1, ui.handcards1Container.firstChild);
-		ui.handcards2Container.insertBefore(ui.handcards2, ui.handcards2Container.firstChild);
-		ui.updatehl();
-		game.addVideo("swapControl", player, get.cardsInfo(player.getCards("h")));
-
-		if (game.me.isAlive()) {
-			if (ui.auto) ui.auto.show();
-			if (ui.wuxie) ui.wuxie.show();
-			if (ui.revive) {
-				ui.revive.close();
-				delete ui.revive;
+	swapControl(player,from) {
+		if(_status.connectMode && player.side!=game.me.side){
+			if(!from){
+				var from=game.filterPlayer(function(current){return current.side==player.side&&current.isOnline()});
+				if(from.length>0){
+					from=from[0];
+					if(from==player) return;
+				}else return;
 			}
-			if (ui.swap) {
-				ui.swap.close();
-				delete ui.swap;
-			}
-			if (ui.restart) {
-				ui.restart.close();
-				delete ui.restart;
-			}
-			if (ui.continue_game) {
-				ui.continue_game.close();
-				delete ui.continue_game;
+
+			from.send(function(player){
+				if(!ui.fakeme) return;
+				if (player == game.me) return;
+				game.me.node.handcards1.remove();
+				game.me.node.handcards2.remove();
+				
+				game.me = player;
+				ui.handcards1 = player.node.handcards1.addTempClass("start").fix();
+				ui.handcards2 = player.node.handcards2.addTempClass("start").fix();
+				ui.handcards1Container.insertBefore(ui.handcards1, ui.handcards1Container.firstChild);
+				ui.handcards2Container.insertBefore(ui.handcards2, ui.handcards2Container.firstChild);
+				ui.updatehl();
+		
+				if (game.me.isAlive()) {
+					if (ui.auto) ui.auto.show();
+					if (ui.revive) {
+						ui.revive.close();
+						delete ui.revive;
+					}
+					if (ui.swap) {
+						ui.swap.close();
+						delete ui.swap;
+					}
+					if (ui.restart) {
+						ui.restart.close();
+						delete ui.restart;
+					}
+					if (ui.continue_game) {
+						ui.continue_game.close();
+						delete ui.continue_game;
+					}
+				}
+			},player);
+
+			var ws=player.ws;
+			player.ws=from.ws;
+			from.ws=ws;
+			var formid=from.playerid;
+			var playerid=player.playerid;
+
+			game.broadcastAll(function(player,form,formid,playerid){
+				player.playerid = formid;
+				form.playerid = playerid;
+
+				lib.playerOL[formid] = player;
+				lib.playerOL[playerid] = form;
+			},player,from,formid,playerid);
+		}else{
+			if (player == game.me) return;
+
+			game.me.node.handcards1.remove();
+			game.me.node.handcards2.remove();
+	
+			game.me = player;
+			ui.handcards1 = player.node.handcards1.addTempClass("start").fix();
+			ui.handcards2 = player.node.handcards2.addTempClass("start").fix();
+			ui.handcards1Container.insertBefore(ui.handcards1, ui.handcards1Container.firstChild);
+			ui.handcards2Container.insertBefore(ui.handcards2, ui.handcards2Container.firstChild);
+			ui.updatehl();
+			game.addVideo("swapControl", player, get.cardsInfo(player.getCards("h")));
+	
+			if (game.me.isAlive()) {
+				if (ui.auto) ui.auto.show();
+				if (ui.revive) {
+					ui.revive.close();
+					delete ui.revive;
+				}
+				if (ui.swap) {
+					ui.swap.close();
+					delete ui.swap;
+				}
+				if (ui.restart) {
+					ui.restart.close();
+					delete ui.restart;
+				}
+				if (ui.continue_game) {
+					ui.continue_game.close();
+					delete ui.continue_game;
+				}
 			}
 		}
 	}
 	swapPlayerAuto(player) {
 		if (game.modeSwapPlayer) {
+			//debugger
 			game.modeSwapPlayer(player);
 		} else {
 			game.swapPlayer(player);

@@ -5149,7 +5149,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         },
                         prompt:get.prompt('tiShenWanOu'),
                         prompt2:lib.translate.tiShenWanOu_info,
-                        ai:function(target){
+                        ai1:function(card){
+                            return 6-get.value(card);
+                        },
+                        ai2:function(target){
                             if(target.getHandcardLimit()-target.countCards('h')>=1){
                                 return 1;
                             }else{
@@ -8468,7 +8471,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     if(player.isHengZhi()&&player.storage.tongShengGongSi_target.side==player.side) return false;
                     if(!(player.canGongJi()||player.canFaShu())) return false;
                     var minus=player.getHandcardLimit()-player.countCards('h');
-                    return minus>=1;
+                    return minus>=2;
                 }
             },
             liuXue:{

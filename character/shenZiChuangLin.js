@@ -131,18 +131,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     var card;
                     if(name=='moRen'){
                         card=game.createCard("moRen", "", '');
-                        card.storage.xiBie='huo';
                     }else if(name=='yiRen'){
                         card=game.createCard("yiRen", "", '');
-                        card.storage.xiBie='lei';
                     }
                     if(card){
                         player.storage[name]=true;
                         card.storage.renMaster=player;
-                        game.broadcastAll(function(card,xiBie){
-                            card.storage.xiBie=xiBie;
-                            card.$init([xiBie,'xue',card.name])
-                        },card,card.storage.xiBie);
                     }
                     return card;
                 },
@@ -242,16 +236,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 contentx: function(){
                     for(var card of event.cards){
                         if(card.name=='moRen'){
-                            if(card.storage.xiBie=='huo') card.storage.xiBie='shui';
-                            else card.storage.xiBie='huo';
+                            if(card.gaintag[0]=='huo') player.addGaintag([card],['shui']);
+                            else player.addGaintag([card],['huo']);
                         }else if(card.name=='yiRen'){
-                            if(card.storage.xiBie=='lei') card.storage.xiBie='feng';
-                            else card.storage.xiBie='lei';
+                            if(card.storage.xiBie=='lei') player.addGaintag([card],['feng']);
+                            else player.addGaintag([card],['lei']);
                         }
-                        game.broadcastAll(function(card,xiBie){
-                            card.storage.xiBie=xiBie;
-                            card.$init([xiBie,'xue',card.name])
-                        },card,card.storage.xiBie);
                     }
                 },
                 subSkill: {
@@ -265,10 +255,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                 if(card.name=='moRen'||card.name=='yiRen') return 'xue';
                             },
                             cardXiBie:function(card,player,xiBie){
-                                if(card.name=='moRen'||card.name=='yiRen') return card.storage.xiBie;
+                                if(card.name=='moRen'||card.name=='yiRen') return card.gaintag[0];
                             },
                         },
-                    },              
+                    },        
                     biaoJi:{
                         intro: {
                             mark:function(dialog,storage,player){
@@ -284,13 +274,21 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                 return num;
                             },
                         },
-                        trigger: {player:['loseAfter','gainAfter']},
+                        trigger: {player:['loseAfter','gainAfter'],source:'gainAfter'},
                         direct: true,
                         content: function(){
                             if(player.hasCard(function(card){
                                 return card.name=='moRen'||card.name=='yiRen';
                             })){
                                 player.markSkill('ren_biaoJi');
+                                if(trigger.name=='gain'&&trigger.player==player){
+                                    for(let card of trigger.cards){
+                                        if(!card.gaintag.length){
+                                            if(card.name=='moRen') player.addGaintag([card],['huo']);
+                                            else if(card.name=='yiRen') player.addGaintag([card],['lei']);
+                                        }
+                                    }
+                                }
                             }else{
                                 player.unmarkSkill('ren_biaoJi');
                             }
@@ -312,6 +310,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         content: function(){
                             var next=game.createEvent('zhuanHuan');
                             next.cards=cards;
+                            next.player=player;
                             next.setContent(lib.skill.ren.contentx);
                             if(_status.currentPhase==player){
                                 player.storage[event.getParent('phaseUse').xingDong]++;
@@ -358,6 +357,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         content: function(){
                             var next=game.createEvent('zhuanHuan');
                             next.cards=event.cards;
+                            next.player=player;
                             next.setContent(lib.skill.ren.contentx);
                         },
                     },
@@ -392,9 +392,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             'step 1'
                             let name=get.name(event.indexedData);
                             event.indexedData.storage.renMaster.storage[name]=false;
-                            event.indexedData.fix();
-                            event.indexedData.remove();
-                            event.indexedData.destroyed = true;
+                            game.broadcastAll(function(card){
+                                card.fix();
+                                card.remove();
+                                card.destroyed = true;
+                            },event.indexedData);
                             game.log(event.indexedData, "被移除了");
                         },
                     },
@@ -428,9 +430,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             'step 1'
                             let name=get.name(event.indexedData);
                             event.indexedData.storage.renMaster.storage[name]=false;
-                            event.indexedData.fix();
-                            event.indexedData.remove();
-                            event.indexedData.destroyed = true;
+                            game.broadcastAll(function(card){
+                                card.fix();
+                                card.remove();
+                                card.destroyed = true;
+                            },event.indexedData);
                             game.log(event.indexedData, "被移除了");
                         },
                     },

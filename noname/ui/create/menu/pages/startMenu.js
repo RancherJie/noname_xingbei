@@ -165,6 +165,7 @@ export const startMenu = function (connectMenu) {
 		var connectDisplayMap = {
 			connect_player_number: null,
 			connect_versus_mode: null,
+			connect_phaseswap: null,
 		};
 		var updateConnectDisplayMap = function () {
 			if (_status.waitingForPlayer) {
@@ -173,6 +174,9 @@ export const startMenu = function (connectMenu) {
 				}
 				if (connectDisplayMap.connect_versus_mode) {
 					connectDisplayMap.connect_versus_mode.style.display = "none";
+				}
+				if(connectDisplayMap.connect_phaseswap) {
+					connectDisplayMap.connect_phaseswap.style.display = "none";
 				}
 			}
 		};
