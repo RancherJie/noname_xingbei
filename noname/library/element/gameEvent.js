@@ -894,7 +894,7 @@ export class GameEvent {
 					player.removeSkill(skill);
 				});
 
-			if (lib.config.compatiblemode) {
+			if (lib.config.compatiblemode || get.phaseswap()) {
 				doing.addList(
 					game.expandSkills(player.getSkills("invisible").concat(lib.skill.global)).filter(skill => {
 						const info = get.info(skill);

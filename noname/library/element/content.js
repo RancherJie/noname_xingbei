@@ -3522,15 +3522,13 @@ export const Content = {
 			return false;
 		};
 		if (info.direct) {
-			if(_status.connectMode&&lib.configOL.phaseswap) game.swapPlayerAuto(player);
-			if (!_status.connectMode&&player.isUnderControl()) game.swapPlayerAuto(player);
+			if(get.phaseswap()) game.swapPlayerAuto(player);
 			if (player.isOnline()) void 0;
 			event._result = { bool: true };
 			event._direct = true;
 		} else if (typeof info.cost === "function") {
 			if (checkFrequent(info)) event.frequentSkill = true;
-			if(_status.connectMode&&lib.configOL.phaseswap) game.swapPlayerAuto(player);
-			if(!_status.connectMode&&player.isUnderControl()) game.swapPlayerAuto(player);
+			if(get.phaseswap()) game.swapPlayerAuto(player);
 			//创建cost事件
 			var next = game.createEvent(`${event.skill}_cost`);
 			next.player = player;
@@ -4190,6 +4188,8 @@ export const Content = {
 			game.getGlobalHistory().isRound = true;
 		}
 		"step 1";
+		if(get.phaseswap()) game.swapPlayerAuto(player);
+
 		//规则集中的“回合开始后⑤”，进行翻面检测
 		if (player.isTurnedOver() && !event._noTurnOver) {
 			player.turnOver();
@@ -4576,10 +4576,8 @@ export const Content = {
 	chooseToUse: function () {
 		"step 0";
 		if (event.responded) return;
-		if(_status.connectMode&&lib.configOL.phaseswap) game.swapPlayerAuto(player);
-		if (!_status.connectMode && !_status.auto && player.isUnderControl()) {
-			game.swapPlayerAuto(player);
-		}
+		if(get.phaseswap()) game.swapPlayerAuto(player);
+
 		var skills = player.getSkills("invisible").concat(lib.skill.global);
 		game.expandSkills(skills);
 		for (var i = 0; i < skills.length; i++) {
@@ -4868,10 +4866,8 @@ export const Content = {
 		if (!_status.connectMode && lib.config.skip_shan && event.autochoose && event.autochoose()) {
 			event.result = { bool: false };
 		} else {
-			if(_status.connectMode&&lib.configOL.phaseswap) game.swapPlayerAuto(player);
-			if (!_status.connectMode&&!_status.auto && player.isUnderControl()) {
-				game.swapPlayerAuto(player);
-			}
+			if(get.phaseswap()) game.swapPlayerAuto(player);
+
 			if (event.isMine()) {
 				if (event.hsskill && !event.forced && _status.prehidden_skills.includes(event.hsskill)) {
 					ui.click.cancel();
@@ -5349,10 +5345,8 @@ export const Content = {
 		}
 		else{
 			// &&!lib.filter.wuxieSwap(trigger)
-			if(_status.connectMode&&lib.configOL.phaseswap) game.swapPlayerAuto(player);
-			if(!_status.connectMode&&!_status.auto&&player.isUnderControl()){
-				game.swapPlayerAuto(player);
-			}
+			if(get.phaseswap()) game.swapPlayerAuto(player);
+
 			event.rangecards=player.getCards(event.position);
 			for(var i=0;i<event.rangecards.length;i++){
 				if(lib.filter.cardDiscardable(event.rangecards[i],player,event)){
@@ -8470,9 +8464,10 @@ export const Content = {
 				player.tryCardAnimate(card, event.card.name, "metal");
 			}
 		}
-		if (event.audio === false) {
+		if (event.audio === false || event.getParent().name=='useSkill') {
 			cardaudio = false;
 		}
+		/*
 		if (cardaudio)
 			game.broadcastAll(
 				(player, card) => {
@@ -8480,7 +8475,7 @@ export const Content = {
 				},
 				player,
 				card
-			);
+			);*/
 		event.id = get.id();
 		if (typeof event.customArgs != "object") event.customArgs = { };
 		if (typeof event.damageNum != "number") event.damageNum = get.info(card, false).damageNum || 2;
@@ -8584,6 +8579,32 @@ export const Content = {
 			event.type='faShu';
 		}else if(card.name=='shengGuang'){
 			event.type='shengGuang';
+		}
+		if (cardaudio){
+			if(type=='gongJi'){
+				let xiBie=get.xiBie(card);
+				let audio;
+				switch(xiBie){
+					case 'shui':audio='atk_shui';break;
+					case 'huo':audio='atk_huo';break;
+					case 'feng':audio='atk_feng';break;
+					case 'an':audio='atk_an';break;
+					case 'lei':audio='atk_lei';break;
+					case 'di':audio='atk_di';break;
+				}
+				game.broadcastAll(function(audio){
+					if(lib.config.background_audio){
+						game.playAudio('card',audio);
+					}
+				},audio);
+			}else{
+				game.broadcastAll(
+					(player, card) => {
+						game.playCardAudio(card, player);
+					},
+					player,
+					card);
+			}
 		}
 		"step 1";
 		if(event.type=='gongJi' || event.type=='faShu'){

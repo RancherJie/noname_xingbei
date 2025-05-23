@@ -50,6 +50,16 @@ export class Game extends GameCompatible {
 	nengLiangMax=3;
 
 	$initZhanJi(){
+		if(_status.connectMode){
+			game.shiQiMax=parseInt(lib.configOL.shiQiMax)||game.shiQiMax;
+			game.zhanJiMax=parseInt(lib.configOL.zhanJiMax)||game.zhanJiMax;
+			game.xingBeiMax=parseInt(lib.configOL.xingBeiMax)||game.xingBeiMax;
+		}else{
+			game.shiQiMax=parseInt(get.config('shiQiMax'))||game.shiQiMax;
+			game.zhanJiMax=parseInt(get.config('zhanJiMax'))||game.zhanJiMax;
+			game.xingBeiMax=parseInt(get.config('xingBeiMax'))||game.xingBeiMax;
+		}
+
 		game.broadcastAll(function(){
 			ui.shiQiInfo=ui.create.div('.touchinfo.bottom-right',ui.window);
 		});
@@ -6638,22 +6648,9 @@ export class Game extends GameCompatible {
 					}
 				}
 			},player);
-
-			var ws=player.ws;
-			player.ws=from.ws;
-			from.ws=ws;
-			var formid=from.playerid;
-			var playerid=player.playerid;
-
-			game.broadcastAll(function(player,form,formid,playerid){
-				player.playerid = formid;
-				form.playerid = playerid;
-
-				lib.playerOL[formid] = player;
-				lib.playerOL[playerid] = form;
-			},player,from,formid,playerid);
 		}else{
 			if (player == game.me) return;
+			if(!from) var from=game.me;
 
 			game.me.node.handcards1.remove();
 			game.me.node.handcards2.remove();
@@ -6686,6 +6683,30 @@ export class Game extends GameCompatible {
 				}
 			}
 		}
+		
+
+		if(_status.connectMode){
+			var ws=player.ws;
+			player.ws=from.ws;
+			from.ws=ws;
+			var formid=from.playerid;
+			var playerid=player.playerid;
+			var playerNickname=player.nickname;
+			var fromNickname=from.nickname;
+
+			game.broadcastAll(function(player,form,formid,playerid,playerNickname,fromNickname){
+				player.playerid = formid;
+				form.playerid = playerid;
+
+				lib.playerOL[formid] = player;
+				lib.playerOL[playerid] = form;
+
+				player.nickname=fromNickname;
+				form.nickname=playerNickname;
+				player.setNickname();
+				form.setNickname();
+			},player,from,formid,playerid,playerNickname,fromNickname);	
+			}
 	}
 	swapPlayerAuto(player) {
 		if (game.modeSwapPlayer) {

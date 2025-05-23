@@ -239,7 +239,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             if(card.gaintag[0]=='huo') player.addGaintag([card],['shui']);
                             else player.addGaintag([card],['huo']);
                         }else if(card.name=='yiRen'){
-                            if(card.storage.xiBie=='lei') player.addGaintag([card],['feng']);
+                            if(card.gaintag[0]=='lei') player.addGaintag([card],['feng']);
                             else player.addGaintag([card],['lei']);
                         }
                     }

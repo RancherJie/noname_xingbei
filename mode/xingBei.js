@@ -1364,7 +1364,7 @@ export default () => {
 					event.blue_chooseList = [];
 
 					var createDialog = function (list, id, list1, list2) {
-						var dialog = ui.create.dialog("Ban角色1名", [list, "characterx"]);
+						var dialog = ui.create.dialog("Ban角色1名", [list, "character"]);
 						dialog.classList.add("fullwidth");
 						dialog.classList.add("fullheight");
 						dialog.classList.add("noslide");
@@ -1454,8 +1454,7 @@ export default () => {
 					game.log(str,'Ban',result.links);
 
 					for(var i=0;i<result.links.length;i++){
-						var index=event.list.indexOf(result.links[i]);
-						if(index!=-1) event.list.splice(index,1);
+						event.list.remove(result.links[i]);
 					}
 					if(event.choosing==game.blue_leader){
 						event.choosing=game.red_leader;
@@ -1570,8 +1569,19 @@ export default () => {
 						}else{
 							event.red_ban=true;
 						}
+						var list=result.links.slice();
+						for(var link of list){
+							if(lib.characterReplace[link]){
+								for(var character of lib.characterReplace[link]){
+									if(!result.links.includes(character)){
+										result.links.push(character);
+									}
+								}
+							}
+						}
+
 						game.broadcastAll(
-							function (link, choosing,id,choosed) {
+							function (links, choosing,id,choosed) {
 								var dialog = get.idDialog(id);
 								if (dialog) {
 									var str;
@@ -1583,24 +1593,24 @@ export default () => {
 										str=`，<span style="color:red;">红方</span>队长为${choosed}选择角色`;
 									}
 									dialog.content.firstChild.innerHTML =
-										choosing + "Ban了" + get.translation(link)+str;
+										choosing + "Ban了" + get.translation(links)+str;
 
 									//console.log(dialog.content.firstChild.innerHTML);
 
 									for (var i = 0; i < dialog.buttons.length; i++) {
-										if (dialog.buttons[i].link == link) {
+										if(links.includes(dialog.buttons[i].link)){
 											dialog.buttons[i].classList.add("glow2");
 										}
 									}
 								}
 							},
-							result.links[0],
+							result.links,
 							event.choosing,
 							event.videoId,
 							event.choosed.node.name.innerHTML					
 						);
-						event.selected.push(result.links[0]);
-
+						event.selected.addArray(result.links);
+						
 						if (event.choosing == game.red_leader) {
 							var str = "<span style='color:red;'>红方</span>队长";
 						} else {
@@ -1649,7 +1659,19 @@ export default () => {
 						return Math.random();
 					});
 					"step 14";
-					event.selected.push(result.links[0]);
+					var list=result.links.slice();
+						for(var link of list){
+							if(lib.characterReplace[link]){
+								for(var character of lib.characterReplace[link]){
+									if(!result.links.includes(character)){
+										result.links.push(character);
+									}
+								}
+							}
+						}
+
+					event.selected.addArray(result.links);
+
 					var choosed=event.choosed.node.name.innerHTML
 					if (event.choosing == game.red_leader) {
 						var str = `<span style="color:red;">红方</span>队长为${choosed}`;
@@ -1659,10 +1681,10 @@ export default () => {
 					game.log(str,'选择了',result.links[0]);
 
 					if(event.choosing==game.red_leader){
-						event.red_chooseList.push(result.links[0]);
+						event.red_chooseList.addArray(result.links);
 						var id=event.red_list.shift().playerid;
 					}else{
-						event.blue_chooseList.push(result.links[0]);
+						event.blue_chooseList.addArray(result.links);
 						var id=event.blue_list.shift().playerid;
 					}
 					var name=event.choosed.node.name.innerHTML;
@@ -1753,14 +1775,25 @@ export default () => {
 					}, event.videoId);
 					
 					'step 17'
-					var viewHandcard=lib.configOL.viewHandcard;
-					if(viewHandcard==true){
-						game.addGlobalSkill('viewHandcard');
+					_status.characterList=[];
+					if(game.me.side==true) var list=event.red_chooseList;
+					else var list=event.blue_chooseList;
+					for(var player of game.players){
+						if(list.includes(player.name1)){
+							_status.characterList.push(player.name1);
+						}
 					}
+
 					if(get.phaseswap()){
-						var list=game.getActivePlayersBySide();
-						for(var player of list){
-							if(get.itemtype(player)=='player') game.onSwapControl(player);
+						for(var player of game.players){
+							if(player==game.me || player.isOnline2()){
+								game.onSwapControl(player);
+							}
+						}
+					}else{
+						var viewHandcard=lib.configOL.viewHandcard;
+						if(viewHandcard==true){
+							game.addGlobalSkill('viewHandcard');
 						}
 					}
 				});
@@ -1879,7 +1912,7 @@ export default () => {
 					event.num=1;
 					
 					var createDialog = function (list, id, list1, list2) {
-						var dialog = ui.create.dialog("Ban角色1名", [list, "characterx"]);
+						var dialog = ui.create.dialog("Ban角色1名", [list, "character"]);
 						dialog.classList.add("fullwidth");
 						dialog.classList.add("fullheight");
 						dialog.classList.add("noslide");
@@ -1901,7 +1934,7 @@ export default () => {
 							}
 						}
 					};
-					
+
 					game.broadcastAll(createDialog, event.list, event.videoId, event.choosing);
 					
 					_status.side = event.choosing.side;
@@ -1967,8 +2000,7 @@ export default () => {
 					}
 
 					for(var i=0;i<result.links.length;i++){
-						var index=event.list.indexOf(result.links[i]);
-						if(index!=-1) event.list.splice(index,1);
+						event.list.remove(result.links[i]);
 					}
 
 					//因仅循环两次，故不在进行判断，直接对当前选择者进行赋值
@@ -2047,13 +2079,23 @@ export default () => {
 						return Math.random();
 					});
 					"step 9";
-					event.selected.push(result.links[0]);
-					
+					var list=result.links.slice();
+					for(var link of list){
+						if(lib.characterReplace[link]){
+							for(var character of lib.characterReplace[link]){
+								if(!result.links.includes(character)){
+									result.links.push(character);
+								}
+							}
+						}
+					}
+					event.selected.addArray(result.links);
+
 					if(event.choosing.side==true){
-						event.red_chooseList.push(result.links[0]);
+						event.red_chooseList.addArray(result.links);
 						var id=event.red_list.shift().playerid;
 					}else{
-						event.blue_chooseList.push(result.links[0]);
+						event.blue_chooseList.addArray(result.links);
 						var id=event.blue_list.shift().playerid;
 					}
 
@@ -2129,11 +2171,27 @@ export default () => {
 					}, event.videoId);
 					
 					'step 12'
-					var viewHandcard=lib.configOL.viewHandcard;
-					if(viewHandcard==true){
-						game.addGlobalSkill('viewHandcard');
+					_status.characterList=[];
+					if(game.me.side==true) var list=event.red_chooseList;
+					else var list=event.blue_chooseList;
+					for(var player of game.players){
+						if(list.includes(player.name1)){
+							_status.characterList.push(player.name1);
+						}
 					}
-					
+
+					if(get.phaseswap()){
+						for(var player of game.players){
+							if(player==game.me || player.isOnline2()){
+								game.onSwapControl(player);
+							}
+						}
+					}else{
+						var viewHandcard=lib.configOL.viewHandcard;
+						if(viewHandcard==true){
+							game.addGlobalSkill('viewHandcard');
+						}
+					}
 				});
 			},
 
@@ -2249,7 +2307,7 @@ export default () => {
 					event.num=1;
 					
 					var createDialog = function (list, id, list1, list2) {
-						var dialog = ui.create.dialog("Ban角色1名", [list, "characterx"]);
+						var dialog = ui.create.dialog("Ban角色1名", [list, "character"]);
 						dialog.classList.add("fullwidth");
 						dialog.classList.add("fullheight");
 						dialog.classList.add("noslide");
@@ -2323,6 +2381,12 @@ export default () => {
 						event.choosing.side == _status.side,
 						event.videoId
 					);
+					if (event.choosing.side == true) {
+						var str = "<span style='color:red;'>红方</span>";
+					} else {
+						var str = "<span style='color:lightblue;'>蓝方</span>";
+					}
+					game.log(str,'Ban了',result.links);
 					event.selected.addArray(result.links);
 					if(event.choosing.side==true){
 						event.red_ban.addArray(result.links);
@@ -2331,8 +2395,7 @@ export default () => {
 					}
 
 					for(var i=0;i<result.links.length;i++){
-						var index=event.list.indexOf(result.links[i]);
-						if(index!=-1) event.list.splice(index,1);
+						event.list.remove(result.links[i]);
 					}
 
 					//因仅循环两次，故不在进行判断，直接对当前选择者进行赋值
@@ -2411,12 +2474,22 @@ export default () => {
 						return Math.random();
 					});
 					"step 9";
-					event.selected.push(result.links[0]);
+					var list=result.links.slice();
+					for(var link of list){
+						if(lib.characterReplace[link]){
+							for(var character of lib.characterReplace[link]){
+								if(!result.links.includes(character)){
+									result.links.push(character);
+								}
+							}
+						}
+					}
+					event.selected.addArray(result.links);
 					if(event.choosing.side==true){
-						event.red_chooseList.push(result.links[0]);
+						event.red_chooseList.addArray(result.links);
 						var id=event.red_list.shift().playerid;
 					}else{
-						event.blue_chooseList.push(result.links[0]);
+						event.blue_chooseList.addArray(result.links);
 						var id=event.blue_list.shift().playerid;
 					}
 
@@ -2492,11 +2565,27 @@ export default () => {
 					}, event.videoId);
 					
 					'step 12'
-					var viewHandcard=lib.configOL.viewHandcard;
-					if(viewHandcard==true){
-						game.addGlobalSkill('viewHandcard');
+					_status.characterList=[];
+					if(game.me.side==true) var list=event.red_chooseList;
+					else var list=event.blue_chooseList;
+					for(var player of game.players){
+						if(list.includes(player.name1)){
+							_status.characterList.push(player.name1);
+						}
 					}
-					
+
+					if(get.phaseswap()){
+						for(var player of game.players){
+							if(player==game.me || player.isOnline2()){
+								game.onSwapControl(player);
+							}
+						}
+					}else{
+						var viewHandcard=lib.configOL.viewHandcard;
+						if(viewHandcard==true){
+							game.addGlobalSkill('viewHandcard');
+						}
+					}
 				});
 			},
 
@@ -2614,6 +2703,7 @@ export default () => {
 						}else{
 							chooseList.blue=result[i].links;
 						}
+						if(lib.playerOL[i]==game.me) _status.characterList=result[i].links;
 					}
 					var list=[];
 					var ref=_status.firstAct;

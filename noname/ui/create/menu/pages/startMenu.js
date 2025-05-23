@@ -375,6 +375,7 @@ export const startMenu = function (connectMenu) {
 			if (connectMenu) {
 				connectDisplayMap.connect_player_number = map.connect_player_number;
 				connectDisplayMap.connect_versus_mode = map.connect_versus_mode;
+				connectDisplayMap.connect_phaseswap = map.connect_phaseswap;
 				updateConnectDisplayMap();
 			}
 		};

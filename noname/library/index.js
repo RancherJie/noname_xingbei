@@ -4757,6 +4757,11 @@ export class Library {
 			name:'星杯传说',
 			connect:{
 				update:function(config,map){		
+					if(config.connect_phaseswap){
+						map.connect_viewHandcard.hide();
+					}else{
+						map.connect_viewHandcard.show();
+					}
 					if(config.connect_versus_mode=='4v4'){
 						map.connect_team_sequence.hide();
 						map.connect_choose_mode.hide();
@@ -4845,6 +4850,8 @@ export class Library {
 						12:'12',
 						16:'16',
 						20:'20',
+						24:'24',
+						30:'30',
 					},
 					frequent:true,
 				},
@@ -4871,6 +4878,37 @@ export class Library {
 						game.saveConfig('connect_phaseswap',bool,this._link.config.mode);
 					},
 					frequent:true,
+				},
+				connect_shiQiMax:{
+					name:'士气最大值',
+					init:15,
+					item:{
+						10:'10',
+						15:'15',
+						18:'18',
+						30:'30',
+						45:'45',
+					},
+				},
+				connect_zhanJiMax:{
+					name:'战绩最大值',
+					init:5,
+					item:{
+						5:'5',
+						7:'7',
+						10:'10',
+					},
+				},
+				connect_xingBeiMax:{
+					name:'星杯最大值',
+					init:5,
+					item:{
+						3:'3',
+						5:'5',
+						7:'7',
+						10:'10',
+						15:'15',
+					}
 				},
 			},
 			config:{
@@ -5004,6 +5042,37 @@ export class Library {
 							delete ui.cheat;
 						}
 					},
+				},
+				shiQiMax:{
+					name:'士气最大值',
+					init:15,
+					item:{
+						10:'10',
+						15:'15',
+						18:'18',
+						30:'30',
+						45:'45',
+					},
+				},
+				zhanJiMax:{
+					name:'战绩最大值',
+					init:5,
+					item:{
+						5:'5',
+						7:'7',
+						10:'10',
+					},
+				},
+				xingBeiMax:{
+					name:'星杯最大值',
+					init:5,
+					item:{
+						3:'3',
+						5:'5',
+						7:'7',
+						10:'10',
+						15:'15',
+					}
 				},
 			}
 		},
@@ -10173,7 +10242,7 @@ export class Library {
 			},
 			ai:{
 				order:function(item,player){
-					var num=3.5;
+					var num=3.25;
 					var shiQi=get.shiQi(!player.side);
 					if(shiQi<=5){
 						num+=(0.4*(5-shiQi));
@@ -10181,7 +10250,7 @@ export class Library {
 					}
 					var xingBei=get.xingBei(player.side);
 					if(xingBei+1>=game.xingBeiMax) num+=10;
-					num+=(0.1*(get.zhanJi(player.side).length)-3);
+					num+=(0.1*(get.zhanJi(player.side).length-3));
 					return num;
 				},
 				result:{
@@ -10308,7 +10377,7 @@ export class Library {
 				order:function(item,player){
 					var num=3.15;
 					num+=(0.05*(player.getNengLiangLimit()-player.countNengLiangAll()));
-					num+=(0.1*get.zhanJi(player.side).length);
+					num+=(0.05*get.zhanJi(player.side).length);
 					return num;
 				},
 				result:{
@@ -11687,6 +11756,18 @@ export class Library {
 						ui.window.classList.add("single-handcard");
 						ui.fakeme = ui.create.div(".fakeme.avatar");
 						ui.me.appendChild(ui.fakeme);
+
+						let name=game.me.name;
+						if(ui.fakeme&&ui.fakeme.current!=name){
+							ui.fakeme.current=name;
+							if(ui.versushighlight&&ui.versushighlight!=game.me){
+								ui.versushighlight.classList.remove('current_action');
+							}
+							ui.versushighlight=game.me;
+							game.me.classList.add('current_action');
+
+							ui.fakeme.style.backgroundImage=game.me.node.avatar.style.backgroundImage;
+						}
 					}
 					game.arrangePlayers();
 					//xingBei更新战绩区

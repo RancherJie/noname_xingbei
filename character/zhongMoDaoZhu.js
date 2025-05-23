@@ -1089,17 +1089,18 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
             },
             shiFeng:{
-                trigger:{player:['loseAfter','chuanDao','misa']},
+                trigger:{player:['loseAfter','chuanDao','miSa']},
                 filter:function (event,player,name){
                     if(name=='loseAfter'){
                         if (event.type != "discard") return false;
                         if(event.getParent('chooseToDiscard').shiFeng==false) return false;
                         return player.zhiLiao>0&&event.getParent('chooseToDiscard').selfSkil&&get.position(event.cards[0], true) === "d";
-                    }else if(name=='chuanDao' || name=='misa'){
+                    }else if(name=='chuanDao' || name=='miSa'){
                         return player.zhiLiao>0&&event.cards.length>0;
                     }
                 },
                 content:async function (event,trigger,player){
+                    console.log(trigger.name);
                     await player.changeZhiLiao(-1);
                     game.log(player.storage.luBiaoTarget,'获得了1张牌',);
                     await player.storage.luBiaoTarget.gain(trigger.cards,'draw').set('shiFeng',true);

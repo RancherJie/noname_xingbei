@@ -4604,6 +4604,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 check:function(event,player){
                     if(player.zhiLiao<=1) return false;
+                    if(player.getCards('h')==0&&player.countNengLiangAll()<=1) return false;
                     if(!(player.canGongJi()||player.canFaShu())) return false;
                     return game.hasPlayer(function(current){
                         if(current.side!=player.side) return false;
