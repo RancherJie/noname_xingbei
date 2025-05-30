@@ -11859,6 +11859,31 @@ export const Content = {
 			}
 			
 		}
+
+		if(player.side!=side){//造成士气变动与事件玩家阵营不符时，则事件玩家为来源
+			if(player.stat[player.stat.length-1].changeShiQi==undefined){
+				player.stat[player.stat.length-1].changeShiQi=-num;
+			}
+			else{
+				player.stat[player.stat.length-1].changeShiQi+=-num;
+			}
+		}else{//自己变动了士气
+			if(player.stat[player.stat.length-1].changeShiQied==undefined){
+				player.stat[player.stat.length-1].changeShiQied=-num;
+			}
+			else{
+				player.stat[player.stat.length-1].changeShiQied+=-num;
+			}
+			if(source){
+				if(source.stat[source.stat.length-1].changeShiQi==undefined){
+					source.stat[source.stat.length-1].changeShiQi=-num;
+				}
+				else{
+					source.stat[source.stat.length-1].changeShiQi+=-num;
+				}
+			}
+		}
+		
 		var numx=num;
 		if(side==true){
 			game.hongShiQi+=num;
@@ -11901,6 +11926,13 @@ export const Content = {
 		var numx=num;
 		var name=get.translation(xingShi);
 		if(num>0){
+			if(player.stat[player.stat.length-1].addZhanJi==undefined){
+				player.stat[player.stat.length-1].addZhanJi=num;
+			}
+			else{
+				player.stat[player.stat.length-1].addZhanJi+=num;
+			}
+
 			if(side==true){
 				for(let i=0;i<num;i++){
 					game.hongZhanJi.push(xingShi);
@@ -11990,6 +12022,15 @@ export const Content = {
 		'step 0'
 		player.zhiLiao+=num;
 		if(num>=0){
+			var source=event.source;
+			if(!source) source=event.getParent().player;
+			if(source.stat[player.stat.length-1].addZhiLiao==undefined){
+				source.stat[player.stat.length-1].addZhiLiao=num;
+			}
+			else{
+				source.stat[player.stat.length-1].addZhiLiao+=num;
+			}
+
 			game.broadcastAll(function(){
 				game.playAudio("effect", "heal");
 			});

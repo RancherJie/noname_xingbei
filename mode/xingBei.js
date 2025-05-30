@@ -149,8 +149,12 @@ export default () => {
 				}
 			},
 
-			checkOnlineResult:function(player){
-				return game.players[0].side==player.side;
+			checkOnlineResult:function(player,bool){
+				if(bool===true){
+					return game.me.side==player.side;
+				}else if(bool===false){
+					return game.me.side!=player.side;
+				}else return undefined;
 			},
 			getRoomInfo:function(uiintro){
 				if(lib.configOL.versus_mode=='4v4'){
@@ -2731,9 +2735,10 @@ export default () => {
 					},list,ref);
 
 					game.addGlobalSkill('autoswap');
-					var list=game.getActivePlayersBySide();
-					for(var player of list){
-						if(get.itemtype(player)=='player') game.onSwapControl(player);
+					for(var player of game.players){
+						if(player==game.me || player.isOnline2()){
+							game.onSwapControl(player);
+						}
 					}
 				});
 			},

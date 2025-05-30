@@ -2838,6 +2838,7 @@ export class Player extends HTMLDivElement {
 					}
 					str += "】";
 				}*/
+				str+='<br>';
 				if(config.characterPack.length>0){
 					str+='【';
 					for(var i=0;i<config.characterPack.length;i++){

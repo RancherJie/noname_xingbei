@@ -1,6 +1,6 @@
 window.noname_update = {
-	version: "1.2.1",
-	update: "1.2.1",
+	version: "1.2.2",
+	update: "1.2.2",
 	changeLog: [
 		"增加bp可选角色数",
 		"增加自选士气最大值、战绩最大值、星杯最大值设置",

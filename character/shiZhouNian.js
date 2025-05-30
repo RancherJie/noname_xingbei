@@ -3240,13 +3240,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     return target!=player;
                 },
                 content:async function(event, trigger, player){
-                    var shiQiListBefore=[get.shiQi(true),get.shiQi(false)];
                     await event.target.faShuDamage(1,player).set('wenYi',true);
-                    var shiQiAfter=[get.shiQi(true),get.shiQi(false)];
-                    if(shiQiListBefore[0]!=shiQiAfter[0]||shiQiListBefore[1]!=shiQiAfter[1]){
-                        player.addTempSkill('wenYi_zhiLiao');
-                    }
                 },
+                group:'wenYi_shiQiXiaJiang',
                 subSkill:{
                     zhiLiao:{
                         trigger:{player:'phaseEnd'},
@@ -3255,7 +3251,20 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             player.changeZhiLiao(1);
                             player.removeSkill('wenYi_zhiLiao');
                         }
-                    }
+                    },
+                    shiQiXiaJiang:{
+                        trigger:{global:'changeShiQiAfter'},
+                        lastDo:true,
+                        direct:true,
+                        filter:function(event,player){
+                            return event.getParent('damage').wenYi==true&&event.num<0;
+                        },
+                        content:function(){
+                            if(!player.hasSkill('wenYi_zhiLiao')){
+                                player.addTempSkill('wenYi_zhiLiao');
+                            }
+                        }
+                    },
                 },
                 ai:{
                     order:3.6,
@@ -3581,8 +3590,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.addGongJi();
                 },
                 check:function(event,player){
-                    var shiQi=get.shiQi(player.side);
-                    return shiQi>5;
+                    if(player.countZhiShiWu('xianXue')>=2) return true;
+                    if(player.countCards('h',card=>get.xiBie(card)=='an')>0) return true;
+
+                    if(player.countCards('h')+2>player.getHandcardLimit()) return false;
+                    else return true;
                 }
 
             },
@@ -5354,11 +5366,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 ai:{
                     baoShi:true,
-                    order:3.7,
+                    order:3.5,
                     result:{
                         target:function(player,target){
-                            if(player.countTongXiPai()<3) return 0;
-                            return get.damageEffect(target,2);
+                            if(player.countYiXiPai()<3) return 0;
+                            return get.damageEffect(target,player.countYiXiPai()-1);
                         },
                     }
                 }
@@ -5404,7 +5416,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     result:{
                         target:function(player,target){
                             if(player.side!=target.side) return 0;
-                            return get.zhiLiaoEffect(target,2)-0.1;
+                            return get.zhiLiaoEffect(target,2);
                         },
                     }
                 }
@@ -6351,14 +6363,16 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 trigger:{global:'yongHengYueZhang'},
                 forced:true,
                 filter:function(event,player){
-                    return event.player==player.storage.yongHengYueZhang_target||event.player==player;
+                    return event.player==player.storage.yongHengYueZhang_target;
                 },
                 content:async function(event,trigger,player){
                     var info=get.info('lingGan');
                     if(player.countZhiShiWu('lingGan')<info.intro.max){
                         await player.addZhiShiWu('lingGan');
-                        await player.storage.yongHengYueZhang_target.removeZhiShiWu('yongHengYueZhang');
-                        player.storage.yongHengYueZhang_target=undefined;
+                        if(player.storage.yongHengYueZhang_targe){
+                            await player.storage.yongHengYueZhang_target.removeZhiShiWu('yongHengYueZhang');
+                            delete player.storage.yongHengYueZhang_target;
+                        }
                     }else{
                         await player.faShuDamage(3,player);
                         await player.hengZhi();
@@ -8752,8 +8766,14 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     var cards=player.getExpansions('jian');
                     var result=await player.chooseCardButton(cards,"是否发动【朝圣】,移除1个【茧】,抵御1点该来源的伤害,目前伤害量"+trigger.num)
                     .set('ai',function(button){
-                        return 0;
-                    })
+                        var player=_status.event.player;
+                        var num=_status.event.num;
+                        var shiQiXiaJiang=_status.event.shiQiXiaJiang;
+                        if(shiQiXiaJiang!=false&&player.countCards('h')+num>player.getHandcardLimit()){
+                            if(get.type(button.link)=='faShu') return 1;
+                            else return 2;
+                        }else return 0;
+                    }).set('num',trigger.num).set('shiQiXiaJiang',trigger.shiQiXiaJiang)
                     .forResult();
                     event.result={
                         bool:result.bool,

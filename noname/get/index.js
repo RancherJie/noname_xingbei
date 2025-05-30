@@ -5733,7 +5733,7 @@ export class Get extends GetCompatible {
 		if(target.hasSkillTag('noZhiLiao')) return 0;
 		if(target.getZhiLiaoLimit()-target.zhiLiao<=0){
 			if(target.hasSkillTag('zhiLiaoYiChu')) return 0.2;
-			return 0.1;
+			return 0;
 		}
 		if(!num){
 			num=1;

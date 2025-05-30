@@ -1,6 +1,6 @@
 window.noname_asset_list=
 [
-	"v1.1.2",
+	"v1.2.1",
 	"audio/background/music_default.mp3",
 	"audio/card/default.mp3",
 	'audio/card/atk_an.mp3',

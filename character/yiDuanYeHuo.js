@@ -830,8 +830,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 content:function(){
                     'step 0'
                     player.removeBiShaShuiJing();
+                    player.storage.moLiShangZeng=false;
                     'step 1'
-                    event.shiQiListBefore=[get.shiQi(true),get.shiQi(false)];
                     player.chooseTarget('对目标对手造成1点法术伤害③',true,function(card,player,target){
                         return target.side!=player.side;
                     }).set('ai',function(target){
@@ -839,12 +839,25 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         return get.damageEffect2(target,player,1);
                     });
                     'step 2'
-                    result.targets[0].faShuDamage(1,player);
+                    result.targets[0].faShuDamage(1,player).set('moLiShangZeng',true);
                     'step 3'
-                    event.shiQiListAfter=[get.shiQi(true),get.shiQi(false)];
-                    if((event.shiQiListBefore[0]==event.shiQiListAfter[0])&&(event.shiQiListBefore[1]==event.shiQiListAfter[1])){
+                    if(!player.storage.moLiShangZeng){
                         player.addZhanJi('baoShi');
                     }
+                },
+                group:'moLiShangZeng_shiQiXiaJiang',
+                subSkill:{
+                    shiQiXiaJiang:{
+                        trigger:{global:'changeShiQiAfter'},
+                        lastDo:true,
+                        direct:true,
+                        filter:function(event,player){
+                            return event.getParent('damage').moLiShangZeng==true&&event.num<0;
+                        },
+                        content:function(){
+                            player.storage.moLiShangZeng=true;
+                        }
+                    },
                 },
                 ai:{
                     shuiJing:true,
@@ -951,7 +964,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         var bool1=_status.event.bool1;
                         var bool2=_status.event.bool2;
                         var player=_status.event.player;
-                        if(player.getExpansions('luEn').length>2&&bool2) return '选项二';
+                        if(player.getExpansions('luEn').length>=5&&bool2) return '选项二';
                         if(bool1) return '选项一';
                     }).set('bool1',bool1).set('bool2',bool2);
                     'step 1'

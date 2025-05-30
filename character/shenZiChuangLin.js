@@ -232,7 +232,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
             },
             ren: {
-                global: ["ren_zhuanHuan1","ren_zhuanHuan2","ren_daChuQiZhi","ren_gaiPai","ren_biaoJi",'ren_cardsDiscardEnd','ren_mod'],
+                global: ["ren_zhuanHuan1","ren_zhuanHuan2","ren_daChuQiZhi","ren_gaiPai","ren_biaoJi",'ren_cardsDiscardEnd','ren_mod','ren_cardsDiscardEnd'],
                 contentx: function(){
                     for(var card of event.cards){
                         if(card.name=='moRen'){

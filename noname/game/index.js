@@ -5833,21 +5833,38 @@ export class Game extends GameCompatible {
 			td = document.createElement("td");
 			td.innerHTML = "受伤";
 			tr.appendChild(td);
+			//td = document.createElement("td");
+			//td.innerHTML = "摸牌";
+			//tr.appendChild(td);
+			//td = document.createElement("td");
+			//td.innerHTML = "出牌";
+			//tr.appendChild(td);
 			td = document.createElement("td");
-			td.innerHTML = "摸牌";
-			tr.appendChild(td);
-			td = document.createElement("td");
-			td.innerHTML = "出牌";
+			td.innerHTML = "产石";
 			tr.appendChild(td);
 			//td = document.createElement("td");
 			//td.innerHTML = "杀敌";
 			//tr.appendChild(td);
+			td = document.createElement("td");
+			td.innerHTML = "士气输出";
+			tr.appendChild(td);
+			td = document.createElement("td");
+			td.innerHTML = "士气亏损";
+			tr.appendChild(td);
+
+			td = document.createElement("td");
+			td.innerHTML = "治疗给予";
+			tr.appendChild(td);
+
+
 			table.appendChild(tr);
 			for (i = 0; i < game.players.length; i++) {
 				tr = document.createElement("tr");
+
 				td = document.createElement("td");
 				td.innerHTML = get.translation(game.players[i]) + (game.players[i].ai.stratagem_camouflage ? "(被伪装)" : "");
 				tr.appendChild(td);
+				
 				td = document.createElement("td");
 				num = 0;
 				for (j = 0; j < game.players[i].stat.length; j++) {
@@ -5855,6 +5872,7 @@ export class Game extends GameCompatible {
 				}
 				td.innerHTML = num;
 				tr.appendChild(td);
+
 				td = document.createElement("td");
 				num = 0;
 				for (j = 0; j < game.players[i].stat.length; j++) {
@@ -5862,6 +5880,7 @@ export class Game extends GameCompatible {
 				}
 				td.innerHTML = num;
 				tr.appendChild(td);
+				/*
 				td = document.createElement("td");
 				num = 0;
 				for (j = 0; j < game.players[i].stat.length; j++) {
@@ -5869,6 +5888,8 @@ export class Game extends GameCompatible {
 				}
 				td.innerHTML = num;
 				tr.appendChild(td);
+				*/
+				/*
 				td = document.createElement("td");
 				num = 0;
 				for (j = 0; j < game.players[i].stat.length; j++) {
@@ -5878,6 +5899,15 @@ export class Game extends GameCompatible {
 				}
 				td.innerHTML = num;
 				tr.appendChild(td);
+				*/
+				td = document.createElement("td");
+				num = 0;
+				for (j = 0; j < game.players[i].stat.length; j++) {
+					if (game.players[i].stat[j].addZhanJi != undefined) num += game.players[i].stat[j].addZhanJi;
+				}
+				td.innerHTML = num;
+				tr.appendChild(td);
+				
 				/*
 				td = document.createElement("td");
 				num = 0;
@@ -5887,6 +5917,31 @@ export class Game extends GameCompatible {
 				td.innerHTML = num;
 				tr.appendChild(td);
 				*/
+				
+				td = document.createElement("td");
+				num = 0;
+				for (j = 0; j < game.players[i].stat.length; j++) {
+					if (game.players[i].stat[j].changeShiQi != undefined) num += game.players[i].stat[j].changeShiQi;
+				}
+				td.innerHTML = num;
+				tr.appendChild(td);
+				
+				td = document.createElement("td");
+				num = 0;
+				for (j = 0; j < game.players[i].stat.length; j++) {
+					if (game.players[i].stat[j].changeShiQied != undefined) num += game.players[i].stat[j].changeShiQied;
+				}
+				td.innerHTML = num;
+				tr.appendChild(td);
+				
+				td = document.createElement("td");
+				num = 0;
+				for (j = 0; j < game.players[i].stat.length; j++) {
+					if (game.players[i].stat[j].addZhiLiao != undefined) num += game.players[i].stat[j].addZhiLiao;
+				}
+				td.innerHTML = num;
+				tr.appendChild(td);
+
 				table.appendChild(tr);
 			}
 			dialog.add(ui.create.div(".placeholder"));
@@ -6018,7 +6073,7 @@ export class Game extends GameCompatible {
 		let clients = game.players.concat(game.dead);
 		for (let i = 0; i < clients.length; i++) {
 			if (clients[i].isOnline2()) {
-				clients[i].send(game.over, dialog.content.innerHTML, game.checkOnlineResult(clients[i]));
+				clients[i].send(game.over, dialog.content.innerHTML, game.checkOnlineResult(clients[i],resultbool));
 			}
 		}
 

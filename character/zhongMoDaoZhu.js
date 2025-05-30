@@ -747,7 +747,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     await player.addZhiShiWu('shengYiWu',2);
                     if(!player.hasSkill('wangQuanBaoZhuX')) player.addSkill('wangQuanBaoZhuX');
                     for(var current of game.players) current.storage.wangQuanBaoZhuX_player=player;
-                    await player.addToExpansion(event.cards,player,'gain2').set('type','fangZhi').set('gaintag',['wangQuanBaoZhuX_biaoJi']);
+                    await player.addToExpansion(event.cards,player,'gain2').set('type','fangZhi').set('gaintag',['wangQuanBaoZhuX_biaoJi']).set('special',true);
                 },
                 group:'xinYangChongZhu_teShu',
                 subSkill:{
@@ -837,7 +837,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     next.set('prompt2',lib.translate.daoGaoShi_info);
                     next.set('ai',function(target){
                         var player=_status.event.player;
-                        return get.zhiLiaoEffect2(target,player,1)-0.1;
+                        return get.zhiLiaoEffect2(target,player,1);
                     });
                     event.result=await next.forResult();
                 },
