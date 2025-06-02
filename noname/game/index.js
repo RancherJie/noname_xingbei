@@ -41,9 +41,13 @@ export class Game extends GameCompatible {
 	moDanFangXiang='you';
 	jiChuXiaoGuo={
 		all:['diZhiFengYin','shuiZhiFengYin','huoZhiFengYin','fengZhiFengYin','leiZhiFengYin','weiLiCiFu','xunJieCiFu','shengDun','xuRuo','zhongDu'],
-		fengYinShi:['diZhiFengYin_xiaoGuo','shuiZhiFengYin_xiaoGuo','huoZhiFengYin_xiaoGuo','fengZhiFengYin_xiaoGuo','leiZhiFengYin_xiaoGuo'],
-		qiDaoShi:['weiLiCiFu_xiaoGuo','xunJieCiFu_xiaoGuo'],
-		pai:['_shengDun','_xuRuo','_zhongDu'],
+		all_xiaoGuo:['diZhiFengYin_xiaoGuo','shuiZhiFengYin_xiaoGuo','huoZhiFengYin_xiaoGuo','fengZhiFengYin_xiaoGuo','leiZhiFengYin_xiaoGuo','weiLiCiFu_xiaoGuo','xunJieCiFu_xiaoGuo','_shengDun','_xuRuo','_zhongDu'],
+		fengYinShi:['diZhiFengYin','shuiZhiFengYin','huoZhiFengYin','fengZhiFengYin_xiaoGuo','leiZhiFengYin'],
+		fengYinShi_xiaoGuo:['diZhiFengYin_xiaoGuo','shuiZhiFengYin_xiaoGuo','huoZhiFengYin_xiaoGuo','fengZhiFengYin_xiaoGuo','leiZhiFengYin_xiaoGuo'],
+		qiDaoShi:['weiLiCiFu','xunJieCiFu'],
+		qiDaoSh_xiaoGuo:['weiLiCiFu_xiaoGuo','xunJieCiFu_xiaoGuo'],
+		pai:['shengDun','xuRuo','zhongDu'],
+		pai_xiaoGip:['_shengDun','_xuRuo','_zhongDu'],
 	};
 	handcardLimit=6;
 	zhiLiaoMax=2;

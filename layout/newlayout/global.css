@@ -262,14 +262,16 @@
 	top: auto;
 	bottom: 25px;
 	left: 10px;
-	padding: 2px;
+	padding: 1px 1px;
 	line-height: 20px;
-	width: 8px;
+	width: auto;
+	right: auto;
 	text-align: left;
-	border-radius: 2px;
 	z-index: 2;
 	border-radius: 3px 0 0 3px;
 	box-shadow: rgba(0, 0, 0, 0.2) 1px -1px 2px inset, rgba(255, 255, 255, 0.15) -1px 1px 5px inset;
+	display: inline-block; /* 让宽度根据内容调整 */
+    white-space: nowrap; /* 防止文字换行 */
 }
 .player.topcount .count {
 	border-radius: 2px;

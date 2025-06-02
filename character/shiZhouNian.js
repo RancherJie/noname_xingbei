@@ -239,7 +239,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.addGongJi();
                 },
                 check:function(event,player){
-                    if(player.storage.gongJi.zhuDong>=3) return false;
+                    if(player.getLastStat('gongJi').zhuDong.length>=3) return false;
                     return player.canGongJi();
                 },
                 ai:{
@@ -6362,9 +6362,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             jinJiShiPian:{
                 trigger:{global:'yongHengYueZhang'},
                 forced:true,
-                filter:function(event,player){
-                    return event.player==player.storage.yongHengYueZhang_target;
-                },
                 content:async function(event,trigger,player){
                     var info=get.info('lingGan');
                     if(player.countZhiShiWu('lingGan')<info.intro.max){

@@ -3591,21 +3591,21 @@ export class Player extends HTMLDivElement {
 		if (_status.video) {
 			numh = arguments[0];
 		}
-		if (numh >= 10) {
+		var limit= this.getHandcardLimit();
+
+		this.node.count.innerHTML = numh+ "/" + limit;
+		if (numh > limit) {
 			this.node.count.dataset.condition = "low";
-			this.node.count.innerHTML = Array.from(numh.toString()).join("<br>");
+		}else if (numh > limit/1.5) {
+			this.node.count.dataset.condition = "mid";
+		} else if (numh > limit/2) {
+			this.node.count.dataset.condition = "higher";
+		} else if (numh > 0) {
+			this.node.count.dataset.condition = "high";
 		} else {
-			if (numh > 5) {
-				this.node.count.dataset.condition = "higher";
-			} else if (numh > 2) {
-				this.node.count.dataset.condition = "high";
-			} else if (numh > 0) {
-				this.node.count.dataset.condition = "mid";
-			} else {
-				this.node.count.dataset.condition = "none";
-			}
-			this.node.count.innerHTML = numh;
+			this.node.count.dataset.condition = "none";
 		}
+
 		if (this.updates) {
 			for (var i = 0; i < this.updates.length; i++) {
 				this.updates[i](this);
