@@ -167,7 +167,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 group:['shengJian_drawAndDiscard'],
                 priority:1,
                 filter:function(event,player){
-                    return event.yingZhan!=true&&player.getStat('gongJi').zhuDong==3;
+                    return event.yingZhan!=true&&player.getStat('gongJi').zhuDong.length==3;
                 },
                 content:function(){
                     trigger.qiangZhiMingZhong();
@@ -486,7 +486,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             },
             //暗杀者
             fanShi:{
-                trigger:{player:"chengShouShangHai"},
+                trigger:{player:"chengShouShangHaiAfter"},
                 forced:true,
                 filter:function(event){
                     return event.faShu!=true;
@@ -2429,7 +2429,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             },
             shenPanLangChao:{
                 forced:true,
-                trigger:{player:'chengShouShangHai'},
+                trigger:{player:'chengShouShangHaiAfter'},
                 content:function(){
                     player.addZhiShiWu('shenPan',1);
                 },
@@ -5717,7 +5717,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.chooseTarget(true,'目标角色弃1张牌').set('ai',function(target){
                         var player=_status.event.player;
                         if(target.side==player.side){
-                            return 5;
+                            return 10;
                         }
                         return target.countCards('h');
                     });
@@ -5928,13 +5928,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     if(target.countCards('h')>0){
                         if(player.side==target.side){
                             target.chooseToDiscard('h').set('ai',function(card){
-                                if(get.type(card)=='faShu'||get.xiBie(card)=='lei') return 1;
-                                return 0;
-                            }).set('showCards',true);
+                                if(get.type(card)=='faShu'||get.xiBie(card)=='lei') return 6;
+                                return 6-get.value(card);
+                            }).set('showCards',true); 
                         }else{
                             target.chooseToDiscard('h',true).set('ai',function(card){
                                 if(get.type(card)=='faShu'||get.xiBie(card)=='lei') return 0;
-                                return 1;
+                                return 6-get.value(card);
                             }).set('showCards',true);
                         }
                     }
@@ -6366,7 +6366,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     var info=get.info('lingGan');
                     if(player.countZhiShiWu('lingGan')<info.intro.max){
                         await player.addZhiShiWu('lingGan');
-                        if(player.storage.yongHengYueZhang_targe){
+                        if(player.storage.yongHengYueZhang_target){
                             await player.storage.yongHengYueZhang_target.removeZhiShiWu('yongHengYueZhang');
                             delete player.storage.yongHengYueZhang_target;
                         }
@@ -9102,7 +9102,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 
             //暗杀者
             fanShi:"[被动]反噬",
-            fanShi_info:"<span class='tiaoJian'>(承受攻击伤害时发动⑥)</span>攻击你的对手摸1张牌[强制]。",
+            fanShi_info:"<span class='tiaoJian'>(承受攻击伤害后发动⑥)</span>攻击你的对手摸1张牌[强制]。",
             shuiYing:"[响应]水影",
             shuiYing_info:"<span class='tiaoJian'>(除【特殊行动】外，当你摸牌前发动)</span>弃X张水系牌[展示]；<span class='tiaoJian'>(若你处于【潜行】效果下)</span>你可额外弃1张法术牌[展示]。",
             qianXing:"[启动]潜行",
@@ -9231,7 +9231,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             moRiShenPan:"[法术]末日审判",
             moRiShenPan_info:"<span class='tiaojian'>(移除所有</span><span class='hong'>【审判】</span><span class='tiaojian'>)</span>对目标角色造成等量的法术伤害③；在你的行动阶段开始时，若<span class='hong'>【审判】</span>已达到上限，该行动阶段你必须发动【末日审判】。",
             shenPanLangChao:"[被动]审判浪潮",
-            shenPanLangChao_info:"<span class='tiaoJian'>(你每承受一次伤害⑥)</span>你+1<span class='hong'>【审判】</span>。",
+            shenPanLangChao_info:"<span class='tiaoJian'>(你每承受一次伤害后⑥)</span>你+1<span class='hong'>【审判】</span>。",
             zhongCaiYiShi:"[启动]仲裁仪式[持续]",
             zhongCaiYiShi_info:"[宝石][横置]转为【审判形态】，你的手牌上限恒定为5[恒定]；每次你的回合开始时，你+1<span class='hong'>【审判】</span>。",
             panJueTianPing:"[法术]判决天平",

@@ -51,11 +51,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 trigger:{player:"gongJiSheZhi"},
                 priority:1,
                 filter:function(event,player){
-                    return event.yingZhan!=true&&player.getStat('gongJi').zhuDong==3;
+                    return event.yingZhan!=true&&player.getStat('gongJi').zhuDong.length==3;
                 },
                 content:function(){
                     trigger.qiangZhiMingZhong();
-                    trigger.customArgs.shengJian=true;
                 },
             },
 

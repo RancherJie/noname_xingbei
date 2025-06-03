@@ -686,7 +686,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             return event.gaintag.includes('wangQuanBaoZhuX_biaoJi')&&player.getExpansions('wangQuanBaoZhuX_biaoJi').length>0&&event.type=='zhuanYi'&&player.name=='zhuLvZhe';
                         },
                         content:async function (event,trigger,player){
-                            var choiceList=["将角色卡替换为【红衣主教】，然后移除此卡","<span class='tiaoJian'>(移除X点</span><span class='hong'>【银质子弹】</span><span class='tiaoJian'>，X<3)</span>目标角色摸X张牌[强制]，然后移除此卡"];
+                            var choiceList=["将角色卡替换为【红衣主教】，然后移除此卡","<span class='tiaoJian'>(移除X点</span><span class='hong'>【银制子弹】</span><span class='tiaoJian'>，X<3)</span>目标角色摸X张牌[强制]，然后移除此卡"];
                             var list=['选项一'];
                             if(player.hasZhiShiWu('yinZhiZiDan')) list.push('选项二');
                             var next=player.chooseControl(list);
@@ -709,7 +709,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                     if(i>=3) break;
                                     list.push(i);
                                 }
-                                let control=await player.chooseControl(list).set('prompt','移除X点【银质子弹】，目标角色摸X张牌').forResultControl();
+                                let control=await player.chooseControl(list).set('prompt','移除X点【银制子弹】，目标角色摸X张牌').forResultControl();
                                 await player.changeZhiShiWu('yinZhiZiDan',-control);
                                 var targets=await player.chooseTarget(true,`目标角色摸${control}张牌`).set('ai',function(target){
                                     var player=_status.event.player;
@@ -1363,7 +1363,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     var xiBie2=get.xiBie(card);
                     if(xiBie==xiBie2){
                         await player.discard(card,'yuYan');
-                        await player.addZhanJi('shuiJing');
+                        await player.addZhanJi('baoShi');
                         await event.trigger('xianJi');
                     }
                     else{
@@ -1668,17 +1668,17 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             shengXueZhiJi:'[被动]圣血之击',
             shengXueZhiJi_info:"<span class='tiaoJian'>(主动攻击命中时②)</span>本次攻击伤害额外+1，你+1[治疗]。",
             wangCheYiWei:'[法术]王车易位',
-            wangCheYiWei_info:"<span class='tiaoJian'>(移除场上合计2[治疗])</span>你+2<span class='hong'>【银质子弹】</span>，移除你的所有基础效果和[治疗]，将你的角色卡替换为【红衣主教】并额外+1[攻击行动]。",
+            wangCheYiWei_info:"<span class='tiaoJian'>(移除场上合计2[治疗])</span>你+2<span class='hong'>【银制子弹】</span>，移除你的所有基础效果和[治疗]，将你的角色卡替换为【红衣主教】并额外+1[攻击行动]。",
             zuiDuanHuoMian:'[响应]罪断豁免',
-            zuiDuanHuoMian_info:"<span class='tiaoJian'>(我方非因承受伤害而导致士气下降时，移除X点</span><span class='lan'>【圣遗物】</span><span class='tiaoJian'>)</span>抵御X点士气下降，你+X<span class='hong'>【银质子弹】</span>。",
+            zuiDuanHuoMian_info:"<span class='tiaoJian'>(我方非因承受伤害而导致士气下降时，移除X点</span><span class='lan'>【圣遗物】</span><span class='tiaoJian'>)</span>抵御X点士气下降，你+X<span class='hong'>【银制子弹】</span>。",
             shengYinSongEn:'[响应]圣银颂恩[回合限定]',
-            shengYinSongEn_info:"<span class='tiaoJian'>([攻击行动]结束时，移除2点</span><span class='hong'>【银质子弹】</span><span class='tiaoJian'>)</span>额外+1[攻击行动]，目标角色+1[治疗]。",
+            shengYinSongEn_info:"<span class='tiaoJian'>([攻击行动]结束时，移除2点</span><span class='hong'>【银制子弹】</span><span class='tiaoJian'>)</span>额外+1[攻击行动]，目标角色+1[治疗]。",
             wangQuanBaoZhu:'(专)王权宝珠',
             wangQuanBaoZhu_info:`
             <span class="greentext">[被动]圣律威压</span><br>
             <span class='tiaoJian'>(此卡转移或放置到你面前是)</span>选择一下一项发动：<br>·<span class='tiaoJian'>(选择1张与此卡上牌种类相同的牌)</span>弃置之[展示]。<br>·摸2张牌[强制]，铸律者阵营士气-1。<span class='tiaoJian'>(若</span><span class='lan'>【圣遗物】</span><span class='tiaoJian'>数<1)</span>移除此卡。<br>
             <span class="greentext">[被动]神言咏赞</span><br>
-            <span class='tiaoJian'>(【圣律威压】结算完后)</span>将此卡转移到你右手边最近的玩家面前。<span class='tiaoJian'>(若因此转移至铸律者面前)</span>【铸律者】选择以下一项发动：<br>·将角色卡替换为【红衣主教】，然后移除此卡。<br>·<span class='tiaoJian'>(移除X点</span><span class='hong'>【银质子弹】</span><span class='tiaoJian'>，X<3)</span>目标角色摸X张牌[强制]，然后移除此卡。
+            <span class='tiaoJian'>(【圣律威压】结算完后)</span>将此卡转移到你右手边最近的玩家面前。<span class='tiaoJian'>(若因此转移至铸律者面前)</span>【铸律者】选择以下一项发动：<br>·将角色卡替换为【红衣主教】，然后移除此卡。<br>·<span class='tiaoJian'>(移除X点</span><span class='hong'>【银制子弹】</span><span class='tiaoJian'>，X<3)</span>目标角色摸X张牌[强制]，然后移除此卡。
             `,
             wangQuanBaoZhuX:'(专)王权宝珠',
             wangQuanBaoZhuX_shengLvWeiYa:'[被动]圣律威压',
@@ -1688,26 +1688,26 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             xinYangChongZhu_info:"[水晶]<span class='tiaoJian'>(你的回合结束时，若本回合你未执行【特殊行动】，将1张手牌面朝上放置在【王权宝珠】上[展示][强制])</span>你摸1张牌[强制]，你+2<span class='lan'>【圣遗物】</span>，将【王权宝珠】放置在你面前。",
             shengYiWu:'圣遗物',
             shengYiWu_info:"<span class='lan'>【圣遗物】</span>为红衣主教与铸律者共有指示物，上限为3。",
-            yinZhiZiDan:'银质子弹',
-            yinZhiZiDan_info:"<span class='hong'>【银质子弹】</span>为红衣主教与铸律者共有指示物，上限为3。",
+            yinZhiZiDan:'银制子弹',
+            yinZhiZiDan_info:"<span class='hong'>【银制子弹】</span>为红衣主教与铸律者共有指示物，上限为3。",
 
             shengYueYinQi:"[被动]圣约银契",
-            shengYueYinQi_info:"<span class='tiaoJian'>([攻击行动]或[法术行动]结束时)</span>你+1<span class='hong'>【银质子弹】</span>。",
+            shengYueYinQi_info:"<span class='tiaoJian'>([攻击行动]或[法术行动]结束时)</span>你+1<span class='hong'>【银制子弹】</span>。",
             quMoShi:"[启动]驱魔式",
-            quMoShi_info:"<span class='tiaoJian'>(移除2点</span><span class='hong'>【银质子弹】</span><span class='tiaoJian'>)</span>我方目标角色弃1张牌[展示]。<span class='tiaoJian'>(若该弃牌为圣类命格)</span>你+1[治疗]，摸1张牌[强制]。",
+            quMoShi_info:"<span class='tiaoJian'>(移除2点</span><span class='hong'>【银制子弹】</span><span class='tiaoJian'>)</span>我方目标角色弃1张牌[展示]。<span class='tiaoJian'>(若该弃牌为圣类命格)</span>你+1[治疗]，摸1张牌[强制]。",
             daoGaoShi:"[响应]祷告式",
-            daoGaoShi_info:"<span class='tiaoJian'>(主动攻击前①，移除1点</span><span class='hong'>【银质子弹】</span><span class='tiaoJian'>)</span>目标角色+1[治疗]。",
+            daoGaoShi_info:"<span class='tiaoJian'>(主动攻击前①，移除1点</span><span class='hong'>【银制子弹】</span><span class='tiaoJian'>)</span>目标角色+1[治疗]。",
             quanNengNiWei:"[法术]权能逆位",
-            quanNengNiWei_info:"<span class='tiaoJian'>(移除1点</span><span class='hong'>【银质子弹】</span><span class='tiaoJian'>或我方角色合计2[治疗])</span>你+2<span class='lan'>【圣遗物】</span>，移除你的所有基础效果与[治疗]，将手牌弃到4张，然后将你的角色卡替换为【铸律者】。",
+            quanNengNiWei_info:"<span class='tiaoJian'>(移除1点</span><span class='hong'>【银制子弹】</span><span class='tiaoJian'>或我方角色合计2[治疗])</span>你+2<span class='lan'>【圣遗物】</span>，移除你的所有基础效果与[治疗]，将手牌弃到4张，然后将你的角色卡替换为【铸律者】。",
             shenXuanDaoYan:"[响应]神宣祷言",
-            shenXuanDaoYan_info:"<span class='tiaoJian'>(我方非因承受伤害而导致士气下降时，移除1点</span><span class='lan'>【圣遗物】</span><span class='tiaoJian'>)</span>抵御1点士气下降，你+1<span class='hong'>【银质子弹】</span>。",
+            shenXuanDaoYan_info:"<span class='tiaoJian'>(我方非因承受伤害而导致士气下降时，移除1点</span><span class='lan'>【圣遗物】</span><span class='tiaoJian'>)</span>抵御1点士气下降，你+1<span class='hong'>【银制子弹】</span>。",
             shengDian:"[启动]圣典",
             shengDian_info:"[水晶]我方所有未拥有[治疗]的角色各+1[治疗]。",
 
             chuanShuoZhiDi:"[被动]传说之地",
             chuanShuoZhiDi_info:"游戏初始时，将牌库顶3张牌面朝上放置在你角色旁[展示]，作为【遗迹】。",
             zhiXingHeYi:"[法术]知行合一",
-            zhiXingHeYi_info:"展示牌堆顶2张牌[展示]；你可选择其中1张牌，将此牌作为相应行动发出并起1张牌。<span class='tiaoJian'>(结算完成后)</span>将以此法展示的剩余X张牌弃掉，你+X<span class='hong'>【史料】</span>。",
+            zhiXingHeYi_info:"展示牌堆顶2张牌[展示]；你可选择其中1张牌，将此牌作为相应行动发出并弃1张牌。<span class='tiaoJian'>(结算完成后)</span>将以此法展示的剩余X张牌弃掉，你+X<span class='hong'>【史料】</span>。",
             jiGuShiDian:"[被动]稽古识典",
             jiGuShiDian_info:"<span class='tiaoJian'>(</span><span class='hong'>【史料】</span><span class='tiaoJian'>达到上限时)</span>移除所有<span class='hong'>【史料】</span>，你弃1张牌，将【史书】加入手牌[强制]。",
             yiJiLunPo:"[响应]遗迹论破[回合限定]",
@@ -1752,17 +1752,17 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             shuLingEnCi:"[启动]属灵恩赐",
             shuLingEnCi_info:"[水晶]你+1[治疗]，弃1张牌。",
             miSa:"[响应]弥撒",
-            miSa_info:"[水晶]<span class='tiaoJian'>(【路标】转移或放置后)</span>你+1<span class='hong'>【虔诚】</span>，选择以下一项发动：<br>·弃1张牌[展示]。<span class='tiaoJian'>(若该牌为【虚弱】、【中毒】或【中毒】)</span>将该牌放置在拥有【路标】的角色面前作为基础效果。<br>·<span class='tiaoJian'>(将拥有【路标】的角色面前一张基础效果牌收入自己手中)</span>你+1<span class='hong'>【虔诚】</span>。",
+            miSa_info:"[水晶]<span class='tiaoJian'>(【路标】转移或放置后)</span>你+1<span class='hong'>【虔诚】</span>，选择以下一项发动：<br>·弃1张牌[展示]。<span class='tiaoJian'>(若该牌为【虚弱】、【中毒】或【圣盾】)</span>将该牌放置在拥有【路标】的角色面前作为基础效果。<br>·<span class='tiaoJian'>(将拥有【路标】的角色面前一张基础效果牌收入自己手中)</span>你+1<span class='hong'>【虔诚】</span>。",
             qianCheng:"虔诚",
             qianCheng_info:"<span class='hong'>【虔诚】</span>为传教士专有指示物，上限为4。",
 
 
             yiDuanXieShuo:"[被动]异端邪说",
-            yiDuanXieShuo_info:"游戏初始时，你+1[水晶]。<span class='tiaoJian'>(【末日语言】在场时)</span>你的手牌上限-1。",
+            yiDuanXieShuo_info:"游戏初始时，你+1[水晶]。<span class='tiaoJian'>(【末日预言】在场时)</span>你的手牌上限-1。",
             shenPanYJT:"[响应]审判",
             shenPanYJT_info:"<span class='tiaoJian'>(你的回合结束时，若本回合你对目标对手造成伤害③)</span>我方所有角色各弃1张牌[展示]，然后各摸1张牌[强制]，你将其中1张弃牌加入该对手手牌[强制]。<span class='tiaoJian'>(若【末日预言】在场)</span>将其余弃牌面朝下洗混放置到【末日预言】的【预言】堆顶部作为【预言】。",
             xianJi:"[启动]献祭",
-            xianJi_info:"<span class='tiaoJian'>(仅【末日语言】在场时，指定1种系别)</span>展示【预言】堆顶部1张【预言】[展示]；<span class='tiaoJian'>(若该【预言】与你指定的系别相同)</span>移除该【预言】，我方【战绩区】+1[水晶]；<span class='tiaoJian'>(若不同)</span>将牌堆顶1张牌与该【预言】交换，然后将该【预言】加入你手牌[强制]。",
+            xianJi_info:"<span class='tiaoJian'>(仅【末日预言】在场时，指定1种系别)</span>展示【预言】堆顶部1张【预言】[展示]；<span class='tiaoJian'>(若该【预言】与你指定的系别相同)</span>移除该【预言】，我方【战绩区】+1[宝石]；<span class='tiaoJian'>(若不同)</span>将牌堆顶1张牌与该【预言】交换，然后将该【预言】加入你手牌[强制]。",
             moRiYuYan:"(专)末日预言",
             moRiYuYan_info:`
             <span class="greentext">[被动]末日预言</span><br>

@@ -10360,6 +10360,7 @@ export class Library {
 				},
 				check:function(button){
 					var player=_status.event.player;
+					if(ui.selected.buttons.length>=1) return -1;
 					if(player.hasSkillTag('baoShi')&&!player.hasSkillTag('shuiJing')){
 						if(button.link=='baoShi') return 5;
 						else return -1;
