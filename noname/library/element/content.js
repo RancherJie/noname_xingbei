@@ -10102,7 +10102,7 @@ export const Content = {
 		game.delayx();
 		var num=player.needsToDiscard();
 		if(num>0){
-			var next=player.chooseToDiscard(num,true).set('baoPai',true);
+			var next=player.chooseToDiscard(num,true,`爆牌：弃${num}张牌`).set('baoPai',true);
 			if(event.cause=='damage'){
 				next.set('cause','damage');
 				if(event.faShu===true){
@@ -11538,6 +11538,7 @@ export const Content = {
 			isLinked
 		);
 		game.addVideo("link", player, player.isLinked());
+		//player.update();
 	},
 	/**
 	 * @deprecated

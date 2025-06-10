@@ -10016,18 +10016,18 @@ export class Library {
 		},
 		_faShuXianZhi:{
 			mod:{
-				cardEnabled:function(card){
+				cardEnabled:function(card,player){
 					if(_status.event.name=='faShu'){
-						if(get.type(card)!='faShu') return false;
+						if(get.type(card,player)!='faShu') return false;
 					}
 				}
 			},
 		},
 		_gongJiXianZhi:{
 			mod:{
-				cardEnabled:function(card){
+				cardEnabled:function(card,player){
 					if(_status.event.name=='gongJi'){
-						if(get.type(card)!='gongJi') return false;
+						if(get.type(card,player)!='gongJi') return false;
 					}
 				}    
 			}
@@ -10575,6 +10575,9 @@ export class Library {
 				next.set('canYingZhan',trigger.canYingZhan);
 				next.set('canShengGuang',trigger.canShengGuang);
 				next.set('canAnMie',trigger.canAnMie);
+				next.set('oncard',function(card,player){
+					_status.event.yingZhan=true;//设置本次攻击为应战攻击
+				});
 				'step 1'
 				if(result.bool){
 					trigger.weiMingZhong();
@@ -10593,7 +10596,7 @@ export class Library {
 			},
 			content:function(){
 				'step 0'
-				trigger.yingZhan=true;//设置本次攻击为应战攻击
+				//trigger.yingZhan=true;//设置本次攻击为应战攻击
 
 				event.customArgs=trigger.getParent(5).customArgs;
 				event.source=trigger.getParent().source;//攻击来源
@@ -10698,10 +10701,12 @@ export class Library {
 			trigger:{global:['hengZhiAfter','chongZhiAfter','changeZhiShiWuAfter','changeNengLiangAfter','changeZhiLiaoAfter','addToExpansionAfter','loseToDiscardpileAfter','changeZhanJiAfter','changeXingBeiAfter','changeShiQiAfter','useSkillAfter','useCardAfter']},
 			direct:true,
 			lastDo:true,
+			/*
 			filter:function(event,player){
 				return player.needsToDiscard()>0;
-			},
+			},*/
 			content:function(){
+				player.update();
 				player.qiPai();
 			}
 		},
@@ -12708,6 +12713,14 @@ export class Library {
 					span.textContent = "FAQ";
 					return span.outerHTML;
 				},
+			},
+		],
+		[
+			"农",
+			{
+				showName: "农",
+				color: "#672e3d",
+				nature: "purplemm",
 			},
 		],
 	]);

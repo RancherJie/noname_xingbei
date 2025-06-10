@@ -217,7 +217,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 					}
 				},
 				content:function(){
-					target.addToExpansion(event.cards,'gain2').gaintag.add('_shengDun');
+					target.addToExpansion(event.cards,'gain2',player).gaintag.add('_shengDun');
 				},
 				ai:{
 					order:function(item,player){

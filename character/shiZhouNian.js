@@ -1045,7 +1045,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             'step 0'
                             var x=0;
                             for(var p of game.players){
-                                for(var xiaoGuo of game.jiChuXiaoGuo.fengYinShi){
+                                for(var xiaoGuo of game.jiChuXiaoGuo.fengYinShi_xiaoGuo){
                                     if(p.hasExpansions(xiaoGuo)){
                                         x++;
                                     }
@@ -2726,24 +2726,17 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     },
                     huan:{
                         type:'faShu',
-                        content:function(){
-                            'step 0'
-                            player.removeBiShaShuiJing();
-                            'step 1'
+                        content:async function(event, trigger, player){
+                            await player.removeBiShaShuiJing();
                             var zhanJi=get.zhanJi(player.side).slice();
-                            event.num=0;
-                            for(var i=0;i<zhanJi.length;i++){
-                                event.num++;
+                            var num=0;
+                            for(var xingShi of zhanJi){
+                                if(xingShi == 'shuiJing') num++;
                             }
-                            'step 2'
-                            if(event.num>0){
-                                player.changeZhanJi('shuiJing',-event.num);
+                            if(num>0){
+                                await player.changeZhanJi('shuiJing',-num);
+                                await player.changeZhanJi('baoShi',num);
                             }
-                            'step 3'
-                            if(event.num>0){
-                                player.changeZhanJi('baoShi',event.num);
-                            }
-                            'step 4'
                             player.addGongJiOrFaShu();
                         }
                     }
@@ -5717,9 +5710,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.chooseTarget(true,'目标角色弃1张牌').set('ai',function(target){
                         var player=_status.event.player;
                         if(target.side==player.side){
-                            return 10;
+                            return 15-(target.getHandcardLimit()-target.countCards('h'));
                         }
-                        return target.countCards('h');
+                        return target.countCards('h')*0.5;
                     });
                     'step 4'
                     result.targets[0].chooseToDiscard('h',true);
@@ -8468,9 +8461,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         await player.storage.tongShengGongSi_target.removeZhiShiWu('tongShengGongSi_xiaoGuo');
                         var target=result.targets[0];
                         if(!target.hasSkill('tongShengGongSi_xiaoGuo')){
-                            target.storage.tongShengGongSi_player=player;
                             target.addSkill('tongShengGongSi_xiaoGuo');                
                         }
+                        target.storage.tongShengGongSi_player=player;
                         player.storage.tongShengGongSi_target=target;
                         await target.addZhiShiWu('tongShengGongSi_xiaoGuo');
                     }else{
@@ -8608,9 +8601,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.storage.tongShengGongSi_use=true;
                     
                     if(!target.hasSkill('tongShengGongSi_xiaoGuo')){
-                        target.storage.tongShengGongSi_player=player;
                         target.addSkill('tongShengGongSi_xiaoGuo');
                     }
+                    target.storage.tongShengGongSi_player=player;
                     'step 2'
                     target.addZhiShiWu('tongShengGongSi_xiaoGuo');
                 },

@@ -1356,7 +1356,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 mod:{
                     maxHandcardWuShi:function(player,num){
-                        if(player.storage.chuangKeLvDong) return 99;
+                        if(player.storage.chuangKeLvDong) return Infinity;
                     }
                 },
                 ai:{

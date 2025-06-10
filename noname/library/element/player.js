@@ -3592,6 +3592,7 @@ export class Player extends HTMLDivElement {
 			numh = arguments[0];
 		}
 		var limit= this.getHandcardLimit();
+		if(limit==Infinity) limit='∞';
 
 		this.node.count.innerHTML = numh+ "/" + limit;
 		if (numh > limit) {

@@ -2254,6 +2254,17 @@ div:not(.handcards) > .card > .info > span,
 	white-space: nowrap;
 	/*opacity: 0;*/
 }
+
+.player.linked > .nameol {
+	left: 60px;
+	top: 50px;
+	width: 100%;
+	font-size: 12px;
+	text-align: center;
+	white-space: nowrap;
+	transform:rotate(90deg) translateX(10px);
+	/*opacity: 0;*/
+}
 .player:hover > .nameol {
 	opacity: 1;
 }
