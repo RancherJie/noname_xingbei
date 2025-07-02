@@ -10409,7 +10409,7 @@ export class Library {
 			firstDo:true,
 			content:function(){
 				player.storage.zhongDu=[];
-				player.storage.moDan=false;
+				player.removeMark('_moDan',player.countMark('_moDan'),false);
 			}
 		},
 		_xuRuo:{
@@ -10626,43 +10626,45 @@ export class Library {
 			}
 		},
 		_moDan:{
+			intro:{
+				name:'已魔弹',
+				nocount:true,
+			},
+			markimage:'image/card/moDan.png',
 			trigger:{target:'shouDaoMoDan'},
 			direct:true,
-			content:function(){
-				"step 0"
-				player.storage.moDan=true;//是否已经被魔弹
-				
+			content:async function(event,trigger,player){
+				if(!player.hasMark('_moDan')) await player.addMark('_moDan',1,false);//是否已经被魔弹
+
 				//所有玩家有魔弹标记重置标记
-				var num=0;
-				for(var i=0;i<game.players.length;i++){
-					if(game.players[i].storage.moDan==true){
-						num++;
-					}
-				}
+				var num=game.filterPlayer(function(current){
+					return current.hasMark('_moDan');
+				}).length;
 				if(num>=game.players.length){
-					for(var i=0;i<game.players.length;i++){
-						game.players[i].storage.moDan=false;
+					for(var current of game.players){
+						await current.removeMark('_moDan',current.countMark('_moDan'),false);
 					}
 				}
-				
+
 				var name=get.translation(trigger.player);
 				var str='受到'+name+'的魔弹';
 				var next=player.moDan(str,function(card,player,event){
 					if(!(get.name(card)=='moDan'||get.name(card)=='shengGuang')) return false;
 					return lib.filter.cardEnabled(card,player,'forceEnable');
 				});
-				next.autodelay=true; 
+				next.autodelay=true;
 				game.moDan++;
 
-				"step 1"
+				var result=await next.forResult();
+
 				if(result.bool){
 					trigger.weiMingZhong();
 					game.resetMoDan();
 				}else{
 					game.moDan--;
 				}
-				
-				player.storage.moDan=false;
+
+				if(player.hasMark('_moDan')) await player.removeMark('_moDan',player.countMark('_moDan'),false);
 			},
 			subSkill:{
 				before:{//第一个使用魔弹的角色增加魔弹标记
@@ -10670,14 +10672,11 @@ export class Library {
 					direct:true,
 					lastDo:true,
 					filter:function(event,player){
-						if(player.storage.moDan!=true&&(event.card&&event.card.name=='moDan')){
-							return true;
-						}else{
-							return false;
-						}
+						if(event.getParent().name=='moDan') return false;
+						return (!player.hasMark('_moDan')&&(event.card&&event.card.name=='moDan'));
 					},
 					content:function(){
-						player.storage.moDan=true;
+						player.addMark('_moDan',1,false);
 					}
 				},
 				after:{//第一个使用魔弹的角色删除魔弹标记
@@ -10685,14 +10684,10 @@ export class Library {
 					direct:true,
 					lastDo:true,
 					filter:function(event,player){
-						if(player.storage.moDan!=false&&(event.card&&event.card.name=='moDan')){
-							return true;
-						}else{
-							return false;
-						}
+						return player.hasMark('_moDan')&&(event.card&&event.card.name=='moDan');
 					},
 					content:function(){
-						player.storage.moDan=false;
+						player.removeMark('_moDan',player.countMark('_moDan'),false);
 					}
 				},
 			}
@@ -12721,6 +12716,14 @@ export class Library {
 				showName: "农",
 				color: "#672e3d",
 				nature: "purplemm",
+			},
+		],
+		[
+			"trick",
+			{
+				showName: "trick",
+				color: "#672e3d",
+				nature: "metal",
 			},
 		],
 	]);

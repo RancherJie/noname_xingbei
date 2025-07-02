@@ -704,6 +704,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         player.addGongJi();
                     }
                 },
+                check:function(card){
+                    return 6-get.value(card);
+                },
                 ai:{
                     order:3.8,
                     result:{
@@ -905,9 +908,14 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                 },
                 contentAfter:function(){
+                    'step 0'
                     player.changeZhiLiao(1);
+                    'step 1'
                     player.draw();
                     player.addFaShu();
+                },
+                check:function(card){
+                    return 6-get.value(card);
                 },
                 ai:{
                     order:function(item,player){
@@ -1339,7 +1347,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 content:function(){
                     'step 0'
-                    player.storage.chuangKeLvDong=true;
+                    player.addSkill('chuangKeLvDong_wuXian');
                     player.removeBiShaBaoShi();
                     'step 1'
                     player.chooseDraw(1);
@@ -1350,15 +1358,20 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     if(result.bool){
                         player.addToExpansion('draw',result.cards,'log').gaintag.add('luEn');
                     }
-                    player.storage.chuangKeLvDong=false;
+                    player.removeSkill('chuangKeLvDong_wuXian');
                     'step 4'
                     player.qiPai();
                 },
-                mod:{
-                    maxHandcardWuShi:function(player,num){
-                        if(player.storage.chuangKeLvDong) return Infinity;
+                subSkill:{
+                    wuXian:{
+                        mod:{
+                            maxHandcardWuShi:function(player,num){
+                                return Infinity;
+                            }
+                        },
                     }
                 },
+                
                 ai:{
                     baoShi:true,
                     order:3.8,

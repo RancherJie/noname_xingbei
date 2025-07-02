@@ -74,7 +74,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 enable:'faShu',
                 content:async function (event,trigger,player){
                     var cards=get.cards(2);
-                    game.cardsGotoOrdering(cards);
+                    await game.cardsGotoOrdering(cards);
                     await player.showHiddenCards(cards);
                     var next=player.chooseCardButton(cards);
                     next.set('prompt','你可选择1张牌打出，并弃1张牌');
@@ -309,7 +309,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                     break;
                                 }
                             }
-                            if(bool&&name=='gainEnd'&&event.player==player) return false;
+                            if(bool&&name=='gainEnd'&&event.skill=='jiGuShiDian') return false;
                             
                             return bool;
                         },
@@ -488,20 +488,50 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         player.changeShiQi(-1);
                     }
                 },
-                global:'shenLvFengSuo_zhiLiao',
-                init:function(player,skill){
-                    for(var current of game.players){
-                        current.storage['shenLvFengSuo']=player;
-                    }
-                },
+                //global:'shenLvFengSuo_shangXian',
+                group:'shenLvFengSuo_zhiLiao',
                 subSkill:{
-                    zhiLiao:{
+                    shangXian:{
                         mod:{
                             maxHandcard:function (player,num){
-                                if(player.storage.shenLvFengSuo.zhiLiao<player.storage.shenLvFengSuo.getZhiLiaoLimit()&&player.zhiLiao==0){
+                                if(player.zhiLiao==0){
                                     return num-1;
                                 }
-                            
+                            }
+                        }
+                    },
+                    zhiLiao:{
+                        trigger:{player:'changeZhiLiaoEnd'},
+                        direct:true,
+                        init:function (player){
+                            var flag=false;
+                            if(player.zhiLiao<player.getZhiLiaoLimit()&&!lib.skill.global.includes('shenLvFengSuo_shangXian')){
+                                game.addGlobalSkill('shenLvFengSuo_shangXian');
+                                flag=true;
+                            }else if (player.zhiLiao>=player.getZhiLiaoLimit()&&lib.skill.global.includes('shenLvFengSuo_shangXian')){
+                                game.removeGlobalSkill('shenLvFengSuo_shangXian');
+                                flag=true;
+                            }
+                            if(flag){
+                                for(var current of game.players){
+                                    current.update();
+                                }
+                            }
+                        },
+                        priority:-0.1,
+                        content:async function (event,trigger,player){
+                            var flag=false;
+                            if(player.zhiLiao<player.getZhiLiaoLimit()&&!lib.skill.global.includes('shenLvFengSuo_shangXian')){
+                                game.addGlobalSkill('shenLvFengSuo_shangXian');
+                                flag=true;
+                            }else if (player.zhiLiao>=player.getZhiLiaoLimit()&&lib.skill.global.includes('shenLvFengSuo_shangXian')){
+                                game.removeGlobalSkill('shenLvFengSuo_shangXian');
+                                flag=true;
+                            }
+                            if(flag){
+                                for(var current of game.players){
+                                    current.update();
+                                }
                             }
                         }
                     }
@@ -1388,7 +1418,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 content:async function (event,trigger,player){
                     await player.removeBiShaShuiJing();
-                    player.storage.fangZhu=true;
+                    player.addSkill('fangZhu_wuXian');
 
                     var list=[6,7,8];
                     var num=await player.chooseControl(list).set('prompt',`无视手牌上限摸6-8张牌`).set('ai',function(){
@@ -1418,7 +1448,16 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     await player.addToExpansion(cards,'draw').set('gaintag',["yuYan"]).set('special',true);
 
                     player.addGongJiOrFaShu();
-                    player.storage.fangZhu=false;
+                    player.removeSkill('fangZhu_wuXian');
+                },
+                subSkill:{
+                    wuXian:{
+                        mod:{
+                            maxHandcardWuShi:function(player,num){
+                                return Infinity;
+                            },
+                        }
+                    },
                 },
                 ai:{
                     shuiJing:true,
@@ -1431,9 +1470,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                 },
                 mod:{
-                    maxHandcardWuShi:function(player,num){
-                        if(player.storage.fangZhu) return Infinity;
-                    },
                     aiOrder:function(player,item,num){
                         if(item=='_tiLian'&&player.hasExpansions('yuYan')<=1&&player.countNengLiang()<1) return num+1;
                     }

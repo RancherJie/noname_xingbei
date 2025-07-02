@@ -463,9 +463,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             return bool;
                         },
                         content: async function(event, trigger, player){
-                            event.indexedData.fix();
-                            event.indexedData.remove();
-                            event.indexedData.destroyed = true;
+                            let name=get.name(event.indexedData);
+                            event.indexedData.storage.renMaster.storage[name]=false;
+                            game.broadcastAll(function(card){
+                                card.fix();
+                                card.remove();
+                                card.destroyed = true;
+                            },event.indexedData);
                             game.log(event.indexedData, "被移除了");
                         }
                     },
@@ -552,18 +556,22 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                 player.storage.moRen=false;
                                 let card=cards[j];
                                 await current.lose(card);
-                                card.fix();
-                                card.remove();
-                                card.destroyed = true;
+                                game.broadcastAll(function(card){
+                                    card.fix();
+                                    card.remove();
+                                    card.destroyed = true;
+                                },card);
                                 game.log(card, "被移除了");
                             }else if(cards[j].name=='yiRen'){
                                 players.push(current);
                                 player.storage.yiRen=false;
                                 let card=cards[j];
                                 await current.lose(card);
-                                card.fix();
-                                card.remove();
-                                card.destroyed = true;
+                                game.broadcastAll(function(card){
+                                    card.fix();
+                                    card.remove();
+                                    card.destroyed = true;
+                                },card);
                                 game.log(card, "被移除了");
                             }
                             if(players.length>=2) break;
@@ -1199,6 +1207,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 2'
                     player.addZhiShiWu('jiX');
                 },
+                check:function(card){
+                    return 6-get.value(card);
+                },
                 ai:{
                     order:4,
                     result:{
@@ -1550,6 +1561,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     if(result.bool){
                         player.addZhiShiWu('miShu');
                     }
+                },
+                check:function(card){
+                    if(get.xiBie(card)=='guang') return 0;
+                    return 6-get.value(card);
                 },
                 ai:{
                     order:3.8,
@@ -2099,7 +2114,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             fengXueX_yingZhiFeng1_2:"影之风",
             fengXueX_yingZhiFeng2:"影之风",
             fengXueX_fengZhi:"风止",
-
+            fengXueX_fengZhi_info:"<span class='tiaoJian'>(若你拥有【风穴】，你的回合结束时发动)</span>将手牌补到上限[强制]，弃2张牌，将弃牌面朝下放置在女仆长角色旁作为【影】，然后移除【风穴】。",
 
 
             //结界师

@@ -1318,7 +1318,8 @@ export class GameEvent {
 	 * @param {num} num 伤害改变量 
 	 */
 	changeDamageNum(num){
-		if(typeof num != 'number' || !num) num = 1;
+		if(typeof num != 'number') num = 1;
+		if(num===0) return;
 		if(this.name=='zhiLiao'){
 			this.getParent().num+=num;
 			return this;

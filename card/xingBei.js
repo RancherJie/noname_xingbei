@@ -196,9 +196,9 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 
 				},
 				ai:{
-					order:3,
+					order:2.7,
 					basic:{
-						useful:[7,4,2],
+						useful:[4,3,2],
 						value:[7,4,2],
 					},
 					result:{player:1},
@@ -314,7 +314,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 				filterTarget:function(card,player,target){
 					if(game.moDanFangXiang=='zuo'){
 						var mubiao=player;
-						while(mubiao.storage.moDan==true||mubiao.side==player.side){
+						while(mubiao.hasMark('_moDan')||mubiao.side==player.side){
 							mubiao=mubiao.getPrevious();
 						}
 						if(target==mubiao){
@@ -322,7 +322,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 						}
 					}else if(game.moDanFangXiang=='you'){
 						var mubiao=player;
-						while(mubiao.storage.moDan==true||mubiao.side==player.side){
+						while(mubiao.hasMark('_moDan')||mubiao.side==player.side){
 							mubiao=mubiao.getNext();
 						}
 						if(target==mubiao){

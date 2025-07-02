@@ -47,7 +47,7 @@ export class Game extends GameCompatible {
 		qiDaoShi:['weiLiCiFu','xunJieCiFu'],
 		qiDaoSh_xiaoGuo:['weiLiCiFu_xiaoGuo','xunJieCiFu_xiaoGuo'],
 		pai:['shengDun','xuRuo','zhongDu'],
-		pai_xiaoGip:['_shengDun','_xuRuo','_zhongDu'],
+		pai_xiaoGuo:['_shengDun','_xuRuo','_zhongDu'],
 	};
 	handcardLimit=6;
 	zhiLiaoMax=2;

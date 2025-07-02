@@ -5787,13 +5787,13 @@ export class Get extends GetCompatible {
 			return 2;
 		}
 		//封印师
-		for(var xiaoGuo of game.jiChuXiaoGuo['fengYinShi']){
+		for(var xiaoGuo of game.jiChuXiaoGuo['fengYinShi_xiaoGuo']){
 			if(target.hasExpansions(xiaoGuo)){
 				return 1;
 			}
 		}
 		//赐福
-		for(var xiaoGuo of game.jiChuXiaoGuo['qiDaoShi']){
+		for(var xiaoGuo of game.jiChuXiaoGuo['qiDaoShi_xiaoGuo']){
 			if(target.hasExpansions(xiaoGuo)){
 				return -1;
 			}

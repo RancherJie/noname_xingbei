@@ -592,6 +592,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 content:function(){
                     player.addZhiShiWu('lanSeLingHun',cards.length+1);
                 },
+                check:function(card){
+                    return 6-get.value(card);
+                },
                 ai:{
                     order:function(item,player){
                         return 2.1+player.countCards('h',card=>lib.skill.san_lingHunZhaoHuan.filterCard(card))*0.7;
@@ -1088,7 +1091,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             san_bingShuangDaoYan:"[被动]冰霜祷言",
             san_bingShuangDaoYan_info:"<span class='tiaoJian'>(每当你使用水系牌发动)</span>目标角色+1[治疗]。",
             san_lianMin:"[启动]怜悯[持续]",
-            san_lianMin_info:"[宝石][横置]你的手牌上限恒定为7[持续]。",
+            san_lianMin_info:"[宝石][横置]你的手牌上限恒定为7[恒定]。",
 
             san_hePingXingZhe:"[被动]和平行者",
             san_hePingXingZhe_info:"<span class='tiaoJian'>(发动【英灵召唤】后强制触发[强制])</span>[横置]，转入【英灵形态】；<span class='tiaoJian'>(每当你执行主动攻击时发动①)</span>[重置]脱离【英灵形态】。",
