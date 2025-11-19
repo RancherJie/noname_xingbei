@@ -1,0 +1,30 @@
+.hp:not(.text):not(.actcount):not(.treasure)>div:not(.lost){
+    background: url('image/xingBei1.png');
+    box-shadow: none;
+    border: none;
+    background-size: 100% 100%;
+    transform: scale(2.5);
+    -webkit-filter:brightness(0.8) contrast(1.5);
+    border-radius: 2px;
+}
+
+.hp:not(.text):not(.actcount):not(.treasure)>.lost{
+    background: url('image/xingBei4.png');
+    box-shadow: none;
+    border: none;
+    background-size: 100% 100%;
+    transform: scale(2.5);
+    border-radius: 2px;
+}
+
+#arena.oldlayout .player .hp:not(.text):not(.actcount):not(.treasure)>div:not(.lost){
+    transform: scale(1.6);
+}
+
+#arena.oldlayout .player .hp:not(.text):not(.actcount):not(.treasure)>.lost{
+    transform: scale(1.6);
+}
+
+.button.newstyle>.hp>.text{
+    margin-left: 5px;
+}

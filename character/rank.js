@@ -1,0 +1,17 @@
+window.noname_character_rank={
+	s:[],
+	ap:[],
+	a:[],
+	am:[],
+	bp:[],
+	b:[],
+	bm:[],
+	c:[],
+	d:[],
+	rarity:{
+		legend:[],
+		epic:[],
+		rare:[],
+		junk:[],
+	}
+};
