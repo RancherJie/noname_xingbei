@@ -5534,7 +5534,7 @@ export class Get extends GetCompatible {
 		if(!num) num=2;
 		if(target.hasSkillTag('noShiQiXiaJiang')) return 0;
 		var chaZhi=target.getHandcardLimit()-target.countCards('h');
-		if(target.hasSkillTag('one_damage')) return 0;
+		if(target.hasSkillTag('oneDamage')&&num==1) return 0;
 		if(chaZhi<num) return -2;
 		else if(chaZhi-3<num) return -1;
 		else return -0.5;
@@ -5821,7 +5821,7 @@ export class Get extends GetCompatible {
 		if(target.hasExpansions('_shengDun')){
 			return -1;
 		}
-		if(target.hasExpansions('_zhongDu')&&!target.hasSkillTag('one_damage')){
+		if(target.hasExpansions('_zhongDu')&&!target.hasSkillTag('oneDamage')){
 			return 1;
 		}
 		if(target.hasExpansions('_xuRuo')){
@@ -5843,6 +5843,9 @@ export class Get extends GetCompatible {
 	}
 
 	shiQi(side){
+		if(get.itemtype(side)=='player'){
+			side=side.side;
+		}
 		if(side==true){
 			return game.hongShiQi;
 		}else if(side==false){
@@ -5850,6 +5853,9 @@ export class Get extends GetCompatible {
 		}
 	}
 	zhanJi(side){
+		if(get.itemtype(side)=='player'){
+			side=side.side;
+		}
 		if(side==true){
 			return game.hongZhanJi;
 		}else if(side==false){
@@ -5857,6 +5863,9 @@ export class Get extends GetCompatible {
 		}
 	}
 	xingBei(side){
+		if(get.itemtype(side)=='player'){
+			side=side.side;
+		}
 		if(side==true){
 			return game.hongXingBei;
 		}else if(side==false){
