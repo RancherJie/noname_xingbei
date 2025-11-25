@@ -5334,7 +5334,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.faShuDamage(event.num,player);
                 },
                 ai:{
-                    one_damage:true,
+                    oneDamage:true,
                 }
             },
             moDaoFaDian:{

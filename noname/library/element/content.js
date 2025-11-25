@@ -12331,7 +12331,7 @@ export const Content = {
 							return xiaoGuo;
 						}
 					}
-					if(list.includes('_zhongDu')&&!target.hasSkillTag('one_damage')) return '_zhongDu';
+					if(list.includes('_zhongDu')&&!target.hasSkillTag('oneDamage')) return '_zhongDu';
 				}else{
 					if(list.includes('_shengDun')){
 						return '_shengDun';
@@ -12393,7 +12393,7 @@ export const Content = {
 							return xiaoGuo;
 						}
 					}
-					if(list.includes('_zhongDu')&&!target.hasSkillTag('one_damage')) return '_zhongDu';
+					if(list.includes('_zhongDu')&&!target.hasSkillTag('oneDamage')) return '_zhongDu';
 				}else{
 					if(list.includes('_shengDun')){
 						return '_shengDun';
