@@ -72,6 +72,8 @@ export const optionsMenu = function (connectMenu) {
 			};
 		}
 	}
+	
+	/*星杯中无实际用处
 	var clickBanSkill = function (bool) {
 		var name = this._link.config._name;
 		var list = lib.config.forbidlist;
@@ -82,10 +84,11 @@ export const optionsMenu = function (connectMenu) {
 		}
 		game.saveConfig("forbidlist", list);
 	};
-	var forbid = lib.config.forbid;
+	var forbid = lib.config.forbid;*/
 	if (!lib.config.forbidlist) {
 		game.saveConfig("forbidlist", []);
 	}
+	/*
 	for (var i = 0; i < forbid.length; i++) {
 		var skip = false;
 		var str = "";
@@ -114,7 +117,7 @@ export const optionsMenu = function (connectMenu) {
 			onclick: clickBanSkill,
 			intro: str3,
 		};
-	}
+	}*/
 
 	var updateView = null;
 	var updateAppearence = null;
@@ -150,7 +153,7 @@ export const optionsMenu = function (connectMenu) {
 					}
 					autoskillexpanded = !autoskillexpanded;
 				});
-				banskill = ui.create.div(".config.more", "双角禁配 <div>&gt;</div>", page, function () {
+				banskill = ui.create.div(".config.more", "禁双角同时出现 <div>&gt;</div>", page, function () {
 					if (banskillexpanded) {
 						this.classList.remove("on");
 						for (var k = 0; k < banskillNodes.length; k++) {
@@ -249,7 +252,7 @@ export const optionsMenu = function (connectMenu) {
 					}
 
 					var selectname = ui.create.selectlist(list, list[0], banskilladdNode);
-					selectname.onchange = function () {
+					/*selectname.onchange = function () {
 						var skills = lib.character[this.value][3];
 						skillopt.innerHTML = "";
 						for (var i = 0; i < skills.length; i++) {
@@ -258,9 +261,9 @@ export const optionsMenu = function (connectMenu) {
 							option.innerHTML = lib.translate[skills[i]];
 							skillopt.appendChild(option);
 						}
-					};
+					};*/
 					selectname.style.maxWidth = "85px";
-					var skillopt = ui.create.selectlist(list2, list2[0], banskilladdNode);
+					//var skillopt = ui.create.selectlist(list2, list2[0], banskilladdNode);
 
 					var span = document.createElement("span");
 					span.innerHTML = "＋";
@@ -269,7 +272,7 @@ export const optionsMenu = function (connectMenu) {
 					banskilladdNode.appendChild(br);
 
 					var selectname2 = ui.create.selectlist(list, list[0], banskilladdNode);
-					selectname2.onchange = function () {
+					/*selectname2.onchange = function () {
 						var skills = lib.character[this.value][3];
 						skillopt2.innerHTML = "";
 						for (var i = 0; i < skills.length; i++) {
@@ -278,25 +281,38 @@ export const optionsMenu = function (connectMenu) {
 							option.innerHTML = lib.translate[skills[i]];
 							skillopt2.appendChild(option);
 						}
-					};
+					};*/
 					selectname2.style.maxWidth = "85px";
-					var skillopt2 = ui.create.selectlist(list2, list2[0], banskilladdNode);
+					//var skillopt2 = ui.create.selectlist(list2, list2[0], banskilladdNode);
 					var confirmbutton = document.createElement("button");
 					confirmbutton.innerHTML = "确定";
 					banskilladdNode.appendChild(confirmbutton);
 
 					confirmbutton.onclick = function () {
+						//console.log(selectname.value, selectname2.value);
+						var list=[selectname.value,selectname2.value];
+						if(list[0]==list[1]){
+							alert("请选择不同的角色");
+							return;
+						}
+						if (!lib.config.customforbid) return;
+						
+						/*
 						var skills = [skillopt.value, skillopt2.value];
 						if (skills[0] == skills[1]) {
 							skills.shift();
 						}
-						if (!lib.config.customforbid) return;
 						for (var i = 0; i < lib.config.customforbid.length; i++) {
 							if (matchBanSkill(lib.config.customforbid[i], skills)) return;
+						}*/
+
+						for (var i = 0; i < lib.config.customforbid.length; i++) {
+							if (matchBanSkill(lib.config.customforbid[i], list)) return;
 						}
-						lib.config.customforbid.push(skills);
+
+						lib.config.customforbid.push(list);
 						game.saveConfig("customforbid", lib.config.customforbid);
-						createCustomBanSkill(skills).style.display = "";
+						createCustomBanSkill(list).style.display = "";
 					};
 				})();
 				page.style.paddingBottom = "10px";

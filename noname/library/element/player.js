@@ -9087,6 +9087,8 @@ export class Player extends HTMLDivElement {
 		return list;
 	}
 	checkConflict(skill) {
+		return;
+		//屏蔽技能冲突检测功能，星杯中无实际用处
 		if (skill) {
 			if (this.forbiddenSkills[skill]) {
 				delete this.forbiddenSkills[skill];

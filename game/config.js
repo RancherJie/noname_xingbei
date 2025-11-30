@@ -138,7 +138,11 @@ window.config = {
 	extensions: [],
 	banned: [],
 	bannedcards: [],
-	forbidlist: [],
+	forbidlist: [//互斥角色组合
+		['hongLianQiShi','shengDianQiShi'],
+		['shengNv','jinGuiZhiNv'],
+		['fengZhiJianSheng','jianZhiZi'],
+	],
 	bannedpile: {},
 	customcardpile: {},
 	addedpile: {},

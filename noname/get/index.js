@@ -5741,28 +5741,15 @@ export class Get extends GetCompatible {
 	//xingbei
 	characterGets(list,num){
 		var result=list.slice();
-		if(result.includes('hongLianQiShi')&&result.includes('shengDianQiShi')){
-			let num=Math.random();
-			if(num<0.5){
-				result.remove('hongLianQiShi');
-			}else{
-				result.remove('shengDianQiShi');
-			}
-		}
-		if(result.includes('shengNv')&&result.includes('jinGuiZhiNv')){
-			let num=Math.random();
-			if(num<0.5){
-				result.remove('shengNv');
-			}else{
-				result.remove('jinGuiZhiNv');
-			}
-		}
-		if(result.includes('fengZhiJianSheng')&&result.includes('jianZhiZi')){
-			let num=Math.random();
-			if(num<0.5){
-				result.remove('fengZhiJianSheng');
-			}else{
-				result.remove('jianZhiZi');
+		var forbidlist = lib.config.forbidlist.concat(lib.config.customforbid);
+		for(var i=0;i<forbidlist.length;i++){
+			if(result.includes(forbidlist[i][0])&&result.includes(forbidlist[i][1])){
+				let num=Math.random();
+				if(num<0.5){
+					result.remove(forbidlist[i][0]);
+				}else{
+					result.remove(forbidlist[i][1]);
+				}
 			}
 		}
 		if(typeof num=='number'&&num>0) result=result.randomGets(num);
