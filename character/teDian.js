@@ -3306,6 +3306,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     gongJi:{
                         trigger:{player:'gongJiMingZhong'},
                         filter:function(event,player){
+                            if(event.yingZhan) return false;
                             var num=0;
                             var zuo_cards=player.getExpansions('tianPing_zuo');
                             var you_cards=player.getExpansions('tianPing_you');
