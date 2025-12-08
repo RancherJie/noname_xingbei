@@ -2855,12 +2855,14 @@ export class Get extends GetCompatible {
 		if (get.itemtype(player) !== "player") {
 			player = undefined;
 		}
+		var result;
 		if (str.startsWith("re")) {
 			str2 = str.slice(2);
 			if (str2) {
 				if (lib.translate[str] == lib.translate[str2]) {
 					if (player?.hasSkill(str2)) {
-						return "界" + lib.translate[str];
+						result= "界" + lib.translate[str];
+						//return "界" + lib.translate[str];
 					}
 				}
 			}
@@ -2869,12 +2871,22 @@ export class Get extends GetCompatible {
 			if (str2) {
 				if (lib.translate[str] == lib.translate[str2]) {
 					if (player?.hasSkill(str2)) {
-						return "新" + lib.translate[str];
+						result= "新" + lib.translate[str];
+						//return "新" + lib.translate[str];
 					}
 				}
 			}
+		}else result=get.translation(str);
+
+		//针对作为启动附属技能，去除括号等，避免日志带有歧义
+		if(result.includes&&result.includes('启动')&&get.info(str).type!='qiDong'){
+			var reg=new RegExp(/[\[\(\)].{1,5}[\]\)]/g,'g');
+			if(result.replace){
+				result=result.replace(reg,'');
+			}
 		}
-		return get.translation(str);
+
+		return result;
 	}
 	skillInfoTranslation(name, player) {
 		let str = (() => {
