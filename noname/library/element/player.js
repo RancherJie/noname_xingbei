@@ -2103,6 +2103,7 @@ export class Player extends HTMLDivElement {
 		);
 		if (lib.animate.skill[name]) lib.animate.skill[name].apply(this, arguments);
 		else {
+			//技能弹窗去除括号等
 			var skillName=get.skillTranslation(name,this);
 			var reg=new RegExp(/[\[\(\)].{1,5}[\]\)]/g,'g');
 			if(skillName.replace){
