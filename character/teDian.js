@@ -2101,7 +2101,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             trick_ziDongTianChong:{
                 inherit: 'ziDongTianChong',
                 content:async function(event,trigger,player){
-                    var choiceList=[`[水晶]你+1<span class='hong'>【信仰】</span>或+1[治疗]，然后+1【圣煌辉光炮】`,`[宝石]你+1[水晶]，+2<span class='hong'>【信仰】</span>或目标角色+2[治疗]`];
+                    var choiceList=[`[水晶]你+1<span class='hong'>【信仰】</span>或+1[治疗]，然后+1【圣煌辉光炮】`,`[宝石]你+2<span class='hong'>【信仰】</span>或目标角色+2[治疗]`];
                     var list=['选项一'];
                     if(player.canBiShaBaoShi()){
                         list.push('选项二');
@@ -2116,7 +2116,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         var num=1;
                     }else{
                         await player.removeBiShaBaoShi();
-                        await player.addNengLiang('shuiJing',1);
+                        //await player.addNengLiang('shuiJing',1);
                         var num=2;
                     }
                     var list=['信仰','治疗'];
