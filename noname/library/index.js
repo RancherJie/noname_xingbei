@@ -10612,8 +10612,9 @@ export class Library {
 						game.playAudio('card','male','xuRuo');
 					}
 				});
-				var list=['摸三张牌','跳过行动阶段'];
-				player.chooseControl().set('choiceList',list).set('prompt','虚弱：选择一项').set('ai',function(){
+				var list=['选项一','选项二']; 
+				var choiceList=['摸三张牌','跳过行动阶段'];
+				player.chooseControl(list).set('choiceList',list).set('prompt','虚弱：选择一项').set('ai',function(){
 					var player=_status.event.player;
 					if(player.countCards('h')+3<=player.getHandcardLimit()) return 0;
 					return 1;
