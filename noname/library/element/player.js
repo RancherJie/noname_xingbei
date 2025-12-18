@@ -10884,6 +10884,7 @@ export class Player extends HTMLDivElement {
 		}else{
 			next.side=side;
 		}
+		next.result={};
 
 		var shiQi;
 		switch(next.side){
@@ -10895,10 +10896,13 @@ export class Player extends HTMLDivElement {
 		if(num>0&&(shiQi+num>game.shiQiMax)){
 			num=Math.max(0,game.shiQiMax-shiQi);
 		}
+		next.result.num=num;
 		next.num=num;
 		next.setContent('changeShiQi');
 		next.filterStop=function(){
 			if (this.num == 0) {
+				this.result.num = 0;
+				this.result.cancel = true;
 				delete this.filterStop;
 				this.finish();
 				this._triggered = null;
