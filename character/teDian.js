@@ -1201,7 +1201,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 content:function(){
                     if(get.name(cards[0])=='shengGuang') var xiBie='an';
-                    else var xiBie=get.xiBie(cards[0]);
+                    else var xiBie=get.xiBie(cards[0],player);
+                    if(!xiBie) xiBie=get.xiBie(cards[1],player);
                     var name;
                     switch(xiBie){
                         case 'shui':name='shuiLianZhan';break;

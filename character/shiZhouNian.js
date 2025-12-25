@@ -7205,7 +7205,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     return player.canUseXingBei('anMie',target);
                 },
                 content:function(){
-                    var xiBie=get.xiBie(cards[0]);
+                    var xiBie=get.xiBie(cards[0],player);
+                    if(!xiBie) xiBie=get.xiBie(cards[1],player);
                     var name;
                     switch(xiBie){
                         case 'shui':name='shuiLianZhan';break;
