@@ -2856,8 +2856,8 @@ export class Get extends GetCompatible {
 			player = undefined;
 		}
 		var result;
-		if (str.startsWith("re")) {
-			str2 = str.slice(2);
+		if (str.startsWith("re_")) {
+			str2 = str.slice(3);
 			if (str2) {
 				if (lib.translate[str] == lib.translate[str2]) {
 					if (player?.hasSkill(str2)) {
@@ -2866,8 +2866,8 @@ export class Get extends GetCompatible {
 					}
 				}
 			}
-		} else if (str.startsWith("xin")) {
-			str2 = str.slice(3);
+		} else if (str.startsWith("xin_")) {
+			str2 = str.slice(4);
 			if (str2) {
 				if (lib.translate[str] == lib.translate[str2]) {
 					if (player?.hasSkill(str2)) {
@@ -2879,7 +2879,7 @@ export class Get extends GetCompatible {
 		}else result=get.translation(str);
 
 		//针对作为启动附属技能，去除括号等，避免日志带有歧义
-		if(result.includes&&result.includes('启动')&&get.info(str).type!='qiDong'){
+		if(result&&result.includes('启动')&&get.info(str).type!='qiDong'){
 			var reg=new RegExp(/[\[\(\)].{1,5}[\]\)]/g,'g');
 			if(result.replace){
 				result=result.replace(reg,'');
