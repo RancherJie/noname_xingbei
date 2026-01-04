@@ -1354,6 +1354,20 @@ export class GameEvent {
 			if(this.getParent().damageNum < 0) this.getParent().damageNum = 0;
 		}
 	}
+	setDamageNum(num){
+		if(typeof num != 'number') return;
+		if(num<0) num=0;
+		if(this.name=='zhiLiao'){
+			this.getParent().num=num;
+			return this;
+		}
+		if(typeof this.damageNum == 'number' || typeof this.num == 'number'){
+			if(typeof this.damageNum == 'number') this.damageNum = num;
+			if(typeof this.num == 'number') this.num = num;
+		}else if(typeof this.getParent().damageNum=='number'){
+			this.getParent().damageNum = num;
+		}
+	}
 	/** 
 	 * 设置攻击效果 主要在攻击设置/攻击前时机调用
 	*/
