@@ -2762,7 +2762,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 filter: function(event,player) {
                     const targets = game.filterPlayer(p => p.side == player.side);
-                    return player.canBiShaBaoShi() && !event.yingZhan && targets.some(p => p.zhiLiao > 0);
+                    return player.canBiShaBaoShi() && !event.yingZhan;
                 },
                 content: async function(event,trigger,player) {
                     await player.removeBiShaBaoShi();
