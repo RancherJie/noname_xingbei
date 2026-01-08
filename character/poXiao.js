@@ -2748,11 +2748,29 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             },
             shenShengBiHu: {
                 trigger: {
-                    player: "shouDaoShangHaiAfter"
+                    player: "shouDaoShangHai"
                 },
                 forced: true,
                 content: async function(event,trigger,player) {
-                    await player.changeZhiLiao(1,player);
+                    player.storage.shenShengBiHu = true;
+                },
+                group: "shenShengBiHu_ZhiLiao",
+                subSkill: {
+                    ZhiLiao:{
+                        trigger: {
+                            player: "damageAfter"
+                        },
+                        forced: true,
+                        silent: true,
+                        filter: function(event,player) {
+                            return player.storage.shenShengBiHu;
+                        },
+                        content: async function(event,trigger,player) {
+                            player.storage.shenShengBiHu = false;
+                            await player.changeZhiLiao(1,player);
+                        },
+                        "_priority": 1
+                    }
                 },
                 "_priority": 0
             },
