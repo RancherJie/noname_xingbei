@@ -2986,6 +2986,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         content: async function(event,trigger,player) {
                             await trigger.changeDamageNum(2);
                             // 移除希望之歌及其效果
+                            await player.removeSkill('xiWangZhiGe');
                             await player.removeZhiShiWu('xiWangZhiGe');
                             await player.update();
                         },
@@ -3011,25 +3012,15 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 type: "faShu",
                 enable: "faShu",
                 filter: function(event,player) {
-                    return player.canBiShaBaoShi();
+                    return player.canBiShaBaoShi() && game.filterPlayer((function(current){
+                        return current.hasZhiShiWu('xiWangZhiGe');
+                    })).length == 0;
                 },
                 selectTarget: 1,
                 filterTarget: true,
                 content: async function(event,trigger,player) {
                     await player.removeBiShaBaoShi();
-                    console.log(player.storage.xiWangZhiGe);
-                    
-                    // 先判断是否已经放置过希望之歌,回收
-                    var players=game.filterPlayer((function(current){
-                        return current.hasZhiShiWu('xiWangZhiGe');
-                    }));
-                    if(players.length > 0) {
-                        await players[0].removeZhiShiWu('xiWangZhiGe');
-                        await players[0].update();
-                    }
-                    if(!event.target.hasSkill('xiWangZhiGe')) {
-                        await event.target.addSkill('xiWangZhiGe');
-                    }
+                    await event.target.addSkill('xiWangZhiGe');
 					await event.target.addZhiShiWu('xiWangZhiGe');
                     await event.target.update();
                     await player.addGongJi();
