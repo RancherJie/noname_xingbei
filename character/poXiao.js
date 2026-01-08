@@ -2921,8 +2921,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     return player.side != target.side;
                 },
                 content: async function(event,trigger,player) {
-                    await event.target.draw(1);
                     await player.draw(1);
+                    await event.target.draw(1);
                     var targets = game.filterPlayer(p => p != player && p.side == player.side);
                     for (let target of targets) {
                         await target.chooseToDiscard("h",1)
