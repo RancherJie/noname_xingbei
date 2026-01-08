@@ -2559,8 +2559,22 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     trigger.source = player;
                     return trigger.card;
                 },
-                group: "guiPai_xiaoGuo",
+                group: ["guiPai_tiaoJian","guiPai_xiaoGuo"],
                 subSkill:{
+                    tiaoJian:{
+                        trigger:{player:'useCardBefore'},
+                        firstDo:true,
+                        direct:true,
+                        filter:function(event,player){
+                            return event.skill=='guiPai';
+                        },
+                        content: async function(event,trigger,player) {
+                            await player.removeBiShaShuiJing();
+                            trigger.card.mingGe = "";
+                            console.log(trigger);
+                        },
+                        "_priority": 1
+                   },
                     xiaoGuo:{
                         trigger:{player:'gongJiBefore'},
                         firstDo:true,
@@ -2569,7 +2583,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             return event.skill=='guiPai';
                         },
                         content: async function(event,trigger,player) {
-                            await player.removeBiShaShuiJing();
                             await player.changeZhanJi("baoShi",1,player.side);
                         },
                         "_priority": 1
