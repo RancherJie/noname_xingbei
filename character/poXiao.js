@@ -328,13 +328,14 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 filter: function (event, player) {
                     return player.canBiShaBaoShi();
                 },
-                content: function () {
-                    'step 0'
-                    player.removeBiShaBaoShi();
-                    'step 1'
-                    var targets = game.filterPlayer(p => p != player && p.isEnemyOf(player));
-                    for (let i = 0; i < targets.length; i++) {
-                        targets[i].faShuDamage(2, player);
+                content: async function (event,trigger,player) {
+                    await player.removeBiShaBaoShi();
+                    let nextPlayer = player.getNext();
+                    while (nextPlayer != player) {
+                        if (nextPlayer.isEnemyOf(player)) {
+                            await nextPlayer.faShuDamage(2, player);
+                        }
+                        nextPlayer = nextPlayer.getNext();
                     }
                 },
                 ai: {
