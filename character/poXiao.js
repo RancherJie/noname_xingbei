@@ -885,8 +885,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         }
                     } else {
                         // 不选择翻开，结算1点法术伤害
-                        target.faShuDamage(1,player);
+                        player.storage.xinLingFengBao_faShuDamage = 1;
                         await event.set("source","xinLingFengBao").set("target",target).trigger("anZhiSuccess");
+                        target.faShuDamage(player.storage.xinLingFengBao_faShuDamage, player);
                     }
                 },
                 "_priority": 0,
@@ -939,7 +940,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         var xingshi_target = xingshi.targets[0];
                         await xingshi_target.changeNengLiang('baoShi',1);
                     }else if(trigger_name === "xinLingFengBao"){
-                        target.faShuDamage(1,player);
+                        player.storage.xinLingFengBao_faShuDamage = 2;
                         var zhiliao = await player.chooseTarget(1,"额外选择任意角色+1治疗", true).forResult();
                         zhiliao.targets[0].changeZhiLiao(1,player);
                     }
