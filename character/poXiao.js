@@ -3085,7 +3085,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             zhangejisi_name: "法芙娜",
 
 
-            zhuiFengJi: "[被动]追风技",
+            zhuiFengJi: "[被动]追风刺",
             "zhuiFengJi_info": "你的风系攻击无法应战。",
             zhuRiJian: "[法术]逐日箭",
             "zhuRiJian_info": "<span class='tiaoJian'>(弃一张火系牌[展示])</span>对目标对手造成2点法术伤害③。",
