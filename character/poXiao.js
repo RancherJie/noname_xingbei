@@ -328,13 +328,14 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 filter: function (event, player) {
                     return player.canBiShaBaoShi();
                 },
-                content: function () {
-                    'step 0'
-                    player.removeBiShaBaoShi();
-                    'step 1'
-                    var targets = game.filterPlayer(p => p != player && p.isEnemyOf(player));
-                    for (let i = 0; i < targets.length; i++) {
-                        targets[i].faShuDamage(2, player);
+                content: async function (event,trigger,player) {
+                    await player.removeBiShaBaoShi();
+                    let nextPlayer = player.getNext();
+                    while (nextPlayer != player) {
+                        if (nextPlayer.isEnemyOf(player)) {
+                            await nextPlayer.faShuDamage(2, player);
+                        }
+                        nextPlayer = nextPlayer.getNext();
                     }
                 },
                 ai: {
@@ -885,8 +886,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         }
                     } else {
                         // 不选择翻开，结算1点法术伤害
-                        target.faShuDamage(1,player);
+                        player.storage.xinLingFengBao_faShuDamage = 1;
                         await event.set("source","xinLingFengBao").set("target",target).trigger("anZhiSuccess");
+                        target.faShuDamage(player.storage.xinLingFengBao_faShuDamage, player);
                     }
                 },
                 "_priority": 0,
@@ -939,7 +941,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         var xingshi_target = xingshi.targets[0];
                         await xingshi_target.changeNengLiang('baoShi',1);
                     }else if(trigger_name === "xinLingFengBao"){
-                        target.faShuDamage(1,player);
+                        player.storage.xinLingFengBao_faShuDamage = 2;
                         var zhiliao = await player.chooseTarget(1,"额外选择任意角色+1治疗", true).forResult();
                         zhiliao.targets[0].changeZhiLiao(1,player);
                     }
@@ -2557,8 +2559,22 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     trigger.source = player;
                     return trigger.card;
                 },
-                group: "guiPai_xiaoGuo",
+                group: ["guiPai_tiaoJian","guiPai_xiaoGuo"],
                 subSkill:{
+                    tiaoJian:{
+                        trigger:{player:'useCardBefore'},
+                        firstDo:true,
+                        direct:true,
+                        filter:function(event,player){
+                            return event.skill=='guiPai';
+                        },
+                        content: async function(event,trigger,player) {
+                            await player.removeBiShaShuiJing();
+                            trigger.card.mingGe = "";
+                            console.log(trigger);
+                        },
+                        "_priority": 1
+                   },
                     xiaoGuo:{
                         trigger:{player:'gongJiBefore'},
                         firstDo:true,
@@ -2567,7 +2583,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             return event.skill=='guiPai';
                         },
                         content: async function(event,trigger,player) {
-                            await player.removeBiShaShuiJing();
                             await player.changeZhanJi("baoShi",1,player.side);
                         },
                         "_priority": 1
@@ -2747,11 +2762,29 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             },
             shenShengBiHu: {
                 trigger: {
-                    player: "shouDaoShangHaiAfter"
+                    player: "shouDaoShangHai"
                 },
                 forced: true,
                 content: async function(event,trigger,player) {
-                    await player.changeZhiLiao(1,player);
+                    player.storage.shenShengBiHu = true;
+                },
+                group: "shenShengBiHu_ZhiLiao",
+                subSkill: {
+                    ZhiLiao:{
+                        trigger: {
+                            player: "damageAfter"
+                        },
+                        forced: true,
+                        silent: true,
+                        filter: function(event,player) {
+                            return player.storage.shenShengBiHu;
+                        },
+                        content: async function(event,trigger,player) {
+                            player.storage.shenShengBiHu = false;
+                            await player.changeZhiLiao(1,player);
+                        },
+                        "_priority": 1
+                    }
                 },
                 "_priority": 0
             },
@@ -2761,7 +2794,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 filter: function(event,player) {
                     const targets = game.filterPlayer(p => p.side == player.side);
-                    return player.canBiShaBaoShi() && !event.yingZhan && targets.some(p => p.zhiLiao > 0);
+                    return player.canBiShaBaoShi() && !event.yingZhan;
                 },
                 content: async function(event,trigger,player) {
                     await player.removeBiShaBaoShi();
@@ -2921,8 +2954,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     return player.side != target.side;
                 },
                 content: async function(event,trigger,player) {
-                    await event.target.draw(1);
                     await player.draw(1);
+                    await event.target.draw(1);
                     var targets = game.filterPlayer(p => p != player && p.side == player.side);
                     for (let target of targets) {
                         await target.chooseToDiscard("h",1)
@@ -2986,6 +3019,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         content: async function(event,trigger,player) {
                             await trigger.changeDamageNum(2);
                             // 移除希望之歌及其效果
+                            await player.removeSkill('xiWangZhiGe');
                             await player.removeZhiShiWu('xiWangZhiGe');
                             await player.update();
                         },
@@ -3011,25 +3045,15 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 type: "faShu",
                 enable: "faShu",
                 filter: function(event,player) {
-                    return player.canBiShaBaoShi();
+                    return player.canBiShaBaoShi() && game.filterPlayer((function(current){
+                        return current.hasZhiShiWu('xiWangZhiGe');
+                    })).length == 0;
                 },
                 selectTarget: 1,
                 filterTarget: true,
                 content: async function(event,trigger,player) {
                     await player.removeBiShaBaoShi();
-                    console.log(player.storage.xiWangZhiGe);
-                    
-                    // 先判断是否已经放置过希望之歌,回收
-                    var players=game.filterPlayer((function(current){
-                        return current.hasZhiShiWu('xiWangZhiGe');
-                    }));
-                    if(players.length > 0) {
-                        await players[0].removeZhiShiWu('xiWangZhiGe');
-                        await players[0].update();
-                    }
-                    if(!event.target.hasSkill('xiWangZhiGe')) {
-                        await event.target.addSkill('xiWangZhiGe');
-                    }
+                    await event.target.addSkill('xiWangZhiGe');
 					await event.target.addZhiShiWu('xiWangZhiGe');
                     await event.target.update();
                     await player.addGongJi();
@@ -3094,7 +3118,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             zhangejisi_name: "法芙娜",
 
 
-            zhuiFengJi: "[被动]追风技",
+            zhuiFengJi: "[被动]追风刺",
             "zhuiFengJi_info": "你的风系攻击无法应战。",
             zhuRiJian: "[法术]逐日箭",
             "zhuRiJian_info": "<span class='tiaoJian'>(弃一张火系牌[展示])</span>对目标对手造成2点法术伤害③。",
