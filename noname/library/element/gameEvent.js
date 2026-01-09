@@ -1344,9 +1344,11 @@ export class GameEvent {
 			this.getParent().num+=num;
 			return this;
 		}
-		if(typeof this.damageNum == 'number'){
+		if(typeof this.damageNum == 'number'|| typeof this.num == 'number'){
 			if(typeof this.damageNum == 'number') this.damageNum += num;
+			if(typeof this.num == 'number') this.num += num;
 			if(this.damageNum < 0) this.damageNum = 0;
+			if(this.num < 0) this.num = 0
 		}else if(typeof this.getParent().damageNum=='number'){
 			this.getParent().damageNum += num;
 			if(this.getParent().damageNum < 0) this.getParent().damageNum = 0;
@@ -1359,8 +1361,9 @@ export class GameEvent {
 			this.getParent().num=num;
 			return this;
 		}
-		if(typeof this.damageNum == 'number'){
+		if(typeof this.damageNum == 'number'|| typeof this.num == 'number'){
 			if(typeof this.damageNum == 'number') this.damageNum = num;
+			if(typeof this.num == 'number') this.num = num;
 		}else if(typeof this.getParent().damageNum=='number'){
 			this.getParent().damageNum = num;
 		}

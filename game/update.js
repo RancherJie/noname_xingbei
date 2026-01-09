@@ -1,6 +1,6 @@
 window.noname_update = {
-	version: "1.4.4",
-	update: "1.4.4",
+	version: "1.4.5",
+	update: "1.4.5",
 	changeLog: [
 		"调整了被放逐者鬼牌技能能量扣除时机，以及应战的攻击牌含有命格的问题",
 		"调整了炼金术士的万物湮灭技能的写法，使其法术伤害结算顺序固定为逆时针方向",
@@ -23,8 +23,8 @@ window.noname_update = {
 		"完善设置-选项-技能中禁双角同时出现设置",
 		"将one_damage技能标签改为oneDamage",
 		"优化ai在1点法伤技能中的治疗使用",
-		"优化get.shiQi/zhanJi/xingBei,可直接传入玩家参数"
-
+		"优化get.shiQi/zhanJi/xingBei,可直接传入玩家参数",
+		"修复changeDamageNum和setDamageNum错误删除导致damage事件未适配",
 	],
 	files: [
 
