@@ -2103,6 +2103,7 @@ export class Player extends HTMLDivElement {
 		);
 		if (lib.animate.skill[name]) lib.animate.skill[name].apply(this, arguments);
 		else {
+			//技能弹窗去除括号等
 			var skillName=get.skillTranslation(name,this);
 			var reg=new RegExp(/[\[\(\)].{1,5}[\]\)]/g,'g');
 			if(skillName.replace){
@@ -9087,6 +9088,8 @@ export class Player extends HTMLDivElement {
 		return list;
 	}
 	checkConflict(skill) {
+		return;
+		//屏蔽技能冲突检测功能，星杯中无实际用处
 		if (skill) {
 			if (this.forbiddenSkills[skill]) {
 				delete this.forbiddenSkills[skill];
@@ -10881,6 +10884,7 @@ export class Player extends HTMLDivElement {
 		}else{
 			next.side=side;
 		}
+		next.result={};
 
 		var shiQi;
 		switch(next.side){
@@ -10892,10 +10896,13 @@ export class Player extends HTMLDivElement {
 		if(num>0&&(shiQi+num>game.shiQiMax)){
 			num=Math.max(0,game.shiQiMax-shiQi);
 		}
+		next.result.num=num;
 		next.num=num;
 		next.setContent('changeShiQi');
 		next.filterStop=function(){
 			if (this.num == 0) {
+				this.result.num = 0;
+				this.result.cancel = true;
 				delete this.filterStop;
 				this.finish();
 				this._triggered = null;

@@ -8723,7 +8723,7 @@ export const Content = {
 			next.card = card;
 			next.cards = cards;
 			next.player = player;
-			next.num = num;
+			//next.num = num;
 			next.type = "card";
 			next.skill = event.skill;
 			next.damageNum = event.damageNum;
@@ -12331,7 +12331,7 @@ export const Content = {
 							return xiaoGuo;
 						}
 					}
-					if(list.includes('_zhongDu')&&!target.hasSkillTag('one_damage')) return '_zhongDu';
+					if(list.includes('_zhongDu')&&!target.hasSkillTag('oneDamage')) return '_zhongDu';
 				}else{
 					if(list.includes('_shengDun')){
 						return '_shengDun';
@@ -12393,7 +12393,7 @@ export const Content = {
 							return xiaoGuo;
 						}
 					}
-					if(list.includes('_zhongDu')&&!target.hasSkillTag('one_damage')) return '_zhongDu';
+					if(list.includes('_zhongDu')&&!target.hasSkillTag('oneDamage')) return '_zhongDu';
 				}else{
 					if(list.includes('_shengDun')){
 						return '_shengDun';
