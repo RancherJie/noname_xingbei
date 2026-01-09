@@ -2855,26 +2855,38 @@ export class Get extends GetCompatible {
 		if (get.itemtype(player) !== "player") {
 			player = undefined;
 		}
-		if (str.startsWith("re")) {
-			str2 = str.slice(2);
-			if (str2) {
-				if (lib.translate[str] == lib.translate[str2]) {
-					if (player?.hasSkill(str2)) {
-						return "界" + lib.translate[str];
-					}
-				}
-			}
-		} else if (str.startsWith("xin")) {
+		var result;
+		if (str.startsWith("re_")) {
 			str2 = str.slice(3);
 			if (str2) {
 				if (lib.translate[str] == lib.translate[str2]) {
 					if (player?.hasSkill(str2)) {
-						return "新" + lib.translate[str];
+						result= "界" + lib.translate[str];
+						//return "界" + lib.translate[str];
 					}
 				}
 			}
+		} else if (str.startsWith("xin_")) {
+			str2 = str.slice(4);
+			if (str2) {
+				if (lib.translate[str] == lib.translate[str2]) {
+					if (player?.hasSkill(str2)) {
+						result= "新" + lib.translate[str];
+						//return "新" + lib.translate[str];
+					}
+				}
+			}
+		}else result=get.translation(str);
+
+		//针对作为启动附属技能，去除括号等，避免日志带有歧义
+		if(result&&result.includes('启动')&&get.info(str).type!='qiDong'){
+			var reg=new RegExp(/[\[\(\)].{1,5}[\]\)]/g,'g');
+			if(result.replace){
+				result=result.replace(reg,'');
+			}
 		}
-		return get.translation(str);
+
+		return result;
 	}
 	skillInfoTranslation(name, player) {
 		let str = (() => {
@@ -5534,7 +5546,7 @@ export class Get extends GetCompatible {
 		if(!num) num=2;
 		if(target.hasSkillTag('noShiQiXiaJiang')) return 0;
 		var chaZhi=target.getHandcardLimit()-target.countCards('h');
-		if(target.hasSkillTag('one_damage')) return 0;
+		if(target.hasSkillTag('oneDamage')&&num==1) return 0;
 		if(chaZhi<num) return -2;
 		else if(chaZhi-3<num) return -1;
 		else return -0.5;
@@ -5741,28 +5753,15 @@ export class Get extends GetCompatible {
 	//xingbei
 	characterGets(list,num){
 		var result=list.slice();
-		if(result.includes('hongLianQiShi')&&result.includes('shengDianQiShi')){
-			let num=Math.random();
-			if(num<0.5){
-				result.remove('hongLianQiShi');
-			}else{
-				result.remove('shengDianQiShi');
-			}
-		}
-		if(result.includes('shengNv')&&result.includes('jinGuiZhiNv')){
-			let num=Math.random();
-			if(num<0.5){
-				result.remove('shengNv');
-			}else{
-				result.remove('jinGuiZhiNv');
-			}
-		}
-		if(result.includes('fengZhiJianSheng')&&result.includes('jianZhiZi')){
-			let num=Math.random();
-			if(num<0.5){
-				result.remove('fengZhiJianSheng');
-			}else{
-				result.remove('jianZhiZi');
+		var forbidlist = lib.config.forbidlist.concat(lib.config.customforbid);
+		for(var i=0;i<forbidlist.length;i++){
+			if(result.includes(forbidlist[i][0])&&result.includes(forbidlist[i][1])){
+				let num=Math.random();
+				if(num<0.5){
+					result.remove(forbidlist[i][0]);
+				}else{
+					result.remove(forbidlist[i][1]);
+				}
 			}
 		}
 		if(typeof num=='number'&&num>0) result=result.randomGets(num);
@@ -5821,7 +5820,7 @@ export class Get extends GetCompatible {
 		if(target.hasExpansions('_shengDun')){
 			return -1;
 		}
-		if(target.hasExpansions('_zhongDu')&&!target.hasSkillTag('one_damage')){
+		if(target.hasExpansions('_zhongDu')&&!target.hasSkillTag('oneDamage')){
 			return 1;
 		}
 		if(target.hasExpansions('_xuRuo')){
@@ -5843,6 +5842,9 @@ export class Get extends GetCompatible {
 	}
 
 	shiQi(side){
+		if(get.itemtype(side)=='player'){
+			side=side.side;
+		}
 		if(side==true){
 			return game.hongShiQi;
 		}else if(side==false){
@@ -5850,6 +5852,9 @@ export class Get extends GetCompatible {
 		}
 	}
 	zhanJi(side){
+		if(get.itemtype(side)=='player'){
+			side=side.side;
+		}
 		if(side==true){
 			return game.hongZhanJi;
 		}else if(side==false){
@@ -5857,6 +5862,9 @@ export class Get extends GetCompatible {
 		}
 	}
 	xingBei(side){
+		if(get.itemtype(side)=='player'){
+			side=side.side;
+		}
 		if(side==true){
 			return game.hongXingBei;
 		}else if(side==false){

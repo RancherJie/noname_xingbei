@@ -10262,9 +10262,18 @@ export class Library {
 					if(i>event.zhiLiaoLimit) break;
 					list.push(i);
 				}
-				var  zhiLiao=list.length-1;//使用几点治疗，默认取最大值
+
+				//ai
+				var zhiLiao=list.length-1;
+				var max=zhiLiao;
 				var chaZhi=player.getHandcardLimit()-player.countCards('h');
 				if(chaZhi>=num+1) zhiLiao=0;
+				var shiQi=get.shiQi(player);
+				if(player.hasSkillTag('oneDamage')&&(shiQi>3||chaZhi>=1)){
+					if(1+max>=num) zhiLiao=num-1;
+				}
+				
+
 				player.chooseControl(list).set('prompt','选择使用多少[治疗]，目前伤害量'+num).set('ai',function(){
 					var num=_status.event.num;
 					return num;
@@ -10603,8 +10612,9 @@ export class Library {
 						game.playAudio('card','male','xuRuo');
 					}
 				});
-				var list=['摸三张牌','跳过行动阶段'];
-				player.chooseControl().set('choiceList',list).set('prompt','虚弱：选择一项').set('ai',function(){
+				var list=['选项一','选项二']; 
+				var choiceList=['摸三张牌','跳过行动阶段'];
+				player.chooseControl(list).set('choiceList',choiceList).set('prompt','虚弱：选择一项').set('ai',function(){
 					var player=_status.event.player;
 					if(player.countCards('h')+3<=player.getHandcardLimit()) return 0;
 					return 1;

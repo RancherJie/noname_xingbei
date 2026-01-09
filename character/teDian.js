@@ -423,9 +423,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 
                 },
                 contentAfter:async function(event, trigger, player){
-                    if(player.storage.wangNvJinKu_baoshi > 1 && get.shiQi(!player.side) > 1){
-                        await player.changeShiQi(-1,!player.side).set('zhuanYi',true);
-                        await player.changeShiQi(1).set('zhuanYi',true);
+                    if(player.storage.wangNvJinKu_baoshi > 1){
+                        var result=await player.changeShiQi(-1,!player.side).set('zhuanYi',true).forResult();
+                        if(result.num<0) await player.changeShiQi(1).set('zhuanYi',true);
                     }
                 },
                 ai:{
@@ -1201,7 +1201,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 content:function(){
                     if(get.name(cards[0])=='shengGuang') var xiBie='an';
-                    else var xiBie=get.xiBie(cards[0]);
+                    else var xiBie=get.xiBie(cards[0],player);
+                    if(!xiBie) xiBie=get.xiBie(cards[1],player);
                     var name;
                     switch(xiBie){
                         case 'shui':name='shuiLianZhan';break;
@@ -2101,7 +2102,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             trick_ziDongTianChong:{
                 inherit: 'ziDongTianChong',
                 content:async function(event,trigger,player){
-                    var choiceList=[`[水晶]你+1<span class='hong'>【信仰】</span>或+1[治疗]，然后+1【圣煌辉光炮】`,`[宝石]你+1[水晶]，+2<span class='hong'>【信仰】</span>或目标角色+2[治疗]`];
+                    var choiceList=[`[水晶]你+1<span class='hong'>【信仰】</span>或+1[治疗]，然后+1【圣煌辉光炮】`,`[宝石]你+2<span class='hong'>【信仰】</span>或目标角色+2[治疗]`];
                     var list=['选项一'];
                     if(player.canBiShaBaoShi()){
                         list.push('选项二');
@@ -2116,7 +2117,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         var num=1;
                     }else{
                         await player.removeBiShaBaoShi();
-                        await player.addNengLiang('shuiJing',1);
+                        //await player.addNengLiang('shuiJing',1);
                         var num=2;
                     }
                     var list=['信仰','治疗'];
@@ -3306,6 +3307,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     gongJi:{
                         trigger:{player:'gongJiMingZhong'},
                         filter:function(event,player){
+                            if(event.yingZhan) return false;
                             var num=0;
                             var zuo_cards=player.getExpansions('tianPing_zuo');
                             var you_cards=player.getExpansions('tianPing_you');
