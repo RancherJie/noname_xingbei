@@ -10695,6 +10695,7 @@ export class Library {
 						game.playAudio('card','male','shengDun');
 					}
 				});
+				event.shengDun=player.getExpansions('_shengDun')[0];
 				player.discard(player.getExpansions('_shengDun'),'_shengDun').set('visible',true);
 				trigger.weiMingZhong();
 				'step 1'
@@ -10703,6 +10704,8 @@ export class Library {
 					event.yingZhan=trigger.yingZhan;
 					event.card=trigger.card;
 					event.customArgs=trigger.customArgs;
+					event.cause='shengDun';
+					event.causeCard=event.shengDun;
 					event.trigger('gongJiWeiMingZhong');
 				}else if(trigger.card.name=='moDan') game.resetMoDan();
 			},
@@ -10784,6 +10787,8 @@ export class Library {
 				event.player=trigger.getParent().player;//应战者
 				event.yingZhan=trigger.getParent(2).yingZhan;//判断未命中的攻击是否为应战攻击
 				event.card=trigger.getParent().card;//攻击来源牌
+				event.cause='yingZhan';
+				event.causeCard=trigger.card;//应战牌
 				'step 1'
 				event.trigger('gongJiWeiMingZhong');
 			}
@@ -10802,6 +10807,8 @@ export class Library {
 				event.player=trigger.getParent().player;//应战者
 				event.yingZhan=trigger.getParent(2).yingZhan;//判断未命中的攻击是否为应战攻击
 				event.card=trigger.getParent().card;//攻击来源牌
+				event.cause='shengGuang';
+				event.causeCard=trigger.card;//圣光牌
 				'step 1'
 				event.trigger('gongJiWeiMingZhong');
 			}
