@@ -10605,8 +10605,7 @@ export class Library {
 			filter:function(event,player){
 				return player.hasExpansions('_xuRuo');
 			},
-			content:function(){
-				'step 0'
+			content:function(event,trigger,player){
 				game.broadcastAll(function(){
 					if(lib.config.background_audio){
 						game.playAudio('card','male','xuRuo');
@@ -10614,18 +10613,17 @@ export class Library {
 				});
 				var list=['选项一','选项二']; 
 				var choiceList=['摸三张牌','跳过行动阶段'];
-				player.chooseControl(list).set('choiceList',choiceList).set('prompt','虚弱：选择一项').set('ai',function(){
+				var control=await player.chooseControl(list).set('choiceList',choiceList).set('prompt','虚弱：选择一项').set('ai',function(){
 					var player=_status.event.player;
 					if(player.countCards('h')+3<=player.getHandcardLimit()) return 0;
 					return 1;
-				});
-				'step 1'
-				if(result.control=='选项二'){
+				}).forResultControl();
+				if(control.control=='选项二'){
 					trigger.xuRuo=true;
-				}else if(result.control=="选项一"){
-					player.draw(3);
+				}else if(control.control=="选项一"){
+					await player.draw(3);
 				}
-				player.discard(player.getExpansions('_xuRuo'),'_xuRuo').set('visible',true);
+				await player.discard(player.getExpansions('_xuRuo'),'_xuRuo').set('visible',true);
 			},
 			subSkill:{
 				xiaoGuo:{
