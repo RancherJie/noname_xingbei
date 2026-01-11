@@ -2571,7 +2571,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         content: async function(event,trigger,player) {
                             await player.removeBiShaShuiJing();
                             trigger.card.mingGe = "";
-                            console.log(trigger);
+                            //console.log(trigger);
                         },
                         "_priority": 1
                    },
