@@ -10605,7 +10605,7 @@ export class Library {
 			filter:function(event,player){
 				return player.hasExpansions('_xuRuo');
 			},
-			content:function(event,trigger,player){
+			content:async function(event,trigger,player){
 				game.broadcastAll(function(){
 					if(lib.config.background_audio){
 						game.playAudio('card','male','xuRuo');
