@@ -4902,6 +4902,7 @@ export class Library {
 						game.saveConfig('connect_phaseswap',bool,this._link.config.mode);
 					},
 					frequent:true,
+					intro:'双人游玩，每个玩家操控多个角色，适合熟悉的玩家',
 				},
 				connect_shiQiMax:{
 					name:'士气最大值',
@@ -5037,6 +5038,7 @@ export class Library {
 						}
 					},
 					frequent:true,
+					intro:'玩家操控多个角色',
 				},
 
 				free_choose:{
