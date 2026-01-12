@@ -2604,7 +2604,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     result:{
                         player: function(player) {
                             var zhanJi=get.zhanJi(player.side);
-                            if(zhanJi.length<game.zhanJiMax) return 1;
+                            if(zhanJi.length<get.zhanJiMax(player.side)) return 1;
                             var targets=game.filterPlayer(function(current){
                                 return current.side!=player.side&&current.countCards('h')+1>=current.getHandcardLimit();
                             });

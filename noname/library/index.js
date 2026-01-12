@@ -29,6 +29,7 @@ import { ErrorManager } from "../util/error.js";
 
 import { defaultSplashs } from "../init/onload/index.js";
 import dedent from "../../game/dedent.js"
+import { h } from "../../game/vue.esm-browser.js";
 
 export class Library {
 	// 数据库相关
@@ -5207,8 +5208,17 @@ export class Library {
 			},
 		},
 		boss: {
-			name: "挑战",
+			name: "BOSS",
 			config: {
+				difficulty:{
+					name:'难度',
+					init:'normal',
+					item:{
+						easy:'简单',
+						normal:'标准',
+						hard:'困难',
+					},
+				},
 				free_choose: {
 					name: "自由选将",
 					init: true,
@@ -5237,21 +5247,14 @@ export class Library {
 					},
 					frequent: true,
 				},
-				single_control: {
-					name: "单人控制",
-					init: true,
-					frequent: true,
-					onclick(bool) {
-						game.saveConfig("single_control", bool, this._link.config.mode);
-						if (ui.single_swap && game.me != game.boss) {
-							if (bool) {
-								ui.single_swap.style.display = "none";
-							} else {
-								ui.single_swap.style.display = "";
-							}
-						}
+				phaseswap:{
+					name:'多控',
+					init:false,
+					onclick:function(bool){
+						game.saveConfig('connect_phaseswap',bool,this._link.config.mode);
 					},
-					intro: "只控制一名角色，其他角色由AI控制",
+					frequent:true,
+					intro:'玩家操控多个角色',
 				},
 			},
 		},

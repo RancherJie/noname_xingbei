@@ -147,7 +147,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     if(get.xiBie(event.card)=='an') return false;
                     var target=event.targets[0];
                     var zhanJi=get.zhanJi(player.side);
-                    if(zhanJi.length<game.zhanJiMax) return true;
+                    if(zhanJi.length<get.zhanJiMax(player.side)) return true;
                     var minus=target.getHandcardLimit()-target.countCards('h');
                     var num=Math.random();
                     if(minus<2) return num>0.1;

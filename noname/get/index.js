@@ -5872,12 +5872,26 @@ export class Get extends GetCompatible {
 		}
 	}
 	emptyZhanJi(side){
-		if(side==true){
-			return game.zhanJiMax-game.hongZhanJi.length;
-		}else if(side==false){
-			return game.zhanJiMax-game.lanZhanJi.length;
+		var zhanJiMax=get.zhanJiMax(side);
+		if(side===true){
+			return zhanJiMax-game.hongZhanJi.length;
+		}else if(side===false){
+			return zhanJiMax-game.lanZhanJi.length;
 		}
 	}
+	shiQiMax(side){
+		var str='shiQiMax';
+		if(side===true) str+='Hong';
+		else if(side===false) str+='Lan';
+		return game[str];
+	}
+	zhanJiMax(side){
+		var str='zhanJiMax';
+		if(side===true) str+='Hong';
+		else if(side===false) str+='Lan';
+		return game[str];
+	}
+
 	xuanZeTongXiPai(card){
 		if(ui.selected.cards.length==0) return true;
 		else{

@@ -10893,8 +10893,9 @@ export class Player extends HTMLDivElement {
 			case false:
 				shiQi=game.lanShiQi;break;
 		}
-		if(num>0&&(shiQi+num>game.shiQiMax)){
-			num=Math.max(0,game.shiQiMax-shiQi);
+		var shiQiMax=get.shiQiMax(next.side);
+		if(num>0&&(shiQi+num>shiQiMax)){
+			num=Math.max(0,shiQiMax-shiQi);
 		}
 		next.result.num=num;
 		next.num=num;
@@ -10929,8 +10930,9 @@ export class Player extends HTMLDivElement {
 		}
 		if(typeof num!='number') num=1;
 		var zhanJi=get.zhanJi(sidex);
-		if(num>0&&(zhanJi.length+num>game.zhanJiMax)){
-			num=Math.max(0,game.zhanJiMax-zhanJi.length);
+		var zhanJiMax=get.zhanJiMax(sidex);
+		if(num>0&&(zhanJi.length+num>zhanJiMax)){
+			num=Math.max(0,zhanJiMax-zhanJi.length);
 			var yiChu=true;
 		}
 		if(num<0){
