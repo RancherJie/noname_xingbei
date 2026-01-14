@@ -75,7 +75,7 @@ export default () => {
 			"step 3"
 			if(_status.connectMode){
 				_status.mode=lib.configOL.versus_mode;
-                _status.onreconnect=[function(){
+                _status.onreconnect=[function(func){
                     var players=game.players;
                     for(var i=0;i<players.length;i++){
                         if(players[i].side==true){
@@ -85,7 +85,11 @@ export default () => {
                             players[i].node.identity.firstChild.innerHTML='蓝';
                         }
                     }
-                },];
+					if (lib.config.show_handcardbutton) {
+						ui.versushs = ui.create.system("手牌", null, true);
+						lib.setPopped(ui.versushs, func, 220);
+					}
+                },game.versusHoverHandcards];
 			};
 			var players=get.players(lib.sort.position);
 			var info=[];
@@ -112,6 +116,15 @@ export default () => {
 			}
 
             'step 4'
+			if(get.phaseswap()){
+				game.broadcastAll(function(func){
+					if (lib.config.show_handcardbutton) {
+						ui.versushs = ui.create.system("手牌", null, true);
+						lib.setPopped(ui.versushs, func, 220);
+					}
+				},game.versusHoverHandcards);
+			}
+
 			var firstChoose=(_status.firstAct||game.players.randomGet());
 			game.gameDraw(firstChoose);
             game.phaseLoop(firstChoose);
@@ -790,10 +803,6 @@ export default () => {
 						delete ui.cheat2;
 					}
 					
-					if (lib.config.show_handcardbutton) {
-						ui.versushs = ui.create.system("手牌", null, true);
-						lib.setPopped(ui.versushs, game.versusHoverHandcards, 220);
-					}
 					_status.characterList = result.links.slice();
 					for(var i=0;i<result.links.length;i++){
 						game.addRecentCharacter(result.links[i]);
