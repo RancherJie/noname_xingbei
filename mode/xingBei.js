@@ -464,27 +464,23 @@ export default () => {
 									current.classList.remove('bluebg');
 								}
 								this.classList.add('bluebg');
-								_status.firstAct=game.me;
-								var sideList=[]
+
+								var ref=_status.firstAct;
+								var sideList=[];
 								for(var i=0;i<game.players.length;i++){
-									sideList.push(game.players[i].side);
+									sideList.push(ref.side);
+									ref=ref.next;
 								}
+								var firstChoose=game.me;
 								for(var i=0;i<this.link;i++){
-									_status.firstAct=_status.firstAct.previous;
+									firstChoose=firstChoose.previous;
 								}
-								var firstChoose=_status.firstAct;
-								var start=firstChoose;
+								_status.firstAct=firstChoose;
 								for(var i=0;i<game.players.length;i++){
-									start.side=sideList.shift();
-									start=start.next;
+									firstChoose.side=sideList.shift();
+									firstChoose=firstChoose.next;
 								}
-								
-								/*
-								var firstChoose=_status.firstAct;
-								firstChoose.next.side=!firstChoose.side;
-								firstChoose.next.next.side=!firstChoose.side;
-								firstChoose.previous.side=firstChoose.side;
-								*/
+
 								for(var i=0;i<game.players.length;i++){
 									if(game.players[i].side==true){
 										game.players[i].node.identity.firstChild.innerHTML='红';
