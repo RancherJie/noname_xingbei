@@ -54,7 +54,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 'shengGong_name',
                 'shengGroup',
                 '4/5',
-                ['yuanChu_tianZhiGong','yuanChu_shengXieJuBao','yuanChu_shengHuangJiangLin','yuanChu_shengGuangBaoLie','liuXingShengDan','yuanChu_shengHuangHuiGuangPao','yuanChu_shengHuangYuHui','yuanChu_ziDongTianChong','yuanChu_xinYang'],
+                ['yuanChu_tianZhiGong','yuanChu_shengXieJuBao','yuanChu_shengHuangJiangLin','yuanChu_shengGuangBaoLie','yuanChu_liuXingShengDan','yuanChu_shengHuangHuiGuangPao','yuanChu_shengHuangYuHui','yuanChu_ziDongTianChong','yuanChu_xinYang'],
                 [
                     `des:圣弓的最终形态，虽有一颗和平之心，但因遇见强敌而觉醒。其拥有强大的机动性，但因为消耗信仰作为能量且需要的能量巨大，所以一般需要队友支援。一旦能量充填完毕，原初之弓就会显现出最终武器的恐怖形态，无论多么劣势都能看到翻盘的希望`,
                 ],
@@ -1417,6 +1417,59 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         player:1,
                     }
                 }
+            },
+            yuanChu_liuXingShengDan: {
+                inherit: 'liuXingShengDan',
+                filter:function(event,player){
+                    if(!player.isHengZhi()) return false;
+                    return event.yingZhan!=true&&(player.zhiLiao>0||player.countZhiShiWu('yuanChu_xinYang')>0);
+                },
+                async cost(event,trigger,player){
+                    var list=[];
+                    if(player.zhiLiao>0){
+                        list.push('zhiLiao');
+                    }
+                    if(player.countZhiShiWu('yuanChu_xinYang')>0){
+                        list.push('yuanChu_xinYang');
+                    }
+                    list.push('cancel2');
+                    var bool=game.hasPlayer(function(current){
+                        return current.side==player.side&&current.zhiLiao<current.getZhiLiaoLimit();
+                    });
+
+                    var control=await player.chooseControl(list).set('prompt',get.prompt('liuXingShengDan')).set('prompt2','移除1点[治疗]或1点<span class="hong">【信仰】</span>，我方目标角色+1[治疗]').set('ai',function(){
+                        var player=_status.event.player;
+                        var bool=_status.event.bool;
+                        if(player.hasZhiShiWu('shengHuangHuiGuangPaoX')){
+                            if(player.zhiLiao==0) return 'cancel2';
+                            else return 'zhiLiao';
+                        }else{
+                            if(player.countZhiShiWu('yuanChu_xinYang')>0) return 'yuanChu_xinYang';
+                            if(player.zhiLiao>0) return 'zhiLiao';
+                            return 'cancel2';
+                        }
+                    }).set('bool',bool).forResultControl();
+                    event.result={
+                        bool:control!='cancel2',
+                        cost_data:control,
+                    }
+                },
+                content:function(){
+                    'step 0'
+                    if(event.cost_data=='zhiLiao'){
+                        player.changeZhiLiao(-1);
+                    }else if(event.cost_data=='yuanChu_xinYang'){
+                        player.removeZhiShiWu('yuanChu_xinYang',1);
+                    }
+                    'step 1'
+                    player.chooseTarget(true,function(card,player,target){
+                        return target.side==player.side;
+                    }).set('prompt','我方目标角色+1[治疗]').set('ai',function(target){
+                        return get.zhiLiaoEffect(target,1);
+                    });
+                    'step 2'
+                    result.targets[0].changeZhiLiao(1,player);
+                },
             },
             yuanChu_shengHuangHuiGuangPao:{
                 markimage:'image/card/zhuanShu/yuanChu_shengHuangHuiGuangPao.png',
