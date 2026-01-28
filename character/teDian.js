@@ -3255,7 +3255,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                 var cards=player.getExpansions('tianPing_zuo');
                                 if(cards.length>0) dialog.addAuto(cards);
                                 return `<span class='greentext'>[被动]罪灭之左</span><br>
-                                    <span class='tiaoJian'>(每当本卡上的牌数增加，且增加后本卡上的牌数>1)</span>对(X-1)名目标对手造成1点攻击伤害③，X为本卡上的牌数。`;
+                                    <span class='tiaoJian'>(每当本卡上的牌数增加，且增加后本卡上的牌数>1)</span>对(X-1)名目标对手造成1点攻击伤害③，X为本卡上的牌数。<br>
+                                    【天平·左】上的牌上限为3；达到上限则无法被再放置新牌。
+                                    `;
                             },
                         },
                         markimage: 'image/card/zhuanShu/tianPing_zuo.png',
@@ -3287,7 +3289,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                 var cards=player.getExpansions('tianPing_you');
                                 if(cards.length>0) dialog.addAuto(cards);
                                 return `<span class='greentext'>[被动]圣方之右</span><br>
-                                    <span class='tiaoJian'>(每当本卡上的牌被弃掉且弃牌数>1)</span>你+1[治疗]。`;
+                                    <span class='tiaoJian'>(每当本卡上的牌被弃掉且弃牌数>1)</span>你+1[治疗]。<br>
+                                    【天平·右】上的牌上限为3；达到上限则无法被再放置新牌。
+                                    `;
                             },
                         },
                         markimage: 'image/card/zhuanShu/tianPing_you.png',
@@ -3803,11 +3807,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             tianPing_zuo:"[被动]罪灭之左",
             tianPing_you:"[被动]圣方之右",
             tianPing_fangZhi:"[被动]替罪羔羊",
-            tianPing_info:`<span class='greentext'>[被动]替罪羔羊</span><br>
+            tianPing_info:`
+            【天平·左】/【天平·右】上的牌上限为3；达到上限则无法被再放置新牌。<br>
+            (天平共有技能)<span class='greentext'>[被动]替罪羔羊</span><br>
             <span class='tiaoJian'>(每当有新牌将被放置在本卡上时，若该卡与本卡上的牌不同系)</span>移除本卡上所有卡，你+1<span class='hong'>【罪】</span>。<br>
-            <span class='greentext'>[被动]罪灭之左</span><br>
+            (天平·左)<span class='greentext'>[被动]罪灭之左</span><br>
             <span class='tiaoJian'>(每当本卡上的牌数增加，且增加后本卡上的牌数>1)</span>对(X-1)名目标对手造成1点攻击伤害③，X为本卡上的牌数。<br>
-            <span class='greentext'>[被动]圣方之右</span><br>
+            (天平·右)<span class='greentext'>[被动]圣方之右</span><br>
             <span class='tiaoJian'>(每当本卡上的牌被移除且移除牌数>1)</span>你+1[治疗]。
             `,
             tianZui:"[启动]天罪", 
