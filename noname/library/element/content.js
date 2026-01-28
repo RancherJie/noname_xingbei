@@ -9472,7 +9472,11 @@ export const Content = {
 		if(event.discarder) event.done.discarder=event.discarder;
 		if(event.visible) event.done.visible=true;
 		if(event.gaiPai){//移除了盖牌日志
-			let name=get.translation(event.gaiPai);
+			let name;
+			let info= get.info(event.gaiPai);
+			if(info&&info.intro&&info.intro.name){
+				name=info.intro.name;
+			}else name=get.translation(event.gaiPai);
 			if(event.visible){
 				game.log(player,'移除了',cards.length,'张','【'+name+'】',"(",cards,")");
 			}else if(event.sheQi){
