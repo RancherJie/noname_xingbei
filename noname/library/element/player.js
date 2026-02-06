@@ -11105,12 +11105,8 @@ export class Player extends HTMLDivElement {
 		if(typeof num!='number'||!num) num=1;
 		var info=get.info(zhiShiWu);
 		if(num>0){
-			if(typeof max=='number'){
-				max=max;
-			}else if(info&&info.intro&&info.intro.max){
-				max=info.intro.max;
-			}else{
-				max=Infinity;
+			if(!max){
+				max=this.getZhiShiWuLimit(zhiShiWu);
 			}
 			var current=this.countMark(zhiShiWu);
 			if(current+num>max){
@@ -11807,7 +11803,20 @@ export class Player extends HTMLDivElement {
 			return list.length;
 		}
 	}
-	
+	getZhiShiWuLimit(zhiShiWu){
+		if(!zhiShiWu) return Infinity;
+		let max;
+		let info=get.info(zhiShiWu);
+		if(info.intro&&info.intro.max){
+			if(typeof info.intro.max=="function"){
+				max=info.intro.max(this);
+			}else if(typeof info.intro.max=="number"){
+				max=info.intro.max;
+			}
+			if(!max) max=Infinity;
+			return max;
+		}else return Infinity;
+	}
 	
 
 	$drawAuto(cards, target) {

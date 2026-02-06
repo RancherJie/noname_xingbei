@@ -3613,9 +3613,9 @@ export class Get extends GetCompatible {
 		switch (type) {
 			case "mark": {
 				if (content > 0) {
-					let info=get.info(skill);
 					let str="共有" + content + "个标记"
-					if(info.intro.max&&info.intro.max>0) str+="，上限为"+info.intro.max;
+					let max=player.getZhiShiWuLimit(skill);
+					if(max) str+="，上限为"+max;
 					return str;
 				}
 				return false;
