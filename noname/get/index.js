@@ -1314,9 +1314,9 @@ export class Get extends GetCompatible {
 					str="4v4";
 					break;
 			}
-			if(config.phaseswap) str+='多控';
 			return str;
 		}
+		if(config.phaseswap) str+='多控';
 		if (server) {
 			return get.translation(config.mode) + "模式";
 		} else {
