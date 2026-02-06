@@ -8501,6 +8501,129 @@ export class Game extends GameCompatible {
 		return player;
 	}
 	/**
+	 * 添加一个新玩家到target的上家或下家（默认为上家）
+	 * @param { Player } target 新玩家的下家
+	 * @param { string|undefined|null } [character] 新玩家主将
+	 * @param { string|undefined|null } [character2] 新玩家副将
+	 * @param { boolean } [isNext] 是否添加到下家
+	 * @returns { Player }
+	 */
+	addPlayerOL(target, character, character2, isNext) {
+		if (get.itemtype(target) != "player") {
+		return;
+		}
+		const addPlayer = function(id2, target2, character3, character22, isNext2) {
+		const players2 = game.players.concat(game.dead);
+		ui.arena.setNumber(parseInt(ui.arena.dataset.number) + 1);
+		let position = !isNext2 ? parseInt(target2.dataset.position) : parseInt(target2.dataset.position) + 1;
+		if (position == 0) {
+			position = players2.length;
+		}
+		players2.forEach((value) => {
+			if (parseInt(value.dataset.position) >= position) {
+			value.dataset.position = parseInt(value.dataset.position) + 1;
+			}
+		});
+		const player2 = ui.create.player(ui.arena).addTempClass("start");
+		player2.playerid = id2;
+		if (_status.connectMode) {
+			lib.playerOL[id2] = player2;
+		} else {
+			game.playerMap[id2] = player2;
+		}
+		if (character3) {
+			player2.init(character3, character22);
+		}
+		game.players.push(player2);
+		player2.dataset.position = position;
+		game.arrangePlayers();
+		return player2;
+		};
+		const id = get.id();
+		const players = game.players.concat(game.dead);
+		game.broadcast(addPlayer, id, target, character, character2, isNext);
+		const player = addPlayer(id, target, character, character2, isNext);
+		const firstSeat = players.find((value) => value.getSeatNum() == 1);
+		if (firstSeat) {
+		const targetSeat = target.getSeatNum();
+		let seatNum = !isNext ? targetSeat == 1 ? players.length + 1 : targetSeat : targetSeat + 1;
+		player.setSeatNum(seatNum);
+		players.forEach((value) => {
+			if (seatNum && value.getSeatNum() >= seatNum) {
+			value.setSeatNum(value.getSeatNum() + 1);
+			}
+		});
+		}
+		player.actionHistory = new Array(players[0].actionHistory.length).fill({
+		useCard: [],
+		respond: [],
+		skipped: [],
+		lose: [],
+		gain: [],
+		sourceDamage: [],
+		damage: [],
+		custom: [],
+		useSkill: []
+		});
+		player.stat = new Array(players[0].stat.length).fill({
+		card: {},
+		skill: {},
+		triggerSkill: {}
+		});
+		return player;
+	}
+	/**
+	 * 移除一名玩家，单机联机都可用
+	 * @param { Player } player 要移除的玩家
+	 * @returns { Player }
+	 */
+	removePlayerOL(player) {
+		if (get.itemtype(player) != "player") {
+		return;
+		}
+		const players = game.players.concat(game.dead);
+		player.style.left = `${player.getLeft()}px`;
+		player.style.top = `${player.getTop()}px`;
+		if (player.getSeatNum() > 0) {
+		const seatNum = player.getSeatNum();
+		players.forEach((value) => {
+			if (value.getSeatNum() > seatNum) {
+			value.setSeatNum(value.getSeatNum() - 1);
+			}
+		});
+		}
+		game.broadcastAll((player2) => {
+		if (_status.roundStart == player2) {
+			_status.roundStart = player2.next || player2.getNext() || game.players[0];
+		}
+		const players2 = game.players.concat(game.dead);
+		const position = parseInt(player2.dataset.position);
+		players2.forEach((value) => {
+			if (parseInt(value.dataset.position) > position) {
+			value.dataset.position = parseInt(value.dataset.position) - 1;
+			}
+		});
+		if (player2.isAlive()) {
+			player2.next.previous = player2.previous;
+			player2.previous.next = player2.next;
+		}
+		player2.nextSeat.previousSeat = player2.previousSeat;
+		player2.previousSeat.nextSeat = player2.nextSeat;
+		player2.delete();
+		game.players.remove(player2);
+		game.dead.remove(player2);
+		ui.arena.setNumber(parseInt(ui.arena.dataset.number) - 1);
+		player2.removed = true;
+		if (player2 == game.me) {
+			ui.me.hide();
+			ui.auto.hide();
+			ui.wuxie.hide();
+		}
+		setTimeout(() => player2.removeAttribute("style"), 500);
+		}, player);
+		return player;
+	}
+	/**
 	 * @param { number } position
 	 * @param { string } [character]
 	 * @param { string } [animation]
