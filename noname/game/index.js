@@ -2835,20 +2835,16 @@ export class Game extends GameCompatible {
 			}
 			ui.updatehl();
 			for (var i = 0; i < players.length; i++) {
-				if (lib.config.mode == "xingBei") {
-					game.players[i].init(players[i].name, players[i].name2);
-					game.players[i].node.identity.firstChild.innerHTML = players[i].identity;
-					game.players[i].node.identity.dataset.color = players[i].color;
-					game.players[i].side = players[i].side;
-				}
+				game.players[i].init(players[i].name, players[i].name2);
+				game.players[i].node.identity.firstChild.innerHTML = players[i].identity;
+				game.players[i].node.identity.dataset.color = players[i].color;
+				game.players[i].side = players[i].side;
 			}
 			for (var i = 0; i < game.players.length; i++) {
 				game.playerMap[game.players[i].dataset.position] = game.players[i];
 			}
-			if (lib.config.mode == "xingBei") {
-				if (players.bool) {
-					game.onSwapControl();
-				}
+			if (players.bool) {
+				game.onSwapControl();
 			}
 		},
 		newcard: function (content) {
