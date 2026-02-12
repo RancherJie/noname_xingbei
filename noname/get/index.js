@@ -3611,6 +3611,7 @@ export class Get extends GetCompatible {
 	}
 	storageintro(type, content, player, dialog, skill) {
 		switch (type) {
+			case 'zhiShiWu': 
 			case "mark": {
 				if (content > 0) {
 					let str="共有" + content + "个标记"
