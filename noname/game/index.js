@@ -9114,6 +9114,24 @@ export class Game extends GameCompatible {
 		});
 		return [game.moDan,game.moDanFangXiang];
 	}
+
+	versusHoverHandcards(){
+		var uiintro = ui.create.dialog("hidden");
+		var added = false;
+		for (var i = 0; i < game.players.length; i++) {
+			if (game.players[i].name && game.players[i].side == game.me.side && game.players[i] != game.me) {
+				added = true;
+				uiintro.add(get.translation(game.players[i]));
+				var cards = game.players[i].getCards("h");
+				if (cards.length) {
+					uiintro.addSmall(cards, true);
+				} else {
+					uiintro.add("（无）");
+				}
+			}
+		}
+		if (added) return uiintro;
+	}
 }
 
 export let game = new Game();
