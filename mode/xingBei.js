@@ -260,24 +260,6 @@ export default () => {
 				.catch(error =>console.error('Error:',error));
 			},
 
-			
-			versusHoverHandcards: function () {
-				var uiintro = ui.create.dialog("hidden");
-				var added = false;
-				for (var i = 0; i < game.players.length; i++) {
-					if (game.players[i].name && game.players[i].side == game.me.side && game.players[i] != game.me) {
-						added = true;
-						uiintro.add(get.translation(game.players[i]));
-						var cards = game.players[i].getCards("h");
-						if (cards.length) {
-							uiintro.addSmall(cards, true);
-						} else {
-							uiintro.add("（无）");
-						}
-					}
-				}
-				if (added) return uiintro;
-			},
 
 			checkResult:function(){
 				var me = game.me._trueMe || game.me;
