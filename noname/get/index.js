@@ -5884,13 +5884,13 @@ export class Get extends GetCompatible {
 		var str='shiQiMax';
 		if(side===true) str+='Hong';
 		else if(side===false) str+='Lan';
-		return game[str];
+		return game[str]||game.shiQiMax;
 	}
 	zhanJiMax(side){
 		var str='zhanJiMax';
 		if(side===true) str+='Hong';
 		else if(side===false) str+='Lan';
-		return game[str];
+		return game[str]||game.zhanJiMax;
 	}
 
 	xuanZeTongXiPai(card){
