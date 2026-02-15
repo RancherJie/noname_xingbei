@@ -10624,9 +10624,11 @@ export class Library {
 					if(player.countCards('h')+3<=player.getHandcardLimit()) return 0;
 					return 1;
 				}).forResultControl();
-				if(control.control=='选项二'){
+				if(control=='选项二'){
+					game.log(player,'选择了','跳过行动阶段');
 					trigger.xuRuo=true;
-				}else if(control.control=="选项一"){
+				}else if(control=="选项一"){
+					game.log(player,'选择了','摸三张牌');
 					await player.draw(3);
 				}
 				await player.discard(player.getExpansions('_xuRuo'),'_xuRuo').set('visible',true);
