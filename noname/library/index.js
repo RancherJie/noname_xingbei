@@ -7439,6 +7439,7 @@ export class Library {
 		shengGroup:"神圣教廷",
 		huanGroup:"幻影联盟",
 		longGroup:"龙魂帝国",
+		DIY:"DIY",
 		xueGroupColor:"#7D0101",
 		yongGroupColor:"#C6813C",
 		jiGroupColor:"#A5BE7D",
