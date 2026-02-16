@@ -350,23 +350,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 1'
                     trigger.changeDamageNum(1);
                     'step 2'
-                    player.chooseCardTarget({
-                        filterCard:function(card){
-                            return get.type(card)=='faShu';
-                        },
-                        filterTarget:true,
-                        prompt:"<span class='tiaoJian'>(若你额外弃置1张法术牌[展示])</span>本次攻击伤害额外+1",
-                        ai1(card) {
-                            return 6- get.value(card);
-                        },
-                        ai2(target) {
-                            return get.zhiLiaoEffect2(target,player,1);
-                        },
+                    player.chooseToDiscard('showCards',"<span class='tiaoJian'>(若你额外弃置1张法术牌[展示])</span>本次攻击伤害额外+1",card=>get.type(card)=='faShu').set('ai',function(card){
+                        return 6- get.value(card);
                     });
                     'step 3'
                     if(result.bool){
-                        player.discard(result.cards).set('showCards',true);
-                        event.target=result.targets[0];
                         trigger.changeDamageNum(1);
                     }
                     'step 4'
