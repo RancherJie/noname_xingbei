@@ -6099,6 +6099,7 @@ export class Game extends GameCompatible {
 			game.controlOver();
 			return;
 		}
+		/*
 		if (!_status.brawl) {
 			if (lib.config.mode == "boss") {
 				ui.create.control("再战", function () {
@@ -6134,7 +6135,7 @@ export class Game extends GameCompatible {
 			} else if (!_status.connectMode && get.config("continue_game") && !ui.continue_game && !_status.brawl && !game.no_continue_game) {
 				ui.continue_game = ui.create.control("再战", game.reloadCurrent);
 			}
-		}
+		}*/
 		if (!ui.restart) {
 			if (game.onlineroom && typeof game.roomId == "string") {
 				ui.restart = ui.create.control("restart", function () {
