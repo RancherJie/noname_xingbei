@@ -10095,12 +10095,14 @@ export const Content = {
 			if(event.animate=='give'){
 				for(var i in evtmap){
 					var source=(_status.connectMode?lib.playerOL:game.playerMap)[i];
-					//source.$give(evtmap[i][0],player,event.log)
-					source.$give(cards.length,player,event.log)
+					source.$give(evtmap[i][0],player,event.log);
+					//明置给出动画
+					//source.$give(cards.length,player,event.log)
 				}
 			}
 			else{
 				for(var i in evtmap){
+					//$giveAuto会自动处理隐藏/明置和动画，所以不需要区分
 					var source=(_status.connectMode?lib.playerOL:game.playerMap)[i];
 					if(evtmap[i][1].length) source.$giveAuto(evtmap[i][1],player,event.log);
 					if(evtmap[i][2].length) source.$give(evtmap[i][2],player,event.log);

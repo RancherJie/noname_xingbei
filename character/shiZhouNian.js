@@ -1119,15 +1119,15 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 0'
                     if(targets.length==1){
                         if(target.countCards('h')>=2){
-                            target.chooseToGive('交给守护天使2张牌',true,2,player).set('visibleMove',true);
+                            target.chooseToGive('交给守护天使2张牌',true,2,player);
                         }else if(target.countCards('h')==1){
-                            target.chooseToGive('交给守护天使1张牌',true,1,player).set('visibleMove',true);
+                            target.chooseToGive('交给守护天使1张牌',true,1,player);
                         }else if(target.countCards('h')==0){
                             event.finish();
                         }
                     }else if(targets.length==2){
                         if(target.countCards('h')>=1){
-                            target.chooseToGive('交给守护天使1张牌',true,1,player).set('visibleMove',true);
+                            target.chooseToGive('交给守护天使1张牌',true,1,player);
                         }else{
                             event.finish();
                         }
