@@ -2429,7 +2429,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     let num = 0;
                     for (; num < 3;) {
                         num++;
-                        let cards = await get.cards();
+                        let cards = get.cards();
                         await player.showHiddenCards(cards);
                         const card = cards[0];
                         if (get.mingGe(card) !== "xue" && get.type(card) !== "faShu") {
