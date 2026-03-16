@@ -5817,6 +5817,28 @@ export class Get extends GetCompatible {
 		}
 		return Object.keys(dict).length;
 	}
+	countTongMingPai(cards,type){
+		var dict={};
+		for(var i=0;i<cards.length;i++){
+			if(type&&get.type(cards[i])!=type) continue;
+			var mingGe=get.mingGe(cards[i]);
+			if(!mingGe) continue;
+			if(!dict[mingGe]) dict[mingGe]=0;
+			dict[mingGe]++;
+		}
+	}
+	countYiMingPai(cards,type){
+		var dict={};
+		var dict={};
+		for(var i=0;i<cards.length;i++){
+			if(type&&get.type(cards[i])!=type) continue;
+			var mingGe=get.mingGe(cards[i]);
+			if(!mingGe) continue;
+			if(!dict[mingGe]) dict[mingGe]=0;
+			dict[mingGe]++;
+		}
+		return Object.keys(dict).length;
+	}
 	jiChuXiaoGuoEffect(target){
 		if(target.hasExpansions('_shengDun')){
 			return -1;
