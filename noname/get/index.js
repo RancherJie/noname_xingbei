@@ -1301,22 +1301,27 @@ export class Get extends GetCompatible {
 		}
 	}
 	modetrans(config, server) {
+		var str='';
+		if(config.phaseswap) str+='多控';
 		if (config.mode == "xingBei") {
-			var str='';
 			switch (config.versus_mode) {
 				case "2v2":
-					str="2v2";
+					str+="2v2";
 					break;
 				case "3v3":
-					str="3v3";
+					str+="3v3";
 					break;
 				case "4v4":
-					str="4v4";
+					str+="4v4";
 					break;
 			}
 			return str;
 		}
-		if(config.phaseswap) str+='多控';
+		if(config.mode=="boss"){
+			str+='BOSS';
+			return str;
+		}
+
 		if (server) {
 			return get.translation(config.mode) + "模式";
 		} else {
