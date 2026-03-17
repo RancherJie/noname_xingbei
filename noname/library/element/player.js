@@ -9941,8 +9941,7 @@ export class Player extends HTMLDivElement {
 			if (lib.config.mode == "xingBei") {
 				return (get.config("phaseswap")) && this.side == me.side;
 			} else if (lib.config.mode == "boss") {
-				if (me.side) return false;
-				return this.side == me.side && get.config("single_control");
+				return ((get.config("phaseswap")||this.side===true)) && this.side == me.side;
 			}
 		}
 		

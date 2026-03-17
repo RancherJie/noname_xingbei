@@ -5126,6 +5126,158 @@ export class Library {
 				},
 			}
 		},
+		boss: {
+			name: "BOSS",
+			config: {
+				update: function (config, map) {
+					if(config.phaseswap==true){
+						map.viewHandcard.hide();
+					}else{
+						map.viewHandcard.show();
+					}
+				},
+				difficulty:{
+					name:'难度',
+					init:'normal',
+					item:{
+						easy:'简单',
+						normal:'标准',
+						hard:'困难',
+					},
+					frequent:true,
+				},
+				choose_number:{
+					name:'候选角色数',
+					init:3,
+					item:{
+						1:'1',
+						2:'2',
+						3:'3',
+						5:'5',
+						7:'7',
+						10:'10',
+					},
+					frequent:true,
+				},
+				viewHandcard:{
+					name:'可见队友手牌',
+					init:false,
+					onclick:function(bool){
+						game.saveConfig('viewHandcard',bool,this._link.config.mode);
+					},
+					frequent:true,
+				},
+				change_identity:{
+					name:'自由选择座位',
+					init:true,
+					onclick:function(bool){
+						game.saveConfig('change_identity',bool,this._link.config.mode);
+						if(!_status.event.getParent().showConfig&&!_status.event.showConfig) return;
+
+						var dialog;
+						if(ui.cheat2&&ui.cheat2.backup) dialog=ui.cheat2.backup;
+						else dialog=_status.event.dialog;
+						if(!_status.brawl||!_status.brawl.noAddSetting){
+							if(!dialog.querySelector('table')&&get.config('change_identity')) _status.event.getParent().addSetting(dialog);
+							else _status.event.getParent().removeSetting(dialog);
+						}
+						ui.update();
+					}
+				},
+				free_choose: {
+					name: "自由选将",
+					init: true,
+					onclick(bool) {
+						game.saveConfig("free_choose", bool, this._link.config.mode);
+						if (get.mode() != this._link.config.mode || (!_status.event.getParent().showConfig && !_status.event.showConfig)) return;
+						if (!ui.cheat2 && get.config("free_choose")) ui.create.cheat2();
+						else if (ui.cheat2 && !get.config("free_choose")) {
+							ui.cheat2.close();
+							delete ui.cheat2;
+						}
+					},
+				},
+				change_choice: {
+					name: "换角卡",
+					init: true,
+					onclick(bool) {
+						game.saveConfig("change_choice", bool, this._link.config.mode);
+						if (!_status.event.getParent().showConfig && !_status.event.showConfig) return;
+						if (!ui.cheat && get.config("change_choice")) ui.create.cheat();
+						else if (ui.cheat && !get.config("change_choice")) {
+							ui.cheat.close();
+							delete ui.cheat;
+						}
+					},
+				},
+				phaseswap:{
+					name:'多控',
+					init:false,
+					onclick:function(bool){
+						game.saveConfig('phaseswap',bool,this._link.config.mode);
+					},
+					frequent:true,
+					intro:'玩家操控多个角色',
+				},
+				viewHandcard:{
+					name:'可见队友手牌',
+					init:false,
+					onclick:function(bool){
+						game.saveConfig('viewHandcard',bool,this._link.config.mode);
+					},
+					frequent:true,
+				},
+			},
+			connect:{
+				update: function (config, map) {
+					if(config.connect_phaseswap==true){
+						map.connect_viewHandcard.hide();
+					}else{
+						map.connect_viewHandcard.show();
+					}
+				},
+				connect_choose_number:{
+					name:'候选角色数',
+					init:3,
+					item:{
+						1:'1',
+						2:'2',
+						3:'3',
+						5:'5',
+						7:'7',
+						10:'10',
+					},
+					frequent:true,
+				},
+				connect_difficulty:{
+					name:'难度',
+					init:'normal',
+					item:{
+						easy:'简单',
+						normal:'标准',
+						hard:'困难',
+					},
+					frequent:true,
+				},
+				connect_phaseswap:{
+					name:'多控',
+					init:false,
+					onclick:function(bool){
+						game.saveConfig('connect_phaseswap',bool,this._link.config.mode);
+					},
+					frequent:true,
+					intro:'玩家操控多个角色',
+				},
+				connect_viewHandcard:{
+					name:'可见队友手牌',
+					init:false,
+					onclick:function(bool){
+						game.saveConfig('connect_viewHandcard',bool,this._link.config.mode);
+					},
+					frequent:true,
+				},
+			},
+		},
 		connect: {
 			name: "联机",
 			config: {
@@ -5204,57 +5356,6 @@ export class Library {
 						}
 					},
 					clear: true,
-				},
-			},
-		},
-		boss: {
-			name: "BOSS",
-			config: {
-				difficulty:{
-					name:'难度',
-					init:'normal',
-					item:{
-						easy:'简单',
-						normal:'标准',
-						hard:'困难',
-					},
-				},
-				free_choose: {
-					name: "自由选将",
-					init: true,
-					frequent: true,
-					onclick(bool) {
-						game.saveConfig("free_choose", bool, this._link.config.mode);
-						if (get.mode() != this._link.config.mode || (!_status.event.getParent().showConfig && !_status.event.showConfig)) return;
-						if (!ui.cheat2 && get.config("free_choose")) ui.create.cheat2();
-						else if (ui.cheat2 && !get.config("free_choose")) {
-							ui.cheat2.close();
-							delete ui.cheat2;
-						}
-					},
-				},
-				change_choice: {
-					name: "开启换将卡",
-					init: true,
-					onclick(bool) {
-						game.saveConfig("change_choice", bool, this._link.config.mode);
-						if (!_status.event.getParent().showConfig && !_status.event.showConfig) return;
-						if (!ui.cheat && get.config("change_choice")) ui.create.cheat();
-						else if (ui.cheat && !get.config("change_choice")) {
-							ui.cheat.close();
-							delete ui.cheat;
-						}
-					},
-					frequent: true,
-				},
-				phaseswap:{
-					name:'多控',
-					init:false,
-					onclick:function(bool){
-						game.saveConfig('connect_phaseswap',bool,this._link.config.mode);
-					},
-					frequent:true,
-					intro:'玩家操控多个角色',
 				},
 			},
 		},
@@ -11825,7 +11926,10 @@ export class Library {
                     
 					//多控观战模式使用正常布局
 					if(lib.configOL.phaseswap && observe) ui.arena.setNumber(state.number-1);
-					else ui.arena.setNumber(state.number);
+					else{
+						if(lib.configOL.mode=='boss') ui.arena.setNumber(state.number-1)
+						else ui.arena.setNumber(state.number)
+					};
 
 					var pos = state.players[observe || game.onlineID].position;
 					for (var i in state.players) {
@@ -11834,7 +11938,10 @@ export class Library {
 						if(lib.configOL.phaseswap && !observe){
 							player.dataset.position = info.position;
 						}else{
-							player.dataset.position = info.position < pos ? info.position - pos + parseInt(state.number) : info.position - pos;
+							if(lib.configOL.mode=='boss'){ player.dataset.position = info.position < pos ? info.position - pos + parseInt(state.number-1) : info.position - pos;
+							}else{
+								player.dataset.position = info.position < pos ? info.position - pos + parseInt(state.number) : info.position - pos;
+							}
 						}
 						if (i == observe || i == game.onlineID) {
 							game.me = player;

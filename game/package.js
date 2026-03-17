@@ -8,6 +8,7 @@ window.noname_package = {
 		sanBan:'三版',
 		siBan:'四版',
 		poXiao:'破晓',
+		boss:'BOSS',
 	},
 	card: {
 		xingBei:'星杯传说',
@@ -17,6 +18,7 @@ window.noname_package = {
 	},
 	mode: {
 		xingBei: "星杯传说",
+		boss: "BOSS",
 		connect: "联机",
 		offlineChoose: "线下选角",
 		illustration: "图鉴",

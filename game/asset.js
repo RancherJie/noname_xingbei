@@ -1,6 +1,6 @@
 window.noname_asset_list=
 [
-	"v1.3.11",
+	"v1.5.0",
 	"audio/background/music_default.mp3",
 	"audio/card/default.mp3",
 	'audio/card/atk_an.mp3',
@@ -109,11 +109,11 @@ window.noname_asset_list=
 	"image/card/leiGuangZhan.png",
 	"image/card/moRen.png",
 	"image/card/yiRen.png",
-	
+	'image/card/shiShuCard.png',
+
 	'image/card/xingShi/baoShi.png',
 	'image/card/xingShi/shuiJing.png',
-	'image/card/xingShi/shiShuCard.png',
-
+	
 	'image/card/zhuanShu/wuXiShuFu.png',
 	'image/card/zhuanShu/xueQiangWeiTingYuan.png',
 	'image/card/zhuanShu/zhanWen.png',
@@ -148,6 +148,28 @@ window.noname_asset_list=
 	'image/card/zhiShiWu/longYuFengYin.jpg',
 	'image/card/zhiShiWu/shengLongWeiYa.jpg',
 	'image/card/zhiShiWu/yuLongJieJie.jpg',
+
+	//boss
+	'image/mode/boss/character/boss_mingJie1.jpg',
+	'image/mode/boss/character/boss_mingJie2.jpg',
+	'image/mode/boss/character/boss_mingJie_zuoQuan.jpg',
+	'image/mode/boss/character/boss_mingJie_youQuan.jpg',
+	'image/mode/boss/card/buff_A.jpg',
+	'image/mode/boss/card/buff_B.jpg',
+	'image/mode/boss/card/buff_C.jpg',
+	'image/mode/boss/card/buff_D.jpg',
+	'image/mode/boss/card/buff_E.jpg',
+	'image/mode/boss/mark/buff_A.jpg',
+	'image/mode/boss/mark/buff_B.jpg',
+	'image/mode/boss/mark/buff_C.jpg',
+	'image/mode/boss/mark/buff_D.jpg',
+	'image/mode/boss/mark/buff_E.jpg',
+	'image/mode/boss/mark/di.jpg',
+	'image/mode/boss/mark/feng.jpg',
+	'image/mode/boss/mark/huo.jpg',
+	'image/mode/boss/mark/lei.jpg',
+	'image/mode/boss/mark/shui.jpg',
+
 
 	'image/character/anShaZhe.jpg',
 	'image/character/cangYanMoNv.jpg',

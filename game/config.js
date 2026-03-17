@@ -18,7 +18,7 @@ window.config = {
 		sgscharacters:['shiZhouNian'],
 		sgscards:['xingBei'],
 		sgsmodes:['connect','xingBei'],
-		stockmode:['connect','xingBei','offlineChoose','illustration','tutorial','leaderboard'],
+		stockmode:['connect','xingBei','offlineChoose','illustration','tutorial','leaderboard','boss'],
 		nogamemode:['connect','illustration','tutorial','leaderboard'],
 		stockextension:[],
 		layout:['default','newlayout'],
@@ -132,7 +132,7 @@ window.config = {
 	cards: ["xingBei"],
 	characters: ['shiZhouNian'],
 	moderned_chracters: [],
-	connect_characters: ['yiDuanYeHuo','shenZiChuangLin','sanBan','siBan','zhongMoDaoZhu','teDian','poXiao'],
+	connect_characters: ['yiDuanYeHuo','shenZiChuangLin','sanBan','siBan','zhongMoDaoZhu','teDian','poXiao','boss'],//默认关闭的角色包
 	connect_cards: [],
 	plays: [],
 	extensions: [],
