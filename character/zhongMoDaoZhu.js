@@ -18,7 +18,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             zhuLvZhe:['zhuLvZhe_name','xueGroup',5,['shenLvFengSuo','shengXueZhiJi','wangCheYiWei','zuiDuanHuoMian','shengYinSongEn','wangQuanBaoZhu','xinYangChongZhu','shengYiWu','yinZhiZiDan'],['forbidai']],
             hongYiZhuJiao:['zhuLvZhe_name','shengGroup',5,['shengYueYinQi','quMoShi','daoGaoShi','quanNengNiWei','shenXuanDaoYan','shengDian','shengYiWu','yinZhiZiDan']],
             jiLuZhe:['jiLuZhe_name','huanGroup','4/5',['chuanShuoZhiDi','zhiXingHeYi','jiGuShiDian','yiJiLunPo','xuanCuiJingLian','miJingWanXiang','shiShu','guJinHuzheng','yiJi','shiLiao']],
-            chuanJiaoShi:['chuanJiaoShi_name','shengGroup','4/5',['shenDeWenTu','xinYangZhiLu','chuanDao','qiShi','shiFeng','luBiao','shuLingEnCi','miSa','qianCheng']],
+            chuanJiaoShi:['chuanJiaoShi_name','shengGroup','4/5',['shenDeMenTu','xinYangZhiLu','chuanDao','qiShi','shiFeng','luBiao','shuLingEnCi','miSa','qianCheng']],
             yiJiaoTu:['yiJiaoTu_name','huanGroup',4,['yiDuanXieShuo','shenPanYJT','xianJi','moRiYuYan','fangZhu','tanLan','yuYan']],
 		},
         characterIntro: {
@@ -1068,7 +1068,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 }
             },
 
-            shenDeWenTu:{
+            shenDeMenTu:{
                 getPrevious:function (player){
                     var target=player;
                     for (var i = 0; i < game.players.length - 1; i++) {
@@ -1083,7 +1083,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     return player.storage.luBiaoTarget&&event.player==player.storage.luBiaoTarget;
                 },
                 content:function (){
-                    player.insertPhase('shenDeWenTu');
+                    player.insertPhase('shenDeMenTu');
                 },
                 group:['shenDeWenTu_phaseBefore','shenDeWenTu_ban'],
                 subSkill:{
@@ -1091,7 +1091,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         trigger:{player:'phaseBefore'},
                         direct:true,
                         filter:function (event,player){
-                            return player.storage.luBiaoTarget&&event.skill!='shenDeWenTu';
+                            return player.storage.luBiaoTarget&&event.skill!='shenDeMenTu';
                         },
                         content:function (){
                             trigger.cancel()
@@ -1104,7 +1104,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             return game.players.length==4;
                         },
                         content:function (){
-                            player.tempBanSkill('shenDeWenTu','forever');
+                            player.tempBanSkill('shenDeMenTu','forever');
                         }
                     }
                 },
@@ -1124,7 +1124,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     return player.phaseNumber == 1;
                 },
                 content:async function (event,trigger,player){
-                    var target=lib.skill.shenDeWenTu.getPrevious(player);
+                    var target=lib.skill.shenDeMenTu.getPrevious(player);
                     game.addGlobalSkill('luBiaoX');
                     for(var current of game.players){
                         current.storage.luBiaoPlayer=player;
@@ -1151,7 +1151,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             await event.trigger('luBiaoXZhuanYi');
                             if(event.zhuanYi!=false){
                                 await player.storage.luBiaoTarget.removeZhiShiWu('luBiaoX');
-                                var target=lib.skill.shenDeWenTu.getPrevious(player.storage.luBiaoTarget);
+                                var target=lib.skill.shenDeMenTu.getPrevious(player.storage.luBiaoTarget);
                                 player.storage.luBiaoTarget=target;
                                 await target.addZhiShiWu('luBiaoX').set('type','zhuanYi');
                             }
@@ -1283,7 +1283,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     await event.trigger('luBiaoXZhuanYi');
                     if(event.zhuanYi!=false){
                         await player.removeZhiShiWu('luBiaoX');
-                        var target=lib.skill.shenDeWenTu.getPrevious(player);
+                        var target=lib.skill.shenDeMenTu.getPrevious(player);
                         player.storage.luBiaoPlayer.storage.luBiaoTarget=target;
                         await target.addZhiShiWu('luBiaoX').set('type','zhuanYi').set('gaoJieShi',true);
                     }
@@ -1950,7 +1950,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             shiLiao:'史料',
             shiLiao_info:"<span class='hong'>【史料】</span>为记录者专有指示物，上限为3。",
 
-            shenDeWenTu:"[被动]神的门徒",
+            shenDeMenTu:"[被动]神的门徒",
             shenDeWenTu_info:"你无法成为【路标】的目标[恒定]，你的行动顺序改为拥有【路标】的角色之后。2V2中此技能无效。",
             xinYangZhiLu:"[被动]信仰之路",
             xinYangZhiLu_info:"<span class='tiaoJian'>(你的第一回合开始时)</span>将【路标】放置在你左手边最近的角色面前。<span class='tiaoJian'>(你的回合结束时，若本回合你未执行【特殊行动】)</span>将【路标】转移到拥有者左手边最近的角色面前。",
