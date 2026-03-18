@@ -6805,6 +6805,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 group:['jinDuanZhiLi_mingZhong','jinDuanZhiLi_weiMingZhong'],
                 subSkill:{
                     mingZhong:{
+                        prompt2:"弃掉你所有手牌[展示]，其中每有1张法术牌，你+1<span class='hong'>【怒气】</span>；其中每有1张火系牌，本次攻击伤害额外+1，并对自己造成等同于火系牌数量的法术伤害③",
                         trigger:{source:'gongJiMingZhong'},
                         filter:function(event,player){
                             if(!player.canBiShaShuiJing()) return false;
@@ -6839,6 +6840,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         }
                     },
                     weiMingZhong:{
+                        prompt2:"弃掉你所有手牌[展示]，其中每有1张法术牌，你+1<span class='hong'>【怒气】</span>；其中每有1张水系牌，你+1<span class='lan'>【知性】</span>",
                         trigger:{source:'gongJiWeiMingZhong'},
                         filter:function(event,player){
                             if(!player.canBiShaShuiJing()) return false;
