@@ -62,6 +62,7 @@ export class Player extends HTMLDivElement {
 			handcards1: ui.create.div(".handcards"),
 			handcards2: ui.create.div(".handcards"),
 			expansions: ui.create.div(".expansions"),
+			viewHandcard:ui.create.div(".viewHandcard",player).hide(),
 		});
 		player.node.handcards1._childNodesWatcher = new ChildNodesWatcher(player.node.handcards1);
 		player.node.handcards2._childNodesWatcher = new ChildNodesWatcher(player.node.handcards2);
@@ -3617,6 +3618,8 @@ export class Player extends HTMLDivElement {
 			game.addVideo("update", this, [this.countCards("h"), this.hp, this.maxHp, this.zhiLiao]);
 		}
 		this.updateMarks();
+		this.viewHandcard();
+
 		game.callHook("checkTipBottom", [this]);
 		return this;
 	}
@@ -8080,6 +8083,30 @@ export class Player extends HTMLDivElement {
 			this.classList.remove("linked");
 		}
 	}
+	viewHandcard(){
+		const allShown = this.isUnderControl() || (!game.observe && game.me && game.me.hasSkillTag("viewHandcard", null, this, true) && this != game.me);
+		let cards=this.getCards("h");
+		if(allShown&&cards.length){
+			this.node.viewHandcard.show();
+			let str="";
+			for(let i=0;i<cards.length;i++){
+				if(i>7){
+					str+="...<br>";
+					break;
+				}
+				let card=cards[i];
+				if(get.type(card)=='gongJi'){
+					let xiBie=get.xiBie(card);
+					str+=`${get.translation(xiBie)}斩<br>`;
+				}else if(get.type(card)=='faShu'){
+					str+=`${get.translation(card.name)}<br>`;
+				}
+			}
+			this.node.viewHandcard.innerHTML = str;
+		}
+		else this.node.viewHandcard.hide();
+	}
+
 	/**
 	 * 能否对target使用card
 	 * @param { Card | VCard | object | string } card
