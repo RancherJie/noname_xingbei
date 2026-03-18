@@ -62,6 +62,7 @@ export class Player extends HTMLDivElement {
 			handcards1: ui.create.div(".handcards"),
 			handcards2: ui.create.div(".handcards"),
 			expansions: ui.create.div(".expansions"),
+			viewHandcard:ui.create.div(".viewHandcard",player).hide(),
 		});
 		player.node.handcards1._childNodesWatcher = new ChildNodesWatcher(player.node.handcards1);
 		player.node.handcards2._childNodesWatcher = new ChildNodesWatcher(player.node.handcards2);
@@ -3617,6 +3618,8 @@ export class Player extends HTMLDivElement {
 			game.addVideo("update", this, [this.countCards("h"), this.hp, this.maxHp, this.zhiLiao]);
 		}
 		this.updateMarks();
+		this.viewHandcard();
+
 		game.callHook("checkTipBottom", [this]);
 		return this;
 	}
@@ -8080,6 +8083,30 @@ export class Player extends HTMLDivElement {
 			this.classList.remove("linked");
 		}
 	}
+	viewHandcard(){
+		const allShown = this.isUnderControl() || (!game.observe && game.me && game.me.hasSkillTag("viewHandcard", null, this, true) && this != game.me);
+		let cards=this.getCards("h");
+		if(allShown&&cards.length){
+			this.node.viewHandcard.show();
+			let str="";
+			for(let i=0;i<cards.length;i++){
+				if(i>7){
+					str+="...<br>";
+					break;
+				}
+				let card=cards[i];
+				if(get.type(card)=='gongJi'){
+					let xiBie=get.xiBie(card);
+					str+=`${get.translation(xiBie)}斩<br>`;
+				}else if(get.type(card)=='faShu'){
+					str+=`${get.translation(card.name)}<br>`;
+				}
+			}
+			this.node.viewHandcard.innerHTML = str;
+		}
+		else this.node.viewHandcard.hide();
+	}
+
 	/**
 	 * 能否对target使用card
 	 * @param { Card | VCard | object | string } card
@@ -9941,8 +9968,7 @@ export class Player extends HTMLDivElement {
 			if (lib.config.mode == "xingBei") {
 				return (get.config("phaseswap")) && this.side == me.side;
 			} else if (lib.config.mode == "boss") {
-				if (me.side) return false;
-				return this.side == me.side && get.config("single_control");
+				return ((get.config("phaseswap")||this.side===true)) && this.side == me.side;
 			}
 		}
 		
@@ -10893,8 +10919,9 @@ export class Player extends HTMLDivElement {
 			case false:
 				shiQi=game.lanShiQi;break;
 		}
-		if(num>0&&(shiQi+num>game.shiQiMax)){
-			num=Math.max(0,game.shiQiMax-shiQi);
+		var shiQiMax=get.shiQiMax(next.side);
+		if(num>0&&(shiQi+num>shiQiMax)){
+			num=Math.max(0,shiQiMax-shiQi);
 		}
 		next.result.num=num;
 		next.num=num;
@@ -10929,8 +10956,9 @@ export class Player extends HTMLDivElement {
 		}
 		if(typeof num!='number') num=1;
 		var zhanJi=get.zhanJi(sidex);
-		if(num>0&&(zhanJi.length+num>game.zhanJiMax)){
-			num=Math.max(0,game.zhanJiMax-zhanJi.length);
+		var zhanJiMax=get.zhanJiMax(sidex);
+		if(num>0&&(zhanJi.length+num>zhanJiMax)){
+			num=Math.max(0,zhanJiMax-zhanJi.length);
 			var yiChu=true;
 		}
 		if(num<0){
@@ -11103,12 +11131,8 @@ export class Player extends HTMLDivElement {
 		if(typeof num!='number'||!num) num=1;
 		var info=get.info(zhiShiWu);
 		if(num>0){
-			if(typeof max=='number'){
-				max=max;
-			}else if(info&&info.intro&&info.intro.max){
-				max=info.intro.max;
-			}else{
-				max=Infinity;
+			if(!max){
+				max=this.getZhiShiWuLimit(zhiShiWu);
 			}
 			var current=this.countMark(zhiShiWu);
 			if(current+num>max){
@@ -11805,7 +11829,20 @@ export class Player extends HTMLDivElement {
 			return list.length;
 		}
 	}
-	
+	getZhiShiWuLimit(zhiShiWu){
+		if(!zhiShiWu) return Infinity;
+		let max;
+		let info=get.info(zhiShiWu);
+		if(info.intro&&info.intro.max){
+			if(typeof info.intro.max=="function"){
+				max=info.intro.max(this);
+			}else if(typeof info.intro.max=="number"){
+				max=info.intro.max;
+			}
+			if(!max) max=Infinity;
+			return max;
+		}else return Infinity;
+	}
 	
 
 	$drawAuto(cards, target) {

@@ -1119,15 +1119,15 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 0'
                     if(targets.length==1){
                         if(target.countCards('h')>=2){
-                            target.chooseToGive('交给守护天使2张牌',true,2,player).set('visibleMove',true);
+                            target.chooseToGive('交给守护天使2张牌',true,2,player);
                         }else if(target.countCards('h')==1){
-                            target.chooseToGive('交给守护天使1张牌',true,1,player).set('visibleMove',true);
+                            target.chooseToGive('交给守护天使1张牌',true,1,player);
                         }else if(target.countCards('h')==0){
                             event.finish();
                         }
                     }else if(targets.length==2){
                         if(target.countCards('h')>=1){
-                            target.chooseToGive('交给守护天使1张牌',true,1,player).set('visibleMove',true);
+                            target.chooseToGive('交给守护天使1张牌',true,1,player);
                         }else{
                             event.finish();
                         }
@@ -3503,7 +3503,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     if(get.xiBie(event.card)=='an') return false;
                     var target=event.targets[0];
                     var zhanJi=get.zhanJi(player.side);
-                    if(zhanJi.length<game.zhanJiMax) return true;
+                    if(zhanJi.length<get.zhanJiMax(player.side)) return true;
                     var minus=target.getHandcardLimit()-target.countCards('h');
                     var num=Math.random();
                     if(minus<2) return num>0.1;
@@ -5706,6 +5706,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     var choiceList=['目标角色弃1张牌','你摸3张牌[强制]'];
                     player.chooseControl().set('prompt','魔眼').set('choiceList',choiceList).set('ai',function(){
                         var player=_status.event.player;
+                        if(player.countCards('h')<=1) return '选项二';
                         if(!(player.canGongJi()||player.canFaShu())){
                             return '选项二';
                         }else{
@@ -5721,7 +5722,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 3'
                     player.chooseTarget(true,'目标角色弃1张牌').set('ai',function(target){
                         var player=_status.event.player;
-                        if(target==player&&player.countCards('h')==1) return 0;
+                        if(target==player&&player.countCards('h')==1) return -1;
                         if(target.side==player.side){
                             return 15-(target.getHandcardLimit()-target.countCards('h'));
                         }
@@ -6804,6 +6805,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 group:['jinDuanZhiLi_mingZhong','jinDuanZhiLi_weiMingZhong'],
                 subSkill:{
                     mingZhong:{
+                        prompt2:"弃掉你所有手牌[展示]，其中每有1张法术牌，你+1<span class='hong'>【怒气】</span>；其中每有1张火系牌，本次攻击伤害额外+1，并对自己造成等同于火系牌数量的法术伤害③",
                         trigger:{source:'gongJiMingZhong'},
                         filter:function(event,player){
                             if(!player.canBiShaShuiJing()) return false;
@@ -6838,6 +6840,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         }
                     },
                     weiMingZhong:{
+                        prompt2:"弃掉你所有手牌[展示]，其中每有1张法术牌，你+1<span class='hong'>【怒气】</span>；其中每有1张水系牌，你+1<span class='lan'>【知性】</span>",
                         trigger:{source:'gongJiWeiMingZhong'},
                         filter:function(event,player){
                             if(!player.canBiShaShuiJing()) return false;

@@ -93,6 +93,8 @@ body[data-background_color_music="blue"] #arena.mobile:not(.chess) .player[data-
 	text-shadow: none;
 	background: url("wood3.png");
 }
+
+.marks2 > .card:not(.fullskin),
 .marks > .card:not(.fullskin) {
 	color: white;
 	text-shadow: black 0 0 2px;

@@ -221,7 +221,10 @@ export const characterPackMenu = function (connectMenu) {
 					game.saveConfig("forbidai_user", lib.config.forbidai_user);
 				},
 			});
-			if (!mode.startsWith("mode_")) {
+			//不启用的角色包不增加开启选项
+			if(lib.disableCharacterPack.includes(mode)){
+				page.style.paddingTop = "8px";
+			}else if (!mode.startsWith("mode_")) {
 				cfgnodeAI.style.marginTop = "0px";
 				page.appendChild(cfgnode);
 				page.appendChild(cfgnodeAI);

@@ -54,7 +54,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 'shengGong_name',
                 'shengGroup',
                 '4/5',
-                ['yuanChu_tianZhiGong','yuanChu_shengXieJuBao','yuanChu_shengHuangJiangLin','yuanChu_shengGuangBaoLie','liuXingShengDan','yuanChu_shengHuangHuiGuangPao','yuanChu_shengHuangYuHui','yuanChu_ziDongTianChong','yuanChu_xinYang'],
+                ['yuanChu_tianZhiGong','yuanChu_shengXieJuBao','yuanChu_shengHuangJiangLin','yuanChu_shengGuangBaoLie','yuanChu_liuXingShengDan','yuanChu_shengHuangHuiGuangPao','yuanChu_shengHuangYuHui','yuanChu_ziDongTianChong','yuanChu_xinYang'],
                 [
                     `des:圣弓的最终形态，虽有一颗和平之心，但因遇见强敌而觉醒。其拥有强大的机动性，但因为消耗信仰作为能量且需要的能量巨大，所以一般需要队友支援。一旦能量充填完毕，原初之弓就会显现出最终武器的恐怖形态，无论多么劣势都能看到翻盘的希望`,
                 ],
@@ -1418,6 +1418,59 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                 }
             },
+            yuanChu_liuXingShengDan: {
+                inherit: 'liuXingShengDan',
+                filter:function(event,player){
+                    if(!player.isHengZhi()) return false;
+                    return event.yingZhan!=true&&(player.zhiLiao>0||player.countZhiShiWu('yuanChu_xinYang')>0);
+                },
+                async cost(event,trigger,player){
+                    var list=[];
+                    if(player.zhiLiao>0){
+                        list.push('zhiLiao');
+                    }
+                    if(player.countZhiShiWu('yuanChu_xinYang')>0){
+                        list.push('yuanChu_xinYang');
+                    }
+                    list.push('cancel2');
+                    var bool=game.hasPlayer(function(current){
+                        return current.side==player.side&&current.zhiLiao<current.getZhiLiaoLimit();
+                    });
+
+                    var control=await player.chooseControl(list).set('prompt',get.prompt('liuXingShengDan')).set('prompt2','移除1点[治疗]或1点<span class="hong">【信仰】</span>，我方目标角色+1[治疗]').set('ai',function(){
+                        var player=_status.event.player;
+                        var bool=_status.event.bool;
+                        if(player.hasZhiShiWu('shengHuangHuiGuangPaoX')){
+                            if(player.zhiLiao==0) return 'cancel2';
+                            else return 'zhiLiao';
+                        }else{
+                            if(player.countZhiShiWu('yuanChu_xinYang')>0) return 'yuanChu_xinYang';
+                            if(player.zhiLiao>0) return 'zhiLiao';
+                            return 'cancel2';
+                        }
+                    }).set('bool',bool).forResultControl();
+                    event.result={
+                        bool:control!='cancel2',
+                        cost_data:control,
+                    }
+                },
+                content:function(){
+                    'step 0'
+                    if(event.cost_data=='zhiLiao'){
+                        player.changeZhiLiao(-1);
+                    }else if(event.cost_data=='yuanChu_xinYang'){
+                        player.removeZhiShiWu('yuanChu_xinYang',1);
+                    }
+                    'step 1'
+                    player.chooseTarget(true,function(card,player,target){
+                        return target.side==player.side;
+                    }).set('prompt','我方目标角色+1[治疗]').set('ai',function(target){
+                        return get.zhiLiaoEffect(target,1);
+                    });
+                    'step 2'
+                    result.targets[0].changeZhiLiao(1,player);
+                },
+            },
             yuanChu_shengHuangHuiGuangPao:{
                 markimage:'image/card/zhuanShu/yuanChu_shengHuangHuiGuangPao.png',
                 intro:{
@@ -2376,7 +2429,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     let num = 0;
                     for (; num < 3;) {
                         num++;
-                        let cards = await get.cards();
+                        let cards = get.cards();
                         await player.showHiddenCards(cards);
                         const card = cards[0];
                         if (get.mingGe(card) !== "xue" && get.type(card) !== "faShu") {
@@ -2604,7 +2657,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     result:{
                         player: function(player) {
                             var zhanJi=get.zhanJi(player.side);
-                            if(zhanJi.length<game.zhanJiMax) return 1;
+                            if(zhanJi.length<get.zhanJiMax(player.side)) return 1;
                             var targets=game.filterPlayer(function(current){
                                 return current.side!=player.side&&current.countCards('h')+1>=current.getHandcardLimit();
                             });
@@ -3202,7 +3255,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                 var cards=player.getExpansions('tianPing_zuo');
                                 if(cards.length>0) dialog.addAuto(cards);
                                 return `<span class='greentext'>[被动]罪灭之左</span><br>
-                                    <span class='tiaoJian'>(每当本卡上的牌数增加，且增加后本卡上的牌数>1)</span>对(X-1)名目标对手造成1点攻击伤害③，X为本卡上的牌数。`;
+                                    <span class='tiaoJian'>(每当本卡上的牌数增加，且增加后本卡上的牌数>1)</span>对(X-1)名目标对手造成1点攻击伤害③，X为本卡上的牌数。<br>
+                                    【天平·左】上的牌上限为3；达到上限则无法被再放置新牌。
+                                    `;
                             },
                         },
                         markimage: 'image/card/zhuanShu/tianPing_zuo.png',
@@ -3234,7 +3289,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                 var cards=player.getExpansions('tianPing_you');
                                 if(cards.length>0) dialog.addAuto(cards);
                                 return `<span class='greentext'>[被动]圣方之右</span><br>
-                                    <span class='tiaoJian'>(每当本卡上的牌被弃掉且弃牌数>1)</span>你+1[治疗]。`;
+                                    <span class='tiaoJian'>(每当本卡上的牌被弃掉且弃牌数>1)</span>你+1[治疗]。<br>
+                                    【天平·右】上的牌上限为3；达到上限则无法被再放置新牌。
+                                    `;
                             },
                         },
                         markimage: 'image/card/zhuanShu/tianPing_you.png',
@@ -3750,11 +3807,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             tianPing_zuo:"[被动]罪灭之左",
             tianPing_you:"[被动]圣方之右",
             tianPing_fangZhi:"[被动]替罪羔羊",
-            tianPing_info:`<span class='greentext'>[被动]替罪羔羊</span><br>
+            tianPing_info:`
+            【天平·左】/【天平·右】上的牌上限为3；达到上限则无法被再放置新牌。<br>
+            (天平共有技能)<span class='greentext'>[被动]替罪羔羊</span><br>
             <span class='tiaoJian'>(每当有新牌将被放置在本卡上时，若该卡与本卡上的牌不同系)</span>移除本卡上所有卡，你+1<span class='hong'>【罪】</span>。<br>
-            <span class='greentext'>[被动]罪灭之左</span><br>
+            (天平·左)<span class='greentext'>[被动]罪灭之左</span><br>
             <span class='tiaoJian'>(每当本卡上的牌数增加，且增加后本卡上的牌数>1)</span>对(X-1)名目标对手造成1点攻击伤害③，X为本卡上的牌数。<br>
-            <span class='greentext'>[被动]圣方之右</span><br>
+            (天平·右)<span class='greentext'>[被动]圣方之右</span><br>
             <span class='tiaoJian'>(每当本卡上的牌被移除且移除牌数>1)</span>你+1[治疗]。
             `,
             tianZui:"[启动]天罪", 

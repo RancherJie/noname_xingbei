@@ -119,6 +119,8 @@ export async function onload() {
 	lib.connectCharacterPack = [];
 	lib.connectCardPack = [];
 
+	lib.disableCharacterPack=[];//用于角色包设置中无法启用的角色包
+
 	const currentMode = lib.imported.mode[lib.config.mode];
 	loadMode(currentMode);
 	// 为了模式扩展，两个东西删不了

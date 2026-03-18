@@ -2852,6 +2852,25 @@ div:not(.handcards) > .card > .info > span,
 	position: absolute;
 	line-height: 20px;
 }
+.viewHandcard {
+	bottom: -30px;
+	left: 5px;
+	height: 30px;
+	width: auto;
+	border: 1px solid rgba(0, 0, 0, 0.6);
+	background-color: rgba(0, 0, 0, 0.5);
+	border-radius: 3px;
+	writing-mode: vertical-rl;
+	text-orientation: upright;
+	font-size: 13px;
+	text-align: center;
+}
+.player.linked > .viewHandcard{
+	transform: rotate(90deg);
+	bottom: 110px;
+	left: -25px;
+}
+
 
 .hp {
 	left: 18px;

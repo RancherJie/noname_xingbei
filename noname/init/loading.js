@@ -149,16 +149,16 @@ export function loadCharacter(character) {
 				break;
 			case "connect":
 				// @ts-ignore
-				lib.connectCharacterPack.push(name);
+				if(value==true) lib.connectCharacterPack.push(name);
+				break;
+			case "disable":
+				if(value==true){//角色包无法启用，其中的角色也不会有禁用等选项
+					lib.disableCharacterPack.push(name);
+				}
 				break;
 			case "character":
 				if (!lib.config.characters.includes(name) && lib.config.mode !== "connect") {
-					if (lib.config.mode === "chess" && get.config("chess_mode") === "leader" && get.config("chess_leader_allcharacter")) {
-						for (const charaName in value) {
-							// @ts-ignore
-							lib.hiddenCharacters.push(charaName);
-						}
-					} else if (lib.config.mode !== "boss" || name !== "boss") {
+					if (lib.config.mode !== "boss" || name !== "boss") {
 						break;
 					}
 				}

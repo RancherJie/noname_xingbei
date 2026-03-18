@@ -75,7 +75,7 @@ export default () => {
 			"step 3"
 			if(_status.connectMode){
 				_status.mode=lib.configOL.versus_mode;
-                _status.onreconnect=[function(){
+                _status.onreconnect=[function(func){
                     var players=game.players;
                     for(var i=0;i<players.length;i++){
                         if(players[i].side==true){
@@ -85,7 +85,11 @@ export default () => {
                             players[i].node.identity.firstChild.innerHTML='蓝';
                         }
                     }
-                },];
+					if (lib.config.show_handcardbutton) {
+						ui.versushs = ui.create.system("手牌", null, true);
+						lib.setPopped(ui.versushs, func, 220);
+					}
+                },game.versusHoverHandcards];
 			};
 			var players=get.players(lib.sort.position);
 			var info=[];
@@ -112,6 +116,15 @@ export default () => {
 			}
 
             'step 4'
+			if(get.phaseswap()){
+				game.broadcastAll(function(func){
+					if (lib.config.show_handcardbutton) {
+						ui.versushs = ui.create.system("手牌", null, true);
+						lib.setPopped(ui.versushs, func, 220);
+					}
+				},game.versusHoverHandcards);
+			}
+
 			var firstChoose=(_status.firstAct||game.players.randomGet());
 			game.gameDraw(firstChoose);
             game.phaseLoop(firstChoose);
@@ -247,24 +260,6 @@ export default () => {
 				.catch(error =>console.error('Error:',error));
 			},
 
-			
-			versusHoverHandcards: function () {
-				var uiintro = ui.create.dialog("hidden");
-				var added = false;
-				for (var i = 0; i < game.players.length; i++) {
-					if (game.players[i].name && game.players[i].side == game.me.side && game.players[i] != game.me) {
-						added = true;
-						uiintro.add(get.translation(game.players[i]));
-						var cards = game.players[i].getCards("h");
-						if (cards.length) {
-							uiintro.addSmall(cards, true);
-						} else {
-							uiintro.add("（无）");
-						}
-					}
-				}
-				if (added) return uiintro;
-			},
 
 			checkResult:function(){
 				var me = game.me._trueMe || game.me;
@@ -451,27 +446,23 @@ export default () => {
 									current.classList.remove('bluebg');
 								}
 								this.classList.add('bluebg');
-								_status.firstAct=game.me;
-								var sideList=[]
+
+								var ref=_status.firstAct;
+								var sideList=[];
 								for(var i=0;i<game.players.length;i++){
-									sideList.push(game.players[i].side);
+									sideList.push(ref.side);
+									ref=ref.next;
 								}
+								var firstChoose=game.me;
 								for(var i=0;i<this.link;i++){
-									_status.firstAct=_status.firstAct.previous;
+									firstChoose=firstChoose.previous;
 								}
-								var firstChoose=_status.firstAct;
-								var start=firstChoose;
+								_status.firstAct=firstChoose;
 								for(var i=0;i<game.players.length;i++){
-									start.side=sideList.shift();
-									start=start.next;
+									firstChoose.side=sideList.shift();
+									firstChoose=firstChoose.next;
 								}
-								
-								/*
-								var firstChoose=_status.firstAct;
-								firstChoose.next.side=!firstChoose.side;
-								firstChoose.next.next.side=!firstChoose.side;
-								firstChoose.previous.side=firstChoose.side;
-								*/
+
 								for(var i=0;i<game.players.length;i++){
 									if(game.players[i].side==true){
 										game.players[i].node.identity.firstChild.innerHTML='红';
@@ -790,10 +781,6 @@ export default () => {
 						delete ui.cheat2;
 					}
 					
-					if (lib.config.show_handcardbutton) {
-						ui.versushs = ui.create.system("手牌", null, true);
-						lib.setPopped(ui.versushs, game.versusHoverHandcards, 220);
-					}
 					_status.characterList = result.links.slice();
 					for(var i=0;i<result.links.length;i++){
 						game.addRecentCharacter(result.links[i]);

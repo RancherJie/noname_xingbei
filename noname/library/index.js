@@ -29,6 +29,7 @@ import { ErrorManager } from "../util/error.js";
 
 import { defaultSplashs } from "../init/onload/index.js";
 import dedent from "../../game/dedent.js"
+import { h } from "../../game/vue.esm-browser.js";
 
 export class Library {
 	// 数据库相关
@@ -4902,6 +4903,7 @@ export class Library {
 						game.saveConfig('connect_phaseswap',bool,this._link.config.mode);
 					},
 					frequent:true,
+					intro:'双人游玩，每个玩家操控多个角色，适合熟悉的玩家',
 				},
 				connect_shiQiMax:{
 					name:'士气最大值',
@@ -5037,6 +5039,7 @@ export class Library {
 						}
 					},
 					frequent:true,
+					intro:'玩家操控多个角色',
 				},
 
 				free_choose:{
@@ -5123,6 +5126,158 @@ export class Library {
 				},
 			}
 		},
+		boss: {
+			name: "BOSS",
+			config: {
+				update: function (config, map) {
+					if(config.phaseswap==true){
+						map.viewHandcard.hide();
+					}else{
+						map.viewHandcard.show();
+					}
+				},
+				difficulty:{
+					name:'难度',
+					init:'normal',
+					item:{
+						easy:'简单',
+						normal:'标准',
+						hard:'困难',
+					},
+					frequent:true,
+				},
+				choose_number:{
+					name:'候选角色数',
+					init:3,
+					item:{
+						1:'1',
+						2:'2',
+						3:'3',
+						5:'5',
+						7:'7',
+						10:'10',
+					},
+					frequent:true,
+				},
+				viewHandcard:{
+					name:'可见队友手牌',
+					init:false,
+					onclick:function(bool){
+						game.saveConfig('viewHandcard',bool,this._link.config.mode);
+					},
+					frequent:true,
+				},
+				change_identity:{
+					name:'自由选择座位',
+					init:true,
+					onclick:function(bool){
+						game.saveConfig('change_identity',bool,this._link.config.mode);
+						if(!_status.event.getParent().showConfig&&!_status.event.showConfig) return;
+
+						var dialog;
+						if(ui.cheat2&&ui.cheat2.backup) dialog=ui.cheat2.backup;
+						else dialog=_status.event.dialog;
+						if(!_status.brawl||!_status.brawl.noAddSetting){
+							if(!dialog.querySelector('table')&&get.config('change_identity')) _status.event.getParent().addSetting(dialog);
+							else _status.event.getParent().removeSetting(dialog);
+						}
+						ui.update();
+					}
+				},
+				free_choose: {
+					name: "自由选将",
+					init: true,
+					onclick(bool) {
+						game.saveConfig("free_choose", bool, this._link.config.mode);
+						if (get.mode() != this._link.config.mode || (!_status.event.getParent().showConfig && !_status.event.showConfig)) return;
+						if (!ui.cheat2 && get.config("free_choose")) ui.create.cheat2();
+						else if (ui.cheat2 && !get.config("free_choose")) {
+							ui.cheat2.close();
+							delete ui.cheat2;
+						}
+					},
+				},
+				change_choice: {
+					name: "换角卡",
+					init: true,
+					onclick(bool) {
+						game.saveConfig("change_choice", bool, this._link.config.mode);
+						if (!_status.event.getParent().showConfig && !_status.event.showConfig) return;
+						if (!ui.cheat && get.config("change_choice")) ui.create.cheat();
+						else if (ui.cheat && !get.config("change_choice")) {
+							ui.cheat.close();
+							delete ui.cheat;
+						}
+					},
+				},
+				phaseswap:{
+					name:'多控',
+					init:false,
+					onclick:function(bool){
+						game.saveConfig('phaseswap',bool,this._link.config.mode);
+					},
+					frequent:true,
+					intro:'玩家操控多个角色',
+				},
+				viewHandcard:{
+					name:'可见队友手牌',
+					init:false,
+					onclick:function(bool){
+						game.saveConfig('viewHandcard',bool,this._link.config.mode);
+					},
+					frequent:true,
+				},
+			},
+			connect:{
+				update: function (config, map) {
+					if(config.connect_phaseswap==true){
+						map.connect_viewHandcard.hide();
+					}else{
+						map.connect_viewHandcard.show();
+					}
+				},
+				connect_choose_number:{
+					name:'候选角色数',
+					init:3,
+					item:{
+						1:'1',
+						2:'2',
+						3:'3',
+						5:'5',
+						7:'7',
+						10:'10',
+					},
+					frequent:true,
+				},
+				connect_difficulty:{
+					name:'难度',
+					init:'normal',
+					item:{
+						easy:'简单',
+						normal:'标准',
+						hard:'困难',
+					},
+					frequent:true,
+				},
+				connect_phaseswap:{
+					name:'多控',
+					init:false,
+					onclick:function(bool){
+						game.saveConfig('connect_phaseswap',bool,this._link.config.mode);
+					},
+					frequent:true,
+					intro:'玩家操控多个角色',
+				},
+				connect_viewHandcard:{
+					name:'可见队友手牌',
+					init:false,
+					onclick:function(bool){
+						game.saveConfig('connect_viewHandcard',bool,this._link.config.mode);
+					},
+					frequent:true,
+				},
+			},
+		},
 		connect: {
 			name: "联机",
 			config: {
@@ -5201,55 +5356,6 @@ export class Library {
 						}
 					},
 					clear: true,
-				},
-			},
-		},
-		boss: {
-			name: "挑战",
-			config: {
-				free_choose: {
-					name: "自由选将",
-					init: true,
-					frequent: true,
-					onclick(bool) {
-						game.saveConfig("free_choose", bool, this._link.config.mode);
-						if (get.mode() != this._link.config.mode || (!_status.event.getParent().showConfig && !_status.event.showConfig)) return;
-						if (!ui.cheat2 && get.config("free_choose")) ui.create.cheat2();
-						else if (ui.cheat2 && !get.config("free_choose")) {
-							ui.cheat2.close();
-							delete ui.cheat2;
-						}
-					},
-				},
-				change_choice: {
-					name: "开启换将卡",
-					init: true,
-					onclick(bool) {
-						game.saveConfig("change_choice", bool, this._link.config.mode);
-						if (!_status.event.getParent().showConfig && !_status.event.showConfig) return;
-						if (!ui.cheat && get.config("change_choice")) ui.create.cheat();
-						else if (ui.cheat && !get.config("change_choice")) {
-							ui.cheat.close();
-							delete ui.cheat;
-						}
-					},
-					frequent: true,
-				},
-				single_control: {
-					name: "单人控制",
-					init: true,
-					frequent: true,
-					onclick(bool) {
-						game.saveConfig("single_control", bool, this._link.config.mode);
-						if (ui.single_swap && game.me != game.boss) {
-							if (bool) {
-								ui.single_swap.style.display = "none";
-							} else {
-								ui.single_swap.style.display = "";
-							}
-						}
-					},
-					intro: "只控制一名角色，其他角色由AI控制",
 				},
 			},
 		},
@@ -7434,6 +7540,7 @@ export class Library {
 		shengGroup:"神圣教廷",
 		huanGroup:"幻影联盟",
 		longGroup:"龙魂帝国",
+		DIY:"DIY",
 		xueGroupColor:"#7D0101",
 		yongGroupColor:"#C6813C",
 		jiGroupColor:"#A5BE7D",
@@ -10605,8 +10712,7 @@ export class Library {
 			filter:function(event,player){
 				return player.hasExpansions('_xuRuo');
 			},
-			content:function(){
-				'step 0'
+			content:async function(event,trigger,player){
 				game.broadcastAll(function(){
 					if(lib.config.background_audio){
 						game.playAudio('card','male','xuRuo');
@@ -10614,18 +10720,19 @@ export class Library {
 				});
 				var list=['选项一','选项二']; 
 				var choiceList=['摸三张牌','跳过行动阶段'];
-				player.chooseControl(list).set('choiceList',choiceList).set('prompt','虚弱：选择一项').set('ai',function(){
+				var control=await player.chooseControl(list).set('choiceList',choiceList).set('prompt','虚弱：选择一项').set('ai',function(){
 					var player=_status.event.player;
 					if(player.countCards('h')+3<=player.getHandcardLimit()) return 0;
 					return 1;
-				});
-				'step 1'
-				if(result.control=='选项二'){
+				}).forResultControl();
+				if(control=='选项二'){
+					game.log(player,'选择了','跳过行动阶段');
 					trigger.xuRuo=true;
-				}else if(result.control=="选项一"){
-					player.draw(3);
+				}else if(control=="选项一"){
+					game.log(player,'选择了','摸三张牌');
+					await player.draw(3);
 				}
-				player.discard(player.getExpansions('_xuRuo'),'_xuRuo').set('visible',true);
+				await player.discard(player.getExpansions('_xuRuo'),'_xuRuo').set('visible',true);
 			},
 			subSkill:{
 				xiaoGuo:{
@@ -10697,6 +10804,7 @@ export class Library {
 						game.playAudio('card','male','shengDun');
 					}
 				});
+				event.shengDun=player.getExpansions('_shengDun')[0];
 				player.discard(player.getExpansions('_shengDun'),'_shengDun').set('visible',true);
 				trigger.weiMingZhong();
 				'step 1'
@@ -10705,6 +10813,8 @@ export class Library {
 					event.yingZhan=trigger.yingZhan;
 					event.card=trigger.card;
 					event.customArgs=trigger.customArgs;
+					event.cause='shengDun';
+					event.causeCard=event.shengDun;
 					event.trigger('gongJiWeiMingZhong');
 				}else if(trigger.card.name=='moDan') game.resetMoDan();
 			},
@@ -10786,6 +10896,8 @@ export class Library {
 				event.player=trigger.getParent().player;//应战者
 				event.yingZhan=trigger.getParent(2).yingZhan;//判断未命中的攻击是否为应战攻击
 				event.card=trigger.getParent().card;//攻击来源牌
+				event.cause='yingZhan';
+				event.causeCard=trigger.card;//应战牌
 				'step 1'
 				event.trigger('gongJiWeiMingZhong');
 			}
@@ -10804,6 +10916,8 @@ export class Library {
 				event.player=trigger.getParent().player;//应战者
 				event.yingZhan=trigger.getParent(2).yingZhan;//判断未命中的攻击是否为应战攻击
 				event.card=trigger.getParent().card;//攻击来源牌
+				event.cause='shengGuang';
+				event.causeCard=trigger.card;//圣光牌
 				'step 1'
 				event.trigger('gongJiWeiMingZhong');
 			}
@@ -11812,7 +11926,10 @@ export class Library {
                     
 					//多控观战模式使用正常布局
 					if(lib.configOL.phaseswap && observe) ui.arena.setNumber(state.number-1);
-					else ui.arena.setNumber(state.number);
+					else{
+						if(lib.configOL.mode=='boss') ui.arena.setNumber(state.number-1)
+						else ui.arena.setNumber(state.number)
+					};
 
 					var pos = state.players[observe || game.onlineID].position;
 					for (var i in state.players) {
@@ -11821,7 +11938,10 @@ export class Library {
 						if(lib.configOL.phaseswap && !observe){
 							player.dataset.position = info.position;
 						}else{
-							player.dataset.position = info.position < pos ? info.position - pos + parseInt(state.number) : info.position - pos;
+							if(lib.configOL.mode=='boss'){ player.dataset.position = info.position < pos ? info.position - pos + parseInt(state.number-1) : info.position - pos;
+							}else{
+								player.dataset.position = info.position < pos ? info.position - pos + parseInt(state.number) : info.position - pos;
+							}
 						}
 						if (i == observe || i == game.onlineID) {
 							game.me = player;

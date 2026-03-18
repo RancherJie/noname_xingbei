@@ -3421,242 +3421,257 @@ export class Click {
 		} else if (lib.config.debug && lib.skin[nameskin]) {
 			changeskin();
 		}
-		var ban = ui.create.div(".menubutton.large.ban.character", uiintro, "禁用", function (e) {
-			if (this.classList.contains("unselectable")) return;
-			if (typeof noedit == "string") {
-				this.classList.toggle("active");
-				var bannedname = noedit + "_banned";
-				if (!lib.config[bannedname]) {
-					lib.config[bannedname] = [];
+		
+		let enable=true;
+		for(let pack of lib.disableCharacterPack){
+			for(let chara in lib.characterPack[pack]){
+				if(chara==name){
+					enable=false;
+					break;
 				}
-				if (this.classList.contains("active")) {
-					lib.config[bannedname].add(name);
-				} else {
-					lib.config[bannedname].remove(name);
-				}
-				game.saveConfig(bannedname, lib.config[bannedname]);
-				ban.updateBanned();
-			} else {
-				ui.click.touchpop();
-				ui.click.intro.call(this, e);
-				_status.clicked = true;
 			}
-		});
-		ban.link = name;
-		ban._banning = "offline";
-		ban.updateBanned = function () {
-			if (noedit === true) return;
-			if (lib.config[get.mode() + "_banned"] && lib.config[get.mode() + "_banned"].includes(name)) {
-				ban.classList.add("active");
-			} else {
-				ban.classList.remove("active");
-			}
-			if (sourcenode && sourcenode.updateBanned) {
-				sourcenode.updateBanned();
-			}
-		};
-		ban.updateBanned();
-		var fav = ui.create.div(".menubutton.large.fav", uiintro, "收藏", function () {
-			if (this.classList.contains("unselectable")) return;
-			this.classList.toggle("active");
-			if (this.classList.contains("active")) {
-				lib.config.favouriteCharacter.add(name);
-			} else {
-				lib.config.favouriteCharacter.remove(name);
-			}
-			game.saveConfig("favouriteCharacter", lib.config.favouriteCharacter);
-		});
-		if (noedit === true) {
-			fav.classList.add("unselectable");
-			ban.classList.add("unselectable");
-		} else if (lib.config.favouriteCharacter.includes(name)) {
-			fav.classList.add("active");
 		}
 
-		const recentMatch = ui.create.div(".menubutton.large.match.character", uiintro, "最近对局", function (e) {
-			if (this.classList.contains("unselectable")) return;
-			const button = this;
-
-			// 弹出层与弹窗
-			const layer = ui.create.div(".poplayer", ui.window);
-			const uiintro2 = ui.create.dialog("hidden", "notouchscroll");
-			button.classList.add("active");
-			if (lib.config.touchscreen) {
-				lib.setScroll(uiintro2.contentContainer);
-			}
-			layer.listen(function () {
-				if (this.clicked) {
-					this.clicked = false;
-					return;
-				}
-				button.classList.remove("active");
-				uiintro2.delete();
-				this.delete();
-			});
-			uiintro2.listen(function () {
-				_status.clicked = true;
-			});
-			uiintro2.style.zIndex = 21;
-			uiintro2.classList.add("popped");
-			uiintro2.classList.add("static");
-			uiintro2.style.width = "520px";
-			uiintro2.style.left = "calc(50% - 260px)";
-			uiintro2.style.top = get.is.phoneLayout() ? "10%" : "15%";
-			uiintro2.style.maxHeight = get.is.phoneLayout() ? "70%" : "75%";
-			uiintro2.contentContainer.style.overflow = "auto";
-
-			// 标题
-			uiintro2.addText("最近七天对局（" + get.translation(name) + "）");
-
-			// 容器与占位
-			const list = ui.create.div("", uiintro2.content);
-			list.style.paddingTop = "4px";
-			list.style.paddingBottom = "6px";
-			const loadingNode = ui.create.div(".text.center", "加载中...", uiintro2.content);
-			ui.window.appendChild(uiintro2);
-
-			// 格式化时间
-			const formatTime = function (val) {
-				try {
-					if (!val) return "未知时间";
-					const d = new Date(typeof val === "number" ? val : (""+val).replace("T"," ").replace("Z",""));
-					if (isNaN(d.getTime())) return (""+val);
-					const y=d.getFullYear(), m=d.getMonth()+1, dd=d.getDate();
-					const hh=d.getHours(), mm=d.getMinutes();
-					const pad=function(n){ return (n<10?'0':'')+n; };
-					return y+"-"+pad(m)+"-"+pad(dd)+" "+pad(hh)+":"+pad(mm);
-				} catch(e) { return (""+val); }
-			};
-
-			// 拉取最近七天对局
-			const fetchCharacterRecentMatches = async function (cid) {
-				const params = new URLSearchParams({ days: 7 });
-				try {
-					const response = await fetch(`https://agdatabase.ssyy.tech:50000/v1/characters/${cid}/recent?${params}`, {
-						method: 'GET',
-						headers: { 'Authorization': 'Bearer FrRz9uz64OZUSglLKv7CcLs4yTjCedOk' }
-					});
-					return await response.json();
-				} catch (error) {
-					console.error('获取角色对局数据失败:', error);
-					return [];
-				}
-			};
-
-			// 渲染列表
-			(async function(){
-				const data = await fetchCharacterRecentMatches(name);
-				loadingNode.remove();
-
-				if (!Array.isArray(data) || data.length === 0) {
-					ui.create.div(".text.center", "最近七天暂无对局数据", uiintro2.content);
-					return;
-				}
-
-				uiintro2.content.classList.add("recent-matches-dialog");
-				list.classList.add("recent-matches-list");
-
-				// 录像基础地址
-				const replayBase = "https://agdatabase.ssyy.tech:50000";
-				
-				data.forEach(function (rec) {
-					const match = rec.match || {};
-					const players = Array.isArray(rec.players) ? rec.players : [];
-					
-					const me = players.find(function(p){ return p.character_id === name; }) || players[0] || {};
-
-					const ts = match.uploaded_at;
-					// 时间戳处理
-					const formattedString = ts.replace(/([+-])(\d{2})(\d{2})$/, '$1$2:$3');
-					const date = new Date(formattedString);
-					const timestamp = date.getTime();
-
-					const win = (typeof me.is_winner === "boolean") ? (me.is_winner ? "胜" : "负") : "";
-					const mode = match.mode || "";
-					const room = match.id != null ? match.id : "";
-
-					const titleText = formatTime(ts);
-
-					// 每条记录的容器
-					const item = ui.create.div(".menubutton.videotext.pointerdiv recent-match-item", list);
-
-					// 标题
-					const titleNode = ui.create.div(".time", titleText, item);
-					const winNode = ui.create.div(".win", win, item);
-
-					// 次要信息
-					const meta = ui.create.div(".meta", "", item);
-					if (mode) ui.create.div(".meta-line", "模式：" + mode, meta);
-					if (room !== "") ui.create.div(".meta-line", "对局号：" + room, meta);
-
-					const heroName = (typeof get !== "undefined" && get.translation) ? get.translation(me.character_id || "") : (me.character_id || "");
-					if (heroName) ui.create.div(".meta-line", "使用：" + heroName + (me.is_ai ? "（AI）" : ""), meta);
-
-						// 数据行
-						const dmg     = (me.damage != null) ? me.damage : "-";
-						const taken   = (me.damaged != null) ? me.damaged : "-";
-						const heal    = (me.add_zhiliao != null) ? me.add_zhiliao : 0;
-						const zhanji  = (me.add_zhanji != null) ? me.add_zhanji : 0;
-						const shiqiUp = (me.change_shiqi != null) ? me.change_shiqi : 0;
-						const shiqiDn = (me.changed_shiqi != null) ? me.changed_shiqi : 0;
-
-						const statLine = "伤害 " + dmg + "/-" + taken + "，治疗 " + heal +
-									"，产石 +" + zhanji + "，士气 +" + shiqiUp + "/-" + shiqiDn;
-						ui.create.div(".stats", statLine, item);
-
-						// 保存录像按钮
-						const actions = ui.create.div(".actions", "", item);
-						if (rec.has_replay && rec.replay_url) {
-						const btn = ui.create.div(".button", "保存录像", actions, async function () {
-							const replayUrl = replayBase ? (replayBase + rec.replay_url) : rec.replay_url;
-							let data;
-							try {
-								const response = await fetch(replayUrl, {
-									method: 'GET',
-									headers: { 'Authorization': 'Bearer FrRz9uz64OZUSglLKv7CcLs4yTjCedOk' }
-								});
-								data = await response.json();
-							} catch (error) {
-								console.error('获取角色对局数据失败:', error);
-								return;
-							}
-							if (!data) return;
-							let store = lib.db.transaction(["video"], "readwrite").objectStore("video");
-							lib.videos=[];
-							store.openCursor().onsuccess = function (e) {
-								var cursor = e.target.result;
-								if (cursor) {
-									lib.videos.push(cursor.value);
-									cursor.continue();
-								}else{
-									let newvid = {
-										"name": ["[保存]"+heroName, mode],
-										"mode": "xingBei",
-										"video": data,
-										"win": me.is_winner,
-										"name1": name,
-										"time": timestamp
-									}
-									for (let i = 0; i < lib.videos.length; i++) {
-										if (lib.videos[i].time == newvid.time) {
-											alert("录像已存在，请勿重复保存");
-											return;
-										}
-									}
-									lib.videos=[];
-									store.put(newvid);
-									alert("录像保存成功");
-								}
-							};
-							
-						});
-						btn.setAttribute("role", "button");
-						btn.tabIndex = 0;
+		if(enable){
+			var ban = ui.create.div(".menubutton.large.ban.character", uiintro, "禁用", function (e) {
+				if (this.classList.contains("unselectable")) return;
+				if (typeof noedit == "string") {
+					this.classList.toggle("active");
+					var bannedname = noedit + "_banned";
+					if (!lib.config[bannedname]) {
+						lib.config[bannedname] = [];
 					}
+					if (this.classList.contains("active")) {
+						lib.config[bannedname].add(name);
+					} else {
+						lib.config[bannedname].remove(name);
+					}
+					game.saveConfig(bannedname, lib.config[bannedname]);
+					ban.updateBanned();
+				} else {
+					ui.click.touchpop();
+					ui.click.intro.call(this, e);
+					_status.clicked = true;
+				}
 				});
-			})();
-		});
+			ban.link = name;
+			ban._banning = "offline";
+			ban.updateBanned = function () {
+				if (noedit === true) return;
+				if (lib.config[get.mode() + "_banned"] && lib.config[get.mode() + "_banned"].includes(name)) {
+					ban.classList.add("active");
+				} else {
+					ban.classList.remove("active");
+				}
+				if (sourcenode && sourcenode.updateBanned) {
+					sourcenode.updateBanned();
+				}
+			};
+			ban.updateBanned();
 
+			var fav = ui.create.div(".menubutton.large.fav", uiintro, "收藏", function () {
+				if (this.classList.contains("unselectable")) return;
+				this.classList.toggle("active");
+				if (this.classList.contains("active")) {
+					lib.config.favouriteCharacter.add(name);
+				} else {
+					lib.config.favouriteCharacter.remove(name);
+				}
+				game.saveConfig("favouriteCharacter", lib.config.favouriteCharacter);
+			});
+			if (noedit === true) {
+				fav.classList.add("unselectable");
+				ban.classList.add("unselectable");
+			} else if (lib.config.favouriteCharacter.includes(name)) {
+				fav.classList.add("active");
+			}
+
+			const recentMatch = ui.create.div(".menubutton.large.match.character", uiintro, "最近对局", function (e) {
+				if (this.classList.contains("unselectable")) return;
+				const button = this;
+
+				// 弹出层与弹窗
+				const layer = ui.create.div(".poplayer", ui.window);
+				const uiintro2 = ui.create.dialog("hidden", "notouchscroll");
+				button.classList.add("active");
+				if (lib.config.touchscreen) {
+					lib.setScroll(uiintro2.contentContainer);
+				}
+				layer.listen(function () {
+					if (this.clicked) {
+						this.clicked = false;
+						return;
+					}
+					button.classList.remove("active");
+					uiintro2.delete();
+					this.delete();
+				});
+				uiintro2.listen(function () {
+					_status.clicked = true;
+				});
+				uiintro2.style.zIndex = 21;
+				uiintro2.classList.add("popped");
+				uiintro2.classList.add("static");
+				uiintro2.style.width = "520px";
+				uiintro2.style.left = "calc(50% - 260px)";
+				uiintro2.style.top = get.is.phoneLayout() ? "10%" : "15%";
+				uiintro2.style.maxHeight = get.is.phoneLayout() ? "70%" : "75%";
+				uiintro2.contentContainer.style.overflow = "auto";
+
+				// 标题
+				uiintro2.addText("最近七天对局（" + get.translation(name) + "）");
+
+				// 容器与占位
+				const list = ui.create.div("", uiintro2.content);
+				list.style.paddingTop = "4px";
+				list.style.paddingBottom = "6px";
+				const loadingNode = ui.create.div(".text.center", "加载中...", uiintro2.content);
+				ui.window.appendChild(uiintro2);
+
+				// 格式化时间
+				const formatTime = function (val) {
+					try {
+						if (!val) return "未知时间";
+						const d = new Date(typeof val === "number" ? val : (""+val).replace("T"," ").replace("Z",""));
+						if (isNaN(d.getTime())) return (""+val);
+						const y=d.getFullYear(), m=d.getMonth()+1, dd=d.getDate();
+						const hh=d.getHours(), mm=d.getMinutes();
+						const pad=function(n){ return (n<10?'0':'')+n; };
+						return y+"-"+pad(m)+"-"+pad(dd)+" "+pad(hh)+":"+pad(mm);
+					} catch(e) { return (""+val); }
+				};
+
+				// 拉取最近七天对局
+				const fetchCharacterRecentMatches = async function (cid) {
+					const params = new URLSearchParams({ days: 7 });
+					try {
+						const response = await fetch(`https://agdatabase.ssyy.tech:50000/v1/characters/${cid}/recent?${params}`, {
+							method: 'GET',
+							headers: { 'Authorization': 'Bearer FrRz9uz64OZUSglLKv7CcLs4yTjCedOk' }
+						});
+						return await response.json();
+					} catch (error) {
+						console.error('获取角色对局数据失败:', error);
+						return [];
+					}
+				};
+
+				// 渲染列表
+				(async function(){
+					const data = await fetchCharacterRecentMatches(name);
+					loadingNode.remove();
+
+					if (!Array.isArray(data) || data.length === 0) {
+						ui.create.div(".text.center", "最近七天暂无对局数据", uiintro2.content);
+						return;
+					}
+
+					uiintro2.content.classList.add("recent-matches-dialog");
+					list.classList.add("recent-matches-list");
+
+					// 录像基础地址
+					const replayBase = "https://agdatabase.ssyy.tech:50000";
+					
+					data.forEach(function (rec) {
+						const match = rec.match || {};
+						const players = Array.isArray(rec.players) ? rec.players : [];
+						
+						const me = players.find(function(p){ return p.character_id === name; }) || players[0] || {};
+
+						const ts = match.uploaded_at;
+						// 时间戳处理
+						const formattedString = ts.replace(/([+-])(\d{2})(\d{2})$/, '$1$2:$3');
+						const date = new Date(formattedString);
+						const timestamp = date.getTime();
+
+						const win = (typeof me.is_winner === "boolean") ? (me.is_winner ? "胜" : "负") : "";
+						const mode = match.mode || "";
+						const room = match.id != null ? match.id : "";
+
+						const titleText = formatTime(ts);
+
+						// 每条记录的容器
+						const item = ui.create.div(".menubutton.videotext.pointerdiv recent-match-item", list);
+
+						// 标题
+						const titleNode = ui.create.div(".time", titleText, item);
+						const winNode = ui.create.div(".win", win, item);
+
+						// 次要信息
+						const meta = ui.create.div(".meta", "", item);
+						if (mode) ui.create.div(".meta-line", "模式：" + mode, meta);
+						if (room !== "") ui.create.div(".meta-line", "对局号：" + room, meta);
+
+						const heroName = (typeof get !== "undefined" && get.translation) ? get.translation(me.character_id || "") : (me.character_id || "");
+						if (heroName) ui.create.div(".meta-line", "使用：" + heroName + (me.is_ai ? "（AI）" : ""), meta);
+
+							// 数据行
+							const dmg     = (me.damage != null) ? me.damage : "-";
+							const taken   = (me.damaged != null) ? me.damaged : "-";
+							const heal    = (me.add_zhiliao != null) ? me.add_zhiliao : 0;
+							const zhanji  = (me.add_zhanji != null) ? me.add_zhanji : 0;
+							const shiqiUp = (me.change_shiqi != null) ? me.change_shiqi : 0;
+							const shiqiDn = (me.changed_shiqi != null) ? me.changed_shiqi : 0;
+
+							const statLine = "伤害 " + dmg + "/-" + taken + "，治疗 " + heal +
+										"，产石 +" + zhanji + "，士气 +" + shiqiUp + "/-" + shiqiDn;
+							ui.create.div(".stats", statLine, item);
+
+							// 保存录像按钮
+							const actions = ui.create.div(".actions", "", item);
+							if (rec.has_replay && rec.replay_url) {
+							const btn = ui.create.div(".button", "保存录像", actions, async function () {
+								const replayUrl = replayBase ? (replayBase + rec.replay_url) : rec.replay_url;
+								let data;
+								try {
+									const response = await fetch(replayUrl, {
+										method: 'GET',
+										headers: { 'Authorization': 'Bearer FrRz9uz64OZUSglLKv7CcLs4yTjCedOk' }
+									});
+									data = await response.json();
+								} catch (error) {
+									console.error('获取角色对局数据失败:', error);
+									return;
+								}
+								if (!data) return;
+								let store = lib.db.transaction(["video"], "readwrite").objectStore("video");
+								lib.videos=[];
+								store.openCursor().onsuccess = function (e) {
+									var cursor = e.target.result;
+									if (cursor) {
+										lib.videos.push(cursor.value);
+										cursor.continue();
+									}else{
+										let newvid = {
+											"name": ["[保存]"+heroName, mode],
+											"mode": "xingBei",
+											"video": data,
+											"win": me.is_winner,
+											"name1": name,
+											"time": timestamp
+										}
+										for (let i = 0; i < lib.videos.length; i++) {
+											if (lib.videos[i].time == newvid.time) {
+												alert("录像已存在，请勿重复保存");
+												return;
+											}
+										}
+										lib.videos=[];
+										store.put(newvid);
+										alert("录像保存成功");
+									}
+								};
+								
+							});
+							btn.setAttribute("role", "button");
+							btn.tabIndex = 0;
+						}
+					});
+				})();
+			});
+		}
+
+		
 		// 样式二
 		if (
 			lib.config.show_characternamepinyin == "showPinyin2" ||

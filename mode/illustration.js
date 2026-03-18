@@ -49,10 +49,11 @@ export default () => {
                         // 角色可用性检查
                         if (lib.characterPack[pack][i][4]) {
                             if (lib.characterPack[pack][i].isMinskin) continue;        // 跳过皮肤角色
+                            /*
                             if (lib.characterPack[pack][i].isBoss || lib.characterPack[pack][i].isHiddenBoss) {
                                 if (lib.config.mode == "boss") continue;              // Boss模式检查
                                 if (!lib.characterPack[pack][i].isBossAllowed) continue;
-                            }
+                            }*/
                             if (lib.characterPack[pack][i].isUnseen) continue;             // 跳过不可见角色
                         }
                         

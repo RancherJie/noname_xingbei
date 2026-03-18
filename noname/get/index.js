@@ -1301,22 +1301,27 @@ export class Get extends GetCompatible {
 		}
 	}
 	modetrans(config, server) {
+		var str='';
+		if(config.phaseswap) str+='多控';
 		if (config.mode == "xingBei") {
-			var str='';
 			switch (config.versus_mode) {
 				case "2v2":
-					str="2v2";
+					str+="2v2";
 					break;
 				case "3v3":
-					str="3v3";
+					str+="3v3";
 					break;
 				case "4v4":
-					str="4v4";
+					str+="4v4";
 					break;
 			}
-			if(config.phaseswap) str+='多控';
 			return str;
 		}
+		if(config.mode=="boss"){
+			str+='BOSS';
+			return str;
+		}
+
 		if (server) {
 			return get.translation(config.mode) + "模式";
 		} else {
@@ -3611,11 +3616,12 @@ export class Get extends GetCompatible {
 	}
 	storageintro(type, content, player, dialog, skill) {
 		switch (type) {
+			case 'zhiShiWu': 
 			case "mark": {
 				if (content > 0) {
-					let info=get.info(skill);
 					let str="共有" + content + "个标记"
-					if(info.intro.max&&info.intro.max>0) str+="，上限为"+info.intro.max;
+					let max=player.getZhiShiWuLimit(skill);
+					if(max) str+="，上限为"+max;
 					return str;
 				}
 				return false;
@@ -5816,6 +5822,28 @@ export class Get extends GetCompatible {
 		}
 		return Object.keys(dict).length;
 	}
+	countTongMingPai(cards,type){
+		var dict={};
+		for(var i=0;i<cards.length;i++){
+			if(type&&get.type(cards[i])!=type) continue;
+			var mingGe=get.mingGe(cards[i]);
+			if(!mingGe) continue;
+			if(!dict[mingGe]) dict[mingGe]=0;
+			dict[mingGe]++;
+		}
+	}
+	countYiMingPai(cards,type){
+		var dict={};
+		var dict={};
+		for(var i=0;i<cards.length;i++){
+			if(type&&get.type(cards[i])!=type) continue;
+			var mingGe=get.mingGe(cards[i]);
+			if(!mingGe) continue;
+			if(!dict[mingGe]) dict[mingGe]=0;
+			dict[mingGe]++;
+		}
+		return Object.keys(dict).length;
+	}
 	jiChuXiaoGuoEffect(target){
 		if(target.hasExpansions('_shengDun')){
 			return -1;
@@ -5872,12 +5900,26 @@ export class Get extends GetCompatible {
 		}
 	}
 	emptyZhanJi(side){
-		if(side==true){
-			return game.zhanJiMax-game.hongZhanJi.length;
-		}else if(side==false){
-			return game.zhanJiMax-game.lanZhanJi.length;
+		var zhanJiMax=get.zhanJiMax(side);
+		if(side===true){
+			return zhanJiMax-game.hongZhanJi.length;
+		}else if(side===false){
+			return zhanJiMax-game.lanZhanJi.length;
 		}
 	}
+	shiQiMax(side){
+		var str='shiQiMax';
+		if(side===true) str+='Hong';
+		else if(side===false) str+='Lan';
+		return game[str]||game.shiQiMax;
+	}
+	zhanJiMax(side){
+		var str='zhanJiMax';
+		if(side===true) str+='Hong';
+		else if(side===false) str+='Lan';
+		return game[str]||game.zhanJiMax;
+	}
+
 	xuanZeTongXiPai(card){
 		if(ui.selected.cards.length==0) return true;
 		else{
