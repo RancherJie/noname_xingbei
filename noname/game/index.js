@@ -6661,6 +6661,12 @@ export class Game extends GameCompatible {
 				form.setNickname();
 			},player,from,formid,playerid,playerNickname,fromNickname);	
 		}
+
+		game.broadcastAll(function(){
+			for(var i=0;i<game.players.length;i++){
+				game.players[i].viewHandcard();
+			}
+		});
 	}
 	swapPlayerAuto(player) {
 		if (game.modeSwapPlayer) {
