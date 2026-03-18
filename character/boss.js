@@ -1073,7 +1073,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     return 7-get.value(card);
                 },
                 ai:{
-                    order:3.5,
+                    order:function(item,player){
+                        let num=3.3;
+                        return num+player.countCards('h')*0.1;
+                    },
                     result:{
                         target:-1,
                     }
