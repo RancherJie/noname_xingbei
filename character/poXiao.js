@@ -1094,10 +1094,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 forced: true,
                 filter: function(event, player) {
-                    return player.hasZhiShiWu('longShenEnHui');
+                    return player.hasZhiShiWu('longShenEnHui') && !event.yingZhan;
                 },
-                content: function() {
-                    player.addFaShu();
+                content: async function(event,trigger,player) {
+                    await player.addFaShu();
                 },
                 "_priority": 0,
             },
