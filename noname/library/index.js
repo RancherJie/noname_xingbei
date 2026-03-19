@@ -10351,9 +10351,6 @@ export class Library {
 			trigger:{player:"zhiLiao"},
 			forced:true,
 			lastDo:true,
-			init:function(player){
-				player.storage.zhongDu=[];
-			},
 			filter:function(event,player){
 				if(player.zhiLiao<=0) return false;
 				return true;
@@ -10694,7 +10691,7 @@ export class Library {
 		_init:{
 			trigger:{global:'gameStart'},
 			direct:true,
-			firstDo:true,
+			priority:100,
 			content:function(){
 				player.storage.zhongDu=[];
 				player.storage.oriname=player.name;

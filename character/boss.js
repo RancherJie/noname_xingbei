@@ -327,6 +327,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             },
             mingYueXianYing:{
                 trigger:{global:'gameStart'},
+                firstDo:true,
                 forced:true,
                 content:async function(event,trigger,player){
                     //初始化数据
