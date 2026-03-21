@@ -10351,9 +10351,6 @@ export class Library {
 			trigger:{player:"zhiLiao"},
 			forced:true,
 			lastDo:true,
-			init:function(player){
-				player.storage.zhongDu=[];
-			},
 			filter:function(event,player){
 				if(player.zhiLiao<=0) return false;
 				return true;
