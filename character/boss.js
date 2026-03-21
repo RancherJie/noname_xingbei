@@ -327,6 +327,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             },
             mingYueXianYing:{
                 trigger:{global:'gameStart'},
+                firstDo:true,
                 forced:true,
                 content:async function(event,trigger,player){
                     //初始化数据
@@ -342,11 +343,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     game.zhanJiMaxHong=5;
                     game.zhanJiMaxLan=5;
                     game.xingBeiMax=Infinity;
-                    game.addGlobalSkill('huoDeXingBei');
-                    game.removeGlobalSkill('_heCheng');
-                    game.removeGlobalSkill('_gouMai');
-                    game.addGlobalSkill('mingJie_heCheng');
-                    game.addGlobalSkill('mingJie_gouMai');
                     _status.buffList=[];
 
                     let zuoQuan = game.addPlayerOL(player,'boss_mingJie_zuoQuan');
@@ -355,6 +351,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     youQuan.addSkill('quanPhase_cancel');
                     let quanList=[zuoQuan,youQuan];
                     _status.quanList=quanList;
+                    zuoQuan.useSkill('_init');
+                    youQuan.useSkill('_init');
 
                     game.broadcastAll(function(list){
                         list[0].side=true;
@@ -365,6 +363,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             quan.node.identity.dataset.color=quan.side+'zhu';
                         }
                     },quanList);
+
+                    game.addGlobalSkill('huoDeXingBei');
+                    game.removeGlobalSkill('_heCheng');
+                    game.removeGlobalSkill('_gouMai');
+                    game.addGlobalSkill('mingJie_heCheng');
+                    game.addGlobalSkill('mingJie_gouMai');
+
                     
                     await player.addZhiShiWu('zhangQi',6).set('mingYueXianYing',true);
                     
