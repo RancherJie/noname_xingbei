@@ -10691,7 +10691,7 @@ export class Library {
 		_init:{
 			trigger:{global:'gameStart'},
 			direct:true,
-			firstDo:true,
+			priority:100,
 			content:function(){
 				player.storage.zhongDu=[];
 				player.storage.oriname=player.name;
