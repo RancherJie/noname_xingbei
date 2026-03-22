@@ -259,7 +259,7 @@ export default () => {
 						}else{
 							var basenum=1;
 						}
-						if(!_status.characterChoice) _status.characterChoice=event.list.randomGets(choose_number);
+ 						_status.characterChoice=event.list.randomGets(choose_number);
 					}
 
 					var addSetting=function(dialog){
