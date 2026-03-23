@@ -11843,6 +11843,15 @@ export class Player extends HTMLDivElement {
 			return max;
 		}else return Infinity;
 	}
+	setSide(side){
+		if(this.side===side) return;
+		game.addVideo('setSide', this, side);
+		game.broadcastAll(function(player,side){
+			player.side=side;
+			player.node.identity.firstChild.innerHTML=player.side === true ? '红' : '蓝';
+			player.node.identity.dataset.color=player.side+'zhu';
+		},this,side);
+	}
 	
 
 	$drawAuto(cards, target) {

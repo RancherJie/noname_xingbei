@@ -4192,6 +4192,11 @@ export class Game extends GameCompatible {
 			setTimeout(() => player.removeAttribute("style"), 500);
 
 		},
+		setSide: function (player,side) {
+			player.side=side;
+			player.node.identity.firstChild.innerHTML=player.side === true ? '红' : '蓝';
+			player.node.identity.dataset.color=player.side+'zhu';
+		}
 	};
 	reload() {
 		if (_status) {

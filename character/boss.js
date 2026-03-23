@@ -354,15 +354,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     zuoQuan.useSkill('_init');
                     youQuan.useSkill('_init');
 
-                    game.broadcastAll(function(list){
-                        list[0].side=true;
-                        list[1].side=true;
-                        for(var i=0;i<list.length;i++){
-                            let quan=list[i];
-                            quan.node.identity.firstChild.innerHTML='红';
-                            quan.node.identity.dataset.color=quan.side+'zhu';
-                        }
-                    },quanList);
+                    zuoQuan.setSide(true);
+                    youQuan.setSide(true);
 
                     game.addGlobalSkill('huoDeXingBei');
                     game.removeGlobalSkill('_heCheng');
