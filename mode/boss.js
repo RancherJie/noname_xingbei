@@ -259,8 +259,7 @@ export default () => {
 						}else{
 							var basenum=1;
 						}
-						if(!_status.characterList) _status.characterList=event.list.randomGets(choose_number);
-						_status.characterChoice=_status.characterList;
+ 						_status.characterChoice=event.list.randomGets(choose_number);
 					}
 
 					var addSetting=function(dialog){
@@ -432,6 +431,8 @@ export default () => {
 						delete ui.cheat2;
 					}
 
+					_status.characterList=result.links.slice();
+					
 					if(_status.boss==game.me){
 						game.me.init(result.links[0]);
 						//其他玩家随机角色

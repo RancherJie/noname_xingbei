@@ -1,5 +1,5 @@
 /*调整询问弹窗宽度，因为手机比较窄，内容多时会盖住卡牌导致无法选择*/
-.dialog.nobutton {
+.dialog.nobutton:not(.fullheight) {
 	top: 130px !important;
 	width: 600px;
 	left: calc(50% - 300px);

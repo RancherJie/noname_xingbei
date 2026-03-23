@@ -327,6 +327,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             },
             mingYueXianYing:{
                 trigger:{global:'gameStart'},
+                firstDo:true,
                 forced:true,
                 content:async function(event,trigger,player){
                     //初始化数据
@@ -342,11 +343,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     game.zhanJiMaxHong=5;
                     game.zhanJiMaxLan=5;
                     game.xingBeiMax=Infinity;
-                    game.addGlobalSkill('huoDeXingBei');
-                    game.removeGlobalSkill('_heCheng');
-                    game.removeGlobalSkill('_gouMai');
-                    game.addGlobalSkill('mingJie_heCheng');
-                    game.addGlobalSkill('mingJie_gouMai');
                     _status.buffList=[];
 
                     let zuoQuan = game.addPlayerOL(player,'boss_mingJie_zuoQuan');
@@ -355,16 +351,18 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     youQuan.addSkill('quanPhase_cancel');
                     let quanList=[zuoQuan,youQuan];
                     _status.quanList=quanList;
+                    zuoQuan.useSkill('_init');
+                    youQuan.useSkill('_init');
 
-                    game.broadcastAll(function(list){
-                        list[0].side=true;
-                        list[1].side=true;
-                        for(var i=0;i<list.length;i++){
-                            let quan=list[i];
-                            quan.node.identity.firstChild.innerHTML='红';
-                            quan.node.identity.dataset.color=quan.side+'zhu';
-                        }
-                    },quanList);
+                    zuoQuan.setSide(true);
+                    youQuan.setSide(true);
+
+                    game.addGlobalSkill('huoDeXingBei');
+                    game.removeGlobalSkill('_heCheng');
+                    game.removeGlobalSkill('_gouMai');
+                    game.addGlobalSkill('mingJie_heCheng');
+                    game.addGlobalSkill('mingJie_gouMai');
+
                     
                     await player.addZhiShiWu('zhangQi',6).set('mingYueXianYing',true);
                     
@@ -494,6 +492,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     gongJi:{
                         trigger:{global:'shouDaoShangHaiAfter'},
                         filter:function(event,player){
+                            if(player.isHengZhi()) return false;
                             if(player.countZhiShiWu('zhangQi')<=0) return false;
                             if(!event.card) return false;
                             let xiBie=get.xiBie(event.card);
@@ -507,6 +506,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     faShu:{
                         trigger:{global:'shouDaoShangHaiAfter'},
                         filter:function(event,player){
+                            if(player.isHengZhi()) return false;
                             if(player.countZhiShiWu('zhangQi')<=0) return false;
                             if(event.player.side!=player.side) return false;
                             if(!event.faShu) return false;
@@ -1577,7 +1577,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             mingYueXianYing:"[被动]冥跃现影",
             mingYueXianYing_info:"游戏初始时，你+6<span class='hong'>【瘴气】</span>，将1/2/2个【弱点标记】混洗后放置在本体/左拳/右拳角色牌上。将【双拳标记卡】分别放置到任意角色牌之间。",
             zhangQiShouHu:"[被动]瘴气守护[持续]",
-            zhangQiShouHu_info:"<span class='tiaoJian'>(仅【普通形态】下，我方角色在承受角色牌上【弱点标记】对应系别的攻击造成的攻击伤害⑥后)</span>移除X点<span class='hong'>【瘴气】</span>，X与本次伤害相同；<span class='tiaoJian'>(我方角色在承受法术伤害⑥导致手牌数超过手牌上限造成弃牌后)</span>移除Y点<span class='hong'>【瘴气】</span>，Y与本次弃牌数相同。<span class='tiaoJian'>(若<span class='hong'>【瘴气】</span>减为0，该次伤害结算完成后)</span>[横置]转为【破防形态】，移除我方角色牌上所有【弱点标记】。",
+            zhangQiShouHu_info:"<span class='tiaoJian'>(仅【普通形态】下，我方角色在承受角色牌上【弱点标记】对应系别的攻击造成的攻击伤害⑥后)</span>移除X点<span class='hong'>【瘴气】</span>，X与本次伤害相同；<span class='tiaoJian'>(仅【普通形态】下，我方角色在承受法术伤害⑥导致手牌数超过手牌上限造成弃牌后)</span>移除Y点<span class='hong'>【瘴气】</span>，Y与本次弃牌数相同。<span class='tiaoJian'>(若<span class='hong'>【瘴气】</span>减为0，该次伤害结算完成后)</span>[横置]转为【破防形态】，移除我方角色牌上所有【弱点标记】。",
             poFangXingTai:"[被动]破防形态",
             poFangXingTai_info:"此形态下，你的行动阶段开始前，跳过你本次行动阶段；敌方角色的回合结束时，你+(M+1)<span class='hong'>【瘴气】</span>，M为你的阶段数值。你的<span class='hong'>【瘴气】</span>到达上限时，[重置]脱离【破防形态】，你弃到4牌，将1/2/2个【弱点标记】混洗后放置在本体/左拳/右拳角色牌上，任意调整【双拳标记卡】的位置。",
             yuHeng:"[响应]御衡",

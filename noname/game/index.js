@@ -2805,7 +2805,7 @@ export class Game extends GameCompatible {
 			}
 		},
 		init: function (players) {
-			if (lib.config.mode == "xingBei") {
+			if (lib.config.mode == "xingBei" || lib.config.mode == 'boss') {
 				players.bool = players.pop();
 			}
 			ui.arena.setNumber(players.length);
@@ -2818,7 +2818,7 @@ export class Game extends GameCompatible {
 			ui.handcards2 = game.me.node.handcards2;
 			ui.handcards1Container.appendChild(ui.handcards1);
 			ui.handcards2Container.appendChild(ui.handcards2);
-			if (lib.config.mode == "xingBei") {
+			if (lib.config.mode == "xingBei" || lib.config.mode == 'boss') {
 				if (players.bool) {
 					ui.arena.setNumber(parseInt(ui.arena.dataset.number) + 1);
 					for (var i = 0; i < game.players.length; i++) {
@@ -4095,7 +4095,108 @@ export class Game extends GameCompatible {
 				console.log(player);
 			}
 		},
+		addPlayerOL: function (target,content) {
+			let character = content[0], character2 = content[1], isNext = content[2];
+			//从addPlayerOL函数改的，减少改动就这样吧，星杯里用不上的也没删
+			const addPlayer = function(target2, character3, character22, isNext2) {
+				const players2 = game.players.concat(game.dead);
+				ui.arena.setNumber(parseInt(ui.arena.dataset.number) + 1);
+				let position = !isNext2 ? parseInt(target2.dataset.position) : parseInt(target2.dataset.position) + 1;
+				if (position == 0) {
+					position = players2.length;
+				}
+				players2.forEach((value) => {
+					if (parseInt(value.dataset.position) >= position) {
+						value.dataset.position = parseInt(value.dataset.position) + 1;
+					}
+				});
+				const player2 = ui.create.player(ui.arena);
+				player2.dataset.position = position;
 
+				//重新调整录像里的玩家位置记录，录像基于玩家位置调用玩家，所以必须调整
+				game.players.push(player2);
+				let players3 = get.players(lib.sort.position);
+				for (var i = 0; i < players3.length; i++) {
+					game.playerMap[players3[i].dataset.position] = players3[i];
+				}
+
+				if (character3) {
+					player2.init(character3, character22);
+				}
+
+				game.arrangePlayers();
+				return player2;
+			};
+			
+			const players = game.players.concat(game.dead);
+			const player = addPlayer(target, character, character2, isNext);
+			const firstSeat = players.find((value) => value.getSeatNum() == 1);
+			if (firstSeat) {
+				const targetSeat = target.getSeatNum();
+				let seatNum = !isNext ? targetSeat == 1 ? players.length + 1 : targetSeat : targetSeat + 1;
+				player.setSeatNum(seatNum);
+				players.forEach((value) => {
+					if (seatNum && value.getSeatNum() >= seatNum) {
+						value.setSeatNum(value.getSeatNum() + 1);
+					}
+				});
+			}
+		},
+		removePlayerOL: function (player) {;
+			//从removePlayerOL函数改的，减少改动就这样吧
+			const players = game.players.concat(game.dead);
+			player.style.left = `${player.getLeft()}px`;
+			player.style.top = `${player.getTop()}px`;
+			if (player.getSeatNum() > 0) {
+			const seatNum = player.getSeatNum();
+				players.forEach((value) => {
+					if (value.getSeatNum() > seatNum) {
+					value.setSeatNum(value.getSeatNum() - 1);
+					}
+				});
+			}
+
+			if (_status.roundStart == player) {
+				_status.roundStart = player.next || player.getNext() || game.players[0];
+			}
+			const players2 = game.players.concat(game.dead);
+			const position = parseInt(player.dataset.position);
+			players2.forEach((value) => {
+				if (parseInt(value.dataset.position) > position) {
+					value.dataset.position = parseInt(value.dataset.position) - 1;
+				}
+			});
+			if (player.isAlive()) {
+				player.next.previous = player.previous;
+				player.previous.next = player.next;
+			}
+			player.nextSeat.previousSeat = player.previousSeat;
+			player.previousSeat.nextSeat = player.nextSeat;
+			player.delete();
+			game.players.remove(player);
+			game.dead.remove(player);
+
+			//从上面复制下来的，变量名没进行改动
+			let players3 = get.players(lib.sort.position);
+			for (var i = 0; i < players3.length; i++) {
+				game.playerMap[players3[i].dataset.position] = players3[i];
+			}
+
+			ui.arena.setNumber(parseInt(ui.arena.dataset.number) - 1);
+			player.removed = true;
+			if (player == game.me) {
+				ui.me.hide();
+				ui.auto.hide();
+				ui.wuxie.hide();
+			}
+			setTimeout(() => player.removeAttribute("style"), 500);
+
+		},
+		setSide: function (player,side) {
+			player.side=side;
+			player.node.identity.firstChild.innerHTML=player.side === true ? '红' : '蓝';
+			player.node.identity.dataset.color=player.side+'zhu';
+		}
 	};
 	reload() {
 		if (_status) {
@@ -8513,34 +8614,37 @@ export class Game extends GameCompatible {
 	 */
 	addPlayerOL(target, character, character2, isNext) {
 		if (get.itemtype(target) != "player") {
-		return;
+			return;
 		}
+
+		game.addVideo("addPlayerOL", target, [character, character2, isNext]);
+
 		const addPlayer = function(id2, target2, character3, character22, isNext2) {
-		const players2 = game.players.concat(game.dead);
-		ui.arena.setNumber(parseInt(ui.arena.dataset.number) + 1);
-		let position = !isNext2 ? parseInt(target2.dataset.position) : parseInt(target2.dataset.position) + 1;
-		if (position == 0) {
-			position = players2.length;
-		}
-		players2.forEach((value) => {
-			if (parseInt(value.dataset.position) >= position) {
-			value.dataset.position = parseInt(value.dataset.position) + 1;
+			const players2 = game.players.concat(game.dead);
+			ui.arena.setNumber(parseInt(ui.arena.dataset.number) + 1);
+			let position = !isNext2 ? parseInt(target2.dataset.position) : parseInt(target2.dataset.position) + 1;
+			if (position == 0) {
+				position = players2.length;
 			}
-		});
-		const player2 = ui.create.player(ui.arena).addTempClass("start");
-		player2.playerid = id2;
-		if (_status.connectMode) {
-			lib.playerOL[id2] = player2;
-		} else {
-			game.playerMap[id2] = player2;
-		}
-		if (character3) {
-			player2.init(character3, character22);
-		}
-		game.players.push(player2);
-		player2.dataset.position = position;
-		game.arrangePlayers();
-		return player2;
+			players2.forEach((value) => {
+				if (parseInt(value.dataset.position) >= position) {
+				value.dataset.position = parseInt(value.dataset.position) + 1;
+				}
+			});
+			const player2 = ui.create.player(ui.arena).addTempClass("start");
+			player2.playerid = id2;
+			if (_status.connectMode) {
+				lib.playerOL[id2] = player2;
+			} else {
+				game.playerMap[id2] = player2;
+			}
+			if (character3) {
+				player2.init(character3, character22);
+			}
+			game.players.push(player2);
+			player2.dataset.position = position;
+			game.arrangePlayers();
+			return player2;
 		};
 		const id = get.id();
 		const players = game.players.concat(game.dead);
@@ -8548,31 +8652,32 @@ export class Game extends GameCompatible {
 		const player = addPlayer(id, target, character, character2, isNext);
 		const firstSeat = players.find((value) => value.getSeatNum() == 1);
 		if (firstSeat) {
-		const targetSeat = target.getSeatNum();
-		let seatNum = !isNext ? targetSeat == 1 ? players.length + 1 : targetSeat : targetSeat + 1;
-		player.setSeatNum(seatNum);
-		players.forEach((value) => {
-			if (seatNum && value.getSeatNum() >= seatNum) {
-			value.setSeatNum(value.getSeatNum() + 1);
-			}
-		});
+			const targetSeat = target.getSeatNum();
+			let seatNum = !isNext ? targetSeat == 1 ? players.length + 1 : targetSeat : targetSeat + 1;
+			player.setSeatNum(seatNum);
+			players.forEach((value) => {
+				if (seatNum && value.getSeatNum() >= seatNum) {
+				value.setSeatNum(value.getSeatNum() + 1);
+				}
+			});
 		}
 		player.actionHistory = new Array(players[0].actionHistory.length).fill({
-		useCard: [],
-		respond: [],
-		skipped: [],
-		lose: [],
-		gain: [],
-		sourceDamage: [],
-		damage: [],
-		custom: [],
-		useSkill: []
+			useCard: [],
+			respond: [],
+			skipped: [],
+			lose: [],
+			gain: [],
+			sourceDamage: [],
+			damage: [],
+			custom: [],
+			useSkill: []
 		});
 		player.stat = new Array(players[0].stat.length).fill({
-		card: {},
-		skill: {},
-		triggerSkill: {}
+			card: {},
+			skill: {},
+			triggerSkill: {}
 		});
+
 		return player;
 	}
 	/**
@@ -8582,48 +8687,51 @@ export class Game extends GameCompatible {
 	 */
 	removePlayerOL(player) {
 		if (get.itemtype(player) != "player") {
-		return;
+			return;
 		}
+		game.addVideo("removePlayerOL", player);
 		const players = game.players.concat(game.dead);
 		player.style.left = `${player.getLeft()}px`;
 		player.style.top = `${player.getTop()}px`;
 		if (player.getSeatNum() > 0) {
 		const seatNum = player.getSeatNum();
-		players.forEach((value) => {
-			if (value.getSeatNum() > seatNum) {
-			value.setSeatNum(value.getSeatNum() - 1);
-			}
-		});
+			players.forEach((value) => {
+				if (value.getSeatNum() > seatNum) {
+				value.setSeatNum(value.getSeatNum() - 1);
+				}
+			});
 		}
 		game.broadcastAll((player2) => {
-		if (_status.roundStart == player2) {
-			_status.roundStart = player2.next || player2.getNext() || game.players[0];
-		}
-		const players2 = game.players.concat(game.dead);
-		const position = parseInt(player2.dataset.position);
-		players2.forEach((value) => {
-			if (parseInt(value.dataset.position) > position) {
-			value.dataset.position = parseInt(value.dataset.position) - 1;
+			if (_status.roundStart == player2) {
+				_status.roundStart = player2.next || player2.getNext() || game.players[0];
 			}
-		});
-		if (player2.isAlive()) {
-			player2.next.previous = player2.previous;
-			player2.previous.next = player2.next;
-		}
-		player2.nextSeat.previousSeat = player2.previousSeat;
-		player2.previousSeat.nextSeat = player2.nextSeat;
-		player2.delete();
-		game.players.remove(player2);
-		game.dead.remove(player2);
-		ui.arena.setNumber(parseInt(ui.arena.dataset.number) - 1);
-		player2.removed = true;
-		if (player2 == game.me) {
-			ui.me.hide();
-			ui.auto.hide();
-			ui.wuxie.hide();
-		}
-		setTimeout(() => player2.removeAttribute("style"), 500);
+			const players2 = game.players.concat(game.dead);
+			const position = parseInt(player2.dataset.position);
+			players2.forEach((value) => {
+				if (parseInt(value.dataset.position) > position) {
+					value.dataset.position = parseInt(value.dataset.position) - 1;
+				}
+			});
+			if (player2.isAlive()) {
+				player2.next.previous = player2.previous;
+				player2.previous.next = player2.next;
+			}
+			player2.nextSeat.previousSeat = player2.previousSeat;
+			player2.previousSeat.nextSeat = player2.nextSeat;
+			player2.delete();
+			game.players.remove(player2);
+			game.dead.remove(player2);
+			ui.arena.setNumber(parseInt(ui.arena.dataset.number) - 1);
+			player2.removed = true;
+			if (player2 == game.me) {
+				ui.me.hide();
+				ui.auto.hide();
+				ui.wuxie.hide();
+			}
+			setTimeout(() => player2.removeAttribute("style"), 500);
 		}, player);
+
+
 		return player;
 	}
 	/**
