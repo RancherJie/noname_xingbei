@@ -2867,8 +2867,8 @@ div:not(.handcards) > .card > .info > span,
 }
 .player.linked > .viewHandcard{
 	transform: rotate(90deg);
-	bottom: 110px;
-	left: -25px;
+	bottom: 135px;
+	left: -4px;
 }
 
 

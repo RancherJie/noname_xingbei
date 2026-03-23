@@ -8091,7 +8091,7 @@ export class Player extends HTMLDivElement {
 			let str="";
 			for(let i=0;i<cards.length;i++){
 				if(i>7){
-					str+="...<br>";
+					str+="..<br>";
 					break;
 				}
 				let card=cards[i];
