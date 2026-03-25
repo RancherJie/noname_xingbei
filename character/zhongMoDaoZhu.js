@@ -1085,7 +1085,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 content:function (){
                     player.insertPhase('shenDeMenTu');
                 },
-                group:['shenDeWenTu_phaseBefore','shenDeWenTu_ban'],
+                group:['shenDeMenTu_phaseBefore','shenDeMenTu_ban'],
                 subSkill:{
                     phaseBefore:{
                         trigger:{player:'phaseBefore'},
@@ -1951,7 +1951,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             shiLiao_info:"<span class='hong'>【史料】</span>为记录者专有指示物，上限为3。",
 
             shenDeMenTu:"[被动]神的门徒",
-            shenDeWenTu_info:"你无法成为【路标】的目标[恒定]，你的行动顺序改为拥有【路标】的角色之后。2V2中此技能无效。",
+            shenDeMenTu_info:"你无法成为【路标】的目标[恒定]，你的行动顺序改为拥有【路标】的角色之后。2V2中此技能无效。",
             xinYangZhiLu:"[被动]信仰之路",
             xinYangZhiLu_info:"<span class='tiaoJian'>(你的第一回合开始时)</span>将【路标】放置在你左手边最近的角色面前。<span class='tiaoJian'>(你的回合结束时，若本回合你未执行【特殊行动】)</span>将【路标】转移到拥有者左手边最近的角色面前。",
             chuanDao:"[启动]传道",
