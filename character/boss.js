@@ -613,7 +613,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     })) return false;
                     if(event.player.side!=player.side) return false;
                     let teammates=game.filterPlayer(function(current){
-                        return current!=player&&current.side==player.side&&current.countEmptyCards()>=1;
+                        return current!=event.player&&current.side===event.player.side&&current.countEmptyCards()>=1;
                     });
                     return teammates.length>=2;
                 },
@@ -1346,7 +1346,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 filter:function(event,player){
                     let boss=game.players.find(i=>i.name=='boss_mingJie1'||i.name=='boss_mingJie2');
 
-                    if(boss.hasSkill('yuHeng')&&!boss.isTempBanned('yuHeng')){
+                    if(player.side===boss.side&&boss.hasSkill('yuHeng')&&!boss.isTempBanned('yuHeng')){
                         let bool1=player.countEmptyCards()>=3;
                         let teammates=game.filterPlayer(function(current){
                             return current!=player&&current.side==player.side&&current.countEmptyCards()>=1;
@@ -1363,7 +1363,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     });
 
                     let boss=_status.boss;
-                    if(boss.hasSkill('yuHeng')&&!boss.isTempBanned('yuHeng')){
+                    if(player.side===boss.side&&boss.hasSkill('yuHeng')&&!boss.isTempBanned('yuHeng')){
                         let bool1=player.countEmptyCards()>=3;
                         let teammates=game.filterPlayer(function(current){
                             return current!=player&&current.side==player.side&&current.countEmptyCards()>=1;
@@ -1437,7 +1437,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     if(xingShi.length<3) return false;
 
                     let boss=game.players.find(i=>i.name=='boss_mingJie1'||i.name=='boss_mingJie2');
-					if(boss.hasSkill('yuHeng')&&!boss.isTempBanned('yuHeng')){
+					if(player.side===boss.side&&boss.hasSkill('yuHeng')&&!boss.isTempBanned('yuHeng')){
                         let bool1=player.countEmptyCards()>=3;
                         let teammates=game.filterPlayer(function(current){
                             return current!=player&&current.side==player.side&&current.countEmptyCards()>=1;
@@ -1472,7 +1472,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 								});
 
                                 let boss=_status.boss;
-                                if(boss.hasSkill('yuHeng')&&!boss.isTempBanned('yuHeng')){
+                                if(player.side===boss.side&&boss.hasSkill('yuHeng')&&!boss.isTempBanned('yuHeng')){
                                     let bool1=player.countEmptyCards()>=3;
                                     let teammates=game.filterPlayer(function(current){
                                         return current!=player&&current.side==player.side&&current.countEmptyCards()>=1;
