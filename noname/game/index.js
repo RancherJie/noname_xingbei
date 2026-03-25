@@ -5499,6 +5499,17 @@ export class Game extends GameCompatible {
 			}
 			lib.skill.globalmap[skill].add(player);
 		}
+		game.broadcast(function(skill, player) {
+			lib.skill.global.add(skill);
+			/*未查询到globalmap的使用场景，暂时注释掉
+			if (player) {
+				if (!lib.skill.globalmap[skill]) {
+					lib.skill.globalmap[skill] = [];
+				}
+				lib.skill.globalmap[skill].add(player);
+			}*/
+		},skill, player);
+
 		if (info.trigger) {
 			let setTrigger = function (i, evt) {
 				let name = i + "_" + evt;
