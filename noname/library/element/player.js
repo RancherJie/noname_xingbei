@@ -9959,11 +9959,12 @@ export class Player extends HTMLDivElement {
 			if (self) return true;
 			return false;
 		}
-		if (that === me || this == me._trueMe) return true;
+		//加个me&&可解决多控重新入局报错
+		if (that === me ||  (me&&this == me._trueMe)) return true;
 		//if (_status.connectMode) return false;
 		//if (lib.config.mode == "versus") {
 		if(_status.connectMode){
-			return lib.configOL.phaseswap && this.side == me.side;
+			return lib.configOL.phaseswap && me	&& this.side == me.side;
 		}else{
 			if (lib.config.mode == "xingBei") {
 				return (get.config("phaseswap")) && this.side == me.side;
