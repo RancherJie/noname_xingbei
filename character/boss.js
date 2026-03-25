@@ -175,7 +175,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         return Math.random();
                     });
                     let result=await next.forResult();
-                    let buff=result.buttons[0].link[2];
+                    let buff=result.links[0][2];
                     game.log(player,'获得了场地BUFF',get.translation(buff));
                     _status.buffList.push(buff);
                     player.addSkill(buff);
