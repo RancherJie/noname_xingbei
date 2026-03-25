@@ -8,6 +8,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
         character:{
             boss_mingJie1: {
                 hp:5,
+                sex:"mingJie_name",
                 group: "DIY",
                 skills: ['mingYueXianYing','zhangQiShouHu','poFangXingTai','yuHeng','lingYiSheQu','tianJie','tianQian','shunYingTuXi','zhangQi','hunZhiLi'],
                 isBoss: true,
@@ -16,6 +17,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             },
             boss_mingJie2: {
                 hp:5,
+                sex:"mingJie_name",
                 group: "DIY",
                 skills: ['xueMaiFengYin','anYingZaiSheng','zhangQiShouHu','poFangXingTai','yuHeng','lingYiSheQu','mingJie','mingQian','shunYingTuXi','zhangQi','hunZhiLi'],
                 isBoss: true,
@@ -24,6 +26,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             },
             boss_mingJie_zuoQuan: {
                 hp:5,
+                sex:"mingJie_name",
                 group: "DIY",
                 skills: ['qianYingZhuanHuan','zhangQiZhiLi','xieQuanFangHu','baoLieLianDa'],
                 isBoss: true,
@@ -32,6 +35,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             },
             boss_mingJie_youQuan: {
                 hp:5,
+                sex:"mingJie_name",
                 group: "DIY",
                 skills: ['qianYingZhuanHuan','zhangQiZhiLi','tanWang','mingFuDuShen'],
                 isBoss: true,
@@ -1574,10 +1578,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             buff_E_info:`<span class="greentext">[被动]刻之咒符</span><br>
             左拳或右拳发动【潜影转换】时，选择的目标角色手牌数需与其自身手牌数具有相同奇偶性；本体无法发动【御衡】。`,
 
-            boss_mingJie1:'冥界一阶段',
-            boss_mingJie2:'冥界二阶段',
-            boss_mingJie_zuoQuan:'冥界左拳',
-            boss_mingJie_youQuan:'冥界右拳',
+            boss_mingJie1:'本体（一阶段）',
+            boss_mingJie2:'本体（二阶段）',
+            boss_mingJie_zuoQuan:'左拳',
+            boss_mingJie_youQuan:'右拳',
+            mingJie_name:'冥界',
 
             mingYueXianYing:"[被动]冥跃现影",
             mingYueXianYing_info:"游戏初始时，你+6<span class='hong'>【瘴气】</span>，将1/2/2个【弱点标记】混洗后放置在本体/左拳/右拳角色牌上。将【双拳标记卡】分别放置到任意角色牌之间。",
