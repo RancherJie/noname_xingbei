@@ -17,7 +17,7 @@ window.noname_package = {
 
 	},
 	mode: {
-		xingBei: "星杯传说",
+		xingBei: "单机",
 		boss: "BOSS",
 		connect: "联机",
 		offlineChoose: "线下选角",
