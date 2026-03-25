@@ -262,7 +262,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         },
                         content:async function(event,trigger,player){
                             await player.removeZhanJi(event.cost_data,1);
-                            event.num-=1;
+                            trigger.num-=1;
                         },
                         mark:true,
                         intro:{
@@ -303,7 +303,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         },
                         content:async function(event,trigger,player){
                             await player.removeZhanJi(event.cost_data,1);
-                            event.num-=1;
+                            trigger.num-=1;
                         },
                         mark:true,
                         intro:{
