@@ -8095,10 +8095,13 @@ export class Player extends HTMLDivElement {
 					break;
 				}
 				let card=cards[i];
-				if(get.type(card)=='gongJi'){
-					let xiBie=get.xiBie(card);
+				let type=get.type(card,false);
+				if(type=='gongJi'){
+					let xiBie=get.xiBie(card,false);
 					str+=`${get.translation(xiBie)}斩<br>`;
-				}else if(get.type(card)=='faShu'){
+				}else if(type=='faShu'){
+					str+=`${get.translation(card.name)}<br>`;
+				}else{
 					str+=`${get.translation(card.name)}<br>`;
 				}
 			}
