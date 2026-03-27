@@ -2852,23 +2852,23 @@ div:not(.handcards) > .card > .info > span,
 	position: absolute;
 	line-height: 20px;
 }
-.viewHandcard {
+.player > .viewHandcard {
 	bottom: -30px;
 	left: 5px;
 	height: 30px;
-	width: auto;
-	border: 1px solid rgba(0, 0, 0, 0.6);
-	background-color: rgba(0, 0, 0, 0.5);
 	border-radius: 3px;
 	writing-mode: vertical-rl;
 	text-orientation: upright;
 	font-size: 13px;
 	text-align: center;
+	text-shadow:none;
+	color:rgb(34, 26, 21);
+	background-color: rgba(197, 192, 174, 0.5);
+	border: 1px solid rgba(197, 192, 174, 0.6);
+	transform-origin:left top;
 }
 .player.linked > .viewHandcard{
-	transform: rotate(90deg);
-	bottom: 135px;
-	left: -4px;
+	transform: rotate(90deg) translate(-172px,-33px);
 }
 
 

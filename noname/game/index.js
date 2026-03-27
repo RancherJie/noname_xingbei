@@ -5499,6 +5499,17 @@ export class Game extends GameCompatible {
 			}
 			lib.skill.globalmap[skill].add(player);
 		}
+		game.broadcast(function(skill, player) {
+			lib.skill.global.add(skill);
+			/*未查询到globalmap的使用场景，暂时注释掉
+			if (player) {
+				if (!lib.skill.globalmap[skill]) {
+					lib.skill.globalmap[skill] = [];
+				}
+				lib.skill.globalmap[skill].add(player);
+			}*/
+		},skill, player);
+
 		if (info.trigger) {
 			let setTrigger = function (i, evt) {
 				let name = i + "_" + evt;
@@ -6538,8 +6549,8 @@ export class Game extends GameCompatible {
 		if (behind) {
 			let totalPopulation = game.players.length + game.dead.length + 1;
 			for (let iwhile = 0; iwhile < totalPopulation; iwhile++) {
-				if (player1.next != player2) {
-					game.swapSeat(player1, player1.next, false, false);
+				if (player1.previous != player2) {
+					game.swapSeat(player1, player1.previous, false, false);
 				} else break;
 			}
 			if (prompt != false) {

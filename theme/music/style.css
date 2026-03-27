@@ -100,6 +100,13 @@ body[data-background_color_music="blue"] #arena.mobile:not(.chess) .player[data-
 	text-shadow: black 0 0 2px;
 	background: linear-gradient(#4b4b4b, #464646);
 }
+
+.player > .viewHandcard {
+	color: white;
+	background-color: rgba(0, 0, 0, 0.5);
+	border: 1px solid rgba(0, 0, 0, 0.6);
+}
+
 #me > div > div > .card,
 #arena > .card:not(*:empty) {
 	box-shadow: rgba(0, 0, 0, 0.2) 0 0 0 1px, rgba(0, 0, 0, 0.45) 0 3px 10px;

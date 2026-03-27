@@ -8,6 +8,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
         character:{
             boss_mingJie1: {
                 hp:5,
+                sex:"mingJie_name",
                 group: "DIY",
                 skills: ['mingYueXianYing','zhangQiShouHu','poFangXingTai','yuHeng','lingYiSheQu','tianJie','tianQian','shunYingTuXi','zhangQi','hunZhiLi'],
                 isBoss: true,
@@ -16,6 +17,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             },
             boss_mingJie2: {
                 hp:5,
+                sex:"mingJie_name",
                 group: "DIY",
                 skills: ['xueMaiFengYin','anYingZaiSheng','zhangQiShouHu','poFangXingTai','yuHeng','lingYiSheQu','mingJie','mingQian','shunYingTuXi','zhangQi','hunZhiLi'],
                 isBoss: true,
@@ -24,6 +26,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             },
             boss_mingJie_zuoQuan: {
                 hp:5,
+                sex:"mingJie_name",
                 group: "DIY",
                 skills: ['qianYingZhuanHuan','zhangQiZhiLi','xieQuanFangHu','baoLieLianDa'],
                 isBoss: true,
@@ -32,6 +35,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             },
             boss_mingJie_youQuan: {
                 hp:5,
+                sex:"mingJie_name",
                 group: "DIY",
                 skills: ['qianYingZhuanHuan','zhangQiZhiLi','tanWang','mingFuDuShen'],
                 isBoss: true,
@@ -62,98 +66,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             },
         },
         skill:{
-            quanPhase:{
-                subSkill:{
-                    cancel:{
-                        trigger:{player:'phaseBefore'},
-                        direct:true,
-                        firstDo:true,
-                        filter:function (event,player){
-                            if(event.skill=='quanPhase') return false;
-                            if(event.skill=='shunYingTuXi') return false;
-                            return true;
-                        },
-                        content:function (){
-                            trigger.cancel()
-                        },
-                    },
-                    zuoQuan:{
-                        trigger:{player:'phaseAfter'},
-                        direct:true,
-                        lastDo:true,
-                        filter:function (event,player){
-                            if(event.skill=='shenDeMenTu') return false;
-                            return !event.skill;
-                        },
-                        content:function (){
-                            _status.quanList[0].insertPhase('quanPhase');
-                        },
-                        marktext:'左',
-                        mark:true,
-                        intro:{
-                            name:'左拳行动',
-                            content:'该角色回合结束后由左拳行动',
-                        },
-                    },
-                    youQuan:{
-                        trigger:{player:'phaseAfter'},
-                        lastDo:true,
-                        direct:true,
-                        filter:function (event,player){
-                            if(event.skill=='shenDeMenTu') return true;
-                            return !event.skill;
-                        },
-                        content:function (){
-                            _status.quanList[1].insertPhase('quanPhase');
-                        },
-                        marktext:'右',
-                        mark:true,
-                        intro:{
-                            name:'右拳行动',
-                            content:'该角色回合结束后由右拳行动',
-                        },
-                    },
-                },
-                xuanZe:async function (player){
-                    var next=game.createEvent('quanPhase',false);
-                    next.player=player;
-                    next.setContent(async function (event,trigger,player){
-                        let list=[['zuo','左拳'],['you','右拳']];
-                        for(var i=0;i<_status.quanList.length;i++){
-                            let next=player.chooseButtonTarget({
-                                createDialog:[
-                                    '请安排拳的行动<br>目标角色回合结束后由该拳行动',
-                                    [list,'tdnodes'],
-                                ],
-                                complexTarget:true,
-                                filterTarget:function (card,player,target){
-                                    if(ui.selected.buttons.length==0) return true;
-                                    if(ui.selected.buttons.length==1){
-                                        return !(target.name=='boss_mingJie_youQuan'||target.name=='boss_mingJie_zuoQuan');
-                                    }
-                                },
-                                forced:true,
-                                ai1:function(button){
-                                    return Math.random();
-                                },
-                                ai2:function(target){
-                                    return Math.random();
-                                },
-                                quanList:_status.quanList,
-                            });
-                            let result=await next.forResult();
-                            
-                            let target=result.targets[0];
-                            let link=result.buttons[0].link;
-                            game.log(target,'获得了',list.find(i=>i[0]==link)[1],'的行动标记');
-                            target.addSkill('quanPhase_'+link+'Quan');
-                            if(link=='zuo') list=[['you','右拳']];
-                            else if(link=='you') list=[['zuo','左拳']];
-                        }
-                    });
-                    return next;
-                },
-            },
             huoDeXingBei:{
                 trigger:{player:'changeXingBeiAfter'},
                 direct:true,
@@ -171,49 +83,58 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         return Math.random();
                     });
                     let result=await next.forResult();
-                    let buff=result.buttons[0].link[2];
+                    let buff=result.links[0][2];
                     game.log(player,'获得了场地BUFF',get.translation(buff));
                     _status.buffList.push(buff);
                     player.addSkill(buff);
                 },
             },
-            buff:{
+            buff_A:{
+                trigger:{global:'phaseBefore'},
+                forced:true,
+                filter:function(event,player){
+                    return event.player.name=='boss_mingJie1'||event.player.name=='boss_mingJie2';
+                },
+                content:async function(event,trigger,player){
+                    let list=['+1[宝石]','+2[水晶]'];
+                    let next=player.chooseControl(list);
+                    next.set('prompt','选择我方战绩区获得的【星石】');
+                    next.set('ai',function(){
+                        if(get.zhanJi(false).length<=3) return 1;
+                        else return 0;
+                    });
+                    let control=await next.forResultControl();
+                    if(control=='+1[宝石]'){
+                        player.addZhanJi('baoShi',1);
+                    }else if(control=='+2[水晶]'){
+                        player.addZhanJi('shuiJing',2);
+                    }
+                },
+                mark:true,
+                intro:{
+                    name:'[被动]炼金术',
+                    content:`
+                    <span class='tiaoJian'>(本体的回合开始前)</span>选择以下一项发动：<br>
+                    ·我方【战绩区】+1[宝石]；<br>
+                    ·我方【战绩区】+2[水晶]。`,
+                },
+                markimage:'image/mode/boss/mark/buff_A.png',
+            },
+            buff_B:{
+                mark:true,
+                intro:{
+                    name:'圣洁药水<br>振奋药水',
+                    content:`
+                    <span class="greentext">[被动]圣洁药水</span><br>
+                    <span class='tiaoJian'>(本体的回合开始前)</span>我方目标角色+1[治疗]。<br>
+                    <span class="greentext">[被动]振奋药水</span><br>
+                    <span class='tiaoJian'>(本体进入【破防形态】时)</span>我方+1【士气】。
+                    `,
+                },
+                markimage:'image/mode/boss/mark/buff_B.png',
+                group:['buff_B_shengJie','buff_B_zhenFen'],
                 subSkill:{
-                    A:{
-                        init:function(player){
-                            game.zhanJiMaxLan+=3;
-                        },
-                        trigger:{global:'phaseBefore'},
-                        forced:true,
-                        filter:function(event,player){
-                            return event.player.name=='boss_mingJie1'||event.player.name=='boss_mingJie2';
-                        },
-                        content:async function(event,trigger,player){
-                            let list=['+1[宝石]','+2[水晶]'];
-                            let next=player.chooseControl(list);
-                            next.set('prompt','选择我方战绩区获得的【星石】');
-                            next.set('ai',function(){
-                                if(get.zhanJi(false).length<=3) return 1;
-                                else return 0;
-                            });
-                            let control=await next.forResultControl();
-                            if(control=='+1[宝石]'){
-                                player.addZhanJi('baoShi',1);
-                            }else if(control=='+2[水晶]'){
-                                player.addZhanJi('shuiJing',2);
-                            }
-                        },
-                        mark:true,
-                        intro:{
-                            name:'[被动]炼金术',
-                            content:`我方【战绩区】的【星石】上限+3；<br>
-                            <span class='tiaoJian'>(本体的回合开始前)</span>选择以下一项发动：<br>
-                            ·我方【战绩区】+1[宝石]；<br>
-                            ·我方【战绩区】+2[水晶]。`,
-                        },
-                        markimage:'image/mode/boss/mark/buff_A.png',
-                    },
-                    B:{
+                    shengJie:{
                         trigger:{global:'phaseBefore'},
                         forced:true,
                         priority:-1,
@@ -221,16 +142,41 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             return event.player.name=='boss_mingJie1'||event.player.name=='boss_mingJie2';
                         },
                         content:async function(event,trigger,player){
-                            player.addShiQi(1);
+                            let targets=await player.chooseTarget('圣洁药水：我方目标角色+1[治疗]',1,true,lib.filter.ourSide).set('ai',function(target){
+                                let player=_status.event.player;
+                                return get.zhiLiaoEffect2(target,player,1);
+                            }).forResultTargets();
+                            let target=targets[0];
+                            await target.addZhiLiao(1);
                         },
-                        mark:true,
-                        intro:{
-                            name:'[被动]圣洁药水',
-                            content:`<span class='tiaoJian'>(本体的回合开始前)</span>我方+1【士气】。`,
-                        },
-                        markimage:'image/mode/boss/mark/buff_B.png',
                     },
-                    C:{
+                    zhenFen:{
+                        trigger:{global:'hengZhiAfter'},
+                        forced:true,
+                        filter:function(event,player){
+                            return event.player.name=='boss_mingJie1'||event.player.name=='boss_mingJie2';
+                        },
+                        content:async function(event,trigger,player){
+                            player.changeShiQi(1);
+                        },
+                    },
+                },
+            },
+            buff_C:{
+                mark:true,
+                intro:{
+                    name:'先驱法杖<br>法力燃烧',
+                    content:`
+                    <span class="greentext">[响应]先驱法杖</span>
+                    <br><span class='tiaoJian'>(敌方角色因承受法术伤害导致士气下降时，移除我方【战绩区】1【星石】)</span>本次士气额外-1。
+                    <br><span class="greentext">[被动]法力燃烧</span>
+                    <br><span class='tiaoJian'>(本体因承受法术伤害导致【瘴气】减为0的回合结束时)</span>本回合本体不会增加【瘴气】。
+                    `,
+                },
+                markimage:'image/mode/boss/mark/buff_C.png',
+                group:['buff_C_xianQu','buff_C_faLi'],
+                subSkill:{
+                    xianQu:{
                         trigger:{global:'changeShiQiBefore'},
                         filter:function(event,player){
                             if(event.player.side==false) return false;
@@ -262,16 +208,35 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         },
                         content:async function(event,trigger,player){
                             await player.removeZhanJi(event.cost_data,1);
-                            event.num-=1;
+                            trigger.num-=1;
                         },
-                        mark:true,
-                        intro:{
-                            name:'[响应]先驱法杖',
-                            content:`<span class='tiaoJian'>(敌方角色因承受法术伤害导致士气下降时，移除我方【战绩区】1【星石】)</span>本次士气额外-1。`,
-                        },
-                        markimage:'image/mode/boss/mark/buff_C.png',
                     },
-                    D:{
+                    faLi:{
+                        trigger:{global:'changeZhiShiWuAfter'},
+                        forced:true,
+                        filter:function(event,player){
+                            return (event.player.name=='boss_mingJie1'||event.player.name=='boss_mingJie2')&&event.zhiShiWu=='zhangQi'&&event.getParent().name=='zhangQiShouHu_faShu'&&event.num<0&&event.player.countZhiShiWu('zhangQi')<=0;
+                        },
+                        content:async function(event,trigger,player){
+                            let evt=trigger.getParent('phase');
+                            if(evt) evt.poFangXingTai_recover=false;
+                        },
+                    },
+                },
+            },
+            buff_D:{
+                mark:true,
+                intro:{
+                    name:'攻击号令<br>勇气之心',
+                    content:`<span class="greentext">[响应]攻击号令</span>
+                    <br><span class='tiaoJian'>(敌方角色因承受攻击伤害导致士气下降时，移除我方【战绩区】1【星石】)</span>本次士气额外-1。
+                    <br><span class="greentext">[被动]勇气之心</span>
+                    <br><span class='tiaoJian'>(本体因承受攻击伤害导致【瘴气】减为0的回合结束时)</span>本回合本体不会增加【瘴气】。`,
+                },
+                markimage:'image/mode/boss/mark/buff_D.png',
+                group:['buff_D_gongJi','buff_D_yongQi'],
+                subSkill:{
+                    gongJi:{
                         trigger:{global:'changeShiQiBefore'},
                         filter:function(event,player){
                             if(event.player.side==false) return false;
@@ -303,26 +268,31 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         },
                         content:async function(event,trigger,player){
                             await player.removeZhanJi(event.cost_data,1);
-                            event.num-=1;
-                        },
-                        mark:true,
-                        intro:{
-                            name:'[响应]攻击号令',
-                            content:`<span class='tiaoJian'>(敌方角色因承受攻击伤害导致士气下降时，移除我方【战绩区】1【星石】)</span>本次士气额外-1。`,
-                        },
-                        markimage:'image/mode/boss/mark/buff_D.png',
-                    },
-                    E:{
-                        mark:true,
-                        intro:{
-                            name:'[被动]刻之咒符',
-                            content:`左拳或右拳发动【潜影转换】时，选择的目标角色手牌数需与其自身手牌数具有相同奇偶性；本体无法发动【御衡】。`,
-                        },
-                        markimage:'image/mode/boss/mark/buff_E.png',
-                        init:function(player){
-                            _status.boss.tempBanSkill('yuHeng','forever');
+                            trigger.num-=1;
                         },
                     },
+                    yongQi:{
+                        trigger:{global:'changeZhiShiWuAfter'},
+                        forced:true,
+                        filter:function(event,player){
+                            return (event.player.name=='boss_mingJie1'||event.player.name=='boss_mingJie2')&&event.zhiShiWu=='zhangQi'&&event.getParent().name=='zhangQiShouHu_gongJi'&&event.num<0&&event.player.countZhiShiWu('zhangQi')<=0;
+                        },
+                        content:async function(event,trigger,player){
+                            let evt=trigger.getParent('phase');
+                            if(evt) evt.poFangXingTai_recover=false;
+                        },
+                    },
+                },
+            },
+            buff_E:{
+                mark:true,
+                intro:{
+                    name:'[被动]刻之咒符',
+                    content:`左拳或右拳发动【潜影转换】时，选择的目标角色手牌数需与其自身手牌数具有相同奇偶性；本体无法发动【御衡】。`,
+                },
+                markimage:'image/mode/boss/mark/buff_E.png',
+                init:function(player){
+                    _status.boss.tempBanSkill('yuHeng','forever');
                 },
             },
             mingYueXianYing:{
@@ -346,9 +316,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     _status.buffList=[];
 
                     let zuoQuan = game.addPlayerOL(player,'boss_mingJie_zuoQuan');
-                    zuoQuan.addSkill('quanPhase_cancel');
+                    
                     let youQuan = game.addPlayerOL(player,'boss_mingJie_youQuan',null,true);
-                    youQuan.addSkill('quanPhase_cancel');
+                    
                     let quanList=[zuoQuan,youQuan];
                     _status.quanList=quanList;
                     zuoQuan.useSkill('_init');
@@ -368,7 +338,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     
                     lib.skill.zhangQiShouHu.addRuoDian();
 
-                    await lib.skill.quanPhase.xuanZe(player);
+                    await lib.skill.mingYueXianYing.swapSeat(player);
                 },
                 group:['mingYueXianYing_secondStage'],
                 subSkill:{
@@ -389,6 +359,28 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             await event.trigger('mingYueXianYingSecondStage');
                         },
                     },
+                },
+                swapSeat:async function(player){
+                    var next=game.createEvent('quanPhase',false);
+                    next.player=player;
+                    next.setContent(async function (event,trigger,player){
+                        for(let i=0;i<_status.quanList.length;i++){
+                            let quan=_status.quanList[i];
+                            let name=get.colorName(quan);
+                            let targets =await player.chooseTarget(`选择将${name}置于目标角色下家`,1,true,function(card,player,target){
+                                return target!=_status.event.quan;
+                            }).set('quan',quan).set('ai',function(target){
+                                return Math.random();
+                            }).forResultTargets();
+                            let target=targets[0];
+                            if(target){
+                                game.broadcastAll(function(quan,target){
+                                    game.swapSeat(quan,target,true,true);
+                                },quan,target);
+                            }
+                        }
+                    });
+                    return next;
                 },
             },
             zhangQiShouHu:{
@@ -564,11 +556,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     recover:{
                         trigger:{global:'phaseEnd'},
                         forced:true,
+                        lastDo:true,
                         filter:function(event,player){
-                            return event.player.side!=player.side&&player.isHengZhi();
+                            return event.player.side!=player.side&&player.isHengZhi()&& event.poFangXingTai_recover!==false;
                         },
                         content:async function(event,trigger,player){
-                            await player.addZhiShiWu('zhangQi',(1+_status.bossStage));
+                            await player.addZhiShiWu('zhangQi',2);
                         },
                     },
                     chongZhi:{
@@ -587,14 +580,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             }
                             lib.skill.zhangQiShouHu.addRuoDian();
 
-                            let bool=await player.chooseBool('是否调整【双拳标记卡】的位置').forResultBool();
+                            let bool=await player.chooseBool('是否调整【双拳】的位置').forResultBool();
                             if(bool){
-                                for(let i=0;i<game.players.length;i++){
-                                    let current=game.players[i];
-                                    current.removeSkill('quanPhase_zuoQuan');
-                                    current.removeSkill('quanPhase_youQuan');
-                                }
-                                await lib.skill.quanPhase.xuanZe(player);
+                                await lib.skill.mingYueXianYing.swapSeat(player);
                             }
                         },
                     },
@@ -609,7 +597,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     })) return false;
                     if(event.player.side!=player.side) return false;
                     let teammates=game.filterPlayer(function(current){
-                        return current!=player&&current.side==player.side&&current.countEmptyCards()>=1;
+                        return current!=event.player&&current.side===event.player.side&&current.countEmptyCards()>=1;
                     });
                     return teammates.length>=2;
                 },
@@ -964,22 +952,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             }
                         }
                     }else if(mingGe=='ji' || mingGe=='yong'){
-                        let target;
-                        let skill=mingGe=='ji'?'quanPhase_zuoQuan':'quanPhase_youQuan';
-                        for(var i=0;i<game.players.length;i++){
-                            let current=game.players[i];
-                            if(current.hasSkill(skill)){
-                                target=current;
-                                break;
-                            }
-                        }
-                        if(target){
+                        let quan=mingGe=='ji'?_status.quanList[0]:_status.quanList[1];
+                        if(quan){
                             let targets=[];
-                            if(target.side!=player.side) targets.push(target);
-                            if(target.next.side!=player.side) targets.push(target.next);
-                            else if(target.next.next.side!=player.side) targets.push(target.next.next);
+                            if(quan.previous.side!=player.side) targets.push(quan.priority);
+                            if(quan.next.side!=player.side) targets.push(quan.next);
 
-                            let str=mingGe=='ji'?'对左拳标记卡相邻的目标对手造成3点攻击伤害':'对右拳标记卡相邻的目标对手造成3点攻击伤害';
+                            let str=mingGe=='ji'?'对左拳相邻的目标对手造成3点攻击伤害':'对右拳相邻的目标对手造成3点攻击伤害';
                             let choose=await player.chooseTarget(str,true,function(card,player,target){
                                 return _status.event.list.includes(target);
                             }).set('ai',function(target){
@@ -1340,7 +1319,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 enable:'xingDong',
                 type:'teShu',
                 filter:function(event,player){
-                    if(player.hasSkill('yuHeng')&&!player.isTempBanned('yuHeng')){
+                    let boss=game.players.find(i=>i.name=='boss_mingJie1'||i.name=='boss_mingJie2');
+
+                    if(player.side===boss.side&&boss.hasSkill('yuHeng')&&!boss.isTempBanned('yuHeng')){
                         let bool1=player.countEmptyCards()>=3;
                         let teammates=game.filterPlayer(function(current){
                             return current!=player&&current.side==player.side&&current.countEmptyCards()>=1;
@@ -1356,7 +1337,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         }
                     });
 
-                    if(player.hasSkill('yuHeng')&&!player.isTempBanned('yuHeng')){
+                    let boss=_status.boss;
+                    if(player.side===boss.side&&boss.hasSkill('yuHeng')&&!boss.isTempBanned('yuHeng')){
                         let bool1=player.countEmptyCards()>=3;
                         let teammates=game.filterPlayer(function(current){
                             return current!=player&&current.side==player.side&&current.countEmptyCards()>=1;
@@ -1429,7 +1411,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					var xingShi=get.zhanJi(player.side);
                     if(xingShi.length<3) return false;
 
-					if(player.hasSkill('yuHeng')&&!player.isTempBanned('yuHeng')){
+                    let boss=game.players.find(i=>i.name=='boss_mingJie1'||i.name=='boss_mingJie2');
+					if(player.side===boss.side&&boss.hasSkill('yuHeng')&&!boss.isTempBanned('yuHeng')){
                         let bool1=player.countEmptyCards()>=3;
                         let teammates=game.filterPlayer(function(current){
                             return current!=player&&current.side==player.side&&current.countEmptyCards()>=1;
@@ -1463,7 +1446,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 									}
 								});
 
-                                if(player.hasSkill('yuHeng')&&!player.isTempBanned('yuHeng')){
+                                let boss=_status.boss;
+                                if(player.side===boss.side&&boss.hasSkill('yuHeng')&&!boss.isTempBanned('yuHeng')){
                                     let bool1=player.countEmptyCards()>=3;
                                     let teammates=game.filterPlayer(function(current){
                                         return current!=player&&current.side==player.side&&current.countEmptyCards()>=1;
@@ -1551,35 +1535,50 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             mingJie_heCheng_backup:'合成',
             buff_A:'炼金术',
             buff_A_info:`<span class="greentext">[被动]炼金术</span><br>
-            我方【战绩区】的【星石】上限+3；<br>
             <span class='tiaoJian'>(本体的回合开始前)</span>选择以下一项发动：<br>
             ·我方【战绩区】+1[宝石]；<br>
             ·我方【战绩区】+2[水晶]。
             `,
-            buff_B:'圣洁药水',
+            buff_B:'圣洁药水<br>振奋药水',
+            buff_B_shengJie:'[被动]圣洁药水',
+            buff_B_zhenFen:'[被动]振奋药水',
             buff_B_info:`<span class="greentext">[被动]圣洁药水</span>
-            <br><span class='tiaoJian'>(本体的回合开始前)</span>我方+1【士气】。`,
-            buff_C:'先驱法杖',
+            <br><span class='tiaoJian'>(本体的回合开始前)</span>我方目标角色+1[治疗]。
+            <br><span class="greentext">[被动]振奋药水</span>
+            <br><span class='tiaoJian'>(本体进入【破防形态】时)</span>我方+1【士气】。
+            `,
+            buff_C:'先驱法杖<br>法力燃烧',
+            buff_C_xianQu:'[响应]先驱法杖',
+            buff_C_faLi:'[被动]法力燃烧',
             buff_C_info:`<span class="greentext">[响应]先驱法杖</span>
-            <br><span class='tiaoJian'>(敌方角色因承受法术伤害导致士气下降时，移除我方【战绩区】1【星石】)</span>本次士气额外-1。`,
-            buff_D:'攻击号令',
+            <br><span class='tiaoJian'>(敌方角色因承受法术伤害导致士气下降时，移除我方【战绩区】1【星石】)</span>本次士气额外-1。
+            <br><span class="greentext">[被动]法力燃烧</span>
+            <br><span class='tiaoJian'>(本体因承受法术伤害导致【瘴气】减为0的回合结束时)</span>本回合本体不会增加【瘴气】。
+            `,
+            buff_D:'攻击号令<br>勇气之心',
+            buff_D_gongJi:'[响应]攻击号令',
+            buff_D_yongQi:'[被动]勇气之心',
             buff_D_info:`<span class="greentext">[响应]攻击号令</span>
-            <br><span class='tiaoJian'>(敌方角色因承受攻击伤害导致士气下降时，移除我方【战绩区】1【星石】)</span>本次士气额外-1。`,
+            <br><span class='tiaoJian'>(敌方角色因承受攻击伤害导致士气下降时，移除我方【战绩区】1【星石】)</span>本次士气额外-1。
+            <br><span class="greentext">[被动]勇气之心</span>
+            <br><span class='tiaoJian'>(本体因承受攻击伤害导致【瘴气】减为0的回合结束时)</span>本回合本体不会增加【瘴气】。
+            `,
             buff_E:'刻之咒符',
             buff_E_info:`<span class="greentext">[被动]刻之咒符</span><br>
             左拳或右拳发动【潜影转换】时，选择的目标角色手牌数需与其自身手牌数具有相同奇偶性；本体无法发动【御衡】。`,
 
-            boss_mingJie1:'冥界一阶段',
-            boss_mingJie2:'冥界二阶段',
-            boss_mingJie_zuoQuan:'冥界左拳',
-            boss_mingJie_youQuan:'冥界右拳',
+            boss_mingJie1:'本体（一阶段）',
+            boss_mingJie2:'本体（二阶段）',
+            boss_mingJie_zuoQuan:'左拳',
+            boss_mingJie_youQuan:'右拳',
+            mingJie_name:'冥界',
 
             mingYueXianYing:"[被动]冥跃现影",
-            mingYueXianYing_info:"游戏初始时，你+6<span class='hong'>【瘴气】</span>，将1/2/2个【弱点标记】混洗后放置在本体/左拳/右拳角色牌上。将【双拳标记卡】分别放置到任意角色牌之间。",
+            mingYueXianYing_info:"游戏初始时，你+6<span class='hong'>【瘴气】</span>，将1/2/2个【弱点标记】混洗后放置在本体/左拳/右拳角色牌上。将【双拳】分别放置到任意角色之间。",
             zhangQiShouHu:"[被动]瘴气守护[持续]",
             zhangQiShouHu_info:"<span class='tiaoJian'>(仅【普通形态】下，我方角色在承受角色牌上【弱点标记】对应系别的攻击造成的攻击伤害⑥后)</span>移除X点<span class='hong'>【瘴气】</span>，X与本次伤害相同；<span class='tiaoJian'>(仅【普通形态】下，我方角色在承受法术伤害⑥导致手牌数超过手牌上限造成弃牌后)</span>移除Y点<span class='hong'>【瘴气】</span>，Y与本次弃牌数相同。<span class='tiaoJian'>(若<span class='hong'>【瘴气】</span>减为0，该次伤害结算完成后)</span>[横置]转为【破防形态】，移除我方角色牌上所有【弱点标记】。",
             poFangXingTai:"[被动]破防形态",
-            poFangXingTai_info:"此形态下，你的行动阶段开始前，跳过你本次行动阶段；敌方角色的回合结束时，你+(M+1)<span class='hong'>【瘴气】</span>，M为你的阶段数值。你的<span class='hong'>【瘴气】</span>到达上限时，[重置]脱离【破防形态】，你弃到4牌，将1/2/2个【弱点标记】混洗后放置在本体/左拳/右拳角色牌上，任意调整【双拳标记卡】的位置。",
+            poFangXingTai_info:"此形态下，你的行动阶段开始前，跳过你本次行动阶段；敌方角色的回合结束时，,其他角色结算效果后，你+2<span class='hong'>【瘴气】</span>。你的<span class='hong'>【瘴气】</span>到达上限时，[重置]脱离【破防形态】，你弃到4牌，将1/2/2个【弱点标记】混洗后放置在本体/左拳/右拳角色牌上，任意调整【双拳】的位置。",
             yuHeng:"[响应]御衡",
             yuHeng_info:"<span class='tiaoJian'>(我方角色执行【购买】或【合成】时)</span>将“你摸3张牌”改为“你摸2张牌，其他队友各摸1张牌”。",
             lingYiSheQu:"[被动]灵力摄取",
