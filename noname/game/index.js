@@ -6549,8 +6549,8 @@ export class Game extends GameCompatible {
 		if (behind) {
 			let totalPopulation = game.players.length + game.dead.length + 1;
 			for (let iwhile = 0; iwhile < totalPopulation; iwhile++) {
-				if (player1.next != player2) {
-					game.swapSeat(player1, player1.next, false, false);
+				if (player1.previous != player2) {
+					game.swapSeat(player1, player1.previous, false, false);
 				} else break;
 			}
 			if (prompt != false) {
