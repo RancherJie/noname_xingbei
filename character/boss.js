@@ -184,9 +184,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             buff:{
                 subSkill:{
                     A:{
-                        init:function(player){
-                            game.zhanJiMaxLan+=3;
-                        },
                         trigger:{global:'phaseBefore'},
                         forced:true,
                         filter:function(event,player){
@@ -210,7 +207,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         mark:true,
                         intro:{
                             name:'[被动]炼金术',
-                            content:`我方【战绩区】的【星石】上限+3；<br>
+                            content:`
                             <span class='tiaoJian'>(本体的回合开始前)</span>选择以下一项发动：<br>
                             ·我方【战绩区】+1[宝石]；<br>
                             ·我方【战绩区】+2[水晶]。`,
@@ -1561,7 +1558,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             mingJie_heCheng_backup:'合成',
             buff_A:'炼金术',
             buff_A_info:`<span class="greentext">[被动]炼金术</span><br>
-            我方【战绩区】的【星石】上限+3；<br>
             <span class='tiaoJian'>(本体的回合开始前)</span>选择以下一项发动：<br>
             ·我方【战绩区】+1[宝石]；<br>
             ·我方【战绩区】+2[水晶]。
