@@ -89,40 +89,52 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.addSkill(buff);
                 },
             },
-            buff:{
+            buff_A:{
+                trigger:{global:'phaseBefore'},
+                forced:true,
+                filter:function(event,player){
+                    return event.player.name=='boss_mingJie1'||event.player.name=='boss_mingJie2';
+                },
+                content:async function(event,trigger,player){
+                    let list=['+1[宝石]','+2[水晶]'];
+                    let next=player.chooseControl(list);
+                    next.set('prompt','选择我方战绩区获得的【星石】');
+                    next.set('ai',function(){
+                        if(get.zhanJi(false).length<=3) return 1;
+                        else return 0;
+                    });
+                    let control=await next.forResultControl();
+                    if(control=='+1[宝石]'){
+                        player.addZhanJi('baoShi',1);
+                    }else if(control=='+2[水晶]'){
+                        player.addZhanJi('shuiJing',2);
+                    }
+                },
+                mark:true,
+                intro:{
+                    name:'[被动]炼金术',
+                    content:`
+                    <span class='tiaoJian'>(本体的回合开始前)</span>选择以下一项发动：<br>
+                    ·我方【战绩区】+1[宝石]；<br>
+                    ·我方【战绩区】+2[水晶]。`,
+                },
+                markimage:'image/mode/boss/mark/buff_A.png',
+            },
+            buff_B:{
+                mark:true,
+                intro:{
+                    name:'圣洁药水<br>振奋药水',
+                    content:`
+                    <span class="greentext">[被动]圣洁药水</span><br>
+                    <span class='tiaoJian'>(本体的回合开始前)</span>我方目标角色+1[治疗]。<br>
+                    <span class="greentext">[被动]振奋药水</span><br>
+                    <span class='tiaoJian'>(本体进入【破防形态】时)</span>我方+1【士气】。
+                    `,
+                },
+                markimage:'image/mode/boss/mark/buff_B.png',
+                group:['buff_B_shengJie','buff_B_zhenFen'],
                 subSkill:{
-                    A:{
-                        trigger:{global:'phaseBefore'},
-                        forced:true,
-                        filter:function(event,player){
-                            return event.player.name=='boss_mingJie1'||event.player.name=='boss_mingJie2';
-                        },
-                        content:async function(event,trigger,player){
-                            let list=['+1[宝石]','+2[水晶]'];
-                            let next=player.chooseControl(list);
-                            next.set('prompt','选择我方战绩区获得的【星石】');
-                            next.set('ai',function(){
-                                if(get.zhanJi(false).length<=3) return 1;
-                                else return 0;
-                            });
-                            let control=await next.forResultControl();
-                            if(control=='+1[宝石]'){
-                                player.addZhanJi('baoShi',1);
-                            }else if(control=='+2[水晶]'){
-                                player.addZhanJi('shuiJing',2);
-                            }
-                        },
-                        mark:true,
-                        intro:{
-                            name:'[被动]炼金术',
-                            content:`
-                            <span class='tiaoJian'>(本体的回合开始前)</span>选择以下一项发动：<br>
-                            ·我方【战绩区】+1[宝石]；<br>
-                            ·我方【战绩区】+2[水晶]。`,
-                        },
-                        markimage:'image/mode/boss/mark/buff_A.png',
-                    },
-                    B:{
+                    shengJie:{
                         trigger:{global:'phaseBefore'},
                         forced:true,
                         priority:-1,
@@ -130,16 +142,41 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             return event.player.name=='boss_mingJie1'||event.player.name=='boss_mingJie2';
                         },
                         content:async function(event,trigger,player){
-                            player.addShiQi(1);
+                            let targets=await player.chooseTarget('圣洁药水：我方目标角色+1[治疗]',1,true,lib.filter.ourSide).set('ai',function(target){
+                                let player=_status.event.player;
+                                return get.zhiLiaoEffect2(target,player,1);
+                            }).forResultTargets();
+                            let target=targets[0];
+                            await target.addZhiLiao(1);
                         },
-                        mark:true,
-                        intro:{
-                            name:'[被动]圣洁药水',
-                            content:`<span class='tiaoJian'>(本体的回合开始前)</span>我方+1【士气】。`,
-                        },
-                        markimage:'image/mode/boss/mark/buff_B.png',
                     },
-                    C:{
+                    zhenFen:{
+                        trigger:{global:'hengZhiAfter'},
+                        forced:true,
+                        filter:function(event,player){
+                            return event.player.name=='boss_mingJie1'||event.player.name=='boss_mingJie2';
+                        },
+                        content:async function(event,trigger,player){
+                            player.changeShiQi(1);
+                        },
+                    },
+                },
+            },
+            buff_C:{
+                mark:true,
+                intro:{
+                    name:'先驱法杖<br>法力燃烧',
+                    content:`
+                    <span class="greentext">[响应]先驱法杖</span>
+                    <br><span class='tiaoJian'>(敌方角色因承受法术伤害导致士气下降时，移除我方【战绩区】1【星石】)</span>本次士气额外-1。
+                    <br><span class="greentext">[被动]法力燃烧</span>
+                    <br><span class='tiaoJian'>(本体因承受法术伤害导致【瘴气】减为0的回合结束时)</span>本回合本体不会增加【瘴气】。
+                    `,
+                },
+                markimage:'image/mode/boss/mark/buff_C.png',
+                group:['buff_C_xianQu','buff_C_faLi'],
+                subSkill:{
+                    xianQu:{
                         trigger:{global:'changeShiQiBefore'},
                         filter:function(event,player){
                             if(event.player.side==false) return false;
@@ -173,14 +210,33 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             await player.removeZhanJi(event.cost_data,1);
                             trigger.num-=1;
                         },
-                        mark:true,
-                        intro:{
-                            name:'[响应]先驱法杖',
-                            content:`<span class='tiaoJian'>(敌方角色因承受法术伤害导致士气下降时，移除我方【战绩区】1【星石】)</span>本次士气额外-1。`,
-                        },
-                        markimage:'image/mode/boss/mark/buff_C.png',
                     },
-                    D:{
+                    faLi:{
+                        trigger:{global:'changeZhiShiWuAfter'},
+                        forced:true,
+                        filter:function(event,player){
+                            return (event.player.name=='boss_mingJie1'||event.player.name=='boss_mingJie2')&&event.zhiShiWu=='zhangQi'&&event.getParent().name=='zhangQiShouHu_faShu'&&event.num<0&&event.player.countZhiShiWu('zhangQi')<=0;
+                        },
+                        content:async function(event,trigger,player){
+                            let evt=trigger.getParent('phase');
+                            if(evt) evt.poFangXingTai_recover=false;
+                        },
+                    },
+                },
+            },
+            buff_D:{
+                mark:true,
+                intro:{
+                    name:'攻击号令<br>勇气之心',
+                    content:`<span class="greentext">[响应]攻击号令</span>
+                    <br><span class='tiaoJian'>(敌方角色因承受攻击伤害导致士气下降时，移除我方【战绩区】1【星石】)</span>本次士气额外-1。
+                    <br><span class="greentext">[被动]勇气之心</span>
+                    <br><span class='tiaoJian'>(本体因承受攻击伤害导致【瘴气】减为0的回合结束时)</span>本回合本体不会增加【瘴气】。`,
+                },
+                markimage:'image/mode/boss/mark/buff_D.png',
+                group:['buff_D_gongJi','buff_D_yongQi'],
+                subSkill:{
+                    gongJi:{
                         trigger:{global:'changeShiQiBefore'},
                         filter:function(event,player){
                             if(event.player.side==false) return false;
@@ -214,24 +270,29 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             await player.removeZhanJi(event.cost_data,1);
                             trigger.num-=1;
                         },
-                        mark:true,
-                        intro:{
-                            name:'[响应]攻击号令',
-                            content:`<span class='tiaoJian'>(敌方角色因承受攻击伤害导致士气下降时，移除我方【战绩区】1【星石】)</span>本次士气额外-1。`,
-                        },
-                        markimage:'image/mode/boss/mark/buff_D.png',
                     },
-                    E:{
-                        mark:true,
-                        intro:{
-                            name:'[被动]刻之咒符',
-                            content:`左拳或右拳发动【潜影转换】时，选择的目标角色手牌数需与其自身手牌数具有相同奇偶性；本体无法发动【御衡】。`,
+                    yongQi:{
+                        trigger:{global:'changeZhiShiWuAfter'},
+                        forced:true,
+                        filter:function(event,player){
+                            return (event.player.name=='boss_mingJie1'||event.player.name=='boss_mingJie2')&&event.zhiShiWu=='zhangQi'&&event.getParent().name=='zhangQiShouHu_gongJi'&&event.num<0&&event.player.countZhiShiWu('zhangQi')<=0;
                         },
-                        markimage:'image/mode/boss/mark/buff_E.png',
-                        init:function(player){
-                            _status.boss.tempBanSkill('yuHeng','forever');
+                        content:async function(event,trigger,player){
+                            let evt=trigger.getParent('phase');
+                            if(evt) evt.poFangXingTai_recover=false;
                         },
                     },
+                },
+            },
+            buff_E:{
+                mark:true,
+                intro:{
+                    name:'[被动]刻之咒符',
+                    content:`左拳或右拳发动【潜影转换】时，选择的目标角色手牌数需与其自身手牌数具有相同奇偶性；本体无法发动【御衡】。`,
+                },
+                markimage:'image/mode/boss/mark/buff_E.png',
+                init:function(player){
+                    _status.boss.tempBanSkill('yuHeng','forever');
                 },
             },
             mingYueXianYing:{
@@ -497,7 +558,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         forced:true,
                         lastDo:true,
                         filter:function(event,player){
-                            return event.player.side!=player.side&&player.isHengZhi();
+                            return event.player.side!=player.side&&player.isHengZhi()&& event.poFangXingTai_recover!==false;
                         },
                         content:async function(event,trigger,player){
                             await player.addZhiShiWu('zhangQi',2);
@@ -1478,15 +1539,30 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             ·我方【战绩区】+1[宝石]；<br>
             ·我方【战绩区】+2[水晶]。
             `,
-            buff_B:'圣洁药水',
+            buff_B:'圣洁药水<br>振奋药水',
+            buff_B_shengJie:'[被动]圣洁药水',
+            buff_B_zhenFen:'[被动]振奋药水',
             buff_B_info:`<span class="greentext">[被动]圣洁药水</span>
-            <br><span class='tiaoJian'>(本体的回合开始前)</span>我方+1【士气】。`,
-            buff_C:'先驱法杖',
+            <br><span class='tiaoJian'>(本体的回合开始前)</span>我方目标角色+1[治疗]。
+            <br><span class="greentext">[被动]振奋药水</span>
+            <br><span class='tiaoJian'>(本体进入【破防形态】时)</span>我方+1【士气】。
+            `,
+            buff_C:'先驱法杖<br>法力燃烧',
+            buff_C_xianQu:'[响应]先驱法杖',
+            buff_C_faLi:'[被动]法力燃烧',
             buff_C_info:`<span class="greentext">[响应]先驱法杖</span>
-            <br><span class='tiaoJian'>(敌方角色因承受法术伤害导致士气下降时，移除我方【战绩区】1【星石】)</span>本次士气额外-1。`,
-            buff_D:'攻击号令',
+            <br><span class='tiaoJian'>(敌方角色因承受法术伤害导致士气下降时，移除我方【战绩区】1【星石】)</span>本次士气额外-1。
+            <br><span class="greentext">[被动]法力燃烧</span>
+            <br><span class='tiaoJian'>(本体因承受法术伤害导致【瘴气】减为0的回合结束时)</span>本回合本体不会增加【瘴气】。
+            `,
+            buff_D:'攻击号令<br>勇气之心',
+            buff_D_gongJi:'[响应]攻击号令',
+            buff_D_yongQi:'[被动]勇气之心',
             buff_D_info:`<span class="greentext">[响应]攻击号令</span>
-            <br><span class='tiaoJian'>(敌方角色因承受攻击伤害导致士气下降时，移除我方【战绩区】1【星石】)</span>本次士气额外-1。`,
+            <br><span class='tiaoJian'>(敌方角色因承受攻击伤害导致士气下降时，移除我方【战绩区】1【星石】)</span>本次士气额外-1。
+            <br><span class="greentext">[被动]勇气之心</span>
+            <br><span class='tiaoJian'>(本体因承受攻击伤害导致【瘴气】减为0的回合结束时)</span>本回合本体不会增加【瘴气】。
+            `,
             buff_E:'刻之咒符',
             buff_E_info:`<span class="greentext">[被动]刻之咒符</span><br>
             左拳或右拳发动【潜影转换】时，选择的目标角色手牌数需与其自身手牌数具有相同奇偶性；本体无法发动【御衡】。`,
