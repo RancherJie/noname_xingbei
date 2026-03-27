@@ -1077,7 +1077,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                     return null;
                 },
-                trigger:{global:'phaseAfter'},
+                trigger:{global:'phaseOver'},
                 forced:true,
                 filter:function (event,player){
                     return player.storage.luBiaoTarget&&event.player==player.storage.luBiaoTarget;
