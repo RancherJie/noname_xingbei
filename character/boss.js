@@ -568,11 +568,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     recover:{
                         trigger:{global:'phaseEnd'},
                         forced:true,
+                        lastDo:true,
                         filter:function(event,player){
                             return event.player.side!=player.side&&player.isHengZhi();
                         },
                         content:async function(event,trigger,player){
-                            await player.addZhiShiWu('zhangQi',(1+_status.bossStage));
+                            await player.addZhiShiWu('zhangQi',2);
                         },
                     },
                     chongZhi:{
@@ -1589,7 +1590,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             zhangQiShouHu:"[被动]瘴气守护[持续]",
             zhangQiShouHu_info:"<span class='tiaoJian'>(仅【普通形态】下，我方角色在承受角色牌上【弱点标记】对应系别的攻击造成的攻击伤害⑥后)</span>移除X点<span class='hong'>【瘴气】</span>，X与本次伤害相同；<span class='tiaoJian'>(仅【普通形态】下，我方角色在承受法术伤害⑥导致手牌数超过手牌上限造成弃牌后)</span>移除Y点<span class='hong'>【瘴气】</span>，Y与本次弃牌数相同。<span class='tiaoJian'>(若<span class='hong'>【瘴气】</span>减为0，该次伤害结算完成后)</span>[横置]转为【破防形态】，移除我方角色牌上所有【弱点标记】。",
             poFangXingTai:"[被动]破防形态",
-            poFangXingTai_info:"此形态下，你的行动阶段开始前，跳过你本次行动阶段；敌方角色的回合结束时，你+(M+1)<span class='hong'>【瘴气】</span>，M为你的阶段数值。你的<span class='hong'>【瘴气】</span>到达上限时，[重置]脱离【破防形态】，你弃到4牌，将1/2/2个【弱点标记】混洗后放置在本体/左拳/右拳角色牌上，任意调整【双拳标记卡】的位置。",
+            poFangXingTai_info:"此形态下，你的行动阶段开始前，跳过你本次行动阶段；敌方角色的回合结束时，,其他角色结算效果后，你+2<span class='hong'>【瘴气】</span>。你的<span class='hong'>【瘴气】</span>到达上限时，[重置]脱离【破防形态】，你弃到4牌，将1/2/2个【弱点标记】混洗后放置在本体/左拳/右拳角色牌上，任意调整【双拳标记卡】的位置。",
             yuHeng:"[响应]御衡",
             yuHeng_info:"<span class='tiaoJian'>(我方角色执行【购买】或【合成】时)</span>将“你摸3张牌”改为“你摸2张牌，其他队友各摸1张牌”。",
             lingYiSheQu:"[被动]灵力摄取",
