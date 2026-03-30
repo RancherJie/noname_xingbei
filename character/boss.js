@@ -334,7 +334,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     game.addGlobalSkill('mingJie_gouMai');
 
                     
-                    await player.addZhiShiWu('zhangQi',6).set('mingYueXianYing',true);
+                    await player.addZhiShiWu('zhangQi',6);
                     
                     lib.skill.zhangQiShouHu.addRuoDian();
 
@@ -567,7 +567,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     chongZhi:{
                         trigger:{player:'changeZhiShiWuAfter'},
                         filter:function(event,player){
-                            if(event.mingYueXianYing) return false;
+                            if(!player.isHengZhi()) return false;
                             return event.zhiShiWu=='zhangQi'&&player.countZhiShiWu('zhangQi')>=player.getZhiShiWuLimit('zhangQi')&&event.num>0;
                         },
                         forced:true,
