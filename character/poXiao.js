@@ -1664,13 +1664,20 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     source: "gongJiBefore"
                 },
                 filter: function(event,player){
-                    return player.countTongXiPai() >=2;
+                    return player.countCards('h') >=2;
+                },
+                cost: async function(event,trigger,player) {
+                    event.result = await player.chooseCard(2, 'h', card => get.xuanZeTongXiPai(card))
+                    .set('prompt',get.prompt('zhiYueZhiHuan'))
+                    .set('prompt2',lib.translate.zhiYueZhiHuan_info)
+                    .set('complexCard',true)
+                    .set('ai',function(card){
+                            return 6-get.value(card);
+                    }).forResult();
                 },
                 content: async function(event,trigger,player) {
                     await player.addSkill('zhiYueZhiHuan_weiMingZhong');
-                    await player.chooseToDiscard(2,'h', "showCards", true, card => get.xuanZeTongXiPai(card))
-                    .set('prompt',"弃2张同系牌")
-                    .set('complexCard',true);
+                    await player.discard(event.cards).set('showCards',true);
                 },
                 group: "zhiYueZhiHuan_mingZhong",
                 subSkill:{
