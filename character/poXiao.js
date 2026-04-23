@@ -807,18 +807,21 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             if(num>0.5) return "选项一";
                             else return "选项二";
                         }).forResult('control');
-                    
+                    game.log(target, '选择了', '选项一'==fankai ? '翻开' : '不翻开');
                     event.effect = fankai;
+
+                    if(event.effect == '选项二') await event.trigger("anZhiSuccess");
+
                     if (event.effect == '选项一') {
                         // 选择翻开，先将暗置的牌展示出来
-                        await player.showCards(player.storage.hiddenCards);
+                        await player.showHiddenCards(player.storage.hiddenCards);
                         // 判断三同系
                         const xiBie = get.xiBie(player.storage.hiddenCards[0]);
-                        if(player.storage.hiddenCards.every(card => get.xiBie(card) === xiBie)){
+                        if(event.tongXi || player.storage.hiddenCards.every(card => get.xiBie(card) === xiBie)){
                             // 三同系，玩家选择一个队友加1宝石，正常结算三点暗灭伤害
                             var card={name:'anMie',xiBie:'an'};
                             await player.useCard(card,target).set('damageNum',3).set('action',true);
-                            var xingshi = await player.chooseTarget(1,true,'选择一个队友加1宝石',true,function(card, player, target){
+                            var xingshi = await player.chooseTarget(1,true,'选择1个队友加1]【宝石】',true,function(card, player, target){
                                 return player != target && target.side == player.side;
                             }).forResult();
                             var xingshi_target = xingshi.targets[0];
@@ -833,7 +836,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         // 不选择翻开，正常结算三点暗灭伤害
                         var card={name:'anMie',xiBie:'an'};
                         await player.useCard(card,target).set('damageNum',3).set('action',true);
-                        await await event.set("source","huanXiangChongJi").set("target",target).trigger("anZhiSuccess");;
                     }
                 },
                 "_priority": 0,
@@ -855,29 +857,33 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 content: async function(event, trigger, player) {
                     player.storage.hiddenCards = event.cards;
                     var target = event.target;
-                    var zhiliao = await player.chooseTarget(1,"选择任意角色+1治疗", true).forResult();
-                    zhiliao.targets[0].changeZhiLiao(1,player);
                     var options = ['翻开', '不翻开'];
                     var fankai = await target.chooseControl(['选项一', '选项二'])
                         .set('choiceList', options)
-                        .set('prompt', '受到1点法术伤害，是否选择翻开暗置牌？<br>翻开对方的暗置牌，若都为法术，本次法术伤害额外+1，对方额外为任意角色+1治疗<br>若否，本次法术无效且对方受到5点法术伤害，我方战绩区+1宝石。')
+                        .set('prompt', '受到1点法术伤害，是否选择翻开暗置牌？<br>翻开对方的暗置牌，若都为法术，本次法术伤害额外+1，对方额外为目标角色+1治疗<br>若否，本次法术无效且对方受到5点法术伤害，我方战绩区+1宝石。')
                         .set('ai',function(){
                             //ai随机选择翻开和不翻开
                             var num=Math.random();
                             if(num>0.5) return "选项一";
                             else return "选项二";
                         }).forResult('control');
-                    
+                    game.log(target, '选择了', '选项一'==fankai ? '翻开' : '不翻开');
                     event.effect = fankai;
+                    
+                    if(event.effect == '选项二') await event.trigger("anZhiSuccess");
+
                     if (event.effect == '选项一') {
                         // 选择翻开，先将暗置的牌展示出来
-                        await player.showCards(player.storage.hiddenCards);
-                        // 判断是否都为法术
-                        if(player.storage.hiddenCards.every(card => get.type(card) === 'faShu')){
-                            // 都为法术，再选择一个角色加1治疗，结算2点法术伤害
-                            target.faShuDamage(2,player);
-                            var zhiliao = await player.chooseTarget(1,"额外选择任意角色+1治疗", true).forResult();
-                            zhiliao.targets[0].changeZhiLiao(1,player);
+                        await player.showHiddenCards(player.storage.hiddenCards);
+                        // 判断是否都为法术，allFaShu由改变世界设置
+                        if(event.allFaShu || player.storage.hiddenCards.every(card => get.type(card) === 'faShu')){
+                            // 都为法术，结算2点法术伤害
+                            await target.faShuDamage(2,player);                            var zhiliao = await player.chooseTarget([1,2],"分配2点[治疗]给1-2名目标角色", true).forResult();
+                            if(zhiliao.targets.length==1) await zhiliao.targets[0].changeZhiLiao(2,player);
+                            else {
+                                await zhiliao.targets[0].changeZhiLiao(1,player);
+                                await zhiliao.targets[1].changeZhiLiao(1,player);
+                            }
                         }else{
                             //否，伤害无效，玩家受到5点法术伤害，目标战绩区加1宝石
                             await player.faShuDamage(5,player);
@@ -886,9 +892,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         }
                     } else {
                         // 不选择翻开，结算1点法术伤害
-                        player.storage.xinLingFengBao_faShuDamage = 1;
-                        await event.set("source","xinLingFengBao").set("target",target).trigger("anZhiSuccess");
-                        target.faShuDamage(player.storage.xinLingFengBao_faShuDamage, player);
+                        await target.faShuDamage(1, player);
+                        var zhiliao = await player.chooseTarget(1,"选择目标角色+1治疗", true).forResult();
+                        await zhiliao.targets[0].changeZhiLiao(1,player);
                     }
                 },
                 "_priority": 0,
@@ -933,17 +939,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 content: async function(event, trigger, player){
                     await player.removeBiShaShuiJing();
                     var trigger_name = event.getTrigger().name;
-                    var target = event.getTrigger().target;
                     if(trigger_name === "huanXiangChongJi"){
-                        var xingshi = await player.chooseTarget(1,true,'选择一个队友加1宝石',true,function(card, player, target){
-                            return player != target && target.side == player.side;
-                        }).forResult();
-                        var xingshi_target = xingshi.targets[0];
-                        await xingshi_target.changeNengLiang('baoShi',1);
+                        trigger.effect = '选项一';
+                        trigger.tongXi = true; // 标记三同系
                     }else if(trigger_name === "xinLingFengBao"){
-                        player.storage.xinLingFengBao_faShuDamage = 2;
-                        var zhiliao = await player.chooseTarget(1,"额外选择任意角色+1治疗", true).forResult();
-                        zhiliao.targets[0].changeZhiLiao(1,player);
+                        trigger.effect = '选项一';
+                        trigger.allFaShu=true;
                     }
                 },
                 "_priority": 0,
