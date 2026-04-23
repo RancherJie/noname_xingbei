@@ -440,7 +440,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 }
             },
 
-            // 灵汐之潮
+            // 灵熙之潮
             lingZhiZhiYi: {
                 mod: {
                     targetEnabled: function (card, player, target) {
@@ -456,7 +456,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     return game.jiChuXiaoGuo.all_xiaoGuo.includes(event.jiChuXiaoGuo);
                 },
                 async cost(event, trigger, player) {
-                    event.result= await player.chooseTarget("对目标对手造成1点法术伤害③", true, function (card, player, target) {
+                    event.result= await player.chooseTarget("对目标对手造成1点法术伤害③", function (card, player, target) {
                         return player.side != target.side;
                     })
                     .set("ai", function (target) {
@@ -825,18 +825,26 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
             },
             jingLingDeJianWu: {
-                trigger:{player:'gongJiBefore'},
+                enable: "gongJi",
                 filter: function (event, player) {
-                    return event.yingZhan != true && player.canBiShaShuiJing();
+                    return player.canBiShaShuiJing()&&player.hasCard(card => get.type(card)=='gongJi');
                 },
-                content: async function (event, trigger, player) {
-                    await player.removeBiShaShuiJing();
-                    game.broadcastAll(function(card){
-                        game.setXiBie(card,'feng');
-                    },trigger.card)
+                filterCard: function (card) {
+                    return get.type(card) == 'gongJi';
                 },
-                check: function (event, player) {
-                    return player.hasCard(card => get.xiBie(card) == 'feng' && get.type(card) == 'gongJi');
+                viewAs: {name:'fengShenZhan', xiBie: 'feng' },
+                onuse: function (event, player) {
+                    player.removeBiShaShuiJing();
+                },
+                check: function (card) {
+                    if(get.xiBie(card)=='feng') return 0;
+                    return 4 - get.value(card);
+                },
+                ai: {
+                    order: 3.2,
+                    result: {
+                        player:1,
+                    },
                 },
             },
             ziDan: {
@@ -3525,7 +3533,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 			jianZhiMoNv:"剑之魔女",
             jieRiMoDao:"节日魔导",
             tanLanShaoNv:"贪婪少女",
-            lingXiZhiChao: "灵汐之潮",
+            lingXiZhiChao: "灵熙之潮",
             youJiShi: "游击士",
             nong_baoShiShaoNv: "农暴食少女",
             nong_baoShiShaoNv_prefix: "农",
@@ -3583,7 +3591,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             wangNvJinKu:"[法术]亡女的金库",
             wangNvJinKu_info:"[水晶]对2名目标对手各造成1点法术伤害③。<span class='tiaoJian'>(若你额外移除【战绩区】所有星石)</span>每移除2星石，伤害+1；<span class='tiaoJian'>(若本次移除的星石中[宝石]>1，伤害结算完成后)将对方1点士气转移给我方。",
 
-            // 灵汐之潮
+            // 灵熙之潮
             lingZhiZhiYi: "[被动]灵枝旨意",
             lingZhiZhiYi_info: "你无法成为基础效果的目标。",
             xieLingTuiSan: "[响应]邪灵退散",
@@ -3599,7 +3607,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             haiShenYuWu: "[法术]海神御巫",
             haiShenYuWu_info: "[水晶](使用一张封印师或祈祷师的独有技)你弃一张牌。",
             lingYong: "灵涌",
-            lingYong_info: "<span class='hong'>【灵涌】</span>为灵汐之潮专有的指示物，上限为4。",
+            lingYong_info: "<span class='hong'>【灵涌】</span>为灵熙之潮专有的指示物，上限为4。",
 
             // 游击士
             jingLingZengLi: "[被动]精灵赠礼",

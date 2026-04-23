@@ -46,6 +46,19 @@ export const startMenu = function (connectMenu) {
 						config[i.slice(8)] = get.config(i, lib.configOL.mode);
 					}
 					config.zhinang_tricks = lib.config.connect_zhinang_tricks;
+					
+					//可在创房后更改角色包设置
+					config.characterPack = lib.connectCharacterPack.slice(0);
+					config.cardPack = lib.connectCardPack.slice(0);
+					for (var i = 0; i < lib.config.connect_characters.length; i++) {
+						config.characterPack.remove(lib.config.connect_characters[i]);
+					}
+					for (var i = 0; i < lib.config.connect_cards.length; i++) {
+						config.cardPack.remove(lib.config.connect_cards[i]);
+					}
+					config.banned = lib.config["connect_" + active.mode + "_banned"];
+					config.bannedcards = lib.config["connect_" + active.mode + "_bannedcards"];
+					
 					if (game.online) {
 						if (game.onlinezhu) {
 							game.send("changeRoomConfig", config);
