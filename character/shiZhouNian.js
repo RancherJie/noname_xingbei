@@ -3863,7 +3863,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     xiaoGuo:{
                         marktext:"迅",
                         intro:{
-                            content:'jiaChuXiaoGuo',
+                            content:'jiChuXiaoGuo',
                         },
                         onremove:function(player, skill) {
                             const cards = player.getGaiPai(skill);
