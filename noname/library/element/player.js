@@ -9954,6 +9954,7 @@ export class Player extends HTMLDivElement {
 	isUnderControl(self, me) {
 		if(_status.playback) return true;//使在录像模式下可以查看其他角色盖牌
 		//修复观战未允许观看手牌的情况可以观看队友牌
+		if(game.observe&&lib.configOL.observe_handcard===true) return true;
 		if(game.observe&&lib.configOL.observe_handcard===false) return false;
 		me = me || game.me;
 		var that = this._trueMe || this;
