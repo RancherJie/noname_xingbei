@@ -3863,7 +3863,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     xiaoGuo:{
                         marktext:"迅",
                         intro:{
-                            content:'jiaChuXiaoGuo',
+                            content:'jiChuXiaoGuo',
                         },
                         onremove:function(player, skill) {
                             const cards = player.getGaiPai(skill);
@@ -4007,7 +4007,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     event.links=[player.storage.xueXingDaoYan];
                     if(event.links[0]>1){
                         var num=2;
-                        var propmt='选择1~2个目标队友';
+                        var prompt='选择1~2个目标队友';
                     }else{
                         var num=1;
                         var prompt='选择1个目标队友';

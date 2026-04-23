@@ -11935,7 +11935,7 @@ export class Library {
 						if(lib.configOL.phaseswap && !observe){
 							player.dataset.position = info.position;
 						}else{
-							if(lib.configOL.mode=='boss'){ player.dataset.position = info.position < pos ? info.position - pos + parseInt(state.number-1) : info.position - pos;
+							if(lib.configOL.mode=='boss' || observe){ player.dataset.position = info.position < pos ? info.position - pos + parseInt(state.number-1) : info.position - pos;
 							}else{
 								player.dataset.position = info.position < pos ? info.position - pos + parseInt(state.number) : info.position - pos;
 							}
