@@ -825,18 +825,26 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
             },
             jingLingDeJianWu: {
-                trigger:{player:'gongJiBefore'},
+                enable: "gongJi",
                 filter: function (event, player) {
-                    return event.yingZhan != true && player.canBiShaShuiJing();
+                    return player.canBiShaShuiJing()&&player.hasCard(card => get.type(card)=='gongJi');
                 },
-                content: async function (event, trigger, player) {
-                    await player.removeBiShaShuiJing();
-                    game.broadcastAll(function(card){
-                        game.setXiBie(card,'feng');
-                    },trigger.card)
+                filterCard: function (card) {
+                    return get.type(card) == 'gongJi';
                 },
-                check: function (event, player) {
-                    return player.hasCard(card => get.xiBie(card) == 'feng' && get.type(card) == 'gongJi');
+                viewAs: {name:'fengShenZhan', xiBie: 'feng' },
+                onuse: function (event, player) {
+                    player.removeBiShaShuiJing();
+                },
+                check: function (card) {
+                    if(get.xiBie(card)=='feng') return 0;
+                    return 4 - get.value(card);
+                },
+                ai: {
+                    order: 3.2,
+                    result: {
+                        player:1,
+                    },
                 },
             },
             ziDan: {
