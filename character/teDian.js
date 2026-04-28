@@ -790,7 +790,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         xingDong: "gongJi",
                         xiBie: xiBie,
                         filterCard: function (card, player, event) {
-                            if (get.xiBie(card) != this.xiBie || get.type(card) != "gongJi") return false;
+                            if (get.xiBie(card) != _status.event.xiBie || get.type(card) != "gongJi") return false;
                             return lib.filter.cardEnabled(card, player, "forceEnable");
                         },
                         prompt: `【二重剑影】:${name}系[攻击行动]`,
