@@ -2934,7 +2934,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     shuiJing: true,
 					order:function(item,player){
 						var num=game.filterPlayer(function(current){
-							return current.side != player.side && current.countCards('h') + 3 > current.getHandcardLimit() + current.ZhiLiao;
+							return current.side != player.side && current.countCards('h') + 3 > current.getHandcardLimit();
 						});
 						if(num.length>=1){
 							return 3.4;
