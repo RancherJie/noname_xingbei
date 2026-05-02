@@ -5553,7 +5553,7 @@ export class Get extends GetCompatible {
 		if(target.hasSkillTag('noShiQiXiaJiang')) return 0;
 		var chaZhi=target.getHandcardLimit()-target.countCards('h');
 		if(target.hasSkillTag('oneDamage')&&num==1) return 0;
-		if(chaZhi<num) return -2;
+		if(chaZhi<num) return -(num-chaZhi)-1;
 		else if(chaZhi-3<num) return -1;
 		else return -0.5;
 	}
