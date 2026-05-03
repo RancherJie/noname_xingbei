@@ -487,6 +487,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             if(player.isHengZhi()) return false;
                             if(player.countZhiShiWu('zhangQi')<=0) return false;
                             if(!event.card) return false;
+                            if(event.faShu) return false;
                             let xiBie=get.xiBie(event.card);
                             return event.player.side==player.side&&event.player.hasSkill('zhangQiShouHu_'+xiBie);
                         },
