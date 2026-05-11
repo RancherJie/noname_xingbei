@@ -6678,7 +6678,7 @@ export class Player extends HTMLDivElement {
 			const source = event.customSource || event.player;
 			if (source && !source.isDead()) next.source = source;
 		}
-		if (typeof next.num != "number") next.num = (event.damageNum || 2);
+		if (typeof next.num != "number") next.num = (event.damageNum || 1);
 		next.original_num = next.num;
 		next.change_history = [];
 		if (next.unreal) next._triggered = 2;
