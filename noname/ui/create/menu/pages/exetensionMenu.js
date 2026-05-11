@@ -2928,7 +2928,8 @@ export const extensionMenu = function (connectMenu) {
 					}
 				};
 				window.extension = {};
-				fetch(`${extensionURL}catalog.js`, {
+				//增加?t=${Date.now()}使每次都重新请求
+				fetch(`${extensionURL}catalog.js?t=${Date.now()}`, {
 					referrerPolicy: "no-referrer",
 				})
 					.then((response) => response.text())

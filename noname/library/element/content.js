@@ -9017,9 +9017,9 @@ export const Content = {
 		'step 0'
 		var info=get.info(event.skill);
 		if(event.getParent().firstAction) event.firstAction=true;
-		if(info.type=='faShu' || info.type=='teShu'){
+		if(info&&(info.type=='faShu' || info.type=='teShu')){
 			event.trigger(info.type+"Before");
-		}
+		}else console.log('no skill type',event.skill,info);
 		"step 1"
 		var info=get.info(event.skill);
 		if(!info.noForceDie) event.forceDie=true;
@@ -9200,6 +9200,11 @@ export const Content = {
 		event.trigger('useSkill');
 		"step 2"
 		var info=get.info(event.skill);
+		if(info&&(info.type=='faShu' || info.type=='teShu')){
+			event.trigger(info.type+"Begin");
+		}else console.log('no skill type',event.skill,info);
+		"step 3"
+		var info=get.info(event.skill);
 		if(info&&info.contentBefore){
 			var next=game.createEvent(event.skill+'ContentBefore');
 			next.setContent(info.contentBefore);
@@ -9209,7 +9214,7 @@ export const Content = {
 			if(event.forceDie) next.forceDie=true;
 			if(event.includeOut) next.includeOut=true;
 		}
-		"step 3"
+		"step 4"
 		if(!event.skill){
 			console.log('error: no skill',get.translation(event.player),event.player.getSkills());
 			if(event._skill){
@@ -9277,7 +9282,7 @@ export const Content = {
 			event.num++;
 			event.redo();
 		}
-		"step 4"
+		"step 5"
 		var info=get.info(event.skill);
 		if(info&&info.contentAfter){
 			var next=game.createEvent(event.skill+'ContentAfter');
@@ -9288,7 +9293,7 @@ export const Content = {
 			if(event.forceDie) next.forceDie=true;
 			if(event.includeOut) next.includeOut=true;
 		}
-		"step 5"
+		"step 6"
 		if(player.getStat().allSkills>200){
 			player._noSkill=true;
 			console.log(player.name,event.skill);
@@ -9300,18 +9305,18 @@ export const Content = {
 		else{
 			event.finish();
 		}*/
-		"step 6"
+		"step 7"
 		ui.clear();
-		'step 7'
-		var info=get.info(event.skill);
-		if(info.type=='faShu' || info.type=='teShu'){
-			event.trigger(info.type+"End");
-		}
 		'step 8'
 		var info=get.info(event.skill);
-		if(info.type=='faShu' || info.type=='teShu'){
+		if(info&&(info.type=='faShu' || info.type=='teShu')){
+			event.trigger(info.type+"End");
+		}else console.log('no skill type',event.skill,info);
+		'step 9'
+		var info=get.info(event.skill);
+		if(info&&(info.type=='faShu' || info.type=='teShu')){
 			event.trigger(info.type+"After");
-		}
+		}else console.log('no skill type',event.skill,info);
 	},
 	/*
 	draw: function () {
