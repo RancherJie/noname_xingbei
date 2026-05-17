@@ -9019,7 +9019,7 @@ export const Content = {
 		if(event.getParent().firstAction) event.firstAction=true;
 		if(info&&(info.type=='faShu' || info.type=='teShu')){
 			event.trigger(info.type+"Before");
-		}else if(!info) console.log('no skill type',event.skill,info);
+		}else if(!info) console.warn('no skill type',event.skill,info);
 		"step 1"
 		var info=get.info(event.skill);
 		if(!info.noForceDie) event.forceDie=true;
