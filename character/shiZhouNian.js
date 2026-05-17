@@ -6204,8 +6204,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     if(player.isHengZhi()) return false;
                     if(event.faShu!=true) return false;
                     if(player.countCards('h')<2) return false;
-                    if(!(event.player.side!=player.side&&event.source.side==player.side)) return false; 
-                    return player.storage.chenLunXieZouQu.length>=2;
+                    if(!(event.player.side!=player.side&&event.source.side==player.side)) return false;
+                    if(!player.getHistory('custom').chenLunXieZouQu) return false;
+                    return player.getHistory('custom').chenLunXieZouQu.length>=2;
                 },
                 usable:1,
                 async cost(event,trigger,player){
@@ -6244,26 +6245,20 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         await targets[0].faShuDamage(1,player);
                     }
                 },
-                group:['chenLunXieZouQu_chongZhi','chenLunXieZouQu_jiShu'],
+                group:['chenLunXieZouQu_jiShu'],
                 subSkill:{
-                    chongZhi:{
-                        trigger:{global:'phaseBefore'},
-                        direct:true,
-                        priority:1,
-                        content:function(){
-                            player.storage.chenLunXieZouQu=[];
-                        }
-                    },
                     jiShu:{
                         trigger:{global:'zaoChengShangHai'},
                         filter:function(event,player){
                             if(event.faShu!=true) return false;
-                            if(player.storage.chenLunXieZouQu.includes(event.player)) return false;
+                            if(player.getHistory('custom').chenLunXieZouQu && player.getHistory('custom').chenLunXieZouQu.includes(event.player)) return false;
                             return event.player.side!=player.side&&event.source.side==player.side;
                         },
                         direct:true,
                         content:function(){
-                            player.storage.chenLunXieZouQu.add(trigger.player);
+                            if(!player.getHistory('custom').chenLunXieZouQu) player.getHistory('custom').chenLunXieZouQu=[];
+                            player.getHistory('custom').chenLunXieZouQu.push(trigger.player);
+                            //player.storage.chenLunXieZouQu.add(trigger.player);
                         }
                     }
                 }
