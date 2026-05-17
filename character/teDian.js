@@ -113,6 +113,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 ['shenZhiTianPing','shanEBiJi','tianPingQingDao','shenZhiShenPan','tianPing','tianZui','zuiChiBiDao','zui'],
                 ["des:新的裁判钟声已经敲响，不知道是新生的喜悦钟声，还是赴死的丧钟。咚，咚，咚。。。"],
             ],
+            yueTuanShouXi: [
+                "yueTuanShouXi_name",
+                'huanGroup',
+                4,
+                ['baSiKeZhiFa', 'moXingXuanLv', 'xinYueZhang', 'baLieTaNiXiaoDiao', 'puLuoWangSiXieZouQu', 'naBuLeSiDuZou','yinFu'],
+                ["des:暂无介绍"],
+            ],
         },
 
         characterIntro: {
@@ -3524,6 +3531,287 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 onremove: "storage",
                 markimage: 'image/card/zhiShiWu/hong.png',
             },
+
+            //乐团首席
+            baSiKeZhiFa:{
+                trigger:{player:'addGaiPaiBegin'},
+                filter:function(event,player){
+                    return event.gaiPai=='yinFu'&&player.countGaiPai('yinFu')>=3;
+                },
+                forced:true,
+                content:async function(event,trigger,player){
+                    let yinFu=player.getGaiPai('yinFu');
+                    await player.discard(yinFu[0],'yinFu');
+                },
+            },
+            moXingXuanLv:{
+                trigger:{player:['gongJiAfter','faShuAfter']},
+                filter:function(event,player){
+                    return event.yingZhan!=true;
+                },
+                forced:true,
+                content:async function(event,trigger,player){
+                    let cards=get.cards();
+                    await player.showHiddenCards(cards);
+                    await player.addGaiPai(cards,'yinFu');
+                },
+            },
+            xinYueZhang:{
+                trigger:{player:'addGaiPaiAfter'},
+                filter:function(event,player){
+                    return event.gaiPai=='yinFu'&&player.countGaiPai('yinFu')>=3;
+                },
+                prompt2:function(event,player){
+                    let yinFu=player.getGaiPai('yinFu');
+                    let xiBie1=get.xiBie(yinFu[0]);
+                    let xiBie2=get.xiBie(yinFu[1]);
+                    let xiBie3=get.xiBie(yinFu[2]);
+                    let target;
+                    let action;
+                    let num=1;
+
+                    if(xiBie1=='shui') target='all';
+                    else if(['feng','di'].includes(xiBie1)) target='opponent';
+                    else target='self';
+
+                    if(xiBie2=='shui') action='zhiLiao';
+                    else if(['feng','di'].includes(xiBie2)) action='discard';
+                    else action='damage';
+
+                    if(xiBie3=='shui'){
+                        target='all';
+                        num=2;
+                    }else if(['feng','di'].includes(xiBie3)){
+                        target='opponent';
+                        num=2;
+                    }
+
+                    let str=``;
+                    if(target=='self') str+='自己';
+                    else if(target=='opponent') str+=`${num}名目标对手`;
+                    else if(target=='all') str+=`${num}名目标角色`;
+                    str+=`${action=='zhiLiao'?'+1[治疗]':action=='discard'?'弃1张牌':'受到1点法术伤害'}`;
+                    return str;
+                },
+                content:async function(event,trigger,player){
+                    let yinFu=player.getGaiPai('yinFu');
+                    let xiBie1=get.xiBie(yinFu[0]);
+                    let xiBie2=get.xiBie(yinFu[1]);
+                    let xiBie3=get.xiBie(yinFu[2]);
+                    let num=1;
+                    let target;
+                    let action;
+
+                    if(xiBie1=='shui') target='all';
+                    else if(['feng','di'].includes(xiBie1)) target='opponent';
+                    else target='self';
+
+                    if(xiBie2=='shui') action='zhiLiao';
+                    else if(['feng','di'].includes(xiBie2)) action='discard';
+                    else action='damage';
+
+                    if(xiBie3=='shui'){
+                        target='all';
+                        num=2;
+                    }else if(['feng','di'].includes(xiBie3)){
+                        target='opponent';
+                        num=2;
+                    }
+
+                    if(target=='self'){
+                        if(action=='zhiLiao') await player.addZhiLiao();
+                        else if(action=='discard') await player.chooseToDiscard('h',1,'新乐章：弃1张牌').set('ai',function(card){
+                            return 6-get.value(card);
+                        });
+                        else if(action=='damage') await player.faShuDamage(player);
+                    }else if(target=='opponent'||target=='all'){
+                        let filter=lib.filter.all;
+                        if(target=='opponent') filter=lib.filter.opponent;
+                        let str=`新乐章：选择${num}名目标${target=='opponent'?'对手':'角色'}${action=='zhiLiao'?'+1[治疗]':action=='discard'?'弃1张牌': '受到1点法术伤害'}`;
+                        let targets=await player.chooseTarget(str,filter,true,num).set('ai',function(target){
+                            let action=_status.event.action;
+                            let player=_status.event.player;
+                            let choose=_status.event.choose;
+                            if(action=='zhiLiao') return get.zhiLiaoEffect2(target,1);
+                            else if(action=='discard'){
+                                if(choose=='opponent') return Math.random();
+                                else return target.countCards('h');
+                            }else if(action=='damage') return get.damageEffect2(target, player,1);
+                        }).set('action',action).set('choose',target).forResultTargets();
+                        targets=targets.sortBySeat();
+                        for(let target of targets){
+                            if(action=='zhiLiao') await target.addZhiLiao();
+                            else if(action=='discard') await target.chooseToDiscard('h',1,'新乐章：弃1张牌').set('ai',function(card){
+                                return 6-get.value(card);
+                            });
+                            else if(action=='damage') await target.faShuDamage(player);
+                        }
+                    }
+                },
+                check:function(event,player){
+                    let yinFu=player.getGaiPai('yinFu');
+                    let xiBie1=get.xiBie(yinFu[0]);
+                    let xiBie2=get.xiBie(yinFu[1]);
+                    let xiBie3=get.xiBie(yinFu[2]);
+                    let target;
+                    let action;
+
+                    if(xiBie1=='shui') target='all';
+                    else if(['feng','di'].includes(xiBie1)) target='opponent';
+                    else target='self';
+
+                    if(xiBie2=='shui') action='zhiLiao';
+                    else if(['feng','di'].includes(xiBie2)) action='discard';
+                    else action='damage';
+
+                    if(xiBie3=='shui'){
+                        target='all';
+                    }else if(['feng','di'].includes(xiBie3)){
+                        target='opponent';
+                    }
+
+                    if(target=='self' && action=='damage') return false;
+                    if(target=='opponent' && action=='zhiLiao') return false;
+                    return true;
+                },
+            },
+            baLieTaNiXiaoDiao:{
+                trigger:{player:'gongJiMingZhong'},
+                filter:function(event,player){
+                    return event.yingZhan!=true;
+                },
+                content:async function(event,trigger,player){
+                    let cards=get.cards();
+                    await player.showHiddenCards(cards);
+                    await player.addGaiPai(cards,'yinFu');
+                    await player.chooseToDiscard(1,'巴列塔尼小调：弃1张牌',true).set('ai',function(card){
+                        return 6-get.value(card);
+                    });
+                },
+                check:function(event,player){
+                    return Math.random()<0.6;
+                },
+            },
+            puLuoWangSiXieZouQu:{
+                type:'qiDong',
+                trigger:{player:'qiDong'},
+                filter:function(event,player){
+                    return get.zhanJi(player).length>=2&&player.countGaiPai('yinFu')>=1;
+                },
+                content:async function(event,trigger,player){
+                    let zhanJi=get.zhanJi(player);
+                    let list=[];
+                    for(var i=0;i<zhanJi.length;i++){
+						list.push([zhanJi[i],get.translation(zhanJi[i])]);
+					}
+                    let yiChu=await player.chooseButton(['协奏曲：请选择要移除的2个星石',[list,'tdnodes']],2,true).set('ai',function(button){
+                        switch(button.link){
+                            case 'shuiJing':{
+                                return 2;
+                            }
+                            case 'baoShi':{
+                                return 1;
+                            }
+                        }
+                    }).forResultLinks();
+                    var dict={};
+                    for(var i=0;i<yiChu.length;i++){
+                        if(yiChu[i]=='baoShi'){
+                            dict['baoShi']=(dict['baoShi']||0)+1;
+                        }else if(yiChu[i]=='shuiJing'){
+                            dict['shuiJing']=(dict['shuiJing']||0)+1;
+                        }
+                    }
+                    if(dict['baoShi']>0){
+                        await player.removeZhanJi('baoShi',dict['baoShi']);
+                    }
+                    if(dict['shuiJing']>0){
+                        await player.removeZhanJi('shuiJing',dict['shuiJing']);
+                    }
+
+                    let yinFu=player.getGaiPai('yinFu');
+                    let oldYinFu=await player.chooseCardButton('协奏曲：请选择要移除的【音符】',yinFu,true,[1,Infinity]).set('ai',function(button){
+                        return Math.random()-0.5;
+                    }).forResultLinks();
+                    await player.discard(oldYinFu,'yinFu');
+                    let num=oldYinFu.length-1;
+                    while (num>0) {
+                        let cards=get.cards();
+                        await player.showHiddenCards(cards);
+                        await player.addGaiPai(cards,'yinFu');
+                        num--;
+                    }
+                },
+                check:function(event,player){
+                    if(player.countGaiPai('yinFu')<3) return false;
+                    if(player.countCards('h')<2 || !player.canXingDong()) return false;
+                    let zhanJi=get.zhanJi(player);
+                    let shuiJingNum=zhanJi.filter(x=>x=='shuiJing').length;
+                    if(shuiJingNum>=2) return Math.random()<0.5;
+                    else return false;
+                },
+            },
+            naBuLeSiDuZou:{
+                trigger:{player:'addGaiPaiBefore'},
+                filter:function(event,player){
+                    return event.gaiPai=='yinFu'&&player.canBiShaShuiJing();
+                },
+                cost:async function(event,trigger,player){
+                    let yinFu=player.getGaiPai('yinFu');
+                    let str='';
+                    for(let i=0;i<yinFu.length;i++){
+                        str+=`【${get.translation(get.xiBie(yinFu[i]))}】`;
+                    }
+                    let next= player.chooseBool();
+                    let dialog=['那不勒斯独奏：移除[水晶]用手牌替换该牌',[trigger.cards, "card"],str,""];
+                    next.set('createDialog',dialog);
+                    //next.set('choice',player.countGaiPai('yinFu')>=2);
+                    event.result = await next.forResult();
+                },
+                content:async function(event,trigger,player){
+                    await player.removeBiShaShuiJing();
+                    await player.loseToDiscardpile(trigger.cards);
+                    trigger.cards=[];
+                    if(player.countCards('h')>0){
+                        let cards=await player.chooseCard('h',1,'那不勒斯独奏：选择1张手牌[展示]作为【音符】',true).set('ai',function(card){
+                            return 6-get.value(card);
+                        }).forResultCards();
+
+                        await player.lose(cards,ui.ordering);
+                        await player.showCards(cards);
+                        await player.addGaiPai(cards,'yinFu');
+                    }
+                    player.addTempSkill('naBuLeSiDuZou_cancel');
+                },
+                subSkill:{
+                    cancel:{
+                        trigger:{player:'addGaiPaiBefore'},
+                        forced:true,
+                        firstDo:true,
+                        filter:function(event,player){
+                            return event.gaiPai=='yinFu';
+                        },
+                        content:function(){
+                            trigger.cancel();
+                        },
+                    },
+                },
+                /*
+                ai:{
+                    shuiJing:true,
+                },*/
+            },
+            yinFu:{
+                intro:{
+					content:'gaiPai',
+					markcount:'gaiPai',
+                    show:true,
+				},
+                onremove:function(player, skill) {
+                    const cards = player.getGaiPai(skill);
+                    if (cards.length) player.loseToDiscardpile(cards);
+                },
+            },
         },
         
         translate:{
@@ -3551,6 +3839,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             jianZhiZi:'剑之子',
             moGongEX: "魔弓EX",
             sheng_zhongCaiZhe:'圣仲裁者',
+            yueTuanShouXi: "乐团首席",
 
             jianZhiMoNv_name:"席拉",
             lingXiZhiChao_name: "濯香姬",
@@ -3560,6 +3849,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             luoLiFanZhang_name: "柠歌",
             jianXiZhiPian_name: "惕惕子",
             sheng_zhongCaiZhe_name: "恩布拉",
+            yueTuanShouXi_name: "洁米",
 
             //技能
             //剑之魔女
@@ -3830,6 +4120,29 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             zuiChiBiDao_info:"[水晶]本回合你无法获得<span class='hong'>【罪】</span>。<span class='tiaoJian'>(你移除所有</span><span class='hong'>【罪】</span><span class='tiaoJian'>)</span>你可将手牌中X张基本牌面朝上[展示]依次放到【天平·左】或【天平·右】上，X为移除的<span class='hong'>【罪】</span>数量",
             zui:'罪',
             zui_info:"<span class='hong'>【罪】</span>为仲裁者专有指示物，上限为3。",
+
+            //乐团首席
+            baSiKeZhiFa:"[被动]巴斯克指法？",
+            baSiKeZhiFa_info:"你的新【乐章】放置时须放置在所有【音符】右边。【音符】自左至右依序为【第一音符】、【第二音符】、【第三音符】。<span class='tiaoJian'>(每当【音符】即将超过上限时)</span>移除【第一音符】，然后放置新【音符】。",
+            moXingXuanLv:"[被动]魔性旋律",
+            moXingXuanLv_info:"<span class='tiaoJian'>([攻击行动]或[法术行动]结束后发动)</span>将牌堆顶1张牌面朝上[展示]放置在你的角色旁，作为【音符】。",
+            xinYueZhang:"[响应]新乐章",
+            xinYueZhang_info:`<span class='tiaoJian'>(当【音符】被放置后，【音符】数>2时发动)</span>根据下表，你对【第一音符】的目标，执行【第二音符】的效果，并根据【第三音符】改变目标。<br>
+            <table style='text-align: center;'>
+            <tr><th style='width: 20%;'>音符系别</th><th  style='width: 20%;'>第一音符</th><th  style='width: 20%;'>第二音符</th><th  style='width: 20%;'>第三音符</th></tr>
+            <tr><th>水系</th><th>目标角色</th><th>+1[治疗]</th><th>目标改为2名目标角色</th></tr>
+            <tr><th>风或地系</th><th>目标对手</th><th>弃1张牌</th><th>目标改为2名目标对手</th></tr>
+            <tr><th>其他系别</th><th>你</th><th>受到你的1点法术伤害</th><th>无改变</th></tr>
+            </table>
+            `,
+            baLieTaNiXiaoDiao:"[响应]巴列塔尼小调",
+            baLieTaNiXiaoDiao_info:"<span class='tiaoJian'>(主动攻击命中时发动②)</span>将牌堆顶1张牌面朝上[展示]放置在你的角色旁，作为【音符】，然后你弃1张牌。",
+            puLuoWangSiXieZouQu:"[启动]普罗旺斯协奏曲",
+            puLuoWangSiXieZouQu_info:"<span class='tiaoJian'>(移除我方【战绩区】2星石，移除X个【音符】)</span>依序将牌堆顶(X-1)张牌朝上[展示]放置在你的角色旁，作为【音符】。",
+            naBuLeSiDuZou:"[响应]那不勒斯独奏",
+            naBuLeSiDuZou_info:"[水晶]<span class='tiaoJian'>(【音符】将被放置时发动)</span>移除改牌，改为将1张手牌面朝上[展示]放置在你的角色旁，作为【音符】。持续本回合结束时，你的【音符】无法增加。",
+            yinFu:"音符",
+            yinFu_info:"【音符】为乐团首席专有展示盖牌，上限为3。",
         },
     };
 });
