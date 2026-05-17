@@ -2464,6 +2464,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             //冒险家
             qiZha:{
                 enable:'gongJi',
+                type:'gongJi',
                 filter:function(event,player){
                     var bool1=player.countTongXiPai()>=2;
                     var bool2=game.hasPlayer(current=>lib.skill.qiZha.filterTarget('',player,current));
