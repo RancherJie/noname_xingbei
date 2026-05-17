@@ -6284,7 +6284,7 @@ export class Player extends HTMLDivElement {
 			cards[i].fix();
 			if (gaintag) cards[i].addGaintag(gaintag);
 			var sort = lib.config.sort_card(cards[i]);
-			this.node.expansions.insertBefore(cards[i], this.node.expansions.firstChild);
+			this.node.expansions.appendChild(cards[i]);
 		}
 		if (broadcast !== false)
 			game.broadcast(

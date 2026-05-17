@@ -1,6 +1,6 @@
 window.noname_asset_list=
 [
-	"v1.5.0",
+	"v1.6.0",
 	"audio/background/music_default.mp3",
 	"audio/card/default.mp3",
 	'audio/card/atk_an.mp3',
@@ -268,6 +268,7 @@ window.noname_asset_list=
 	'image/character/zhanxingjia.jpg',
 	'image/character/zhenLongNvWang.jpg',
 	'image/character/zhoushushi.jpg',
+	'image/character/yueTuanShouXi.jpg',
 
 
 	"image/emotion/xingBei_emotion/1.gif",

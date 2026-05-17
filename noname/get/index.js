@@ -5322,6 +5322,14 @@ export class Get extends GetCompatible {
 				} else {
 					result2 *= Math.sqrt(Math.sqrt(threaten));
 				}
+				if(get.type(card)=='gongJi'){
+					let countTargetCards = target.countCards("h");
+					if(countTargetCards == 2) result2 *= 1.1;
+					else if(countTargetCards == 3) result2 *= 1.05;
+					else if(countTargetCards >= 4) result2 *= 0.9;
+					if(target.zhiLiao>=2) result2 *= 0.9;
+				}
+				/*
 				if (target.hp == 1) result2 *= 2.5;
 				if (target.hp == 2) result2 *= 1.8;
 				let countTargetCards = target.countCards("h");
@@ -5338,6 +5346,7 @@ export class Get extends GetCompatible {
 				if (target.hp == 4) result2 *= 0.9;
 				else if (target.hp == 5) result2 *= 0.8;
 				else if (target.hp > 5) result2 *= 0.6;
+				*/
 			}
 		} else {
 			result2 += temp02;
@@ -5550,7 +5559,7 @@ export class Get extends GetCompatible {
 	damageEffect(target,num){
 		if(!target) return 0;
 		if(!num) num=2;
-		if(target.hasSkillTag('noShiQiXiaJiang')) return 0;
+		if(target.hasSkillTag('noShiQiXiaJiang')) return 0.1;
 		var chaZhi=target.getHandcardLimit()-target.countCards('h');
 		if(target.hasSkillTag('oneDamage')&&num==1) return 0;
 		if(chaZhi<num) return -(num-chaZhi)-1;
