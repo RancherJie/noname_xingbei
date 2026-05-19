@@ -3620,7 +3620,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 
                     if(target=='self'){
                         if(action=='zhiLiao') await player.addZhiLiao();
-                        else if(action=='discard') await player.chooseToDiscard('h',1,'新乐章：弃1张牌').set('ai',function(card){
+                        else if(action=='discard') await player.chooseToDiscard('h',1,'新乐章：弃1张牌',true).set('ai',function(card){
                             return 6-get.value(card);
                         });
                         else if(action=='damage') await player.faShuDamage(player);
@@ -3641,7 +3641,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         targets=targets.sortBySeat();
                         for(let target of targets){
                             if(action=='zhiLiao') await target.addZhiLiao();
-                            else if(action=='discard') await target.chooseToDiscard('h',1,'新乐章：弃1张牌').set('ai',function(card){
+                            else if(action=='discard') await target.chooseToDiscard('h',1,'新乐章：弃1张牌',true).set('ai',function(card){
                                 return 6-get.value(card);
                             });
                             else if(action=='damage') await target.faShuDamage(player);
