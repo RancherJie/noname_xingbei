@@ -1,12 +1,10 @@
 window.noname_update = {
-	version: "1.6.0",
-	update: "1.6.0",
+	version: "1.6.1",
+	update: "1.6.1",
 	changeLog: [
-		'新增角色乐团首席',
-		'优化吟游诗人沉沦协奏曲实现逻辑',
-		'尝试优化ai，调整get.effect_use/damageEffect函数',
-		'调整在useSkill使用未拥有type属性技能时的报错',
-		'冒险家欺诈增加type属性',
+		"优化月之女神美杜莎发动时提示",
+		"修复乐团首席新乐章弃牌非强制",
+		"修复乐团首席那不勒斯独奏发动后会额外移除音符"
 	],
 	files: [
 
