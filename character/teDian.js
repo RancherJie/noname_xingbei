@@ -3620,7 +3620,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 
                     if(target=='self'){
                         if(action=='zhiLiao') await player.addZhiLiao();
-                        else if(action=='discard') await player.chooseToDiscard('h',1,'新乐章：弃1张牌').set('ai',function(card){
+                        else if(action=='discard') await player.chooseToDiscard('h',1,'新乐章：弃1张牌',true).set('ai',function(card){
                             return 6-get.value(card);
                         });
                         else if(action=='damage') await player.faShuDamage(player);
@@ -3641,7 +3641,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         targets=targets.sortBySeat();
                         for(let target of targets){
                             if(action=='zhiLiao') await target.addZhiLiao();
-                            else if(action=='discard') await target.chooseToDiscard('h',1,'新乐章：弃1张牌').set('ai',function(card){
+                            else if(action=='discard') await target.chooseToDiscard('h',1,'新乐章：弃1张牌',true).set('ai',function(card){
                                 return 6-get.value(card);
                             });
                             else if(action=='damage') await target.faShuDamage(player);
@@ -3771,7 +3771,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 content:async function(event,trigger,player){
                     await player.removeBiShaShuiJing();
                     await player.loseToDiscardpile(trigger.cards);
-                    trigger.cards=[];
+                    trigger.cancel();
                     if(player.countCards('h')>0){
                         let cards=await player.chooseCard('h',1,'那不勒斯独奏：选择1张手牌[展示]作为【音符】',true).set('ai',function(card){
                             return 6-get.value(card);
@@ -3792,6 +3792,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             return event.gaiPai=='yinFu';
                         },
                         content:function(){
+                            player.loseToDiscardpile(trigger.cards);
                             trigger.cancel();
                         },
                     },
@@ -4140,7 +4141,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             puLuoWangSiXieZouQu:"[启动]普罗旺斯协奏曲",
             puLuoWangSiXieZouQu_info:"<span class='tiaoJian'>(移除我方【战绩区】2星石，移除X个【音符】)</span>依序将牌堆顶(X-1)张牌朝上[展示]放置在你的角色旁，作为【音符】。",
             naBuLeSiDuZou:"[响应]那不勒斯独奏",
-            naBuLeSiDuZou_info:"[水晶]<span class='tiaoJian'>(【音符】将被放置时发动)</span>移除改牌，改为将1张手牌面朝上[展示]放置在你的角色旁，作为【音符】。持续本回合结束时，你的【音符】无法增加。",
+            naBuLeSiDuZou_info:"[水晶]<span class='tiaoJian'>(【音符】将被放置时发动)</span>移除该牌，改为将1张手牌面朝上[展示]放置在你的角色旁，作为【音符】。持续到本回合结束时，你的【音符】无法增加。",
             yinFu:"音符",
             yinFu_info:"【音符】为乐团首席专有展示盖牌，上限为3。",
         },
