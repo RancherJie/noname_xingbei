@@ -492,7 +492,19 @@ export const characterPackMenu = function (connectMenu) {
 		}
 		delete lib.characterPack.mode_banned;
 	}
-	var characterlist = connectMenu ? lib.connectCharacterPack : lib.config.all.characters;
+	var characterlist = connectMenu ? lib.connectCharacterPack.slice(0) : lib.config.all.characters.slice(0);
+	if (connectMenu) {// 联机模式下，按照lib.config.all.characters的顺序显示武将包，未收录的武将包显示在最后
+		var characterOrder = new Map();
+		for (var i = 0; i < lib.config.all.characters.length; i++) {
+			characterOrder.set(lib.config.all.characters[i], i);
+		}
+		characterlist.sort(function (a, b) {
+			var indexA = characterOrder.has(a) ? characterOrder.get(a) : Number.MAX_SAFE_INTEGER;
+			var indexB = characterOrder.has(b) ? characterOrder.get(b) : Number.MAX_SAFE_INTEGER;
+			return indexA - indexB;
+		});
+	}
+	
 	for (var i = 0; i < characterlist.length; i++) {
 		createModeConfig(characterlist[i], start.firstChild);
 	}
