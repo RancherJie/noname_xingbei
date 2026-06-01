@@ -10790,6 +10790,7 @@ export class Library {
 			trigger:{target:['shouDaoGongJi','shouDaoMoDan']},
 			direct:true,
 			lastDo:true,
+			priority:-1,
 			filter:function(event,player){
 				if(event.canShengDun==false) return false;
 				return player.hasExpansions('_shengDun');
@@ -10822,6 +10823,7 @@ export class Library {
 		_yingZhan:{
 			trigger:{target:'shouDaoGongJi'},
 			direct:true,
+			lastDo:true,
 			filter:function(event,player){
 				if(event.canYingZhan==false&&event.canShengGuang==false) return false;
 				return true;

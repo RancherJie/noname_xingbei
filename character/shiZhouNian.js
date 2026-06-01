@@ -4687,12 +4687,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             yinYangZhanHuan:{
                 enable:['yingZhan'],
                 filter:function(event,player){
-                    var event=_status.event;
                     if(event.canYingZhan==false) return false;
                     var mingGe=get.mingGe(event.card);
                     return player.hasCard(card=>get.mingGe(card)==mingGe&&get.type(card)=='gongJi');
                 },
-                filterCard:function(card,player,event){
+                filterCard:function(card,player){
                     var event=_status.event;
                     var mingGe=get.mingGe(event.card);
                     return get.mingGe(card)==mingGe&&get.type(card)=='gongJi';
