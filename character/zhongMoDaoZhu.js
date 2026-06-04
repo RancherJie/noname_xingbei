@@ -1389,7 +1389,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 mod:{
                     maxHandcard:function (player,num){
-                        if(player.hasGaiPai('yuYan')) return num-1;
+                        if(player.hasSkill('yuYan_zero')) return num-1;
                     }
                 }
             },
