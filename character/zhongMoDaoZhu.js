@@ -1670,7 +1670,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 content:async function (event,trigger,player){
                     game.log(player,`移除了1张`,`#g【预言】`);
-                    trigger.cards.pop();
+                    var card = trigger.cards.pop();
+                    await game.cardsGotoPile(card, "insert");
                     var cards=player.getExpansions('yuYan');
                     trigger.cards.unshift(cards[0]);
                 },
