@@ -633,7 +633,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         }
                     }
                     if(player.zhiLiao>0) await player.changeZhiLiao(-player.zhiLiao);
-                    await player.reinitCharacter(player.name1,'hongYiZhuJiao');
+                    await player.reinitCharacter(player.name1,'hongYiZhuJiao',false);
                     player.addGongJi();
                 },
                 ai:{
@@ -835,7 +835,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             next.set('bool',list.length>1);
                             var control=await next.forResultControl();
                             if(control=='选项一'){
-                                await player.reinitCharacter(player.name1,'hongYiZhuJiao');
+                                await player.reinitCharacter(player.name1,'hongYiZhuJiao',false);
                             }else if(control=='选项二'){
                                 let list=[];
                                 for(let i=1;i<=player.countZhiShiWu('yinZhiZiDan');i++){
@@ -1027,7 +1027,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                     if(player.zhiLiao>0) await player.changeZhiLiao(-player.zhiLiao);
                     if(player.countCards('h')>4) player.chooseToDiscard('h',true,player.countCards('h')-4);
-                    await player.reinitCharacter(player.name1,'zhuLvZhe');
+                    await player.reinitCharacter(player.name1,'zhuLvZhe',false);
                 },
                 ai:{
                     order:3.1,
