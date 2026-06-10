@@ -461,7 +461,7 @@ table {
 #arena.chess > #arenalog {
 	display: none !important;
 }
-#arena.observe .handcards > .card > div {
+#arena.hidden_handcard .handcards > .card > div {
 	opacity: 0 !important;
 }
 #arena.hide_name .player > .name:not(.name_seat),
@@ -3105,7 +3105,7 @@ div:not(.handcards) > .card > .info > span,
 .unseen2 > .name2 {
 	opacity: 0 !important;
 }
-
+/*
 #arena:not(.observe) .player[data-position="0"].unseen > .avatar,
 #arena:not(.observe) .player[data-position="0"].unseen2 > .avatar2,
 #arena:not(.observe) .player[data-position="0"].unseen > .name:not(.name2):not(.name_seat),
@@ -3126,7 +3126,7 @@ div:not(.handcards) > .card > .info > span,
 #arena:not(.observe) .player:not([data-position="0"]).unseen2_show > .avatar2 {
 	opacity: 1 !important;
 	background-image: url("../../image/character/hidden_image.jpg") !important;
-}
+}*/
 
 .player > .name_seat {
 	opacity: 0;
@@ -3889,7 +3889,7 @@ div:not(.handcards) > .card > .info > span,
 	opacity: 1;
 }
 
-#arena.observe .handcards > .card {
+#arena.hidden_handcard .handcards > .card {
 	background:url('../../theme/style/cardback/image/xingBei1.png');
 	background-size: contain;
 }
