@@ -12083,6 +12083,8 @@ export const Content = {
 		'step 1'
 		if(!event.zhuanYi) event.trigger('changeShiQiBefore');
 		'step 2'
+		if(!event.zhuanYi) event.trigger('changeShiQiBegin');
+		'step 3'
 		num=event.num;
 		side=event.side;
 		//增加参数是否存在最大变动值，如果存在则进行限制
@@ -12147,11 +12149,11 @@ export const Content = {
 		},game.hongShiQi,game.lanShiQi);
 
 		game.addVideo('changeShiQi',null,[numx,side]);
-		'step 3'
-		game.checkResult();
 		'step 4'
-		if(!event.zhuanYi) event.trigger('changeShiQiEnd');
+		game.checkResult();
 		'step 5'
+		if(!event.zhuanYi) event.trigger('changeShiQiEnd');
+		'step 6'
 		if(!event.zhuanYi) event.trigger('changeShiQiAfter');
 	},
 	changeZhanJi:function(){

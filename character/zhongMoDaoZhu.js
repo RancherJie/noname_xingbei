@@ -646,7 +646,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 }
             },
             zuiDuanHuoMian:{
-                trigger:{global:'changeShiQiBefore'},
+                trigger:{global:'changeShiQiBegin'},
                 filter:function (event,player){
                     if(event.side!=player.side) return false;
                     return player.hasZhiShiWu('shengYiWu')&&event.num<0&&event.cause!='damage';
@@ -1037,7 +1037,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 }
             },
             shenXuanDaoYan:{
-                trigger:{global:'changeShiQiBefore'},
+                trigger:{global:'changeShiQiBegin'},
                 filter:function (event,player){
                     if(event.side!=player.side) return false;
                     return player.hasZhiShiWu('shengYiWu')&&event.num<0&&event.cause!='damage';

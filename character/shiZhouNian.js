@@ -1225,7 +1225,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 }
             },
             shenZhiBiHu:{
-                trigger:{global:'changeShiQiBefore'},
+                priority:-1,
+                trigger:{global:'changeShiQiBegin'},
                 filter:function(event,player){
                     if(event.side!=player.side) return false;
                     return player.canBiShaShuiJing()&&event.num<0&&event.cause=='damage'&&event.faShu==true;
