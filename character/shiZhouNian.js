@@ -158,7 +158,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     aiOrder:function(player,card,num){
                         if(get.type(card)!='gongJi') return;
                         if(get.xiBie(card)=='feng') return num-0.3;
-                    }
+                    },
+                    aiValue(player, card, num) {
+                        if (get.xiBie(card)=='feng') return num + 1;
+                    },
                 }
             },
             shengJian:{
