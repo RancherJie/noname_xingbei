@@ -157,7 +157,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     aiOrder:function(player,card,num){
                         if(get.type(card)!='gongJi') return;
                         if(get.mingGe(card)=='ji') return num-0.3;
-                    }
+                    },
+                    aiValue(player, card, num) {
+                        if (get.mingGe(card)=='ji') return num + 1;
+                    },
                 }
             },
             yiXiangJian: {
@@ -3028,7 +3031,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         await player.addNengLiang('shuiJing',2);
                         player.insertPhase('jianShouShiYan');
                         player.addSkill('jianShouShiYan_huiHeKaiShi');
-                        await player.reinitCharacter(player.name1,'fengZhiJianSheng');
+                        await player.reinitCharacter(player.name1,'fengZhiJianSheng',false);
                     }
                 },
                 group: ['jianShouShiYan_tiaoJian'],

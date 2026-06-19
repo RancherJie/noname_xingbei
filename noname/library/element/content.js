@@ -10890,6 +10890,7 @@ export const Content = {
 		}
 		if(event.animate!==false){
 			player.$damage(source);
+			player.$damagepop(num);
 		}
 		"step 7"
 		if(source&&lib.config.border_style=='auto'){
@@ -12083,6 +12084,8 @@ export const Content = {
 		'step 1'
 		if(!event.zhuanYi) event.trigger('changeShiQiBefore');
 		'step 2'
+		if(!event.zhuanYi) event.trigger('changeShiQiBegin');
+		'step 3'
 		num=event.num;
 		side=event.side;
 		//增加参数是否存在最大变动值，如果存在则进行限制
@@ -12147,11 +12150,11 @@ export const Content = {
 		},game.hongShiQi,game.lanShiQi);
 
 		game.addVideo('changeShiQi',null,[numx,side]);
-		'step 3'
-		game.checkResult();
 		'step 4'
-		if(!event.zhuanYi) event.trigger('changeShiQiEnd');
+		game.checkResult();
 		'step 5'
+		if(!event.zhuanYi) event.trigger('changeShiQiEnd');
+		'step 6'
 		if(!event.zhuanYi) event.trigger('changeShiQiAfter');
 	},
 	changeZhanJi:function(){
@@ -12257,16 +12260,15 @@ export const Content = {
 	changeZhiLiao:function(){
 		'step 0'
 		player.zhiLiao+=num;
+		var source=event.source;
+		if(!source) source=event.getParent().player;
+		player.popup(num>=0?'+'+num:num);
 		if(num>=0){
-			var source=event.source;
-			if(!source) source=event.getParent().player;
 			if(source.stat[player.stat.length-1].addZhiLiao==undefined){
 				source.stat[player.stat.length-1].addZhiLiao=num;
-			}
-			else{
+			}else{
 				source.stat[player.stat.length-1].addZhiLiao+=num;
 			}
-
 			game.broadcastAll(function(){
 				game.playAudio("effect", "heal");
 			});
@@ -12278,6 +12280,11 @@ export const Content = {
 				else game.log(player,'获得了'+num+'点','[治疗]');
 			}
 		}else if(num<0){
+			if(source.stat[player.stat.length-1].removeZhiLiao==undefined){
+				source.stat[player.stat.length-1].removeZhiLiao=-num;
+			}else{
+				source.stat[player.stat.length-1].removeZhiLiao-=num;
+			}
 			num=-num;
 			if(event.source) game.log(event.source,'使',player,'移除了'+num+'点','[治疗]');
 			else game.log(player,'移除了'+num+'点','[治疗]');
