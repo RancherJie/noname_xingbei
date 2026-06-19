@@ -12260,16 +12260,15 @@ export const Content = {
 	changeZhiLiao:function(){
 		'step 0'
 		player.zhiLiao+=num;
+		var source=event.source;
+		if(!source) source=event.getParent().player;
+		player.popup(num>=0?'+'+num:num);
 		if(num>=0){
-			var source=event.source;
-			if(!source) source=event.getParent().player;
 			if(source.stat[player.stat.length-1].addZhiLiao==undefined){
 				source.stat[player.stat.length-1].addZhiLiao=num;
-			}
-			else{
+			}else{
 				source.stat[player.stat.length-1].addZhiLiao+=num;
 			}
-
 			game.broadcastAll(function(){
 				game.playAudio("effect", "heal");
 			});
@@ -12281,6 +12280,11 @@ export const Content = {
 				else game.log(player,'获得了'+num+'点','[治疗]');
 			}
 		}else if(num<0){
+			if(source.stat[player.stat.length-1].removeZhiLiao==undefined){
+				source.stat[player.stat.length-1].removeZhiLiao=-num;
+			}else{
+				source.stat[player.stat.length-1].removeZhiLiao-=num;
+			}
 			num=-num;
 			if(event.source) game.log(event.source,'使',player,'移除了'+num+'点','[治疗]');
 			else game.log(player,'移除了'+num+'点','[治疗]');
