@@ -11899,7 +11899,7 @@ export class Library {
 							);
 						}
 						if (!lib.configOL.observe_handcard) {
-							ui.arena.classList.add("observe");
+							ui.arena.classList.add("hidden_handcard");
 						}
 					}
 					postReconnect = get.parsedResult(postReconnect);

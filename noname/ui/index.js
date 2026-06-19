@@ -497,6 +497,7 @@ export class UI {
 		}
 	}
 	updatehl() {
+		if(game.pcvideo) return;
 		if (!game.me) return;
 		if (!ui.handcards1Container || !ui.handcards2Container) return;
 		if (!ui.handcards1Container.childNodes.length) return;

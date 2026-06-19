@@ -158,7 +158,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     aiOrder:function(player,card,num){
                         if(get.type(card)!='gongJi') return;
                         if(get.xiBie(card)=='feng') return num-0.3;
-                    }
+                    },
+                    aiValue(player, card, num) {
+                        if (get.xiBie(card)=='feng') return num + 1;
+                    },
                 }
             },
             shengJian:{
@@ -1225,7 +1228,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 }
             },
             shenZhiBiHu:{
-                trigger:{global:'changeShiQiBefore'},
+                priority:-1,
+                trigger:{global:'changeShiQiBegin'},
                 filter:function(event,player){
                     if(event.side!=player.side) return false;
                     return player.canBiShaShuiJing()&&event.num<0&&event.cause=='damage'&&event.faShu==true;

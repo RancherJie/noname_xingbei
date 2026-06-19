@@ -127,7 +127,7 @@ html {
 .cardbg.button {
 	background: url("wood.png");
 }
-#arena.observe .handcards > .card {
+#arena.hidden_handcard .handcards > .card {
 	background: url("wood.jpg") !important;
 }
 #arena:not(.chess).textequip .player[data-position="0"] .equips > .card {

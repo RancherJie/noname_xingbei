@@ -2808,6 +2808,13 @@ export class Game extends GameCompatible {
 			if (lib.config.mode == "xingBei" || lib.config.mode == 'boss') {
 				players.bool = players.pop();
 			}
+
+			if(!get.is.phoneLayout()&&players.length<8){
+				ui.arena.classList.add("pcvideo");
+				game.pcvideo=true;
+				ui.me.hide();
+			}
+
 			ui.arena.setNumber(players.length);
 			ui.arena.classList.add("video");
 			game.players.length = 0;
@@ -2824,10 +2831,12 @@ export class Game extends GameCompatible {
 					for (var i = 0; i < game.players.length; i++) {
 						game.players[i].dataset.position = parseInt(game.players[i].dataset.position) + 1;
 					}
-					game.singleHandcard = true;
-					ui.arena.classList.add("single-handcard");
-					ui.window.classList.add("single-handcard");
-					ui.fakeme = ui.create.div(".fakeme.avatar", ui.me);
+					if(!game.pcvideo){
+						game.singleHandcard = true;
+						ui.arena.classList.add("single-handcard");
+						ui.window.classList.add("single-handcard");
+						ui.fakeme = ui.create.div(".fakeme.avatar", ui.me);
+					}
 				}
 				ui.arena.style.display = "";
 				ui.refresh(ui.arena);
