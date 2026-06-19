@@ -10890,6 +10890,7 @@ export const Content = {
 		}
 		if(event.animate!==false){
 			player.$damage(source);
+			player.$damagepop(num);
 		}
 		"step 7"
 		if(source&&lib.config.border_style=='auto'){

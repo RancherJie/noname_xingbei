@@ -13538,8 +13538,9 @@ export class Player extends HTMLDivElement {
 				node.classList.add("normal-font");
 			}
 			if (typeof num == "number" && num > 0) {
-				if (num == Infinity) num = "+∞";
-				else num = "+" + num;
+				//if (num == Infinity) num = "+∞";
+				//else num = "+" + num;
+				if (num == Infinity) num = "∞";
 			} else if (num == -Infinity) num = "-∞";
 			node.innerHTML = num;
 			this.damagepopups.push(node);
