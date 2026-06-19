@@ -2852,7 +2852,7 @@ div:not(.handcards) > .card > .info > span,
 	position: absolute;
 	line-height: 20px;
 }
-.player > .viewHandcard {
+#arena:not(.pcvideo) .player > .viewHandcard {
 	bottom: -30px;
 	left: 5px;
 	height: 30px;
@@ -2867,8 +2867,125 @@ div:not(.handcards) > .card > .info > span,
 	border: 1px solid rgba(197, 192, 174, 0.6);
 	transform-origin:left top;
 }
-.player.linked > .viewHandcard{
+#arena:not(.pcvideo) .player.linked > .viewHandcard{
 	transform: rotate(90deg) translate(-172px,-33px);
+}
+
+#arena.pcvideo .player > .viewHandcard {
+	transform: scale(0.7);
+	transform-origin:left;
+	width: 680px;
+	border:0px;
+}
+#arena.pcvideo .player.linked > .viewHandcard {
+	transform: rotate(90deg) scale(0.7);
+}
+
+#arena.pcvideo[data-number="5"] > .player[data-position="1"],
+#arena.pcvideo[data-number="4"] > .player[data-position="0"] {
+	top: calc(100% / 3 + 300px);
+	left: calc(100% - 150px);
+}
+#arena.pcvideo[data-number="5"] > .player[data-position="2"],
+#arena.pcvideo[data-number="4"] > .player[data-position="1"] {
+	top: 0;
+	left: calc(100% - 150px);
+}
+#arena.pcvideo[data-number="5"] > .player[data-position="3"],
+#arena.pcvideo[data-number="4"] > .player[data-position="2"] {
+	top: 0;
+	left: 0;
+}
+#arena.pcvideo[data-number="5"] > .player[data-position="4"],
+#arena.pcvideo[data-number="4"] > .player[data-position="3"] {
+	top:  calc(100% / 3 + 300px);
+	left: 0;
+}
+
+#arena.pcvideo[data-number="7"] > .player[data-position="1"].linked > .viewHandcard,
+#arena.pcvideo[data-number="7"] > .player[data-position="2"].linked > .viewHandcard,
+#arena.pcvideo[data-number="7"] > .player[data-position="3"].linked > .viewHandcard,
+#arena.pcvideo[data-number="6"] > .player[data-position="0"].linked > .viewHandcard,
+#arena.pcvideo[data-number="6"] > .player[data-position="1"].linked > .viewHandcard,
+#arena.pcvideo[data-number="6"] > .player[data-position="2"].linked > .viewHandcard,
+#arena.pcvideo[data-number="5"] > .player[data-position="1"].linked > .viewHandcard,
+#arena.pcvideo[data-number="5"] > .player[data-position="2"].linked > .viewHandcard,
+#arena.pcvideo[data-number="4"] > .player[data-position="0"].linked > .viewHandcard,
+#arena.pcvideo[data-number="4"] > .player[data-position="1"].linked > .viewHandcard {
+	transform: rotate(90deg) scale(0.7) translate(-700px, -950px);
+}
+#arena.pcvideo[data-number="7"] > .player[data-position="4"].linked > .viewHandcard,
+#arena.pcvideo[data-number="7"] > .player[data-position="5"].linked > .viewHandcard,
+#arena.pcvideo[data-number="7"] > .player[data-position="6"].linked > .viewHandcard,
+#arena.pcvideo[data-number="6"] > .player[data-position="3"].linked > .viewHandcard,
+#arena.pcvideo[data-number="6"] > .player[data-position="4"].linked > .viewHandcard,
+#arena.pcvideo[data-number="6"] > .player[data-position="5"].linked > .viewHandcard,
+#arena.pcvideo[data-number="5"] > .player[data-position="3"].linked > .viewHandcard,
+#arena.pcvideo[data-number="5"] > .player[data-position="4"].linked > .viewHandcard,
+#arena.pcvideo[data-number="4"] > .player[data-position="2"].linked > .viewHandcard,
+#arena.pcvideo[data-number="4"] > .player[data-position="3"].linked > .viewHandcard {
+	transform: rotate(90deg) scale(0.7) translate(275px, -8px);
+}
+
+#arena.pcvideo[data-number="7"] > .player[data-position="1"] > .viewHandcard,
+#arena.pcvideo[data-number="7"] > .player[data-position="2"] > .viewHandcard,
+#arena.pcvideo[data-number="7"] > .player[data-position="3"] > .viewHandcard,
+#arena.pcvideo[data-number="6"] > .player[data-position="0"] > .viewHandcard,
+#arena.pcvideo[data-number="6"] > .player[data-position="1"] > .viewHandcard,
+#arena.pcvideo[data-number="6"] > .player[data-position="2"] > .viewHandcard,
+#arena.pcvideo[data-number="5"] > .player[data-position="1"] > .viewHandcard,
+#arena.pcvideo[data-number="5"] > .player[data-position="2"] > .viewHandcard,
+#arena.pcvideo[data-number="4"] > .player[data-position="0"] > .viewHandcard,
+#arena.pcvideo[data-number="4"] > .player[data-position="1"] > .viewHandcard  {
+	top:0;
+	left: -500px;
+	direction: rtl;
+}
+
+#arena.pcvideo[data-number="7"] > .player[data-position="4"] > .viewHandcard,
+#arena.pcvideo[data-number="7"] > .player[data-position="5"] > .viewHandcard,
+#arena.pcvideo[data-number="7"] > .player[data-position="6"] > .viewHandcard,
+#arena.pcvideo[data-number="6"] > .player[data-position="3"] > .viewHandcard,
+#arena.pcvideo[data-number="6"] > .player[data-position="4"] > .viewHandcard,
+#arena.pcvideo[data-number="6"] > .player[data-position="5"] > .viewHandcard,
+#arena.pcvideo[data-number="5"] > .player[data-position="3"] > .viewHandcard,
+#arena.pcvideo[data-number="5"] > .player[data-position="4"] > .viewHandcard,
+#arena.pcvideo[data-number="4"] > .player[data-position="2"] > .viewHandcard,
+#arena.pcvideo[data-number="4"] > .player[data-position="3"] > .viewHandcard  {
+	top:0;
+	left: 160px;
+}
+
+
+#arena.pcvideo[data-number="7"] > .player[data-position="1"],
+#arena.pcvideo[data-number="6"] > .player[data-position="0"] {
+	top: calc(100% / 3 + 300px);
+	left: calc(100% - 150px);
+}
+#arena.pcvideo[data-number="7"] > .player[data-position="2"],
+#arena.pcvideo[data-number="6"] > .player[data-position="1"] {
+	top: calc(100% / 3);
+	left: calc(100% - 150px);
+}
+#arena.pcvideo[data-number="7"] > .player[data-position="3"],
+#arena.pcvideo[data-number="6"] > .player[data-position="2"] {
+	top: 0;
+	left: calc(100% - 150px);
+}
+#arena.pcvideo[data-number="7"] > .player[data-position="4"],
+#arena.pcvideo[data-number="6"] > .player[data-position="3"] {
+	top: 0;
+	left: 0;
+}
+#arena.pcvideo[data-number="7"] > .player[data-position="5"],
+#arena.pcvideo[data-number="6"] > .player[data-position="4"] {
+	top:  calc(100% / 3);
+	left: 0;
+}
+#arena.pcvideo[data-number="7"] > .player[data-position="6"],
+#arena.pcvideo[data-number="6"] > .player[data-position="5"] {
+	top:  calc(100% / 3 + 300px);
+	left: 0;
 }
 
 
@@ -3679,7 +3796,7 @@ div:not(.handcards) > .card > .info > span,
 	position: absolute;
 	opacity: 1;
 	margin: 0;
-	z-index: 3;
+	z-index: 1;
 }
 #arena > .card.thrown {
 	pointer-events: none;

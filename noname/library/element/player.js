@@ -8088,24 +8088,29 @@ export class Player extends HTMLDivElement {
 		let cards=this.getCards("h");
 		if(allShown&&cards.length){
 			this.node.viewHandcard.show();
-			let str="";
-			for(let i=0;i<cards.length;i++){
-				if(i>7){
-					str+="..<br>";
-					break;
+			if(game.pcvideo){
+				this.node.viewHandcard.appendChild(this.node.handcards1);
+			}else{
+				let str="";
+				for(let i=0;i<cards.length;i++){
+					if(i>7){
+						str+="..<br>";
+						break;
+					}
+					let card=cards[i];
+					let type=get.type(card,false);
+					if(type=='gongJi'){
+						let xiBie=get.xiBie(card,false);
+						str+=`${get.translation(xiBie)}斩<br>`;
+					}else if(type=='faShu'){
+						str+=`${get.translation(card.name)}<br>`;
+					}else{
+						str+=`${get.translation(card.name)}<br>`;
+					}
 				}
-				let card=cards[i];
-				let type=get.type(card,false);
-				if(type=='gongJi'){
-					let xiBie=get.xiBie(card,false);
-					str+=`${get.translation(xiBie)}斩<br>`;
-				}else if(type=='faShu'){
-					str+=`${get.translation(card.name)}<br>`;
-				}else{
-					str+=`${get.translation(card.name)}<br>`;
-				}
+				this.node.viewHandcard.innerHTML = str;
 			}
-			this.node.viewHandcard.innerHTML = str;
+			
 		}
 		else this.node.viewHandcard.hide();
 	}
