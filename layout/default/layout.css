@@ -2964,7 +2964,7 @@ div:not(.handcards) > .card > .info > span,
 }
 #arena.pcvideo[data-number="7"] > .player[data-position="2"],
 #arena.pcvideo[data-number="6"] > .player[data-position="1"] {
-	top: calc(100% / 3);
+	top: calc(100% / 3 -20px);
 	left: calc(100% - 150px);
 }
 #arena.pcvideo[data-number="7"] > .player[data-position="3"],
@@ -2979,7 +2979,7 @@ div:not(.handcards) > .card > .info > span,
 }
 #arena.pcvideo[data-number="7"] > .player[data-position="5"],
 #arena.pcvideo[data-number="6"] > .player[data-position="4"] {
-	top:  calc(100% / 3);
+	top:  calc(100% / 3 -20px);
 	left: 0;
 }
 #arena.pcvideo[data-number="7"] > .player[data-position="6"],
