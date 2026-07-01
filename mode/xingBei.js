@@ -57,6 +57,11 @@ export default () => {
 			// game.delay();
 			"step 2"
 			if(_status.connectMode){
+				//选角时增加时间
+				_status.time=lib.configOL.choose_timeout;
+				game.broadcastAll(function (time) {
+					lib.configOL.choose_timeout = time;
+				}, _status.time*2);
 				if(lib.configOL.phaseswap){
 					switch(lib.configOL.versus_mode){
 						case '2v2':lib.configOL.number=4;break;
@@ -74,6 +79,9 @@ export default () => {
 			}
 			"step 3"
 			if(_status.connectMode){
+				game.broadcastAll(function (time) {
+					lib.configOL.choose_timeout = time;
+				}, _status.time);
 				_status.mode=lib.configOL.versus_mode;
                 _status.onreconnect=[function(func){
                     var players=game.players;
