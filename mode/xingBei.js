@@ -1002,6 +1002,9 @@ export default () => {
 					if(mode=='CM02'||mode=='CM01'){
 						team_sequence='CM';
 					}
+					if(mode=='BP02'||mode=='BP01'){
+						team_sequence='BP';
+					}
 				}else{
 					number=game.players.length;
 					team_sequence=get.config('team_sequence');
@@ -1015,7 +1018,9 @@ export default () => {
 						list=[true,true,false,false];
 					}else if(team_sequence=='crossed'){
 						list=[true,false,true,false];
-					}else{
+					}else if(team_sequence=='BP'){
+                         list=[true,false,true,false];
+                    }else{
 						list=[false,false,true];
 						list.randomSort();
 						list.unshift(true);
@@ -1027,7 +1032,9 @@ export default () => {
 						list=[true,true,true,false,false,false];
 					}else if(team_sequence=='crossed'){
 						list=[true,false,true,false,true,false];
-					}else{
+					}else if(team_sequence=='BP'){
+                        list=[true,false,false,true,false,true];
+                    }else{
 						list=[true,true,false,false,false];
 						list.randomSort();
 						list.unshift(true);

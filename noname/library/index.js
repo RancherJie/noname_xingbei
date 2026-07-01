@@ -4791,7 +4791,7 @@ export class Library {
 						map.connect_choose_number.show();
 						map.connect_BPchoose_number.hide();
 					}else{
-						if(config.connect_choose_mode=='CM02' || config.connect_choose_mode=='CM01'){
+						if(config.connect_choose_mode=='CM02' || config.connect_choose_mode=='CM01'||config.connect_choose_mode=='BP01' || config.connect_choose_mode=='BP02'){
 							map.connect_team_sequence.hide();
 						}else{
 							map.connect_team_sequence.show();
@@ -4848,6 +4848,7 @@ export class Library {
 						'crossed':'交叉',
 						'near':'临近',
 						'CM':"CM",
+						'BP':"BP",
 					},
 					frequent:true,
 				},
@@ -5001,6 +5002,7 @@ export class Library {
 						crossed:'交叉',
 						near:'临近',
 						CM:"CM",
+						BP:"BP",
 					},
 					frequent:true,
 				},
@@ -5363,7 +5365,7 @@ export class Library {
 			name: "线下选角",
 			config: {
 				update:function(config,map){
-					if(config.choose_mode=='CM02' || config.choose_mode=='CM01'){
+					if(config.choose_mode=='CM02' || config.choose_mode=='CM01'||config.choose_mode=='BP01' || config.choose_mode=='BP02'){
 						map.team_sequence.hide();
 					}else{
 						map.team_sequence.show();
@@ -5405,6 +5407,7 @@ export class Library {
 						crossed:'交叉',
 						near:'临近',
 						CM:"CM",
+						'BP':"BP",
 					},
 					frequent:true,
 					restart:true,
