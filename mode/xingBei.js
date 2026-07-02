@@ -57,6 +57,11 @@ export default () => {
 			// game.delay();
 			"step 2"
 			if(_status.connectMode){
+				//选角时增加时间
+				_status.time=lib.configOL.choose_timeout;
+				game.broadcastAll(function (time) {
+					lib.configOL.choose_timeout = time;
+				}, _status.time*2);
 				if(lib.configOL.phaseswap){
 					switch(lib.configOL.versus_mode){
 						case '2v2':lib.configOL.number=4;break;
@@ -74,6 +79,9 @@ export default () => {
 			}
 			"step 3"
 			if(_status.connectMode){
+				game.broadcastAll(function (time) {
+					lib.configOL.choose_timeout = time;
+				}, _status.time);
 				_status.mode=lib.configOL.versus_mode;
                 _status.onreconnect=[function(func){
                     var players=game.players;
@@ -1002,6 +1010,9 @@ export default () => {
 					if(mode=='CM02'||mode=='CM01'){
 						team_sequence='CM';
 					}
+					if(mode=='BP02'||mode=='BP01'){
+						team_sequence='BP';
+					}
 				}else{
 					number=game.players.length;
 					team_sequence=get.config('team_sequence');
@@ -1015,7 +1026,9 @@ export default () => {
 						list=[true,true,false,false];
 					}else if(team_sequence=='crossed'){
 						list=[true,false,true,false];
-					}else{
+					}else if(team_sequence=='BP'){
+                         list=[true,false,true,false];
+                    }else{
 						list=[false,false,true];
 						list.randomSort();
 						list.unshift(true);
@@ -1027,7 +1040,9 @@ export default () => {
 						list=[true,true,true,false,false,false];
 					}else if(team_sequence=='crossed'){
 						list=[true,false,true,false,true,false];
-					}else{
+					}else if(team_sequence=='BP'){
+                        list=[true,false,false,true,false,true];
+                    }else{
 						list=[true,true,false,false,false];
 						list.randomSort();
 						list.unshift(true);

@@ -348,6 +348,26 @@ export function createConfig(config, position) {
 				game.saveConfig('connect_remark',input.innerHTML);
 				game.saveConfig('connect_remark',input.innerHTML,'xingBei');
 			}
+		}else if(config.name=='房间密码'){
+			input.innerHTML=config.init||'无';
+			input.onblur=function(){
+				input.innerHTML=input.innerHTML.replace(/<br>/g,'');
+				if(!input.innerHTML||get.is.banWords(input.innerHTML)){
+					input.innerHTML='无';
+				}
+				input.innerHTML=input.innerHTML.slice(0,20);
+				if(input.innerHTML=='无'){
+					game.saveConfig('connect_hasPassword',false);
+					game.saveConfig('connect_hasPassword',false,'xingBei');
+					game.saveConfig('password',undefined);
+					game.saveConfig('password',undefined,'xingBei');
+				}else{
+					game.saveConfig('connect_hasPassword',true);
+					game.saveConfig('connect_hasPassword',true,'xingBei');
+					game.saveConfig('password',input.innerHTML);
+					game.saveConfig('password',input.innerHTML,'xingBei');
+				}
+			}
 		} else {
 			input.innerHTML = config.init;
 			input.onblur = config.onblur;

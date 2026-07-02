@@ -2889,6 +2889,19 @@ export class Click {
 			if (!_status.enteringroom) {
 				_status.enteringroom = true;
 				_status.enteringroomserver = this.serving;
+				// 如果房间设置了密码，需要先提示输入密码
+				var password;
+				try {
+					if (this.config && this.config.hasPassword) {
+						password = prompt('请输入房间密码');
+						if (!password) {
+							_status.enteringroom = false;
+							return;
+						}else{
+							game.saveConfig('roomPassword', password);
+						}
+					}
+				} catch (e) {}
 				game.send("server", "enter", this.key, get.connectNickname(), lib.config.connect_avatar);
 			}
 		}

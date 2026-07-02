@@ -2831,6 +2831,10 @@ export class Player extends HTMLDivElement {
 				if(info[2].remark && info[2].remark!='无'){
 					str+=`备注[${info[2].remark}]`;
 				}
+				// 如果房间设置了密码，标记为已设密码（不显示密码内容）
+				if (info[2].hasPassword) {
+					str += '　<span class="greentext">已设密码</span>';
+				}
 				/*
 				if (config.mode != "guozhan" && (config.mode != "doudizhu" || config.doudizhu_mode != "online")) {
 					str += "【";

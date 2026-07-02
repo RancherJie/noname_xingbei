@@ -212,10 +212,31 @@ export const startMenu = function (connectMenu) {
 				var hiddenNodes = [];
 				var config = lib.config.mode_config[mode] || {};
 				if (connectMenu) {
+					infoconfig.update = function (config, map) {
+						if(config.connect_hasPassword===true){
+							map.password.show();
+						}else{
+							map.password.hide();
+						}
+					}
 					infoconfig.connect_remark = {
 						name:'房间备注',
 						input:true,
 						frequent:true,
+						connect: true,
+					};
+					// 房间密码设置
+					infoconfig.connect_hasPassword = {
+						name: "启用密码",
+						init: false,
+						connect: true,
+						frequent: true,
+					}
+					infoconfig.password = {
+						name: "房间密码",
+						input: true,
+						frequent: true,
+						connect: true,
 					};
 					infoconfig.connect_choose_timeout = {
 						name: "出牌时限",

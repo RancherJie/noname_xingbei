@@ -44,6 +44,7 @@ export default () => {
                 number=game.players.length;
                 team_sequence=get.config('team_sequence');
                 if(get.config('choose_mode')=='CM02'||get.config('choose_mode')=='CM01') team_sequence='CM';
+                if(get.config('choose_mode')=='BP01'||get.config('choose_mode')=='BP02') team_sequence='BP';
                 var list=[];
                 if(number==4){
                     if(team_sequence=='CM'){
@@ -52,6 +53,8 @@ export default () => {
                         list=[true,true,false,false];
                     }else if(team_sequence=='crossed'){
                         list=[true,false,true,false];
+                    }else if(team_sequence=='BP'){
+                         list=[true,false,true,false];
                     }else{
                         list=[false,false,true];
                         list.randomSort();
@@ -64,6 +67,8 @@ export default () => {
                         list=[true,true,true,false,false,false];
                     }else if(team_sequence=='crossed'){
                         list=[true,false,true,false,true,false];
+                    }else if(team_sequence=='BP'){
+                        list=[true,false,false,true,false,true];
                     }else{
                         list=[true,true,false,false,false];
                         list.randomSort();
