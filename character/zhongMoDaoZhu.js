@@ -1357,7 +1357,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             }
                         }).forResultCards();
                         var name=get.name(cards[0]);
-                        if(((name=='xuRuo'||name=='shengDun')&&player.storage.luBiaoTarget.getJiChuXiaoGuo("_"+name).length==0)||name=='zhongDu'){
+
+                        if((((name=='xuRuo'||name=='shengDun')&&player.storage.luBiaoTarget.getJiChuXiaoGuo("_"+name).length==0)||name=='zhongDu')&&player.canUse(name,player.storage.luBiaoTarget)){
                             await player.storage.luBiaoTarget.addJiChuXiaoGuo("_"+name,cards);
                             if(name=='zhongDu') player.storage.luBiaoTarget.storage.zhongDu.push(player);
                             cards=[];
