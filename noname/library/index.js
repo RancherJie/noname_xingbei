@@ -11049,6 +11049,8 @@ export class Library {
 				var banBlacklist = lib.config.banBlacklist === undefined ? [] : lib.config.banBlacklist;
 				if (lib.node.banned.includes(banned_info) || banBlacklist.includes(config.onlineKey)) {
 					this.send("denied", "banned");
+					lib.node.clients.remove(this);
+					this.closed = true;
 				} else if (config.id && lib.playerOL && lib.playerOL[config.id]) {
 					var player = lib.playerOL[config.id];
 					player.setNickname();
@@ -11067,7 +11069,11 @@ export class Library {
 					this.send("denied", "version");
 					lib.node.clients.remove(this);
 					this.closed = true;
-				} else if (get.config("check_extension", "connect") && config.extension) {
+				}else if(lib.configOL.hasPassword&&config.password!=lib.config.password){
+					this.send("denied", "password");
+					lib.node.clients.remove(this);
+					this.closed = true;
+				}else if (get.config("check_extension", "connect") && config.extension) {
 					this.send("denied", "extension");
 				} else if (!_status.waitingForPlayer) {
 					if (!config.nickname) {
@@ -11388,6 +11394,7 @@ export class Library {
 						nickname: get.connectNickname(),
 						versionLocal: lib.version,
 						extension: lib.config.extensions.some(ext => lib.config[`extension_${ext}_enable`]),
+						password:lib.config.roomPassword,
 					},
 					lib.config.banned_info
 				);
@@ -12147,6 +12154,9 @@ export class Library {
 						break;
 					case "number":
 						alert("加入失败：房间已满");
+						break;
+					case "password":
+						alert("加入失败：房间密码错误");
 						break;
 					case "banned":
 						alert("加入失败：房间拒绝你加入");
