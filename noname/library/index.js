@@ -4808,6 +4808,11 @@ export class Library {
 						}
 						map.connect_choose_mode.show();
 					}
+					if(config.connect_hasPassword===true){
+						map.password.show();
+					}else{
+						map.password.hide();
+					}
 				},
 				/*
 				connect_remark:{
@@ -5236,6 +5241,11 @@ export class Library {
 						map.connect_viewHandcard.hide();
 					}else{
 						map.connect_viewHandcard.show();
+					}
+					if(config.connect_hasPassword===true){
+						map.password.show();
+					}else{
+						map.password.hide();
 					}
 				},
 				connect_choose_number:{

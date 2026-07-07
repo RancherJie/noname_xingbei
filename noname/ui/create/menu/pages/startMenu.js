@@ -212,13 +212,6 @@ export const startMenu = function (connectMenu) {
 				var hiddenNodes = [];
 				var config = lib.config.mode_config[mode] || {};
 				if (connectMenu) {
-					infoconfig.update = function (config, map) {
-						if(config.connect_hasPassword===true){
-							map.password.show();
-						}else{
-							map.password.hide();
-						}
-					}
 					infoconfig.connect_remark = {
 						name:'房间备注',
 						input:true,
