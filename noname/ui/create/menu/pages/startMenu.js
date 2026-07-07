@@ -38,6 +38,15 @@ export const startMenu = function (connectMenu) {
 		}
 		var active = this.parentNode.querySelector(".active");
 		if (active) {
+			// 如果启用密码选项被选中但密码为空，则取消启用密码
+			if(lib.config.password==undefined){
+				game.saveConfig("connect_hasPassword", false);
+				game.saveConfig("connect_hasPassword", false, active.mode);
+				const node = Array.from(this.parentNode.querySelectorAll('div')).find(d=>d.textContent.trim()==='启用密码');
+				if(node.classList.contains("on")==true){
+					node.classList.remove("on");
+				}
+			}
 			if (connectMenu) {
 				if (_status.waitingForPlayer) {
 					var config = {};
