@@ -4777,7 +4777,7 @@ export class Library {
 	};
 	mode = {
 		xingBei:{
-			name:'单机',
+			name:'星杯传说',
 			connect:{
 				update:function(config,map){		
 					if(config.connect_phaseswap){
