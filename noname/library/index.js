@@ -4808,6 +4808,7 @@ export class Library {
 						}
 						map.connect_choose_mode.show();
 					}
+					//房间密码相关，目前没办法在其他地方加
 					if(config.connect_hasPassword===true){
 						map.password.show();
 					}else{
