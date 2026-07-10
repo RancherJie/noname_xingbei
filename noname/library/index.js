@@ -11003,15 +11003,34 @@ export class Library {
 			}
 		},
 		_baoPai:{
-			trigger:{global:['hengZhiAfter','chongZhiAfter','changeZhiShiWuAfter','changeNengLiangAfter','changeZhiLiaoAfter','addToExpansion','loseToDiscardpileAfter','changeZhanJiAfter','changeXingBeiAfter','changeShiQiAfter','useSkillAfter','useCardAfter']},
+			trigger:{global:['hengZhiAfter','chongZhiAfter','changeZhiShiWuAfter','changeNengLiangAfter','changeZhiLiaoAfter','addToExpansion','loseToDiscardpileAfter','changeZhanJiAfter','changeXingBeiAfter','changeShiQiAfter','useSkillAfter','useCardAfter','logSkill','triggerEnd']},
 			direct:true,
 			lastDo:true,
-			/*
 			filter:function(event,player){
+				if(event.skill=='_baoPai') return false;
 				return player.needsToDiscard()>0;
-			},*/
+			},
 			content:function(){
-				player.update();
+				'step 0'
+				game.broadcastAll(function(pl,limit,numh){
+					var limit = limit;
+					var numh = numh;
+					if(limit==Infinity) limit='∞';
+
+					pl.node.count.innerHTML = numh+ "/" + limit;
+					if (numh > limit) {
+						pl.node.count.dataset.condition = "low";
+					}else if (numh > limit/1.5) {
+						pl.node.count.dataset.condition = "mid";
+					} else if (numh > limit/2) {
+						pl.node.count.dataset.condition = "higher";
+					} else if (numh > 0) {
+						pl.node.count.dataset.condition = "high";
+					} else {
+						pl.node.count.dataset.condition = "none";
+					}
+				},player,player.getHandcardLimit(),player.countCards("h"));
+				'step 1'
 				player.qiPai();
 			}
 		},
