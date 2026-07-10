@@ -3811,11 +3811,13 @@ export class Game extends GameCompatible {
 				var hs = info[0] || [],
 					es = info[1] || [],
 					js = info[2] || [],
-					ss = info[3] || [];
+					ss = info[3] || [],
+					xs = info[4] || [];
 				var phs = player.getCards("h"),
 					pes = player.getCards("e"),
 					pjs = player.getCards("j"),
-					pss = player.getCards("s");
+					pss = player.getCards("s"),
+					pxs = player.getCards("x");
 				var checkMatch = function (l1, l2) {
 					for (var i = 0; i < l1.length; i++) {
 						for (var j = 0; j < l2.length; j++) {
@@ -3841,6 +3843,7 @@ export class Game extends GameCompatible {
 				checkMatch(es, pes);
 				checkMatch(js, pjs);
 				checkMatch(ss, pss);
+				checkMatch(xs, pxs);
 				ui.updatehl();
 			} else {
 				console.log(player);

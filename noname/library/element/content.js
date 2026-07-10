@@ -10523,7 +10523,7 @@ export const Content = {
 			cards,
 			ui.cardPile.childNodes.length
 		);
-		game.addVideo("lose", player, [get.cardsInfo(hs), get.cardsInfo(es), get.cardsInfo(js), get.cardsInfo(ss)]);
+		game.addVideo("lose", player, [get.cardsInfo(hs), get.cardsInfo(es), get.cardsInfo(js), get.cardsInfo(ss), get.cardsInfo(xs)]);
 		event.cards2 = hs.concat(es);
 		player.getHistory("lose").push(event);
 		game.getGlobalHistory().cardMove.push(event);
