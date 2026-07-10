@@ -648,6 +648,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         }).set('ai',function(target){
                             return Math.random();
                         }).forResultTargets();
+                        targets=targets.sortBySeat(player);
                         game.log(player,'选择了',targets);
                         event.targets=targets.slice();
                         for(var target of targets){
@@ -683,6 +684,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             }).set('ai',function(target){
                                 return -get.damageEffect(target,1);
                             }).forResultTargets();
+                            targets=targets.sortBySeat(player);
                             game.log(player,'选择了',targets);
                             for(var target of targets){
                                 await target.faShuDamage(1,player);
@@ -693,6 +695,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                 var player=_status.event.player;
                                 return get.damageEffect2(target,player,1);
                             }).forResultTargets();
+                            targets=targets.sortBySeat(player);
                             game.log(player,'选择了',targets);
                             for(var target of targets){
                                 await target.faShuDamage(1,player);
@@ -703,6 +706,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                 var player=_status.event.player;
                                 return get.zhiLiaoEffect2(target,player,1);
                             }).forResultTargets();
+                            targets=targets.sortBySeat(player);    
                             game.log(player,'选择了',targets);
                             for(var target of targets){
                                 target.changeZhiLiao(1,player);
