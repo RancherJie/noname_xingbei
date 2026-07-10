@@ -43,7 +43,7 @@ export const startMenu = function (connectMenu) {
 				game.saveConfig("connect_hasPassword", false);
 				game.saveConfig("connect_hasPassword", false, active.mode);
 				const node = Array.from(this.parentNode.querySelectorAll('div')).find(d=>d.textContent.trim()==='启用密码');
-				if(node.classList.contains("on")==true){
+				if(node&&node.classList.contains("on")==true){
 					node.classList.remove("on");
 				}
 			}
