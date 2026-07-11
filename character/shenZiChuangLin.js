@@ -308,7 +308,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
             },
             ren: {
-                global: ["ren_zhuanHuan1","ren_zhuanHuan2","ren_daChuQiZhi","ren_gaiPai","ren_biaoJi",'ren_cardsDiscardEnd','ren_mod','ren_cardsDiscardEnd'],
+                global: ["ren_zhuanHuan1","ren_zhuanHuan2","ren_daChuQiZhi","ren_gaiPai","ren_biaoJi",'ren_loseToDiscardpile','ren_mod'],
                 contentx: function(){
                     for(var card of event.cards){
                         if(card.name=='moRen'){
@@ -510,8 +510,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             game.log(event.indexedData, "被移除了");
                         },
                     },
-                    cardsDiscardEnd:{
-                        trigger:{global:'cardsDiscardEnd'},
+                    loseToDiscardpile:{
+                        trigger:{global:'loseToDiscardpile'},
                         direct:true,
                         getIndex(event, player) {
 							const cards = [];
@@ -527,6 +527,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             var bool=false;
                             for(var card of event.cards){
                                 if(card.name=='moRen'||card.name=='yiRen'){
+                                    if(card.destroyed) continue;
                                     bool=true;
                                     break;
                                 }
