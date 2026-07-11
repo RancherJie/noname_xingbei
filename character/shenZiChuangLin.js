@@ -129,7 +129,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                     if(card){
                         game.log(player, "获得了1张【刃】")
-                        player.gain(card,'draw');
+                        var tag=card.name=='moRen'?'eternal_huo':'eternal_lei';
+                        player.gain(card,'draw').gaintag.add(tag);
                     }
                 },
                 check: function(event,player){
@@ -146,10 +147,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         player.storage[name]=true;
                         card.storage.renMaster=player;
                     }
-                    game.broadcastAll(function(card){
-                        if(card.name=='moRen') card.addGaintag('eternal_huo');
-                        if(card.name=='yiRen') card.addGaintag('eternal_lei');
-                    },card);
                     return card;
                 },
             },
@@ -166,7 +163,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         card=lib.skill.yuRen.createRen('yiRen',player);
                     }
                     game.log(trigger.target,'获得了',card);
-                    trigger.target.gain(card,'draw');
+                    var tag=card.name=='moRen'?'eternal_huo':'eternal_lei';
+                    trigger.target.gain(card,'draw').gaintag.add(tag);
                 },
             },
             shiMie: {
@@ -364,15 +362,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                 return card.name=='moRen'||card.name=='yiRen';
                             })){
                                 player.markSkill('ren_biaoJi');
-                                /*
-                                if(trigger.name=='gain'&&trigger.player==player){
-                                    for(let card of trigger.cards){
-                                        if(!card.gaintag.length){
-                                            if(card.name=='moRen') player.addGaintag([card],['huo']);
-                                            else if(card.name=='yiRen') player.addGaintag([card],['lei']);
-                                        }
-                                    }
-                                }*/
                             }else{
                                 player.unmarkSkill('ren_biaoJi');
                             }
@@ -599,10 +588,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                 }else if(result.links[i][2]=='yiRen'){
                                     card=lib.skill.yuRen.createRen('yiRen',player);
                                 }
+                                let tag=card.name=='moRen'?'eternal_huo':'eternal_lei';
+                                let gain=player.gain(card,'draw').gaintag.add(tag);
+                                await gain;
                                 cards.push(card);
                             }
                             game.log(player,`获得了${cards.length}张【刃】`);
-                            await player.gain(cards,'draw');
 
                             var targets=await player.chooseTarget('对1名目标角色造成1点法术伤害③',true).set('ai',function(target){
                                 var player=_status.event.player;
