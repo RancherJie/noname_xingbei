@@ -217,6 +217,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     trigger.wuFaShengDun();
                     trigger.wuFaYingZhan();
                 },
+                mod:{
+                    aiUseful:function(player,card,num){
+                        if(!card.hasDuYou('lieFengJi')) return;
+                        return 4.5;
+                    },
+                },
             },
             jiFengJi:{
                 duYou:'jiFengJi',
@@ -227,6 +233,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 content:function(){
                     'step 0'
                     player.addGongJi();
+                },
+                mod:{
+                    aiUseful:function(player,card,num){
+                        if(!card.hasDuYou('jiFengJi')) return;
+                        return 4.5;
+                    },
                 },
             },
             jianYing:{
@@ -283,6 +295,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 0'
                     trigger.customArgs.xueYingKuangDao=true;
                 },
+                mod:{
+                    aiUseful:function(player,card,num){
+                        if(!card.hasDuYou('xueYingKuangDao')) return;
+                        return 4.5;
+                    },
+                },
                 subSkill:{
                     gongJiMingZhong:{
                         trigger:{source:'gongJiMingZhong'},
@@ -311,7 +329,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 content:function(){
                     if(trigger.target.zhiLiao==2) trigger.qiangZhiMingZhong();
                     
-                }
+                },
+                mod:{
+                    aiUseful:function(player,card,num){
+                        if(!card.hasDuYou('xueXingPaoXiao')) return;
+                        return 4.5;
+                    },
+                },
             },
             siLie:{
                 trigger:{source:'gongJiMingZhongAfter'},
@@ -364,6 +388,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 content:function(){
                     target.changeZhiLiao(2,player);
                 },
+                mod:{
+                    aiUseful:function(player,card,num){
+                        if(!card.hasDuYou('zhiLiaoShu')) return;
+                        return 4.5;
+                    },
+                },
                 ai: {
 					result: {
 						target:function(player,target){
@@ -394,6 +424,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     if(target){
                         target.changeZhiLiao(1,player);
                     }
+                },
+                mod:{
+                    aiUseful:function(player,card,num){
+                        if(!card.hasDuYou('zhiYuZhiGuang')) return;
+                        return 4.5;
+                    },
                 },
                 ai: {
 					result: {
@@ -641,6 +677,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                     return false;
                 },
+                mod:{
+                    aiUseful:function(player,card,num){
+                        if(!card.hasDuYou('diZhiFengYin')) return;
+                        return 4.5;
+                    },
+                },
                 subSkill:{
                     xiaoGuo:{
                         marktext:"地",
@@ -704,6 +746,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 useCard:true,
                 content:function(){
                     target.addFengYin('shuiZhiFengYin_xiaoGuo',cards,player);
+                },
+                mod:{
+                    aiUseful:function(player,card,num){
+                        if(!card.hasDuYou('shuiZhiFengYin')) return;
+                        return 4.5;
+                    },
                 },
                 subSkill:{
                     xiaoGuo:{
@@ -769,6 +817,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 content:function(){
                     target.addFengYin('huoZhiFengYin_xiaoGuo',cards,player);
                 },
+                mod:{
+                    aiUseful:function(player,card,num){
+                        if(!card.hasDuYou('huoZhiFengYin')) return;
+                        return 4.5;
+                    },
+                },
                 subSkill:{
                     xiaoGuo:{
                         marktext:"火",
@@ -832,6 +886,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 useCard:true,
                 content:function(){
                     target.addFengYin('fengZhiFengYin_xiaoGuo',cards,player);
+                },
+                mod:{
+                    aiUseful:function(player,card,num){
+                        if(!card.hasDuYou('fengZhiFengYin')) return;
+                        return 4.5;
+                    },
                 },
                 subSkill:{
                     xiaoGuo:{
@@ -898,6 +958,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 discard:false,
                 content:function(){
                     target.addFengYin('leiZhiFengYin_xiaoGuo',cards,player);
+                },
+                mod:{
+                    aiUseful:function(player,card,num){
+                        if(!card.hasDuYou('leiZhiFengYin')) return;
+                        return 4.5;
+                    },
                 },
                 subSkill:{
                     xiaoGuo:{
@@ -1180,6 +1246,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         return lib.skill.tianShiZhiQiang.filterCard(card);
                     });
 				},
+                mod:{
+                    aiUseful:function(player,card,num){
+                        if(!card.hasDuYou('tianShiZhiQiang')) return;
+                        return 4.5;
+                    },
+                },
                 ai:{
                     order:3.8,
                 }
@@ -1326,6 +1398,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 content:function(){
                     target.faShuDamage(2,player);
                 },
+                mod:{
+                    aiUseful:function(player,card,num){
+                        if(!card.hasDuYou('shanGuangXianJing')) return;
+                        return 4.5;
+                    },
+                },
                 ai:{
                     order:3.6,
                     result:{
@@ -1347,7 +1425,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 check:function(event,player){
                     return event.targets[0].countCards('h')>3;
-                }
+                },
+                mod:{
+                    aiUseful:function(player,card,num){
+                        if(!card.hasDuYou('jingZhunSheJi')) return;
+                        return 4.5;
+                    },
+                },
             },
             juJi:{
                 type:'faShu',
@@ -1758,7 +1842,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             return get.damageEffect(target);
                         }
                     }
-                }
+                },
+                mod:{
+                    aiUseful:function(player,card,num){
+                        if(!card.hasDuYou('yunShi')) return;
+                        return 4.5;
+                    },
+                },
             },
             bingDong:{
                 type:'faShu',
@@ -1820,7 +1910,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             return get.damageEffect(target);
                         }
                     }
-                }
+                },
+                mod:{
+                    aiUseful:function(player,card,num){
+                        if(!card.hasDuYou('bingDong')) return;
+                        return 4.5;
+                    },
+                },
             },
             huoQou:{
                 type:'faShu',
@@ -1877,7 +1973,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             return get.damageEffect(target,2);
                         }
                     }
-                }
+                },
+                mod:{
+                    aiUseful:function(player,card,num){
+                        if(!card.hasDuYou('huoQou')) return;
+                        return 4.5;
+                    },
+                },
             },
             fengRen:{
                 type:'faShu',
@@ -1932,7 +2034,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             return get.damageEffect(target);
                         }
                     }
-                }
+                },
+                mod:{
+                    aiUseful:function(player,card,num){
+                        if(!card.hasDuYou('fengRen')) return;
+                        return 4.5;
+                    },
+                },
             },
             leiJi:{
                 type:'faShu',
@@ -1987,7 +2095,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             return get.damageEffect(target);
                         }
                     }
-                }
+                },
+                mod:{
+                    aiUseful:function(player,card,num){
+                        if(!card.hasDuYou('leiJi')) return;
+                        return 4.5;
+                    },
+                },
             },
             yueGuang:{
                 type:'faShu',
@@ -3804,6 +3918,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 1'
                     target.addJiChuXiaoGuo('weiLiCiFu_xiaoGuo',cards);
                 },
+                mod:{
+                    aiUseful:function(player,card,num){
+                        if(!card.hasDuYou('weiLiCiFu')) return;
+                        return 4.5;
+                    },
+                },
                 subSkill:{
                     xiaoGuo:{
                         marktext:"威",
@@ -3863,6 +3983,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                     'step 1'
                     target.addJiChuXiaoGuo('xunJieCiFu_xiaoGuo',cards);
+                },
+                mod:{
+                    aiUseful:function(player,card,num){
+                        if(!card.hasDuYou('xunJieCiFu')) return;
+                        return 4.5;
+                    },
                 },
                 subSkill:{
                     xiaoGuo:{
@@ -8294,7 +8420,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             return get.damageEffect(target,3);
                         },
                     }
-                }
+                },
+                mod:{
+                    aiUseful:function(player,card,num){
+                        if(!card.hasDuYou('lingHunZhenBao')) return;
+                        return 4.5;
+                    },
+                },
             },
             lingHunFuYu:{
                 type:'faShu',
@@ -8329,7 +8461,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             }
                         }
                     }
-                }
+                },
+                mod:{
+                    aiUseful:function(player,card,num){
+                        if(!card.hasDuYou('lingHunFuYu')) return;
+                        return 4.5;
+                    },
+                },
             },
             lingHunLianJie:{
                 type:'qiDong',
@@ -8644,7 +8782,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             return get.damageEffect(target,2)
                         }
                     }
-                }
+                },
+                mod:{
+                    aiUseful:function(player,card,num){
+                        if(!card.hasDuYou('xueZhiBeiMing')) return;
+                        return 4.5;
+                    },
+                },
             },
             tongShengGongSi:{
                 type:'faShu',
