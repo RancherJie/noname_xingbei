@@ -3642,9 +3642,9 @@ export const Content = {
 				return info && info.after && info.after(event, player, event.triggername);
 			})
 		)
-			event.trigger("triggerAfter");
+		event.trigger("triggerEnd");
 		'step 6'
-		event.trigger('triggerEnd');
+		event.trigger('triggerAfter');
 	},
 	playVideoContent: function () {
 		"step 0";
