@@ -51,7 +51,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					},
 					result:{
 						target:function(player,target,card,isLink){
-							return get.damageEffect(target,2);
+                            var effect=get.damageEffect(target,2);
+                            if(target.zhiLiao>0) effect-=0.5;
+							return effect;
 						},
 					},
                 },
@@ -78,7 +80,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					},
 					result:{
 						target:function(player,target,card,isLink){
-							return get.damageEffect(target,2);
+							var effect=get.damageEffect(target,2);
+                            var hasZhiLiao=game.hasPlayer(function(current){
+                                return current.zhiLiao>0&&current.side!=player.side;
+                            });
+                            if(!hasZhiLiao) return effect;
+                            if(target.zhiLiao>0) effect+=0.5;
+                            return effect;
 						},
 					},
                 },
@@ -162,70 +170,136 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
             },
             shiMie: {
-                trigger: { player: "gongJiShi"},
-                filter: function(event,player){
-                    return get.name(event.card)=='moRen'&&player.countCards('h')>0;
+                enable: ["gongJi"],
+                type: "gongJi",
+                filter: function(card,player){
+                    var bool1=player.hasCard(function(card){
+                        return get.name(card)=='moRen';
+                    });
+                    var bool2=player.hasCard(function(card){
+                        return ['shui', 'huo'].includes(get.xiBie(card));
+                    });
+                    return bool1&&bool2;
                 },
-                async cost(event,trigger,player){
-                    var next=player.chooseCard('h',function(card){
-                        var xiBie=get.xiBie(card);
-                        return xiBie=='shui'||xiBie=='huo';
-                    }).set('ai',function(){
-                        var target=_status.event.target;
-                        if(target.zhiLiao>0){
-                            return Math.random();
-                        }else{
-                            return 0;
-                        }
-                    }).set('target',trigger.target);
-                    next.set('prompt',get.prompt('shiMie'));
-                    next.set('prompt2',lib.translate.shiMie_info);
-                    event.result=await next.forResult();
+                selectCard: 2,
+                discard: false,
+                lose: false,
+                filterCard:function(card){
+                    if(ui.selected.cards.length==0){
+                        return get.name(card)=='moRen';
+                    }else{
+                        return ['shui', 'huo'].includes(get.xiBie(card));
+                    }
                 },
-                content: function(){
-                    'step 0'
-                    player.discard(event.cards,'showCards');
-                    'step 1'
-                    trigger.target.changeZhiLiao(-1);
+                filterOk:function(){
+                    return ui.selected.cards[0].name=='moRen';
+                },
+                complexCard:true,
+                viewAs:function(cards,player){
+                    var cardx={name:'moRen'};
+                    cardx.xiBie=get.xiBie(cards[0]);
+                    cardx.mingGe=get.mingGe(cards[0]);
+                    return cardx;
+                },
+                group:["shiMie_xiaoGuo"],
+                ai: {
+                    order: function(event,player){
+                        var num=3.1;
+                        var hasZhiLiao=game.hasPlayer(function(current){
+                            return current.zhiLiao>0&&current.side!=player.side;
+                        });
+                        if(!hasZhiLiao) num-=0.5;
+                        return num;
+                    },
+                },
+                check: function(card){
+                    return 6-get.value(card);
+                },
+                subSkill: {
+                    xiaoGuo:{
+                        trigger: { player: "gongJiShi"},
+                        direct: true, 
+                        filter: function(event,player){
+                            return event.card.name=='moRen'&&event.card.cards.length==2;
+                        },
+                        content: function(){
+                            'step 0'
+                            trigger.target.changeZhiLiao(-1);
+                        },
+                    },
                 },
             },
             shangMie: {
-                trigger: {player: "gongJiShi",},
-                filter: function(event,player){
-                    return get.name(event.card)=='yiRen'&&player.countCards('h')>0;
-                },
-                async cost(event,trigger,player){
-                    var bool=game.hasPlayer(function(current){
-                        return current.zhiLiao>0||current.side!=player.side;
+                enable: ["gongJi"],
+                type: "gongJi",
+                filter: function(card,player){
+                    var bool1=player.hasCard(function(card){
+                        return get.name(card)=='yiRen';
                     });
-                    var next=player.chooseCardTarget({
-                        filterCard:function(card){
-                            var xiBie=get.xiBie(card);
-                            return xiBie=='feng'||xiBie=='lei';
-                        },
-                        filterTarget:function(card,player,target){
-                            var targetx=_status.event.targetx;
-                            return targetx!=target&&target.side!=player.side;
-                        },
-                        ai1(card) {
-                            return 6- get.value(card);
-                        },
-                        ai2(target) {
-                            var player=_status.event.player;
-                            if(target.side==player.side) return 0;
-                            return target.zhiLiao;
-                        },
+                    var bool2=player.hasCard(function(card){
+                        return ['feng', 'lei'].includes(get.xiBie(card));
                     });
-                    next.set('targetx',trigger.target);
-                    next.set('prompt',get.prompt('shangMie'));
-                    next.set('prompt2',lib.translate.shangMie_info);
-                    event.result=await next.forResult();
+                    return bool1&&bool2;
                 },
-                content: function(){
-                    'step 0'
-                    player.discard(event.cards,'showCards');
-                    'step 1'
-                    event.targets[0].changeZhiLiao(-1);
+                selectCard: 2,
+                discard: false,
+                lose: false,
+                filterCard:function(card){
+                    if(ui.selected.cards.length==0){
+                        return get.name(card)=='yiRen';
+                    }else{
+                        return ['feng', 'lei'].includes(get.xiBie(card));
+                    }
+                },
+                filterOk:function(){
+                    return ui.selected.cards[0].name=='yiRen';
+                },
+                complexCard:true,
+                viewAs:function(cards,player){
+                    var cardx={name:'yiRen'};
+                    cardx.xiBie=get.xiBie(cards[0]);
+                    cardx.mingGe=get.mingGe(cards[0]);
+                    return cardx;
+                },
+                group:["shangMie_xiaoGuo"],
+                ai: {
+                    order: function(event,player){
+                        var num=3.1;
+                        var hasZhiLiao=game.hasPlayer(function(current){
+                            return current.zhiLiao>0&&current.side!=player.side;
+                        });
+                        if(!hasZhiLiao) num-=0.5;
+                        return num;
+                    },
+                },
+                check: function(card){
+                    return 6-get.value(card);
+                },
+                subSkill: {
+                    xiaoGuo:{
+                        trigger: { player: "gongJiShi"},
+                        direct: true, 
+                        filter: function(event,player){
+                            return event.card.name=='yiRen'&&event.card.cards.length==2;
+                        },
+                        content: function(){
+                            'step 0'
+                            var next=player.chooseTarget(function(card,player,target){
+                                var targetx=_status.event.targetx;
+                                return targetx!=target&&target.side!=player.side;
+                            },true);
+                            next.set('ai',function(target){
+                                var player=_status.event.player;
+                                if(target.side==player.side) return 0;
+                                return target.zhiLiao;
+                            });
+                            next.set('targetx',trigger.target);
+                            next.set('prompt',`移除${get.colorName(trigger.target)}外1名敌方角色1[治疗]`);
+                            'step 1'
+                            game.log(player,'【殇灭】选择了',result.targets);
+                            result.targets[0].changeZhiLiao(-1);
+                        },
+                    },
                 },
             },
             tongDiao: {
