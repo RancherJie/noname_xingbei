@@ -8652,7 +8652,7 @@ export const Content = {
 		if (targets.length && !event.hideTargets) {
 			//xingbei
 			var yingZhan_str='';
-			if(get.type(card)=='gongJi'){
+			if(get.type(card,player)=='gongJi'){
 				if(event.yingZhan==true){
 					yingZhan_str='，应战攻击';
 				}else{
@@ -8663,7 +8663,7 @@ export const Content = {
 
 			var str=targets;
 			if (cards.length && !card.isCard) {
-				game.log(player, "对", str, "使用了", card, "（", cards, "）");
+				game.log(player, "对", str, "使用了", card, "（", cards, "）",yingZhan_str);
 			} else {
 				game.log(player, "对", str, "使用了", card,yingZhan_str);
 			}
