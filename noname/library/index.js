@@ -11003,18 +11003,12 @@ export class Library {
 			}
 		},
 		_baoPai:{
-			trigger:{global:['hengZhiAfter','chongZhiAfter','changeZhiShiWuAfter','changeNengLiangAfter','changeZhiLiaoAfter','addToExpansion','loseToDiscardpileAfter','changeZhanJiAfter','changeXingBeiAfter','changeShiQiAfter','useSkillAfter','useCardAfter','logSkill','triggerEnd']},
+			trigger:{global:['hengZhiAfter','chongZhiAfter','changeZhiShiWuAfter','changeNengLiangAfter','changeZhiLiaoAfter','addToExpansionAfter','loseToDiscardpileAfter','changeZhanJiAfter','changeXingBeiAfter','changeShiQiAfter','useSkillAfter','useCardAfter']},
 			direct:true,
 			lastDo:true,
-			filter:function(event,player){
-				if(event.skill=='_baoPai') return false;
-				return player.needsToDiscard()>0;
-			},
 			content:function(){
 				'step 0'
 				game.broadcastAll(function(pl,limit,numh){
-					var limit = limit;
-					var numh = numh;
 					if(limit==Infinity) limit='∞';
 
 					pl.node.count.innerHTML = numh+ "/" + limit;
