@@ -359,8 +359,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                         if(xiBie2==xiBie1) return 0;
                                         else return 1;
                                     }
-                                }
-                                return 0.5;
+                                }else return Math.random()>0.7?1:0;
                             });
                             event.result=await next.forResult();
                         },
