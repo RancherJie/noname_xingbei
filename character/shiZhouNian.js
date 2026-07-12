@@ -141,6 +141,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     return event.yingZhan!=true;
                 },
                 content:function(){
+                    game.log(player,'+1风系【攻击行动】');
                     player.storage.extraXingDong.push({
                         xingDong:'gongJi',
                         filterCard:function(card,player,event){
@@ -3438,6 +3439,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     return event.yingZhan!=true;
                 },
                 content:function(){
+                    game.log(player,'+1火系【攻击行动】');
                     player.storage.extraXingDong.push({
                         xingDong:'gongJi',
                         filterCard:function(card,player,event){

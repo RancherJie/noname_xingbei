@@ -1829,6 +1829,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 0'
                     trigger.selected=true;
                     player.addTempSkill('yaoJingMiShu_gongJi');
+                    game.log(player,'+1【攻击行动】');
                     player.storage.extraXingDong.push({
                         xingDong:'gongJi',
                         bool:true,

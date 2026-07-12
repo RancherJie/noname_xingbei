@@ -222,7 +222,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         player.storage.zhuiYingJiTargets = [];
                     }
                     player.storage.zhuiYingJiTargets.addArray(trigger.targets);
-
+                    game.log(player,'+1【攻击行动】');
                     player.storage.extraXingDong.push({
                         xingDong: 'gongJi',
                         filterTarget: function (card, player, target) {

@@ -140,6 +140,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     return event.yingZhan!=true;
                 },
                 content:function(){
+                    game.log(player,'+1技类【攻击行动】');
                     player.storage.extraXingDong.push({
                         xingDong:'gongJi',
                         filterCard:function(card,player,event){
@@ -796,6 +797,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 content: function (event, trigger, player) {
                     var xiBie = get.xiBie(trigger.card);
                     const name = get.translation(xiBie);
+                    game.log(player,`+1${name}系【攻击行动】`);
                     player.storage.extraXingDong.push({
                         xingDong: "gongJi",
                         xiBie: xiBie,
@@ -2840,6 +2842,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     return event.yingZhan!=true;
                 },
                 content: async function(event, trigger, player) {
+                    game.log(player,'+1魔弹【法术行动】');
                     player.storage.extraXingDong.push({
                         xingDong:'faShu',
                         filterCard:function(card,player,event){
@@ -2919,6 +2922,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 content: async function(event, trigger, player) {
                     await player.removeBiShaShuiJing();
+                    game.log(player,'+1【攻击行动】');
                     player.storage.extraXingDong.push({
                         xingDong:'gongJi',
                         filterCard:function(card,player,event){
@@ -3090,6 +3094,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }).forResultTargets();
                     var target=targets[0];
                     await target.chooseToDiscard('h',1,'剑残影：弃1张牌',true);
+                    game.log(player,'+1【攻击行动】');
                     player.storage.extraXingDong.push({
                         xingDong:'gongJi',
                         target:target,
