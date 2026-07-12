@@ -2879,6 +2879,7 @@ div:not(.handcards) > .card > .info > span,
 }
 #arena:not(.pcvideo) .player.linked > .viewHandcard{
 	transform: rotate(90deg) translate(-172px,-33px);
+	backface-visibility: hidden;
 }
 
 #arena.pcvideo .player > .viewHandcard {
@@ -2889,6 +2890,7 @@ div:not(.handcards) > .card > .info > span,
 }
 #arena.pcvideo .player.linked > .viewHandcard {
 	transform: rotate(90deg) scale(0.7);
+	backface-visibility: hidden;
 }
 
 #arena.pcvideo[data-number="5"] > .player[data-position="1"],

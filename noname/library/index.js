@@ -3969,6 +3969,14 @@ export class Library {
 						}
 					},
 				},
+				show_chatDanMu: {
+					name: "显示聊天弹幕",
+					init: true,
+					intro: "在联机的聊天发送消息后，以弹幕的形式呈现。",
+					onclick(bool) {
+						game.saveConfig("show_chatDanMu", bool);
+					},
+				},
 				transparent_dialog: {
 					name: "堆叠对话框虚化",
 					init: false,
