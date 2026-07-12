@@ -2847,6 +2847,7 @@ export class Game extends GameCompatible {
 				game.players[i].node.identity.firstChild.innerHTML = players[i].identity;
 				game.players[i].node.identity.dataset.color = players[i].color;
 				game.players[i].side = players[i].side;
+				if(players[i].nickname) game.players[i].setNickname(players[i].nickname);
 			}
 			for (var i = 0; i < game.players.length; i++) {
 				game.playerMap[game.players[i].dataset.position] = game.players[i];

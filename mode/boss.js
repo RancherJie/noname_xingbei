@@ -76,6 +76,7 @@ export default () => {
 					identity:players[i].node.identity.firstChild.innerHTML,
 					color:players[i].node.identity.dataset.color,
 					side:players[i].side,
+					nickname:players[i].nickname,
 				});
 			}
 			_status.videoInited=true;
