@@ -11485,14 +11485,17 @@ export class Player extends HTMLDivElement {
 	
 	addGongJiOrFaShu(num){
 		if(typeof num!='number') num=1;
+		game.log(this,`加${num}【攻击行动】或【法术行动】`);
 		return this.storage.gongJiOrFaShu+=num;
 	}
 	addGongJi(num){
 		if(typeof num!='number') num=1;
+		game.log(this,`加${num}【攻击行动】`);
 		return this.storage.gongJi+=num;
 	}
 	addFaShu(num){
 		if(typeof num!='number') num=1;
+		game.log(this,`加${num}【法术行动】`);
 		return this.storage.faShu+=num;
 	}
 
