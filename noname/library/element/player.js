@@ -3271,6 +3271,9 @@ export class Player extends HTMLDivElement {
 	 */
 	say(str) {
 		str = str.replace(/##assetURL##/g, lib.assetURL);
+		const nickname = "<" + (this.nickname || get.translation(this.name) + "[电脑玩家]" || "[电脑玩家]") + ">";
+		//创建聊天弹幕
+		ui.create.danMu("", nickname, str);
 		var dialog = ui.create.dialog("hidden");
 		dialog.classList.add("static");
 		dialog.add('<div class="text" style="word-break:break-all;display:inline">' + str + "</div>");
