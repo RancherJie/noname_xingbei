@@ -730,11 +730,12 @@ table {
 	transform: translateX(-50%);
 	text-align: center;
 }
-.zhanJi {
+.table.zhanJi {
 	border-collapse: collapse;
 	border-radius: 8px;
 	overflow: hidden;
 	background-color: rgba(255, 255, 255, 0.7); /* 半透明白色背景 */
+	font-size: 24px;
 }
 
 tr > td{
@@ -748,9 +749,6 @@ tr.highlight {
 	background-color:rgba(6, 165, 165, 0.352);
 }
 
-.table.zhanJi {
-	font-size: 24px;
-}
 
 #window.touchinfohidden > .touchinfo {
 	opacity: 0;
