@@ -12109,7 +12109,7 @@ export class Library {
 					}
 					game.arrangePlayers();
 					//xingBei更新战绩区
-					ui.shiQiInfo=ui.create.div('.touchinfo.bottom-right',ui.window);
+					ui.create.zhanJi();
                     ui.updateShiQiInfo();
 
 					_status.event = lib.element.GameEvent.initialGameEvent();

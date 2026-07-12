@@ -67,11 +67,10 @@ export class Game extends GameCompatible {
 		}
 
 		game.broadcastAll(function(){
-			ui.shiQiInfo=ui.create.div('.touchinfo.bottom-right',ui.window);
+			ui.create.zhanJi();
 		});
 		game.changeShiQi(game.shiQiMax,true,false);
 		game.changeShiQi(game.shiQiMax,false,false);
-		return ui.shiQiInfo;
 	}
 
 	documentZoom;
@@ -9137,7 +9136,7 @@ export class Game extends GameCompatible {
 			ui.updateShiQiInfo();
 		},game.hongShiQi,game.lanShiQi);
 		game.addVideo('changeShiQi',null,[numx,side]);
-		return ui.shiQiInfo;
+		//return ui.shiQiInfo;
 	}
 	/**
 	 * 更改战绩星石
@@ -9199,7 +9198,7 @@ export class Game extends GameCompatible {
 			ui.updateShiQiInfo();
 		},game.hongZhanJi,game.lanZhanJi);
 		game.addVideo('changeZhanJi',null,[numx,xingShi,side]);
-		return ui.shiQiInfo;
+		//return ui.shiQiInfo;
 	}
 	/**
 	 * 更改星杯数量
@@ -9239,7 +9238,7 @@ export class Game extends GameCompatible {
 			ui.updateShiQiInfo();
 		},game.hongXingBei,game.lanXingBei);
 		game.addVideo('changeXingBei',null,[numx,side]);
-		return ui.shiQiInfo; 
+		//return ui.shiQiInfo; 
 	}
 	/**
 	 * 魔弹重置数据

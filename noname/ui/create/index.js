@@ -3384,4 +3384,10 @@ export class Create {
 	pagination(options) {
 		return new Pagination(options);
 	}
+	/**
+	 * 创建战绩面板
+	 */
+	zhanJi() {
+		ui.shiQiInfo=ui.create.div('.touchinfo.bottom-right.zhanJi.table',ui.window);
+	}
 }
