@@ -724,8 +724,11 @@ table {
 }
 .touchinfo.bottom-center{
 	top:auto;
-    right: 50%;
-    bottom: 0;
+	left: 50%;
+	right: auto;
+	bottom: 0;
+	transform: translateX(-50%);
+	text-align: center;
 }
 .zhanJi {
 	border-collapse: collapse;
@@ -2890,7 +2893,7 @@ div:not(.handcards) > .card > .info > span,
 
 #arena.pcvideo[data-number="5"] > .player[data-position="1"],
 #arena.pcvideo[data-number="4"] > .player[data-position="0"] {
-	top: calc(100% / 3 + 300px);
+	top: calc(100% / 3 + 400px);
 	left: calc(100% - 150px);
 }
 #arena.pcvideo[data-number="5"] > .player[data-position="2"],
@@ -2905,7 +2908,7 @@ div:not(.handcards) > .card > .info > span,
 }
 #arena.pcvideo[data-number="5"] > .player[data-position="4"],
 #arena.pcvideo[data-number="4"] > .player[data-position="3"] {
-	top:  calc(100% / 3 + 300px);
+	top:  calc(100% / 3 + 400px);
 	left: 0;
 }
 
@@ -2966,12 +2969,12 @@ div:not(.handcards) > .card > .info > span,
 
 #arena.pcvideo[data-number="7"] > .player[data-position="1"],
 #arena.pcvideo[data-number="6"] > .player[data-position="0"] {
-	top: calc(100% / 3 + 300px);
+	top: calc(100% / 3 + 400px);
 	left: calc(100% - 150px);
 }
 #arena.pcvideo[data-number="7"] > .player[data-position="2"],
 #arena.pcvideo[data-number="6"] > .player[data-position="1"] {
-	top: calc(100% / 3 - 20px);
+	top: calc(100% / 3);
 	left: calc(100% - 150px);
 }
 #arena.pcvideo[data-number="7"] > .player[data-position="3"],
@@ -2986,12 +2989,12 @@ div:not(.handcards) > .card > .info > span,
 }
 #arena.pcvideo[data-number="7"] > .player[data-position="5"],
 #arena.pcvideo[data-number="6"] > .player[data-position="4"] {
-	top:  calc(100% / 3 - 20px);
+	top:  calc(100% / 3);
 	left: 0;
 }
 #arena.pcvideo[data-number="7"] > .player[data-position="6"],
 #arena.pcvideo[data-number="6"] > .player[data-position="5"] {
-	top:  calc(100% / 3 + 300px);
+	top:  calc(100% / 3 + 400px);
 	left: 0;
 }
 
