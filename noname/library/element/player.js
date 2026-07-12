@@ -3503,22 +3503,25 @@ export class Player extends HTMLDivElement {
 
 		if (this.hp >= this.maxHp) this.hp = this.maxHp;
 		game.broadcast(
-			function (player, hp, maxHp, zhiLiao) {
+			function (player, hp, maxHp, zhiLiao, limit, numh) {
 				player.hp=hp;
 				player.maxHp=maxHp;
 				player.zhiLiao=zhiLiao;
 				player.$update();
+				//专门更新手牌上限用，有些参数客机更新不及时，直接改ui
+				player.$updateHandcardLimit(limit, numh);
 			},
 			this,
 			this.hp,
 			this.maxHp,
-			this.zhiLiao
+			this.zhiLiao,
+			this.getHandcardLimit(),
+			this.countCards("h")
 		);
 		game.callHook("checkUpdate", [this]);
 		this.$update(...arguments);
 	}
 	$update() {
-		if (this.hp >= this.maxHp) this.hp = this.maxHp;
 		var hp = this.node.hp;
 		hp.style.transition = "none";
 		/*
@@ -3626,6 +3629,21 @@ export class Player extends HTMLDivElement {
 
 		game.callHook("checkTipBottom", [this]);
 		return this;
+	}
+	$updateHandcardLimit(limit, numh) {
+		if(limit==Infinity) limit='∞';
+		this.node.count.innerHTML = numh+ "/" + limit;
+		if (numh > limit) {
+			this.node.count.dataset.condition = "low";
+		}else if (numh > limit/1.5) {
+			this.node.count.dataset.condition = "mid";
+		} else if (numh > limit/2) {
+			this.node.count.dataset.condition = "higher";
+		} else if (numh > 0) {
+			this.node.count.dataset.condition = "high";
+		} else {
+			this.node.count.dataset.condition = "none";
+		}
 	}
 	/**
 	 * 清除玩家的标记

@@ -11008,22 +11008,7 @@ export class Library {
 			lastDo:true,
 			content:function(){
 				'step 0'
-				game.broadcastAll(function(pl,limit,numh){
-					if(limit==Infinity) limit='∞';
-
-					pl.node.count.innerHTML = numh+ "/" + limit;
-					if (numh > limit) {
-						pl.node.count.dataset.condition = "low";
-					}else if (numh > limit/1.5) {
-						pl.node.count.dataset.condition = "mid";
-					} else if (numh > limit/2) {
-						pl.node.count.dataset.condition = "higher";
-					} else if (numh > 0) {
-						pl.node.count.dataset.condition = "high";
-					} else {
-						pl.node.count.dataset.condition = "none";
-					}
-				},player,player.getHandcardLimit(),player.countCards("h"));
+				player.update();
 				'step 1'
 				player.qiPai();
 			}
