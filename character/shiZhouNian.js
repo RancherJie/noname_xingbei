@@ -140,6 +140,16 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 filter:function(event,player){
                     return event.yingZhan!=true;
                 },
+                async cost(event, trigger, player) {
+                    let list=['cancel2'];
+                    if(player.countCards('h',card=>get.xiBie(card)=='feng'&&get.type(card)=='gongJi')>0){
+                        list.unshift('ok2');
+                    }
+                    let control=await player.chooseControl(list).set('prompt','风怒追击：是否发动？').forResultControl();
+                    event.result={
+                        bool:control=='ok2'
+                    };
+                },
                 content:function(){
                     game.log(player,'+1风系【攻击行动】');
                     player.storage.extraXingDong.push({
