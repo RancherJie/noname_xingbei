@@ -1014,8 +1014,14 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.discard(result.links,'luEn','showHiddenCards');
                     event.cards=result.links;
                     'step 8'
-                    event.trigger('yiChuLuEn')
+                    //用于移除后，保持卢恩展示，方便玩家展示
+                    player.$throw(event.cards, null);
+                    event.trigger('yiChuLuEn');
                     'step 9'
+                    //清除ui
+                    game.broadcastAll(function () {
+                        ui.clear();
+                    });
                     var list=[];
                     if(player.hasZhiShiWu('fanXing')) list.push('繁星');
                     if(player.hasZhiShiWu('yingYue')) list.push('影月');
