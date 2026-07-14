@@ -2867,7 +2867,7 @@ export class Click {
 		game.pause2();
 		ui.click.charactercard(player.name2, null, null, true, this, player.skin.name2 || player.name2);
 	}
-	connectroom(e) {
+	async connectroom(e) {
 		if (_status.dragged) return;
 		if (_status.clicked) return;
 		if (ui.intro) return;
@@ -2893,7 +2893,7 @@ export class Click {
 				var password;
 				try {
 					if (this.config && this.config.hasPassword) {
-						password = prompt('请输入房间密码');
+						password = await game.promises.prompt('请输入房间密码');
 						if (!password) {
 							_status.enteringroom = false;
 							return;

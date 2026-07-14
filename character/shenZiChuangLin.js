@@ -51,7 +51,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					},
 					result:{
 						target:function(player,target,card,isLink){
-							return get.damageEffect(target,2);
+                            var effect=get.damageEffect(target,2);
+                            if(target.zhiLiao>0) effect-=0.5;
+							return effect;
 						},
 					},
                 },
@@ -78,7 +80,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					},
 					result:{
 						target:function(player,target,card,isLink){
-							return get.damageEffect(target,2);
+							var effect=get.damageEffect(target,2);
+                            var hasZhiLiao=game.hasPlayer(function(current){
+                                return current.zhiLiao>0&&current.side!=player.side;
+                            });
+                            if(!hasZhiLiao) return effect;
+                            if(target.zhiLiao>0) effect+=0.5;
+                            return effect;
 						},
 					},
                 },
@@ -121,7 +129,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                     if(card){
                         game.log(player, "获得了1张【刃】")
-                        player.gain(card,'draw');
+                        var tag=card.name=='moRen'?'eternal_huo':'eternal_lei';
+                        player.gain(card,'draw').gaintag.add(tag);
                     }
                 },
                 check: function(event,player){
@@ -138,10 +147,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         player.storage[name]=true;
                         card.storage.renMaster=player;
                     }
-                    game.broadcastAll(function(card){
-                        if(card.name=='moRen') card.addGaintag('eternal_huo');
-                        if(card.name=='yiRen') card.addGaintag('eternal_lei');
-                    },card);
                     return card;
                 },
             },
@@ -158,74 +163,141 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         card=lib.skill.yuRen.createRen('yiRen',player);
                     }
                     game.log(trigger.target,'获得了',card);
-                    trigger.target.gain(card,'draw');
+                    var tag=card.name=='moRen'?'eternal_huo':'eternal_lei';
+                    trigger.target.gain(card,'draw').gaintag.add(tag);
                 },
             },
             shiMie: {
-                trigger: { player: "gongJiShi"},
-                filter: function(event,player){
-                    return get.name(event.card)=='moRen'&&player.countCards('h')>0;
+                enable: ["gongJi"],
+                type: "gongJi",
+                filter: function(card,player){
+                    var bool1=player.hasCard(function(card){
+                        return get.name(card)=='moRen';
+                    });
+                    var bool2=player.hasCard(function(card){
+                        return ['shui', 'huo'].includes(get.xiBie(card));
+                    });
+                    return bool1&&bool2;
                 },
-                async cost(event,trigger,player){
-                    var next=player.chooseCard('h',function(card){
-                        var xiBie=get.xiBie(card);
-                        return xiBie=='shui'||xiBie=='huo';
-                    }).set('ai',function(){
-                        var target=_status.event.target;
-                        if(target.zhiLiao>0){
-                            return Math.random();
-                        }else{
-                            return 0;
-                        }
-                    }).set('target',trigger.target);
-                    next.set('prompt',get.prompt('shiMie'));
-                    next.set('prompt2',lib.translate.shiMie_info);
-                    event.result=await next.forResult();
+                selectCard: 2,
+                discard: false,
+                lose: false,
+                filterCard:function(card){
+                    if(ui.selected.cards.length==0){
+                        return get.name(card)=='moRen';
+                    }else{
+                        return ['shui', 'huo'].includes(get.xiBie(card));
+                    }
                 },
-                content: function(){
-                    'step 0'
-                    player.discard(event.cards,'showCards');
-                    'step 1'
-                    trigger.target.changeZhiLiao(-1);
+                filterOk:function(){
+                    return ui.selected.cards[0].name=='moRen';
+                },
+                complexCard:true,
+                viewAs:function(cards,player){
+                    var cardx={name:'moRen'};
+                    cardx.xiBie=get.xiBie(cards[0]);
+                    cardx.mingGe=get.mingGe(cards[0]);
+                    return cardx;
+                },
+                group:["shiMie_xiaoGuo"],
+                ai: {
+                    order: function(event,player){
+                        var num=3.1;
+                        var hasZhiLiao=game.hasPlayer(function(current){
+                            return current.zhiLiao>0&&current.side!=player.side;
+                        });
+                        if(!hasZhiLiao) num-=0.5;
+                        return num;
+                    },
+                },
+                check: function(card){
+                    return 6-get.value(card);
+                },
+                subSkill: {
+                    xiaoGuo:{
+                        trigger: { player: "gongJiShi"},
+                        direct: true, 
+                        filter: function(event,player){
+                            return event.card.name=='moRen'&&event.card.cards.length==2;
+                        },
+                        content: function(){
+                            'step 0'
+                            trigger.target.changeZhiLiao(-1);
+                        },
+                    },
                 },
             },
             shangMie: {
-                trigger: {player: "gongJiShi",},
-                filter: function(event,player){
-                    return get.name(event.card)=='yiRen'&&player.countCards('h')>0;
-                },
-                async cost(event,trigger,player){
-                    var bool=game.hasPlayer(function(current){
-                        return current.zhiLiao>0||current.side!=player.side;
+                enable: ["gongJi"],
+                type: "gongJi",
+                filter: function(card,player){
+                    var bool1=player.hasCard(function(card){
+                        return get.name(card)=='yiRen';
                     });
-                    var next=player.chooseCardTarget({
-                        filterCard:function(card){
-                            var xiBie=get.xiBie(card);
-                            return xiBie=='feng'||xiBie=='lei';
-                        },
-                        filterTarget:function(card,player,target){
-                            var targetx=_status.event.targetx;
-                            return targetx!=target&&target.side!=player.side;
-                        },
-                        ai1(card) {
-                            return 6- get.value(card);
-                        },
-                        ai2(target) {
-                            var player=_status.event.player;
-                            if(target.side==player.side) return 0;
-                            return target.zhiLiao;
-                        },
+                    var bool2=player.hasCard(function(card){
+                        return ['feng', 'lei'].includes(get.xiBie(card));
                     });
-                    next.set('targetx',trigger.target);
-                    next.set('prompt',get.prompt('shangMie'));
-                    next.set('prompt2',lib.translate.shangMie_info);
-                    event.result=await next.forResult();
+                    return bool1&&bool2;
                 },
-                content: function(){
-                    'step 0'
-                    player.discard(event.cards,'showCards');
-                    'step 1'
-                    event.targets[0].changeZhiLiao(-1);
+                selectCard: 2,
+                discard: false,
+                lose: false,
+                filterCard:function(card){
+                    if(ui.selected.cards.length==0){
+                        return get.name(card)=='yiRen';
+                    }else{
+                        return ['feng', 'lei'].includes(get.xiBie(card));
+                    }
+                },
+                filterOk:function(){
+                    return ui.selected.cards[0].name=='yiRen';
+                },
+                complexCard:true,
+                viewAs:function(cards,player){
+                    var cardx={name:'yiRen'};
+                    cardx.xiBie=get.xiBie(cards[0]);
+                    cardx.mingGe=get.mingGe(cards[0]);
+                    return cardx;
+                },
+                group:["shangMie_xiaoGuo"],
+                ai: {
+                    order: function(event,player){
+                        var num=3.1;
+                        var hasZhiLiao=game.hasPlayer(function(current){
+                            return current.zhiLiao>0&&current.side!=player.side;
+                        });
+                        if(!hasZhiLiao) num-=0.5;
+                        return num;
+                    },
+                },
+                check: function(card){
+                    return 6-get.value(card);
+                },
+                subSkill: {
+                    xiaoGuo:{
+                        trigger: { player: "gongJiShi"},
+                        direct: true, 
+                        filter: function(event,player){
+                            return event.card.name=='yiRen'&&event.card.cards.length==2;
+                        },
+                        content: function(){
+                            'step 0'
+                            var next=player.chooseTarget(function(card,player,target){
+                                var targetx=_status.event.targetx;
+                                return targetx!=target&&target.side!=player.side;
+                            },true);
+                            next.set('ai',function(target){
+                                var player=_status.event.player;
+                                if(target.side==player.side) return 0;
+                                return target.zhiLiao;
+                            });
+                            next.set('targetx',trigger.target);
+                            next.set('prompt',`移除${get.colorName(trigger.target)}外1名敌方角色1[治疗]`);
+                            'step 1'
+                            game.log(player,'【殇灭】选择了',result.targets);
+                            result.targets[0].changeZhiLiao(-1);
+                        },
+                    },
                 },
             },
             tongDiao: {
@@ -236,7 +308,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
             },
             ren: {
-                global: ["ren_zhuanHuan1","ren_zhuanHuan2","ren_daChuQiZhi","ren_gaiPai","ren_biaoJi",'ren_cardsDiscardEnd','ren_mod','ren_cardsDiscardEnd'],
+                global: ["ren_zhuanHuan1","ren_zhuanHuan2","ren_daChuQiZhi","ren_gaiPai","ren_biaoJi",'ren_loseToDiscardpile','ren_mod'],
                 contentx: function(){
                     for(var card of event.cards){
                         if(card.name=='moRen'){
@@ -290,15 +362,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                 return card.name=='moRen'||card.name=='yiRen';
                             })){
                                 player.markSkill('ren_biaoJi');
-                                /*
-                                if(trigger.name=='gain'&&trigger.player==player){
-                                    for(let card of trigger.cards){
-                                        if(!card.gaintag.length){
-                                            if(card.name=='moRen') player.addGaintag([card],['huo']);
-                                            else if(card.name=='yiRen') player.addGaintag([card],['lei']);
-                                        }
-                                    }
-                                }*/
                             }else{
                                 player.unmarkSkill('ren_biaoJi');
                             }
@@ -359,8 +422,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                         if(xiBie2==xiBie1) return 0;
                                         else return 1;
                                     }
-                                }
-                                return 0.5;
+                                }else return Math.random()>0.7?1:0;
                             });
                             event.result=await next.forResult();
                         },
@@ -448,8 +510,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             game.log(event.indexedData, "被移除了");
                         },
                     },
-                    cardsDiscardEnd:{
-                        trigger:{global:'cardsDiscardEnd'},
+                    loseToDiscardpile:{
+                        trigger:{global:'loseToDiscardpile'},
                         direct:true,
                         getIndex(event, player) {
 							const cards = [];
@@ -465,6 +527,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             var bool=false;
                             for(var card of event.cards){
                                 if(card.name=='moRen'||card.name=='yiRen'){
+                                    if(card.destroyed) continue;
                                     bool=true;
                                     break;
                                 }
@@ -526,10 +589,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                 }else if(result.links[i][2]=='yiRen'){
                                     card=lib.skill.yuRen.createRen('yiRen',player);
                                 }
+                                let tag=card.name=='moRen'?'eternal_huo':'eternal_lei';
+                                let gain=player.gain(card,'draw').gaintag.add(tag);
+                                await gain;
                                 cards.push(card);
                             }
                             game.log(player,`获得了${cards.length}张【刃】`);
-                            await player.gain(cards,'draw');
 
                             var targets=await player.chooseTarget('对1名目标角色造成1点法术伤害③',true).set('ai',function(target){
                                 var player=_status.event.player;
@@ -648,6 +713,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         }).set('ai',function(target){
                             return Math.random();
                         }).forResultTargets();
+                        targets=targets.sortBySeat(player);
                         game.log(player,'选择了',targets);
                         event.targets=targets.slice();
                         for(var target of targets){
@@ -683,6 +749,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             }).set('ai',function(target){
                                 return -get.damageEffect(target,1);
                             }).forResultTargets();
+                            targets=targets.sortBySeat(player);
                             game.log(player,'选择了',targets);
                             for(var target of targets){
                                 await target.faShuDamage(1,player);
@@ -693,6 +760,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                 var player=_status.event.player;
                                 return get.damageEffect2(target,player,1);
                             }).forResultTargets();
+                            targets=targets.sortBySeat(player);
                             game.log(player,'选择了',targets);
                             for(var target of targets){
                                 await target.faShuDamage(1,player);
@@ -703,6 +771,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                 var player=_status.event.player;
                                 return get.zhiLiaoEffect2(target,player,1);
                             }).forResultTargets();
+                            targets=targets.sortBySeat(player);    
                             game.log(player,'选择了',targets);
                             for(var target of targets){
                                 target.changeZhiLiao(1,player);
@@ -1760,6 +1829,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 0'
                     trigger.selected=true;
                     player.addTempSkill('yaoJingMiShu_gongJi');
+                    game.log(player,'+1【攻击行动】');
                     player.storage.extraXingDong.push({
                         xingDong:'gongJi',
                         bool:true,

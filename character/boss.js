@@ -350,7 +350,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         },
                         content:async function(event,trigger,player){
                             game.log(player,'进入二阶段');
-                            await player.reinitCharacter(player.name1,'boss_mingJie2',false);
+                            await player.reinitCharacter(player.name1,'boss_mingJie2');
                             player.update();
                             _status.bossStage=2;//二阶段
                             game.shiQiMaxHong=12;

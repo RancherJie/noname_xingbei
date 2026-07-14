@@ -721,12 +721,23 @@ table {
 	top:auto;
     right: 0;
     bottom: 0;
-
+}
+.touchinfo.bottom-center{
+	top:auto;
+	left: 50%;
+	right: auto;
+	bottom: 0;
+	transform: translateX(-50%);
+	text-align: center;
+}
+.table.zhanJi {
 	border-collapse: collapse;
 	border-radius: 8px;
 	overflow: hidden;
 	background-color: rgba(255, 255, 255, 0.7); /* 半透明白色背景 */
+	font-size: 24px;
 }
+
 tr > td{
     padding: 2px;
 	text-align: center;
@@ -738,9 +749,6 @@ tr.highlight {
 	background-color:rgba(6, 165, 165, 0.352);
 }
 
-.table.zhanJi {
-	font-size: 24px;
-}
 
 #window.touchinfohidden > .touchinfo {
 	opacity: 0;
@@ -2869,6 +2877,7 @@ div:not(.handcards) > .card > .info > span,
 }
 #arena:not(.pcvideo) .player.linked > .viewHandcard{
 	transform: rotate(90deg) translate(-172px,-33px);
+	backface-visibility: hidden;
 }
 
 #arena.pcvideo .player > .viewHandcard {
@@ -2879,11 +2888,12 @@ div:not(.handcards) > .card > .info > span,
 }
 #arena.pcvideo .player.linked > .viewHandcard {
 	transform: rotate(90deg) scale(0.7);
+	backface-visibility: hidden;
 }
 
 #arena.pcvideo[data-number="5"] > .player[data-position="1"],
 #arena.pcvideo[data-number="4"] > .player[data-position="0"] {
-	top: calc(100% / 3 + 300px);
+	top: calc(100% / 3 + 400px);
 	left: calc(100% - 150px);
 }
 #arena.pcvideo[data-number="5"] > .player[data-position="2"],
@@ -2898,7 +2908,7 @@ div:not(.handcards) > .card > .info > span,
 }
 #arena.pcvideo[data-number="5"] > .player[data-position="4"],
 #arena.pcvideo[data-number="4"] > .player[data-position="3"] {
-	top:  calc(100% / 3 + 300px);
+	top:  calc(100% / 3 + 400px);
 	left: 0;
 }
 
@@ -2959,12 +2969,12 @@ div:not(.handcards) > .card > .info > span,
 
 #arena.pcvideo[data-number="7"] > .player[data-position="1"],
 #arena.pcvideo[data-number="6"] > .player[data-position="0"] {
-	top: calc(100% / 3 + 300px);
+	top: calc(100% / 3 + 400px);
 	left: calc(100% - 150px);
 }
 #arena.pcvideo[data-number="7"] > .player[data-position="2"],
 #arena.pcvideo[data-number="6"] > .player[data-position="1"] {
-	top: calc(100% / 3 -20px);
+	top: calc(100% / 3);
 	left: calc(100% - 150px);
 }
 #arena.pcvideo[data-number="7"] > .player[data-position="3"],
@@ -2979,12 +2989,12 @@ div:not(.handcards) > .card > .info > span,
 }
 #arena.pcvideo[data-number="7"] > .player[data-position="5"],
 #arena.pcvideo[data-number="6"] > .player[data-position="4"] {
-	top:  calc(100% / 3 -20px);
+	top:  calc(100% / 3);
 	left: 0;
 }
 #arena.pcvideo[data-number="7"] > .player[data-position="6"],
 #arena.pcvideo[data-number="6"] > .player[data-position="5"] {
-	top:  calc(100% / 3 + 300px);
+	top:  calc(100% / 3 + 400px);
 	left: 0;
 }
 
