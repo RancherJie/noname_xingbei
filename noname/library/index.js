@@ -10176,7 +10176,7 @@ export class Library {
 		},
 
 		_qiDong:{
-			trigger:{player:'triggerEnd'},
+			trigger:{player:'triggerAfter'},
 			direct:true,
 			filter:function(event,player){
 				if(event.skill=='_qiDong') return false;
