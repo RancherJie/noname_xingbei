@@ -3642,9 +3642,9 @@ export const Content = {
 				return info && info.after && info.after(event, player, event.triggername);
 			})
 		)
-			event.trigger("triggerAfter");
+		event.trigger("triggerEnd");
 		'step 6'
-		event.trigger('triggerEnd');
+		event.trigger('triggerAfter');
 	},
 	playVideoContent: function () {
 		"step 0";
@@ -8652,7 +8652,7 @@ export const Content = {
 		if (targets.length && !event.hideTargets) {
 			//xingbei
 			var yingZhan_str='';
-			if(get.type(card)=='gongJi'){
+			if(get.type(card,player)=='gongJi'){
 				if(event.yingZhan==true){
 					yingZhan_str='，应战攻击';
 				}else{
@@ -8663,7 +8663,7 @@ export const Content = {
 
 			var str=targets;
 			if (cards.length && !card.isCard) {
-				game.log(player, "对", str, "使用了", card, "（", cards, "）");
+				game.log(player, "对", str, "使用了", card, "（", cards, "）",yingZhan_str);
 			} else {
 				game.log(player, "对", str, "使用了", card,yingZhan_str);
 			}
@@ -10523,7 +10523,7 @@ export const Content = {
 			cards,
 			ui.cardPile.childNodes.length
 		);
-		game.addVideo("lose", player, [get.cardsInfo(hs), get.cardsInfo(es), get.cardsInfo(js), get.cardsInfo(ss)]);
+		game.addVideo("lose", player, [get.cardsInfo(hs), get.cardsInfo(es), get.cardsInfo(js), get.cardsInfo(ss), get.cardsInfo(xs)]);
 		event.cards2 = hs.concat(es);
 		player.getHistory("lose").push(event);
 		game.getGlobalHistory().cardMove.push(event);

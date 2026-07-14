@@ -273,7 +273,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             },
             shiShu:{},
             shiShuX:{
-                group:['shiShuX_yiShiWeiJing','shiShuX_yinJiBianJian','shiShuX_mod','shiShuX_cardsDiscardEnd'],
+                group:['shiShuX_yiShiWeiJing','shiShuX_yinJiBianJian','shiShuX_mod','shiShuX_loseToDiscardpile'],
                 subSkill:{
                     mod:{
                         priority:-1,//mod技能生效也分优先级
@@ -378,8 +378,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             await player.gain(gains, "draw");
                         }
                     },
-                    cardsDiscardEnd:{
-                        trigger:{global:'cardsDiscardEnd'},
+                    loseToDiscardpile:{
+                        trigger:{global:'loseToDiscardpile'},
                         direct:true,
                         getIndex(event, player) {
 							const cards = [];
@@ -395,6 +395,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             var bool=false;
                             for(var card of event.cards){
                                 if(get.name(card)=='shiShuCard'){
+                                    if(card.destroyed) continue;
                                     bool=true;
                                     break;
                                 }
@@ -633,7 +634,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         }
                     }
                     if(player.zhiLiao>0) await player.changeZhiLiao(-player.zhiLiao);
-                    await player.reinitCharacter(player.name1,'hongYiZhuJiao',false);
+                    await player.reinitCharacter(player.name1,'hongYiZhuJiao');
                     player.addGongJi();
                 },
                 ai:{
@@ -835,7 +836,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             next.set('bool',list.length>1);
                             var control=await next.forResultControl();
                             if(control=='选项一'){
-                                await player.reinitCharacter(player.name1,'hongYiZhuJiao',false);
+                                await player.reinitCharacter(player.name1,'hongYiZhuJiao');
                             }else if(control=='选项二'){
                                 let list=[];
                                 for(let i=1;i<=player.countZhiShiWu('yinZhiZiDan');i++){
@@ -1027,7 +1028,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                     if(player.zhiLiao>0) await player.changeZhiLiao(-player.zhiLiao);
                     if(player.countCards('h')>4) player.chooseToDiscard('h',true,player.countCards('h')-4);
-                    await player.reinitCharacter(player.name1,'zhuLvZhe',false);
+                    await player.reinitCharacter(player.name1,'zhuLvZhe');
                 },
                 ai:{
                     order:3.1,

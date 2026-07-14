@@ -3178,14 +3178,14 @@ export class Create {
 					game.reload();
 				}
 			} else {
-				var num = 0;
-				for (var i of game.connectPlayers) {
-					if (!i.nickname && !i.classList.contains("unselectable2")) num++;
-				}
-				if (num >= lib.configOL.number - 1) {
-					alert("至少要有两名玩家才能开始游戏！");
-					return;
-				}
+				// var num = 0;
+				// for (var i of game.connectPlayers) {
+				// 	if (!i.nickname && !i.classList.contains("unselectable2")) num++;
+				// }
+				// if (num >= lib.configOL.number - 1) {
+				// 	alert("至少要有两名玩家才能开始游戏！");
+				// 	return;
+				// }
 				game.resume();
 			}
 			button.delete();
@@ -3383,5 +3383,93 @@ export class Create {
 	 */
 	pagination(options) {
 		return new Pagination(options);
+	}
+	/**
+	 * 创建战绩面板
+	 */
+	zhanJi() {
+		if(_status.playback){
+			ui.shiQiInfo=ui.create.div('.touchinfo.bottom-center.zhanJi.table',ui.window);
+		}else{
+			ui.shiQiInfo=ui.create.div('.touchinfo.bottom-right.zhanJi.table',ui.window);
+		}
+	}
+	/** 	
+   	* 创建聊天弹幕
+   	*/
+	danMu(prefix = '', name = "[电脑玩家]", str = '') {
+		if (!lib.config.show_chatDanMu) return;
+		if (!ui.danmuList) ui.danmuList = [];
+		if (!ui.bulletScreen) {
+			ui.bulletScreen = ui.create.div('.bulletScreen', document.body)
+			ui.bulletScreen.css({
+				width: "100%",
+				height: "100%",
+				left: "0",
+				top: "0",
+				pointerEvents: "none",
+				zIndex: "100"
+			});
+		}
+		let top = document.body.clientHeight / 3;
+		name = get.plainText(name);
+		// if (!get.is.emotion(str)) {
+		// 	str = get.plainText(str);
+		// }
+		str = str.replace(/##assetURL##/g, lib.assetURL);
+		if (name == "提示") {
+			name = `<span style="color:yellow;">提示`;
+			str += `</span>`;
+		}
+		const color = new Map([
+			["r", "fire"],
+			["y", "yellow"],
+			["g", "green"],
+			["b", "blue"],
+		]);
+		const strList = str.split("#")
+		let newStr = "";
+		strList.forEach((seg, index) => {
+			if (index === 0) {
+				newStr += seg;
+			} else {
+				newStr += `<span class="${color.get(seg[0]) || ""}text">${seg.slice(1)}</span>`;
+			}
+		});
+		const danmu = ui.create.div('.danmumode', `${prefix}${name}：${newStr}`, ui.bulletScreen)
+		danmu.css({
+			left: '100%',
+			transition: 'left 18s cubic-bezier(0.45, 0.44, 0.55, 0.52) 0s',
+			fontSize: "18px",
+			textShadow: "1px 1px black",
+			whiteSpace: "nowrap",
+			fontFamily: "宋体",
+			zIndex: "1000",
+			pointerEvents: "none"
+		})
+		const { height } = danmu.getBoundingClientRect()
+		let retry = 0
+		while (ui.danmuList.includes(top)) {
+			top += height
+			if (top > document.body.clientHeight * 2 / 3) {
+				top = 149 - height
+				retry++
+				if (retry >= 2) {
+					ui.danmuList = []
+					top = document.body.clientHeight / 3
+				}
+			}
+		}
+		ui.danmuList.add(top)
+		danmu.style.top = top + "px"
+		ui.refresh(danmu)
+		danmu.style.left = "-10%"
+		danmu.topBound = top
+		const removeNode = function () {
+			this.remove()
+			ui.danmuList.remove(this.topBound)
+		}
+		danmu.addEventListener('transitionend', removeNode)
+		danmu.addEventListener('webkittransitionend', removeNode)
 	}
 }

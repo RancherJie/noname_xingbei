@@ -22,7 +22,7 @@ export default () => {
 				var store=lib.db.transaction(['video'],'readwrite').objectStore('video');
 				store.get(parseInt(playback)).onsuccess=function(e){
 					if(e.target.result){
-						ui.shiQiInfo=ui.create.div('.touchinfo.bottom-right',ui.window);
+						ui.create.zhanJi();
 						ui.updateShiQiInfo();
 						game.playVideoContent(e.target.result.video);
 					}
@@ -108,6 +108,7 @@ export default () => {
 					identity:players[i].node.identity.firstChild.innerHTML,
 					color:players[i].node.identity.dataset.color,
 					side:players[i].side,
+					nickname:players[i].nickname,
 				});
 			}
 			_status.videoInited=true;
@@ -307,12 +308,14 @@ export default () => {
 						case 'BP02':uiintro.add('<div class="text chat">选角模式：BP02');break;
 						case 'jiuGuan':uiintro.add('<div class="text chat">选角模式：酒馆');break;
 					}
-					if(lib.configOL.choose_mode!='CM02'&&lib.configOL.choose_mode!='CM01'){
+					if(lib.configOL.choose_mode!='CM02'&&lib.configOL.choose_mode!='CM01'&&lib.configOL.choose_mode!='BP01'&&lib.configOL.choose_mode!='BP02'){
 						switch(lib.configOL.team_sequence){
 							case 'random':uiintro.add('<div class="text chat">队伍顺序：随机');break;
 							case 'near':uiintro.add('<div class="text chat">队伍顺序：临近');break;
 							case 'crossed':uiintro.add('<div class="text chat">队伍顺序：交叉');break;
 							case 'CM':uiintro.add('<div class="text chat">队伍顺序：CM');break;
+							case "BP":uiintro.add('<div class="text chat">队伍顺序：BP');break;
+							default :uiintro.add(`<div class="text chat">队伍顺序：${lib.configOL.team_sequence}`);break;
 						}
 						if(lib.configOL.choose_mode=='BP02'||lib.configOL.choose_mode=='BP01'){
 							var last=uiintro.add('<div class="text chat">可选角色数：'+lib.configOL.BPchoose_number);

@@ -1,5 +1,17 @@
 import { lib, game, ui, get, ai, _status } from "../noname.js";
 game.import('character',function(lib,game,ui,get,ai,_status){
+    // ----- 首次执行，禁用改版角色（玩家根据需求自行开启） -----
+    if (!lib.config["poXiao_gai_initialized"]) {
+        let banned = lib.config["xingBei_banned"] || [];
+        const banList = ["gai_zhenLongNvWang","gai_caijuezhe","gai_longzhiqiyuezhe"];
+        banList.forEach(name => {
+            if (!banned.includes(name)) {
+                banned.push(name);
+            }
+        });
+        game.saveConfig("xingBei_banned", banned);
+        game.saveConfig("poXiao_gai_initialized", true);
+    }
     return {
         name:'poXiao',
         connect:true,
@@ -12,6 +24,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 "3xing":['shuangxuegongzhu','longyuzhe'],
                 "3.5xing":['caijuezhe'],
                 "4xing":['xinlingsushi','zhenLongNvWang'],
+                "gai": ["gai_zhenLongNvWang","gai_caijuezhe","gai_longzhiqiyuezhe"]
             }
         },
         character: {
@@ -41,7 +54,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             anzhiwangnv: ["anzhiwangnv_name","xueGroup",2,["anZhiWanGe","zhenHunQu","eShaGuangMing"]],
             huangjiashiwei: ["huangjiashiwei_name","shengGroup",2,["xiSheng","shenShengHuWei","shenShengBiHu","jueDiFanJi"]],
             zhoushushi: ["zhoushushi_name","xueGroup",2,["lingHunShouGe","zhouShuJiDang","zhouFu"]],
-            zhangejisi: ["zhangejisi_name","yongGroup","2/3",["zhanZhengGeYao","zhanYiGongMing","xiWangZhiGe","yingXiongZhanGe"]]
+            zhangejisi: ["zhangejisi_name","yongGroup","2/3",["zhanZhengGeYao","zhanYiGongMing","xiWangZhiGe","yingXiongZhanGe"]],
+            gai_zhenLongNvWang: ["zhenLongNvWang_name","longGroup",4,["gai_yuanGuJinZhi","gai_zhenLongJueXing","longHunShouHu","longShenEnHui","longWangZhiLi","shengLongWeiYa","gai_baiWanLongYan","gai_longZuFuXing","gai_longKuangMiSuo","longMaiShuFu","longYuFengYin","yuLongJieJie"],['character:zhenLongNvWang']],
+            gai_caijuezhe: ["caijuezhe_name","shengGroup","3/4",["zhengYiZhuiJi","caiJueZhiXin","zhenLiCaiJue","gai_songZhongDaoFeng","wuJinZhiRen"],['character:caijuezhe']],
+            gai_longzhiqiyuezhe: ["longzhiqiyuezhe_name","longGroup","2/3",["juLongZhiLi","gai_longZuZunYan","longXueQinYe","longXueZhuoShao","xingHongBaiLongBa"],['character:longzhiqiyuezhe']],
         },
         characterIntro: {
             youXia: "与活跃于正面战场之上的其他作战部队不同，人数不多的丛林守护者作为战技殿堂的特种精英部队基本都是担负着特种作战和游击侦查的任务，极夜之战中恰恰是这支不起眼的力量反而成为了敌人后方梦魇般的存在。因为作战的特殊性质，这支部队在快速机动和单兵作战能力上非常突出，温蒂斯作为丛林守护者部队的首领更是将这种特点发挥到了极致，同时继承了精灵血脉和神兵弗雷斯特的她就像一柄最锋利的匕首，每次都能毫无偏差的插入敌人最薄弱的地方。",
@@ -64,7 +80,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             anzhiwangnv: "如同大部分鲜血议会的成员一样，辛德蕾拉的过去是完全的不为人知的禁忌，身为夜之眷族的她虽然外貌是个清秀弱气的女孩子，但是这幅容貌已经有一百多年没有丝毫变化了。作为鲜血议会的元老成员，辛德蕾拉从来只是自己单独行动，而且从未失手，传闻她的那把“哀恸悲歌”是死神曾经所使用过的。",
             huangjiashiwei: "皇家侍卫自从帝国覆灭之后便再也未曾出现过，直到贝拉维恩，这位帝国历史上最强大的皇家侍卫长，被王室的后裔所召唤，在新一轮的大陆争霸中为神圣教廷而战，英灵化的贝拉维拉能用星石维持自己的形态和日常消耗，在战斗中作为教廷最坚固的盾永远冲锋在战场的最前线。",
             zhoushushi: "沉睡百年的少女，不变的是那颗执着于仇恨的心，虽然她的仇人早已消失在历史之中，但被仇恨蒙蔽了双眼的奈落却将复仇的对象转向了他们的后裔。奈落使用传承自部落的古老邪恶巫术，在与现代的魔法体系格格不入的同时也异常难以破解，无论敌人是谁，奈落都会让他们体会到深渊一般的痛苦与绝望。",
-            zhangejisi: "战歌祭司是一种将魔力融入自己的歌声之中，从而提高队友的战斗力量的职业，虽然自身孱弱，但却十分被队友所依赖。在法师众多的咏歌城之中法芙娜一直被狂热的歌迷所追捧，但作为歌姬的她更希望能够在战场上展现自己所拥有的力量，当龙族入侵发生时，法芙娜第一时间赶到受灾最重的重灾区，加入了对抗龙魂帝国的一线部队。"
+            zhangejisi: "战歌祭司是一种将魔力融入自己的歌声之中，从而提高队友的战斗力量的职业，虽然自身孱弱，但却十分被队友所依赖。在法师众多的咏歌城之中法芙娜一直被狂热的歌迷所追捧，但作为歌姬的她更希望能够在战场上展现自己所拥有的力量，当龙族入侵发生时，法芙娜第一时间赶到受灾最重的重灾区，加入了对抗龙魂帝国的一线部队。",
+            gai_zhenLongNvWang: "通过血统革命推翻龙族长老会的统治的领军人物，并且担任龙魂帝国的第一任女王，虽然是人类和龙族的混血种，但她却拥有着连纯血种龙族也无可比拟的天赋，让帝国达到了前所未有的昌盛，为了给帝国带来新的繁荣，决定跨越祖先所设置的界线，重新向帝国的发源地，阿斯特莱雅大陆进军。索菲亚本质上是个非常单纯的人，战斗所取得的辉煌战果让民众对她十分信赖，但进军阿斯特莱雅的决定和这种不顾一切的性格也让很多人感到十分的不满。",
+            gai_caijuezhe: "仲裁厅一直是神圣教廷内部最为神秘的部门，如果说光辉神殿的使命是向世人散布神的荣光和怜悯，那么仲裁厅便是他冷酷而无情的另一面。仲裁厅的执行人员，主要负责处理『神秘遗物』以及处理相关的事件以及清除拥有危险力量的渎神者和叛教者。仲裁厅所属的人员包括圣殿骑士和战争祭司，总人数极少，由被称为『裁决者』的十余名特别骑士所管辖。面对突如其来的龙族入侵，这个神秘而特殊的机构终于将他的面目展露在世人面前，这次事件中带队的裁决者的代号为“路西菲尔”。"
         },
         skill: {
             zhuiFengJi: {
@@ -137,7 +155,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 0'
                     // 消耗水晶
                     player.removeBiShaShuiJing();
-                    
+
                     'step 1'
                     // 获得额外法术行动
                     player.addFaShu();
@@ -222,7 +240,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         player.storage.zhuiYingJiTargets = [];
                     }
                     player.storage.zhuiYingJiTargets.addArray(trigger.targets);
-
+                    game.log(player,'+1【攻击行动】');
                     player.storage.extraXingDong.push({
                         xingDong: 'gongJi',
                         filterTarget: function (card, player, target) {
@@ -588,7 +606,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             let zhiliao_num = 0;
                             let targets = game.filterPlayer(p => !p.isEnemyOf(player));
                             for (let target of targets) {
-                                let num = target.getZhiLiaoLimit()-target.ZhiLiao;
+                                let num = target.getZhiLiaoLimit()-target.zhiLiao;
                                 zhiliao_num += num;
                             }
                             console.log(zhiliao_num - 2);
@@ -623,8 +641,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                 console.log("满手，不发动")
                                 return -1;
                             }
-                            // 
-                            if(player.ZhiLiao==2) {
+                            //
+                            if(player.zhiLiao==2) {
                                 console.log("自己满治疗，不发动")
                                 return -1;
                             }
@@ -821,7 +839,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             // 三同系，玩家选择一个队友加1宝石，正常结算三点暗灭伤害
                             var card={name:'anMie',xiBie:'an'};
                             await player.useCard(card,target).set('damageNum',3).set('action',true);
-                            var xingshi = await player.chooseTarget(1,true,'选择1个队友加1]【宝石】',true,function(card, player, target){
+                            var xingshi = await player.chooseTarget(1,true,'选择1个队友加1【宝石】',true,function(card, player, target){
                                 return player != target && target.side == player.side;
                             }).forResult();
                             var xingshi_target = xingshi.targets[0];
@@ -869,7 +887,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         }).forResult('control');
                     game.log(target, '选择了', '选项一'==fankai ? '翻开' : '不翻开');
                     event.effect = fankai;
-                    
+
                     if(event.effect == '选项二') await event.trigger("anZhiSuccess");
 
                     if (event.effect == '选项一') {
@@ -964,6 +982,21 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 "_priority": 0,
             },
+            gai_yuanGuJinZhi: {
+                trigger:{
+                    global: "gameStart"
+                },
+                forced: true,
+                content: async function(event,trigger,player) {
+                    if (!player.storage.longZuFuXing_removed)
+                        player.storage.longZuFuXing_removed = [];
+                    await player.addZhiShiWu("gai_longKuangMiSuo");
+                    await player.addZhiShiWu("longMaiShuFu");
+                    await player.addZhiShiWu("longYuFengYin");
+                    await player.addZhiShiWu("yuLongJieJie");
+                },
+                "_priority": 0,
+            },
             zhenLongJueXing: {
                 trigger: {
                     global: ["changeShiQiAfter","heCheng"]
@@ -984,11 +1017,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     var skillMap = {
                         "龙狂迷锁": {
                             id: "baiWanLongYan",
-                            text: "龙狂迷锁=>百万龙炎:(摸0-2张牌，弃X张同系牌)对自己和任一对手各造成X点法术伤害"
+                            text: "龙狂迷锁=>百万龙炎:(摸0-2张牌，弃X张同系牌[展示])对自己和目标对手各造成X点法术伤害"
                         },
                         "龙脉束缚": {
                             id: "longWangZhiLi",
-                            text: "龙脉束缚=>龙王之力:(攻击命中后弃X张异系牌)本次伤害额外+X"
+                            text: "龙脉束缚=>龙王之力:(攻击命中后弃X张异系牌[展示])本次伤害额外+X"
                         },
                         "龙语封印": {
                             id: "longShenEnHui",
@@ -1022,7 +1055,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                 }
                             }
                         }).forResult('control');
-                    
+
                     if (jinzhi == '龙狂迷锁') {
                         await player.setZhiShiWu("longKuangMiSuo",0);
                         await player.setZhiShiWu("baiWanLongYan",1);
@@ -1072,6 +1105,114 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 "_priority": 0,
             },
+            gai_zhenLongJueXing: {
+                trigger: {
+                    global: ["changeShiQiAfter","heCheng"]
+                },
+                forced: true,
+                filter:function(event,player){
+                    // 四张全翻就无需再询问
+                    if(player.hasZhiShiWu("gai_baiWanLongYan") &&
+                    player.hasZhiShiWu("longWangZhiLi") &&
+                    player.hasZhiShiWu("longShenEnHui") &&
+                    player.hasZhiShiWu("shengLongWeiYa")) return false;
+                    // 改变士气增加判断是否我方士气下降
+                    if(event.name === "changeShiQi") return player.side==event.side && event.num<0;
+                    // 合杯则一定执行
+                    else return true;
+                },
+                content: async function(event,trigger,player) {
+                    var skillMap = {
+                        "龙狂迷锁": {
+                            id: "gai_baiWanLongYan",
+                            text: "龙狂迷锁=>百万龙炎:(弃X张同系牌[展示])对自己和目标对手各造成X点法术伤害③，然后你可以摸Y张牌(Y<3)"
+                        },
+                        "龙脉束缚": {
+                            id: "longWangZhiLi",
+                            text: "龙脉束缚=>龙王之力:(攻击命中后弃X张异系牌[展示])本次伤害额外+X"
+                        },
+                        "龙语封印": {
+                            id: "longShenEnHui",
+                            text: "龙语封印=>龙神恩惠:(攻击行动结束后发动)额外获得1个法术行动"
+                        },
+                        "驭龙结界": {
+                            id: "shengLongWeiYa",
+                            text: "驭龙结界=>圣龙威压:你的攻击不能被应战，你也不能应战攻击"
+                        }
+                    };
+                    var options = [];
+                    var buttons = [];
+                    for (var key in skillMap) {
+                        if (!player.hasZhiShiWu(skillMap[key].id)) {
+                            options.push(skillMap[key].text);
+                            buttons.push(key);
+                        }
+                    }
+                    var jinzhi = await player.chooseControl(buttons)
+                        .set('choiceList', options)
+                        .set('prompt', '翻转任意一张【禁制】牌')
+                        .set('ai',function(){
+                            //优先龙狂迷锁和龙脉束缚，其次龙语封印，最后驭龙结界
+                            var ids = ["gai_baiWanLongYan", "longWangZhiLi", "longShenEnHui", "shengLongWeiYa"];
+                            for (var id of ids) {
+                                if (!player.hasZhiShiWu(id)) {
+                                    if(id == "gai_baiWanLongYan") return "龙狂迷锁";
+                                    if(id == "longWangZhiLi") return "龙脉束缚";
+                                    if(id == "longShenEnHui") return "龙语封印";
+                                    if(id == "shengLongWeiYa") return "驭龙结界";
+                                }
+                            }
+                        }).forResult('control');
+
+                    if (jinzhi == '龙狂迷锁') {
+                        await player.setZhiShiWu("gai_longKuangMiSuo",0);
+                        await player.setZhiShiWu("gai_baiWanLongYan",1);
+                    }else if(jinzhi == '龙脉束缚') {
+                        await player.setZhiShiWu("longMaiShuFu",0);
+                        await player.setZhiShiWu("longWangZhiLi",1);
+                    }else if(jinzhi == '龙语封印') {
+                        await player.setZhiShiWu("longYuFengYin",0);
+                        await player.setZhiShiWu("longShenEnHui",1);
+                    }else if(jinzhi == '驭龙结界') {
+                        await player.setZhiShiWu("yuLongJieJie",0);
+                        await player.setZhiShiWu("shengLongWeiYa",1);
+                    }
+                },
+                group: "gai_zhenLongJueXing_clear",
+                subSkill: {
+                    //回合结束强制翻回所有禁制牌
+                    clear: {
+                        trigger:{
+                            player: "phaseEnd"
+                        },
+                        forced: true,
+                        content: async function(event,trigger,player) {
+                            if (!player.storage.longZuFuXing_removed.includes("gai_baiWanLongYan")) {
+                                await player.setZhiShiWu("gai_baiWanLongYan",0);
+                                await player.setZhiShiWu("gai_longKuangMiSuo",1);
+                            }
+                            if (!player.storage.longZuFuXing_removed.includes("longWangZhiLi")) {
+                                await player.setZhiShiWu("longWangZhiLi",0);
+                                await player.setZhiShiWu("longMaiShuFu",1);
+                            }
+                            if (!player.storage.longZuFuXing_removed.includes("longShenEnHui")) {
+                                await player.setZhiShiWu("longShenEnHui",0);
+                                await player.setZhiShiWu("longYuFengYin",1);
+                            }
+                            if (!player.storage.longZuFuXing_removed.includes("shengLongWeiYa")) {
+                                await player.setZhiShiWu("shengLongWeiYa",0);
+                                await player.setZhiShiWu("yuLongJieJie",1);
+                            }
+                        },
+                        silent: true,
+                        sub: true,
+                        sourceSkill: "gai_zhenLongJueXing",
+                        popup: false,
+                        "_priority": 0,
+                    }
+                },
+                "_priority": 0,
+            },
             longHunShouHu: {
                 trigger: {
                     player: "faShuEnd"
@@ -1105,7 +1246,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             longWangZhiLi: {
                 intro:{
                     name:'龙王之力',
-                    content:"<span class='tiaoJian'>(攻击命中后弃X张异系牌)</span>本次伤害额外+X，<span class='greentext'>【龙脉束缚】</span>存在时不能发动该技能。",
+                    content:"<span class='tiaoJian'>(攻击命中后弃X张异系牌[展示])</span>本次伤害额外+X，<span class='greentext'>【龙脉束缚】</span>存在时不能发动该技能。",
                     nocount:true,
                 },
                 onremove:'storage',
@@ -1118,7 +1259,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 async cost(event,trigger,player){
                     event.result=await player.chooseCard([2,Infinity],'h', card => get.xuanZeYiXiPai(card))
-                    .set('prompt',"龙王之力：攻击命中后弃X张异系牌,本次伤害额外+X")
+                    .set('prompt',"龙王之力：攻击命中后弃X张异系牌[展示],本次伤害额外+X")
                     .set('complexCard',true)
                     .set('ai',function(card){
                             return 1;
@@ -1156,7 +1297,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             baiWanLongYan: {
                 intro:{
                     name:'百万龙炎',
-                    content:"<span class='tiaoJian'>(摸0-2张牌，弃X张同系牌)</span>对自己和任一对手各造成X点法术伤害，<span class='greentext'>【龙狂迷锁】</span>存在时不能发动该技能。",
+                    content:"<span class='tiaoJian'>(摸0-2张牌，弃X张同系牌[展示])</span>对自己和目标对手各造成X点法术伤害，<span class='greentext'>【龙狂迷锁】</span>存在时不能发动该技能。",
                     nocount:true,
                 },
                 onremove:'storage',
@@ -1181,7 +1322,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     if(player.countTongXiPai()<2) return;
                     // 弃X张同系
                     var qiPai = await player.chooseCard([2,Infinity],'h', card => get.xuanZeTongXiPai(card))
-                    .set('prompt',"百万龙炎：弃X张同系牌,对自己和任一对手各造成X点法术伤害")
+                    .set('prompt',"百万龙炎：弃X张同系牌[展示],对自己和目标对手各造成X点法术伤害")
                     .set('complexCard',true)
                     .set('ai',function(card){
                             return 1;
@@ -1189,13 +1330,57 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     // 各造成X点法术伤害
                     if(qiPai.bool){
                         await player.discard(qiPai.cards).set('showCards',true);
-                        var duishou = await player.chooseTarget(1,'选择任意对手，各造成X点法术伤害',true,function(card, player, target){
+                        var duishou = await player.chooseTarget(1,'选择目标对手，各造成X点法术伤害',true,function(card, player, target){
                                 return player != target && target.side != player.side;
                         }).forResult();
                         var target = duishou.targets[0];
                         await target.faShuDamage(qiPai.cards.length,player);
                         await player.faShuDamage(qiPai.cards.length,player);
                     }
+                },
+                "_priority": 0,
+            },
+            gai_baiWanLongYan: {
+                intro:{
+                    name:'百万龙炎',
+                    content:"<span class='tiaoJian'>(弃X张同系牌[展示])</span>对自己和目标对手各造成X点法术伤害③，然后你可以摸Y张牌(Y<3)。<span class='greentext'>【龙狂迷锁】</span>存在时不能发动该技能。",
+                    nocount:true,
+                },
+                onremove:'storage',
+                markimage:'image/card/zhiShiWu/baiWanLongYan.jpg',
+                type: 'faShu',
+                enable: 'faShu',
+                filter: function(event, player) {
+                    return player.hasZhiShiWu('gai_baiWanLongYan') && player.countTongXiPai()>=2;
+                },
+                selectTarget:1,
+                filterTarget: function(card, player, target){
+                    return player != target && target.side != player.side;
+                },
+                selectCard:[2,Infinity],
+                filterCard:function(card,player){
+                    return get.xuanZeTongXiPai(card);
+                },
+                complexCard:true,
+                discard:false,
+                lose:false,
+                content: async function(event,trigger,player) {
+                    // 弃X张同系
+                    await player.discard(event.cards).set('showCards',true);
+                    var target = event.target;
+                    await target.faShuDamage(event.cards.length,player);
+                    await player.faShuDamage(event.cards.length,player);
+                    // 选择摸0-2张牌
+                    var list=[];
+                    for(var i=0;i<3;i++){
+                        list.push(i);
+                    }
+                    var mopai_num = await player.chooseControl(list).set('prompt','选择摸0-2张牌').set('ai',function(){
+                        if(player.countCards('h')<=4) return 2;
+                        else if(player.countCards('h') == 5) return 1;
+                        else return 0;
+                    }).forResult('control');
+                    await player.draw(mopai_num);
                 },
                 "_priority": 0,
             },
@@ -1219,11 +1404,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     var skillMap = {
                         "龙狂迷锁": {
                             id: "baiWanLongYan",
-                            text: "龙狂迷锁=>百万龙炎:(摸0-2张牌，弃X张同系牌)对自己和任一对手各造成X点法术伤害"
+                            text: "龙狂迷锁=>百万龙炎:(摸0-2张牌，弃X张同系牌[展示])对自己和目标对手各造成X点法术伤害"
                         },
                         "龙脉束缚": {
                             id: "longWangZhiLi",
-                            text: "龙脉束缚=>龙王之力:(攻击命中后弃X张异系牌)本次伤害额外+X"
+                            text: "龙脉束缚=>龙王之力:(攻击命中后弃X张异系牌[展示])本次伤害额外+X"
                         },
                         "龙语封印": {
                             id: "longShenEnHui",
@@ -1261,10 +1446,81 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 "_priority": 1,
             },
+            gai_longZuFuXing: {
+                trigger: {
+                    player: "phaseEnd"
+                },
+                filter: function(event, player) {
+                    if (player.canBiShaBaoShi()) {
+                        var ids = ["gai_baiWanLongYan", "longWangZhiLi", "longShenEnHui", "shengLongWeiYa"];
+                        for (var id of ids) {
+                            if (player.hasZhiShiWu(id) && !player.storage.longZuFuXing_removed.includes(id)) {
+                                return true;
+                            }
+                        }
+                    }
+                    return false;
+                },
+                content: async function(event, trigger, player) {
+                    await player.removeBiShaBaoShi();
+                    var skillMap = {
+                        "龙狂迷锁": {
+                            id: "gai_baiWanLongYan",
+                            text: "龙狂迷锁=>百万龙炎:(弃X张同系牌[展示])对自己和目标对手各造成X点法术伤害③，然后你可以摸Y张牌(Y<3)"
+                        },
+                        "龙脉束缚": {
+                            id: "longWangZhiLi",
+                            text: "龙脉束缚=>龙王之力:(攻击命中后弃X张异系牌[展示])本次伤害额外+X"
+                        },
+                        "龙语封印": {
+                            id: "longShenEnHui",
+                            text: "龙语封印=>龙神恩惠:(攻击行动结束后发动)额外获得1个法术行动"
+                        },
+                        "驭龙结界": {
+                            id: "shengLongWeiYa",
+                            text: "驭龙结界=>圣龙威压:你的攻击不能被应战，你也不能应战攻击"
+                        }
+                    };
+                    var options = [];
+                    var buttons = [];
+                    for (var key in skillMap) {
+                        if (player.hasZhiShiWu(skillMap[key].id) && !player.storage.longZuFuXing_removed.includes(skillMap[key].id)) {
+                            options.push(skillMap[key].text);
+                            buttons.push(key);
+                        }
+                    }
+                    var toRemove = await player.chooseControl(buttons)
+                    .set('choiceList', options)
+                    .set('prompt', '选择一张【禁制】永久移除')
+                    .set('ai', function(){
+                        var ids = ["gai_baiWanLongYan", "longWangZhiLi", "longShenEnHui", "shengLongWeiYa"];
+                        for (var id of ids) {
+                            if (player.hasZhiShiWu(id) && !player.storage.longZuFuXing_removed.includes(id)) {
+                                if(id == "gai_baiWanLongYan") return "龙狂迷锁";
+                                if(id == "longWangZhiLi") return "龙脉束缚";
+                                if(id == "longShenEnHui") return "龙语封印";
+                                if(id == "shengLongWeiYa") return "驭龙结界";
+                            }
+                        }
+                    }).forResult('control');
+                    player.storage.longZuFuXing_removed.push(skillMap[toRemove].id);
+                    lib.skill[skillMap[toRemove].id].intro.name = lib.skill[skillMap[toRemove].id].intro.name + "  <span class='hong'>【禁制】已永久移除</span>";
+                },
+                "_priority": 1,
+            },
             longKuangMiSuo:{
                 intro:{
                     name:'龙狂迷锁',
-                    content:"<span class='tiaoJian'>(摸0-2张牌，弃X张同系牌)</span>对自己和任一对手各造成X点法术伤害，<span class='greentext'>【龙狂迷锁】</span>存在时不能发动该技能。",
+                    content:"<span class='tiaoJian'>(摸0-2张牌，弃X张同系牌[展示])</span>对自己和目标对手各造成X点法术伤害，<span class='greentext'>【龙狂迷锁】</span>存在时不能发动该技能。",
+                    nocount:true,
+                },
+                onremove:'storage',
+                markimage:'image/card/zhiShiWu/longKuangMiSuo.jpg'
+            },
+            gai_longKuangMiSuo:{
+                intro:{
+                    name:'龙狂迷锁',
+                    content:"<span class='tiaoJian'>(弃X张同系牌[展示])</span>对自己和目标对手各造成X点法术伤害③，然后你可以摸Y张牌(Y<3)。<span class='greentext'>【龙狂迷锁】</span>存在时不能发动该技能。",
                     nocount:true,
                 },
                 onremove:'storage',
@@ -1273,7 +1529,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             longMaiShuFu:{
                 intro:{
                     name:'龙脉束缚',
-                    content:"<span class='tiaoJian'>(攻击命中后弃X张异系牌)</span>本次伤害额外+X，<span class='greentext'>【龙脉束缚】</span>存在时不能发动该技能。",
+                    content:"<span class='tiaoJian'>(攻击命中后弃X张异系牌[展示])</span>本次伤害额外+X，<span class='greentext'>【龙脉束缚】</span>存在时不能发动该技能。",
                     nocount:true,
                 },
                 onremove:'storage',
@@ -1303,7 +1559,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 forced: true,
                 filter: function(event, player) {
-                    if(event.getParent().name =="_heCheng_backup" && event.getParent().player==player) 
+                    if(event.getParent().name =="_heCheng_backup" && event.getParent().player==player)
                         return true; //合杯必定掉对面士气，先触发
                     //正常打伤害的触发判定
                     if(event.side==player.side) return false;    //改变自己方士气不发动
@@ -1382,13 +1638,31 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 filter:function(event,player){
                     return player.canBiShaShuiJing() && !event.yingZhan;
-                }, 
+                },
                 content: async function(event,trigger,player) {
                     await player.removeBiShaShuiJing();
                     if(player.countCards('h') + 1 <= trigger.target.countCards('h')){
                         trigger.changeDamageNum(1);
                     }
                     if(player.countCards('h') + 1 >= trigger.target.countCards('h')){
+                        trigger.wuFaYingZhan();
+                    }
+                },
+                "_priority": 0
+            },
+            gai_songZhongDaoFeng: {
+                trigger: {
+                    player: "gongJiShi"
+                },
+                filter:function(event,player){
+                    return player.canBiShaShuiJing() && !event.yingZhan;
+                },
+                content: async function(event,trigger,player) {
+                    await player.removeBiShaShuiJing();
+                    if(player.countCards('h') <= trigger.target.countCards('h')){
+                        trigger.changeDamageNum(1);
+                    }
+                    if(player.countCards('h') >= trigger.target.countCards('h')){
                         trigger.wuFaYingZhan();
                     }
                 },
@@ -1662,10 +1936,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             },
             zhiYueZhiHuan: {
                 trigger: {
-                    source: "gongJiBefore"
+                    source: "gongJiShi"
                 },
                 filter: function(event,player){
-                    return player.countCards('h') >=2;
+                    return player.countTongXiPai() >=2;
                 },
                 cost: async function(event,trigger,player) {
                     event.result = await player.chooseCard(2, 'h', card => get.xuanZeTongXiPai(card))
@@ -1831,6 +2105,21 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 "_priority": 0
             },
+            gai_longZuZunYan: {
+                trigger:{global:'gameStart'},
+                forced: true,
+                content: function() {
+
+                },
+                mod:{
+                    playerEnabled:function(card,player,target){
+                        if(get.type(card)=='gongJi' && player.countCards("h")<=target.countCards("h") && !player.isHengZhi()){
+                            if(_status.event.yingZhan!=true) return false;
+                        }
+                    }
+                },
+                "_priority": 0
+            },
             longXueQinYe: {
                 enable: "faShu",
                 type: "faShu",
@@ -1907,7 +2196,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         trigger:{player:['phaseEnd']},
                         filter:function(event,player){
                             return player.isHengZhi() && !player.storage.huaLongFlag;
-                        }, 
+                        },
                         direct:true,
                         content:function(){
                             player.chongZhi();
@@ -2913,7 +3202,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             var list=[`受到3点法术伤害`,'跳过本回合'];
                             var result = await player.chooseControl().set('choiceList',list).set('prompt','咒缚：选择一项').set('ai',function(){
                                 var player=_status.event.player;
-                                if(player.countCards('h') + 3 <= player.getHandcardLimit() + player.ZhiLiao){
+                                if(player.countCards('h') + 3 <= player.getHandcardLimit() + player.zhiLiao){
                                     return 0;
                                 }else{
                                     return 1;
@@ -2922,7 +3211,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             if(result.index==1){
                                 await trigger.cancel();
                             }else if(result.index==0){
-                                await player.faShuDamage(3,player.storage.zhouFuSource); 
+                                await player.faShuDamage(3,player.storage.zhouFuSource);
                             }
                             delete player.storage.zhouFuSource;
                             await player.removeZhiShiWu('zhouFu_xiaoGuo');
@@ -2934,7 +3223,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     shuiJing: true,
 					order:function(item,player){
 						var num=game.filterPlayer(function(current){
-							return current.side != player.side && current.countCards('h') + 3 > current.getHandcardLimit();
+							return current.side != player.side && current.countCards('h') + 3 > current.getHandcardLimit() + current.zhiLiao;
 						});
 						if(num.length>=1){
 							return 3.4;
@@ -3125,6 +3414,14 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             zhangejisi: "战歌祭司",
             zhangejisi_name: "法芙娜",
 
+            gai_zhenLongNvWang: "改版真龙女王",
+            gai_zhenLongNvWang_prefix: "改版",
+            gai_caijuezhe: "改版裁决者",
+            gai_caijuezhe_prefix: "改版",
+            gai_longzhiqiyuezhe: "改版龙之契约者",
+            gai_longzhiqiyuezhe_prefix: "改版",
+
+            gai: "改版",
 
             zhuiFengJi: "[被动]追风刺",
             "zhuiFengJi_info": "你的风系攻击无法应战。",
@@ -3190,8 +3487,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             <span class='tiaoJian'>(发动【心灵风暴】时该对手选择“不翻开暗置牌”)</span>改为他选择“翻开暗置牌”且你选择“若暗置牌均为法术牌”这一效果执行。`,
             yuanGuJinZhi: "[被动]远古禁制",
             "yuanGuJinZhi_info": "游戏初始时,你拥有<span class='greentext'>【龙语封印】</span>,<span class='greentext'>【驭龙结界】</span>,<span class='greentext'>【龙狂迷锁】</span>,<span class='greentext'>【龙脉束缚】</span>4种<span class='hong'>【禁制】</span>。",
+            gai_yuanGuJinZhi: "[被动]远古禁制",
+            "gai_yuanGuJinZhi_info": "游戏初始时,你拥有<span class='greentext'>【龙语封印】</span>,<span class='greentext'>【驭龙结界】</span>,<span class='greentext'>【龙狂迷锁】</span>,<span class='greentext'>【龙脉束缚】</span>4种<span class='hong'>【禁制】</span>。",
             zhenLongJueXing: "[被动]真龙觉醒",
             "zhenLongJueXing_info": "<span class='tiaoJian'>(我方士气下降或场上有【星杯】合成时)</span>翻转任意1张<span class='hong'>【禁制】</span>牌。<span class='tiaoJian'>(你的回合结束时)</span>重新翻回所有<span class='hong'>【禁制】</span>牌。",
+            gai_zhenLongJueXing: "[被动]真龙觉醒",
+            "gai_zhenLongJueXing_info": "<span class='tiaoJian'>(我方士气下降或场上有【星杯】合成时)</span>翻转任意1张<span class='hong'>【禁制】</span>牌。<span class='tiaoJian'>(你的回合结束时)</span>重新翻回所有<span class='hong'>【禁制】</span>牌。",
             longHunShouHu: "[被动]龙魂守护",
             "longHunShouHu_info": "<span class='tiaoJian'>([法术行动]结束后)</span>你+1[治疗]。",
             longShenEnHui: "(专)[被动]龙神恩惠",
@@ -3205,10 +3506,16 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             "shengLongWeiYa_info": "你的攻击无法应战，你也不能执行应战攻击。<span class='greentext'>【驭龙结界】</span>存在时不能发动该技能。",
             baiWanLongYan: "(专)[法术]百万龙炎",
             baiWanLongYan_xiaoGuo: "百万龙炎",
-            "baiWanLongYan_info": "<span class='tiaoJian'>(摸X张牌[强制]，X最高为2，最低为0，然后弃Y张同系牌[展示])</span>对自己和目标角色各造成Y点法术伤害③。<span class='greentext'>【龙狂迷锁】</span>存在时不能发动该技能。",
+            "baiWanLongYan_info": "<span class='tiaoJian'>(摸X张牌[强制]，X最高为2，最低为0，然后弃Y张同系牌[展示])</span>对自己和目标对手各造成Y点法术伤害③。<span class='greentext'>【龙狂迷锁】</span>存在时不能发动该技能。",
+            gai_baiWanLongYan: "(专)[法术]百万龙炎",
+            gai_baiWanLongYan_xiaoGuo: "百万龙炎",
+            "gai_baiWanLongYan_info": "<span class='tiaoJian'>(弃X张同系牌[展示])</span>对自己和目标对手各造成X点法术伤害③，然后你可以摸Y张牌(Y<3)。<span class='greentext'>【龙狂迷锁】</span>存在时不能发动该技能。",
             longZuFuXing: "[响应]龙族复兴",
             "longZuFuXing_info": "[回合限定][宝石]<span class='tiaoJian'>(回合结束时翻回任一<span class='hong'>【禁制】</span>时发动)</span>该<span class='hong'>【禁制】</span>永久翻转。",
+            gai_longZuFuXing: "[响应]龙族复兴",
+            "gai_longZuFuXing_info": "[回合限定][宝石]<span class='tiaoJian'>(回合结束时翻回任一<span class='hong'>【禁制】</span>时发动)</span>该<span class='hong'>【禁制】</span>永久翻转。",
             longKuangMiSuo: "龙狂迷锁",
+            gai_longKuangMiSuo: "龙狂迷锁",
             longMaiShuFu: "龙脉束缚",
             longYuFengYin: "龙语封印",
             yuLongJieJie: "驭龙结界",
@@ -3220,6 +3527,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             "zhenLiCaiJue_info": "你造成的所有伤害只能被最多1点[治疗]抵御。",
             songZhongDaoFeng: "[响应]送终刀锋",
             "songZhongDaoFeng_info": `[水晶]<span class='tiaoJian'>(主动攻击前①)</span>选择以下一项发动:<br>
+            <span class='tiaoJian'>(若你的手牌数小于攻击目标的手牌数)</span>本次攻击伤害额外+1;<br>
+            <span class='tiaoJian'>(若你的手牌数大于攻击目标的手牌数)</span>本次攻击无法应战;<br>
+            <span class='tiaoJian'>(若你的手牌数等于攻击目标的手牌数)</span>本次攻击伤害额外+1且无法应战。`,
+            gai_songZhongDaoFeng: "[响应]送终刀锋",
+            "gai_songZhongDaoFeng_info": `[水晶]<span class='tiaoJian'>(主动攻击时①)</span>选择以下一项发动:<br>
             <span class='tiaoJian'>(若你的手牌数小于攻击目标的手牌数)</span>本次攻击伤害额外+1;<br>
             <span class='tiaoJian'>(若你的手牌数大于攻击目标的手牌数)</span>本次攻击无法应战;<br>
             <span class='tiaoJian'>(若你的手牌数等于攻击目标的手牌数)</span>本次攻击伤害额外+1且无法应战。`,
@@ -3263,6 +3575,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             "juLongZhiLi_info": "<span class='tiaoJian'>(主动攻击时①)</span>你的主动攻击伤害为你的手牌数+1。",
             longZuZunYan: "[被动]龙族尊严",
             "longZuZunYan_info": "<span class='tiaoJian'>(仅【普通形态】下)</span>你不能主动攻击手牌大于你的角色。",
+            gai_longZuZunYan: "[被动]龙族尊严",
+            "gai_longZuZunYan_info": "<span class='tiaoJian'>(仅【普通形态】下)</span>你不能主动攻击手牌大于等于你的角色。",
             longXueQinYe: "[法术]龙血倾曳",
             "longXueQinYe_info": "<span class='tiaoJian'>(摸1张牌[强制])</span>对目标角色造成1点法术伤害③。",
             longXueZhuoShao: "[法术]龙血灼烧",

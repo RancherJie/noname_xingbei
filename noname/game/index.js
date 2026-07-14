@@ -67,11 +67,10 @@ export class Game extends GameCompatible {
 		}
 
 		game.broadcastAll(function(){
-			ui.shiQiInfo=ui.create.div('.touchinfo.bottom-right',ui.window);
+			ui.create.zhanJi();
 		});
 		game.changeShiQi(game.shiQiMax,true,false);
 		game.changeShiQi(game.shiQiMax,false,false);
-		return ui.shiQiInfo;
 	}
 
 	documentZoom;
@@ -2848,6 +2847,7 @@ export class Game extends GameCompatible {
 				game.players[i].node.identity.firstChild.innerHTML = players[i].identity;
 				game.players[i].node.identity.dataset.color = players[i].color;
 				game.players[i].side = players[i].side;
+				if(players[i].nickname) game.players[i].setNickname(players[i].nickname);
 			}
 			for (var i = 0; i < game.players.length; i++) {
 				game.playerMap[game.players[i].dataset.position] = game.players[i];
@@ -3811,11 +3811,13 @@ export class Game extends GameCompatible {
 				var hs = info[0] || [],
 					es = info[1] || [],
 					js = info[2] || [],
-					ss = info[3] || [];
+					ss = info[3] || [],
+					xs = info[4] || [];
 				var phs = player.getCards("h"),
 					pes = player.getCards("e"),
 					pjs = player.getCards("j"),
-					pss = player.getCards("s");
+					pss = player.getCards("s"),
+					pxs = player.getCards("x");
 				var checkMatch = function (l1, l2) {
 					for (var i = 0; i < l1.length; i++) {
 						for (var j = 0; j < l2.length; j++) {
@@ -3841,6 +3843,7 @@ export class Game extends GameCompatible {
 				checkMatch(es, pes);
 				checkMatch(js, pjs);
 				checkMatch(ss, pss);
+				checkMatch(xs, pxs);
 				ui.updatehl();
 			} else {
 				console.log(player);
@@ -9134,7 +9137,7 @@ export class Game extends GameCompatible {
 			ui.updateShiQiInfo();
 		},game.hongShiQi,game.lanShiQi);
 		game.addVideo('changeShiQi',null,[numx,side]);
-		return ui.shiQiInfo;
+		//return ui.shiQiInfo;
 	}
 	/**
 	 * 更改战绩星石
@@ -9196,7 +9199,7 @@ export class Game extends GameCompatible {
 			ui.updateShiQiInfo();
 		},game.hongZhanJi,game.lanZhanJi);
 		game.addVideo('changeZhanJi',null,[numx,xingShi,side]);
-		return ui.shiQiInfo;
+		//return ui.shiQiInfo;
 	}
 	/**
 	 * 更改星杯数量
@@ -9236,7 +9239,7 @@ export class Game extends GameCompatible {
 			ui.updateShiQiInfo();
 		},game.hongXingBei,game.lanXingBei);
 		game.addVideo('changeXingBei',null,[numx,side]);
-		return ui.shiQiInfo; 
+		//return ui.shiQiInfo; 
 	}
 	/**
 	 * 魔弹重置数据

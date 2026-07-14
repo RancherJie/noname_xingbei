@@ -3969,6 +3969,14 @@ export class Library {
 						}
 					},
 				},
+				show_chatDanMu: {
+					name: "显示聊天弹幕",
+					init: true,
+					intro: "在联机的聊天发送消息后，以弹幕的形式呈现。",
+					onclick(bool) {
+						game.saveConfig("show_chatDanMu", bool);
+					},
+				},
 				transparent_dialog: {
 					name: "堆叠对话框虚化",
 					init: false,
@@ -4777,7 +4785,7 @@ export class Library {
 	};
 	mode = {
 		xingBei:{
-			name:'单机',
+			name:'星杯传说',
 			connect:{
 				update:function(config,map){		
 					if(config.connect_phaseswap){
@@ -4807,6 +4815,12 @@ export class Library {
 							map.connect_choose_number.hide();
 						}
 						map.connect_choose_mode.show();
+					}
+					//房间密码相关，目前没办法在其他地方加
+					if(config.connect_hasPassword===true){
+						map.password.show();
+					}else{
+						map.password.hide();
 					}
 				},
 				/*
@@ -5236,6 +5250,11 @@ export class Library {
 						map.connect_viewHandcard.hide();
 					}else{
 						map.connect_viewHandcard.show();
+					}
+					if(config.connect_hasPassword===true){
+						map.password.show();
+					}else{
+						map.password.hide();
 					}
 				},
 				connect_choose_number:{
@@ -10992,15 +11011,13 @@ export class Library {
 			}
 		},
 		_baoPai:{
-			trigger:{global:['hengZhiAfter','chongZhiAfter','changeZhiShiWuAfter','changeNengLiangAfter','changeZhiLiaoAfter','addToExpansion','loseToDiscardpileAfter','changeZhanJiAfter','changeXingBeiAfter','changeShiQiAfter','useSkillAfter','useCardAfter']},
+			trigger:{global:['hengZhiAfter','chongZhiAfter','changeZhiShiWuAfter','changeNengLiangAfter','changeZhiLiaoAfter','addToExpansionAfter','loseToDiscardpileAfter','changeZhanJiAfter','changeXingBeiAfter','changeShiQiAfter','useSkillAfter','useCardAfter']},
 			direct:true,
 			lastDo:true,
-			/*
-			filter:function(event,player){
-				return player.needsToDiscard()>0;
-			},*/
 			content:function(){
+				'step 0'
 				player.update();
+				'step 1'
 				player.qiPai();
 			}
 		},
@@ -12085,7 +12102,7 @@ export class Library {
 					}
 					game.arrangePlayers();
 					//xingBei更新战绩区
-					ui.shiQiInfo=ui.create.div('.touchinfo.bottom-right',ui.window);
+					ui.create.zhanJi();
                     ui.updateShiQiInfo();
 
 					_status.event = lib.element.GameEvent.initialGameEvent();
@@ -13029,6 +13046,14 @@ export class Library {
 				showName: "trick",
 				color: "#672e3d",
 				nature: "metal",
+			},
+		],
+        [
+			"改版",
+			{
+				showName: "改",
+				color: "#ffff99",
+				nature: "firemm",
 			},
 		],
 	]);

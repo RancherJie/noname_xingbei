@@ -18,7 +18,7 @@ export default () => {
 				var store=lib.db.transaction(['video'],'readwrite').objectStore('video');
 				store.get(parseInt(playback)).onsuccess=function(e){
 					if(e.target.result){
-						ui.shiQiInfo=ui.create.div('.touchinfo.bottom-right',ui.window);
+						ui.create.zhanJi();
 						ui.updateShiQiInfo();
 						game.playVideoContent(e.target.result.video);
 					}
@@ -76,6 +76,7 @@ export default () => {
 					identity:players[i].node.identity.firstChild.innerHTML,
 					color:players[i].node.identity.dataset.color,
 					side:players[i].side,
+					nickname:players[i].nickname,
 				});
 			}
 			_status.videoInited=true;
@@ -154,11 +155,10 @@ export default () => {
 			
 			$initZhanJi:function(){
 				game.broadcastAll(function(){
-					ui.shiQiInfo=ui.create.div('.touchinfo.bottom-right',ui.window);
+					ui.create.zhanJi();
 				});
 				game.changeShiQi(game.shiQiMaxHong||game.shiQiMax,true,false);
 				game.changeShiQi(game.shiQiMaxLan||game.shiQiMax,false,false);
-				return ui.shiQiInfo;
 			},
 			modeSwapPlayer:function(player){
 				if(get.phaseswap()){

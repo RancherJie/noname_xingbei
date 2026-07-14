@@ -38,6 +38,15 @@ export const startMenu = function (connectMenu) {
 		}
 		var active = this.parentNode.querySelector(".active");
 		if (active) {
+			// 如果启用密码选项被选中但密码为空，则取消启用密码
+			if(lib.config.password==undefined){
+				game.saveConfig("connect_hasPassword", false);
+				game.saveConfig("connect_hasPassword", false, active.mode);
+				const node = Array.from(this.parentNode.querySelectorAll('div')).find(d=>d.textContent.trim()==='启用密码');
+				if(node&&node.classList.contains("on")==true){
+					node.classList.remove("on");
+				}
+			}
 			if (connectMenu) {
 				if (_status.waitingForPlayer) {
 					var config = {};
@@ -212,13 +221,6 @@ export const startMenu = function (connectMenu) {
 				var hiddenNodes = [];
 				var config = lib.config.mode_config[mode] || {};
 				if (connectMenu) {
-					infoconfig.update = function (config, map) {
-						if(config.connect_hasPassword===true){
-							map.password.show();
-						}else{
-							map.password.hide();
-						}
-					}
 					infoconfig.connect_remark = {
 						name:'房间备注',
 						input:true,
