@@ -3504,11 +3504,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             jiuShu: "[法术]救赎",
             "jiuShu_info": "<span class='tiaoJian'>(摸1张牌[强制])</span>你和目标队友各+1[治疗]。",
             shenShengCaiJue: "[法术]神圣裁决",
-            "shenShengCaiJue_info": `[水晶]你选择以下一项发动:<br>
+            "shenShengCaiJue_info": `[水晶]选择一个目标角色，然后选择以下一项发动:<br>
             你和目标角色各弃2张牌<br>
             你和目标角色各摸2张牌[强制]<br>`,
             gai_shenShengCaiJue: "[法术]神圣裁决",
-            "gai_shenShengCaiJue_info": `[宝石]你选择以下一项发动:<br>
+            "gai_shenShengCaiJue_info": `[宝石]选择一个目标角色，然后选择以下一项发动:<br>
             你和目标角色各弃2张牌<br>
             你和目标角色各摸2张牌[强制]<br>`,
             tanLanZhiXin: "[法术]贪婪之心",
