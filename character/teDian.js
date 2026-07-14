@@ -505,7 +505,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
             },
             boYongZhiLi: {
-                trigger: {global: "triggerEnd",},
+                trigger: {global: "triggerAfter",},
                 forced: true,
                 filter: function (event, player) {
                     var skill = get.info(event.skill);
