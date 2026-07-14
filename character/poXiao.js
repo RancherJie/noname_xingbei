@@ -1,5 +1,17 @@
 import { lib, game, ui, get, ai, _status } from "../noname.js";
 game.import('character',function(lib,game,ui,get,ai,_status){
+    // ----- 首次执行，禁用改版角色（玩家根据需求自行开启） -----
+    if (!lib.config["poXiao_gai_initialized"]) {
+        let banned = lib.config["xingBei_banned"] || [];
+        const banList = ["gai_zhenLongNvWang","gai_caijuezhe","gai_longzhiqiyuezhe"];
+        banList.forEach(name => {
+            if (!banned.includes(name)) {
+                banned.push(name);
+            }
+        });
+        game.saveConfig("xingBei_banned", banned);
+        game.saveConfig("poXiao_gai_initialized", true);
+    }
     return {
         name:'poXiao',
         connect:true,
