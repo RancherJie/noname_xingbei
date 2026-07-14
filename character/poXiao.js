@@ -606,7 +606,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             let zhiliao_num = 0;
                             let targets = game.filterPlayer(p => !p.isEnemyOf(player));
                             for (let target of targets) {
-                                let num = target.getZhiLiaoLimit()-target.ZhiLiao;
+                                let num = target.getZhiLiaoLimit()-target.zhiLiao;
                                 zhiliao_num += num;
                             }
                             console.log(zhiliao_num - 2);
@@ -642,7 +642,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                 return -1;
                             }
                             //
-                            if(player.ZhiLiao==2) {
+                            if(player.zhiLiao==2) {
                                 console.log("自己满治疗，不发动")
                                 return -1;
                             }
@@ -3202,7 +3202,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             var list=[`受到3点法术伤害`,'跳过本回合'];
                             var result = await player.chooseControl().set('choiceList',list).set('prompt','咒缚：选择一项').set('ai',function(){
                                 var player=_status.event.player;
-                                if(player.countCards('h') + 3 <= player.getHandcardLimit() + player.ZhiLiao){
+                                if(player.countCards('h') + 3 <= player.getHandcardLimit() + player.zhiLiao){
                                     return 0;
                                 }else{
                                     return 1;
@@ -3223,7 +3223,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     shuiJing: true,
 					order:function(item,player){
 						var num=game.filterPlayer(function(current){
-							return current.side != player.side && current.countCards('h') + 3 > current.getHandcardLimit();
+							return current.side != player.side && current.countCards('h') + 3 > current.getHandcardLimit() + current.zhiLiao;
 						});
 						if(num.length>=1){
 							return 3.4;
