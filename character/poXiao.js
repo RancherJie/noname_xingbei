@@ -1,16 +1,16 @@
 import { lib, game, ui, get, ai, _status } from "../noname.js";
 game.import('character',function(lib,game,ui,get,ai,_status){
     // ----- 首次执行，禁用改版角色（玩家根据需求自行开启） -----
-    if (!lib.config["poXiao_gai_initialized"]) {
+    if (!lib.config["poXiao_gai_initialized_0714"]) {
         let banned = lib.config["xingBei_banned"] || [];
-        const banList = ["gai_zhenLongNvWang","gai_caijuezhe","gai_longzhiqiyuezhe"];
+        const banList = ["gai_zhenLongNvWang","gai_caijuezhe","gai_longzhiqiyuezhe","gai_dasiji"];
         banList.forEach(name => {
             if (!banned.includes(name)) {
                 banned.push(name);
             }
         });
         game.saveConfig("xingBei_banned", banned);
-        game.saveConfig("poXiao_gai_initialized", true);
+        game.saveConfig("poXiao_gai_initialized_0714", true);
     }
     return {
         name:'poXiao',
@@ -24,7 +24,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 "3xing":['shuangxuegongzhu','longyuzhe'],
                 "3.5xing":['caijuezhe'],
                 "4xing":['xinlingsushi','zhenLongNvWang'],
-                "gai": ["gai_zhenLongNvWang","gai_caijuezhe","gai_longzhiqiyuezhe"]
+                "gai": ["gai_zhenLongNvWang","gai_caijuezhe","gai_longzhiqiyuezhe","gai_dasiji"]
             }
         },
         character: {
@@ -58,6 +58,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             gai_zhenLongNvWang: ["zhenLongNvWang_name","longGroup",4,["gai_yuanGuJinZhi","gai_zhenLongJueXing","longHunShouHu","longShenEnHui","longWangZhiLi","shengLongWeiYa","gai_baiWanLongYan","gai_longZuFuXing","gai_longKuangMiSuo","longMaiShuFu","longYuFengYin","yuLongJieJie"],['character:zhenLongNvWang']],
             gai_caijuezhe: ["caijuezhe_name","shengGroup","3/4",["zhengYiZhuiJi","caiJueZhiXin","zhenLiCaiJue","gai_songZhongDaoFeng","wuJinZhiRen"],['character:caijuezhe']],
             gai_longzhiqiyuezhe: ["longzhiqiyuezhe_name","longGroup","2/3",["juLongZhiLi","gai_longZuZunYan","longXueQinYe","longXueZhuoShao","xingHongBaiLongBa"],['character:longzhiqiyuezhe']],
+            gai_dasiji: ["dasiji_name","shengGroup",1,["shengGuangShanYao","jiuShu","gai_shenShengCaiJue"],['character:dasiji']],
         },
         characterIntro: {
             youXia: "与活跃于正面战场之上的其他作战部队不同，人数不多的丛林守护者作为战技殿堂的特种精英部队基本都是担负着特种作战和游击侦查的任务，极夜之战中恰恰是这支不起眼的力量反而成为了敌人后方梦魇般的存在。因为作战的特殊性质，这支部队在快速机动和单兵作战能力上非常突出，温蒂斯作为丛林守护者部队的首领更是将这种特点发挥到了极致，同时继承了精灵血脉和神兵弗雷斯特的她就像一柄最锋利的匕首，每次都能毫无偏差的插入敌人最薄弱的地方。",
@@ -82,7 +83,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             zhoushushi: "沉睡百年的少女，不变的是那颗执着于仇恨的心，虽然她的仇人早已消失在历史之中，但被仇恨蒙蔽了双眼的奈落却将复仇的对象转向了他们的后裔。奈落使用传承自部落的古老邪恶巫术，在与现代的魔法体系格格不入的同时也异常难以破解，无论敌人是谁，奈落都会让他们体会到深渊一般的痛苦与绝望。",
             zhangejisi: "战歌祭司是一种将魔力融入自己的歌声之中，从而提高队友的战斗力量的职业，虽然自身孱弱，但却十分被队友所依赖。在法师众多的咏歌城之中法芙娜一直被狂热的歌迷所追捧，但作为歌姬的她更希望能够在战场上展现自己所拥有的力量，当龙族入侵发生时，法芙娜第一时间赶到受灾最重的重灾区，加入了对抗龙魂帝国的一线部队。",
             gai_zhenLongNvWang: "通过血统革命推翻龙族长老会的统治的领军人物，并且担任龙魂帝国的第一任女王，虽然是人类和龙族的混血种，但她却拥有着连纯血种龙族也无可比拟的天赋，让帝国达到了前所未有的昌盛，为了给帝国带来新的繁荣，决定跨越祖先所设置的界线，重新向帝国的发源地，阿斯特莱雅大陆进军。索菲亚本质上是个非常单纯的人，战斗所取得的辉煌战果让民众对她十分信赖，但进军阿斯特莱雅的决定和这种不顾一切的性格也让很多人感到十分的不满。",
-            gai_caijuezhe: "仲裁厅一直是神圣教廷内部最为神秘的部门，如果说光辉神殿的使命是向世人散布神的荣光和怜悯，那么仲裁厅便是他冷酷而无情的另一面。仲裁厅的执行人员，主要负责处理『神秘遗物』以及处理相关的事件以及清除拥有危险力量的渎神者和叛教者。仲裁厅所属的人员包括圣殿骑士和战争祭司，总人数极少，由被称为『裁决者』的十余名特别骑士所管辖。面对突如其来的龙族入侵，这个神秘而特殊的机构终于将他的面目展露在世人面前，这次事件中带队的裁决者的代号为“路西菲尔”。"
+            gai_caijuezhe: "仲裁厅一直是神圣教廷内部最为神秘的部门，如果说光辉神殿的使命是向世人散布神的荣光和怜悯，那么仲裁厅便是他冷酷而无情的另一面。仲裁厅的执行人员，主要负责处理『神秘遗物』以及处理相关的事件以及清除拥有危险力量的渎神者和叛教者。仲裁厅所属的人员包括圣殿骑士和战争祭司，总人数极少，由被称为『裁决者』的十余名特别骑士所管辖。面对突如其来的龙族入侵，这个神秘而特殊的机构终于将他的面目展露在世人面前，这次事件中带队的裁决者的代号为“路西菲尔”。",
+            gai_dasiji: "罗德里格斯是神圣教廷中极为罕见的另类天才，他作为一名圣战士在教廷的战场上立下赫赫战功，但在少年得意时突然转职为纯粹的神职人员，在经过十几年的默默无闻之后，他又在教廷危难之际挺身而出，一出手便发挥了决定性的逆转作用，并被教皇授予“圣·罗德里格斯”的封号。如今的他虽然退居幕后，成为了神圣教廷的神职者们导师一般的角色，但大家依然相信，在教廷遭遇危机之时，他必然会毫不犹豫地再次出手，缔造新的传奇。"
         },
         skill: {
             zhuiFengJi: {
@@ -687,6 +689,53 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 ai: {
                     shuiJing: true,
+                    order: 4,
+                    result: {
+                        target: function (player, target) {
+                            if (player.countCards('h') <= 4 && target.countCards('h') > 4) return -2;
+                            if (player.countCards('h') > 4) return 1;
+                            return -1;
+                        },
+                        player: 1,
+                    },
+                },
+                "_priority": 0,
+            },
+            gai_shenShengCaiJue: {
+                type: "faShu",
+                enable: "faShu",
+                filter: function (event, player) {
+                    return player.canBiShaBaoShi();
+                },
+                selectTarget: 1,
+                filterTarget: function (card, player, target) {
+                    return true;
+                },
+                content: async function (event,trigger,player) {
+                    await player.removeBiShaBaoShi();
+                    var options = ['你们各弃2张牌', '你们各摸2张牌'];
+                    var res = await player.chooseControl(['选项一', '选项二'])
+                        .set('choiceList', options)
+                        .set('prompt', '选择神圣裁决的效果')
+                        .set('ai', function(target) {
+                            var player = _status.event.player;
+                            if (player.countCards('h') > 4) return '选项一';
+                            return '选项二';
+                        })
+                        .forResult();
+
+                    event.effect = res.control;
+                    var target = _status.event.target;
+                    if (event.effect == '选项一') {
+                        await player.chooseToDiscard('h', 2, true);
+                        await target.chooseToDiscard('h', 2, true);
+                    } else {
+                        await player.draw(2);
+                        await target.draw(2);
+                    }
+                },
+                ai: {
+                    baoShi: true,
                     order: 4,
                     result: {
                         target: function (player, target) {
@@ -3419,6 +3468,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             gai_caijuezhe_prefix: "改版",
             gai_longzhiqiyuezhe: "改版龙之契约者",
             gai_longzhiqiyuezhe_prefix: "改版",
+            gai_dasiji: "改版大司祭",
+            gai_dasiji_prefix: "改版",
 
             gai: "改版",
 
@@ -3454,6 +3505,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             "jiuShu_info": "<span class='tiaoJian'>(摸1张牌[强制])</span>你和目标队友各+1[治疗]。",
             shenShengCaiJue: "[法术]神圣裁决",
             "shenShengCaiJue_info": `[水晶]你选择以下一项发动:<br>
+            你和目标角色各弃2张牌<br>
+            你和目标角色各摸2张牌[强制]<br>`,
+            gai_shenShengCaiJue: "[法术]神圣裁决",
+            "gai_shenShengCaiJue_info": `[宝石]你选择以下一项发动:<br>
             你和目标角色各弃2张牌<br>
             你和目标角色各摸2张牌[强制]<br>`,
             tanLanZhiXin: "[法术]贪婪之心",
