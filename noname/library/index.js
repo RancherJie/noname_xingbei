@@ -13031,6 +13031,14 @@ export class Library {
 				nature: "metal",
 			},
 		],
+        [
+			"改版",
+			{
+				showName: "改",
+				color: "#ffff99",
+				nature: "firemm",
+			},
+		],
 	]);
 	groupnature = {
 		shen: "shen",
