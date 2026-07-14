@@ -1662,10 +1662,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             },
             zhiYueZhiHuan: {
                 trigger: {
-                    source: "gongJiBefore"
+                    source: "gongJiShi"
                 },
                 filter: function(event,player){
-                    return player.countCards('h') >=2;
+                    return player.countTongXiPai() >=2;
                 },
                 cost: async function(event,trigger,player) {
                     event.result = await player.chooseCard(2, 'h', card => get.xuanZeTongXiPai(card))
