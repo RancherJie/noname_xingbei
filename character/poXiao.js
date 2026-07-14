@@ -1109,7 +1109,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 trigger: {
                     global: ["changeShiQiAfter","heCheng"]
                 },
-                forced: true,
                 filter:function(event,player){
                     // 四张全翻就无需再询问
                     if(player.hasZhiShiWu("gai_baiWanLongYan") &&
@@ -3491,7 +3490,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             "gai_yuanGuJinZhi_info": "游戏初始时,你拥有<span class='greentext'>【龙语封印】</span>,<span class='greentext'>【驭龙结界】</span>,<span class='greentext'>【龙狂迷锁】</span>,<span class='greentext'>【龙脉束缚】</span>4种<span class='hong'>【禁制】</span>。",
             zhenLongJueXing: "[被动]真龙觉醒",
             "zhenLongJueXing_info": "<span class='tiaoJian'>(我方士气下降或场上有【星杯】合成时)</span>翻转任意1张<span class='hong'>【禁制】</span>牌。<span class='tiaoJian'>(你的回合结束时)</span>重新翻回所有<span class='hong'>【禁制】</span>牌。",
-            gai_zhenLongJueXing: "[被动]真龙觉醒",
+            gai_zhenLongJueXing: "[响应]真龙觉醒",
             "gai_zhenLongJueXing_info": "<span class='tiaoJian'>(我方士气下降或场上有【星杯】合成时)</span>翻转任意1张<span class='hong'>【禁制】</span>牌。<span class='tiaoJian'>(你的回合结束时)</span>重新翻回所有<span class='hong'>【禁制】</span>牌。",
             longHunShouHu: "[被动]龙魂守护",
             "longHunShouHu_info": "<span class='tiaoJian'>([法术行动]结束后)</span>你+1[治疗]。",
