@@ -618,7 +618,7 @@ export class Player extends HTMLDivElement {
 					compileStep(str2, recompiledScope);
 				}
 			}
-			const content = compiler.compile(contents);
+			const content = ContentCompiler.compile(contents);
 			content.original = originals;
 			skill.content = content;
 		};

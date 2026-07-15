@@ -130,8 +130,10 @@ const pack_skills = {
     //风之剑圣
     fengNuZhuiJi: {
         usable: 1,
-        trigger: { player: "gongJiAfter" },
-        filter: function (event, player) {
+        trigger: { 
+            player: "gongJiAfter" 
+        },
+        filter(event, player) {
             return event.yingZhan != true;
         },
         async cost(event, trigger, player) {
@@ -167,54 +169,44 @@ const pack_skills = {
     },
     shengJian: {
         forced: true,
-        trigger: { player: "gongJiSheZhi" },
-        group: ['shengJian_drawAndDiscard'],
+        trigger: { 
+            player: "gongJiSheZhi" 
+        },
         priority: 1,
-        filter: function (event, player) {
+        filter(event, player) {
             return event.yingZhan != true && player.getStat('gongJi').zhuDong.length == 3;
         },
-        content: function () {
+        async content(event, trigger, player) {
             trigger.qiangZhiMingZhong();
-            trigger.customArgs.shengJian = true;
-        },
-        subSkill: {
-            drawAndDiscard: {
-                direct: true,
-                trigger: { player: 'gongJiEnd' },
-                filter: function (event, player) {
-                    return event.customArgs.shengJian == true;
-                },
-                content: function () {
-                    "step 0"
+            player.when({ player: 'gongJiEnd' })
+                .filter(evt => event?.getTrigger()?.getParent() === evt?.getParent())
+                .step(async (event, trigger, player) => {
                     var list = [0, 1, 2, 3];
-                    player.chooseControl(list).set('prompt', '圣剑：摸X张牌并弃置X张牌').set('ai', function () {
+                    const result = await player.chooseControl(list).set('prompt', '圣剑：摸X张牌并弃置X张牌').set('ai', function () {
                         var player = _status.event.player;
                         var num = player.getHandcardLimit() - player.countCards('h');
                         if (num > 3) num = 3;
                         return num;
-                    });
-                    "step 1"
+                    }).forResult();
                     if (result.control == 0) {
                         event.finish();
                     } else {
                         event.number = result.control;
                     }
-                    "step 2"
-                    player.draw(event.number);
-                    "step 3"
-                    player.chooseToDiscard(event.number, true);
-                }
-            }
+                    await player.draw(event.number);
+                    await player.chooseToDiscard(event.number, true);
+                });
         },
     },
     lieFengJi: {
         duYou: 'lieFengJi',
-        trigger: { player: 'gongJiShi' },
-        filter: function (event, player) {
+        trigger: { 
+            player: 'gongJiShi' 
+        },
+        filter(event, player) {
             return event.card.hasDuYou('lieFengJi') && event.target.hasJiChuXiaoGuo('_shengDun');
         },
-        content: function () {
-            'step 0'
+        async content(event, trigger, player) {
             trigger.wuFaShengDun();
             trigger.wuFaYingZhan();
         },
@@ -227,12 +219,13 @@ const pack_skills = {
     },
     jiFengJi: {
         duYou: 'jiFengJi',
-        trigger: { player: 'gongJiShi' },
-        filter: function (event, player) {
+        trigger: { 
+            player: 'gongJiShi' 
+        },
+        filter(event, player) {
             return event.card.hasDuYou('jiFengJi') && event.yingZhan != true;
         },
-        content: function () {
-            'step 0'
+        async content(event, trigger, player) {
             player.addGongJi();
         },
         mod: {
@@ -243,15 +236,15 @@ const pack_skills = {
         },
     },
     jianYing: {
-        trigger: { player: 'gongJiAfter' },
-        usable: 1,
-        filter: function (event, player) {
-            return event.yingZhan != true && player.canBiShaShuiJing();
+        trigger: { 
+            player: 'gongJiAfter' 
         },
-        content: function () {
-            'step 0'
-            player.removeBiShaShuiJing();
-            'step 1'
+        usable: 1,
+        filter(event, player) {
+            return !event.yingZhan && player.canBiShaShuiJing();
+        },
+        async content(event, trigger, player) {
+            await player.removeBiShaShuiJing();
             player.addGongJi();
         },
         check: function (event, player) {
@@ -264,37 +257,40 @@ const pack_skills = {
     },
     //狂战士
     kuangHua: {
-        trigger: { player: 'gongJiSheZhi' },
+        trigger: { 
+            player: 'gongJiSheZhi',
+            source: 'gongJiMingZhong'
+         },
         forced: true,
-        group: ['kuangHua_gongJiMingZhong'],
-        content: function () {
-            'step 0'
+        filter(event, player) {
+            if (event?.next?.[0]?.triggername == "gongJiSheZhi") return true;
+            return player.countCards('h') > 3;
+        },
+        async content(event, trigger, player) {
             trigger.changeDamageNum(1);
         },
-        subSkill: {
-            gongJiMingZhong: {
-                trigger: { source: 'gongJiMingZhong' },
-                forced: true,
-                filter: function (event, player) {
-                    return player.countCards('h') > 3;
-                },
-                content: function () {
-                    'step 0'
-                    trigger.changeDamageNum(1);
-                }
-            }
-        }
     },
     xueYingKuangDao: {
         duYou: 'xueYingKuangDao',
-        trigger: { player: 'gongJiShi' },
-        group: ['xueYingKuangDao_gongJiMingZhong'],
-        filter: function (event, player) {
+        trigger: { 
+            player: 'gongJiShi' 
+        },
+        filter(event, player) {
             return event.yingZhan != true && event.card.hasDuYou('xueYingKuangDao');
         },
-        content: function () {
-            'step 0'
-            trigger.customArgs.xueYingKuangDao = true;
+        async content(event, trigger, player) {
+            player.when({ source: 'gongJiMingZhong' })
+                .assign({
+                    priority: 0.5
+                })
+                .filter(evt => event?.getTrigger()?.getParent() === evt?.getParent() && (evt.target.countCards('h') == 2 || evt.target.countCards('h') == 3))
+                .step(async (event, trigger, player) => {
+                    if (trigger.target.countCards('h') == 2) {
+                        trigger.changeDamageNum(2);
+                    } else if (trigger.target.countCards('h') == 3) {
+                        trigger.changeDamageNum(1);
+                    }
+                })
         },
         mod: {
             aiUseful: function (player, card, num) {
@@ -302,34 +298,17 @@ const pack_skills = {
                 return 4.5;
             },
         },
-        subSkill: {
-            gongJiMingZhong: {
-                trigger: { source: 'gongJiMingZhong' },
-                direct: true,
-                priority: 0.5,
-                filter: function (event, player) {
-                    return event.customArgs.xueYingKuangDao == true && (event.target.countCards('h') == 2 || event.target.countCards('h') == 3);
-                },
-                content: function () {
-                    'step 0'
-                    if (trigger.target.countCards('h') == 2) {
-                        trigger.changeDamageNum(2);
-                    } else if (trigger.target.countCards('h') == 3) {
-                        trigger.changeDamageNum(1);
-                    }
-                }
-            }
-        },
     },
     xueXingPaoXiao: {
         duYou: 'xueXingPaoXiao',
-        trigger: { player: 'gongJiShi' },
-        filter: function (event, player) {
+        trigger: { 
+            player: 'gongJiShi' 
+        },
+        filter(event, player) {
             return event.card.hasDuYou('xueXingPaoXiao') && event.yingZhan != true;
         },
-        content: function () {
+        async content(event, trigger, player) {
             if (trigger.target.zhiLiao == 2) trigger.qiangZhiMingZhong();
-
         },
         mod: {
             aiUseful: function (player, card, num) {
@@ -339,14 +318,14 @@ const pack_skills = {
         },
     },
     siLie: {
-        trigger: { source: 'gongJiMingZhongAfter' },
-        filter: function (event, player) {
+        trigger: { 
+            source: 'gongJiMingZhongAfter' 
+        },
+        filter(event, player) {
             return player.canBiShaBaoShi();
         },
-        content: function () {
-            'step 0'
-            player.removeBiShaBaoShi();
-            'step 1'
+        async content(event, trigger, player) {
+            await player.removeBiShaBaoShi();
             trigger.changeDamageNum(2);
         }
     },
