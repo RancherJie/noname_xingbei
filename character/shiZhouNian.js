@@ -1,5 +1,5 @@
 import { lib, game, ui, get, ai, _status } from "../noname.js";
-const characterSort = {
+const pack_characterSort = {
     shiZhouNian: {
         "3xing": ['fengZhiJianSheng', 'kuangZhanShi', 'shenJianShou', 'fengYinShi', 'anShaZhe', 'shengNv', 'tianShi', 'moFaShaoNv'],
         "3.5xing": ['moJianShi', 'shengQiangQiShi', 'yuanSuShi', 'maoXianJia', 'wenYiFaShi', 'zhongCaiZhe', 'jingLingSheShou', 'nvWuShen'],
@@ -8,7 +8,7 @@ const characterSort = {
         "5xing": ["yueZhiNvShen", 'xueZhiWuNv', 'dieWuZhe'],
     }
 }
-const character = {
+const pack_characters = {
     fengZhiJianSheng: ['fengZhiJianSheng_name', 'jiGroup', 3, ['fengNuZhuiJi', 'shengJian', 'lieFengJi', 'jiFengJi', 'jianYing'],],
     kuangZhanShi: ['kuangZhanShi_name', 'xueGroup', 3, ['kuangHua', 'xueYingKuangDao', 'xueXingPaoXiao', 'siLie'],],
     shenJianShou: ['shenJianShou_name', 'jiGroup', 3, ['shanDianJian', 'guanChuanSheJi', 'shanGuangXianJing', 'jingZhunSheJi', 'juJi'],],
@@ -48,7 +48,7 @@ const character = {
     shengGong: ['shengGong_name', 'shengGroup', '4/5', ['tianZhiGong', 'shengXieJuBao', 'shengHuangJiangLin', 'shengGuangBaoLie', 'liuXingShengDan', 'shengHuangHuiGuangPao', 'ziDongTianChong', 'xinYang', 'shengHuangHuiGuangPaoX'],],
 
 }
-const characterIntro = {
+const pack_characterIntro = {
     fengZhiJianSheng: "风之剑圣有着极高的攻击频率，一旦得到了风的强力赐福，更可以让他打出无数绚丽的连击和伤害。再加上其本身拥有的“圣剑”，在伤害输出上不容小觑，更是团队【宝石】获得的得力助手",
     kuangZhanShi: "狂战士毋庸置疑的拥有本作最强大的物理攻击输出能力，特别是对于防御力弱和拥有治疗的角色更是能制造出绝对的碾压和毁灭伤害。其唯一的弱点就是命中率，因此由队友掩护攻击或攻击防御薄弱的角色是狂战取胜之道",
     shenJianShou: "其精准的射击总是能令对手防不胜防。作为本作命中数一数二的职业，神箭手往往是团队攻击链最后致命一击的缔造者。她的必杀技更是控场神技，总是能令对方的如意算盘全部落空",
@@ -89,7 +89,7 @@ const characterIntro = {
     shouLingWuShi: `御魂流是一种奇妙的剑道，通过兽魂的不同，可以一击必中，也可以卸掉对手的攻势让其无处使劲。最为奇妙的当属其中奥义【逆反居合斩】，还没有人能准确描述中了此招后的感受。。。因为。。。`,
     shengGong: "因尚未充填完毕，圣弓的伤害仍然受到束缚。然而即使如此，也能隐隐约约感受到其作为能量炮的恐怖之处。若给她足够的时间积蓄力量，她能够一瞬间重置战场甚至逆转战局，是不可忽视的因素",
 }
-const card = {
+const pack_cards = {
     diZhiFengYin: {
         filterTarget: function (card, player, target) {
             return !target.hasJiChuXiaoGuo('diZhiFengYin_xiaoGuo');
@@ -126,7 +126,7 @@ const card = {
         }
     }
 }
-const skill = {
+const pack_skills = {
     //风之剑圣
     fengNuZhuiJi: {
         usable: 1,
@@ -136,24 +136,20 @@ const skill = {
         },
         async cost(event, trigger, player) {
             let list = ['cancel2'];
-            if (player.countCards('h', card => get.xiBie(card) == 'feng' && get.type(card) == 'gongJi') > 0) {
+            if (player.countCards('h', card => get.xiBie(card) == 'feng' && get.type(card) == 'gongJi' && player.hasUseTargetXingBei(card)) > 0) {
                 list.unshift('ok2');
             }
-            let control = await player.chooseControl(list).set('prompt', '风怒追击：是否发动？').forResultControl();
+            let control = await player.chooseControl(list).set('prompt', get.prompt2("fengNuZhuiJi")).forResultControl();
             event.result = {
                 bool: control == 'ok2'
             };
         },
-        content: function () {
-            game.log(player, '+1风系【攻击行动】');
-            player.storage.extraXingDong.push({
-                xingDong: 'gongJi',
-                filterCard: function (card, player, event) {
-                    if (get.xiBie(card) != 'feng' || get.type(card) != 'gongJi') return false;
-                    return lib.filter.cardEnabled(card, player, 'forceEnable');
-                },
-                prompt: '风怒追击：风系[攻击行动]',
-            });
+        async content(event, trigger, player) {
+            game.log(player, "+1风系", "#r【攻击行动】");
+            player.addExtraXingDong('gongJi', true, function (card, player, event) {
+                if (get.xiBie(card) != 'feng' || get.type(card) != 'gongJi') return false;
+                return lib.filter.cardEnabled(card, player, 'forceEnable');
+            }, '风怒追击：风系[攻击行动]');
         },
         check: function (event, player) {
             var num = player.countCards('h', card => get.xiBie(card) == 'feng' && get.type(card) == 'gongJi');
@@ -9225,7 +9221,7 @@ const skill = {
         markimage: 'image/card/zhiShiWu/hong.png'
     },
 }
-const translate = {
+const pack_translate = {
     //角色名字
     fengZhiJianSheng: "风之剑圣",
     kuangZhanShi: "狂战士",
@@ -9910,11 +9906,11 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
     return {
         name: 'shiZhouNian',
         connect: true,
-        characterSort,
-        character,
-        characterIntro,
-        card,
-        skill,
-        translate,
+        characterSort: { ...pack_characterSort },
+        character: { ...pack_characters },
+        characterIntro: { ...pack_characterIntro },
+        card: { ...pack_cards },
+        skill: { ...pack_skills },
+        translate: { ...pack_translate },
     };
 });

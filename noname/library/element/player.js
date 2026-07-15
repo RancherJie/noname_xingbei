@@ -8167,7 +8167,7 @@ export class Player extends HTMLDivElement {
 	canUseXingBei(card, target) {
 		if (typeof card == "string") card = { name: card, isCard: true };
 		var info = get.info(card);
-		if (info.multicheck && !info.multicheck(card, this)) return false;
+		if (info?.multicheck && !info.multicheck(card, this)) return false;
 		return lib.filter["targetEnabled"](card, this, target);
 	}
 	/**
@@ -11514,6 +11514,31 @@ export class Player extends HTMLDivElement {
 		if(typeof num!='number') num=1;
 		game.log(this,`+${num}【法术行动】`);
 		return this.storage.faShu+=num;
+	}
+	addExtraXingDong() {
+		const next = {
+			xingDong: 'gongJi',
+			prompt: '额外行动',
+		}
+		for (let i = 0; i < arguments.length; i++) {
+			// 如果传入了对象直接使用该对象，否则自行根据参数构建
+			if (typeof arguments[i] == "object") {
+				Object.assign(next, arguments[i]);
+				break;
+			} else if (typeof arguments[i] == "boolean") {
+				if (!next.forced) next.forced = arguments[i];
+			} else if (typeof arguments[i] == "string") {
+				if (!next.xingDong) next.xingDong = arguments[i];
+				else next.prompt = arguments[i];
+			} else if (typeof arguments[i] == "function") {
+				if (!next.filterCard) next.filterCard = arguments[i];
+				else next.filterTarget = arguments[i];
+			} else if (Array.isArray(arguments[i])) {
+				next.createDialog = arguments[i];
+			}
+		}
+		this.storage.extraXingDong ??= [];
+		this.storage.extraXingDong.push(next);
 	}
 
 	gainJiChuXiaoGuo(target){
