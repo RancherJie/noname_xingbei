@@ -331,20 +331,20 @@ const pack_skills = {
     },
     //圣女
     bingShuangDaoYan: {
-        trigger: { player: 'daChuPai' },
+        trigger: { 
+            player: 'daChuPai' 
+        },
         forced: true,
-        filter: function (event, player) {
+        filter(event, player) {
             return get.xiBie(event.card) == 'shui' || event.card.name == 'shengGuang';
         },
-        content: function () {
-            'step 0'
-            var next = player.chooseTarget(true, '目标角色+1[治疗]').set('ai', function (target) {
-                var player = _status.event.player;
+        async content(event, trigger, player) {
+            const result = await player.chooseTarget(true, '目标角色+1[治疗]').set('ai', function (target) {
+                const player = get.event()?.player;
                 return get.zhiLiaoEffect2(target, player, 1);
-            });
-            'step 1'
+            }).forResult();
             if (result.bool) {
-                var target = result.targets[0];
+                const target = result.targets[0];
                 target.changeZhiLiao(1, player);
             }
         }
@@ -360,13 +360,13 @@ const pack_skills = {
         filterCard: function (card) {
             return card.hasDuYou('zhiLiaoShu');
         },
-        filter: function (event, player) {
+        filter(event, player) {
             return player.hasCard(function (card) {
                 return lib.skill.zhiLiaoShu.filterCard(card);
             });
         },
-        content: function () {
-            target.changeZhiLiao(2, player);
+        async content(event, trigger, player) {
+            event.target.changeZhiLiao(2, player);
         },
         mod: {
             aiUseful: function (player, card, num) {
@@ -391,7 +391,7 @@ const pack_skills = {
             return card.hasDuYou('zhiYuZhiGuang');
         },
         position: 'h',
-        filter: function (event, player) {
+        filter(event, player) {
             return player.hasCard(function (card) {
                 return lib.skill.zhiYuZhiGuang.filterCard(card);
             });
@@ -400,9 +400,9 @@ const pack_skills = {
         filterTarget: true,
         selectTarget: [1, 3],
         useCard: true,
-        content: function () {
-            if (target) {
-                target.changeZhiLiao(1, player);
+        async content(event, trigger, player) {
+            if (event.target) {
+                event.target.changeZhiLiao(1, player);
             }
         },
         mod: {
@@ -422,21 +422,20 @@ const pack_skills = {
     },
     lianMin: {
         type: 'qiDong',
-        trigger: { player: 'qiDong' },
-        filter: function (event, player) {
+        trigger: { 
+            player: 'qiDong' 
+        },
+        filter(event, player) {
             return player.canBiShaBaoShi();
         },
-        content: function () {
-            'step 0'
-            player.removeBiShaBaoShi();
-            'step 1'
-            player.hengZhi();
-            'step 2'
-            player.addNengLiang('shuiJing');
+        async content(event, trigger, player) {
+            await player.removeBiShaBaoShi();
+            await player.hengZhi();
+            await player.addNengLiang('shuiJing');
         },
         mod: {
             maxHandcardFinal: function (player, num) {
-                if (player.isHengZhi()) return 7
+                if (player.isHengZhi()) return 7;
             }
         },
         check: function (event, player) {
@@ -450,11 +449,12 @@ const pack_skills = {
             }
         }
     },
+    //TODO
     shengLiao: {
         type: 'faShu',
         usable: 1,
         enable: 'faShu',
-        filter: function (event, player) {
+        filter(event, player) {
             return player.canBiShaShuiJing();
         },
         selectTarget: [1, 3],
@@ -506,19 +506,23 @@ const pack_skills = {
     },
     //暗杀者
     fanShi: {
-        trigger: { player: "chengShouShangHaiAfter" },
+        trigger: { 
+            player: "chengShouShangHaiAfter" 
+        },
         forced: true,
-        filter: function (event) {
+        filter(event) {
             return event.faShu != true;
         },
         logTarget: 'source',
-        content: function () {
-            trigger.source.draw(player);
+        async content(event, trigger, player) {
+            await trigger.source.draw(player);
         }
     },
     shuiYing: {
-        trigger: { player: 'drawBefore' },
-        filter: function (event, player) {
+        trigger: { 
+            player: 'drawBefore' 
+        },
+        filter(event, player) {
             return event.cause != "teShuXingDong" && player.countCards('h') > 0;
         },
         async cost(event, trigger, player) {
@@ -533,34 +537,31 @@ const pack_skills = {
                 })
                 .forResult();
         },
-        content: function () {
-            'step 0'
-            player.discard(event.cards).set('showCards', true);
-            'step 2'
+        async content(event, trigger, player) {
+            await player.discard(event.cards).set('showCards', true);
             if (!player.isHengZhi()) event.finish();
-            'step 3'
-            var next = player.chooseToDiscard(1, '水影：选择要弃置的法术牌', function (card) {
+            const next = player.chooseToDiscard(1, '水影：选择要弃置的法术牌', function (card) {
                 return get.type(card) == 'faShu';
             });
             next.set('ai', function (card) {
                 return 6 - get.value(card);
             });
             next.set('showCards', true);
+            await next;
         }
     },
     qianXing: {
         type: 'qiDong',
-        trigger: { player: 'qiDong' },
+        trigger: { 
+            player: 'qiDong' 
+        },
         filter: function (event, player) {
             return player.canBiShaBaoShi();
         },
-        content: function () {
-            'step 0'
-            player.removeBiShaBaoShi();
-            'step 1'
-            player.chooseDraw(1);
-            'step 3'
-            player.hengZhi();
+        async content(event, trigger, player) {
+            await player.removeBiShaBaoShi();
+            await player.chooseDraw(1);
+            await player.hengZhi();
         },
         mod: {
             maxHandcardBase: function (player, num) {
@@ -580,22 +581,23 @@ const pack_skills = {
             chongZhi: {
                 direct: true,
                 trigger: { player: 'xingDongBegin' },
-                filter: function (event, player) {
+                filter(event, player) {
                     return player.isHengZhi();
                 },
-                content: function () {
-                    'step 0'
-                    player.chongZhi();
+                async content(event, trigger, player) {
+                    await player.chongZhi();
                 }
             },
             xiaoGuo: {
                 direct: true,
-                trigger: { player: "gongJiSheZhi" },
-                filter: function (event, player) {
+                trigger: { 
+                    player: "gongJiSheZhi" 
+                },
+                filter(event, player) {
                     return event.yingZhan != true && player.isHengZhi();
                 },
-                content: function () {
-                    var num = player.countNengLiangAll();
+                async content(event, trigger, player) {
+                    const num = player.countNengLiangAll();
                     if (num > 0) trigger.changeDamageNum(num);
                     trigger.wuFaYingZhan();
                 }
