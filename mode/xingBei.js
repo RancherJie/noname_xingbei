@@ -1666,7 +1666,7 @@ export default () => {
 						event.blue_chooseList
 					];
 					'step 6'
-					var next = event.choosing.chooseButton(event.videoId, event.num, true);
+					var next = event.choosing.chooseButton(event.videoId, event.num);
 					next.set("filterButton", function (button) {
 						if (_status.event.selected.includes(button.link)) return false;
 						return true;
@@ -1677,24 +1677,38 @@ export default () => {
 					});
 					'step 7'
 					game.broadcastAll(
-						function (links, choosing, first, id) {
+						function (links, choosing, first, id,bool) {
 							var dialog = get.idDialog(id);
 							if (dialog) {
 								if (choosing == game.red_leader) {
-									choosing1 = "<span style='color:red;'>红方</span>队长";
-									choosing2 = "<span style='color:lightblue;'>蓝方</span>队长";
+									var choosing1 = "<span style='color:red;'>红方</span>队长";
+									var choosing2 = "<span style='color:lightblue;'>蓝方</span>队长";
 								} else {
-									choosing2 = "<span style='color:lightblue;'>蓝方</span>队长";
+									var choosing2 = "<span style='color:lightblue;'>蓝方</span>队长";
 								}
-								dialog.content.firstChild.innerHTML =
-									choosing1 + "Ban了" + get.translation(links)+`，等待` + choosing2 + "Ban2名角色";
-								for (var i = 0; i < dialog.buttons.length; i++) {
-									if ((dialog.buttons[i].link == links[0])||(dialog.buttons[i].link == links[1])) {
-										if (first) {
-											dialog.buttons[i].classList.add("selectedx");
-										} else {
-											dialog.buttons[i].classList.add("glow");
+								if(bool){
+									if(choosing == game.red_leader){
+										dialog.content.firstChild.innerHTML =
+										choosing1 + "Ban了" + get.translation(links)+`，等待` + choosing2 + "Ban2名角色";
+									}else{
+										dialog.content.firstChild.innerHTML =
+										choosing2 + "Ban了" + get.translation(links);
+									}
+									
+									for (var i = 0; i < dialog.buttons.length; i++) {
+										if ((dialog.buttons[i].link == links[0])||(dialog.buttons[i].link == links[1])) {
+											if (first) {
+												dialog.buttons[i].classList.add("selectedx");
+											} else {
+												dialog.buttons[i].classList.add("glow");
+											}
 										}
+									}
+								}else{
+									if(choosing == game.red_leader) {
+										dialog.content.firstChild.innerHTML = choosing1 + "放弃Ban选"+`，等待` + choosing2 + "Ban2名角色";
+									}else{
+										dialog.content.firstChild.innerHTML = choosing2 + "放弃Ban选";
 									}
 								}
 							}
@@ -1702,25 +1716,29 @@ export default () => {
 						result.links,
 						event.choosing,
 						event.choosing == _status.firstChoose,
-						event.videoId
+						event.videoId,
+						result.bool
 					);
-					event.selected.addArray(result.links);
-					if(event.choosing==game.blue_leader){
-						event.blue_chooseList.addArray(result.links);
-					}else{
-						event.red_chooseList.addArray(result.links);
-					}
-
 					if (event.choosing == game.red_leader) {
 						var str = "<span style='color:red;'>红方</span>队长";
 					} else {
 						var str = "<span style='color:lightblue;'>蓝方</span>队长";
 					}
-					game.log(str,'Ban',result.links);
-
-					for(var i=0;i<result.links.length;i++){
-						event.list.remove(result.links[i]);
+					if(result.bool){
+						event.selected.addArray(result.links);
+						if(event.choosing==game.blue_leader){
+							event.blue_chooseList.addArray(result.links);
+						}else{
+							event.red_chooseList.addArray(result.links);
+						}
+						game.log(str,'Ban',result.links);
+						for(var i=0;i<result.links.length;i++){
+							event.list.remove(result.links[i]);
+						}
+					}else{
+						game.log(str,'放弃Ban选');
 					}
+					
 					if(event.choosing==game.blue_leader){
 						event.choosing=game.red_leader;
 					}else{
@@ -2223,7 +2241,7 @@ export default () => {
 					];
 
 					'step 3'
-					var next = event.choosing.chooseButton(event.videoId, 1, true);
+					var next = event.choosing.chooseButton(event.videoId, 1);
 					next.set("filterButton", function (button) {
 						if (_status.event.selected.includes(button.link)) return false;
 						return true;
@@ -2234,7 +2252,7 @@ export default () => {
 					});
 					'step 4'
 					game.broadcastAll(
-						function (links, choosing, first, id) {
+						function (links, choosing, first, id,bool) {
 							var dialog = get.idDialog(id);
 							if (dialog) {
 								if (choosing.side == true) {
@@ -2244,40 +2262,50 @@ export default () => {
 									choosing = "<span style='color:lightblue;'>蓝方</span>";
 									var choosing2 = "";
 								}
-								dialog.content.firstChild.innerHTML =
-									choosing + "Ban了" + get.translation(links)+ choosing2;
-								for (var i = 0; i < dialog.buttons.length; i++) {
-									if ((dialog.buttons[i].link == links[0])||(dialog.buttons[i].link == links[1])) {
-										if (first) {
-											dialog.buttons[i].classList.add("selectedx");
-										} else {
-											dialog.buttons[i].classList.add("glow");
+								if(bool){
+									dialog.content.firstChild.innerHTML =
+										choosing + "Ban了" + get.translation(links)+ choosing2;
+									for (var i = 0; i < dialog.buttons.length; i++) {
+										if ((dialog.buttons[i].link == links[0])||(dialog.buttons[i].link == links[1])) {
+											if (first) {
+												dialog.buttons[i].classList.add("selectedx");
+											} else {
+												dialog.buttons[i].classList.add("glow");
+											}
 										}
 									}
+								}else{
+									dialog.content.firstChild.innerHTML =
+										choosing + "放弃Ban选"+ choosing2;
 								}
 							}
 						},
 						result.links,
 						event.choosing,
 						event.choosing.side == _status.side,
-						event.videoId
+						event.videoId,
+						result.bool
 					);
-					event.selected.addArray(result.links);
 					if (event.choosing.side == true) {
 						var str = "<span style='color:red;'>红方</span>";
 					} else {
 						var str = "<span style='color:lightblue;'>蓝方</span>";
 					}
-					game.log(str,'Ban了',result.links);
-					if(event.choosing.side==true){
-						event.red_ban.addArray(result.links);
+					if(result.bool){
+						event.selected.addArray(result.links);
+						game.log(str,'Ban了',result.links);
+						if(event.choosing.side==true){
+							event.red_ban.addArray(result.links);
+						}else{
+							event.blue_ban.addArray(result.links);
+						}
+						for(var i=0;i<result.links.length;i++){
+							event.list.remove(result.links[i]);
+						}
 					}else{
-						event.blue_ban.addArray(result.links);
+						game.log(str,'放弃Ban选');
 					}
-
-					for(var i=0;i<result.links.length;i++){
-						event.list.remove(result.links[i]);
-					}
+					
 
 					//因仅循环两次，故不在进行判断，直接对当前选择者进行赋值
 					event.choosing=event.blue_list[0];
