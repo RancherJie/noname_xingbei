@@ -3546,7 +3546,8 @@ export class Click {
 				const formatTime = function (val) {
 					try {
 						if (!val) return "未知时间";
-						const d = new Date(typeof val === "number" ? val : (""+val).replace("T"," ").replace("Z",""));
+						const normalized = typeof val === "number" ? val : ("" + val).replace(" ", "T").replace(/([+-])(\d{2})(\d{2})$/, "$1$2:$3");
+						const d = new Date(normalized);
 						if (isNaN(d.getTime())) return (""+val);
 						const y=d.getFullYear(), m=d.getMonth()+1, dd=d.getDate();
 						const hh=d.getHours(), mm=d.getMinutes();
