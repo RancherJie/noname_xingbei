@@ -3388,7 +3388,7 @@ export class Create {
 	 * 创建战绩面板
 	 */
 	zhanJi() {
-		if(_status.playback){
+		if(_status.playback&&game.pcvideo){
 			ui.shiQiInfo=ui.create.div('.touchinfo.bottom-center.zhanJi.table',ui.window);
 		}else{
 			ui.shiQiInfo=ui.create.div('.touchinfo.bottom-right.zhanJi.table',ui.window);
