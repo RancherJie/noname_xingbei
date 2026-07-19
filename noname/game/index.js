@@ -3652,7 +3652,7 @@ export class Game extends GameCompatible {
 				player.hp = info[1];
 				player.maxHp = info[2];
 				player.zhiLiao = info[3];
-				player.update(info[0]);
+				player.update(info[0],info[4]);
 			} else {
 				console.log(player);
 			}
