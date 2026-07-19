@@ -10,120 +10,113 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                shiTu:['jianZhiMoNv','jianZhiZi'],
             }
         },
+        characterIntro:{
+            lingXiZhiChao:`灵熙之潮对于基础效果有着很敏锐的感受，通过不断触发基础效果获得灵涌，让这个世界的人体验一下怒潮狂涛的威力吧。`,
+            jianZhiMoNv:`最快的招式，就是最难以应付的招式。悟出此道的剑之魔女，剑招以快取胜，每一招都是进攻，不需要防守。因为只要够快，敌人就永远追不上她进攻的脚步。“在下一路走来，只有风伴我随行”当此句传入耳中时，你已中招倒地。`,
+            jieRiMoDao:'小范围的区域伤害是魔法少女的特长，她更可以把魔弹随意的使用和施放。在积累了一定的能量之后，强大的“毁灭风暴”更是可以让所有对手都品尝到何为魔法的洗礼和冲击。',
+            tanLanShaoNv:'贪婪少女对于星石的贪婪可谓突破天际，无论是宝石还是水晶，都是她的涉猎目标。但是这还是比不上她以前金库的一厘一分。',
+            youJiShi:'精灵的赠礼对于索拉来说至关重要，“好的开始是成功的一半”这句名言在她的身上得到了最好的体现。',
+            nong_baoShiShaoNv:'暴食少女除了能够像魔法少女一样肆意运用魔弹和毁灭风暴这样的强大法术以外；作为喜爱甜点的她更加为了满足自己的食欲而开发出了更加“食用”的魔法。<br>因机制问题，无法完全符合faq。',
+            zhouFuShi:'狐神降神于风音身体，融合了风音的意识，自称“铃音”。由于狐神天性喜爱捉弄人，咒符师更倾向灵动的配合队友。“咒符不是用以伤害敌人，而是帮助队友解决困扰”，不要将胜负扛在肩上，更相信队友才是致胜之道。',
+            yuanChuZhiGong:'圣弓的最终形态，虽有一颗和平之心，但因遇见强敌而觉醒。其拥有强大的机动性，但因为消耗信仰作为能量且需要的能量巨大，所以一般需要队友支援。一旦能量充填完毕，原初之弓就会显现出最终武器的恐怖形态，无论多么劣势都能看到翻盘的希望。',
+            daoDanLuoLi:'既然如此了，就不用拿圣盾用来保护队友了，不如来大闹一场吧~连自己也不一定掌控的tricky，简直是太刺激了~ 到底是trick还是treat？一场盛大的surprise正在上演~',
+            luoLiFanZhang:'暂无介绍',
+            jianXiZhiPian:'暂无介绍',
+            daiDuoShaoNv:'ZZZ~',
+            jiDuShaoNv:'哼~',
+            jianZhiZi:'这是威斯特姆尚幼，席拉尚在时的故事。——并且，还是未曾向他人道述过的故事。',
+            moGongEX:'其精准的射击总是能令对手防不胜防。作为本作命中数一数二的职业，往往是团队攻击链最后致命一击的缔造者。她的必杀技更是控场神技，总是能令对方的如意算盘全部落空。',
+            sheng_zhongCaiZhe:'新的裁判钟声已经敲响，不知道是新生的喜悦钟声，还是赴死的丧钟。咚，咚，咚。。。',
+            yueTuanShouXi:`“放学后的茶点时间~要不要来一首安可曲？”<br>
+                            “听我的吹奏吧，这是我昨天想到的曲调哦~”<br>
+                            “偷偷溜出来玩的时间怎么这么快就过完了，这次学会了新的颤音呢~”<br>
+                            “呜呜呜，忘了后面怎么吹奏了o(╥﹏╥)o”`,
+        },
         character:{
-            jianZhiMoNv: ["jianZhiMoNv_name", "jiGroup", '3/4', ["jiZhiJianYi", "yiXiangJian", "mengXiangJian", "jianYingDuanNian"], ['des:最快的招式，就是最难以应付的招式。悟出此道的剑之魔女，剑招以快取胜，每一招都是进攻，不需要防守。因为只要够快，敌人就永远追不上她进攻的脚步。“在下一路走来，只有风伴我随行”当此句传入耳中时，你已中招倒地。']],
-            jieRiMoDao:["moFaShaoNv_name","yongGroup",3,["moDanZhangWo","moDanRongHe","jiRi_moBaoChongJie","faLiHuDun","huiMieFengBao"],['des:小范围的区域伤害是魔法少女的特长，她更可以把魔弹随意的使用和施放。在积累了一定的能量之后，强大的“毁灭风暴”更是可以让所有对手都品尝到何为魔法的洗礼和冲击']],
-            tanLanShaoNv: ["moFaShaoNv_name", "yongGroup", 3, ["tanYuHeiDong", "lianJinMoFa", "lianJinShu", "wangNvJinKu"], ['des:贪婪少女对于星石的贪婪可谓突破天际，无论是宝石还是水晶，都是她的涉猎目标。但是这还是比不上她以前金库的一厘一分。']],
+            jianZhiMoNv: ["jianZhiMoNv_name", "jiGroup", '3/4', ["jiZhiJianYi", "yiXiangJian", "mengXiangJian", "jianYingDuanNian"], ],
+            jieRiMoDao:["moFaShaoNv_name","yongGroup",3,["moDanZhangWo","moDanRongHe","jiRi_moBaoChongJie","faLiHuDun","huiMieFengBao"],],
+            tanLanShaoNv: ["moFaShaoNv_name", "yongGroup", 3, ["tanYuHeiDong", "lianJinMoFa", "lianJinShu", "wangNvJinKu"],],
             lingXiZhiChao: [
                 "lingXiZhiChao_name",
                 "huanGroup",
                 "3/4",
                 ["lingZhiZhiYi", "xieLingTuiSan", "banXiangHunLing", "boYongZhiLi", "nuChaoHuangTao", "haiShenYuWu", "lingYong"],
-                [
-                    `des:灵熙之潮对于基础效果有着很敏锐的感受，通过不断触发基础效果获得灵涌，让这个世界的人体验一下怒潮狂涛的威力吧`,
-                ],
             ],
             youJiShi: [
                 "youJiShi_name",
                 "jiGroup",
                 "3/4",
                 ["jingLingZengLi", "yuanSuSheJi*sora", "erChongJianYing", "fuMoZhiShu",  "jingLingDeJianWu","ziDan"],
-                [
-                    `des:精灵的赠礼对于索拉来说至关重要，“好的开始是成功的一半”这句名言在她的身上得到了最好的体现。`,
-                ],
             ],
             nong_baoShiShaoNv: [
                 "moFaShaoNv_name",
                 "yongGroup",
                 3,
                 ["tianDianChongJi", "shiYuDeHeiDong", "meiWeiRongHe", "sanMiaoYuanZe", "meiShiFengBao"],
-                [
-                    "des:暴食少女除了能够像魔法少女一样肆意运用魔弹和毁灭风暴这样的强大法术以外；作为喜爱甜点的她更加为了满足自己的食欲而开发出了更加“食用”的魔法。<br>因机制问题，无法完全符合faq。",
-                ],
             ],
             zhouFuShi: [
                 "zhouFuShi_name",
                 "yongGroup",
                 4,
                 ["zhouFuHuoLi", "zhouFuDongTian", "zhouFu_nianZhou", "chiMeiWangLiang", "zhouLiChongSu", "zhouFu_yaoLi"],
-                [
-                    `des:狐神降神于风音身体，融合了风音的意识，自称“铃音”。由于狐神天性喜爱捉弄人，咒符师更倾向灵动的配合队友。“咒符不是用以伤害敌人，而是帮助队友解决困扰”，不要将胜负扛在肩上，更相信队友才是致胜之道`,
-                ],
             ],
             yuanChuZhiGong:[
                 'shengGong_name',
                 'shengGroup',
                 '4/5',
                 ['yuanChu_tianZhiGong','yuanChu_shengXieJuBao','yuanChu_shengHuangJiangLin','yuanChu_shengGuangBaoLie','yuanChu_liuXingShengDan','yuanChu_shengHuangHuiGuangPao','yuanChu_shengHuangYuHui','yuanChu_ziDongTianChong','yuanChu_xinYang'],
-                [
-                    `des:圣弓的最终形态，虽有一颗和平之心，但因遇见强敌而觉醒。其拥有强大的机动性，但因为消耗信仰作为能量且需要的能量巨大，所以一般需要队友支援。一旦能量充填完毕，原初之弓就会显现出最终武器的恐怖形态，无论多么劣势都能看到翻盘的希望`,
-                ],
             ],
             daoDanLuoLi: [
                 "daoDanLuoLi_name",
                 "huanGroup",
                 4,
                 ["tianShi?", "panNiZhiQiang", "shenMiFuBi", "T-r-i-c-k-y!", "trickOrTreat", "suprise"],
-                [
-                    `des:既然如此了，就不用拿圣盾用来保护队友了，不如来大闹一场吧~连自己也不一定掌控的tricky，简直是太刺激了~ 到底是trick还是treat？一场盛大的surprise正在上演~`,
-                ],
             ],
             trick_shengGong:['shengGong_name','shengGroup','4/5',['trick_tianZhiGong','shengXieJuBao','trick_shengHuangJiangLin','trick_shengGuangBaoLie','liuXingShengDan','trick_shengHuangHuiGuangPao','trick_ziDongTianChong','xinYang','shengHuangHuiGuangPaoX'],['character:shengGong']],
             trick_maoXianJia:['maoXianJia_name','huanGroup','3/4',['trick_qiZha','qiangYun','diXiaFaZe','trick_maoXianJiaTianTang','touTianHuanRi'],['character:maoXianJia']],
-            luoLiFanZhang: ["luoLiFanZhang_name", "xueGroup", 3, ["xuanHuaShangDeng", "yeLuSiKu", "aiSiTianLiu", "mieChaKuCha"], [`des:暂无介绍`]],
+            luoLiFanZhang: ["luoLiFanZhang_name", "xueGroup", 3, ["xuanHuaShangDeng", "yeLuSiKu", "aiSiTianLiu", "mieChaKuCha"]],
             jianXiZhiPian: [
                 "jianXiZhiPian_name",
                 "yongGroup",
                 "3/4",
                 ["yuanZiXiShou", "yuanZiChongSu", "yuanSuXueTu", "leiJiBianYi", "yueYun", "yuanZi"],
-                ["des:暂无介绍"],
             ],
             daiDuoShaoNv: [
                 "moFaShaoNv_name",
                 "shengGroup",
                 3,
                 ["bieFanWo", "rangWoTangPing", "xiangYongMoDan", "buXiangTiLian", "zaiShuiYiXia"],
-                ["des:暂无介绍"],
             ],
             jiDuShaoNv: [
                 "moFaShaoNv_name",
                 "jiGroup",
                 3,
                 ["cuYiXiuXin", "xuRongZhangWo", "xiangSiBing", "jiDuZhuiFang"],
-                ["des:暂无介绍"],
             ],
             jianZhiZi:[
                 "fengZhiJianSheng_name",
                 "jiGroup",
                 3,
                 ["qingMu", "fengZhiJian", "jianShouShiYan", "jianCanYing"],
-                ["des:暂无介绍"],
             ],
             moGongEX:[
                 'moGong_name',
                 'jiGroup',
                 3,
                 ["shenFengShi", "jiFengZhuiShe", "gongShenHouBu", "juJi"],
-                ["des:其精准的射击总是能令对手防不胜防。作为本作命中数一数二的职业，往往是团队攻击链最后致命一击的缔造者。她的必杀技更是控场神技，总是能令对方的如意算盘全部落空"],
             ],
             sheng_zhongCaiZhe:[
                 'sheng_zhongCaiZhe_name',
                 'shengGroup',
                 '4/5',
                 ['shenZhiTianPing','shanEBiJi','tianPingQingDao','shenZhiShenPan','tianPing','tianZui','zuiChiBiDao','zui'],
-                ["des:新的裁判钟声已经敲响，不知道是新生的喜悦钟声，还是赴死的丧钟。咚，咚，咚。。。"],
             ],
             yueTuanShouXi: [
                 "yueTuanShouXi_name",
                 'huanGroup',
                 4,
                 ['baSiKeZhiFa', 'moXingXuanLv', 'xinYueZhang', 'baLieTaNiXiaoDiao', 'puLuoWangSiXieZouQu', 'naBuLeSiDuZou','yinFu'],
-                ["des:暂无介绍"],
             ],
-        },
-
-        characterIntro: {
-
         },
         card: {
             tricky: {
