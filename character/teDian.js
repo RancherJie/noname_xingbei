@@ -1776,7 +1776,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             },
                         },
                         onremove: function (player, skill) {
-                            const cards = player.hasJiChuXiaoGuo(skill);
+                            const cards = player.getJiChuXiaoGuo(skill);
                             if (cards.length) player.loseToDiscardpile(cards);
                         },
                         tag: {
