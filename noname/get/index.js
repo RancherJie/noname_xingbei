@@ -5559,7 +5559,7 @@ export class Get extends GetCompatible {
 	damageEffect(target,num){
 		if(!target) return 0;
 		if(!num) num=2;
-		if(target.hasSkillTag('noShiQiXiaJiang')) return 0.1;
+		if(target.hasSkillTag('noShiQiXiaJiang')) return 0;
 		var chaZhi=target.getHandcardLimit()-target.countCards('h');
 		if(target.hasSkillTag('oneDamage')&&num==1) return 0;
 		if(chaZhi<num) return -(num-chaZhi)-1;
