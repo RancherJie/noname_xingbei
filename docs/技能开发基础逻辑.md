@@ -1,0 +1,1790 @@
+# 星杯 DIY 角色：技能开发基础逻辑
+
+> 文档定位：本文件是项目中唯一有效的技能开发规范。根目录旧版已删除，禁止另建同名副本。
+>
+> 设计来源：开发或修改角色前，先读取同目录下的《角色属性.txt》，确认角色 ID、阵营、资源、技能文案和设计状态，再按本文实现。
+>
+> 适用本体：无名杀星杯版 `1.6.6`。本文以游戏目录 `resources/app/character/` 中的旧角色实现及 `resources/app/noname/library/element/player.js` 为准，用于开发 `bigcowcow` 等自定义角色包。
+>
+> 仓库边界：实现新角色的技能代码时，只允许修改当前扩展 Git 仓库内的文件。Git 仓库之外的游戏本体、日志及其他文件只能读取和参考，不得写入、覆盖、移动或删除；若功能必须依赖本体改动，应停止实现并先记录需求、向维护者确认，不能自行修改本体。
+>
+> 最后源码核对：`2026-07-29`。
+
+## 1. 角色包与技能的基本结构
+
+角色包由 `game.import('character', ...)` 注册。一个角色定义通常包含：角色 ID、显示名翻译、阵营、星级/生命值、技能 ID 列表、角色介绍，以及技能对象和翻译。
+
+```js
+game.import('character', function (lib, game, ui, get, ai, _status) {
+    return {
+        name: 'my_pack',
+        connect: true,
+        character: {
+            my_character: ['角色名', 'jiGroup', 3, ['my_skill', 'my_mark']],
+        },
+        skill: {
+            // 技能定义写在这里
+        },
+        translate: {
+            my_character: '角色名',
+            my_skill: '被动【技能名】',
+            my_skill_info: '技能说明',
+        },
+    };
+});
+```
+
+常用阵营为：`jiGroup`（战技殿堂）、`shengGroup`（神圣教廷）、`huanGroup`（幻影联盟）；本体也定义了 `xueGroup`、`yongGroup`、`longGroup`。
+
+角色数组的第四项是技能 ID 数组。属于该角色自身、需要长期展示或计数的专属指示物、专属卡标记和扩展牌技能也必须加入该数组，否则其上限、触发与展示信息可能无法正常生效。需要临时施加给任意角色的动态状态则应按第 6.1.1 节注册，不能只依赖原角色的技能数组。
+
+## 2. 两种技能流程写法
+
+本体旧代码同时存在两种流程，均可运行，但**同一个技能应只选一种主流程**。
+
+### 2.1 旧式分步流程
+
+适合沿用旧角色代码；通过 `'step n'` 和全局 `result` 推进。
+
+```js
+content: function () {
+    'step 0'
+    player.chooseTarget(true, '选择1名对手', lib.filter.opponent);
+    'step 1'
+    if (result.bool) {
+        result.targets[0].faShuDamage(1, player);
+    }
+},
+```
+
+### 2.2 现代异步流程（推荐）
+
+新技能优先使用 `async function (event, trigger, player)`，并从选择事件取回结果。多目标应按座次排序后依次结算。
+
+```js
+content: async function (event, trigger, player) {
+    const targets = await player
+        .chooseTarget('选择1名对手造成1点法术伤害', lib.filter.opponent, true)
+        .set('ai', target => get.damageEffect2(target, player, 1))
+        .forResultTargets();
+    for (const target of targets.sortBySeat(player)) {
+        await target.faShuDamage(1, player);
+    }
+},
+```
+
+`forResultTargets()` 返回目标数组；`forResult()` 返回完整结果对象；`forResult('control')` 可直接取得选项文字。若选择允许取消，须检查结果是否为空/`bool` 是否为真。
+
+### 2.3 异步费用与结算顺序
+
+需要选牌、弃牌或移除资源作为费用时，应先强制完成选择，等待费用事件结算完毕，再执行技能效果。不要只创建选择/弃牌事件而不 `await`，否则效果可能先于费用发生。
+
+```js
+content: async function (event, trigger, player) {
+    const cards = await player
+        .chooseCard('h', 1, '弃置1张手牌作为费用', true)
+        .forResultCards();
+    if (!cards.length) return;
+
+    await player.discard(cards).set('showCards', true);
+    await event.target.faShuDamage(1, player);
+},
+```
+
+- 必须支付的费用，应在选择接口中传入 `true`，防止玩家取消后仍获得效果。
+- 允许取消的选择，执行效果前必须检查 `bool`、目标数组或牌数组。
+- 需要读取“支付前”的数值时，应先保存数值；需要读取“支付后”的数值时，应等待费用结算后再读取。
+- 异步 `content` 中使用 `event.target`、`trigger.target` 或局部变量，不依赖旧式流程中的隐式全局 `target`、`result`。
+
+### 2.4 触发技能的 `cost` 与 `direct`
+
+需要在触发后询问是否发动、选择目标或选择牌时，优先把选择放在 `cost` 中，并把完整选择结果赋给 `event.result`。本体会把成功结果中的 `targets`、`cards` 和 `cost_data` 传给后续 `content`：
+
+```js
+my_optional_response: {
+    trigger: { player: 'phaseEnd' },
+    filter: function (event, player) {
+        return game.hasPlayer(current => current !== player);
+    },
+    cost: async function (event, trigger, player) {
+        event.result = await player
+            .chooseTarget('是否发动技能？', function (card, player, target) {
+                return target !== player;
+            })
+            .set('ai', target => get.attitude(player, target))
+            .forResult();
+    },
+    content: async function (event, trigger, player) {
+        const target = event.targets?.[0];
+        if (!target) return;
+        await target.changeZhiLiao(1, player);
+    },
+},
+```
+
+- **不得同时配置 `direct: true` 与 `cost`。**当前本体优先处理 `direct`，一旦设置 `direct: true`，标准 `cost` 不会执行。
+- 使用 `cost` 时不需要再设置 `direct`；选择取消后 `result.bool` 为假，本体不会进入 `content`。
+- `cost` 需要传递额外数据时，使用 `event.result.cost_data`，然后在 `content` 中读取 `event.cost_data`。任意自定义字段不会自动复制。
+- 只有确实要在 `content` 内自行询问、判空并记录技能日志时才使用 `direct: true`。
+- 必须发动的技能使用 `forced: true`；如果强制技能仍需选择目标或牌，可以在 `content` 中做强制选择，或使用不会取消的 `cost`，但不得同时依赖 `direct`。
+
+## 3. 技能类别与触发框架
+
+### 3.1 被动、响应技能
+
+以 `trigger` 指定时机，`filter` 限制条件，`content` 执行效果。
+
+```js
+my_response: {
+    trigger: { source: 'gongJiMingZhong' },
+    filter: function (event, player) {
+        return !event.yingZhan && player.countZhiShiWu('my_mark') > 0;
+    },
+    cost: async function (event, trigger, player) {
+        event.result = await player
+            .chooseBool('是否移除1个【能量印记】发动技能？')
+            .set('ai', () => true)
+            .forResult();
+    },
+    content: async function (event, trigger, player) {
+        await player.removeZhiShiWu('my_mark');
+        await trigger.target.faShuDamage(1, player);
+    },
+},
+```
+
+- `forced: true`：满足条件后强制发动。
+- `direct: true`：跳过本体的标准发动询问与 `cost` 流程，**不会自动让玩家选择是否发动**。只有技能在 `content` 中自行选择、判空并调用 `player.logSkill('技能ID', target)` 时才使用。
+- `usable: 1`：当前本体中表示该技能每回合限发动一次，既适用于主动技能，也适用于触发技能。技能文案含“每回合限一次”时必须配置，并在实战中验证回合切换后次数会重置。
+- `source`：伤害/攻击的来源；`player`：技能拥有者；`global`：任意角色或全局事件。
+
+### 3.2 启动技能
+
+启动技能使用 `type: 'qiDong'`，并在玩家执行启动行动时响应。
+
+```js
+my_activate: {
+    type: 'qiDong',
+    trigger: { player: 'qiDong' },
+    filter: function (event, player) {
+        return player.canBiShaShuiJing();
+    },
+    content: async function (event, trigger, player) {
+        await player.removeBiShaShuiJing();
+        await player.addZhiShiWu('my_mark', 2);
+    },
+},
+```
+
+### 3.3 法术技能
+
+法术使用 `type: 'faShu'` 和 `enable: 'faShu'`。有费用时，`filter` 负责判断能否发动，`content` 的第一步应支付费用。
+
+```js
+my_spell: {
+    type: 'faShu',
+    enable: 'faShu',
+    filter: function (event, player) {
+        return player.canBiShaBaoShi();
+    },
+    filterTarget: true,
+    content: async function (event, trigger, player) {
+        await player.removeBiShaBaoShi();
+        await event.target.faShuDamage(2, player);
+    },
+    ai: {
+        baoShi: true,
+        order: 3.5,
+        result: { target: (player, target) => get.damageEffect(target, 2) },
+    },
+},
+```
+
+### 3.4 复用独有技牌
+
+赵灵儿的元素独有技与四糸乃的【冰之祈愿】代表两种不同的标准模式，设计时必须先确定是“继续使用原独有技”，还是“只把带有独有技的牌作为新技能载体”。
+
+继续使用原独有技时，子技能应声明 `duYou`，第一张牌用 `card.hasDuYou(...)` 判断，并通过 `prepare` 打出原实体牌：
+
+```js
+my_original_unique_spell: {
+    sub: true,
+    sourceSkill: 'my_parent_skill',
+    type: 'faShu',
+    enable: 'faShu',
+    duYou: 'my_unique',
+    position: 'h',
+    selectCard: 1,
+    filterCard: function (card) {
+        return !!card &&
+            typeof card.hasDuYou === 'function' &&
+            card.hasDuYou('my_unique');
+    },
+    discard: false,
+    prepare: function (cards, player, targets) {
+        player.useCard(cards[0]);
+    },
+    content: async function (event, trigger, player) {
+        // 在原独有技框架上追加角色自己的修正
+    },
+},
+```
+
+只借用独有技牌作为新技能费用时，不调用原独有技内容，而由新技能完整结算：
+
+```js
+my_rewritten_unique_spell: {
+    type: 'faShu',
+    enable: 'faShu',
+    position: 'h',
+    selectCard: 1,
+    useCard: true,
+    filterCard: function (card) {
+        return !!card &&
+            typeof card.hasDuYou === 'function' &&
+            (
+                card.hasDuYou('first_unique') ||
+                card.hasDuYou('second_unique')
+            );
+    },
+    filterTarget: true,
+    content: async function (event, trigger, player) {
+        // 新技能自己的完整效果
+    },
+},
+```
+
+- 一张牌的独有技字段可能同时包含多个 ID；统一使用 `card.hasDuYou(id)`，不要直接比较 `get.duYou(card) === id`。
+- `discard: false`、`useCard: true` 和 `prepare` 会影响实体牌由谁、在何时进入用牌/弃牌流程，必须与设计语义一致，不能混用两种模式。
+- 新技能若选择自己为目标，目标合法性要按支付费用后的剩余手牌重新判断，避免费用牌被占用后没有牌可执行后续弃牌。
+- 复用本体或其他角色包独有技前，先确认对应技能与牌字段已经加载；不能只复制显示名称。
+
+## 4. 常用触发时机
+
+以下是旧角色中高频出现的时机。具体事件字段应先在同类旧技能中确认再使用。
+
+| 目的 | 常见时机 | 常用字段/注意事项 |
+| --- | --- | --- |
+| 攻击前调整 | `gongJiShi`、`gongJiSheZhi`、`gongJiBefore` | 常读取 `event.card`、`event.target`，或修改攻击事件。 |
+| 成为攻击目标 | `shouDaoGongJiBefore`、`shouDaoGongJi` | 使用 `trigger: { target: 'shouDaoGongJi' }`；在应战、圣光和圣盾结算前后进入攻击响应流程，不表示已经承受攻击伤害。 |
+| 攻击命中 | `gongJiMingZhong`、`gongJiMingZhongAfter` | 通常为 `source`，目标在 `trigger.target`。 |
+| 攻击未命中 | `gongJiWeiMingZhong` | 用于未命中后的补偿或惩罚；此事件不保证携带原攻击的实体 `cards`。 |
+| 攻击结束 | `gongJiEnd`、`gongJiAfter` | 适合追加攻击行动、结算连击；原 `useCard` 事件通常仍可读取 `target` 与 `cards`。 |
+| 造成伤害 | `zaoChengShangHai` | 伤害流程的较早阶段，通常由伤害来源响应；用 `event.faShu` 区分法术伤害，用 `event.yingZhan` 排除迎战。 |
+| 即将受到伤害 | `shouDaoShangHai`、`chanShengShangHai` | 位于实际承受伤害之前，适合精确免疫或早期修改伤害值。 |
+| 承受伤害 | `chengShouShangHaiBefore`、`chengShouShangHai` | 适合减伤、转移等实际伤害前效果。 |
+| 伤害结算后 | `chengShouShangHaiAfter`、`shouDaoShangHaiAfter` | 适合受伤反击和后续状态；此时不能再用来免疫已经结算的伤害。 |
+| 法术前后 | `faShuBefore`、`faShuAfter` | 用于法术限制、法术后触发。 |
+| 士气变化 | `changeShiQiEnd` | `event.side` 是阵营，`event.num < 0` 表示士气下降。 |
+| 回合/行动 | `phaseBegin`、`xingDongBefore`、`xingDongBegin`、`xingDongEnd`、`phaseEnd` | `phaseBegin` 早于行动数初始化；增减本回合行动应使用 `xingDongBefore` 或更晚的行动时机。 |
+| 提炼结束 | `_tiLian_backupEnd` | 用于读取提炼结果或作联动。 |
+| 放置扩展牌 | `addToExpansionBefore`、`addToExpansionAfter` | 自定义位置可从 `event.position` 判断。 |
+
+常见过滤条件：
+
+```js
+if (event.yingZhan) return false;                    // 排除迎战攻击
+if (event.faShu !== true) return false;              // 仅法术伤害
+if (event.side === player.side) return false;        // 仅敌方阵营事件
+if (event.num >= 0) return false;                    // 仅负向变化（如士气下降）
+if (_status.currentPhase !== player) return false;   // 仅当前角色自己的回合
+```
+
+### 4.1 伤害事件顺序
+
+当前本体的主要伤害事件按以下顺序触发：
+
+```text
+zaoChengShangHai
+→ shouDaoShangHai
+→ chanShengShangHai
+→ chengShouShangHaiBefore
+→ chengShouShangHai
+→ 实际伤害结算
+→ chengShouShangHaiAfter
+→ shouDaoShangHaiAfter
+```
+
+- 增伤、减伤和免疫必须在“实际伤害结算”之前处理。
+- 伤害后追加效果使用 `chengShouShangHaiAfter` 或 `shouDaoShangHaiAfter`。
+- 同一个伤害技能只选择一个符合语义的主触发阶段，避免在多个阶段重复修改同一伤害。
+- 修改伤害值优先调用 `trigger.changeDamageNum(num)`；完全免疫可传入 `-trigger.num`。直接赋值 `trigger.num = 0` 虽可生效，但不利于统一追踪伤害变化。
+
+`shouDaoGongJi` 属于攻击用牌流程，不在上述伤害事件链中。角色成为攻击目标时就会触发；即使其随后成功应战、使用【圣光】或由【圣盾】令攻击未命中，也不需要等到实际伤害产生。因此，技能文案必须先明确“受到攻击”具体指哪一种语义：
+
+```js
+// 成为火系攻击的目标时触发；不要求攻击命中或造成伤害
+my_fire_attack_target: {
+    trigger: { target: 'shouDaoGongJi' },
+    forced: true,
+    filter: function (event, player) {
+        return !!event?.card &&
+            get.type(event.card) === 'gongJi' &&
+            get.xiBie(event.card) === 'huo';
+    },
+    content: function (event, trigger, player) {
+        // 目标时效果
+    },
+},
+
+// 实际承受火系攻击伤害后触发；成功应战或伤害被降为0时不触发
+my_fire_attack_damage: {
+    trigger: { player: 'chengShouShangHaiAfter' },
+    forced: true,
+    filter: function (event, player) {
+        return event?.num > 0 &&
+            event.faShu !== true &&
+            !!event.card &&
+            get.type(event.card) === 'gongJi' &&
+            get.xiBie(event.card) === 'huo';
+    },
+    content: function (event, trigger, player) {
+        // 伤害后效果
+    },
+},
+```
+
+文案写“成为攻击目标时①”时使用 `shouDaoGongJi`；写“攻击命中后②”时使用 `gongJiMingZhong`；写“承受攻击造成的伤害后⑥”时使用 `chengShouShangHaiAfter` 并验证 `event.num > 0`。不要用其中一个事件近似代替另一个。
+
+如果减伤技能规定“即使伤害减至0，仍执行附带效果”，减伤和附带效果必须在同一个伤害前技能中顺序结算。伤害被降为0后，伤害事件会提前结束，不能再依赖 `chengShouShangHaiAfter` 补做效果：
+
+```js
+my_forced_reduction: {
+    trigger: { player: 'chengShouShangHaiBefore' },
+    forced: true,
+    filter: function (event, player) {
+        return event?.num > 0 &&
+            !player.isZhiShiWuMax('my_mark');
+    },
+    content: async function (event, trigger, player) {
+        trigger.changeDamageNum(-1);
+        // 即使上一步把伤害降为0，仍在当前技能内增加指示物
+        await player.addZhiShiWu('my_mark', 1);
+    },
+},
+```
+
+### 4.2 过滤器的事件字段判空
+
+`filter` 会在本体整理触发器时执行。不同事件携带的字段并不相同，任何技能都不得假定 `event.card`、`event.target`、`event.source`、`event.cards` 或父事件一定存在。
+
+```js
+filter: function (event, player) {
+    if (!event || !event.card || !event.target) return false;
+    return event.card.name === 'zhongDu' && event.target !== player;
+},
+```
+
+读取父事件时也要判空：
+
+```js
+filter: function (event, player) {
+    const useCardEvent = event?.getParent?.('useCard', true);
+    return useCardEvent?.card?.name === 'zhongDu';
+},
+```
+
+不要直接写 `event.card.name`、`event.target.side` 或 `event.getParent(...).name`。字段缺失时，这类写法会在 `arrangeTrigger` 阶段抛出异常并中断整次结算。
+
+### 4.3 回合开始与行动数初始化
+
+当前本体进入角色回合后，先触发 `phaseBegin`，随后才进入 `xingDong` 并把行动数初始化为：
+
+```text
+攻击或法术行动 = 1
+法术行动 = 0
+攻击行动 = 0
+额外行动列表 = []
+```
+
+初始化完成后才触发 `xingDongBefore` 和 `xingDongBegin`。因此，在 `phaseBegin` 中直接调用 `addGongJi()`、`addFaShu()` 或 `addGongJiOrFaShu()`，增加的数值会被初始化覆盖。
+
+纯粹的“本回合额外增加行动”应直接在 `xingDongBefore` 处理：
+
+```js
+my_extra_attack: {
+    trigger: { player: 'xingDongBefore' },
+    forced: true,
+    content: function (event, trigger, player) {
+        player.addGongJi();
+    },
+},
+```
+
+如果必须先在 `phaseBegin` 完成重置、横置等异步结算，再根据其结果增加行动，应保存一次性标记，并在 `xingDongBefore` 消耗：
+
+```js
+my_turn_start: {
+    group: ['my_turn_start_reset', 'my_turn_start_action'],
+    subSkill: {
+        reset: {
+            trigger: { player: 'phaseBegin' },
+            forced: true,
+            filter: function (event, player) {
+                return player.isHengZhi();
+            },
+            content: async function (event, trigger, player) {
+                await player.chongZhi();
+                player.storage.my_turn_start_extra_attack = true;
+            },
+        },
+        action: {
+            trigger: { player: 'xingDongBefore' },
+            forced: true,
+            popup: false,
+            filter: function (event, player) {
+                return player.storage.my_turn_start_extra_attack === true;
+            },
+            content: function (event, trigger, player) {
+                delete player.storage.my_turn_start_extra_attack;
+                player.addGongJi();
+            },
+        },
+    },
+},
+```
+
+一次性行动标记必须在使用后删除，并在技能移除或角色状态清理时提供后备清理，防止标记残留到后续回合。
+
+如果规则要求“执行【特殊行动】后直接结束回合”，但技能额外增加了普通 `gongJi` / `faShu` 计数，特殊行动结算后本体仍会因剩余计数继续行动。此时应单独记录该技能授予的待用行动：在对应主动行动结束后清除记录；若先触发 `teShuEnd`，只扣除该技能尚未使用的1次行动并清除记录。不要直接把 `player.storage.gongJi`、`player.storage.faShu` 或整个 `extraXingDong` 清零，以免误删其他技能授予的行动。
+
+“取消即将开始的额外攻击/法术行动并结束回合”应同时取消当前行动事件，并把所属 `xingDong` 标记为结束：
+
+```js
+function isExtraAction(event, action, player) {
+    if (!event || typeof event.getParent !== 'function') return false;
+    const phase = event.getParent('xingDong');
+    if (!phase || phase.name !== 'xingDong') return false;
+    if (event.player !== player ||
+        phase.player !== player ||
+        event.yingZhan === true) {
+        return false;
+    }
+    if (event.extraXingDongType === action) return true;
+    if (event.action !== true) return false;
+    return phase.xingDong === action;
+}
+
+async function cancelExtraAction(trigger, player) {
+    const phase = trigger.getParent('xingDong');
+    if (phase?.name === 'xingDong') {
+        phase.skipped = true;
+    }
+    trigger.cancel();
+}
+```
+
+分别在 `gongJiBefore` 与 `faShuBefore` 监听，并传入对应的 `action` 及【冻结】持有者。`event.player` 与 `phase.player` 必须都等于该持有者，且 `event.yingZhan` 不能为 `true`；否则其他角色在其行动阶段内应战时，会被误判成应战角色自己的额外行动。
+
+通过 `player.addGongJi()`、`player.addFaShu()` 或 `storage.extraXingDong` 增加的行动会生成带 `action: true` 的独立行动事件，可以按 `phase.xingDong` 识别。若技能像【潮卷冰削】一样直接通过 `useCard()` 创建追加攻击，没有独立行动事件，则必须在该 `useCard` 事件上写入 `extraXingDongType: 'gongJi'`；追加法术对应 `'faShu'`。
+
+只调用 `trigger.cancel()` 会取消本次牌/技能，但行动阶段可能继续；只设置 `phase.skipped` 又可能让当前行动继续进入后续步骤，因此两者都要处理。触发前必须确认这是额外行动，不能误取消角色每回合默认的第一次行动或其他角色的应战攻击。
+
+### 4.4 自定义联动时机
+
+多个技能需要在同一个自定义节点联动时，可以在当前事件上主动触发一个命名时机。异步流程必须等待该时机中的响应技能全部结算完成：
+
+```js
+content: async function (event, trigger, player) {
+    event.materialCount = 1;
+    await event.trigger('my_material_added');
+    // 监听 my_material_added 的响应技能已经结算完毕
+},
+
+my_material_response: {
+    trigger: { player: 'my_material_added' },
+    forced: true,
+    filter: function (event, player) {
+        return typeof event.materialCount === 'number';
+    },
+    content: function (event, trigger, player) {
+        trigger.materialCount++;
+    },
+},
+```
+
+- `event.trigger('自定义时机')` 在当前事件上触发技能，不会自动创建一套新的业务字段；需要联动的数据应先写入该事件。
+- 监听方仍须按实际事件拥有者选择 `player`、`source` 或 `global`，并对自定义字段判空。
+- 需要等待响应结果再继续时必须 `await event.trigger(...)`；只调用而不等待会导致后续代码先执行。
+
+## 5. 常用效果 API
+
+### 5.1 伤害、治疗、行动
+
+```js
+await target.damage(2, player);             // 2 点攻击伤害
+await target.faShuDamage(2, player);        // 2 点法术伤害
+await target.damageFaShu(2, player);        // 与 faShuDamage 等价，建议统一使用 faShuDamage
+await target.changeZhiLiao(1, player);      // 增加 1 点治疗；可传治疗来源
+await target.changeZhiLiao(-1);             // 移除 1 点治疗
+player.addGongJi();                         // +1 攻击行动
+player.addFaShu();                          // +1 法术行动
+player.addGongJiOrFaShu();                  // +1 攻击或法术行动（由规则流程处理选择）
+player.canGongJi();                         // 当前是否存在可执行的攻击行动
+player.canFaShu();                          // 当前是否存在可执行的法术行动
+player.canTeShu();                          // 当前是否存在可执行的特殊行动
+player.canXingDong();                       // 当前是否存在任意可执行行动
+player.canXingDong('gongJi');               // 指定类型是否存在可执行行动
+```
+
+治疗、能量和指示物都有上限处理。`changeZhiLiao` 可能产生溢出事件，不能只依赖调用前的数值判断来模拟实际结果。
+
+`canGongJi`、`canFaShu`、`canTeShu` 和 `canXingDong` 会综合检查当前可用技能、卡牌与合法目标，适合用于发动条件和后续行动判断；它们不等同于只检查行动数是否大于零。
+
+如果后续技能需要识别造成伤害的牌或元素，必须让伤害事件携带有效的 `card`：
+
+```js
+const fireCard = game.createCard2('huoYanZhan');
+await target.faShuDamage(1, player, fireCard);
+```
+
+后续触发器应先判空，再读取元素：
+
+```js
+filter: function (event, player) {
+    return event?.num > 0 &&
+        event.faShu === true &&
+        !!event.card &&
+        get.xiBie(event.card) === 'huo';
+},
+```
+
+标准的“火系法术伤害”必须同时满足：
+
+1. `event.num > 0`：最终确实承受了正数伤害；
+2. `event.faShu === true`：伤害类型是法术伤害；
+3. `event.card` 存在且 `get.xiBie(event.card) === 'huo'`：伤害事件明确携带火系牌。
+
+仅设置 `faShu: true` 只能标识法术伤害，不能代替 `event.card` 中的牌名、元素等信息。仅弃置或展示火系牌作为费用，也不会自动令后续伤害成为火系伤害；造成伤害时必须显式传入该牌。反之，只检查 `event.card` 的系别而不检查 `event.faShu`，会把火系攻击伤害以及其他附带火系牌对象的伤害一并纳入。
+
+若规则只是把当前伤害“视为法术伤害”，应在 `zaoChengShangHai` 的 `firstDo` 技能中直接设置当前事件的 `trigger.faShu = true`。不要把原伤害减至0后再创建一次新的 `faShuDamage`；新事件会丢失原攻击牌、应战状态、技能标记和其他自定义字段，还会额外留下原来的0点伤害事件。
+
+常见范围如下：
+
+| 场景 | 是否属于火系法术伤害 | 原因 |
+| --- | --- | --- |
+| 火系【魔弹】实际造成伤害 | 是 | 法术伤害事件继承本次使用的火系牌。 |
+| 【火球】把火系费用牌显式传入 `faShuDamage` | 是 | 同时具备 `faShu` 与火系 `card`。 |
+| 火系主动攻击或应战攻击造成伤害 | 否 | 是攻击伤害；若技能同时处理火系攻击，应单独增加攻击分支。 |
+| 纯技能调用 `faShuDamage`，没有牌对象 | 否 | 有法术伤害类型，但没有可确认系别的 `event.card`。 |
+| 弃置火系牌支付费用，伤害调用未传该牌 | 否 | 费用牌不会自动成为伤害牌。 |
+| 伤害被减至0 | 否 | 没有实际承受正数伤害。 |
+| 延迟状态结算未传入原实体牌 | 否 | 伤害事件无法恢复原牌的系别；需要在状态中保存并显式传入。 |
+
+同时处理“火系攻击伤害或火系法术伤害”时，不要只写宽泛的“存在火系 `event.card`”；应把两种合法类型写清楚：
+
+```js
+filter: function (event, player) {
+    if (!event || event.num <= 0 || !event.card) return false;
+    if (get.xiBie(event.card) !== 'huo') return false;
+
+    const isSpellDamage = event.faShu === true;
+    const isAttackDamage =
+        event.faShu !== true &&
+        get.type(event.card) === 'gongJi';
+    return isSpellDamage || isAttackDamage;
+},
+```
+
+只免疫某一种伤害时，必须同时限制触发阶段和伤害来源，不得取消整个状态或放宽为同属性的全部伤害：
+
+```js
+my_poison_immunity: {
+    trigger: { player: 'shouDaoShangHai' },
+    forced: true,
+    filter: function (event, player) {
+        if (!event || event.num <= 0) return false;
+        if (event.card?.name === 'zhongDu') return true;
+
+        const poisonEvent = event.getParent?.('_zhongDu', true);
+        return poisonEvent?.name === '_zhongDu';
+    },
+    content: function (event, trigger, player) {
+        trigger.changeDamageNum(-trigger.num);
+    },
+},
+```
+
+免疫技能只把匹配到的本次伤害降为零；除非设计文案明确要求，否则不应移除【中毒】、阻止其其他效果，或免疫无关的法术伤害。
+
+修改伤害时应区分增量与定值：
+
+```js
+trigger.changeDamageNum(1); // 在当前伤害上增加1
+trigger.changeDamageNum(-1); // 在当前伤害上减少1，最低为0
+trigger.setDamageNum(2);     // 把本次伤害直接设置为2
+```
+
+多项增减效果叠加时使用 `changeDamageNum`；文案明确写“伤害改为/视为 X”时才使用 `setDamageNum`。两者都会把最终数值限制为不小于零。
+
+### 5.2 攻击流程控制
+
+攻击事件提供以下标准方法：
+
+```js
+trigger.wuFaYingZhan();      // 本次攻击无法应战
+trigger.wuFaShengGuang();    // 本次攻击无法使用圣光
+trigger.wuFaShengDun();      // 本次攻击无法使用/触发圣盾
+trigger.wuFaAnMie();         // 本次攻击无法使用暗灭
+trigger.qiangZhiMingZhong(); // 同时禁止应战、圣光和圣盾
+trigger.weiMingZhong();      // 清除攻击目标，使本次攻击未命中
+```
+
+- 这些方法主要在 `gongJiSheZhi`、`gongJiBefore` 等攻击设置/攻击前时机调用。优先对当前攻击事件调用；本体虽会在部分子事件中回溯父事件，但不应依赖不明确的父子层级。
+- `wuFaShengDun()` 只绕过【圣盾】，不会同时禁止应战；“无法应战”只使用 `wuFaYingZhan()`。
+- “强制命中”使用 `qiangZhiMingZhong()`，它会禁止应战、圣光和圣盾，但不会自动改变伤害数值。
+- “攻击未命中”应使用 `weiMingZhong()`，不要只把伤害改为零；未命中与命中后造成零伤害会触发不同的后续事件。
+- 调用前仍应确认 `trigger` 确实属于本次攻击流程，并排除不符合文案的迎战攻击。
+
+#### 5.2.1 未命中与原攻击实体牌
+
+`weiMingZhong()` 的实际行为是把原攻击事件的 `target` 清空。由【圣盾】或应战流程另外触发的 `gongJiWeiMingZhong` 事件只会复制攻击牌信息 `card` 等必要字段，**不保证存在实体牌数组 `cards`**。因此：
+
+- 只需要响应“未命中”时，监听 `gongJiWeiMingZhong`；
+- 需要在未命中后获得、盖放或移动原攻击实体牌时，监听原攻击的 `gongJiEnd`，用 `!event.target` 判断未命中，并检查 `event.cards`；
+- `event.card` 是牌信息，不等同于可移动的实体 `event.cards`。
+
+```js
+my_collect_missed_attack: {
+    trigger: { player: 'gongJiEnd' },
+    forced: true,
+    filter: function (event, player) {
+        return !!event &&
+            !event.target &&
+            Array.isArray(event.cards) &&
+            event.cards.some(card => card && !card.destroyed);
+    },
+    content: async function (event, trigger, player) {
+        const card = trigger.cards.find(card => card && !card.destroyed);
+        if (!card) return;
+        await player.addGaiPai(card, player, 'my_material');
+    },
+},
+```
+
+若同一技能先在攻击前记录“本次攻击已发动”，应把标记写入原攻击事件可延续到 `gongJiEnd` 的字段（例如 `customArgs`），并在结束时同时检查该标记，避免收取其他未命中的攻击牌。
+
+### 5.3 星石/宝石与能量
+
+本体的能量只有 `shuiJing`（水晶）与 `baoShi`（宝石）：
+
+```js
+player.canBiShaShuiJing();        // 有水晶或宝石即可支付“水晶/星石”类消耗
+player.canBiShaBaoShi();          // 必须有宝石
+await player.removeBiShaShuiJing(); // 优先/按本体选择规则移除一颗水晶或宝石
+await player.removeBiShaBaoShi();   // 移除一颗宝石
+player.countNengLiangAll();       // 全部能量数
+player.countNengLiang('baoShi');  // 宝石数
+player.countNengLiang('shuiJing');// 水晶数
+await player.addNengLiang('baoShi', 1);
+await player.removeNengLiang('shuiJing', 2);
+```
+
+费用应只支付一次。若技能伤害依赖“剩余能量”，先明确设计是“支付前”还是“支付后”计算，并按此安排顺序。
+
+### 5.4 士气、战绩与横置
+
+```js
+await player.changeShiQi(-1);             // 改变己方士气
+await player.changeShiQi(-1, !player.side); // 改变敌方士气
+await player.addZhanJi('baoShi', 1);      // 在己方战绩区增加宝石
+await player.removeZhanJi('shuiJing', 1); // 从战绩区移除水晶
+await player.hengZhi();                   // 横置
+await player.chongZhi();                  // 重置（解除横置）
+```
+
+### 5.5 指示物
+
+先定义技能本体，再调用增减 API：
+
+```js
+my_mark: {
+    intro: { name: '能量印记', content: 'mark', max: 5 },
+    onremove: 'storage',
+    markimage: 'image/card/zhiShiWu/hong.png',
+},
+```
+
+定义加载后再调用：
+
+```js
+await player.addZhiShiWu('my_mark', 1);
+await player.removeZhiShiWu('my_mark', 2);
+player.countZhiShiWu('my_mark');
+player.hasZhiShiWu('my_mark');
+player.isZhiShiWuMax('my_mark');
+await player.setZhiShiWu('my_mark', 3); // 调整到恰好3个
+```
+
+指示物上限来自 `intro.max`。不要只修改 `storage`，应通过 `addZhiShiWu` / `removeZhiShiWu` / `setZhiShiWu` 触发正确的 UI 与事件流程。`setZhiShiWu` 表示调整到指定总数，不是增加指定数量。
+
+当前无名杀 1.6.6 的 `addMark` / `removeMark` 会直接读取 `info.markimage.includes(...)`。凡是通过 `addZhiShiWu` / `removeZhiShiWu` / `setZhiShiWu` 管理的计数指示物，都必须配置有效的 `markimage`；只配置 `marktext` 会在增减指示物时触发 `Cannot read properties of undefined (reading 'includes')`。常用标准图标为：
+
+```js
+markimage: 'image/card/zhiShiWu/hong.png', // 红色指示物
+markimage: 'image/card/zhiShiWu/lan.png',  // 蓝色指示物
+```
+
+需要按“本次增加溢出了多少”结算后续效果时，比较调用前后的实际变化，不要只检查是否已经达到上限：
+
+```js
+const requested = 2;
+const before = player.countZhiShiWu('my_mark');
+await player.addZhiShiWu('my_mark', requested);
+const after = player.countZhiShiWu('my_mark');
+const added = Math.max(0, after - before);
+const overflow = Math.max(0, requested - added);
+
+if (overflow > 0) {
+    await player.changeZhiLiao(overflow, player);
+}
+```
+
+可传递指示物应先让新目标成功获得，再从旧持有者处移除，避免添加失败后指示物从场上消失：
+
+```js
+const before = target.countZhiShiWu('my_transferable_mark');
+await target.addZhiShiWu('my_transferable_mark', 1, true);
+const received =
+    target.countZhiShiWu('my_transferable_mark') > before;
+
+if (received) {
+    await player.removeZhiShiWu('my_transferable_mark', 1);
+}
+```
+
+转移到任意角色的指示物技能必须已加入全局技能或由目标角色实际持有定义；添加失败时不得继续移除旧持有者的指示物。
+
+### 5.6 手牌、弃牌与选牌
+
+```js
+player.countCards('h');                    // 手牌数
+player.getCards('h');                      // 手牌数组
+player.hasCard(card => get.type(card) === 'faShu');
+await player.draw(2);
+await player.discard(cards).set('showCards', true);
+
+const chosen = await player
+    .chooseCard('h', 1, '选择1张手牌', true)
+    .set('filterCard', card => get.xiBie(card) === 'huo')
+    .forResultCards();
+
+await player.tiaoZhengShouPai(4); // 将手牌调整至4张：不足则摸牌，超出则强制弃牌
+await player.showHiddenCards(cards, '展示这些盖放/隐藏的牌');
+
+const drawResult = await player.chooseDraw(3, true).forResult();
+// true 表示可选择0～3中的任意数量；不传或传false时只在0和3之间选择
+```
+
+常用位置：`h` 为手牌、`e` 为装备、`j` 为判定区。元素以 `get.xiBie(card)` 获取；卡牌类型以 `get.type(card)` 获取（如 `gongJi`、`faShu`）。
+
+`tiaoZhengShouPai(num)` 会把目标数量限制在当前手牌上限以内。当前封装在未传参数、参数不是数字或传入 `0` 时会把目标数回退为 `4`；负数进入结算后才会直接结束。因此不要用 `0` 表示“不调整”，应在调用前自行判断并跳过调用。`chooseDraw` 会自行完成摸牌，返回结果只用于读取最终选择数量。
+
+按手牌系别或命格统计时可使用：
+
+```js
+player.countTongXiPai();          // 同一系手牌的最大数量
+player.countTongXiPai('gongJi');  // 同一系攻击牌的最大数量
+player.countYiXiPai();            // 手牌中不同系别的数量
+player.countTongMingPai();        // 同一命格手牌的最大数量
+player.countYiMingPai();          // 手牌中不同命格的数量
+```
+
+`countTongXiPai()` 和 `countTongMingPai()` 在没有符合条件的手牌时，当前实现可能返回 `-Infinity`。调用前先确认有牌，或统一写成 `Math.max(0, player.countTongXiPai())`。需要统计任意牌数组而非手牌时，可使用 `get.countTongXiPai(cards, type)`、`get.countYiXiPai(cards, type)`、`get.countTongMingPai(cards)` 和 `get.countYiMingPai(cards)`，并保留相同的空数组防护。
+
+#### 5.6.1 延后标准爆牌并追踪技能弃牌
+
+当前本体的 `draw()` 会在摸牌事件内部立即检查手牌上限并执行标准爆牌。若技能要求“先查看或判断本次摸到的牌，再按处理后的手牌执行标准爆牌”，不能直接 `await player.draw()` 后再判断，因为摸牌事件返回时爆牌可能已经完成。
+
+标准做法是：
+
+1. 临时增加足以容纳本次摸牌的手牌上限，使 `draw()` 内部不产生爆牌。
+2. 用 `try...finally` 完成摸牌、展示及分支处理，并保证临时手牌上限一定被移除。
+3. 恢复原手牌上限后调用 `player.qiPai()`，让本体重新计算并执行标准爆牌、弃牌和士气下降。
+
+```js
+const bonus = Math.max(1, player.needsToDiscard(1));
+player.storage.myTemporaryHandLimit = bonus;
+player.addSkill('myTemporaryHandLimit');
+
+try {
+    const cards = await player.draw(1).forResult();
+    await player.showCards(cards);
+    // 在这里完成系别判断、保留或弃置摸到的牌
+} finally {
+    player.removeSkill('myTemporaryHandLimit');
+}
+
+const overflow = player.qiPai();
+if (overflow) {
+    overflow.set('mySkillDiscardSource', player.playerid);
+    await overflow;
+}
+```
+
+临时手牌上限技能使用 `maxHandcardFinal` 返回 `num + storage`，并在 `onremove` 中删除对应存储。
+
+当“因技能弃置”既包括技能直接调用的弃牌，也包括技能引发的标准爆牌弃牌时，应把来源 ID 写在实际 `discard` 事件或其父事件上。`chooseToDiscard()` 会再创建一个子 `discard` 事件，因此观察全局 `discard` 时必须从当前事件开始沿父事件链查找来源标记，不能只检查 `event.mySkillDiscardSource`。一次 `discard` 事件无论包含几张牌都只触发一次；多名角色依次弃牌则会产生多个独立事件，分别结算。
+
+### 5.7 实体牌、虚拟牌与牌堆取牌
+
+需要把牌交给 `useCard`、放入盖牌区/扩展区，或让牌在当前事件之后继续存在时，应创建可持久化的实体牌：
+
+```js
+const poisonCard = game.createCard2('zhongDu');
+await player.useCard(poisonCard, event.target);
+```
+
+- `game.createCard()` 会给牌设置 `storage.vanish = true`，适合临时牌；事件结束后需要保留的牌优先使用 `game.createCard2()`。
+- 只传 `{ name: 'zhongDu' }` 等虚拟牌对象时，`useCard` 事件可能没有实体 `event.cards`。若卡牌效果依赖把实体牌放到目标区域，虚拟牌不会产生预期状态。
+- `get.cardPile(...)` 在牌堆中找不到符合条件的牌时会返回 `undefined`。不得把未检查的结果传入 `useCard`。
+- `get.cards()` 会把牌实体直接从牌堆中取出。展示后必须明确将其 `gain`、`useCard`、放入扩展区，或通过 `game.cardsDiscard(cards)` 移入弃牌堆；仅调用 `showCards` / `showHiddenCards` 会让牌脱离所有区域。
+- 追加攻击若由玩家选择一张现有攻击牌执行，应把该实体牌直接传给 `useCard`。不要先弃置，再只按系别创建虚拟攻击，否则会丢失牌名、命格、独有技和实体牌触发信息。
+
+```js
+const card = get.cardPile(current => current.name === 'zhongDu');
+if (card) {
+    await player.useCard(card, event.target);
+} else {
+    await player.useCard(game.createCard2('zhongDu'), event.target);
+}
+```
+
+#### 5.7.1 应战时把攻击牌视为当前攻击同系
+
+赫克托【横枪架势】与史蒂夫【沉重格挡】使用同一标准模式：`viewAs` 创建独立虚拟攻击牌，只改变本次应战攻击的系别，保留原实体牌的牌名、命格和独有技。不得直接修改所选实体牌或上一次攻击事件的 `card.xiBie`，否则会污染下一名角色的应战条件。
+
+```js
+my_same_element_response: {
+    enable: 'yingZhan',
+    position: 'h',
+    filter: function (event, player) {
+        event = event || _status.event;
+        if (!event || event.canYingZhan === false || !event.card) {
+            return false;
+        }
+        return player.hasCard(function (card) {
+            return get.type(card) === 'gongJi';
+        }, 'h');
+    },
+    filterCard: function (card, player, event) {
+        return get.type(card) === 'gongJi';
+    },
+    viewAs: function (cards, player) {
+        if (!cards.length) return;
+        const responseEvent = _status.event;
+        if (!responseEvent?.card) return;
+
+        const card = cards[0];
+        return {
+            name: get.name(card),
+            xiBie: get.xiBie(responseEvent.card),
+            mingGe: get.mingGe(card),
+            duYou: get.duYou(card),
+            isCard: true,
+        };
+    },
+    group: 'my_same_element_response_effect',
+    subSkill: {
+        effect: {
+            trigger: { player: 'gongJiBefore' },
+            forced: true,
+            firstDo: true,
+            filter: function (event, player) {
+                return event?.skill === 'my_same_element_response';
+            },
+            content: async function (event, trigger, player) {
+                // 在这里支付指示物、耐久等费用并修改本次攻击
+            },
+        },
+    },
+},
+```
+
+- `viewAs` 返回的新对象只服务本次应战攻击；不能在 `gongJiBefore` 把系别恢复成实体牌原系别，否则后续角色会按错误系别应战。
+- 费用放在与 `event.skill` 匹配的攻击前子技能中，确保只有玩家实际使用该虚拟应战技能后才支付。
+- `filterTarget` 如需改选攻击目标，应从 `_yingZhan` 父事件读取原攻击来源，并排除来源、自身、队友及非法目标。
+- 若【暗灭】等牌受 `canAnMie` 限制，`filterCard` 与 `filter` 必须同时执行相同合法性判断。
+
+### 5.8 随机选择与重复结算
+
+当前本体没有 `game.shuffle()`。数组随机操作使用本体扩展方法：
+
+```js
+const one = list.randomGet();       // 随机取得1项
+const some = list.randomGets(3);    // 随机取得最多3项
+const shuffled = list.randomSort(); // 原数组随机排序
+```
+
+随机对多个角色重复施加效果时，应依次等待每次结算，并在每轮重新获取仍存活的合法目标：
+
+```js
+for (let i = 0; i < 3; i++) {
+    const candidates = game.players.filter(current => current.isAlive());
+    if (!candidates.length) break;
+
+    const target = candidates.randomGet();
+    const card = game.createCard2('zhongDu');
+    await player.useCard(card, target);
+}
+```
+
+不要一次缓存目标后无等待地批量创建事件；前一次结算可能导致角色死亡、状态变化或目标失效。
+
+需要按座次从右手边开始并让自己最后结算时，先生成稳定顺序，再逐个等待：
+
+```js
+const targets = [];
+let current = player.getNext();
+let guard = 0;
+
+while (current &&
+    current !== player &&
+    guard < game.players.length) {
+    targets.push(current);
+    current = current.getNext();
+    guard++;
+}
+targets.push(player);
+
+for (const target of targets) {
+    if (!target?.isIn()) continue;
+    // 当前目标的完整结算
+}
+```
+
+固定要求选择N名目标的技能，应在支付牌、指示物或能量前确认合法目标数量不少于N。若费用可以把目标数从1提高至2或3，各档费用也必须分别检查对应数量；不能先支付费用，再进入无法完成的强制选目标流程。
+
+循环必须有不超过场上人数的保护计数，防止异常座次链造成死循环。若每名角色结算期间还要监听“是否因本次摸牌导致士气下降”等旁路事件，应临时添加记录技能，并用 `try...finally` 保证无论中途是否抛错都清理记录状态：
+
+```js
+player.storage.my_sequence_state = {
+    target: null,
+    matched: false,
+};
+player.addSkill('my_sequence_observer');
+
+try {
+    for (const target of targets) {
+        if (!target?.isIn()) continue;
+        const state = player.storage.my_sequence_state;
+        state.target = target.playerid;
+        state.matched = false;
+        // 执行该目标的异步结算，观察者在期间更新 matched
+    }
+} finally {
+    delete player.storage.my_sequence_state;
+    player.removeSkill('my_sequence_observer');
+}
+```
+
+## 6. 扩展牌（角色旁的专属牌）
+
+有实体牌承载、需要移动或展示牌面的专属牌，应使用扩展区和 `gaintag`，不要只把卡牌引用存在 `storage`。如果所谓“专属卡”只是规则、形态或装备状态，没有对应实体牌，则应使用第 6.4 节的专属卡标记模式。
+
+```js
+const cards = await player.chooseCard('h', 1, '将1张手牌作为【印记牌】', true).forResultCards();
+await player
+    .addToExpansion(cards)
+    .set('gaintag', ['my_expansion'])
+    .set('log', true);
+
+const expansionCards = player.getExpansions('my_expansion');
+if (expansionCards.length >= 3) return false;
+await player.discard(expansionCards, 'my_expansion');
+```
+
+`addToExpansion` 会把新牌追加到扩展区末端，因此 `getExpansions(tag)` 返回的数组按放置先后排列：`cards[0]` 是最早放置的牌，`cards[cards.length - 1]` 是最新放置的牌。技能若要求移除“最左边”“最右边”“最早”或“最新”的实体牌，必须先核对界面排列与规则文案，再统一过滤器、结算代码和翻译；不能默认用 `[0]` 代表刚生成的牌。
+
+扩展牌说明可使用：
+
+```js
+my_expansion: {
+    intro: {
+        name: '印记牌',
+        content: 'expansion',
+        markcount: 'expansion',
+        mark: function (dialog, storage, player) {
+            dialog.addAuto(player.getExpansions('my_expansion'));
+        },
+    },
+    onremove: function (player, skill) {
+        const cards = player.getExpansions(skill);
+        if (cards.length) player.loseToDiscardpile(cards);
+    },
+},
+```
+
+若需要区分多个区域，可给 `addToExpansion` 事件设置 `position`，并在 `addToExpansionBefore/After` 的过滤器中读取 `event.position`。
+
+### 6.1 盖牌与自定义基础效果
+
+盖牌和基础效果底层也使用扩展区，但应通过本体封装接口操作：
+
+```js
+await target.addGaiPai(card, player, 'my_gai_pai');
+target.countGaiPai('my_gai_pai');
+target.getGaiPai('my_gai_pai');
+target.hasGaiPai('my_gai_pai');
+
+await target.addJiChuXiaoGuo(card, player, 'my_basic_effect');
+```
+
+- `addGaiPai` 用于有实体牌承载的盖牌，字符串参数为盖牌/`gaintag` 技能 ID。
+- `addJiChuXiaoGuo` 用于有实体牌承载的基础效果，不应在没有 `card/cards` 的情况下用它模拟纯状态。
+
+#### 6.1.1 动态效果必须注册
+
+`addGaiPai`、`addJiChuXiaoGuo` 和直接调用 `addToExpansion(...).set('gaintag', ...)` 最终都会进入扩展区流程。当前本体只在以下任一条件成立时真正加入扩展牌：
+
+1. 目标角色持有与 `gaintag` 同名的技能；
+2. 该技能已经存在于 `lib.skill.global`。
+
+因此，需要放到任意角色身上的自定义盖牌/基础效果，应在角色包已经加载后注册为全局技能：
+
+```js
+game.addGlobalSkill('my_basic_effect');
+```
+
+如果父技能通过 `group` 使用子技能，`game.addGlobalSkill('my_basic_effect')` **不会自动给各子技能注册全局触发钩子**。必须把展开后的子技能 ID 分别注册：
+
+```js
+[
+    'my_basic_effect',
+    'my_basic_effect_damage',
+    'my_basic_effect_cleanup',
+].forEach(function (skill) {
+    game.addGlobalSkill(skill);
+});
+```
+
+子技能 `damage`、`cleanup` 会展开为 `my_basic_effect_damage`、`my_basic_effect_cleanup`。注册操作通常在专属初始化技能的 `gameStart` 时机执行一次。添加后应立即用 `hasGaiPai` / `hasJiChuXiaoGuo` 验证结果；不能只根据 `addGaiPai` 事件没有报错就认定添加成功。
+
+`game.expandSkills(skills)` 也只检查传入数组当前已有技能的直接 `group`，不会递归展开“子技能的 `group`”。存在两层以上分组时，应显式列出所有层级的技能 ID，或循环展开直到数组长度不再变化；不能只调用一次后就认定所有后代技能都已注册。
+
+#### 6.1.2 移除任意类型的盖牌
+
+`getCards('x')`、`countCards('x')` 取得的是角色面前的全部扩展牌，其中还可能包含基础效果、专属实体牌和普通扩展牌，不能直接用于“移除1张盖牌”。
+
+当技能允许移除任意类型的盖牌时，应检查扩展牌的 `gaintag` 对应技能是否以 `intro.markcount: 'gaiPai'` 声明为盖牌，并在弃置时把识别出的盖牌技能 ID 一并传入：
+
+```js
+function getGaiPaiTag(card) {
+    for (const tag of Array.from(card.gaintag || [])) {
+        const info = get.info(tag);
+        if (info && info.intro && info.intro.markcount === 'gaiPai') {
+            return tag;
+        }
+    }
+    return null;
+}
+
+const entries = target.getCards('x').map(function (card) {
+    return { card: card, tag: getGaiPaiTag(card) };
+}).filter(function (entry) {
+    return entry.tag;
+});
+
+if (entries.length) {
+    const links = await target.chooseCardButton(
+        entries.map(function (entry) {
+            return entry.card;
+        }),
+        true,
+        '移除一个盖牌'
+    ).forResultLinks();
+    const entry = entries.find(function (current) {
+        return current.card === links[0];
+    });
+    if (entry) await target.discard(entry.card, entry.tag);
+}
+```
+
+向 `discard` 传入盖牌 ID 会设置标准的 `event.gaiPai`，从而保留盖牌专用日志与相关移除触发。必须等待该弃置事件完成后，再结算依赖“目标是否仍有盖牌”的后续效果。
+
+#### 6.1.3 盖牌可见性
+
+使用 `intro.content: 'gaiPai'` 时：
+
+- 盖牌持有者的控制端能看到实体牌；
+- 其他角色只能看到盖牌数量；
+- 配置 `intro.show: true` 后，所有角色都能看到实体牌。
+
+若规则要求“只有施加者能看到，连盖牌持有者也不能看到”，需要保存施加者并自定义 `intro.mark`：
+
+```js
+my_hidden_cards: {
+    intro: {
+        name: '秘密盖牌',
+        markcount: 'gaiPai',
+        mark: function (dialog, storage, holder) {
+            const cards = holder.getGaiPai('my_hidden_cards');
+            const source = holder.storage.my_hidden_cards_source;
+            const viewer = game.me;
+            const canSee = source && viewer && (
+                source === viewer ||
+                source._trueMe === viewer ||
+                viewer._trueMe === source
+            );
+            if (canSee) {
+                dialog.addAuto(cards);
+                return false;
+            }
+            return '共有' + cards.length + '张牌';
+        },
+    },
+    onremove: function (player, skill) {
+        delete player.storage.my_hidden_cards_source;
+        const cards = player.getGaiPai(skill);
+        if (cards.length) player.loseToDiscardpile(cards);
+    },
+},
+```
+
+施加时保存来源：
+
+```js
+target.storage.my_hidden_cards_source = player;
+await target.addGaiPai(card, player, 'my_hidden_cards');
+```
+
+`game.me` 表示当前客户端视角，联机或托管场景还需兼容 `_trueMe`。不得通过全局 `intro.show` 实现“仅来源可见”，否则会向所有客户端公开牌面。
+
+### 6.2 本体标准基础效果
+
+本体核心实体牌基础效果为：
+
+| 实体牌 | 效果技能 | 说明 |
+| --- | --- | --- |
+| `shengDun` | `_shengDun` | 【圣盾】；符合条件时使攻击/魔弹未命中并移除对应实体牌。 |
+| `xuRuo` | `_xuRuo` | 【虚弱】；在持有者 `xingDongBefore` 结算。 |
+| `zhongDu` | `_zhongDu` | 【中毒】；在持有者 `xingDongBefore` 按实体牌及其来源结算法术伤害。 |
+
+添加这三种效果时，优先让来源角色使用对应实体牌：
+
+```js
+await player.useCard(game.createCard2('shengDun'), target);
+await player.useCard(game.createCard2('xuRuo'), target);
+await player.useCard(game.createCard2('zhongDu'), target);
+```
+
+不要只调用 `target.addJiChuXiaoGuo(card, player, '_zhongDu')` 来模拟完整【中毒】。标准中毒牌的结算还会同步 `target.storage.zhongDu` 中的伤害来源；缺少来源会导致中毒伤害、转移或移除异常。圣盾、虚弱和中毒均应优先走其原始牌的 `useCard` 内容。
+
+需要让玩家选择目标身上的一个基础效果时，可以使用：
+
+```js
+await player.gainJiChuXiaoGuo(target);   // 选择一个效果，将其实体牌获得到手牌
+await player.removeJiChuXiaoGuo(target); // 选择一个效果并将其移除/弃置
+```
+
+`gainJiChuXiaoGuo` 的“获得”是把选中的基础效果实体牌移入玩家手牌，不是把该效果转移到玩家面前；方法还会维护标准中毒来源并移除非实体效果技能。使用前应确认目标仍 `isIn()` 且 `jiChuXiaoGuoList()` 非空。
+
+`game.jiChuXiaoGuo` 还列出各属性封印、威力赐福、迅捷赐福和 `tricky` 等效果，但这些效果依赖对应角色包及技能定义。只有确认 `lib.skill[效果技能ID]` 已加载后才能复用，不能把它们视为始终可用的核心效果。属性封印优先使用 `target.addFengYin(封印技能ID, cards, source)`，由本体同步技能、来源和实体牌。
+
+### 6.3 无实体牌的普通状态
+
+“下次受到火属性伤害时爆炸”这类没有实体牌承载的状态，应使用 `mark: true` 的技能配合 `storage`，由状态技能负责触发、移除和清理。
+
+状态若记录施加者，应把来源保存到专用 `storage`，并明确来源死亡、目标死亡、技能移除时如何清理。
+
+```js
+my_state: {
+    mark: true,
+    onremove: 'storage',
+    intro: { content: '下次受到火属性伤害时触发' },
+    trigger: { player: 'chengShouShangHaiAfter' },
+    forced: true,
+    filter: function (event, player) {
+        if (!event || event.num <= 0 || !event.card) return false;
+        if (event.my_state_damage) return false;
+        return get.xiBie(event.card) === 'huo';
+    },
+    content: async function (event, trigger, player) {
+        const source = player.storage.my_state;
+        player.removeSkill('my_state');
+
+        const next = source?.isIn()
+            ? player.faShuDamage(1, source, 'nocard')
+            : player.faShuDamage(1, 'nosource', 'nocard');
+        next.set('my_state_damage', true);
+        await next;
+    },
+},
+```
+
+施加状态时，把来源保存在与技能同名的 `storage` 中：
+
+```js
+target.storage.my_state = player;
+target.addSkill('my_state');
+```
+
+- `onremove: 'storage'` 会在移除技能时清理 `player.storage.my_state`；若使用其他 storage 键，应改为自定义 `onremove`。
+- 追加伤害传入 `nocard` 并设置专用事件标记，避免继承原火系牌后递归触发自身。只有明确要求追加伤害继续触发同类状态时才允许继承原牌。
+- “下次受到”属于一次性状态，应在产生追加效果前移除；永久或可重复触发状态则保留技能，但仍必须设置防递归标记。
+- 若某次伤害用于“施加状态”，而该状态监听同类伤害，应在该次伤害结算完成后再添加状态，避免状态被刚刚用于施加它的伤害立即触发。
+
+### 6.4 无实体牌的专属卡标记
+
+形态、武器、律法等“专属卡”如果没有真实卡牌需要进入扩展区，可以使用角色自带的标记技能表示。星坠巫女的【繁星】、【影月】、【蚀日】采用的就是这一格式：
+
+```js
+my_exclusive_card: {
+    intro: {
+        name: '专属卡：示例',
+        content: '该专属卡的完整规则说明。',
+        nocount: true,
+    },
+    onremove: 'storage',
+    markimage: 'image/card/zhuanShu/my_exclusive_card.png',
+    // 暂不设计图标时可改用：marktext: '示'
+    trigger: { player: 'my_custom_timing' },
+    filter: function (event, player) {
+        return player.hasZhiShiWu('my_exclusive_card');
+    },
+    content: async function (event, trigger, player) {
+        // 专属卡效果
+    },
+},
+
+translate: {
+    my_exclusive_card: '(专)[响应]示例',
+    my_exclusive_card_info: '该专属卡的完整规则说明。',
+},
+```
+
+- 专属卡技能 ID 必须加入拥有者的角色技能数组，之后再用 `addZhiShiWu` / `removeZhiShiWu` 或专用管理技能控制是否置于面前。
+- 同一时间只允许一个专属卡/形态时，添加新标记前必须移除旧标记，并同步清理旧卡对应的 `storage`、标记显示和临时技能。
+- `intro` 用于面前标记的展示，`translate.*_info` 用于角色技能列表；两处规则文本应保持一致。
+- 只有完全由 `markSkill` / `unmarkSkill` 管理、不调用指示物增减 API 的纯规则标记，才可仅配置 `marktext`。凡通过 `addZhiShiWu` / `removeZhiShiWu` / `setZhiShiWu` 管理的专属卡或计数标记，必须配置 `markimage`；没有专用图标时使用标准红/蓝指示物图标。
+- 只有存在可移动的实体牌时才改用扩展区；纯规则专属卡不要伪造实体牌，也不要把扩展牌规则套到纯状态上。
+
+#### 6.4.1 互斥装备专属卡及其子资源
+
+史蒂夫的剑代表“同一时间只存在一个装备专属卡，且资源属于当前装备而不是角色”的标准结构。应使用一个管理技能统一保存当前装备、上限和子资源，所有装备技能只调用管理接口：
+
+```js
+my_equipment_manager: {
+    charlotte: true,
+    limits: {
+        my_weapon_a: 2,
+        my_weapon_b: 4,
+    },
+    getEquipment: function (player) {
+        return player.storage.my_current_equipment || null;
+    },
+    getLimit: function (player, equipment) {
+        equipment = equipment ||
+            lib.skill.my_equipment_manager.getEquipment(player);
+        return lib.skill.my_equipment_manager.limits[equipment] || 0;
+    },
+    getResource: function (player) {
+        return Math.max(0, player.storage.my_equipment_resource || 0);
+    },
+    setEquipment: function (player, equipment) {
+        const manager = lib.skill.my_equipment_manager;
+        const old = manager.getEquipment(player);
+        if (old && old !== equipment) player.unmarkSkill(old);
+
+        player.storage.my_current_equipment = equipment;
+        player.storage.my_equipment_resource =
+            manager.getLimit(player, equipment);
+        player.markSkill(equipment);
+        player.update();
+    },
+    changeResource: function (player, num) {
+        if (typeof num !== 'number' || num === 0) return 0;
+        const manager = lib.skill.my_equipment_manager;
+        const equipment = manager.getEquipment(player);
+        if (!equipment) return 0;
+
+        const old = manager.getResource(player);
+        const limit = manager.getLimit(player, equipment);
+        const current = Math.max(0, Math.min(limit, old + num));
+        player.storage.my_equipment_resource = current;
+        player.markSkill(equipment);
+        player.update();
+        return current - old;
+    },
+    removeEquipment: function (player) {
+        const equipment =
+            lib.skill.my_equipment_manager.getEquipment(player);
+        if (equipment) player.unmarkSkill(equipment);
+        delete player.storage.my_current_equipment;
+        delete player.storage.my_equipment_resource;
+        player.update();
+    },
+    onremove: function (player) {
+        lib.skill.my_equipment_manager.removeEquipment(player);
+    },
+},
+```
+
+- 装备子资源不调用角色指示物 API，避免与角色自身【治疗】或其他指示物混用；专属卡通过 `intro.markcount` 读取管理器数值。
+- 增减接口必须把结果限制在 `0～上限` 并返回实际变化量。需要响应“确实移除了资源”时，以返回的负数或一个自定义 `await event.trigger(...)` 时机为准。
+- 更换装备时先 `unmarkSkill` 旧装备，再写入新装备与满额子资源；移除时同时清理装备 ID、子资源和显示。
+- 配方判断、费用展示和装备效果都应读取同一份配置表，不要在多个技能中重复硬编码上限。
+
+## 7. 目标、AI 与调试约定
+
+目标筛选优先复用本体过滤器：
+
+```js
+lib.filter.opponent // 对手
+lib.filter.teammate // 队友
+target !== player   // 非自身
+target.side === player.side // 同阵营
+```
+
+主动技能中依赖目标自身状态的条件必须写在 `filterTarget(card, player, target)`，不能在技能总 `filter(event, player)` 中读取尚未选择的 `event.targets[0]`，也不能只把判断留在注释中。例如“不能以满手牌角色为目标”应使用目标当前的实际手牌上限：
+
+```js
+filterTarget: function (card, player, target) {
+    return target.countCards('h') < target.getHandcardLimit();
+},
+```
+
+这里必须调用 `target.getHandcardLimit()`，不能使用固定值或误用发动者的手牌上限；装备、状态和角色技能都可能改变目标的实际上限。
+
+对延迟伤害、状态转移和多段结算，应区分：
+
+```js
+target.isAlive(); // 角色未死亡
+target.isIn();    // 角色未死亡，并且仍在当前游戏场上、未离场
+```
+
+延迟效果通常使用 `isIn()`。仅检查对象存在或 `isAlive()`，仍可能对已经离场的角色继续创建结算事件。
+
+### 7.1 禁止用牌、响应或成为目标
+
+持续限制优先使用状态技能的 `mod`，不要在每次选牌时临时修改 UI：
+
+```js
+my_restriction: {
+    mod: {
+        targetEnabled: function (card, source, target) {
+            if (target.hasSkill('my_untargetable') &&
+                get.type(card) === 'gongJi') {
+                return false; // 不能以该角色为攻击目标
+            }
+        },
+        cardEnabled: function (card, player) {
+            if (get.type(card) === 'faShu') return false; // 不能使用法术牌
+        },
+        cardUsable: function (card, player) {
+            if (card.hasGaintag('my_locked_card')) return false;
+        },
+        cardRespondable: function (card, player) {
+            if (card.hasGaintag('my_locked_card')) return false;
+        },
+    },
+},
+```
+
+- `targetEnabled` 控制是否能成为某张牌的目标。
+- `cardEnabled` 控制牌是否能被使用；某些特殊流程还会检查 `cardEnabled2`。
+- `cardUsable` 控制牌在当前用牌流程中是否可用。
+- `cardRespondable` 控制牌能否用于响应。
+- 只在需要禁止时返回 `false`，其他情况返回 `undefined`，让本体和其他技能继续修正结果。
+- `mod` 的参数角色含义不同，必须按对应接口签名书写；特别是 `targetEnabled(card, source, target)` 中第二个角色是用牌者，第三个才是目标。
+- 需要把某角色的主动攻击严格锁定到一个指定目标时，可使用 `playerEnabled(card, source, target)`：确认来源拥有对应状态且当前牌为攻击牌后，对指定目标以外的所有目标返回 `false`。必须沿当前事件父链排除 `_yingZhan` 等应战流程，否则会错误限制应战攻击。若指定目标不存在、已离场或本身不是合法目标，应对所有目标返回 `false`，使该主动攻击无法执行；多目标攻击也不得借此附带选择其他角色。
+
+### 7.2 临时与持久状态技能
+
+```js
+player.addSkill('my_state'); // 持续存在，直到明确移除
+player.addTempSkill('my_state', { player: 'phaseEndBefore' });
+player.removeSkill('my_state');
+```
+
+- 有明确结束事件的状态优先使用 `addTempSkill`，结束条件对象的键表示事件拥有者（如 `player`、`source`、`global`），值为事件名。
+- 需要跨回合或由自定义条件清除的状态使用 `addSkill`，并由触发器调用 `removeSkill`。
+- 技能的 `onremove` 必须负责清理对应 `storage`、实体牌、指示物或来源引用。仅删除技能不一定会自动清除自定义数据。
+- 不要把 `player.wuFaXingDong()` 当作简单的“跳过行动”通用接口。当前本体的无法行动机制还依赖专门的 `wuFaXingDong` 技能流程，应先参考同类角色完整实现。
+
+双面专属卡或互斥形态应由一个管理技能统一提供 `getForm(player)`、`setForm(player, form)` 与 `flip(player)`。`setForm` 必须先移除另一形态，再添加目标形态；每个形态标记只负责显示及挂载该形态下可用的技能组。管理技能的 `onremove` 同时移除全部形态，避免角色失去主技能后仍残留一面。
+
+需要让额外行动携带限定系别、选项或临时攻击效果时，把数据与 `xingDong` 一起写入 `player.storage.extraXingDong`。本体在取出该对象时会把字段传给实际行动事件，后续技能应只读取该次事件的载荷，不能把效果无条件作用于下一次普通行动。若该额外行动禁止再次发动来源技能，来源技能的 `filter` 和额外行动事件标记都要防止连锁；正常行动结束时清理一次，并在整个 `xingDongEnd` 再设置取消/无牌时的兜底清理。
+
+推荐为伤害和治疗技能提供 AI，避免人机无法正确使用：
+
+```js
+ai: {
+    order: 3.5,
+    result: {
+        target: (player, target) => get.damageEffect(target, 2),
+    },
+},
+```
+
+当技能要求目标弃牌，但弃牌与治疗、摸牌、获得资源等效果共同构成对目标的正向收益时，必须区分两种 AI 回调：
+
+- `chooseTarget(...).set('ai', fn)` 的返回值是直接用于选择目标的最终评分，可以直接用 `get.attitude` 或对敌方返回 `0`。
+- 主动技能 `ai.result.target` 的返回值表示“该效果对目标本身的原始收益”，本体之后还会乘以发动者对目标的态度。正向效果应返回正数；若对敌方返回负数，负数再乘负态度会变成正分，反而强烈鼓励 AI 对敌方使用。
+
+需要在保留玩家任意目标规则的同时，让正向主动技能的 AI 彻底排除敌方时，可以给敌方返回较大的“目标自身正收益”，使其与负态度相乘后成为强负选择；同时不要再给发动者固定正分：
+
+```js
+result: {
+    player: 0,
+    target: function (player, target) {
+        if (target.side !== player.side) return 100;
+        return get.zhiLiaoEffect(target, 2);
+    },
+},
+```
+
+若本体的强制选目标流程仍可能在技能进入后选择敌方，应在 `filterTarget` 中增加AI专用硬限制：本地玩家手动控制（`player.isUnderControl(true) && !_status.auto`）或联网玩家（`player.isOnline()`）继续使用原规则；其余电脑控制与本地托管状态只允许同阵营目标。该限制只用于明确要求“玩家可自由选择、AI不得选择敌方”的技能，不能作为所有技能的通用阵营过滤。
+
+带强制摸牌费用或收益的技能还必须在 `ai.order` 和 `result.player` 中检查摸牌后的手牌数。若不能选择其他支付方式，且 `当前手牌数 + 摸牌数 > 手牌上限`，应让 `order` 返回 `0`、发动者收益返回强负分，避免 AI 主动制造爆牌和士气损失。治疗型技能还应在 `order` 前确认至少一名我方合法目标能实际获得治疗。
+
+只有技能设计明确把弃牌定义为对目标的负面效果时，才按负面效果优先敌方。当前扩展中，贝亚娜水系【炫纹】、史蒂夫【精准开采】和【战斗附魔】的风系弃牌均按对目标的正向效果评价，AI 应友方优先。技能规则已经通过 `filterTarget` 或触发条件限定同阵营时，AI 仍应使用 `get.attitude` 评估队友收益，但无需重复扩大合法目标范围。
+
+开发期间可用 `game.log()` 观察游戏内事件，也可用 `console.log()`、`console.warn()`、`console.error()` 输出详细信息。需要排查时，重点输出 `trigger`、`trigger.target`、`trigger.card`、`event.cards`、`player`。
+
+当前本体已在 `resources/app/noname/init/node.js` 安装全局文件日志。每次启动会在以下目录创建一个文件：
+
+```text
+resources/app/logs/runtime-YYYY-MM-DD_HH-MM-SS.log
+```
+
+文件日志会记录 `game.log`、常用 `console` 方法、未捕获的窗口错误和未处理的 Promise 拒绝。当前日志路径也可从 `game.fileLogger.path` 读取；需要写入自定义级别时可调用：
+
+```js
+game.fileLogger?.write('SKILL', ['my_skill', event, trigger]);
+```
+
+日志功能属于全局本体功能，不应在单个扩展的 `extension.js` 中重复安装。提交前应删除高频、无意义或可能产生超大对象的调试输出，但保留对关键异常有帮助的简洁日志。
+
+### 7.3 技能语音与占位文件
+
+扩展技能语音统一放在当前扩展仓库内：
+
+```text
+bigcowcow/audio/skill/
+```
+
+技能对象通过 `audio` 指定文件。单条固定语音优先使用完整扩展路径：
+
+```js
+my_skill: {
+    audio: 'ext:bigcowcow/audio/skill/my_skill.mp3',
+    // 其他技能配置
+},
+```
+
+需要同一技能随机播放多条语音时，可以使用数量格式：
+
+```js
+my_skill: {
+    audio: 'ext:bigcowcow/audio/skill:2',
+},
+```
+
+对应文件名必须为：
+
+```text
+bigcowcow/audio/skill/my_skill1.mp3
+bigcowcow/audio/skill/my_skill2.mp3
+```
+
+也可以显式列出多个不同文件：
+
+```js
+audio: [
+    'ext:bigcowcow/audio/skill/my_skill_a.mp3',
+    'ext:bigcowcow/audio/skill/my_skill_b.mp3',
+],
+```
+
+当前本体在标准主动技能的 `useSkill` 流程中自动调用 `game.trySkillAudio(event.skill, player)`；普通触发技能通过标准发动日志调用 `player.logSkill(...)` 时也会播放对应语音。使用 `direct: true` 并自行处理发动流程的技能，需要由技能代码显式记录发动：
+
+```js
+player.logSkill('my_skill');
+player.logSkill('my_skill', target); // 同时记录目标
+```
+
+`player.logSkill`已经包含技能语音调用。调用后不得再对同一次发动额外调用 `game.trySkillAudio`，否则可能重复播放。只有确实需要“只播放语音、不显示技能发动日志”的特殊流程才直接调用：
+
+```js
+game.trySkillAudio('my_skill', player, true);
+```
+
+技能语音还应遵守以下资源规则：
+
+- 游戏设置中的技能/角色语音开关关闭时，本体不会播放技能语音；代码不得绕过该设置强制播放。
+- 文件扩展名必须与实际音频编码一致；可以使用本体支持的 `.mp3`、`.ogg`或`.wav`，不能只修改文件后缀。
+- 本地直接加载时按 `audio` 路径读取；需要打包或分发扩展时，还必须把文件加入 `package.js` 的 `files` 列表，并同步 `extension.js` 末尾的 `files.audio`。
+- 子技能若需要播放父技能语音，应明确复用父技能语音或指向同一文件；不能依赖当前本体已经注释掉的 `sourceSkill` 自动回退逻辑。
+
+当用户明确要求“给某技能添加语音”但尚未提供正式音频时，必须同时生成语音占位文件：
+
+1. 按技能 ID 生成与 `audio` 字段完全一致的文件名；多条语音则为每个编号分别生成。
+2. 占位文件必须是浏览器能够正常读取的短静音音频，不能创建0字节文件、文本文件或只改后缀的伪音频。
+3. 优先生成短静音 `.mp3`；当前环境没有可用 MP3 编码器时，可以生成有效的短静音 `.wav`，并让 `audio` 字段使用实际的 `.wav` 路径。
+4. 同时更新扩展资源清单，并在角色文档或交付说明中标明该文件是待替换的技能语音占位符。
+5. 用户已经提供正式语音文件时，直接使用正式文件，不再生成占位符；没有明确要求添加技能语音时，不因新增角色或技能自动创建音频文件。
+
+## 8. 可标准化技能代码汇总
+
+标准化的对象应是“事件语义、费用流程、状态生命周期和数据边界”，而不是把某个角色的完整业务技能抽成全局函数。角色专属数值、目标条件和文案顺序仍保留在角色技能中，以下结构可以直接复用：
+
+本次标准化审计覆盖 `bigcowcow` 当前全部17名已完成角色：
+
+| 已完成角色 | 主要可复用模式 |
+| --- | --- |
+| 贝亚娜斗神 | 有序实体扩展牌、按扩展牌系别结算、持续变身状态、伤害类型转换、多目标法术。 |
+| 优菈 | 攻击前/命中/结束三阶段联动、同一攻击事件的后续追击、回合限定和技能互斥。 |
+| 赵灵儿 | 复用独有技、动态增加多目标、将攻击伤害转换为法术伤害、跨角色在场联动。 |
+| 李逍遥 | 行动次数统计、提炼结束联动、牌堆顶展示与可选获得、同回合技能互斥、跨回合手牌上限状态。 |
+| 林月如 | 队友全局触发、指示物溢出、战绩区资源翻面、命中/未命中分支、追加法术伤害与士气结果追踪。 |
+| 阿奴 | 独有技扩展、隐藏盖牌、异系费用、基础效果实体牌、随机重复结算、状态来源、士气免疫和可传递指示物。 |
+| 赫克托 | 绕过圣盾、未命中计数、`customArgs` 跨攻击阶段记录、应战虚拟牌视为同系。 |
+| 提莫 | 回合开始行动初始化、主动攻击目标限制、仅来源可见盖牌、专属卡与其附属实体牌转移。 |
+| 史蒂夫 | 自定义联动时机、互斥装备专属卡、装备子资源与上限、配方校验、未命中后回收原攻击实体牌。 |
+| 百花缭乱 | 自伤与他伤区分、二选一费用、禁止资源增加、士气最低值、同一技能的多段持续时间。 |
+| 四糸乃 | 借用独有技牌重写效果、全局队友减伤、计数状态阈值、取消额外行动、逐名队友选择。 |
+| 时崎狂三 | 包含自伤的实际伤害来源、减至0仍执行附带效果、同一攻击互斥响应、回合结束阈值状态、支付前后识别实际星石类型。 |
+| 五河琴里 | 双面形态管理、同类触发分别限次、额外行动载荷、动态形态技能组、按每个实际攻击伤害事件治疗。 |
+| 电棍Otto | 自伤同时叠加来源与承受增伤、跨行动阶段状态、严格限制主动攻击目标、动态全局专属卡、士气下降后多目标结算。 |
+| 夜刀神十香 | 双面专属卡、带自定义字段的额外行动、一次行动的临时攻击效果、额外行动禁止连锁与结束/取消双重清理。 |
+| 奶龙 | 技能弃牌来源标记、按弃牌事件触发、延后标准爆牌、系别处理后恢复爆牌、从自身开始的环形座次弃牌。 |
+| 露米娅 | 专属盖牌满额更换、牌库顶实体判定、自定义实验响应时机、同一事件结果升级锁、带载荷额外攻击、魔弹逐次实际伤害识别。 |
+
+未完成或仍处于设计稿的角色不作为标准实现来源；新增模式仍需完成对应角色的对局验证后，才可视为稳定范例。
+
+| 标准场景 | 推荐结构 | 对应章节 |
+| --- | --- | --- |
+| 主动技能选择并支付费用 | `filter` + 强制异步选择 + `content` | 2.3、3.2、3.3 |
+| 响应技能询问并支付费用 | `cost` + `event.result`；或完整 `direct` 流程 | 2.4 |
+| 复用独有技牌 | 按“继续原独有技”或“重写为新技能”选择对应模式 | 3.4 |
+| 成为攻击目标、攻击命中、实际承受伤害 | 分别使用攻击目标、命中、伤害事件 | 4.1 |
+| 回合开始授予额外行动 | `phaseBegin` 保存结果，`xingDongBefore` 增加行动 | 4.3 |
+| 取消额外行动并结束回合 | 识别所属 `xingDong`，同时设置 `skipped` 并取消当前事件 | 4.3 |
+| 按牌名或系别识别伤害 | 创建伤害时传 `card`，过滤时同时检查伤害类型和 `event.card` | 5.1 |
+| 无法应战、绕过圣盾、强制命中 | 调用攻击事件标准方法 | 5.2 |
+| 应战牌视为当前攻击同系 | 创建独立 `viewAs` 虚拟牌，不修改实体牌或前一次攻击牌 | 5.7.1 |
+| 指示物增加、移除、溢出和转移 | 统一使用指示物 API，以调用前后差值计算实际变化；转移先加后减 | 5.5 |
+| 多目标、随机或环形座次结算 | 固定目标快照，逐个重新检查并 `await`；临时观察者用 `try...finally` 清理 | 5.8 |
+| 技能弃牌与标准爆牌均需追踪来源 | 在弃牌事件或其父事件写来源 ID，观察 `discard` 时沿父链识别；需先处理摸牌结果时临时延后爆牌 | 5.6 |
+| 任意角色可获得的动态效果 | 注册父技能及全部触发子技能为全局技能 | 6.1.1 |
+| 无实体状态及追加伤害 | `mark` + `storage` 来源 + `onremove` + 防递归标记 | 6.3 |
+| 互斥装备与装备子资源 | 独立管理器统一维护当前装备、上限、资源和显示 | 6.4.1 |
+| 跨回合状态 | `addSkill` + 明确的清除子技能 | 7.2、8.3 |
+| 双面形态及形态技能组 | 管理技能集中 `getForm` / `setForm` / `flip`，形态标记只挂载对应技能组 | 7.2 |
+| 携带临时效果的额外行动 | 向 `storage.extraXingDong` 写入载荷，行动事件读取载荷；正常结束和取消路径均清理 | 7.2 |
+| 强制主动攻击只能指定某角色 | `playerEnabled` 限制所有其他目标，并排除应战流程 | 7.1 |
+| 扩展技能语音与占位文件 | `audio` 扩展路径 + 标准发动日志 + 有效静音音频占位 | 7.3 |
+| 同一事件不能同时发动两个响应 | 在共享原事件 `customArgs` 中设置互斥锁 | 8.4 |
+| 自定义判定结果可被响应修改 | 在当前业务事件保存初始/最终结果并 `await event.trigger(...)`；响应在同一事件写一次性升级锁 | 4.4、8.4 |
+
+### 8.1 禁止指定指示物增加
+
+“持续期间不能获得某指示物”不能只让当前已知的几个产出技能失效，否则后续新增技能、转移效果或 `setZhiShiWu` 仍可能绕过限制。标准做法是在状态技能中统一拦截 `changeZhiShiWuBefore` 的正向变化：
+
+```js
+my_resource_lock: {
+    charlotte: true,
+    trigger: { player: 'changeZhiShiWuBefore' },
+    forced: true,
+    firstDo: true,
+    priority: 100,
+    popup: false,
+    filter: function (event, player) {
+        return !!event &&
+            event.zhiShiWu === 'my_mark' &&
+            event.num > 0;
+    },
+    content: function (event, trigger, player) {
+        trigger.num = 0;
+    },
+},
+```
+
+- 只拦截 `event.num > 0`，不能阻止费用或其他正常移除。
+- 这是最终规则保护；现有产出技能还可以统一调用角色包内的 `addMyResource(player, num)` 辅助方法，在创建事件前提前跳过，但不能只依赖辅助方法。
+- 禁止获得期间仍允许读取、消耗已有指示物；若设计要求同时不能消耗，需要另写负向变化限制。
+- `setZhiShiWu` 在目标值高于当前值时最终仍会调用增加流程，因此也会被该模板拦截。
+
+### 8.2 士气等阵营数值的最低值保护
+
+“某方士气最少为1”应修改即将发生的士气变化，不应在士气降到0后再补回。保护技能监听 `changeShiQiBefore`，用当前士气计算本次最多可以下降多少：
+
+```js
+my_morale_floor: {
+    charlotte: true,
+    mark: true,
+    marktext: '护',
+    intro: {
+        content: '直到你的下个回合开始前，对方士气最少为1。',
+    },
+    group: [
+        'my_morale_floor_guard',
+        'my_morale_floor_cleanup',
+    ],
+    subSkill: {
+        guard: {
+            trigger: { global: 'changeShiQiBefore' },
+            forced: true,
+            lastDo: true,
+            priority: -100,
+            popup: false,
+            filter: function (event, player) {
+                if (!event ||
+                    event.side === player.side ||
+                    event.num >= 0) return false;
+
+                const current = get.shiQi(event.side);
+                return typeof current === 'number' &&
+                    current + event.num < 1;
+            },
+            content: function (event, trigger, player) {
+                const minimum = 1;
+                const current = get.shiQi(trigger.side);
+                trigger.num = Math.min(0, minimum - current);
+                if (trigger.result) {
+                    trigger.result.num = trigger.num;
+                }
+            },
+        },
+        cleanup: {
+            trigger: { player: 'phaseBegin' },
+            forced: true,
+            firstDo: true,
+            priority: 100,
+            popup: false,
+            content: function (event, trigger, player) {
+                player.removeSkill('my_morale_floor');
+            },
+        },
+    },
+},
+```
+
+主技能结算时施加：
+
+```js
+player.addSkill('my_morale_floor');
+```
+
+- `lastDo` 与较低优先级让保护尽量在其他士气增减修正后执行，再把最终下降量限制到最低值。
+- 同步修改 `trigger.result.num`，避免后续技能读取到修改前的旧结果。
+- 最低值保护只阻止继续下降，不会把已经低于最低值的士气主动恢复。
+- 保护哪一方必须按 `event.side` 判断，不能只看触发事件的 `player`。
+
+### 8.3 持续时间与清除时机
+
+持续时间应直接映射到一个明确事件：
+
+| 文案 | 推荐实现 |
+| --- | --- |
+| 直到本回合结束 | `addTempSkill` 到 `phaseEndBefore`，或状态自身监听 `phaseEnd` 清除。 |
+| 此技能结算期间 | 在主事件结束前显式添加和移除，不创建跨事件状态。 |
+| 直到你的下个回合开始前 | 使用持久 `addSkill`，在该角色的 `phaseBegin` 以 `firstDo` 清除。 |
+| 直到你的下个行动阶段开始 | 在 `xingDongBefore` 清除；不要用更早的 `phaseBegin` 近似。 |
+| 直到某张牌/指示物离开 | 监听对应移除事件，并保留 `onremove` 后备清理。 |
+
+同一技能包含不同持续时间时必须拆成不同状态。例如“本回合不能获得资源”与“直到下个回合开始前保护士气”不能共用一个在 `phaseEnd` 移除的状态。每个状态只负责一种生命周期，主技能同时添加它们。
+
+### 8.4 同一事件中的互斥响应
+
+多个响应技能写“不能同时发动”时，不要只让两边的初始 `filter` 检查对方是否使用。触发器可能在任一技能结算前就完成排列，两边初始过滤都可能通过。标准做法是在它们共享的原事件 `customArgs` 中写入互斥锁，并在 `filter`、`cost` 和 `content` 三处防守：
+
+```js
+my_exclusive_response_a: {
+    trigger: { source: 'gongJiMingZhongAfter' },
+    filter: function (event, player) {
+        return !!event &&
+            event.customArgs?.my_exclusive_choice === undefined;
+    },
+    cost: async function (event, trigger, player) {
+        if (trigger.customArgs?.my_exclusive_choice !== undefined) {
+            event.result = { bool: false };
+            return;
+        }
+        event.result = await player
+            .chooseBool('是否发动效果A？')
+            .forResult();
+    },
+    content: async function (event, trigger, player) {
+        trigger.customArgs = trigger.customArgs || {};
+        if (trigger.customArgs.my_exclusive_choice !== undefined) return;
+        trigger.customArgs.my_exclusive_choice = 'effect_a';
+        // 效果A
+    },
+},
+```
+
+另一技能使用同一个 `my_exclusive_choice` 键并写入不同值。互斥锁必须放在两个技能真正共享、能延续到后续阶段的原攻击/伤害事件上；写到各自技能事件的 `event` 中不会阻止另一个技能。锁只需在该事件内存在，不要无故写入角色永久 `storage`。
+
+### 8.5 标准化后的最小验证矩阵
+
+复用模板后仍要验证业务参数。每个触发技能至少覆盖以下情况：
+
+1. 正常条件满足时触发一次，数值和来源正确；
+2. 条件字段不存在、数值为0或目标离场时不报错；
+3. 主动攻击与应战攻击分别验证，不把“成为目标”误当作“承受伤害”；
+4. 伤害被减至0、圣盾令攻击未命中或成功应战时，伤害后技能不触发；
+5. 元素伤害分别验证攻击、法术、无牌技能伤害和费用牌未传入的情况；
+6. 状态重复施加、来源离场、状态移除和到期清除后不残留 `storage`；
+7. 追加伤害不会继承原牌后递归触发自身；
+8. 多次变化在同一事件链中叠加时，最低值、上限和 `result` 与最终实际值一致。
+
+## 9. 实现前检查清单
+
+1. 技能描述明确了类型、时机、对象、次数、费用、持续时间和结算顺序。
+2. 每个 `filter` 读取 `event` 字段或父事件前均已判空，不会在 `arrangeTrigger` 阶段抛出异常。
+3. `filter` 已阻止费用不足、目标不存在、状态不满足等非法发动。
+4. 费用只结算一次；“消耗前/后”的数值计算符合文案。
+5. 必须选择和支付的费用已强制选择并 `await`；允许取消的结果已判空；`cost` 已把完整结果赋给 `event.result`。
+6. 触发技能没有同时配置 `direct: true` 与 `cost`；使用 `direct` 时已在 `content` 中自行完成询问、判空和日志。
+7. 在回合开始增加行动时使用 `xingDongBefore` 或更晚时机；若 `phaseBegin` 只保存标记，标记会被及时消费和清理。
+8. 伤害使用 `damage` 或 `faShuDamage` 与文案一致；需要识别牌名/元素时已传入有效 `event.card`。
+9. 增伤、减伤和免疫选择了正确的伤害事件阶段；`changeDamageNum` 与 `setDamageNum` 的语义符合文案；免疫条件只匹配指定伤害。
+10. 无法应战、绕过圣盾、强制命中和未命中使用对应攻击事件方法，没有把“伤害为零”误当作“未命中”。
+11. 多目标与重复随机效果按顺序 `await`，每次结算前使用 `isIn()` 重新检查目标仍在场且合法。
+12. `usable` 与技能文案一致；每回合限制已验证会在正确时机重置。
+13. 自定义联动时机通过 `await event.trigger(...)` 触发；监听方选择了正确的事件拥有者并对自定义字段判空。
+14. 未命中后若要移动原攻击牌，使用原攻击的 `gongJiEnd`、`!event.target` 和有效的 `event.cards`，没有把 `gongJiWeiMingZhong` 的 `event.card` 当作实体牌。
+15. 传入 `useCard`、盖牌区和扩展区的牌是有效实体牌；`get.cardPile` 等可能返回空值的接口已有后备处理。
+16. 圣盾、虚弱和中毒优先通过标准实体牌添加；中毒没有绕过原始牌内容而遗漏伤害来源。
+17. 自定义盖牌/基础效果可放到任意角色时，父技能及所有触发子技能均已按需注册为全局技能；多层 `group` 已完整展开，并验证添加后确实存在。
+18. 盖牌可见范围符合设计：默认持有者可见、`intro.show` 全员可见，或通过自定义 `intro.mark` 仅让指定来源可见。
+19. 专属指示物、实体扩展牌、无实体专属卡、盖牌和普通状态选择了正确机制，且定义、上限、互斥、移除行为和翻译均已补齐。
+20. `tiaoZhengShouPai` 没有用 `0` 表示不调整；所有带默认值的封装 API 均已核对本体对假值参数的处理。
+21. 状态的施加时机、触发时机、来源保存以及角色死亡/技能移除后的清理已明确；临时状态设置了正确到期事件。
+22. 扩展的 `character` 资源清单、角色简介、版本号与实际角色保持一致。
+23. 新角色实现过程中的所有写入均位于当前扩展 Git 仓库内；游戏本体及其他仓库外文件仅作只读参考，没有被修改、覆盖、移动或删除。
+24. 至少用本体对局验证：可发动性、费用、目标选择、伤害、行动数、回合限制、盖牌可见性、死亡/移除后的清理，并检查最新的 `resources/app/logs/runtime-*.log`。
+25. 文案中的“成为攻击目标”“攻击命中”和“实际承受攻击伤害”已经映射到不同事件；主动攻击与应战攻击均按设计覆盖。
+26. “某系法术伤害”同时检查正数伤害、`event.faShu` 和有效元素牌；费用牌、延迟牌或虚拟牌需要传递时已经显式写入伤害事件。
+27. “不能获得指示物”通过 `changeZhiShiWuBefore` 统一拦截正向变化，没有只禁用当前已知的产出技能。
+28. 士气等数值下限在变化前限制 `trigger.num`，并同步需要被后续技能读取的 `trigger.result`；跨回合保护使用独立状态并在准确时机清除。
+29. 复用独有技牌时明确选择“继续原技能”或“重写新技能”，并使用 `card.hasDuYou(id)` 识别多独有技字段。
+30. 应战虚拟牌只在 `viewAs` 返回值中改变本次系别，没有修改所选实体牌、上一张攻击牌或在攻击开始时错误恢复系别。
+31. 互斥装备和装备子资源由统一管理器维护，切换、归零、移除和技能卸载均会清理旧标记与 `storage`。
+32. 同一事件中的互斥响应在共享 `customArgs` 上加锁，并在 `filter`、`cost`、`content` 中重复防守。
+33. 环形座次或逐名异步结算具有循环保护；临时观察技能与记录状态通过 `try...finally` 保证清除。
+34. 取消额外行动时已经确认所属 `xingDong` 确为额外行动，并同时取消当前事件和结束所属行动阶段。
+35. 指示物溢出按请求值与实际增加值的差计算；可传递指示物先确认新目标获得成功，再从旧持有者处移除。
+36. 用户要求添加技能语音时，`audio` 路径、真实文件名和资源清单一致；未提供正式音频时已生成可播放的短静音占位文件，没有使用0字节或伪音频文件，也没有让同一次技能发动重复播放语音。
+37. 需要在摸牌结果处理后才爆牌时，已临时延后 `draw()` 内部爆牌，并在 `finally` 中恢复手牌上限后调用 `qiPai()`；标准爆牌的弃牌和士气下降仍完整执行。
+38. “因技能弃牌”按独立 `discard` 事件计数，来源标记可以从当前事件或父事件链识别；没有按弃牌张数重复触发，也没有漏掉技能引发的标准爆牌。
+39. 双面形态由单一管理技能切换，任一时刻只保留一面；失去管理技能时会移除全部形态及其技能组。
+40. 带效果载荷的额外行动同时具备正常结束与取消兜底清理；禁止连锁的来源技能会识别额外行动标记，临时效果不会泄漏到后续普通行动。
+
+## 10. 主要参考源
+
+- `bigcowcow/extension.js`：当前16名已完成角色的实际实现，是本扩展新增标准模式的第一参考源。
+- `resources/app/character/poXiao.js`：基础角色包、法术、响应与旧式分步流程。
+- `resources/app/character/teDian.js`：现代异步流程、扩展牌、指示物与复杂联动。
+- `resources/app/character/shiZhouNian.js`：大型角色与复合触发范式。
+- `resources/app/character/yiDuanYeHuo.js`：自定义联动时机，以及【繁星】、【影月】、【蚀日】等无实体专属卡标记格式。
+- `resources/app/noname/library/element/player.js`：伤害、能量、治疗、指示物、盖牌、基础效果、士气和行动 API 的实际定义。
+- `resources/app/noname/library/element/content.js`：触发技能 `cost/direct`、行动初始化、伤害、士气、弃牌和扩展牌等事件的实际结算顺序。
+- `resources/app/noname/game/index.js`：`trySkillAudio()`、`playAudio()`、扩展音频路径解析，以及标准基础效果清单、全局技能注册、`createCard`、`createCard2` 等游戏级 API。
+- `resources/app/noname/get/audio.js`：技能 `audio`、多语音数量格式、显式文件路径和技能语音引用的解析规则。
+- `resources/app/noname/library/element/gameEvent.js`：`changeDamageNum()`、`setDamageNum()` 及攻击流程控制等事件 API。
+- `resources/app/noname/get/index.js`：盖牌展示规则、系别/命格统计及常用数据获取方法。
+- `resources/app/noname/library/index.js`：圣盾、虚弱、中毒等本体标准效果技能的实际定义。
+- `resources/app/noname/init/node.js`：全局文件日志的安装与输出路径。
