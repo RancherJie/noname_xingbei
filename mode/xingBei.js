@@ -22,8 +22,6 @@ export default () => {
 				var store=lib.db.transaction(['video'],'readwrite').objectStore('video');
 				store.get(parseInt(playback)).onsuccess=function(e){
 					if(e.target.result){
-						ui.create.zhanJi();
-						ui.updateShiQiInfo();
 						game.playVideoContent(e.target.result.video);
 					}
 					else{

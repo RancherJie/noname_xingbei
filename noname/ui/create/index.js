@@ -3388,11 +3388,14 @@ export class Create {
 	 * 创建战绩面板
 	 */
 	zhanJi() {
-		if((_status.playback&&(!get.is.phoneLayout()&&players.length<8))||game.pcvideo){//创建时pcvideow还未设置，故用_status.playback来判断，先留着pcvideo以后可能能用上
+		game.addVideo('createZhanJi',null);
+		if(ui.shiQiInfo) return;
+		if(game.pcvideo){
 			ui.shiQiInfo=ui.create.div('.touchinfo.bottom-center.zhanJi.table',ui.window);
 		}else{
 			ui.shiQiInfo=ui.create.div('.touchinfo.bottom-right.zhanJi.table',ui.window);
 		}
+		
 	}
 	/** 	
    	* 创建聊天弹幕
