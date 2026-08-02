@@ -5524,6 +5524,88 @@ export class Player extends HTMLDivElement {
 		next._args = Array.from(arguments);
 		return next;
 	}
+	chooseRemoveZhanJi(){
+		var next = game.createEvent("chooseRemoveZhanJi");
+		next.player = this;
+		for (var i = 0; i < arguments.length; i++) {
+			if(typeof arguments[i] =='boolean'){
+				if(!next.side) next.side = arguments[i];
+				else if(!next.forced) next.forced = arguments[i];
+				else next.complexSelect = arguments[i];
+			}else if(get.itemtype(arguments[i])=='player'){
+				next.side=arguments[i].side;
+			}else if(typeof arguments[i] == 'number'){
+				next.selectButton = [arguments[i], arguments[i]];
+			}else if(get.itemtype(arguments[i])=='select'){
+				next.selectButton = arguments[i];
+			}else if(typeof arguments[i] == 'function'){
+				if(next.ai) next.filterButton = arguments[i];
+				else next.ai = arguments[i];
+			}else if(typeof arguments[i] == 'object' && arguments[i]){
+				var filter = get.filter(arguments[i]);
+				next.filterButton = function(button){
+					return filter(button.link);
+				};
+			}else if(typeof arguments[i] == 'string'){
+				next.prompt = arguments[i];
+			}
+		}
+		if(next.side == undefined) next.side = this.side;
+		if(next.filterButton == undefined) next.filterButton = lib.filter.all;
+		if(next.selectButton == undefined) next.selectButton = [1, 1];
+		if(next.ai == undefined) next.ai = function(button){
+			return 1;
+		};
+		if(next.complexSelect !== false) next.complexSelect = true;
+		next.setContent("chooseRemoveZhanJi");
+		next._args = Array.from(arguments);
+		if(get.zhanJi(this.side).length==0){
+			_status.event.next.remove(next);
+			next.resolve();
+		}
+		return next;
+	}
+	chooseZhanJi(){
+		var next = game.createEvent("chooseZhanJi");
+		next.player = this;
+		for (var i = 0; i < arguments.length; i++) {
+			if(typeof arguments[i] =='boolean'){
+				if(!next.side) next.side = arguments[i];
+				else if(!next.forced) next.forced = arguments[i];
+				else next.complexSelect = arguments[i];
+			}else if(get.itemtype(arguments[i])=='player'){
+				next.side=arguments[i].side;
+			}else if(typeof arguments[i] == 'number'){
+				next.selectButton = [arguments[i], arguments[i]];
+			}else if(get.itemtype(arguments[i])=='select'){
+				next.selectButton = arguments[i];
+			}else if(typeof arguments[i] == 'function'){
+				if(next.ai) next.filterButton = arguments[i];
+				else next.ai = arguments[i];
+			}else if(typeof arguments[i] == 'object' && arguments[i]){
+				var filter = get.filter(arguments[i]);
+				next.filterButton = function(button){
+					return filter(button.link);
+				};
+			}else if(typeof arguments[i] == 'string'){
+				next.prompt = arguments[i];
+			}
+		}
+		if(next.side == undefined) next.side = this.side;
+		if(next.filterButton == undefined) next.filterButton = lib.filter.all;
+		if(next.selectButton == undefined) next.selectButton = [1, 1];
+		if(next.ai == undefined) next.ai = function(button){
+			return 1;
+		};
+		if(next.complexSelect !== false) next.complexSelect = true;
+		next.setContent("chooseZhanJi");
+		next._args = Array.from(arguments);
+		if(get.zhanJi(this.side).length==0){
+			_status.event.next.remove(next);
+			next.resolve();
+		}
+		return next;
+	}
 
 	discardPlayerCard() {
 		var next = game.createEvent("discardPlayerCard");

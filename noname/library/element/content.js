@@ -12041,6 +12041,170 @@ export const Content = {
 			if (event.dialog) event.dialog.close();
 		},
 	],
+	chooseRemoveZhanJi:[
+		async (event, _trigger, player) => {
+			if (typeof event.dialog == "number") {
+				event.dialog = get.idDialog(event.dialog);
+			}
+
+			const list = [];
+			const zhanJi = get.zhanJi(event.side);
+			for(var i=0;i<zhanJi.length;i++){
+				list.push([zhanJi[i],get.translation(zhanJi[i])]);
+			}
+
+			var str;
+			if(typeof(event.prompt)=='string') str=event.prompt;
+			else{
+				const range=get.select(event.selectButton);
+				str='请移除';
+				if(range[0]==range[1]) str+=get.cnNumber(range[0]);
+				else if(range[1]==Infinity) str+='至少'+get.cnNumber(range[0]);
+				else str+=get.cnNumber(range[0])+'至'+get.cnNumber(range[1]);
+				str+='个星石';
+			}
+			event.createDialog = [
+				str,
+				[list,'tdnodes'],
+			];
+
+			if (event.createDialog && !event.dialog) {
+				if (Array.isArray(event.createDialog)) {
+					event.createDialog.add("hidden");
+					event.dialog = ui.create.dialog.apply(this, event.createDialog);
+				}
+				event.closeDialog = true;
+			}
+			if (event.dialog == undefined) event.dialog = ui.dialog;
+			if (event.isMine()) {
+				if (event.hsskill && !event.forced && _status.prehidden_skills.includes(event.hsskill)) {
+					ui.click.cancel();
+					return;
+				}
+				if (event.isMine() || event.dialogdisplay) {
+					event.dialog.style.display = "";
+					event.dialog.open();
+				}
+				game.check();
+				game.pause();
+			} else if (event.isOnline()) {
+				event.result = await event.sendAsync();
+			} else {
+				//考虑中途托管的情况
+				event.result = "ai";
+			}
+		},
+		async (event, _trigger, player, result) => {
+			//处理ai的选择结果
+			if (event.result == "ai") {
+				game.check();
+				if (ai.basic.chooseButton(event.ai) || event.forced) {
+					if (event.forced && (!event.filterOk || event.filterOk())) {
+						ui.click.ok();
+						_status.event._aiexclude.length = 0;
+					} else {
+						ui.click.cancel();
+					}
+				} else {
+					ui.click.cancel();
+				}
+			}
+		},
+		async (event, _trigger, player, result) => {
+			//处理选择的结果
+			event.resume();
+			if (event.dialog) event.dialog.close();
+		},
+		async (event, _trigger, player, result) => {
+			if(!game.online && event.result.bool){
+				var baoShi=0;
+				var shuiJing=0;
+				for(var i of event.result.links){
+					if(i=='baoShi'){
+						baoShi++;
+					}else if(i=='shuiJing'){
+						shuiJing++;
+					}
+				}
+				if(baoShi>0) await player.removeZhanJi('baoShi',baoShi);
+				if(shuiJing>0) await player.removeZhanJi('shuiJing',shuiJing);
+			}
+		}
+	],
+	chooseZhanJi:[
+		async (event, _trigger, player) => {
+			if (typeof event.dialog == "number") {
+				event.dialog = get.idDialog(event.dialog);
+			}
+
+			const list = [];
+			const zhanJi = get.zhanJi(event.side);
+			for(var i=0;i<zhanJi.length;i++){
+				list.push([zhanJi[i],get.translation(zhanJi[i])]);
+			}
+			var str;
+			if(typeof(event.prompt)=='string') str=event.prompt;
+			else{
+				const range=get.select(event.selectButton);
+				str='请选择';
+				if(range[0]==range[1]) str+=get.cnNumber(range[0]);
+				else if(range[1]==Infinity) str+='至少'+get.cnNumber(range[0]);
+				else str+=get.cnNumber(range[0])+'至'+get.cnNumber(range[1]);
+				str+='个星石';
+			}
+			event.createDialog = [
+				str,
+				[list,'tdnodes'],
+			];
+
+			if (event.createDialog && !event.dialog) {
+				if (Array.isArray(event.createDialog)) {
+					event.createDialog.add("hidden");
+					event.dialog = ui.create.dialog.apply(this, event.createDialog);
+				}
+				event.closeDialog = true;
+			}
+			if (event.dialog == undefined) event.dialog = ui.dialog;
+			if (event.isMine()) {
+				if (event.hsskill && !event.forced && _status.prehidden_skills.includes(event.hsskill)) {
+					ui.click.cancel();
+					return;
+				}
+				if (event.isMine() || event.dialogdisplay) {
+					event.dialog.style.display = "";
+					event.dialog.open();
+				}
+				game.check();
+				game.pause();
+			} else if (event.isOnline()) {
+				event.result = await event.sendAsync();
+			} else {
+				//考虑中途托管的情况
+				event.result = "ai";
+			}
+		},
+		async (event, _trigger, player, result) => {
+			//处理ai的选择结果
+			if (event.result == "ai") {
+				game.check();
+				if (ai.basic.chooseButton(event.ai) || event.forced) {
+					if (event.forced && (!event.filterOk || event.filterOk())) {
+						ui.click.ok();
+						_status.event._aiexclude.length = 0;
+					} else {
+						ui.click.cancel();
+					}
+				} else {
+					ui.click.cancel();
+				}
+			}
+		},
+		async (event, _trigger, player, result) => {
+			//处理选择的结果
+			event.resume();
+			if (event.dialog) event.dialog.close();
+		},
+	],
 
 	//xingbei
 	changeXingBei:function(){
