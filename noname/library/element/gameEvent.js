@@ -1332,7 +1332,7 @@ export class GameEvent {
 	//xingBei
 	weiMingZhong(){
 		this.target=undefined;
-		return this;
+		//return this;
 	}
 	/**
 	 * @param {num} num 伤害改变量 

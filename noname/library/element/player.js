@@ -3600,6 +3600,7 @@ export class Player extends HTMLDivElement {
 			numh = arguments[0];
 		}
 		var limit= this.getHandcardLimit();
+		if(_status.video) limit=arguments[1];
 		if(limit==Infinity) limit='∞';
 
 		this.node.count.innerHTML = numh+ "/" + limit;
@@ -3621,7 +3622,7 @@ export class Player extends HTMLDivElement {
 			}
 		}
 		if (!_status.video) {
-			game.addVideo("update", this, [this.countCards("h"), this.hp, this.maxHp, this.zhiLiao]);
+			game.addVideo("update", this, [this.countCards("h"), this.hp, this.maxHp, this.zhiLiao,this.getHandcardLimit()]);
 		}
 		this.updateMarks();
 		this.viewHandcard();
