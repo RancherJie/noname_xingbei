@@ -6054,9 +6054,12 @@ const pack_skills = {
             if (target.countCards('h') > 0) {
                 if (player.side == target.side) {
                     target.chooseToDiscard('h', '充盈：是否弃1张牌').set('ai', function (card) {
-                        if (get.type(card) == 'faShu' || get.xiBie(card) == 'lei') return 6;
+                        if(_status.event.player == _status.event.skillPlayer){
+                            return 6-get.value(card);
+                        }
+                        if (get.type(card) == 'faShu' || get.xiBie(card) == 'lei') return 10-get.value(card);
                         return 6 - get.value(card);
-                    }).set('showCards', true);
+                    }).set('showCards', true).set('skillPlayer', player);
                 } else {
                     target.chooseToDiscard('h', '充盈：弃1张牌', true).set('ai', function (card) {
                         if (get.type(card) == 'faShu' || get.xiBie(card) == 'lei') return 0;
