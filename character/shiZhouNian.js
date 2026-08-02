@@ -568,7 +568,7 @@ const pack_skills = {
                 if (player.isHengZhi()) return num - 1;
             },
             targetEnabled: function (card, player, target) {
-                if (get.type(card) == 'gongJi' && target.isHengZhi()) {
+                if (get.type(card,player) == 'gongJi' && target.isHengZhi()) {
                     if (_status.event.yingZhan != true) return false;
                 }
             },
