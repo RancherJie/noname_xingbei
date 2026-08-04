@@ -2705,7 +2705,7 @@ export class Get extends GetCompatible {
 	}
 	/**
 	 * @overload
-	 * @param { string } item
+	 * @param { string | Symbol } item
 	 * @returns { Skill }
 	 */
 	/**
@@ -2715,20 +2715,20 @@ export class Get extends GetCompatible {
 	 * @returns { any }
 	 */
 	info(item, player) {
-		if (typeof item == "string") {
-			const info = (() => {
-				const info = lib.skill[item];
-				if (!info) {
-					console.warn(`孩子，你的技能${item}是不是忘写了什么？！`);
-					return {};
-				}
-				return info;
-			})();
+		if (typeof item == "string" || typeof item == "symbol") {
+			const info = Reflect.get(lib.skill, item);
+			if (!info) {
+				const str = typeof item == "string" ? item : `[${item.toString()}]`;
+				console.warn(`孩子，你的技能${str}是不是忘写了什么？！`);
+				return {};
+			}
 			return info;
 		}
 		if (typeof item == "object") {
 			var name = item.name;
-			if (player !== false) name = get.name(item, player);
+			if (player !== false) {
+				name = get.name(item, player);
+			}
 			return lib.card[name];
 		}
 	}
@@ -5559,9 +5559,9 @@ export class Get extends GetCompatible {
 	damageEffect(target,num){
 		if(!target) return 0;
 		if(!num) num=2;
-		if(target.hasSkillTag('noShiQiXiaJiang')) return 0.1;
+		if(target.hasSkillTag('noShiQiXiaJiang')) return 0;
 		var chaZhi=target.getHandcardLimit()-target.countCards('h');
-		if(target.hasSkillTag('oneDamage')&&num==1) return 0;
+		if(target.hasSkillTag('oneDamage')&&num==1) return 0.5;
 		if(chaZhi<num) return -(num-chaZhi)-1;
 		else if(chaZhi-3<num) return -1;
 		else return -0.5;

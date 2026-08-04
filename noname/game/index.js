@@ -2814,6 +2814,8 @@ export class Game extends GameCompatible {
 				ui.me.hide();
 			}
 
+			ui.create.zhanJi();//后续版本删除，保留用于现有版本兼容
+
 			ui.arena.setNumber(players.length);
 			ui.arena.classList.add("video");
 			game.players.length = 0;
@@ -3652,7 +3654,7 @@ export class Game extends GameCompatible {
 				player.hp = info[1];
 				player.maxHp = info[2];
 				player.zhiLiao = info[3];
-				player.update(info[0]);
+				player.update(info[0],info[4]);
 			} else {
 				console.log(player);
 			}
@@ -4208,6 +4210,9 @@ export class Game extends GameCompatible {
 			player.side=side;
 			player.node.identity.firstChild.innerHTML=player.side === true ? '红' : '蓝';
 			player.node.identity.dataset.color=player.side+'zhu';
+		},
+		createZhanJi: function () {
+			ui.create.zhanJi();
 		}
 	};
 	reload() {
