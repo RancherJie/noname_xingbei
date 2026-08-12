@@ -896,8 +896,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         }else{
                             //否，伤害无效，玩家受到5点法术伤害，目标加1治疗
                             await player.faShuDamage(5,player);
-                            await event.trigger("anZhiFail");
                             await target.changeZhiLiao(1);
+                            await event.trigger("anZhiFail");
                         }
                     } else {
                         // 不选择翻开，正常结算三点暗灭伤害
@@ -954,8 +954,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         }else{
                             //否，伤害无效，玩家受到5点法术伤害，目标战绩区加1宝石
                             await player.faShuDamage(5,player);
-                            await event.trigger("anZhiFail");
                             await target.changeZhanJi('baoShi',1,target.side);
+                            await event.trigger("anZhiFail");
                         }
                     } else {
                         // 不选择翻开，结算1点法术伤害
