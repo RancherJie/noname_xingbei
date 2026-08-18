@@ -521,12 +521,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         .chooseTarget("对4名目标角色造成1点法术伤害③，<span class='tiaoJian'>(若目标角色拥有X个基础效果)</span>本次对他的法术伤害额外+X点", 4, true)
                         .set("ai", function (target) {
                             var player = _status.event.player;
-                            var length = target.jiChuXiaoGuoList().length;
+                            var length = target.countJiChuXiaoGuo();
                             return get.damageEffect2(target, player, 1+length);
                         })
                         .forResultTargets();
                     for (var target of targets.sortBySeat(player)) {
-                        var length = target.jiChuXiaoGuoList().length;
+                        var length = target.countJiChuXiaoGuo();
                         await target.faShuDamage(1 + length, player);
                     }
                 },
