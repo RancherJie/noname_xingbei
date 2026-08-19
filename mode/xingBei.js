@@ -1238,10 +1238,7 @@ export default () => {
 							event.interval=setInterval(function(){
 								var target=event.ai_targets.shift();
 								var list=game._characterChoice[target.playerid];
-								var choice;
-								//AI必选玩家推荐角色
-								if(target._aiChoice&&list.includes(target._aiChoice)) choice=target._aiChoice;
-								else choice=list.randomGet();
+								var choice=list.randomGet();
 								if(lib.characterReplace[choice]) choice=lib.characterReplace[choice].randomGet();
 								event.sendback({
 									result:true,
