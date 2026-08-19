@@ -1069,13 +1069,12 @@ export default () => {
 					var team_sequence=lib.configOL.team_sequence;
 					var chooseSide=lib.configOL.chooseSide;
 					var number=game.players.length;
+					if(number==8) team_sequence='random';
+					else if(mode=='CM02'||mode=='CM01') team_sequence='CM';
+					else if(mode=='BP02'||mode=='BP01') team_sequence='BP';
 					if(chooseSide){
 						var ref=game.getFirstRed();
-						if(mode=='CM02'||mode=='CM01'||mode=='BP02'||mode=='BP01'){
-							game.moveSeat(ref);
-						}else{
-							if(team_sequence!='random'&&number!=8) game.moveSeat(ref);
-						}
+						if(team_sequence!='random') game.moveSeat(ref);
 					}else{
 						var ref=game.assignPlayerSides();
 					}
