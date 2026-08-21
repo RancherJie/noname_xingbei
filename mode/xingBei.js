@@ -2518,6 +2518,11 @@ export default () => {
 
 					if(get.phaseswap()){
 						game.addGlobalSkill('autoswap');
+					}else{
+						var viewHandcard=lib.configOL.viewHandcard;
+						if(viewHandcard==true){
+							game.addGlobalSkill('viewHandcard');
+						}
 					}
 
 					event.allCharacterList=get.charactersOL();
