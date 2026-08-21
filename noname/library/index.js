@@ -4851,6 +4851,7 @@ export class Library {
 						'BP01':"BP01",
 						'BP02':"BP02",
 						'jiuGuan':'酒馆',
+						'freeChoose':'自由选角',
 					},
 					frequent:true,
 				},
@@ -7570,6 +7571,7 @@ export class Library {
 		huanGroupColor:"#635282",
 		longGroupColor:"#4b4556ff",
 		jiuGuan:"酒馆",
+		freeChoose:"自由选角",
 
 		zhiLiao:"治疗",
 

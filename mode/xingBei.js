@@ -305,6 +305,7 @@ export default () => {
 						case 'BP01':uiintro.add('<div class="text chat">选角模式：BP01');break;
 						case 'BP02':uiintro.add('<div class="text chat">选角模式：BP02');break;
 						case 'jiuGuan':uiintro.add('<div class="text chat">选角模式：酒馆');break;
+						case 'freeChoose':uiintro.add('<div class="text chat">选角模式：自由选角');break;
 					}
 					if(lib.configOL.choose_mode!='CM02'&&lib.configOL.choose_mode!='CM01'&&lib.configOL.choose_mode!='BP01'&&lib.configOL.choose_mode!='BP02'){
 						switch(lib.configOL.team_sequence){
@@ -828,6 +829,7 @@ export default () => {
 						case 'BP01':game.chooseCharacterOLBP();break;
 						case 'BP02':game.chooseCharacterOLBP();break;
 						case 'jiuGuan':game.chooseCharacterOLJiuGuan();break;
+						case 'freeChoose':game.chooseCharacterOLFree();break;
 					}
 				}else if(lib.configOL.versus_mode=='4v4'){
 					game.chooseCharacterOLDuoXuanYi();
@@ -839,6 +841,7 @@ export default () => {
 						case 'BP01':game.chooseCharacterOLBP();break;
 						case 'BP02':game.chooseCharacterOLBP();break;
 						case 'jiuGuan':game.chooseCharacterOLJiuGuan();break;
+						case 'freeChoose':game.chooseCharacterOLFree();break;
 					}	
 				}
 			},
@@ -2718,6 +2721,155 @@ export default () => {
 					if(event.choose_list.length>0){
 						event.goto(7);
 					}
+				});
+			},
+
+			chooseCharacterOLFree:function(){
+				var next=game.createEvent('chooseCharacterOL');
+				next.setContent(function(){
+					'step 0'
+					game.initSideAndPosition(lib.configOL.phaseswap);
+					'step 1'
+					var list=get.charactersOL();
+					event.characterList=list;//后续给ai随机选角用
+
+					event._choiceMap={};
+					event.videoId=lib.status.videoId++;
+					game.broadcastAll(function(id,phaseswap,list){
+						game._characterDialogID=id;
+						if(phaseswap){
+							var str=`请按顺位选择角色${game.me.side?'(红方)':'(蓝方)'}`;
+						}else{
+							var str='请选择角色';
+						}
+						ui.arena.classList.add('choose-character');
+						var dialog=ui.create.characterDialogOL('heightset',str,list);
+						dialog.videoId=id;
+						dialog.open();
+					},event.videoId,lib.configOL.phaseswap,list);
+
+
+					if(lib.configOL.phaseswap){
+						var send=function(){
+							var next=game.me.chooseButton(game.players.length/2,true);
+							next.set('dialog',game._characterDialogID);
+							//托管选择
+							next.set('ai',function(button){
+								return 0.5+Math.random();
+							});
+							if(game.online) game.resume();
+						}
+					}else{
+						var send=function(){
+							var next=game.me.chooseButton(1,true);
+							next.set('dialog',game._characterDialogID);
+							//托管选择
+							next.set('ai',function(button){
+								return 0.5+Math.random();
+							});
+							if(game.online) game.resume();
+						}
+					}
+					
+					var sendback=function(result,player){
+						var type=typeof result;
+						if(result&&type=='object'){
+							var choice=result.links;
+							event._choiceMap[player.playerid]=choice;
+						}
+					}
+					event.sendback=sendback;
+
+					event.ai_targets=[];
+					for(var i=0;i<game.players.length;i++){
+						if(game.players[i].isOnline()){
+							event.withol=true;
+							game.players[i].send(send);
+							game.players[i].wait(sendback);
+						}
+						else if(game.players[i]==game.me){
+							event.withme=true;
+							send();
+							game.me.wait(sendback);
+						}
+					}
+
+					'step 2'
+					if(event.withme){
+						game.me.unwait(result);
+					}
+					'step 3'
+					if(event.withol&&!event.resultOL){
+						game.pause();
+					}
+
+					'step 4'
+					game.broadcastAll(function(id){
+						var dialog=get.idDialog(id);
+						if(dialog){
+							dialog.close();
+							clearInterval(dialog.delay);
+						}
+						ui.arena.classList.remove('choose-character');
+					},event.videoId);
+
+					var result=event._choiceMap;
+					var chooseList={};
+					
+					if(lib.configOL.phaseswap){
+						for(var i in result){
+							if(lib.playerOL[i].side==true){
+								chooseList.red=result[i];
+							}else if(lib.playerOL[i].side==false){
+								chooseList.blue=result[i];
+							}
+						}
+					}else{
+						chooseList=result;
+					}
+					_status.characterList=result[game.me.playerid];
+
+					var list=[];
+					var ref=_status.firstAct;
+					for(var i =0;i<game.players.length;i++){
+						if(lib.configOL.phaseswap){
+							if(ref.side==true){
+								if(chooseList.red) list.push(chooseList.red.shift());
+								else list.push(event.characterList.randomGet());
+							}else{
+								if(chooseList.blue) list.push(chooseList.blue.shift());
+								else list.push(event.characterList.randomGet());
+							}
+						}else{
+							if(chooseList[ref.playerid]) list.push(chooseList[ref.playerid].shift());
+							else list.push(event.characterList.randomGet());
+						}
+						ref=ref.next;
+					}
+					game.broadcastAll(function(list,ref){
+						for(var i=0;i<list.length;i++){
+							if(!ref.name1){
+								ref.init(list[i]);
+								ref.update();
+							}
+							ref=ref.next;
+						}
+					},list,ref);
+
+					if(lib.configOL.phaseswap){
+						game.addGlobalSkill('autoswap');
+						for(var player of game.players){
+							if(player==game.me || player.isOnline2()){
+								game.onSwapControl(player);
+							}
+						}
+					}else{
+						var viewHandcard=lib.configOL.viewHandcard;
+						if(viewHandcard==true){
+							game.addGlobalSkill('viewHandcard');
+						}
+					}
+					
 				});
 			},
 
