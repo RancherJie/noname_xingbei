@@ -2421,9 +2421,9 @@ export default () => {
 						let buttonList=[];
 						buttonList.push(player);
 						let configList=[];
-						if(player.side==true) configList.push('(红方)');
-						else configList.push('(蓝方)');
-						configList[0]+='按顺位进行选择';
+						configList.push('请按顺位选择角色');
+						if(player.side==true) configList[0]+='(红方)';
+						else configList[0]+='(蓝方)';
 						configList.push([list.randomRemove(choose_number),'characterx']);
 						buttonList.push(configList);
 						buttonList.push(game.players.length/2);
