@@ -706,8 +706,8 @@ export default () => {
 
 					var characterChoice=list.randomGets(choose_number);
 					var basenum=number/2;
-					var basestr=game.me.side?'（红方）':'（蓝方）';
-					basestr+='选择你和队友的角色，按顺位选择';
+					var basestr='请按顺位选择你和队友的角色';
+					basestr+=game.me.side?'（红方）':'（蓝方）';
 					
 					var dialog=ui.create.dialog(basestr,[characterChoice,'characterx']);
 					game.me.chooseButton(true,dialog,basenum).set('onfree',true);
