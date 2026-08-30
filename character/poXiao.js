@@ -2556,9 +2556,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         await player.discard(event.cards).set('showCards',true);
                     }
                     if(event.cards){
-                        var targets = game.filterPlayer(p => p != player && p.isEnemyOf(player));
-                        for (let i = 0; i < targets.length; i++) {
-                            await targets[i].faShuDamage(1, player);
+                        let nextPlayer = player.getNext();
+                        while (nextPlayer != player) {
+                            if (nextPlayer.isEnemyOf(player)) {
+                                await nextPlayer.faShuDamage(1, player);
+                            }
+                            nextPlayer = nextPlayer.getNext();
                         }
                         // 清空本轮的弃牌再按需触发大招
                         event.cards = undefined;
