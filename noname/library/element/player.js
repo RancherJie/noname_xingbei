@@ -4867,6 +4867,8 @@ export class Player extends HTMLDivElement {
 			} else if (get.itemtype(arguments[i]) == "dialog") {
 				next.dialog = arguments[i];
 				next.prompt = false;
+			}else if(get.itemtype(arguments[i]) == "event"){
+				next.relatedEvent = arguments[i];
 			} else if (typeof arguments[i] == "boolean") {
 				next.forced = arguments[i];
 			} else if (get.itemtype(arguments[i]) == "position") {
@@ -6193,6 +6195,8 @@ export class Player extends HTMLDivElement {
 				if(arguments[i] == "showCards") next.showCards = true;
 				else if(arguments[i] == "showHiddenCards") next.showHiddenCards = true;
 				else next.gaiPai = arguments[i];
+			}else if(get.itemtype(arguments[i])=='event'){
+				next.relatedEvent = arguments[i];
 			}
 		}
 		if (next.cards == undefined) {

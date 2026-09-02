@@ -1447,7 +1447,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 3'
                     event.target=result.targets[0];
                     if(event.target.countCards('h')>0){
-                        event.target.chooseToDiscard('h',true,'showCards');
+                        event.target.chooseToDiscard('h',true,'showCards',event).set('loseTo',ui.ordering);
                     }
                     'step 4'
                     event.cards=result.cards;
