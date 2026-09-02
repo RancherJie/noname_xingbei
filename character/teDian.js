@@ -521,12 +521,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         .chooseTarget("对4名目标角色造成1点法术伤害③，<span class='tiaoJian'>(若目标角色拥有X个基础效果)</span>本次对他的法术伤害额外+X点", 4, true)
                         .set("ai", function (target) {
                             var player = _status.event.player;
-                            var length = target.jiChuXiaoGuoList().length;
+                            var length = target.countJiChuXiaoGuo();
                             return get.damageEffect2(target, player, 1+length);
                         })
                         .forResultTargets();
                     for (var target of targets.sortBySeat(player)) {
-                        var length = target.jiChuXiaoGuoList().length;
+                        var length = target.countJiChuXiaoGuo();
                         await target.faShuDamage(1 + length, player);
                     }
                 },
@@ -929,27 +929,27 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
             },
             sanMiaoYuanZe: {
-                init: function (player, skill) {
-                    player.storage[skill] = [];
-                },
-                trigger:{global:'cardsDiscardBefore'},
+                trigger:{global:'cardsDiscardEnd'},
                 filter: function (event, player) {
-                    for(var card of event.cards){
-                        if(player.storage.sanMiaoYuanZe.includes(card)) return true;
+                    var evt=event.getParent(2);
+                    if(evt.player.side==player.side&&evt.player!=player){
+                        for(var card of event.cards){
+                            if(get.name(card) == "moDan" && ['h','x'].includes(card.original)&&get.position(card,true)=='d') {
+                                return true;
+                            }
+                        }
                     }
                     return false;
                 },
                 content:async function (event, trigger, player) {
                     await player.chooseToDiscard(1,true);
                     var cards=[];
-                    for(var card of trigger.cards.slice()){
-                        if(player.storage.sanMiaoYuanZe.includes(card)){
-                            cards.push(card);
-                            trigger.cards.remove(card);
-                            player.storage.sanMiaoYuanZe.remove(card);
+                    for(var card of trigger.cards){
+                            if(get.name(card) == "moDan" && ['h','x'].includes(card.original)&&get.position(card,true)=='d') {
+                                cards.push(card);
+                            }
                         }
-                    }
-                    await player.gain(cards,'gain2');
+                    await player.gain(cards,'gain2','log');
                 },
                 check: function (event,player) {
                     return player.countCards('h') < player.getHandcardLimit();
@@ -957,19 +957,29 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 group: 'sanMiaoYuanZe_discard',
                 subSkill:{
                     discard:{
+                        //正常弃牌的
                         trigger:{global: "loseEnd"},
-                        direct: true,
                         filter: function (event, player) {
-                            return event.player.side==player.side&&event.player!=player &&((event.type=='discard'&&(event.getParent().showCards||event.getParent().showHiddenCards)) || (event.type=='use'));
-                        },
-                        content:async function (event, trigger, player) {
-                            for (var card of trigger.cards) {
-                                if (get.name(card) == "moDan" && ['h','x'].includes(card.original)&&!player.storage.sanMiaoYuanZe.includes(card)&&get.position(card)=='d') {
-                                    player.storage.sanMiaoYuanZe.push(card);
-                                    //game.log(player, "将", "#g【魔弹】", "加入了", "#y【三妙原则】");
+                            if(event.player.side==player.side&&event.player!=player &&(event.type=='discard'&&(event.getParent().showCards||event.getParent().showHiddenCards))){
+                                for(var card of event.cards){
+                                    if(get.name(card) == "moDan" && ['h','x'].includes(card.original)&&get.position(card,true)=='d') {
+                                        return true;
+                                    }
                                 }
                             }
-                            if(player.storage.sanMiaoYuanZe.length) game.cardsGotoOrdering(player.storage.sanMiaoYuanZe);
+                            return false;
+                        },
+                        content:async function (event, trigger, player) {
+                            await player.chooseToDiscard(1,true);
+                            var cards=[];
+                            for (var card of trigger.cards) {
+                                if (get.name(card) == "moDan" && ['h','x'].includes(card.original)&&get.position(card,true)=='d') {
+                                    cards.push(card);
+                                }
+                            }
+                            if(cards.length>0){
+                                await player.gain(cards,'gain2','log');
+                            }
                         }
                     } 
                 },

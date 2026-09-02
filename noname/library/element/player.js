@@ -2841,10 +2841,22 @@ export class Player extends HTMLDivElement {
 					str += "】";
 				}*/
 				str+='<br>';
+
+				// 处理角色包顺序，让其根据默认角色包顺序排序，而不是按启用顺序
+				var characterList = config.characterPack.slice();
+				var characterOrder = new Map();
+				for (var i = 0; i < lib.config.all.characters.length; i++) {
+					characterOrder.set(lib.config.all.characters[i], i);
+				}
+				characterList.sort(function (a, b) {
+					var indexA = characterOrder.has(a) ? characterOrder.get(a) : Number.MAX_SAFE_INTEGER;
+					var indexB = characterOrder.has(b) ? characterOrder.get(b) : Number.MAX_SAFE_INTEGER;
+					return indexA - indexB;
+				});
 				if(config.characterPack.length>0){
 					str+='【';
 					for(var i=0;i<config.characterPack.length;i++){
-						let enNameOri=config.characterPack[i];
+						let enNameOri=characterList[i];
 						let enName=enNameOri+'_character_config';
 						let name=get.translation(enName);
 						if(enName==name) name=enNameOri;
@@ -4855,6 +4867,8 @@ export class Player extends HTMLDivElement {
 			} else if (get.itemtype(arguments[i]) == "dialog") {
 				next.dialog = arguments[i];
 				next.prompt = false;
+			}else if(get.itemtype(arguments[i]) == "event"){
+				next.relatedEvent = arguments[i];
 			} else if (typeof arguments[i] == "boolean") {
 				next.forced = arguments[i];
 			} else if (get.itemtype(arguments[i]) == "position") {
@@ -6181,6 +6195,8 @@ export class Player extends HTMLDivElement {
 				if(arguments[i] == "showCards") next.showCards = true;
 				else if(arguments[i] == "showHiddenCards") next.showHiddenCards = true;
 				else next.gaiPai = arguments[i];
+			}else if(get.itemtype(arguments[i])=='event'){
+				next.relatedEvent = arguments[i];
 			}
 		}
 		if (next.cards == undefined) {

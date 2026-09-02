@@ -1215,7 +1215,6 @@ const pack_skills = {
         },
     },
     tianShiZhiQiang: {
-        type: 'faShu',
         enable: 'faShu',
         duYou: 'tianShiZhiQiang',
         filterCard: function (card) {
@@ -2564,7 +2563,6 @@ const pack_skills = {
     //冒险家
     qiZha: {
         enable: 'gongJi',
-        type: 'gongJi',
         filter: function (event, player) {
             var bool1 = player.countTongXiPai() >= 2;
             var bool2 = game.hasPlayer(current => lib.skill.qiZha.filterTarget('', player, current));

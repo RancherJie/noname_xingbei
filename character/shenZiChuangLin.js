@@ -168,8 +168,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
             },
             shiMie: {
-                enable: ["gongJi"],
-                type: "gongJi",
+                enable: ["gongJi",'yingZhan'],
                 filter: function(card,player){
                     var bool1=player.hasCard(function(card){
                         return get.name(card)=='moRen';
@@ -228,8 +227,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
             },
             shangMie: {
-                enable: ["gongJi"],
-                type: "gongJi",
+                enable: ["gongJi",'yingZhan'],
                 filter: function(card,player){
                     var bool1=player.hasCard(function(card){
                         return get.name(card)=='yiRen';
@@ -1449,7 +1447,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 3'
                     event.target=result.targets[0];
                     if(event.target.countCards('h')>0){
-                        event.target.chooseToDiscard('h',true,'showCards');
+                        event.target.chooseToDiscard('h',true,'showCards',event).set('loseTo',ui.ordering);
                     }
                     'step 4'
                     event.cards=result.cards;

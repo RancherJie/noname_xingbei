@@ -5469,6 +5469,7 @@ export const Content = {
 		}
 		if(!game.online){
 			event.done=player.discard(event.result.cards,event.loseTo);
+			if(event.relatedEvent) event.done.relatedEvent=event.relatedEvent;
 			if(typeof event.delay=='boolean'){
 				event.done.set('delay',event.delay);
 			}
@@ -9474,6 +9475,7 @@ export const Content = {
 		//game.log(player,'弃置了',cards);
 		event.done=player.lose(cards,event.position);
 		event.done.type='discard';
+		if(event.relatedEvent) event.done.relatedEvent=event.relatedEvent;
 		if(event.discarder) event.done.discarder=event.discarder;
 		if(event.visible) event.done.visible=true;
 		if(event.gaiPai){//移除了盖牌日志
