@@ -2370,14 +2370,25 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 discard: true,
                 showCards: true,
-                content: async function(event,trigger,player) {
-                    const enemy_targets = game.filterPlayer(p => p.side != player.side);
-                    for (let target of enemy_targets) {
-                        await target.faShuDamage(1,player);
+                content: async function (event, trigger, player) {
+                    const enemies = [];
+                    const allies = [];
+                    let current = player.getNext();
+                    while (current !== player) {
+                        if (current.isEnemyOf(player)) {
+                            enemies.push(current);
+                        } else {
+                            allies.push(current);
+                        }
+                        current = current.getNext();
                     }
-                    const friend_targets = game.filterPlayer(p => p != player && p.side == player.side);
-                    for (let target of friend_targets) {
-                        await target.changeZhiLiao(1);
+                    // 所有对手造成1点法术伤害
+                    for (const enemy of enemies) {
+                        await enemy.faShuDamage(1, player);
+                    }
+                    // 所有队友增加1点治疗
+                    for (const ally of allies) {
+                        await ally.changeZhiLiao(1);
                     }
                 },
                 "_priority": 0
@@ -2556,9 +2567,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         await player.discard(event.cards).set('showCards',true);
                     }
                     if(event.cards){
-                        var targets = game.filterPlayer(p => p != player && p.isEnemyOf(player));
-                        for (let i = 0; i < targets.length; i++) {
-                            await targets[i].faShuDamage(1, player);
+                        let nextPlayer = player.getNext();
+                        while (nextPlayer != player) {
+                            if (nextPlayer.isEnemyOf(player)) {
+                                await nextPlayer.faShuDamage(1, player);
+                            }
+                            nextPlayer = nextPlayer.getNext();
                         }
                         // 清空本轮的弃牌再按需触发大招
                         event.cards = undefined;
