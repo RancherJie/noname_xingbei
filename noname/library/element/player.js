@@ -9184,25 +9184,24 @@ export class Player extends HTMLDivElement {
 				this.tempBanSkill(skill[i], expire, log);
 			}
 		} else {
-			if (this.isTempBanned(skill)) return;
+			if (this.isTempBanned(skill)) {
+				return;
+			}
 			this.setStorage(`temp_ban_${skill}`, true);
-
-			if (log !== false && this.hasSkill(skill)) game.log(this, "的技能", `#g【${get.translation(skill)}】`, "暂时失效了");
-
+			if (log !== false && this.hasSkill(skill)) {
+				game.log(this, "的技能", `#g【${get.translation(skill)}】`, "暂时失效了");
+			}
 			if (expire !== "forever") {
-				if (!expire) expire = { global: ["phaseAfter", "phaseBeforeStart"] };
-				else if (typeof expire == "string" || Array.isArray(expire)) expire = { global: expire };
-				this.when(expire, false)
-					.assign({
-						firstDo: true,
-					})
-					.vars({
-						bannedSkill: skill,
-					})
-					.then(() => {
-						delete player.storage[`temp_ban_${bannedSkill}`];
-					})
-					.finish();
+				if (!expire) {
+					expire = { global: ["phaseAfter", "phaseBeforeStart"] };
+				} else if (typeof expire == "string" || Array.isArray(expire)) {
+					expire = { global: expire };
+				}
+				this.when(expire, false).assign({
+					firstDo: true
+				}).step(async (event, trigger, player2) => {
+					delete player2.storage[`temp_ban_${skill}`];
+				}).finish();
 			}
 		}
 		return skill;
