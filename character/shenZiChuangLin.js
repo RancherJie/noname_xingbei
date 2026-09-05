@@ -169,18 +169,31 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             },
             shiMie: {
                 enable: ["gongJi",'yingZhan'],
-                filter: function(card,player){
+                filter: function(event,player){
                     var bool1=player.hasCard(function(card){
                         return get.name(card)=='moRen';
                     });
                     var bool2=player.hasCard(function(card){
+                        if(get.name(card)=='moRen') return false;
                         return ['shui', 'huo'].includes(get.xiBie(card));
                     });
-                    return bool1&&bool2;
+                    if(!bool1||!bool2) return false;
+
+                    if(event.name=='yingZhan'){
+                        if(event.canYingZhan==false) return false;
+                        let cards=player.getCards('h');
+                        let xiBie;
+                        for(var i=0;i<cards.length;i++){
+                            if(get.name(cards[i])=='moRen'){
+                                xiBie=get.xiBie(cards[i]);
+                                break;
+                            }
+                        }
+                        return xiBie==get.xiBie(event.card);
+                    }
+                    return true;
                 },
                 selectCard: 2,
-                discard: false,
-                lose: false,
                 filterCard:function(card){
                     if(ui.selected.cards.length==0){
                         return get.name(card)=='moRen';
@@ -228,18 +241,31 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             },
             shangMie: {
                 enable: ["gongJi",'yingZhan'],
-                filter: function(card,player){
+                filter: function(event,player){                 
                     var bool1=player.hasCard(function(card){
                         return get.name(card)=='yiRen';
                     });
                     var bool2=player.hasCard(function(card){
+                        if(get.name(card)=='yiRen') return false;
                         return ['feng', 'lei'].includes(get.xiBie(card));
                     });
-                    return bool1&&bool2;
+                    if(!bool1||!bool2) return false;
+
+                    if(event.name=='yingZhan'){
+                        if(event.canYingZhan==false) return false;
+                        let cards=player.getCards('h');
+                        let xiBie;
+                        for(var i=0;i<cards.length;i++){
+                            if(get.name(cards[i])=='yiRen'){
+                                xiBie=get.xiBie(cards[i]);
+                                break;
+                            }
+                        }
+                        return xiBie==get.xiBie(event.card);
+                    }
+                    return true;
                 },
                 selectCard: 2,
-                discard: false,
-                lose: false,
                 filterCard:function(card){
                     if(ui.selected.cards.length==0){
                         return get.name(card)=='yiRen';
