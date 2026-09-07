@@ -564,7 +564,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             shengGuangShanYao: {
                 type: "faShu",
                 enable: "faShu",
-                duYou: "shengGuangShanYao",
+                multitarget: true,
                 filterCard: function (card) {
                     return get.type(card) == 'faShu';
                 },
@@ -575,27 +575,29 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 selectCard: 1,
                 discard: true,
                 showCards: true,
-                prompt: "任意分配3点[治疗]给目标角色",
-                content: function () {
-                    'step 0'
-                    event.count = 0;
-                    event.nextStep = function () {
-                        if (event.count >= 3) return event.finish();
-                        player.chooseTarget('第' + (event.count + 1) + '次：选择治疗目标（剩余' + (3 - event.count) + '）', true,function(card, player, target){
-                            return target.side == player.side;
-                        }).set('ai', function (target) {
-                            return get.zhiLiaoEffect(target, 1);
-                        });
-                    };
-                    event.nextStep();
-                    'step 1'
-                    if (result.bool && result.targets && result.targets.length) {
-                        result.targets[0].changeZhiLiao(1, player);
-                    }
-                    event.count++;
-                    if (event.count < 3) {
-                        event.nextStep();
-                        event.goto(1);
+                selectTarget: [1, 3],
+                filterTarget: true,
+                content: async function (event, trigger, player) {
+                    if (event.targets.length == 1) {
+                        await event.targets[0].changeZhiLiao(3, player);
+                    } else if (event.targets.length == 2) {
+                        const list = [1, 2];
+                        const name = get.translation(event.targets[0]);
+                        const chaZhi = event.targets[0].getZhiLiaoLimit() - event.targets[0].zhiLiao;
+                        let num = 0;
+                        if (chaZhi > 1)
+                            num = 1;
+                        const next = await player.chooseControl(list).set('prompt', name + `获得X点[治疗]`)
+                            .set('num', num)
+                            .set('ai', function () {
+                                return _status.event.num;
+                            }).forResult('control');
+                        await event.targets[0].changeZhiLiao(next, player);
+                        await event.targets[1].changeZhiLiao(3 - next, player);
+                    } else if (event.targets.length == 3) {
+                        for (let target of event.targets) {
+                            await target.changeZhiLiao(1, player);
+                        }
                     }
                 },
                 ai: {
@@ -611,7 +613,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                 let num = target.getZhiLiaoLimit()-target.zhiLiao;
                                 zhiliao_num += num;
                             }
-                            console.log(zhiliao_num - 2);
                             return zhiliao_num - 2;
                         },
                     },
