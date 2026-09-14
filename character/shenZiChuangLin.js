@@ -181,17 +181,16 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 
                     if(event.name=='yingZhan'){
                         if(event.canYingZhan==false) return false;
-                        let cards=player.getCards('h');
-                        let xiBie;
-                        for(var i=0;i<cards.length;i++){
-                            if(get.name(cards[i])=='moRen'){
-                                xiBie=get.xiBie(cards[i]);
-                                break;
-                            }
-                        }
-                        return xiBie==get.xiBie(event.card);
                     }
-                    return true;
+                    let card;
+                    let cards=player.getCards('h');
+                    for(var i=0;i<cards.length;i++){
+                        if(get.name(cards[i])=='moRen'){
+                            card=cards[i];
+                            break;
+                        }
+                    }
+                    return event.filterCard?event.filterCard(card,player,event):false;
                 },
                 selectCard: 2,
                 filterCard:function(card){
@@ -253,17 +252,16 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 
                     if(event.name=='yingZhan'){
                         if(event.canYingZhan==false) return false;
-                        let cards=player.getCards('h');
-                        let xiBie;
-                        for(var i=0;i<cards.length;i++){
-                            if(get.name(cards[i])=='yiRen'){
-                                xiBie=get.xiBie(cards[i]);
-                                break;
-                            }
-                        }
-                        return xiBie==get.xiBie(event.card);
                     }
-                    return true;
+                    let card;
+                    let cards=player.getCards('h');
+                    for(var i=0;i<cards.length;i++){
+                        if(get.name(cards[i])=='yiRen'){
+                            card=cards[i];
+                            break;
+                        }
+                    }
+                    return event.filterCard?event.filterCard(card,player,event):false;
                 },
                 selectCard: 2,
                 filterCard:function(card){

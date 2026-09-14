@@ -1427,7 +1427,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
 
                     return player.countCards('h',function(card){
-                        return card.name!='shengGuang'&&get.type(card)=='faShu';
+                        return card.name!='shengGuang'&&get.type(card)=='faShu'&&event.filterCard?event.filterCard(card,player,event):false;;
                     });
                 },
                 filterCard:function(card,player,event){
