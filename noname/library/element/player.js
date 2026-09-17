@@ -11729,7 +11729,7 @@ export class Player extends HTMLDivElement {
 	}
 
 	tiaoZhengShouPai(num){
-		if(typeof num!='number' || !num) num=4;
+		if(typeof num!='number') num=4;
 		var next=game.createEvent('tiaoZhengShouPai',false);
 		next.player=this;
 		next.num=num;
