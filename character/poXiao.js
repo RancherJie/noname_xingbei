@@ -12,6 +12,24 @@ game.import('character',function(lib,game,ui,get,ai,_status){
         game.saveConfig("xingBei_banned", banned);
         game.saveConfig("poXiao_gai_initialized_0714", true);
     }
+    // 计算对target造成num点伤害会产生多少士气收益的函数
+    function getShiQiEffect(player, target, num) {
+        if (!target || target.side === player.side) return 0;
+        if (target.hasSkillTag('noShiQiXiaJiang')) return 0;
+
+        let kongJian = target.getHandcardLimit() - target.countCards('h');
+        let zhiLiao = target.zhiLiao || 0;
+
+        if (target.hasSkillTag('oneDamage')) {
+            let s1 = zhiLiao >= num - 1 ? 1 : Math.max(0, num - zhiLiao);
+            return s1 > kongJian ? s1 - kongJian : 0;
+        }
+
+        let diDang = (kongJian >= num + 1) ? 0 : Math.min(zhiLiao, num);
+        let result = num - diDang;
+
+        return result > kongJian ? result - kongJian : 0;
+    }
     return {
         name:'poXiao',
         connect:true,
@@ -100,9 +118,15 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 mod: {
                     aiOrder: function(player, card, num) {
-                        if (get.xiBie(card) === 'feng' && get.type(card) === 'gongJi') {
-                            return num - 0.3;
-                        }
+                        if (get.xiBie(card) !== 'feng') return;
+                        let best = 0;
+                        game.players.forEach(function (current) {
+                            let n = getShiQiEffect(player, current, 2);
+                            if (n > best) best = n;
+                        });
+                        if (best >= 2) return num + 1.2;
+                        if (best === 1) return num + 0.6;
+                        return num - 0.3;
                     },
                 },
                 "_priority": 0,
@@ -129,17 +153,35 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     // 对目标造成2点法术伤害
                     target.faShuDamage(2, player);
                 },
+                mod: {
+                    aiUseful: function (player, card, num) {
+                        if (!player.hasCard(c => get.xiBie(c) === 'huo')) return;
+                        let best = 0;
+                        game.players.forEach(function (current) {
+                            let n = getShiQiEffect(player, current, 2);
+                            if (n > best) best = n;
+                        });
+                        if (best >= 2) return 5;
+                        if (best === 1) return 4;
+                        return 1;
+                    },
+                },
                 ai: {
-                    order: 3.5,
+                    order: function (item, player) {
+                        let best = 0;
+                        game.players.forEach(function (current) {
+                            let n = getShiQiEffect(player, current, 2);
+                            if (n > best) best = n;
+                        });
+                        if (best >= 2) return 4;
+                        if (best === 1) return 3.35;
+                        return 3;
+                    },
                     result: {
-                        target: function(player, target) {
-                            // 基础伤害收益
-                            let value = get.damageEffect(target, 2);
-                            // 如果目标没有治疗，优先选择
-                            if (target.zhiLiao == 0) value += 0.3;
-                            // 如果目标手牌多，优先选择（可以爆士气）
-                            if (target.countCards('h') > 4) value += 0.5;
-                            return value;
+                        target: function (player, target) {
+                            let n = getShiQiEffect(player, target, 2);
+                            if (n <= 0) return 0;
+                            return -(1 + n);
                         },
                     },
                 },
@@ -163,23 +205,21 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.addFaShu();
                 },
                 ai: {
-                    order: 9.5,
-                    useful: function(player) {
-                        // 有可用法术牌时优先使用
-                        if (player.hasCard(card => get.type(card) === 'faShu')) {
-                            return true;
-                        }
-                        // 手牌多优先跑牌
-                        if (player.countCards('h') > 3) {
-                            return true;
-                        }
-                        // 中后期必用
-                        if (get.shiQi(player.side) < 10) {
-                            return true;
-                        }
-                        return false;
+                    order: function (item, player) {
+                        if (player.countNengLiang() > 0 || get.zhanJi(player.side).length >= 3) return 3.6;
+                        return 3;
                     },
                     shuiJing: true,
+                },
+                check: function (event, player) {
+                    const canZhuRiJian = player.countCards('h', c => get.xiBie(c) === 'huo') > 0;
+                    const canFashu = player.countCards('h', c => get.type(c) === 'faShu') > 0;
+                    // 场上存在发动逐日箭能产生士气收益的敌方
+                    console.log('lingDongZhiWu check', canZhuRiJian, game.players.some(p => p.side !== player.side && getShiQiEffect(player, p, 2) > 0), canFashu, player.countCards('h') + 1, player.getHandcardLimit());
+                    if (canZhuRiJian && game.players.some(p => p.side !== player.side && getShiQiEffect(player, p, 2) > 0)) return true;
+                    // 自己5-6手且有法术牌，则跑牌
+                    if (player.countCards('h') + 1 >= player.getHandcardLimit() && canFashu) return true;
+                    return false;
                 },
                 "_priority": 0,
             },
@@ -194,13 +234,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 content: function () {
                     trigger.changeDamageNum(1);
-                },
-                ai: {
-                    effect: {
-                        target: function (card, player, target, current) {
-                            if (get.type(card) === 'gongJi') return [1, 2]; // 提升攻击威胁
-                        },
-                    },
                 },
                 "_priority": 0,
             },
@@ -218,12 +251,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     trigger.wuFaYingZhan();
                 },
                 ai: {
-                    order: 10,
-                    result: {
-                        target: function (player, target) {
-                            return -1; // 倾向压制敌方
-                        },
-                    },
+                    shuiJing: true,
                 },
                 "_priority": 0,
             },
@@ -268,10 +296,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         "_priority": 1,
                     },
                 },
-                ai: {
-                    combo: "gongJi",
-                    order: 10,
-                },
                 "_priority": 0,
             },
             tiGu: {
@@ -280,7 +304,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 usable: 1,
                 filter: function (event, player) {
-                    return player.countNengLiang('baoShi') > 0;
+                    return player.canBiShaBaoShi();
                 },
                 content: function () {
                     'step 0'
@@ -290,16 +314,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 ai: {
                     baoShi: true,
-                    skillTagFilter: function (player, tag, arg) {
-                        if (tag == 'baoShi' && player.countNengLiang('baoShi') == 0) return false;
-                    },
-                    effect: {
-                        target: function (card, player, target, current) {
-                            if (card.name == 'gongJi' && get.attitude(player, target) < 0) {
-                                return [1, 3];
-                            }
-                        },
-                    },
                 },
                 "_priority": 0,
             },
@@ -332,11 +346,19 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         target.faShuDamage(2, player);
                     }
                 },
+                mod: {
+                    aiUseful: function (player, card, num) {
+                        if (player.countTongXiPai() < 2) return;
+                        return 4.5;
+                    },
+                },
                 ai: {
-                    order: 6,
+                    order: 3.6,
                     result: {
                         target: function (player, target) {
-                            return -2;
+                            let n = getShiQiEffect(player, target, 2);
+                            if (n <= 0) return 0;
+                            return -(1 + n);
                         },
                     },
                 },
@@ -360,10 +382,15 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 ai: {
                     baoShi: true,
-                    order: 8,
+                    order: 3.8,
                     result: {
                         player: function (player) {
-                            return 6;
+                            let total = 0;
+                            game.players.forEach(function (cur) {
+                                if (cur.isEnemyOf(player)) total += getShiQiEffect(player, cur, 2);
+                            });
+                            if (total <= 0) return -1;
+                            return total;
                         },
                     },
                 },
@@ -601,19 +628,23 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                 },
                 ai: {
-                    order: 4,
+                    order: function (item, player) {
+                        let total = 0;
+                        game.filterPlayer(p => p.side === player.side).forEach(function (t) {
+                            total += t.getZhiLiaoLimit() - t.zhiLiao;
+                        });
+                        // 全队可治疗空间小于3，不发动此技能
+                        if (total < 3) return 0;
+                        return 3.6;
+                    },
                     result: {
-                        target: function (target) {
-                            return get.zhiLiaoEffect(target, 1);
+                        target: function (player, target) {
+                            if (player.side !== target.side) return 0;
+                            return target.getZhiLiaoLimit() - target.zhiLiao + 1;
                         },
-                        player: function (player) {
-                            let zhiliao_num = 0;
-                            let targets = game.filterPlayer(p => !p.isEnemyOf(player));
-                            for (let target of targets) {
-                                let num = target.getZhiLiaoLimit()-target.zhiLiao;
-                                zhiliao_num += num;
-                            }
-                            return zhiliao_num - 2;
+                        player(player){
+                            if(player.getZhiLiaoLimit() - player.zhiLiao <= 0) return -1;
+                            return player.getZhiLiaoLimit() - player.zhiLiao + 1;
                         },
                     },
                 },
@@ -634,22 +665,23 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     target.changeZhiLiao(1);
                 },
                 ai: {
-                    order: 3.6,
+                    order: function (item, player) {
+                        // 满手不发动
+                        if (player.countCards('h') >= player.getHandcardLimit()) return 0;
+                        // 没有任何队友能吃治疗，就不值得发动
+                        let anySpace = game.hasPlayer(function (t) {
+                            return t !== player && t.side === player.side &&
+                                t.getZhiLiaoLimit() - t.zhiLiao > 0;
+                        });
+                        if (!anySpace) return 0;
+                        return 3.6;
+                    },
                     result: {
-                        target: function (target) {
-                            return get.zhiLiaoEffect(target, 1);
-                        },
-                        player: function (player) {
-                            if(player.countCards("h")>5) {
-                                console.log("满手，不发动")
-                                return -1;
-                            }
-                            //
-                            if(player.zhiLiao==2) {
-                                console.log("自己满治疗，不发动")
-                                return -1;
-                            }
-                            return get.zhiLiaoEffect(player, 1);
+                        target: function (player, target) {
+                            const player_kongJian = player.getZhiLiaoLimit() - player.zhiLiao;
+                            const target_kongJian = target.getZhiLiaoLimit() - target.zhiLiao;
+                            if (target_kongJian <= 0 || player_kongJian <= 0) return 0;
+                            return target_kongJian + 1;
                         },
                     },
                 },
@@ -690,14 +722,18 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 ai: {
                     shuiJing: true,
-                    order: 4,
+                    order: function (item, player) {
+                        if (player.countCards('h') > 4) return 3.6;
+                        if (player.countCards('h') <= 4 && game.players.some(p => p.side !== player.side && p.countCards('h') == 6)) return 4;
+                        return 3;
+                    },
                     result: {
                         target: function (player, target) {
-                            if (player.countCards('h') <= 4 && target.countCards('h') > 4) return -2;
-                            if (player.countCards('h') > 4) return 1;
-                            return -1;
+                            if (player.side!==target.side && player.countCards('h') <= 4 && target.countCards('h') == 6) return -2;
+                            if (player.countCards('h') > 4) return 2;
+                            return 0;
                         },
-                        player: 1,
+                        player: -1,
                     },
                 },
                 "_priority": 0,
@@ -737,14 +773,18 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 ai: {
                     baoShi: true,
-                    order: 4,
+                    order: function (item, player) {
+                        if (player.countCards('h') > 4) return 3.6;
+                        if (player.countCards('h') < 4 && game.players.some(p => p.side !== player.side && p.countCards('h') == 6)) return 3.6;
+                        return 3;
+                    },
                     result: {
                         target: function (player, target) {
-                            if (player.countCards('h') <= 4 && target.countCards('h') > 4) return -2;
-                            if (player.countCards('h') > 4) return 1;
-                            return -1;
+                            if (player.side !== target.side && player.countCards('h') < 4 && target.countCards('h') == 6) return -2;
+                            if (player.countCards('h') > 4) return 2;
+                            return 0;
                         },
-                        player: 1,
+                        player: -1,
                     },
                 },
                 "_priority": 0,
@@ -769,10 +809,15 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     target.faShuDamage(1, player);
                 },
                 ai: {
-                    order: 3,
+                    order: function (item, player) {
+                        if (player.canBiShaBaoShi() && game.players.some(p => p.side !== player.side && getShiQiEffect(player, p, 3) > 0)) return 3.4;
+                        if (game.players.some(p => p.side !== player.side && getShiQiEffect(player, p, 1) > 0)) return 3.4;
+                        return 3;
+                    },
                     result: {
-                        target: function (target) {
-                            return get.damageEffect(target, player, 1);
+                        target: function (player, target) {
+                            if(player.canBiShaBaoShi()) return -(1 + getShiQiEffect(player, target, 3));
+                            return -(1 + getShiQiEffect(player, target, 1));
                         },
                     },
                 },
@@ -799,10 +844,15 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     target.faShuDamage(2, player);
                 },
                 ai: {
-                    order: 6,
+                    order: function (item, player) {
+                        if (player.canBiShaBaoShi() && game.players.some(p => p.side !== player.side && getShiQiEffect(player, p, 4) > 0)) return 3.4;
+                        if (game.players.some(p => p.side !== player.side && getShiQiEffect(player, p, 2) > 0)) return 3.4;
+                        return 3;
+                    },
                     result: {
                         target: function (player, target) {
-                            return get.damageEffect(target, player, 2);
+                            if(player.canBiShaBaoShi()) return -(1 + getShiQiEffect(player, target, 4));
+                            return -(1 + getShiQiEffect(player, target, 2));
                         },
                     },
                 },
@@ -839,11 +889,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 ai: {
                     baoShi: true,
-                    effect: {
-                        target: function (player, target) {
-                            return get.damageEffect(target, player, 2);
-                        },
-                    },
                 },
                 "_priority": 0,
             },
@@ -1952,6 +1997,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     await player.changeZhiLiao(-1);
                     await player.addGongJi();
                 },
+                check: function (event, player) {
+                    return player.canGongJi();
+                },
                 "_priority": 1
             },
             jingZhunJuJi: {
@@ -1980,6 +2028,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             player.removeSkill('jingZhunJuJi_wuFaYingZhan');
                         }
                     }
+                },
+                ai: {
+                    shuiJing: true,
                 },
                 "_priority": 0
             },
@@ -2099,16 +2150,39 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }).forResult('control');
                     if(event.giveWay == "你给目标1张牌") {
                         if(player.countCards('h')>0){
-                            const giveCard = await player.chooseCard('h',"将1张牌交给目标队友",true,1).forResult();
+                            const giveCard = await player.chooseCard('h',"将1张牌交给目标队友",true,1).set('ai', function (card) {
+                                return 6 - get.value(card);
+                            }).forResult();
                             await player.give(giveCard.cards[0],event.target);
                         }
                     }else {
                         if(event.target.countCards('h')>0) {
-                            const giveCard = await event.target.chooseCard('h',"将1张牌交给目标队友",true,1).forResult()
+                            const giveCard = await event.target.chooseCard('h', "将1张牌交给目标队友", true, 1)
+                                .set('ai', function (card) {
+                                if (["feng","lei"].includes(get.xiBie(card))) return 2;
+                                return 1;
+                            }).forResult();
                             await event.target.give(giveCard.cards[0],player);
                         }
                     }
                     await player.addGongJi();
+                },
+                ai: {
+                    order: function (item, player) {
+                        let total = 0;
+                        let targets = game.filterPlayer(p => p.side == player.side);
+                        for (let target of targets) {
+                            total += target.countCards('h');
+                        }
+                        if (total > 15) return 0;
+                        return 3.2;
+                    },
+                    result: {
+                        target: function (player, target) {
+                            if (player.countCards("h") == 6 && target.countCards('h') < 5) return 2;
+                            return 1;
+                        }
+                    }
                 },
                 "_priority": 0
             },
@@ -2122,6 +2196,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 content: async function(event,trigger,player) {
                     await player.removeBiShaShuiJing();
                     await player.addGongJi();
+                },
+                ai: {
+                    shuiJing: true,
                 },
                 "_priority": 0
             },
