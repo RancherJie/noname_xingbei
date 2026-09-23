@@ -931,25 +931,32 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             sanMiaoYuanZe: {
                 trigger:{global:'cardsDiscardEnd'},
                 filter: function (event, player) {
-                    var evt=event.getParent(2);
-                    if(evt.player.side==player.side&&evt.player!=player){
-                        for(var card of event.cards){
-                            if(get.name(card) == "moDan" && ['h','x'].includes(card.original)&&get.position(card,true)=='d') {
-                                return true;
+                    return game.hasPlayer(function(current){
+                        if(current.side==player.side&&current!=player){
+                            let cards=event.getd(current);
+                            for(let card of cards){
+                                if(get.name(card) == "moDan" && ['h','x'].includes(card.original)&&get.position(card,true)=='d') {
+                                    return true;
+                                }
                             }
                         }
-                    }
-                    return false;
+                        return false;
+                    });
                 },
                 content:async function (event, trigger, player) {
                     await player.chooseToDiscard(1,true);
                     var cards=[];
-                    for(var card of trigger.cards){
-                            if(get.name(card) == "moDan" && ['h','x'].includes(card.original)&&get.position(card,true)=='d') {
-                                cards.push(card);
+                    for(var current of game.players){
+                        if(current.side==player.side&&current!=player){
+                            let currentCards=trigger.getd(current);
+                            for(let card of currentCards){
+                                if(get.name(card) == "moDan" && ['h','x'].includes(card.original)&&get.position(card,true)=='d') {
+                                    if(!cards.includes(card)) cards.push(card);
+                                }
                             }
                         }
-                    await player.gain(cards,'gain2','log');
+                    }
+                    if(cards.length>0) await player.gain(cards,'gain2','log');
                 },
                 check: function (event,player) {
                     return player.countCards('h') < player.getHandcardLimit();
