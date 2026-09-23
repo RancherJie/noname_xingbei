@@ -179,6 +179,7 @@ export class Library {
 		biexiao_emotion: 18,
 		chaijun_emotion: 43,
 		maoshu_emotion: 18,
+		xingBei2_emotion:67,
 	};
 	animate = {
 		skill: {},
@@ -4851,6 +4852,7 @@ export class Library {
 						'BP01':"BP01",
 						'BP02':"BP02",
 						'jiuGuan':'酒馆',
+						'freeChoose':'自由选角',
 					},
 					frequent:true,
 				},
@@ -7450,6 +7452,7 @@ export class Library {
 		baiban: "白板",
 		_disableJudge: "判定区",
 
+		xingBei2_emotion: "星杯表情2",
 		xingBei_emotion: "星杯表情",
 		xiaowu_emotion: "小无表情",
 		guojia_emotion: "郭嘉表情",
@@ -7570,6 +7573,7 @@ export class Library {
 		huanGroupColor:"#635282",
 		longGroupColor:"#4b4556ff",
 		jiuGuan:"酒馆",
+		freeChoose:"自由选角",
 
 		zhiLiao:"治疗",
 

@@ -5469,6 +5469,7 @@ export const Content = {
 		}
 		if(!game.online){
 			event.done=player.discard(event.result.cards,event.loseTo);
+			if(event.relatedEvent) event.done.relatedEvent=event.relatedEvent;
 			if(typeof event.delay=='boolean'){
 				event.done.set('delay',event.delay);
 			}
@@ -9474,6 +9475,7 @@ export const Content = {
 		//game.log(player,'弃置了',cards);
 		event.done=player.lose(cards,event.position);
 		event.done.type='discard';
+		if(event.relatedEvent) event.done.relatedEvent=event.relatedEvent;
 		if(event.discarder) event.done.discarder=event.discarder;
 		if(event.visible) event.done.visible=true;
 		if(event.gaiPai){//移除了盖牌日志
@@ -12623,7 +12625,7 @@ export const Content = {
 	tiaoZhengShouPai: async function (event, trigger, player) {
 		var handcardsNum=player.countCards('h');
 		if(event.num>player.getHandcardLimit()) event.num=player.getHandcardLimit();
-		if(event.num<=0) return;
+		if(event.num<0) return;
 		
 		if(handcardsNum!=event.num){
 			game.log(player,'的手牌数从',handcardsNum,'调整为',event.num);

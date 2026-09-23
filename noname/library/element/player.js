@@ -2841,10 +2841,22 @@ export class Player extends HTMLDivElement {
 					str += "】";
 				}*/
 				str+='<br>';
+
+				// 处理角色包顺序，让其根据默认角色包顺序排序，而不是按启用顺序
+				var characterList = config.characterPack.slice();
+				var characterOrder = new Map();
+				for (var i = 0; i < lib.config.all.characters.length; i++) {
+					characterOrder.set(lib.config.all.characters[i], i);
+				}
+				characterList.sort(function (a, b) {
+					var indexA = characterOrder.has(a) ? characterOrder.get(a) : Number.MAX_SAFE_INTEGER;
+					var indexB = characterOrder.has(b) ? characterOrder.get(b) : Number.MAX_SAFE_INTEGER;
+					return indexA - indexB;
+				});
 				if(config.characterPack.length>0){
 					str+='【';
 					for(var i=0;i<config.characterPack.length;i++){
-						let enNameOri=config.characterPack[i];
+						let enNameOri=characterList[i];
 						let enName=enNameOri+'_character_config';
 						let name=get.translation(enName);
 						if(enName==name) name=enNameOri;
@@ -4855,6 +4867,8 @@ export class Player extends HTMLDivElement {
 			} else if (get.itemtype(arguments[i]) == "dialog") {
 				next.dialog = arguments[i];
 				next.prompt = false;
+			}else if(get.itemtype(arguments[i]) == "event"){
+				next.relatedEvent = arguments[i];
 			} else if (typeof arguments[i] == "boolean") {
 				next.forced = arguments[i];
 			} else if (get.itemtype(arguments[i]) == "position") {
@@ -6181,6 +6195,8 @@ export class Player extends HTMLDivElement {
 				if(arguments[i] == "showCards") next.showCards = true;
 				else if(arguments[i] == "showHiddenCards") next.showHiddenCards = true;
 				else next.gaiPai = arguments[i];
+			}else if(get.itemtype(arguments[i])=='event'){
+				next.relatedEvent = arguments[i];
 			}
 		}
 		if (next.cards == undefined) {
@@ -9168,25 +9184,24 @@ export class Player extends HTMLDivElement {
 				this.tempBanSkill(skill[i], expire, log);
 			}
 		} else {
-			if (this.isTempBanned(skill)) return;
+			if (this.isTempBanned(skill)) {
+				return;
+			}
 			this.setStorage(`temp_ban_${skill}`, true);
-
-			if (log !== false && this.hasSkill(skill)) game.log(this, "的技能", `#g【${get.translation(skill)}】`, "暂时失效了");
-
+			if (log !== false && this.hasSkill(skill)) {
+				game.log(this, "的技能", `#g【${get.translation(skill)}】`, "暂时失效了");
+			}
 			if (expire !== "forever") {
-				if (!expire) expire = { global: ["phaseAfter", "phaseBeforeStart"] };
-				else if (typeof expire == "string" || Array.isArray(expire)) expire = { global: expire };
-				this.when(expire, false)
-					.assign({
-						firstDo: true,
-					})
-					.vars({
-						bannedSkill: skill,
-					})
-					.then(() => {
-						delete player.storage[`temp_ban_${bannedSkill}`];
-					})
-					.finish();
+				if (!expire) {
+					expire = { global: ["phaseAfter", "phaseBeforeStart"] };
+				} else if (typeof expire == "string" || Array.isArray(expire)) {
+					expire = { global: expire };
+				}
+				this.when(expire, false).assign({
+					firstDo: true
+				}).step(async (event, trigger, player2) => {
+					delete player2.storage[`temp_ban_${skill}`];
+				}).finish();
 			}
 		}
 		return skill;
@@ -11714,7 +11729,7 @@ export class Player extends HTMLDivElement {
 	}
 
 	tiaoZhengShouPai(num){
-		if(typeof num!='number' || !num) num=4;
+		if(typeof num!='number') num=4;
 		var next=game.createEvent('tiaoZhengShouPai',false);
 		next.player=this;
 		next.num=num;

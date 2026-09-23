@@ -136,16 +136,6 @@ const pack_skills = {
         filter(event, player) {
             return event.yingZhan != true;
         },
-        async cost(event, trigger, player) {
-            let list = ['cancel2'];
-            if (player.countCards('h', card => get.xiBie(card) == 'feng' && get.type(card) == 'gongJi' && player.hasUseTargetXingBei(card)) > 0) {
-                list.unshift('ok2');
-            }
-            let control = await player.chooseControl(list).set('prompt', get.prompt2("fengNuZhuiJi")).forResultControl();
-            event.result = {
-                bool: control == 'ok2'
-            };
-        },
         async content(event, trigger, player) {
             game.log(player, "+1风系", "#r【攻击行动】");
             player.addExtraXingDong('gongJi', true, function (card, player, event) {
@@ -1215,7 +1205,6 @@ const pack_skills = {
         },
     },
     tianShiZhiQiang: {
-        type: 'faShu',
         enable: 'faShu',
         duYou: 'tianShiZhiQiang',
         filterCard: function (card) {
@@ -2564,7 +2553,6 @@ const pack_skills = {
     //冒险家
     qiZha: {
         enable: 'gongJi',
-        type: 'gongJi',
         filter: function (event, player) {
             var bool1 = player.countTongXiPai() >= 2;
             var bool2 = game.hasPlayer(current => lib.skill.qiZha.filterTarget('', player, current));
