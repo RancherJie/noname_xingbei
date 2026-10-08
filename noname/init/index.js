@@ -247,6 +247,10 @@ export async function boot() {
 		}
 	}
 
+	// Dedicated one-click lobby: ignore saved game mode and splash preferences.
+	config.set("mode", "connect");
+	config.set("show_splash", "off");
+
 	for (const name in get.config("translate")) {
 		lib.translate[name] = get.config("translate")[name];
 	}
