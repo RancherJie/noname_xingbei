@@ -1764,52 +1764,61 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                     return cards.length>0;
                 },
-                content:function(){
-                    'step 0'
-                    var yanLing=player.getGaiPai('yanLing');
-                    player.chooseCardButton(yanLing,true,'选择1个除光系外的【言灵】视为手牌使用').set('ai',function(card){
-                        return Math.random();
-                    }).set('filterButton',function(button){
+                chooseButton:{
+                    dialog: function (event, player) {
+                        var dialog = ui.create.dialog('真言术：选择1个除光系外的【言灵】视为手牌使用', 'hidden');
+                        var cards = player.getGaiPai('yanLing');
+                        dialog.add(cards);
+                        return dialog;
+                    },
+                    filter: function (button, player) {
                         return get.xiBie(button)!='guang';
-                    });
-                    'step 1'
-                    player.storage.zhenYanShu=result.links[0];
-                    'step 2'
-                    player.chooseUseTarget(player.storage.zhenYanShu,true).set('action',true);
-                },
-                contentAfter:function(){
-                    'step 0'
-                    var card=player.storage.zhenYanShu;
-                    var type=get.type(card);
-                    var mingGe=get.mingGe(card);
-                    var bool=false;
-                    if(mingGe=='yong'||type=='faShu'){
-                        bool=true;
-                        event.bool=true;
+                    },
+                    backup: function (links, player) {
+                        return {
+                            card: links[0],
+                            type: 'faShu',
+                            selectTarget: 0,
+                            filterTarget:true,
+                            selectCard:0,
+                            filterCard:true,
+                            content: async function (event,trigger,player) {
+                                player.storage.zhenYanShu=lib.skill.zhenYanShu_backup.card;
+                                await player.chooseUseTarget(player.storage.zhenYanShu,true).set('action',true);
+                            },
+                            contentAfter: async function (event,trigger,player) {
+                                let card=player.storage.zhenYanShu;
+                                let type=get.type(card);
+                                let mingGe=get.mingGe(card);
+                                let bool=false;
+                                if(mingGe=='yong'||type=='faShu'){
+                                    bool=true;
+                                }
+                                let control;
+                                if(!bool&&player.countZhiShiWu('miShu')>0){
+                                    let list=['是','否'];
+                                    control=await player.chooseControl(list).set('prompt',`是否额外移除1点<span class='hong'>【秘术】</span>，对目标对手造成1点法术伤害③`).forResultControl();
+                                }else if(!bool){
+                                    return;
+                                }
+                                if(control=='是'){
+                                    await player.removeZhiShiWu('miShu');
+                                }
+                                if(bool||control=='是'){
+                                    let targets=await player.chooseTarget('对目标对手造成1点法术伤害③',true,function(card,player,target){
+                                        return player.side!=target.side;
+                                    }).set('ai',function(target){
+                                        var player=_status.event.player;
+                                        return get.damageEffect2(target,player,1);
+                                    }).forResultTargets();
+                                    targets[0].faShuDamage(1,player);
+                                }
+                            }
+                        }
+                    },
+                    check: function (button) {
+                        return Math.random();
                     }
-                    if(!bool&&player.countZhiShiWu('miShu')>0){
-                        var list=['是','否'];
-                        player.chooseControl(list).set('prompt',`是否额外移除1点<span class='hong'>【秘术】</span>，对目标对手造成1点法术伤害③`);
-                    }else if(!bool){
-                        event.finish();
-                    }
-                    'step 1'
-                    if(result.control=='是'){
-                        player.removeZhiShiWu('miShu');
-                    }
-                    if(event.bool||result.control=='是'){
-                        player.chooseTarget('对目标对手造成1点法术伤害③',true,function(card,player,target){
-                            return player.side!=target.side;
-                        }).set('ai',function(target){
-                            var player=_status.event.player;
-                            return get.damageEffect2(target,player,1);
-                        });
-                    }else{
-                        event.finish();
-                    }
-                    'step 2'
-                    var target=result.targets[0];
-                    target.faShuDamage(1,player);
                 },
                 ai:{
                     order:3.9,
@@ -1843,7 +1852,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             },
             yaoJingMiShu:{
                 usable:1,
-                trigger:{player:['zhenYanShuContentAfterAfter','zhenYanYaZhiAfter']},
+                trigger:{player:['zhenYanShu_backupContentAfterAfter','zhenYanYaZhiAfter']},
                 filter:function(event,player){
                     return !event.selected;
                 },
