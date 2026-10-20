@@ -2125,6 +2125,7 @@ const pack_skills = {
         },
         content: function () {
             'step 0'
+            //目前特殊处理刃和史书，避免单弃时横置
             var list=[];
             trigger.cards.forEach(function(card){
                 if(!get.info(card).noGaiPai) list.push(card);

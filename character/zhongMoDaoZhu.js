@@ -31,7 +31,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
         card: {
             shiShuCard:{
                 //type: "gongJi",
-                noGaiPai: true,
+                noGaiPai: true,//目前用于月之女神判断是否横置
                 enable: true,
                 selectTarget: 1,
                 filterTarget: function(card,player,target){

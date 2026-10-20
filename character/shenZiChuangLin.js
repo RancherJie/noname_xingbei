@@ -31,7 +31,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
         card: {
             moRen: {
                 //type: "none",
-                noGaiPai: true,
+                noGaiPai: true,//目前用于月之女神判断是否横置
                 enable: true,
                 selectTarget: 1,
                 filterTarget: function(card,player,target){
@@ -60,7 +60,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
             },
             yiRen: {
-                noGaiPai: true,
+                noGaiPai: true,//目前用于月之女神判断是否横置
                 //type: "none",
                 enable: true,
                 selectTarget: 1,
