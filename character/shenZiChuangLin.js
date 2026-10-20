@@ -530,6 +530,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                 card.destroyed = true;
                             },event.indexedData);
                             game.log(event.indexedData, "被移除了");
+                            'step 2'
+                            if(player.countGaiPai(trigger.gaiPai)==0){
+                                player.unmarkSkill(trigger.gaiPai);
+                            }
                         },
                     },
                     loseToDiscardpile:{
