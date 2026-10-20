@@ -7023,9 +7023,11 @@ const pack_skills = {
     //格斗家
     nianQiLiChang: {
         trigger: { player: "zaoChengShangHai" },
+        /*改为默认生效避免因发动顺序导致没限制成
         filter: function (event, player) {
             return event.num > 4;
-        },
+        },*/
+        firstDo:true,
         forced: true,
         content: function () {
             trigger.zaoChengShangHaiMax = 4
