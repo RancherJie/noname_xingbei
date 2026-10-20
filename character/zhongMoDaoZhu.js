@@ -326,6 +326,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         }
                     },
                     yinJiBianJian:{
+                        priority:0.1,
                         trigger:{player:'gongJiShi'},
                         filter:function (event,player){
                             return get.name(event.card)=='shiShuCard'&&event.yingZhan!=true;
