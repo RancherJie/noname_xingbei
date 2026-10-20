@@ -2120,11 +2120,16 @@ const pack_skills = {
             if (event.num >= 0) return false;
             if (event.cause != 'damage') return false;
             if (!event.cards) return false;
+            if(event.cards.length==0) return false;
             return true;
         },
         content: function () {
             'step 0'
-            player.hengZhi();
+            var list=[];
+            trigger.cards.forEach(function(card){
+                if(!get.info(card).noGaiPai) list.push(card);
+            });
+            if(list.length > 0) player.hengZhi();
             'step 1'
             var cards = trigger.cards;
             if (cards) {

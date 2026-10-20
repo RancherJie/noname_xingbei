@@ -31,6 +31,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
         card: {
             moRen: {
                 //type: "none",
+                noGaiPai: true,
                 enable: true,
                 selectTarget: 1,
                 filterTarget: function(card,player,target){
@@ -59,6 +60,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
             },
             yiRen: {
+                noGaiPai: true,
                 //type: "none",
                 enable: true,
                 selectTarget: 1,

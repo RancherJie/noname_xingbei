@@ -9504,8 +9504,6 @@ export const Content = {
 			if(event.delay_time) next.set('delay_time',event.delay_time);
 		}
 		"step 2"
-		if(!event.sheQi) event.trigger('discard');
-		'step 3'
 		if(event.baoPai==true){
 			if(event.shiQiXiaJiang!=false){
 				var next=player.changeShiQi(-event.nun).set('baoPai',true).set('cards',cards);
@@ -9526,6 +9524,8 @@ export const Content = {
 				}
 			}
 		}
+		'step 3'
+		if(!event.sheQi) event.trigger('discard');
 	},
 	loseToDiscardpile:function(){
 		"step 0"

@@ -31,6 +31,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
         card: {
             shiShuCard:{
                 //type: "gongJi",
+                noGaiPai: true,
                 enable: true,
                 selectTarget: 1,
                 filterTarget: function(card,player,target){
