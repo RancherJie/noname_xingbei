@@ -753,7 +753,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                 if(get.xiBie(card)=='shui') num++;
                                 return num;
                             }).forResultCards();
-                            if(card.length>0) cards.push(card[0]);
+                            if(card.length>0&&card[0].destroyed!==true) cards.push(card[0]);
                         }
                     }else{
                         let card=await player.draw().forResult();
