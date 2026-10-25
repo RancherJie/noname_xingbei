@@ -1028,7 +1028,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 1'
                     trigger.player.chooseToDiscard(true,event.num);
                     'step 2'
-                    event.cards=result.cards;
+                    event.cards=result.cards.filter(function(card){
+                        return get.info(card).noGaiPai!==true;
+                    });
+                    //获取xiBie给ai用，无关技能逻辑
                     var xiBies={};
                     var ying=player.getGaiPai('ying');
                     for(let card of ying){
