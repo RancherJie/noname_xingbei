@@ -176,16 +176,18 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 
                     var discarded = result.cards[0];
 
-                    if (get.type(discarded) == 'gongJi') {
-                        var list=['是','否'];
-                        var control = await player.chooseControl(list).set('prompt','是否获得攻击牌')
-                        .set('ai', function() {
-                            var player = _status.event.player;
-                            if(player.countCards('h', card => get.type(card) == 'gongJi') > 1)return '否';
-                            else return '是';
-                        }).forResult('control');
-                        if (control =='是') {
-                            await player.gain(discarded);
+                    if (get.type(discarded,trigger.target) == 'gongJi') {
+                        if(!discarded.destroyed){
+                            var list=['是','否'];
+                            var control = await player.chooseControl(list).set('prompt','是否获得攻击牌')
+                            .set('ai', function() {
+                                var player = _status.event.player;
+                                if(player.countCards('h', card => get.type(card) == 'gongJi') > 1)return '否';
+                                else return '是';
+                            }).forResult('control');
+                            if (control =='是') {
+                                await player.gain(discarded);
+                            }
                         }
                         player.addGongJi();
                     } else if (get.type(discarded) == 'faShu') {
