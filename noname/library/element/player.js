@@ -8204,7 +8204,8 @@ export class Player extends HTMLDivElement {
 		}
 	}
 	viewHandcard(){
-		const allShown = this.isUnderControl() || (!game.observe && game.me && game.me.hasSkillTag("viewHandcard", null, this, true) && this != game.me);
+		if(game.debugMode) var allShown = true;//debug模式下所有手牌可见
+		else var allShown = this.isUnderControl() || (!game.observe && game.me && game.me.hasSkillTag("viewHandcard", null, this, true) && this != game.me);
 		let cards=this.getCards("h");
 		if(allShown&&cards.length){
 			this.node.viewHandcard.show();
@@ -10089,6 +10090,7 @@ export class Player extends HTMLDivElement {
 		}
 		//加个me&&可解决多控重新入局报错
 		if (that === me ||  (me&&this == me._trueMe)) return true;
+		if(game.debugMode) return true;//debug模式下可以查看其他角色牌
 		//if (_status.connectMode) return false;
 		//if (lib.config.mode == "versus") {
 		if(_status.connectMode){

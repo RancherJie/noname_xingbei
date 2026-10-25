@@ -5982,6 +5982,7 @@ export class Get extends GetCompatible {
 		return str;
 	}
 	phaseswap(){
+		if(game.debugMode) return true;//debug模式下，全局控制
 		return (!_status.connectMode&&get.config('phaseswap'))||(_status.connectMode&&lib.configOL.phaseswap);
 	}
 }

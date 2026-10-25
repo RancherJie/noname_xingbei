@@ -137,6 +137,12 @@ export default () => {
             game.phaseLoop(firstChoose);
 		},
 		game:{
+			debug:function(){
+				game.debugMode=true;
+				game.addGlobalSkill('autoswap');
+				console.log('debug模式已开启，所有手牌可见，所有角色可控');
+			},
+
 			addRecord: function (bool) {
 				if(!_status.connectMode) return;//只记录联机对局
 				if (typeof bool == "boolean") {
@@ -2879,6 +2885,7 @@ export default () => {
 			},
 
 			onSwapControl:function(from){
+
 				if(_status.connectMode && (get.itemtype(from)=='player'&&from.side!=game.me.side)){
 					from.send(function(){
 						var name=game.me.name;
@@ -2909,6 +2916,11 @@ export default () => {
 				}
 			},
 			modeSwapPlayer:function(player){
+				if(game.debugMode){//debug模式下，直接切换控制权
+					game.swapPlayer(player);;
+					return;
+				}
+
 				if(get.phaseswap()){
 					var list=game.getActivePlayersBySide();
 					if(list.includes(player)) return;
