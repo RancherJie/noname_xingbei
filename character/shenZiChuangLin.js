@@ -1485,7 +1485,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         event.target.chooseToDiscard('h',true,'showCards',event).set('loseTo',ui.ordering);
                     }
                     'step 4'
-                    event.cards=result.cards;
+                    event.cards=result.cards.filter(function(card){
+                        return !card.destroyed;
+                    });
+                    if(event.cards.length==0) event.finish();
                     'step 5'
                     if(player.countGaiPai('jieJie')>=2){
                         event.finish();
