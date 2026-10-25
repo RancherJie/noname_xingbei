@@ -7803,6 +7803,8 @@ const pack_skills = {
         filter: function (event, player) {
             if (event.customArgs.tianShiZhiHun) return false;
             if (event.customArgs.eMoZhiHun) return false;
+            if(event.card.cards.length == 0) return false;
+            if(event.card.cards[0].destroyed) return false;
             return event.yingZhan != true && player.getGaiPai('jianHun').length < lib.skill.jianHun.intro.max;
         },
         forced: true,
