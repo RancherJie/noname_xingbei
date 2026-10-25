@@ -955,7 +955,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             miShuMuYing:{
                 trigger:{source:'gongJiMingZhong'},
                 filter:function(event,player){
-                    return get.is.zhuDongGongJi(event)&&!player.usedSkill('shun')&&event.cards.length>0;
+                    return get.is.zhuDongGongJi(event)&&!player.usedSkill('shun')&&event.cards.filter(function(card){
+                        return card.destroyed!==true;
+                    }).length>0;
                 },
                 content:function(){
                     'step 0'
