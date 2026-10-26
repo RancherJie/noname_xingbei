@@ -6064,7 +6064,7 @@ const pack_skills = {
             }
             'step 1'
             if (result.bool) {
-                if ((get.type(result.cards[0]) == 'faShu' || get.xiBie(result.cards[0]) == 'lei') && target != player) {
+                if ((get.type(result.cards[0], player) == 'faShu' || get.xiBie(result.cards[0], player) == 'lei') && target != player) {//获取牌信息加player是为了避免苍炎魔女魔女之怒形态下手牌离手无法将牌视为火系
                     player.storage.chongYing += 1;
                 }
             }
