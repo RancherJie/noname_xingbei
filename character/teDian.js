@@ -1977,11 +1977,17 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         return lib.filter.targetEnabled({ name: "tricky" }, player, current);
                     });
 
-                    while (player.countCards("h") > 0 && bool) {
+                    var selectedCards=[];
+                    var selectedTargets=[];
+
+                    while (player.countCards("h") > selectedCards.length && bool) {
                         var result = await player
                             .chooseCardTarget({
-                                filterCard:true,
+                                filterCard:function(card, player){
+                                    return !selectedCards.includes(card);
+                                },
                                 filterTarget:function (card, player, target) {
+                                    if(_status.event.selectedTargets.includes(target)) return false;
                                     return lib.filter.targetEnabled({ name: "tricky" }, player, target);
                                 },
                                 prompt:"选择1名目标角色，将1张手牌作为基础效果【Tricky】放置",
@@ -1993,22 +1999,39 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                     if(player.side == target.side) return 0.1;
                                     else return 1;
                                 },
+                                selectedCards: selectedCards,
+                                selectedTargets: selectedTargets,
                             }).forResult();
 
-                        if (!result.bool) {
+                        if(result.bool) {
+                            selectedCards.push(result.cards[0]);
+                            selectedTargets.push(result.targets[0]);
+                        }else{
                             break;
                         }
-                        var target = result.targets[0];
-                        var cards = result.cards;
 
-                        if (!target.hasSkill("tricky_xiaoGuo")) {
-                            target.addSkill("tricky_xiaoGuo");
-                        }
-                        await target.addJiChuXiaoGuo('tricky_xiaoGuo', player, cards).set('animate','draw');
                         bool=game.hasPlayer(function(current){
+                            if(selectedTargets.includes(current)) return false;
                             return lib.filter.targetEnabled({ name: "tricky" }, player, current);
                         });
                     }
+
+                    if(selectedCards.length>0){
+                        //game.cardsGotoOrdering(selectedCards);
+                        await player.lose(selectedCards,ui.ordering);
+                        while(selectedCards.length>0){
+                            let card=selectedCards.shift();
+                            let target=selectedTargets.shift();
+                            if (!target.hasSkill("tricky_xiaoGuo")) {
+                                target.addSkill("tricky_xiaoGuo");
+                            }
+                            await target.addJiChuXiaoGuo('tricky_xiaoGuo', player, [card]).set('animate','draw');
+                            bool=game.hasPlayer(function(current){
+                                return lib.filter.targetEnabled({ name: "tricky" }, player, current);
+                            });
+                        }
+                    }
+
                 },
                 subSkill: {
                     sheZhi: {

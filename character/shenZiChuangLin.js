@@ -497,7 +497,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         },
                     },
                     gaiPai: {
-                        trigger: {player: "addGaiPaiEnd",},
+                        trigger: {player: ["addGaiPaiEnd"],source:'addJiChuXiaoGuoEnd'},//addJiChuXiaoGuoEnd给捣蛋萝莉大招用
                         getIndex(event, player) {
 							const cards = [];
 							for(let i = 0; i < event.cards.length; i++) {
@@ -533,9 +533,16 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             },event.indexedData);
                             game.log(event.indexedData, "被移除了");
                             'step 2'
-                            if(player.countGaiPai(trigger.gaiPai)==0){
-                                player.unmarkSkill(trigger.gaiPai);
+                            if(this.trigger.name=='addGaiPai'){
+                                if(player.countGaiPai(trigger.gaiPai)==0){
+                                    player.unmarkSkill(trigger.gaiPai);
+                                }
+                            }else{//目前算专有处理吧，捣蛋萝莉
+                                if(trigger.player.countJiChuXiaoGuo(trigger.jiChuXiaoGuo)==0){
+                                    trigger.player.unmarkSkill(trigger.jiChuXiaoGuo);
+                                }
                             }
+                            
                         },
                     },
                     loseToDiscardpile:{
