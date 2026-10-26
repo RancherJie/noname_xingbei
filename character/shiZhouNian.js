@@ -5213,8 +5213,9 @@ const pack_skills = {
                             return num + player.countZhiShiWu('chongSheng') - 2;
                         }
                     },
-                    cardXiBie: function (card, player, xiBie) {
+                    cardXiBie: function (card, player) {
                         if (get.type(card) != 'gongJi' || !player.isHengZhi()) return;
+                        let xiBie = get.xiBie(card, false);
                         if (xiBie == 'an' || xiBie == 'shui') return;
                         return 'huo';
                     }
