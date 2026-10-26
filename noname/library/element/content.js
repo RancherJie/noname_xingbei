@@ -10254,7 +10254,10 @@ export const Content = {
 		if(event.animate=='draw'){
 			player.$draw(cards.length);
 			//if(event.log) game.log(player,'将',get.cnNumber(cards.length),'张牌置于了角色牌上');
-			if(event.log) game.log(player,'将',cards.length,'张',`【${get.translation(event.gaintag[0])}】`,'置于了角色牌上');
+			if(event.log){
+				if(event.source) game.log(event.source,'将',cards.length,'张',`【${get.translation(event.gaintag[0])}】`,'置于了',player,'角色牌上');
+				else game.log(player,'将',cards.length,'张',`【${get.translation(event.gaintag[0])}】`,'置于了角色牌上');
+			} 
 			game.pause();
 			setTimeout(function(){
 				player.$addToExpansion(cards,null,event.gaintag);
