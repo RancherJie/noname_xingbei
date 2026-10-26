@@ -1177,7 +1177,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     var cards2=await player.storage.luBiaoTarget.chooseToDiscard('h',true,1,'showCards').forResultCards();
                     if(cards2.length>0){
                         await player.gain(cards2);
-                        if(get.xiBie(cards1[0])==get.xiBie(cards2[0])||get.mingGe(cards1[0])==get.mingGe(cards2[0])){
+                        if(get.xiBie(cards1[0],player)==get.xiBie(cards2[0],player.storage.luBiaoTarget)||get.mingGe(cards1[0],player)==get.mingGe(cards2[0],player.storage.luBiaoTarget)){
                             await player.addZhiShiWu('qianCheng',1);
                         }
                     }
@@ -1225,10 +1225,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
             },
             shiFeng:{
-                trigger:{player:['loseAfter','chuanDao','miSa']},
+                trigger:{player:['discardAfter','chuanDao','miSa']},
                 filter:function (event,player,name){
-                    if(name=='loseAfter'){
-                        if (event.type != "discard") return false;
+                    if(name=='discardAfter'){
+                        //if (event.type != "discard") return false;
                         if(event.getParent('chooseToDiscard').shiFeng==false) return false;
                         return player.zhiLiao>0&&event.getParent('chooseToDiscard').selfSkil&&get.position(event.cards[0], true) === "d";
                     }else if(name=='chuanDao' || name=='miSa'){
