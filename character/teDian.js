@@ -1958,6 +1958,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 async content(event, trigger, player) {
                     await player.removeBiShaShuiJing();
                     player.addTempSkill("suprise_sheZhi", { player: "phaseEndBefore" });
+                    player.update();//用于及时更新手牌上限
                     var cards=[];
                     var players = game.filterPlayer(function (current) {
                         return current.hasJiChuXiaoGuo("tricky_xiaoGuo");
@@ -2039,6 +2040,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             maxHandcard: function (player, num) {
                                 return num + 5;
                             },
+                        },
+                        onremove: function (player, skill) {
+                            player.update();//用于及时更新手牌上限
                         },
                     },
                 },
