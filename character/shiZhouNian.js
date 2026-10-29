@@ -6616,6 +6616,7 @@ const pack_skills = {
             },
             shengLiJiaoXiangShi: {
                 trigger: { player: 'phaseEnd' },
+                priority: -1,
                 filter: function (event, player) {
                     return player.hasZhiShiWu('yongHengYueZhang');
                 },

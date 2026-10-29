@@ -1242,6 +1242,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         }
                     },
                     fengZhi:{
+                        priority:-1.5,
                         trigger:{player:'phaseEnd'},
                         filter:function(event,player){
                             return player.hasZhiShiWu('fengXueX');
