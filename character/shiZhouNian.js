@@ -12,7 +12,7 @@ const pack_characters = {
     fengZhiJianSheng: ['fengZhiJianSheng_name', 'jiGroup', 3, ['fengNuZhuiJi', 'shengJian', 'lieFengJi', 'jiFengJi', 'jianYing'],],
     kuangZhanShi: ['kuangZhanShi_name', 'xueGroup', 3, ['kuangHua', 'xueYingKuangDao', 'xueXingPaoXiao', 'siLie'],],
     shenJianShou: ['shenJianShou_name', 'jiGroup', 3, ['shanDianJian', 'guanChuanSheJi', 'shanGuangXianJing', 'jingZhunSheJi', 'juJi'],],
-    fengYinShi: ['fengYinShi_name', 'huanGroup', 3, ['faShuJiDang', 'diZhiFengYin', 'shuiZhiFengYin', 'huoZhiFengYin', 'fengZhiFengYin', 'leiZhiFengYin', 'wuXiShuFu', 'fengYinPoSui'],],
+    fengYinShi: ['fengYinShi_name', 'huanGroup', 3, ['faShuJiDang', 'diZhiFengYin', 'shuiZhiFengYin', 'huoZhiFengYin', 'fengZhiFengYin', 'leiZhiFengYin', 'wuXiShuFu','shuFuZhiLi' ,'fengYinPoSui'],],
     anShaZhe: ['anShaZhe_name', 'jiGroup', 3, ['fanShi', 'shuiYing', 'qianXing'],],
     shengNv: ['shengNv_name', 'shengGroup', 3, ['bingShuangDaoYan', 'zhiLiaoShu', 'zhiYuZhiGuang', 'lianMin', 'shengLiao'],],
     tianShi: ['tianShi_name', 'shengGroup', 3, ['fengZhiJieJing', 'tianShiZhuFu', 'tianShiJiBan', 'tianShiZhiQiang', 'tianShiZhiGe', 'shenZhiBiHu'],],
@@ -976,14 +976,14 @@ const pack_skills = {
             }
         }
     },
-    wuXiShuFu: {
+    shuFuZhiLi: {
         type: 'faShu',
         enable: 'faShu',
         filter: function (event, player) {
             if (player.storage.wuXiShuFu) return false;
             var bool1 = player.canBiShaShuiJing();
             var bool2 = game.hasPlayer(function (current) {
-                return lib.skill.wuXiShuFu.filterTarget('', player, current);
+                return lib.skill.shuFuZhiLi.filterTarget('', player, current);
             });
             return bool1 && bool2
         },
@@ -1000,6 +1000,8 @@ const pack_skills = {
             'step 2'
             target.addMark('wuXiShuFu_xiaoGuo');
         },
+    },
+    wuXiShuFu: {
         subSkill: {
             xiaoGuo: {
                 priority: 2,
@@ -1007,7 +1009,7 @@ const pack_skills = {
                 forced: true,
                 markimage: 'image/card/zhuanShu/wuXiShuFu.png',
                 intro: {
-                    content: `<span class='tiaoJian'>(将【五系束缚】放置于目标对手面前)</span>该对手跳过其下个行动阶段。在其下个行动阶段开始前他可以选择摸(2+X)张牌来取消【五系束缚】的效果。X为场上封印的数量，X最高为2。无论效果是否发动，触发后移除此牌。`,
+                    content: `<span class='tiaoJian'>(若你拥有【五系束缚】)</span>你的行动阶段开始前选择以下一项执行：<br>摸(2+X)张牌[强制]，X为场上封印的数量但X最高为2<br>跳过你的行动阶段。<br>触发后移除此卡。`,
                     nocount: true,
                 },
                 onremove: 'storage',
@@ -9330,22 +9332,24 @@ const pack_translate = {
     faShuJiDang_info: "<span class='tiaoJian'>([法术行动]结束后发动)</span>额外+1[攻击行动]。",
     diZhiFengYin: "(独)[法术]地之封印",
     diZhiFengYin_xiaoGuo: '地之封印',
-    diZhiFengYin_info: "<span class='tiaoJian'>(将【地之封印】放置于目标对手面前)</span>该对手获得(直到他从手中打出或展示出地系牌时强制触发)：对他造成3点法术伤害③，触发后移除此牌。",
+    diZhiFengYin_info: "<span class='tiaoJian'>(将【地之封印】放置于目标对手面前)</span>该对手获得(直到他从手中打出或展示地系牌时强制触发)：对他造成3点法术伤害③，触发后移除此牌。",
     shuiZhiFengYin: "(独)[法术]水之封印",
     shuiZhiFengYin_xiaoGuo: "水之封印",
-    shuiZhiFengYin_info: "<span class='tiaoJian'>(将【水之封印】放置于目标对手面前)</span>该对手获得(直到他从手中打出或展示出水系牌时强制触发)：对他造成3点法术伤害③，触发后移除此牌。",
+    shuiZhiFengYin_info: "<span class='tiaoJian'>(将【水之封印】放置于目标对手面前)</span>该对手获得(直到他从手中打出或展示水系牌时强制触发)：对他造成3点法术伤害③，触发后移除此牌。",
     huoZhiFengYin: "(独)[法术]火之封印",
     huoZhiFengYin_xiaoGuo: "火之封印",
-    huoZhiFengYin_info: "<span class='tiaoJian'>(将【火之封印】放置于目标对手面前)</span>该对手获得(直到他从手中打出或展示出火系牌时强制触发)：对他造成3点法术伤害③，触发后移除此牌。",
+    huoZhiFengYin_info: "<span class='tiaoJian'>(将【火之封印】放置于目标对手面前)</span>该对手获得(直到他从手中打出或展示火系牌时强制触发)：对他造成3点法术伤害③，触发后移除此牌。",
     fengZhiFengYin: "(独)[法术]风之封印",
     fengZhiFengYin_xiaoGuo: '风之封印',
-    fengZhiFengYin_info: "<span class='tiaoJian'>(将【风之封印】放置于目标对手面前)</span>该对手获得(直到他从手中打出或展示出风系牌时强制触发)：对他造成3点法术伤害③，触发后移除此牌。",
+    fengZhiFengYin_info: "<span class='tiaoJian'>(将【风之封印】放置于目标对手面前)</span>该对手获得(直到他从手中打出或展示风系牌时强制触发)：对他造成3点法术伤害③，触发后移除此牌。",
     leiZhiFengYin: "(独)[法术]雷之封印",
     leiZhiFengYin_xiaoGuo: '雷之封印',
-    leiZhiFengYin_info: "<span class='tiaoJian'>(将【雷之封印】放置于目标对手面前)</span>该对手获得(直到他从手中打出或展示出雷系牌时强制触发)：对他造成3点法术伤害③，触发后移除此牌。",
-    wuXiShuFu: "(专)[法术]五系束缚",
-    wuXiShuFu_xiaoGuo: "五系束缚",
-    wuXiShuFu_info: "[水晶]<span class='tiaoJian'>(将【五系束缚】放置于目标对手面前)</span>该对手跳过其下个行动阶段。在其下个行动阶段开始前他可以选择摸(2+X)张牌来取消【五系束缚】的效果。X为场上封印的数量，X最高为2。无论效果是否发动，触发后移除此牌。",
+    leiZhiFengYin_info: "<span class='tiaoJian'>(将【雷之封印】放置于目标对手面前)</span>该对手获得(直到他从手中打出或展示雷系牌时强制触发)：对他造成3点法术伤害③，触发后移除此牌。",
+    wuXiShuFu: "(专)[被动]五系束缚",
+    wuXiShuFu_xiaoGuo: "(专)[被动]五系束缚",
+    wuXiShuFu_info: "<span class='tiaoJian'>(若你拥有【五系束缚】)</span>你的行动阶段开始前选择以下一项执行：<br>摸(2+X)张牌[强制]，X为场上封印的数量但X最高为2<br>跳过你的行动阶段。<br>触发后移除此卡。。",
+    shuFuZhiLi: "[法术]束缚之力",
+    shuFuZhiLi_info: "[水晶]将【五系束缚】放置于目标对手面前。",
     fengYinPoSui: "[法术]封印破碎",
     fengYinPoSui_info: "[水晶]将场上任意一张基础效果牌收入自己手中。",
 
