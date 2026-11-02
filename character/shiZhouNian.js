@@ -31,7 +31,7 @@ const pack_characters = {
     geDouJia: ['geDouJia_name', 'jiGroup', '4/5', ['nianQiLiChang', 'xuLiYiji', 'nianDan', 'baiShiHuanLongQuan', 'qiJueBengJi', 'douShenTianQu', 'douQi'],],
     yongZhe: ['yongZhe_name', 'xueGroup', '4/5', ['yongZheZhiXin', 'nuHou', 'jinPiLiJin', 'mingJingZhiShui', 'tiaoXin', 'jinDuanZhiLi', 'siDou', 'nuQi', 'zhiXing'],],
     lingHunShuShi: ['lingHunShuShi_name', 'huanGroup', '4/5', ["lingHunTunShi", "lingHunZhaoHuan", 'lingHunZhuanHuan', "lingHunJingXiang",'lingHunQiYue','lingHunDaoYin', "lingHunZhenBao", "lingHunFuYu", "lingHunLianJie", "lingHunZengFu", "huangSeLingHun", "lanSeLingHun"],],
-    xueZhiWuNv: ['xueZhiWuNv_name', 'xueGroup', 5, ['xueZhiAiShang', 'liuXue', 'niLiu', 'xueZhiBeiMing', 'tongShengGongSi', 'xueZhiZuZhou'],],
+    xueZhiWuNv: ['xueZhiWuNv_name', 'xueGroup', 5, ['tongShengZhiXie','xueZhiAiShang', 'liuXue', 'niLiu', 'xueZhiBeiMing', 'tongShengGongSi', 'xueZhiZuZhou'],],
     dieWuZhe: ['dieWuZhe_name', 'yongGroup', 5, ['shengMingZhiHuo', 'wuDong', 'duFen', 'chaoSheng', 'jingHuaShuiYue', 'diaoLing', 'yongHua', 'daoNiZhiDie', 'jian', 'DWZyong'],],
     nvWuShen: ['nvWuShen_name', 'shengGroup', '3/4', ['shenShengZhuiJi', 'zhiXuZhiYin', 'hePingXingZhe', 'junShenWeiGuang', 'yingLingZhaoHuan'],],
     moGong: ['moGong_name', 'huanGroup', 4, ['moGuanChongJi', 'leiGuangSanShe', 'duoChongSheJi', 'chongNeng', 'moYan', 'chongNengPai'],],
@@ -8619,6 +8619,25 @@ const pack_skills = {
         markimage: 'image/card/zhiShiWu/lan.png',
     },
     //血之巫女
+    tongShengZhiXie: {
+        type: 'faShu',
+        enable: ['faShu'],
+        filter: function (event, player) {
+            return !player.storage.tongShengGongSi_use;
+        },
+        selectTarget: 1,
+        filterTarget: true,
+        content: function () {
+            'step 0'
+            player.draw(2);
+            'step 1'
+            player.storage.tongShengGongSi_use = true;
+            player.storage.tongShengGongSi_target = target;
+
+            lib.skill.tongShengGongSi.addTongShengGongSiSkill(player, target);
+            target.addZhiShiWu('tongShengGongSi_xiaoGuo');
+        },
+    },
     xueZhiAiShang: {
         type: 'qiDong',
         trigger: { player: 'qiDong' },
@@ -8777,23 +8796,6 @@ const pack_skills = {
         },
     },
     tongShengGongSi: {
-        type: 'faShu',
-        enable: ['faShu'],
-        filter: function (event, player) {
-            return !player.storage.tongShengGongSi_use;
-        },
-        selectTarget: 1,
-        filterTarget: true,
-        content: function () {
-            'step 0'
-            player.draw(2);
-            'step 1'
-            player.storage.tongShengGongSi_use = true;
-            player.storage.tongShengGongSi_target = target;
-
-            lib.skill.tongShengGongSi.addTongShengGongSiSkill(player, target);
-            target.addZhiShiWu('tongShengGongSi_xiaoGuo');
-        },
         global: 'tongShengGongSi_xiaoGuo',
         group: 'tongShengGongSi_hengZhiChongZhi',
         subSkill: {
@@ -8815,10 +8817,9 @@ const pack_skills = {
 
                 }
             },
-
             xiaoGuo: {
                 intro: {
-                    content: "<span class='tiaoJian'>(在【普通形态】下)</span>你和他手牌上限各-2。 <span class='tiaoJian'>(在【流血形态】下)</span>你和他手牌上限各+1。",
+                    content: "<span class='tiaoJian'>(若你拥有【同生共死】)</span><br>·在巫女【普通形态】下，巫女和你手牌上限各-2。<br>·在巫女【流血形态】下，巫女和你手牌上限各+1。",
                     nocount: true,
                 },
                 onremove: 'storage',
@@ -9853,18 +9854,20 @@ const pack_translate = {
     lanSeLingHun_info: "<span class='lan'>【蓝色灵魂】</span>为灵魂术士专有指示物，上限为6。",
 
     //血之巫女
+    tongShengZhiXie: "[法术]同生之楔",
     xueZhiAiShang: "[启动]血之哀伤",
     liuXue: "[被动]流血[持续]",
     niLiu: "[法术]逆流",
     xueZhiBeiMing: "(独)[法术]血之悲鸣",
-    tongShengGongSi: "(专)[法术]同生共死",
+    tongShengGongSi: "(专)[被动]同生共死",
     xueZhiZuZhou: "[法术]血之诅咒",
 
+    tongShengZhiXie_info: "你摸2张牌[强制]，将【同生共死】放置于目标角色面前。",
     xueZhiAiShang_info: "<span class='tiaoJian'>(对自己造成2点法术伤害③)</span>转移同生共死的目标或是移除【同生共死】。",
     liuXue_info: "[持续]<span class='tiaoJian'>(当你在【普通形态】下，因承受伤害而导致我方士气减少时强制发动[强制])</span>[横置]转为【流血形态】，你+1[治疗]。此形态下在你的每次回合开始时，对自己造成1点法术伤害③。 <span class='tiaoJian'>(自身手牌<3时强制发动[强制])</span>[重置]脱离【流血形态】。",
     niLiu_info: "<span class='tiaoJian'>(仅【流血形态】下发动)</span>你弃2张牌，你+1[治疗]。",
     xueZhiBeiMing_info: "<span class='tiaoJian'>(仅【流血形态】下发动)</span>对目标角色和自己各造成(X+1)点法术伤害③，X<3。",
-    tongShengGongSi_info: "<span class='tiaoJian'>(你摸2张牌[强制])</span>将【同生共死】放置于目标角色面前。<span class='tiaoJian'>(在【普通形态】下)</span>你和他手牌上限各-2。<span class='tiaoJian'>(在【流血形态】下)</span>你和他手牌上限各+1。",
+    tongShengGongSi_info: "<span class='tiaoJian'>(若你拥有【同生共死】)</span><br>·在巫女【普通形态】下，巫女和你手牌上限各-2。<br>·在巫女【流血形态】下，巫女和你手牌上限各+1。",
     xueZhiZuZhou_info: "[宝石]对目标角色造成2点法术伤害③，你弃3张牌。",
 
     //蝶舞者
