@@ -1009,7 +1009,7 @@ const pack_skills = {
                 forced: true,
                 markimage: 'image/card/zhuanShu/wuXiShuFu.png',
                 intro: {
-                    content: `<span class='tiaoJian'>(若你拥有【五系束缚】)</span>你的行动阶段开始前选择以下一项执行：<br>摸(2+X)张牌[强制]，X为场上封印的数量但X最高为2<br>跳过你的行动阶段。<br>触发后移除此卡。`,
+                    content: `<span class='tiaoJian'>(若你拥有【五系束缚】)</span>你的行动阶段开始前选择以下一项执行：<br>·摸(2+X)张牌[强制]，X为场上封印的数量但X最高为2<br>跳过你的行动阶段。<br>·触发后移除此卡。`,
                     nocount: true,
                 },
                 onremove: 'storage',
@@ -9348,7 +9348,7 @@ const pack_translate = {
     leiZhiFengYin_info: "<span class='tiaoJian'>(将【雷之封印】放置于目标对手面前)</span>该对手获得(直到他从手中打出或展示雷系牌时强制触发)：对他造成3点法术伤害③，触发后移除此牌。",
     wuXiShuFu: "(专)[被动]五系束缚",
     wuXiShuFu_xiaoGuo: "(专)[被动]五系束缚",
-    wuXiShuFu_info: "<span class='tiaoJian'>(若你拥有【五系束缚】)</span>你的行动阶段开始前选择以下一项执行：<br>摸(2+X)张牌[强制]，X为场上封印的数量但X最高为2<br>跳过你的行动阶段。<br>触发后移除此卡。。",
+    wuXiShuFu_info: "<span class='tiaoJian'>(若你拥有【五系束缚】)</span>你的行动阶段开始前选择以下一项执行：<br>·摸(2+X)张牌[强制]，X为场上封印的数量但X最高为2<br>跳过你的行动阶段。<br>·触发后移除此卡。",
     shuFuZhiLi: "[法术]束缚之力",
     shuFuZhiLi_info: "[水晶]将【五系束缚】放置于目标对手面前。",
     fengYinPoSui: "[法术]封印破碎",
