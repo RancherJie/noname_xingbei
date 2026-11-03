@@ -1392,8 +1392,14 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.addNengLiang('shuiJing');
                 },
                 mod:{
-                    maxHandcard:function (player,num){
-                        if(player.hasSkill('yuYan_zero')) return num-1;
+                    maxHandcardFinal:function (player,num){
+                        var n=num;
+                        if(player.hasSkill('yuYan_zero')) n=n-1;
+                        if (n <= 3) {
+                            return 3;
+                        } else {
+                            return n
+                        }
                     }
                 }
             },
@@ -1525,12 +1531,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     await player.removeBiShaShuiJing();
                     player.addSkill('fangZhu_wuXian');
 
-                    var list=[6,7,8];
-                    var num=await player.chooseControl(list).set('prompt',`无视手牌上限摸6-8张牌`).set('ai',function(){
+                    var list=[6,7];
+                    var num=await player.chooseControl(list).set('prompt',`无视手牌上限摸6-7张牌`).set('ai',function(){
                         var player=_status.event.player;
                         if(player.countCards('h')+2>=5) return 0;
                         else if(player.countCards('h')+4>=5) return 1;
-                        else if(player.countCards('h')+5>=5) return 2;
                         else return 1;
                     }).forResultControl();
                     await player.draw(num);
@@ -1981,7 +1986,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 
 
             yiDuanXieShuo:"[被动]异端邪说",
-            yiDuanXieShuo_info:"游戏初始时，你+1[水晶]。<span class='tiaoJian'>(【末日预言】在场时)</span>你的手牌上限-1。",
+            yiDuanXieShuo_info:"游戏初始时，你+1[水晶]。<span class='tiaoJian'>(【末日预言】在场时)</span>你的手牌上限-1，但至少为3[恒定]。",
             shenPanYJT:"[响应]审判",
             shenPanYJT_info:"<span class='tiaoJian'>(你的回合结束时，若本回合你对目标对手造成伤害③)</span>我方所有角色各弃1张牌[展示]，然后各摸1张牌[强制]，你将其中1张弃牌加入该对手手牌[强制]。<span class='tiaoJian'>(若【末日预言】在场)</span>将其余弃牌面朝下洗混放置到【末日预言】的【预言】堆顶部作为【预言】。",
             xianJi:"[启动]献祭",
@@ -2002,7 +2007,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             <span class='tiaoJian'>(异教徒的回合开始时，若存在【天雷劫火】或【地裂波涛】)</span>移除此卡。
             `,
             fangZhu:"[法术]放逐[回合限定]",
-            fangZhu_info:"[水晶]<span class='tiaoJian'>(无视你的手牌上限摸6-8张牌[强制])</span>移除场上所有【末日预言】和【预言】，将1个【末日预言】放置入场，然后将6张手牌面朝下洗混放置到【末日预言】上作为【预言】，额外+1[攻击行动]或者[法术行动]。",
+            fangZhu_info:"[水晶]<span class='tiaoJian'>(无视你的手牌上限摸6-7张牌[强制])</span>移除场上所有【末日预言】和【预言】，将1个【末日预言】放置入场，然后将6张手牌面朝下洗混放置到【末日预言】上作为【预言】，额外+1[攻击行动]或者[法术行动]。",
             tanLan:"[响应]贪婪",
             tanLan_info:"[水晶]<span class='tiaoJian'>(与【天雷劫火】或【地裂波涛】同时发动)</span>将“选择以下一项发动”改为“发动以下项目，顺序由你决定”。",
             yuYan:"[被动]末日预言",
