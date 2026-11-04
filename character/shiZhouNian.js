@@ -9849,7 +9849,7 @@ const pack_translate = {
     lingHunJingXiang_info: "<span class='tiaoJian'>(移除2点</span><span class='hong'>【黄色灵魂】</span><span class='tiaoJian'>)</span>你弃2张牌，目标角色摸2张牌[强制](但最多补到其手牌上限)。",
     lingHunZhenBao_info: "<span class='tiaoJian'>(移除3点</span><span class='hong'>【黄色灵魂】</span><span class='tiaoJian'>)</span>对目标角色造成3点法术伤害③，若他手牌<3且手牌上限>5，则本次伤害额外+2。",
     lingHunFuYu_info: "<span class='tiaoJian'>(移除3点</span><span class='lan'>【蓝色灵魂】</span><span class='tiaoJian'>)</span>目标角色+2[宝石]。",
-    lingHunQiYue_info: "<span class='tiaoJian'>(当你队友数>1时可发动,移除1点</span><span class='hong'>【黄色灵魂】</span><span class='tiaoJian'>和1点</span><span class='lan'>【蓝色灵魂】</span><span class='tiaoJian'>)</span>将【灵魂链接】放置于目标队友面前。",
+    lingHunQiYue_info: "<span class='tiaoJian'>(仅当</span><span class='hong'>【黄色灵魂】</span><span class='tiaoJian'>和</span><span class='lan'>【蓝色灵魂】</span><span class='tiaoJian'>都存在时可发动,移除1点</span><span class='hong'>【黄色灵魂】</span><span class='tiaoJian'>和1点</span><span class='lan'>【蓝色灵魂】</span><span class='tiaoJian'>)</span>将【灵魂链接】放置于目标队友面前。",
     lingHunDaoYin_info: "<span class='tiaoJian'>(若【灵魂链接】在场，当你或【灵魂链接】的目标角色将承受伤害前⑥，移除X点</span><span class='lan'>【蓝色灵魂】</span><span class='tiaoJian'>)</span>将X点伤害转移给另一方，转移后的伤害为法术伤害⑥。",
     lingHunLianJie_info:"<span class='tiaoJian'>(若你拥有【灵魂链接】)</span>你成为【灵魂链接】的目标角色。",
     lingHunZengFu_info: "[宝石]你+2<span class='hong'>【黄色灵魂】</span>和2<span class='lan'>【蓝色灵魂】</span>。",
