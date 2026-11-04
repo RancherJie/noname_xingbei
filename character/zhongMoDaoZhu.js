@@ -1268,7 +1268,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             luBiao:{},
             luBiaoX:{
                 intro:{
-                    name:'路标',
+                    name:'(专)路标',
                     nocount:true,
                     content:`
                     <span class="greentext">[响应]告解式[回合限定]</span><br>
