@@ -39,7 +39,7 @@ const pack_characters = {
     yingLingRenXing: ['yingLingRenXing_name', 'yongGroup', 4, ['zhanWenZhangWo', 'nuHuoYaZhi', 'zhanWenSuiJi', 'moWenRongHe', 'fuWenGaiZao', 'shuangChongHuiXiang', 'zhanWen', 'moWen'],],
     moQiang: ['moQiang_name', 'huanGroup', 4, ['anZhiJieFang', 'huanYingXingChen', 'heiAnShuFu', 'anZhiZhangBi', 'chongYing', 'qiHeiZhiQiang'],],
     cangYanMoNv: ['cangYanMoNv_name', 'xueGroup', 4, ['cangYanFaDian', 'tianHuoDuanKong', 'moNvZhiNu', 'tiShenWanOu', 'yongShengYinShiJi', 'tongKuLianJie', 'moNengFanZhuan', 'chongSheng'],],
-    yinYouShiRen: ['yinYouShiRen_name', 'huanGroup', '4/5', ['chenLunXieZouQu', 'buXieHeXian', 'jinJiShiPian', 'yongHengYueZhangX', 'xiWangFuGeQu', 'lingGan'],],
+    yinYouShiRen: ['yinYouShiRen_name', 'huanGroup', '4/5', ['chenLunXieZouQu', 'buXieHeXian', 'jinJiShiPian','yongHengQiuTuXingTai', 'yongHengYueZhangX', 'xiWangFuGeQu', 'lingGan'],],
     jingLingSheShou: ['jingLingSheShou_name', 'jiGroup', '3/4', ['yuanSuSheJi', 'dongWuHuoBan', 'jingLingMiYi', 'chongWuQiangHua', 'zhuFu'],],
     yinYangShi: ['yinYangShi_name', 'huanGroup', 4, ['shiShenJiangLin', 'yinYangZhanHuan', 'shiShenZhuanHuan', 'heiAnJiLi', 'shiShenZhouShu', 'shengMingJieJie', 'guiHuo'],],
     xueSeJianLing: ['xueSeJianLing_name', 'xueGroup', 4, ['xueSeJingJi', 'chiSeYiShan', 'xueRanQiangWei', 'xueQiPingZhang', 'xueQiangWeiTingYuan', 'sanHuaLunWu', 'xianXue'],],
@@ -6431,7 +6431,6 @@ const pack_skills = {
                                 break
                             }
                         }
-                        if (player.isHengZhi()) await player.chongZhi();
                         await player.removeZhiShiWu('lingGan', num);
                     },
                     content: async function (event, trigger, player) {
@@ -6450,6 +6449,9 @@ const pack_skills = {
                             await player.chooseToDiscard('h', num, true);
                             await event.target.chooseToDiscard('h', num, true);
                         }
+                    },
+                    contentAfter: async function (event, trigger, player) {
+                        if (player.isHengZhi()) await player.chongZhi();
                     },
                     ai: {
                         result: {
@@ -6505,6 +6507,29 @@ const pack_skills = {
                 await player.hengZhi();
             }
         }
+    },
+    yongHengQiuTuXingTai: {
+        forced: true,
+        trigger: { player: 'chengShouShangHaiBegin' },
+        filter: function (event, player) {
+            return player.isHengZhi()&&event.num > 0;
+        },
+        content: async function (event, trigger, player) {
+            trigger.changeDamageNum(-1);
+        },
+        group: ['yongHengQiuTuXingTai_shengLiJiaoXiangShi'],
+        subSkill: {
+            shengLiJiaoXiangShi: {
+                forced: true,
+                trigger: { player: 'yongHengYueZhang_shengLiJiaoXiangShiBefore' },
+                filter: function (event, player) {
+                    return player.isHengZhi();
+                },
+                content: async function (event, trigger, player) {
+                    await player.addZhiLiao();
+                },
+            },
+        },
     },
     xiWangFuGeQu: {
         type: 'qiDong',
@@ -6573,7 +6598,7 @@ const pack_skills = {
     yongHengYueZhang: {
         intro: {
             name: '(专)永恒乐章',
-            content: "[响应]激昂狂想曲：<span class='tiaoJian'>(回合开始时若你拥有【永恒乐章】)</span>选择以下一项执行：<br>·吟游诗人对2名目标对手各造成1点法术伤害③。 <br>·你弃2张牌。<br>[响应]胜利交响诗：<span class='tiaoJian'>(回合结束时若你拥有【永恒乐章】)</span>选择以下一项执行<br>·将我方【战绩区】的1个星石提炼成为你的能量。<br>·为我方【战绩区】+1[宝石]，你+1[治疗]。",
+            content: "[响应]激昂狂想曲：<span class='tiaoJian'>(回合开始时若你拥有【永恒乐章】)</span>选择以下一项执行：<br>·吟游诗人对2名目标对手各造成1点法术伤害③。 <br>·你弃2张牌。<br>[响应]胜利交响诗：<span class='tiaoJian'>(回合结束时若你拥有【永恒乐章】)</span>选择以下一项执行<br>·<span class='tiaoJian'>(移除我方【战绩区】1星石)</span>你+1[宝石]。<br>·为我方【战绩区】+1[宝石]，你+1[治疗]。",
             nocount: true,
         },
         onremove: 'storage',
@@ -6624,13 +6649,13 @@ const pack_skills = {
                 },
                 content: async function (event, trigger, player) {
                     var zhanJi = get.zhanJi(player.side);
-                    if (zhanJi.length > 0 && player.countEmptyNengLiang() > 0) {
+                    if (zhanJi.length > 0) {
                         var list = [];
                         for (var i = 0; i < zhanJi.length; i++) {
                             list.push([zhanJi[i], get.translation(zhanJi[i])]);
                         }
                         var result = await player.chooseButton([
-                            '提炼我方【战绩区】的1个星石或者为我方【战绩区】+1[宝石]、你+1[治疗]',
+                            `<span class='tiaoJian'>(移除我方【战绩区】1星石)</span>你+1[宝石]或者为我方【战绩区】+1[宝石]、你+1[治疗]`,
                             [list, 'tdnodes'],
                         ]).set('selectButton', [1, 1]).set('ai', function (button) {
                             var player = _status.event.player;
@@ -6653,7 +6678,7 @@ const pack_skills = {
 
                     if (result.bool) {
                         await player.changeZhanJi(result.links[0], -1);
-                        await player.addNengLiang(result.links[0], 1);
+                        await player.addNengLiang('baoShi', 1);
                     } else {
                         await player.addZhanJi('baoShi');
                         await player.changeZhiLiao(1);
@@ -9706,15 +9731,17 @@ const pack_translate = {
     chenLunXieZouQu_info: "<span class='tiaoJian'>(仅【普通形态】下，一回合内我方对至少2名对手造成法术伤害③且结算之后，弃2张同系牌[展示])</span>你+1<span class='hong'>【灵感】</span>。<span class='tiaoJian'>(若弃牌中有法术牌)</span>对目标对手造成1点法术伤害③。",
     buXieHeXian: "[法术]不谐和弦",
     buXieHeXian_backup: "[法术]不谐和弦",
-    buXieHeXian_info: "<span class='tiaoJian'>(移除X点</span><span class='hong'>【灵感】</span><span class='tiaoJian'>，X>1)(若你处于【永恒囚徒形态】，[重置]脱离【永恒囚徒形态】)</span>你选择以下一项发动：<br>·你和目标角色各摸(X-1)张牌[强制]。<br>·你和目标角色各弃(X-1)张牌。",
+    buXieHeXian_info: "<span class='tiaoJian'>(移除X点</span><span class='hong'>【灵感】</span><span class='tiaoJian'>，X>1)</span>你选择以下一项发动：<br>·你和目标角色各摸(X-1)张牌[强制]。<br>·你和目标角色各弃(X-1)张牌。<br><span class='tiaoJian'>(若你处于【永恒囚徒形态】)</span>[重置]脱离【永恒囚徒形态】。",
     jinJiShiPian: "[被动]禁忌诗篇",
-    jinJiShiPian_info: "<span class='tiaoJian'>(【激昂狂想曲】或【胜利交响诗】的效果结算完后)</span>根据<span class='hong'>【灵感】</span>数量：<br>·(<span class='hong'>【灵感】</span>未达上限)你+1<span class='hong'>【灵感】</span>，移除【永恒乐章】。<br> ·(<span class='hong'>【灵感】</span>已达上限)对自己造成3点法术伤害③。<span class='tiaoJian'>(若你处于【普通形态】)</span>[横置]转为【永恒囚徒形态】。",
+    jinJiShiPian_info: "<span class='tiaoJian'>(【激昂狂想曲】或【胜利交响诗】的效果结算完后)</span>根据<span class='hong'>【灵感】</span>数量：<br>·(<span class='hong'>【灵感】</span>未达上限)你+1<span class='hong'>【灵感】</span>，移除【永恒乐章】。<br> ·(<span class='hong'>【灵感】</span>已达上限)对自己造成3点法术伤害③；<span class='tiaoJian'>(若你处于【普通形态】)</span>[横置]转为【永恒囚徒形态】[持续]。",
+    yongHengQiuTuXingTai: "[被动]永恒囚徒形态",
+    yongHengQiuTuXingTai_info: "在此形态下，你承受的法术伤害-1⑥。<span class='tiaoJian'>(当目标队友发动【胜利交响诗】前)</span>，你+1[治疗]。",
     yongHengYueZhangX: "(专)永恒乐章",
     yongHengYueZhangX_info: `
             <span class="greentext">[响应]激昂狂想曲</span><br>
-            <span class='tiaoJian'><span class='tiaoJian'>(回合开始时若你拥有【永恒乐章】)</span>选择以下一项执行：<br>·吟游诗人对2名目标对手各造成1点法术伤害③。 <br>·你弃2张牌。<br>
+            <span class='tiaoJian'>(回合开始时若你拥有【永恒乐章】)</span>选择以下一项执行：<br>·吟游诗人对2名目标对手各造成1点法术伤害③。 <br>·你弃2张牌。<br>
             <span class="greentext">[响应]胜利交响诗</span><br>
-            <span class='tiaoJian'><span class='tiaoJian'>(回合结束时若你拥有【永恒乐章】)</span>选择以下一项执行<br>·将我方【战绩区】的1个星石提炼成为你的能量。<br>·为我方【战绩区】+1[宝石]，你+1[治疗]。
+            <span class='tiaoJian'>(回合结束时若你拥有【永恒乐章】)</span>选择以下一项执行<br>·<span class='tiaoJian'>(移除我方【战绩区】1星石)</span>你+1[宝石]。<br>·为我方【战绩区】+1[宝石]，你+1[治疗]。
             `,
     yongHengYueZhang_jiAngKuangXiangQu: "[响应]激昂狂想曲",
     yongHengYueZhang_shengLiJiaoXiangShi: "[响应]胜利交响诗",
