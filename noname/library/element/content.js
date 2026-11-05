@@ -10845,8 +10845,10 @@ export const Content = {
 		}
 		event.trigger('chengShouShangHaiBefore');
 		"step 5"
-		event.trigger('chengShouShangHai');
+		event.trigger('chengShouShangHaiBegin');//目前只给诗人用于减伤，避免和其他时机技能重合
 		'step 6'
+		event.trigger('chengShouShangHai');
+		'step 7'
 		if(event.chengShouShangHaiMax<event.num){
 			num=event.chengShouShangHaiMax;
 			event.num=event.chengShouShangHaiMax;
@@ -10897,7 +10899,7 @@ export const Content = {
 			player.$damage(source);
 			player.$damagepop(num);
 		}
-		"step 7"
+		"step 8"
 		if(source&&lib.config.border_style=='auto'){
 			var dnum=0;
 			for(var j=0;j<source.stat.length;j++){
@@ -10938,9 +10940,9 @@ export const Content = {
 				}
 			}
 		}
-		"step 8"
+		"step 9"
 		event.trigger('chengShouShangHaiAfter');
-		'step 9'
+		'step 10'
 		event.trigger('shouDaoShangHaiAfter');
 	},
 	recover: function () {

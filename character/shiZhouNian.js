@@ -8559,21 +8559,21 @@ const pack_skills = {
             if (list[0] == player) {
                 if (trigger.player == player) {
                     trigger.insertAfter(function () {
-                        player.faShuDamage(num, source).set('step', 5).set('lingHunLianJie', true);
+                        player.faShuDamage(num, source).set('step', 6).set('lingHunLianJie', true);
                     }, {
                         player: player.storage.lingHunLianJieTarget,
                         num: event.num,
                         source: player,
                     });
                 } else {
-                    player.faShuDamage(event.num, player).set('step', 5).set('lingHunLianJie', true);
+                    player.faShuDamage(event.num, player).set('step', 6).set('lingHunLianJie', true);
                 }
             } else {
                 if (trigger.player == player) {
-                    player.storage.lingHunLianJieTarget.faShuDamage(event.num, player).set('step', 5).set('lingHunLianJie', true);
+                    player.storage.lingHunLianJieTarget.faShuDamage(event.num, player).set('step', 6).set('lingHunLianJie', true);
                 } else {
                     trigger.insertAfter(function () {
-                        player.faShuDamage(num, player).set('step', 5).set('lingHunLianJie', true);
+                        player.faShuDamage(num, player).set('step', 6).set('lingHunLianJie', true);
                     }, {
                         player: player,
                         num: event.num,
