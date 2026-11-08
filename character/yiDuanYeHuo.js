@@ -1427,9 +1427,22 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         }
                         return false;
                     }
-
-                    return player.countCards('h',function(card){
-                        return card.name!='shengGuang'&&get.type(card)=='faShu'&&event.filterCard?event.filterCard(card,player,event):false;;
+                    return player.countCards('h',function(x){
+                        let type=get.type(x);
+                        if(type!='faShu') return false;
+                        if(x.name=='shengGuang') return false;
+                        let xiBie=get.xiBie(x);
+                        let name;
+                        switch(xiBie){
+                            case 'shui':name='shuiLianZhan';break;
+                            case 'huo':name='huoYanZhan';break;
+                            case 'feng':name='fengShenZhan';break;
+                            case 'lei':name='leiGuangZhan';break;
+                            case 'di':name='diLieZhan';break;
+                        }
+                        let mingGe=get.mingGe(x);
+                        let card=get.autoViewAs({name:name,xiBie:xiBie,mingGe:mingGe},x);
+                        return event.filterCard?event.filterCard(card,player,event):false;;
                     });
                 },
                 filterCard:function(card,player,event){
