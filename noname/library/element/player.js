@@ -564,8 +564,7 @@ export class Player extends HTMLDivElement {
 				if (errVars.includes(key)) {
 					throw new Error(`Variable '${key}' should not be referenced by vars objects`);
 				}
-				varstr += `var ${key}=lib.skill['${skillName}'].vars['${key}'];
-	`;
+				varstr += `var ${key}=lib.skill['${skillName}'].vars['${key}'];`;
 			}
 			const originals = [];
 			const contents = [];
@@ -588,9 +587,7 @@ export class Player extends HTMLDivElement {
 				if (!scope) {
 					compiled = new Function(...params, body);
 				} else {
-					compiled = scope(`(function (${params.join(", ")}) {
-	${body}
-	})`);
+					compiled = scope(`(function (${params.join(", ")}) {${body}})`);
 				}
 				originals.push(compiled);
 				contents.push(function (event, trigger2, player2) {
