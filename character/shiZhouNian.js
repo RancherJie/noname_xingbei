@@ -4957,6 +4957,7 @@ const pack_skills = {
                     next.set('forced', true);
                     next.set('selectButton', 2);
                     next.set('filterOk', function () {
+                        if(ui.selected.buttons.length != 2) return false;
                         for (var i in ui.selected.buttons) {
                             if (ui.selected.buttons[i].link == 'baoShi') return true;
                         }
