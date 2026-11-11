@@ -4527,7 +4527,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             shenYiZhiYin: "[被动]神意指引",
             shenYiZhiYin_info: "<span class='tiaoJian'>(你的第一回合开始时)</span>将【路标】放置在你左手边最近的角色面前。",
             xinYangZhiJia: "[法术]信仰之枷",
-            xinYangZhiJia_info: "<span class='tiaoJian'>(弃一张圣类命格的牌[展示])</span>将【路标】转移到拥有者左手边最近的角色面前。",
+            xinYangZhiJia_info: "<span class='tiaoJian'>(弃1张圣类命格的牌[展示])</span>将【路标】转移到拥有者左手边最近的角色面前。",
             sheZui: "[响应]赦罪",
             sheZui_info: "<span class='tiaoJian'>(主动攻击命中后②或[法术行动]结束时发动，指定除你外目标角色弃1张牌[展示])</span>你+1<span class='hong'>【虔诚】</span>。<span class='tiaoJian'>(若你将该弃牌加入手牌[强制])</span>你+1[治疗]。",
             shenYu: "[响应]神谕[回合限定]",
