@@ -1091,7 +1091,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 group:['shenDeMenTu_phaseBefore','shenDeMenTu_ban'],
                 subSkill:{
                     phaseBefore:{
-                        trigger:{player:'phaseBefore'},
+                        trigger:{player:'phaseSkip'},
                         direct:true,
                         filter:function (event,player){
                             return player.storage.luBiaoTarget&&event.skill!='shenDeMenTu';

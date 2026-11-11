@@ -3883,7 +3883,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 group:['shenDeDaiXing_phaseBefore','shenDeDaiXing_ban'],
                 subSkill:{
                     phaseBefore:{
-                        trigger:{player:'phaseBefore'},
+                        trigger:{player:'phaseSkip'},
                         direct:true,
                         filter:function (event,player){
                             return player.storage.luBiaoTarget&&event.skill!='shenDeDaiXing';
