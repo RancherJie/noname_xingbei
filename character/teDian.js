@@ -117,6 +117,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 4,
                 ['baSiKeZhiFa', 'moXingXuanLv', 'xinYueZhang', 'baLieTaNiXiaoDiao', 'puLuoWangSiXieZouQu', 'naBuLeSiDuZou','yinFu'],
             ],
+            daZuiSiJiao:["chuanJiaoShi_name",'shengGroup','4/5',['shenDeDaiXing','shenYiZhiYin','xinYangZhiJia','sheZui','shenYu','fuYin','daZuiLuBiao','shuLingQuanBing','shengCanLi','daZuiQianCheng']],
         },
         card: {
             tricky: {
@@ -3860,6 +3861,333 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     if (cards.length) player.loseToDiscardpile(cards);
                 },
             },
+
+            //大罪司教
+            shenDeDaiXing:{
+                getPrevious:function (player){
+                    var target=player;
+                    for (var i = 0; i < game.players.length - 1; i++) {
+                        target=target.getPrevious();
+                        if(!target.hasSkillTag('noLuBiao')) return target;
+                    }
+                    return null;
+                },
+                trigger:{global:'phaseOver'},
+                forced:true,
+                filter:function (event,player){
+                    return player.storage.luBiaoTarget&&event.player==player.storage.luBiaoTarget;
+                },
+                content:function (){
+                    player.insertPhase('shenDeDaiXing');
+                },
+                group:['shenDeDaiXing_phaseBefore','shenDeDaiXing_ban'],
+                subSkill:{
+                    phaseBefore:{
+                        trigger:{player:'phaseBefore'},
+                        direct:true,
+                        filter:function (event,player){
+                            return player.storage.luBiaoTarget&&event.skill!='shenDeDaiXing';
+                        },
+                        content:function (){
+                            trigger.cancel()
+                        }
+                    },
+                    ban:{
+                        trigger:{global:'gameStart'},
+                        direct:true,
+                        filter:function (event,player){
+                            return game.players.length==4;
+                        },
+                        content:function (){
+                            player.tempBanSkill('shenDeDaiXing','forever');
+                        }
+                    }
+                },
+                ai:{
+                    noLuBiao:true,
+                    skillTagFilter:function (player,tag){
+                        if(tag=='noLuBiao'&&game.players.length==4){
+                            return false;
+                        }
+                    }
+                }
+            },
+            shenYiZhiYin:{
+                trigger:{player:'phaseBegin'},
+                forced:true,
+                filter:function (event,player){
+                    return player.phaseNumber == 1;
+                },
+                content:async function (event,trigger,player){
+                    var target=lib.skill.shenDeDaiXing.getPrevious(player);
+                    game.addGlobalSkill('daZuiLuBiaoX');
+                    for(var current of game.players){
+                        current.storage.luBiaoPlayer=player;
+                    }
+                    player.storage.luBiaoTarget=target;
+                    await target.addZhiShiWu('daZuiLuBiaoX').set('type','fangZhi');
+                },
+            },
+            xinYangZhiJia:{
+                type:'faShu',
+                enable:'faShu',
+                filter:function(event,player){
+                    if(!player.storage.luBiaoTarget) return false;
+                    if(event.getParent('xingDong').xinYangZhiJia===false) return false;
+                    return player.countCards('h',card=>get.mingGe(card)=='sheng')>0;
+                },
+                showCards:true,
+                selectCard:1,
+                filterCard:function(card,player){
+                    return get.mingGe(card)=='sheng';
+                },
+                content:async function (event,trigger,player){
+                    await event.trigger('daZuiLuBiaoXZhuanYi');
+
+                    await player.storage.luBiaoTarget.removeZhiShiWu('daZuiLuBiaoX');
+                    var target=lib.skill.shenDeMenTu.getPrevious(player.storage.luBiaoTarget);
+                    player.storage.luBiaoTarget=target;
+                    await target.addZhiShiWu('daZuiLuBiaoX').set('type','zhuanYi');
+                },
+                ai: {
+                    order:3.3,
+                    result:{
+                        player:1,
+                    }
+                },
+                check: function(card) {
+                    return 5-get.value(card);
+                },
+            },
+            sheZui:{
+                trigger:{player:['gongJiMingZhongAfter','faShuEnd']},
+                filter:function (event,player){
+                    if(event.yingZhan) return false;
+                    return game.hasPlayer(function(current){
+                        if(current==player) return false;
+                        return current.countCards('h')>0;
+                    });
+                },
+                cost:async function (event,trigger,player){
+                    let next=player.chooseTarget(function(card,player,target){
+                        return target!=player&&target.countCards('h')>0;
+                    }).set('ai',function(target){
+                        let player=_status.event.player;
+                        let att=get.attitude(player,target);
+                        if(att<0) return false;
+                        else return target.countCards('h');
+                    });
+                    next.set('prompt',get.prompt('sheZui'));
+                    next.set('prompt2','选择除你外目标角色弃1张手牌[展示]');
+                    event.result = await next.forResult();
+                },
+                content:async function (event,trigger,player){
+                    let cards=await event.targets[0].chooseToDiscard('h',1,true,'showCards','赦罪：弃1张手牌[展示]').forResultCards();
+                    await player.addZhiShiWu('daZuiQianCheng');
+
+                    let card=cards[0];
+                    if(!card.destroyed&&get.position(card, true) === "d"){
+                        let bool=await player.chooseBool('是否获得'+get.translation(card)).set('ai',function(){
+                            return get.value(_status.event.card)>5;
+                        }).set('card',card).forResultBool();
+                        if(bool){
+                            await player.gain(card,'log','gain2');
+                            await player.addZhiLiao();
+                        }
+                    }
+                },
+            },
+            shenYu:{
+                usable:1,
+                trigger:{global:'daZuiLuBiaoXZhuanYi'},
+                filter:function (event,player){
+                    return player.countZhiShiWu('daZuiQianCheng')>=3;
+                },
+                content:async function (event,trigger,player){
+                    await player.removeZhiShiWu('daZuiQianCheng',3);
+                    game.log(player,'立即执行一次[攻击行动]');
+                    await player.gongJi().set('action',true).set('prompt','攻击行动');
+                },
+                check:function (event,player){
+                    return player.canGongJi();
+                },
+            },
+            fuYin:{
+                trigger:{global:'discardAfter'},
+                filter:function (event,player){
+                    if(!player.storage.luBiaoTarget) return false;
+                    if(player.zhiLiao<1) return false;
+                    let par=event.getParent();
+                    if(par.name!='useSkill'&&par.name!='chooseToDiscard') return false;
+                    let skill;
+                    if(par.name=='chooseToDiscard'){
+                        par=par.getParent();
+                        skill=par.name
+                    }else skill=par.skill;
+                    
+                    let skills=player.getSkills();
+                    skills.push('daZuiLuBiaoX');
+                    if(skills.includes(skill)) return get.position(event.cards[0], true) === "d"&& !event.cards[0].destroyed;
+                    else return false;
+                },
+                content:async function (event,trigger,player){
+                    player.storage.faYunShiQi=false;
+                    player.when({ global: 'changeShiQiAfter' })
+                        .filter(function (evt, player) {
+                            if(evt.num>=0) return false;
+                            let gain=evt.getParent(3);
+                            if(!gain||gain.name!='gain') return false;
+                            return gain.getParent()==event;
+                        }).step(async function (event, trigger, player) {
+                            player.storage.faYunShiQi = true;
+                        });
+
+                    await player.changeZhiLiao(-1);
+                    await player.storage.luBiaoTarget.gain(trigger.cards,'log','gain');
+                    
+                    if(player.storage.faYunShiQi===false){
+                        let targets=await player.chooseTarget('福音：除你之外目标角色+1[治疗]',lib.filter.notMe).set('ai',function(target){
+                            return get.zhiLiaoEffect2(target,_status.event.player,1);
+                        }).forResultTargets();
+                        let target=targets[0];
+                        await target.addZhiLiao(1);
+                    }
+                },
+                check:function (event,player){
+                    return get.attitude(player.storage.luBiaoTarget,player)<0;
+                },
+            },
+            daZuiLuBiao:{},
+            daZuiLuBiaoX:{
+                intro:{
+                    name:'(专)路标',
+                    nocount:true,
+                    content:`
+                    <span class="greentext">[响应]忏悔式[回合限定]</span><br>
+                    <span class='tiaoJian'>(此卡被转移至你面前时，你摸2张牌[强制])</span>我方【战绩区】+1[水晶]，然后将此卡转移至你左手边最近的角色面前，大罪司教弃1张牌。
+                    `,
+                },
+                markimage:'image/card/zhuanShu/luBiao.png',
+                trigger:{player:'changeZhiShiWuEnd'},
+                filter:function (event,player){
+                    return event.zhiShiWu=='daZuiLuBiaoX'&&event.type=='zhuanYi'&&event.chanHuiShi!=true;
+                },
+                content:async function (event,trigger,player){
+                    await player.draw(2);
+                    await player.addZhanJi('shuiJing',1);
+                    await event.trigger('daZuiLuBiaoXZhuanYi');
+                    if(event.zhuanYi!=false){
+                        await player.removeZhiShiWu('daZuiLuBiaoX');
+                        var target=lib.skill.shenDeMenTu.getPrevious(player);
+                        player.storage.luBiaoPlayer.storage.luBiaoTarget=target;
+                        await target.addZhiShiWu('daZuiLuBiaoX').set('type','zhuanYi').set('chanHuiShi',true);
+                    }
+                    await player.storage.luBiaoPlayer.chooseToDiscard('h',1,true,'忏悔式：弃1张牌');
+                },
+                check:function (event,player){
+                    if(get.emptyZhanJi(player.side)<1) return false;
+                    if(player.countCards('h')+2>player.getHandcardLimit()) return false;
+                    else return true;
+                }
+            },
+            shuLingQuanBing:{
+                type:'faShu',
+                enable:'faShu',
+                usable:1,
+                filter:function(event,player){
+                    if(!player.storage.luBiaoTarget) return false;
+                    return player.canBiShaShuiJing();
+                },
+                content:async function(event, trigger, player) {
+                    await player.removeBiShaShuiJing();
+
+                    await event.trigger('daZuiLuBiaoXZhuanYi');
+                    await player.storage.luBiaoTarget.removeZhiShiWu('daZuiLuBiaoX');
+                    var target=lib.skill.shenDeMenTu.getPrevious(player.storage.luBiaoTarget);
+                    player.storage.luBiaoTarget=target;
+                    await target.addZhiShiWu('daZuiLuBiaoX').set('type','zhuanYi');
+
+                    player.addFaShu();
+
+                    event.getParent('xingDong').xinYangZhiJia=false;
+                },
+                ai: {
+                    shuiJing:true,
+                    order: 3.3,
+                    result: {
+                        player: 1,
+                    },
+                }
+            },
+            shengCanLi:{
+                trigger:{global:'changeZhiShiWuAfter'},
+                filter:function (event,player){
+                    if(!player.storage.luBiaoTarget) return false;
+                    return event.zhiShiWu=='daZuiLuBiaoX'&&(event.type=='fangZhi'||event.type=='zhuanYi')&&player.canBiShaShuiJing()&&event.player.hasZhiShiWu('daZuiLuBiaoX');
+                },
+                logTarget:'player',
+                content:async function (event,trigger,player){
+                    await player.removeBiShaShuiJing();
+                    await player.addZhiShiWu('daZuiQianCheng',1);
+                    var choiceList=["弃1张牌[展示]。<span class='tiaoJian'>(若盖牌为【虚弱】、【中毒】或【中毒】)</span>将该牌放置在拥有【路标】的角色面前作为基础效果","·<span class='tiaoJian'>(将拥有【路标】的角色面前一张基础效果牌收入自己手中)</span>你+2<span class='hong'>【虔诚】</span>"];
+                    var list=['选项一'];
+                    if(player.storage.luBiaoTarget.hasJiChuXiaoGuo()) list.push('选项二');
+                    var next=player.chooseControl(list);
+                    next.set('choiceList',choiceList);
+                    next.set('ai',function(){
+                        var player=_status.event.player;
+                        var target=player.storage.luBiaoTarget;
+                        if(player.countCards('h')+1>=player.getHandcardLimit()) return '选项一';
+                        if(target.hasJiChuXiaoGuo()){
+                            if(player.side==target.side){
+                                var effect=-get.jiChuXiaoGuoEffect(target);
+                            }else{
+                                var effect=get.jiChuXiaoGuoEffect(target);
+                            }
+                            if(effect>0) return '选项一';
+                            else if(effect<0) return '选项二';
+                        }else{
+                            return '选项一';
+                        }
+                    });
+                    var control=await next.forResultControl();
+                    if(control=='选项一'){
+                        if(player.countCards('h')==0) return;
+                        var cards=await player.chooseToDiscard('h','showCards',1,true).set('ai',function(card){
+                            var player=_status.event.player;
+                            if(player.side==player.storage.luBiaoTarget.side){
+                                if(get.name(card)=='shengDun') return 1;
+                                else if(get.name(card)=='xuRuo'||get.name(card)=='zhongDu') return 0.2;
+                                else return 0.5;
+                            }else{
+                                if(get.name(card)=='xuRuo'||get.name(card)=='zhongDu') return 1;
+                                else return 0.5;
+                            }
+                        }).forResultCards();
+
+                        if(get.position(cards[0], true) === "d"){
+                            var name=get.name(cards[0]);
+
+                            if((((name=='xuRuo'||name=='shengDun')&&player.storage.luBiaoTarget.getJiChuXiaoGuo("_"+name).length==0)||name=='zhongDu')&&player.canUse(name,player.storage.luBiaoTarget)){
+                                await player.storage.luBiaoTarget.addJiChuXiaoGuo("_"+name,cards);
+                                if(name=='zhongDu') player.storage.luBiaoTarget.storage.zhongDu.push(player);
+                            }
+                        }
+                    }else if(control=='选项二'){
+                        await player.gainJiChuXiaoGuo(player.storage.luBiaoTarget);
+                        await player.addZhiShiWu('daZuiQianCheng',2);
+                    }
+                },
+                check:function (event,player){
+                    return player.countCards('h')>=3
+                },
+                ai:{
+                    shuiJing:true,
+                }
+            },
+            daZuiQianCheng:{
+                inherit:'qianCheng',
+            },
         },
         
         translate:{
@@ -3888,6 +4216,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             moGongEX: "魔弓EX",
             sheng_zhongCaiZhe:'圣仲裁者',
             yueTuanShouXi: "乐团首席",
+            daZuiSiJiao: "大罪司教",
+            guShenJiSi: "古神祭祀",
 
             jianZhiMoNv_name:"席拉",
             lingXiZhiChao_name: "濯香姬",
@@ -4191,6 +4521,31 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             naBuLeSiDuZou_info:"[水晶]<span class='tiaoJian'>(【音符】将被放置时发动)</span>移除该牌，改为将1张手牌面朝上[展示]放置在你的角色旁，作为【音符】。持续到本回合结束时，你的【音符】无法增加。",
             yinFu:"音符",
             yinFu_info:"【音符】为乐团首席专有展示盖牌，上限为3。",
+
+            //大罪司教
+            shenDeDaiXing: "[被动]神的代行",
+            shenYiZhiYin: "[被动]神意指引",
+            shenYiZhiYin_info: "<span class='tiaoJian'>(你的第一回合开始时)</span>将【路标】放置在你左手边最近的角色面前。",
+            xinYangZhiJia: "[法术]信仰之枷",
+            xinYangZhiJia_info: "<span class='tiaoJian'>(弃一张圣类命格的牌[展示])</span>将【路标】转移到拥有者左手边最近的角色面前。",
+            sheZui: "[响应]赦罪",
+            sheZui_info: "<span class='tiaoJian'>(主动攻击命中后②或[法术行动]结束时发动，指定除你外目标角色弃1张牌[展示])</span>你+1<span class='hong'>【虔诚】</span>。<span class='tiaoJian'>(若你将该弃牌加入手牌[强制])</span>你+1[治疗]。",
+            shenYu: "[响应]神谕[回合限定]",
+            shenYu_info: "<span class='tiaoJian'>(【路标】转移前，移除3点</span><span class='hong'>【虔诚】</span><span class='tiaoJian'>)</span>立即执行一次[攻击行动]。",
+            fuYin: "[响应]福音",
+            fuYin_info: "<span class='tiaoJian'>(目标角色因你的技能弃的置入弃牌堆时，移除你1[治疗])</span>将该弃牌加入拥有【路标】的角色手牌[强制]。<span class='tiaoJian'>(若为因此造成对方士气下降)</span>指定除你外的目标角色+1[治疗]。",
+            daZuiLuBiao:"(专)路标",
+            daZuiLuBiao_info: `
+            <span class="greentext">[响应]忏悔式[回合限定]</span><br>
+            <span class='tiaoJian'>(此卡被转移至你面前时，你摸2张牌[强制])</span>我方【战绩区】+1[水晶]，然后将此卡转移至你左手边最近的角色面前，大罪司教弃1张牌。
+            `,
+            daZuiLuBiaoX: "[响应]忏悔式[回合限定]",
+            daZuiLuBiaoX_info: "<span class='tiaoJian'>(此卡被转移至你面前时，你摸2张牌[强制])</span>我方【战绩区】+1[水晶]，然后将此卡转移至你左手边最近的角色面前，大罪司教弃1张牌。",
+            shuLingQuanBing: "[法术]属灵权柄[回合限定]",
+            shuLingQuanBing_info: "[水晶]将【路标】转移到拥有者左手边最近的角色面前，你额外+1[法术行动]。本回合你不能再发动【信仰之枷】。",
+            shengCanLi: "[响应]圣餐礼",
+            shengCanLi_info: "[水晶]<span class='tiaoJian'>(【路标】转移或放置后)</span>你+1<span class='hong'>【虔诚】</span>，选择以下一项：<br>·弃1张牌[展示]。<span class='tiaoJian'>(若弃牌为【虚弱】、【中毒】或【圣盾】)</span>将盖牌放置在拥有【路标】的角色面前作为基础效果。<br>·<span class='tiaoJian'>(将拥有【路标】的角色面前一张基础效果牌收入自己手中)</span>你+2<span class='hong'>【虔诚】</span>。",
+            daZuiQianCheng_info: "<span class='hong'>【虔诚】</span>为大罪司教专有指示物，上限为4。",
         },
     };
 });
