@@ -13294,7 +13294,7 @@ export class Player extends HTMLDivElement {
 		}
 		return player;
 	}
-	$gain(card, log, init) {
+	$gain(card, log, init, first=true) {
 		if (init !== false) {
 			game.broadcast(
 				function (player, card, init) {
@@ -13328,9 +13328,9 @@ export class Player extends HTMLDivElement {
 					this.$gain(card[i], false, false);
 				}
 			}
-		} else if (typeof card == "number" && card > 1) {
+		} else if (typeof card == "number" && init !== false) {
 			if (log != false && !_status.video) {
-				game.log(this, "获得了" + get.cnNumber(card) + "张牌");
+				game.log(this, "获得了" + card + "张牌");
 			}
 			if (this.$gainmod) {
 				this.$gainmod(card);
