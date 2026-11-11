@@ -1230,9 +1230,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     if(name=='discardAfter'){
                         //if (event.type != "discard") return false;
                         if(event.getParent('chooseToDiscard').shiFeng==false) return false;
-                        return player.zhiLiao>0&&event.getParent('chooseToDiscard').selfSkil&&get.position(event.cards[0], true) === "d";
+                        return player.zhiLiao>0&&event.getParent('chooseToDiscard').selfSkil&&get.position(event.cards[0], true) === "d"&&!event.cards[0].destroyed;
                     }else if(name=='chuanDao' || name=='miSa'){
-                        return player.zhiLiao>0&&event.cards.length>0;
+                        return player.zhiLiao>0&&event.cards.length>0&&!event.cards[0].destroyed;
                     }
                 },
                 content:async function (event,trigger,player){
