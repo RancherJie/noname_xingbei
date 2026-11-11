@@ -2717,7 +2717,7 @@ export class Get extends GetCompatible {
 	info(item, player) {
 		if (typeof item == "string" || typeof item == "symbol") {
 			const info = Reflect.get(lib.skill, item);
-			if (!info) {
+			if (!info && !item.includes('_when_')) {
 				const str = typeof item == "string" ? item : `[${item.toString()}]`;
 				console.warn(`孩子，你的技能${str}是不是忘写了什么？！`);
 				return {};
