@@ -3351,7 +3351,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                 var cards=player.getExpansions('tianPing_you');
                                 if(cards.length>0) dialog.addAuto(cards);
                                 return `<span class='greentext'>[被动]圣方之右</span><br>
-                                    <span class='tiaoJian'>(每当本卡上的牌被弃掉且弃牌数>1)</span>你+1[治疗]。<br>
+                                    <span class='tiaoJian'>(每当本卡上的牌被移除且移除牌数>1)</span>你+1[治疗]。<br>
                                     【天平·右】上的牌上限为3；达到上限则无法被再放置新牌。
                                     `;
                             },
