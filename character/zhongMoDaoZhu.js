@@ -1293,6 +1293,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     await player.storage.luBiaoPlayer.chooseToDiscard('h',1,true,'告解式：弃1张牌').set('selfSkil',true)
                 },
                 check:function (event,player){
+                    if(get.emptyZhanJi(player.side)<1) return false;
                     if(player.countCards('h')+2>player.getHandcardLimit()) return false;
                     else return true;
                 }
