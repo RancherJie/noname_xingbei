@@ -42,3 +42,38 @@ update.html
 *.txt
 *.pdf
 noname-server.exe
+
+# Keep bundled extensions in source control while leaving other locally
+# installed extensions ignored.
+!extension/
+extension/*
+!extension/boss
+!extension/cardpile
+!extension/coin
+!extension/wuxing
+!extension/无名杯UI优化包/
+!extension/无名杯UI优化包/**
+!extension/百年战争·序章/
+!extension/百年战争·序章/**
+!extension/十周年-噩梦人机/
+!extension/十周年-噩梦人机/**
+!extension/十周年-AI优化版/
+!extension/十周年-AI优化版/**
+!extension/十周年语音包/
+!extension/十周年语音包/**
+!extension/宿命挽歌/
+!extension/宿命挽歌/**
+!extension/轮回遗梦/
+!extension/轮回遗梦/**
+!extension/永夜残响/
+!extension/永夜残响/**
+!extension/峡谷幻音/
+!extension/峡谷幻音/**
+!extension/电啸龙吟/
+!extension/电啸龙吟/**
+!extension/创世纪/
+!extension/创世纪/**
+
+# Exclude unreferenced audio bundles left from the previous extension source.
+extension/百年战争·序章/audio-data/
+extension/宿命挽歌/audio-data/

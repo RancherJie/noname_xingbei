@@ -1,5 +1,5 @@
-import { game, get, lib, boot, onload } from "../noname.js";
-import { canUseHttpProtocol, sendUpdate } from "../noname/init/index.js";
+import { game, get, lib, boot, onload } from "../noname.js?bundled=local-2026-11-13-v23";
+import { canUseHttpProtocol, sendUpdate } from "../noname/init/index.js?bundled=local-2026-11-13-v23";
 
 let [core, version] = get.coreInfo();
 

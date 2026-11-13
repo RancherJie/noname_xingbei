@@ -8,7 +8,7 @@ import { gnc } from "../gnc/index.js";
 import { userAgentLowerCase, nonameInitialized, AsyncFunction, device, leaveCompatibleEnvironment } from "../util/index.js";
 import * as config from "../util/config.js";
 import { promiseErrorHandlerMap } from "../util/browser.js";
-import { importCardPack, importCharacterPack, importExtension, importMode } from "./import.js";
+import { importCardPack, importCharacterPack, importExtension, importMode } from "./import.js?bundled=local-2026-11-13-v22";
 import { initializeSandboxRealms } from "../util/initRealms.js";
 import { ErrorManager } from "../util/error.js";
 import { rootURL } from "../../noname.js";
@@ -423,6 +423,49 @@ export async function boot() {
 		}
 	}
 	localStorage.removeItem("show_splash_off");
+	// Agreed defaults: UI and AI optimization on; other bundled extensions off.
+	const bundledExtensions = [
+		{ name: "无名杯UI优化包", enabled: true },
+		{ name: "百年战争·序章", enabled: false },
+		{ name: "十周年-噩梦人机", enabled: false },
+		{ name: "十周年-AI优化版", enabled: true },
+		{ name: "宿命挽歌", enabled: false },
+		{ name: "创世纪", enabled: false },
+		{ name: "电啸龙吟", enabled: false },
+		{ name: "轮回遗梦", enabled: false },
+		{ name: "十周年语音包", enabled: false },
+		{ name: "峡谷幻音", enabled: false },
+		{ name: "永夜残响", enabled: false },
+	];
+	const bundledExtensionNames = new Set(bundledExtensions.map(({ name }) => name));
+	const configuredExtensions = config.get("extensions");
+	if (Array.isArray(configuredExtensions)) {
+		let extensionsChanged = false;
+		for (const { name } of bundledExtensions) {
+			if (configuredExtensions.includes(name)) continue;
+			configuredExtensions.push(name);
+			extensionsChanged = true;
+		}
+		if (extensionsChanged) game.saveConfig("extensions", configuredExtensions);
+	}
+	for (const { name, enabled } of bundledExtensions) {
+		const enableKey = `extension_${name}_enable`;
+		if (typeof config.get(enableKey) !== "boolean") game.saveConfig(enableKey, enabled);
+	}
+	const bundledDefaultsKey = `${lib.configprefix}bundled_extension_defaults`;
+	if (localStorage.getItem(bundledDefaultsKey) !== "agreed-defaults-v1") {
+		for (const { name, enabled } of bundledExtensions) {
+			game.saveConfig(`extension_${name}_enable`, enabled);
+		}
+		localStorage.setItem(bundledDefaultsKey, "agreed-defaults-v1");
+	}
+	const newlyBundledDefaultsKey = `${lib.configprefix}newly_bundled_extension_defaults`;
+	if (localStorage.getItem(newlyBundledDefaultsKey) !== "2026-11-13-v1") {
+		for (const name of ["创世纪", "电啸龙吟", "轮回遗梦", "十周年语音包", "峡谷幻音", "永夜残响"]) {
+			game.saveConfig(`extension_${name}_enable`, false);
+		}
+		localStorage.setItem(newlyBundledDefaultsKey, "2026-11-13-v1");
+	}
 	const extensionlist = [];
 	if (!localStorage.getItem(lib.configprefix + "disable_extension")) {
 		if (config.has("extensions") && config.get("extensions").length) {
@@ -440,10 +483,17 @@ export async function boot() {
 			}
 		}
 		for (var name = 0; name < config.get("extensions").length; name++) {
-			if (Reflect.get(window, "bannedExtensions").includes(config.get("extensions")[name])) {
+			const extensionName = config.get("extensions")[name];
+			if (Reflect.get(window, "bannedExtensions").includes(extensionName)) {
 				continue;
 			}
-			var extcontent = localStorage.getItem(lib.configprefix + "extension_" + config.get("extensions")[name]);
+			const extensionSourceKey = lib.configprefix + "extension_" + extensionName;
+			if (bundledExtensionNames.has(extensionName)) {
+				localStorage.removeItem(extensionSourceKey);
+				extensionlist.push(extensionName);
+				continue;
+			}
+			var extcontent = localStorage.getItem(extensionSourceKey);
 			if (extcontent) {
 				//var backup_onload=lib.init.onload;
 				_status.evaluatingExtension = true;

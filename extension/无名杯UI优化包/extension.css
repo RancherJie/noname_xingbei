@@ -1,0 +1,1117 @@
+:root {
+    --wmb-ink: #101a19;
+    --wmb-panel: rgba(24, 35, 32, 0.9);
+    --wmb-panel-soft: rgba(38, 53, 47, 0.78);
+    --wmb-paper: #dfd0aa;
+    --wmb-paper-light: #f2e5c5;
+    --wmb-jade: #6fa99a;
+    --wmb-jade-light: #a8d2bd;
+    --wmb-gold: #b89458;
+    --wmb-gold-light: #e0c58d;
+    --wmb-red: #a84f45;
+    --wmb-red-bright: #e58270;
+    --wmb-blue: #466f82;
+    --wmb-blue-bright: #83b8c9;
+    --wmb-cyan: #7eb2a4;
+    --wmb-text: #efe2c1;
+    --wmb-muted: #b8b8a2;
+    --wmb-line: rgba(184, 148, 88, 0.5);
+    --wmb-shadow: 0 10px 28px rgba(4, 10, 9, 0.52);
+}
+
+body.wmb-ui-optimized {
+    --wmb-blur: 10px;
+}
+
+/* 沿用水熊版简洁指针轮廓，换为仙剑版青玉配色。 */
+body.wmb-ui-optimized,
+body.wmb-ui-optimized * {
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 28 28'%3E%3Cpath d='M3 2l18 11-8 2-4 9z' fill='%237eb2a4' stroke='%23101f1d' stroke-width='2'/%3E%3Cpath d='M6 6l10 7-5 1-2 5z' fill='%23eef0cf' opacity='.72'/%3E%3C/svg%3E") 3 2, auto !important;
+}
+
+body.wmb-ui-optimized.wmb-ui-strong-glass {
+    --wmb-panel: rgba(14, 25, 23, 0.95);
+    --wmb-panel-soft: rgba(24, 39, 34, 0.91);
+    --wmb-blur: 15px;
+}
+
+body.wmb-ui-optimized #arena::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background:
+        radial-gradient(ellipse at 18% 20%, transparent 0 33%, rgba(223, 208, 170, 0.055) 34% 35%, transparent 36% 100%),
+        radial-gradient(ellipse at 82% 72%, transparent 0 29%, rgba(111, 169, 154, 0.065) 30% 31%, transparent 32% 100%),
+        linear-gradient(115deg, rgba(125, 50, 43, 0.06), transparent 34%, rgba(53, 92, 103, 0.07));
+    box-shadow: inset 0 0 135px rgba(3, 9, 8, 0.58);
+}
+
+/* 无名杯战况：核心会反复刷新 innerHTML，因此只依赖稳定的表格结构。 */
+body.wmb-ui-optimized .wmb-scoreboard {
+    width: 264px !important;
+    height: auto !important;
+    transition: none !important;
+    min-height: 106px;
+    padding: 27px 8px 7px !important;
+    color: var(--wmb-text) !important;
+    background:
+        radial-gradient(ellipse at 105% -10%, rgba(168, 210, 189, 0.15), transparent 42%),
+        linear-gradient(135deg, rgba(224, 197, 141, 0.13), transparent 31%),
+        repeating-linear-gradient(2deg, rgba(242, 229, 197, 0.018) 0 1px, transparent 1px 5px),
+        var(--wmb-panel) !important;
+    border: 1px solid var(--wmb-line) !important;
+    border-radius: 5px 14px 5px 14px !important;
+    box-shadow: var(--wmb-shadow), inset 0 1px rgba(255, 255, 255, 0.06) !important;
+    backdrop-filter: blur(var(--wmb-blur));
+    -webkit-backdrop-filter: blur(var(--wmb-blur));
+    overflow: visible !important;
+    text-shadow: none !important;
+}
+
+body.wmb-ui-optimized .wmb-scoreboard::before {
+    content: attr(data-wmb-title);
+    position: absolute;
+    top: 5px;
+    left: 10px;
+    color: var(--wmb-gold-light);
+    font: 700 15px/19px "STKaiti", "KaiTi", "Microsoft YaHei", serif;
+    letter-spacing: 3px;
+    text-shadow: 0 1px 5px rgba(0, 0, 0, 0.8);
+}
+
+body.wmb-ui-optimized .wmb-bgm-panel {
+    position: absolute;
+    z-index: 55;
+    width: 264px;
+    box-sizing: border-box;
+    padding: 7px 9px 8px;
+    color: var(--wmb-text);
+    background:
+        radial-gradient(ellipse at 105% -10%, rgba(168, 210, 189, 0.15), transparent 42%),
+        linear-gradient(135deg, rgba(224, 197, 141, 0.13), transparent 31%),
+        repeating-linear-gradient(2deg, rgba(242, 229, 197, 0.018) 0 1px, transparent 1px 5px),
+        var(--wmb-panel) !important;
+    border: 1px solid var(--wmb-line);
+    border-radius: 5px 14px 5px 14px;
+    box-shadow: var(--wmb-shadow), inset 0 1px rgba(255, 255, 255, .06);
+    backdrop-filter: blur(var(--wmb-blur));
+    -webkit-backdrop-filter: blur(var(--wmb-blur));
+    text-shadow: none;
+    transition: none !important;
+}
+
+body.wmb-ui-optimized .wmb-bgm-panel[hidden] { display: none !important; }
+
+body.wmb-ui-optimized .wmb-bgm-panel > div {
+    position: static !important;
+    display: block;
+    transition: none !important;
+}
+
+body.wmb-ui-optimized .wmb-bgm-panel button {
+    position: static !important;
+    transition: none !important;
+}
+
+body.wmb-ui-optimized .wmb-bgm-heading {
+    display: block !important;
+    color: var(--wmb-gold-light);
+    font: 700 15px/22px "STKaiti", "KaiTi", "Microsoft YaHei", serif;
+    text-align: center;
+    border-bottom: 1px solid rgba(184, 148, 88, .48);
+    padding-bottom: 2px;
+    margin-bottom: 5px;
+}
+
+body.wmb-ui-optimized .wmb-bgm-title {
+    display: block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color: var(--wmb-gold-light);
+}
+
+body.wmb-ui-optimized .wmb-bgm-controls {
+    display: grid !important;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 4px;
+    width: 100%;
+}
+
+body.wmb-ui-optimized .wmb-bgm-controls button,
+body.wmb-ui-optimized .wmb-bgm-restore {
+    display: block !important;
+    box-sizing: border-box !important;
+    min-width: 0 !important;
+    width: 100% !important;
+    height: 27px !important;
+    margin: 0 !important;
+    padding: 0 2px !important;
+    color: var(--wmb-paper-light);
+    background: linear-gradient(135deg, rgba(111, 169, 154, .2), rgba(16, 26, 25, .68));
+    border: 1px solid rgba(184, 148, 88, .5) !important;
+    border-radius: 2px 7px 2px 7px;
+    font: 18px/25px "STKaiti", "KaiTi", "Microsoft YaHei", serif !important;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+body.wmb-ui-optimized .wmb-bgm-controls button:hover,
+body.wmb-ui-optimized .wmb-bgm-controls button:focus-visible,
+body.wmb-ui-optimized .wmb-bgm-restore:hover,
+body.wmb-ui-optimized .wmb-bgm-restore:focus-visible {
+    color: #fff4d6;
+    background: rgba(111, 169, 154, .33);
+    border-color: var(--wmb-gold-light);
+    outline: none;
+}
+
+body.wmb-ui-optimized .wmb-bgm-controls button svg,
+body.wmb-ui-optimized .wmb-bgm-restore svg {
+    display: inline-block;
+    width: 21px;
+    height: 21px;
+    vertical-align: middle;
+    fill: rgba(111, 169, 154, .38);
+    stroke: var(--wmb-gold-light);
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, .55));
+}
+
+body.wmb-ui-optimized .wmb-bgm-controls button:hover svg,
+body.wmb-ui-optimized .wmb-bgm-controls button:focus-visible svg,
+body.wmb-ui-optimized .wmb-bgm-restore:hover svg,
+body.wmb-ui-optimized .wmb-bgm-restore:focus-visible svg {
+    fill: rgba(168, 210, 189, .58);
+    stroke: #fff4d6;
+}
+
+body.wmb-ui-optimized .wmb-bgm-collapse svg,
+body.wmb-ui-optimized .wmb-bgm-restore svg,
+body.wmb-ui-optimized .wmb-bgm-collapse:hover svg,
+body.wmb-ui-optimized .wmb-bgm-restore:hover svg {
+    fill: none;
+}
+
+body.wmb-ui-optimized .wmb-bgm-play .wmb-bgm-icon-pause,
+body.wmb-ui-optimized .wmb-bgm-play[data-playing="true"] .wmb-bgm-icon-play {
+    display: none;
+}
+
+body.wmb-ui-optimized .wmb-bgm-play[data-playing="true"] .wmb-bgm-icon-pause {
+    display: inline-block;
+}
+
+body.wmb-ui-optimized .wmb-bgm-play .wmb-bgm-icon-pause {
+    fill: none;
+}
+
+body.wmb-ui-optimized .wmb-bgm-controls .wmb-bgm-mode {
+    font-size: 21px !important;
+}
+
+body.wmb-ui-optimized .wmb-bgm-restore { display: none !important; }
+
+body.wmb-ui-optimized .wmb-bgm-panel.wmb-bgm-collapsed {
+    padding: 5px;
+}
+
+body.wmb-ui-optimized .wmb-bgm-panel.wmb-bgm-collapsed .wmb-bgm-heading,
+body.wmb-ui-optimized .wmb-bgm-panel.wmb-bgm-collapsed .wmb-bgm-controls {
+    display: none !important;
+}
+
+body.wmb-ui-optimized .wmb-bgm-panel.wmb-bgm-collapsed .wmb-bgm-restore {
+    display: block !important;
+}
+
+
+
+body.wmb-ui-optimized .wmb-scoreboard table {
+    width: 100%;
+    height: auto;
+    font-size: inherit;
+    border-spacing: 2px 2px;
+    border-collapse: separate;
+    table-layout: fixed;
+}
+
+body.wmb-ui-optimized .wmb-scoreboard tr:first-child td {
+    height: 18px;
+    color: var(--wmb-muted) !important;
+    font-size: 14px;
+    font-family: "STKaiti", "KaiTi", serif;
+    font-weight: 600;
+    letter-spacing: 2px;
+}
+
+body.wmb-ui-optimized .wmb-scoreboard tr:not(:first-child) td {
+    height: 27px;
+    padding: 2px 4px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.28);
+    background: linear-gradient(90deg, rgba(239, 226, 193, 0.06), rgba(111, 169, 154, 0.035));
+    vertical-align: middle;
+}
+
+body.wmb-ui-optimized .wmb-scoreboard .wmb-team-red td:first-child,
+body.wmb-ui-optimized .wmb-scoreboard .wmb-team-red td:last-child {
+    box-shadow: inset 3px 0 var(--wmb-red);
+}
+
+body.wmb-ui-optimized .wmb-scoreboard .wmb-team-blue td:first-child,
+body.wmb-ui-optimized .wmb-scoreboard .wmb-team-blue td:last-child {
+    box-shadow: inset 3px 0 var(--wmb-blue);
+}
+
+body.wmb-ui-optimized .wmb-scoreboard .wmb-team-red span[style*="red"] {
+    color: var(--wmb-red-bright) !important;
+}
+
+body.wmb-ui-optimized .wmb-scoreboard .wmb-team-blue span[style*="blue"] {
+    color: var(--wmb-blue-bright) !important;
+}
+
+body.wmb-ui-optimized .wmb-scoreboard tr:not(:first-child) td:first-child span,
+body.wmb-ui-optimized .wmb-scoreboard tr:not(:first-child) td:last-child span {
+    font-size: 22px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    text-shadow: 0 0 10px currentColor !important;
+}
+
+body.wmb-ui-optimized .wmb-scoreboard td:nth-child(2) {
+    width: 128px !important;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+body.wmb-ui-optimized .wmb-scoreboard .wmb-starstone {
+    width: 18px !important;
+    height: 18px !important;
+    margin: 0;
+    border-radius: 50%;
+    filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.75));
+}
+
+body.wmb-ui-optimized .wmb-scoreboard tr.highlight td {
+    background: linear-gradient(90deg, rgba(224, 197, 141, 0.18), rgba(111, 169, 154, 0.07));
+    outline: 1px solid rgba(244, 221, 164, 0.22);
+}
+
+/* 治疗槽：保留原版蓝色法阵与白色治疗星构图，统一为仙剑式绘制。 */
+body.wmb-ui-optimized .hp:not(.text):not(.actcount):not(.treasure):not([data-condition="xing"]) > div:not(.lost) {
+    background-image: url("image/zhiLiao_xianxia.png") !important;
+    background-size: 100% 100% !important;
+}
+
+body.wmb-ui-optimized .hp:not(.text):not(.actcount):not(.treasure):not([data-condition="xing"]) > .lost {
+    background-image: url("image/zhiLiaoCao_xianxia.png") !important;
+    background-size: 100% 100% !important;
+}
+
+body.wmb-ui-optimized .hp:not(.text):not(.actcount):not(.treasure)[data-condition="xing"] > div {
+    background-image: url("image/xingJi_xianxia.png") !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+    background-size: 100% 100% !important;
+}
+
+body.wmb-ui-optimized .hp:not(.text):not(.actcount):not(.treasure)[data-condition="xing"] > .lost {
+    filter: grayscale(1) brightness(0.62) !important;
+    opacity: 0.72;
+}
+
+/* 角色框：保留角色原画，只统一边框、信息层和交互反馈。 */
+body.wmb-ui-optimized #arena > .player,
+body.wmb-ui-optimized #arena .player:not(.minskin) {
+    border-radius: 4px 11px 4px 11px !important;
+    box-shadow: 0 0 0 1px rgba(216, 184, 114, 0.34), 0 8px 24px rgba(0, 0, 0, 0.48) !important;
+}
+
+/* 仙剑版：直接用槽位底色区分红蓝双方，无需依赖右上角身份标识。 */
+body.wmb-ui-optimized #arena .player.wmb-team-slot-red:not(.minskin) {
+    background: linear-gradient(145deg, #681d24 0%, #a83f3b 48%, #3a1018 100%) !important;
+    border-color: rgba(239, 113, 92, 0.88) !important;
+    box-shadow: 0 0 0 2px rgba(189, 55, 48, 0.78), 0 0 17px rgba(202, 48, 39, 0.46), 0 8px 24px rgba(0, 0, 0, 0.48) !important;
+}
+
+body.wmb-ui-optimized #arena .player.wmb-team-slot-blue:not(.minskin) {
+    background: linear-gradient(145deg, #173b55 0%, #286f91 48%, #0d263b 100%) !important;
+    border-color: rgba(105, 190, 231, 0.9) !important;
+    box-shadow: 0 0 0 2px rgba(48, 125, 172, 0.82), 0 0 17px rgba(45, 137, 192, 0.46), 0 8px 24px rgba(0, 0, 0, 0.48) !important;
+}
+
+body.wmb-ui-optimized .player::after {
+    border-radius: 9px !important;
+    box-shadow: inset 0 0 22px rgba(3, 10, 8, 0.3), inset 0 -24px 30px rgba(3, 10, 8, 0.34);
+}
+
+body.wmb-ui-optimized .player.wmb-team-slot-red::after {
+    box-shadow: inset 7px 0 13px rgba(204, 48, 41, 0.58), inset -4px 0 10px rgba(116, 25, 29, 0.4), inset 0 -30px 32px rgba(124, 24, 29, 0.52) !important;
+}
+
+body.wmb-ui-optimized .player.wmb-team-slot-blue::after {
+    box-shadow: inset 7px 0 13px rgba(42, 137, 190, 0.58), inset -4px 0 10px rgba(17, 72, 109, 0.42), inset 0 -30px 32px rgba(20, 76, 112, 0.54) !important;
+}
+
+body.wmb-ui-optimized .player.current_action,
+body.wmb-ui-optimized .player.glow_phase {
+    box-shadow: 0 0 0 3px #f2cf72, 0 0 11px 3px rgba(242, 207, 114, 0.68), var(--wmb-shadow) !important;
+}
+
+body.wmb-ui-optimized .wmb-xj-turn-shade {
+    position: absolute;
+    z-index: 12;
+    inset: 0;
+    pointer-events: none;
+    border-radius: inherit;
+    background: rgba(3, 7, 12, 0.27);
+    opacity: 1;
+    will-change: opacity;
+    transition: opacity 380ms ease;
+}
+
+body.wmb-ui-optimized .player.current_action > .wmb-xj-turn-shade,
+body.wmb-ui-optimized .player.glow_phase > .wmb-xj-turn-shade {
+    opacity: 0;
+}
+
+body.wmb-ui-optimized #arena .player:not(.current_action):not(.glow_phase):hover > .wmb-xj-turn-shade,
+body.wmb-ui-optimized #arena .player:not(.current_action):not(.glow_phase).selected > .wmb-xj-turn-shade,
+body.wmb-ui-optimized #arena .player:not(.current_action):not(.glow_phase).selectable > .wmb-xj-turn-shade {
+    opacity: 0.1;
+}
+
+body.wmb-ui-optimized .wmb-xj-turn-label {
+    display: block;
+    position: absolute;
+    z-index: 18;
+    left: 50%;
+    top: -27px;
+    min-width: 82px;
+    box-sizing: border-box;
+    padding: 4px 12px 3px;
+    color: #fff0b3;
+    font: 900 16px/1.15 "STKaiti", "KaiTi", "Microsoft YaHei", serif;
+    letter-spacing: 2px;
+    text-align: center;
+    white-space: nowrap;
+    pointer-events: none;
+    border: 1px solid rgba(255, 230, 149, 0.94);
+    border-radius: 3px 9px 3px 9px;
+    background: linear-gradient(180deg, rgba(111, 77, 25, 0.98), rgba(43, 29, 13, 0.98));
+    box-shadow: inset 0 0 8px rgba(255, 224, 137, 0.28), 0 0 10px rgba(239, 190, 81, 0.72), 0 3px 8px rgba(0, 0, 0, 0.62);
+    text-shadow: 0 1px 2px #241406, 0 0 5px rgba(255, 222, 126, 0.72);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(-50%) translateY(7px) scale(0.94);
+    transition: opacity 260ms ease, transform 320ms cubic-bezier(0.2, 0.75, 0.25, 1), visibility 0s linear 320ms;
+}
+
+body.wmb-ui-optimized .player.current_action > .wmb-xj-turn-label,
+body.wmb-ui-optimized .player.glow_phase > .wmb-xj-turn-label {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0) scale(1);
+    transition-delay: 80ms, 80ms, 0s;
+}
+
+body.wmb-ui-optimized .player .name,
+body.wmb-ui-optimized .player .name2 {
+    color: var(--wmb-text) !important;
+    text-shadow: 0 2px 4px #000, 0 0 7px rgba(0, 0, 0, 0.85) !important;
+    font-family: "STKaiti", "KaiTi", "Microsoft YaHei", serif;
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+
+body.wmb-ui-optimized .player .identity {
+    border: 1px solid rgba(244, 221, 164, 0.48) !important;
+    background: rgba(8, 14, 24, 0.82) !important;
+    box-shadow: 0 2px 7px rgba(0, 0, 0, 0.55) !important;
+}
+
+body.wmb-ui-optimized .player .identity.wmb-identity-red,
+body.wmb-ui-optimized .player .identity.wmb-identity-blue {
+    display: none !important;
+}
+
+body.wmb-ui-optimized .player .identity.wmb-identity-red {
+    color: #fff0d5 !important;
+    border-color: rgba(255, 202, 145, 0.88) !important;
+    background: radial-gradient(circle at 35% 27%, #e35f4f 0, #aa302d 55%, #5e171d 100%) !important;
+    box-shadow: inset 0 0 0 2px rgba(92, 18, 23, 0.36), 0 0 10px rgba(226, 55, 45, 0.62), 0 2px 6px rgba(0, 0, 0, 0.62) !important;
+    text-shadow: 0 1px 2px #5c1116, 0 0 5px rgba(255, 226, 174, 0.75) !important;
+}
+
+body.wmb-ui-optimized .player .identity.wmb-identity-blue {
+    color: #e5fbff !important;
+    border-color: rgba(174, 231, 232, 0.86) !important;
+    background: radial-gradient(circle at 35% 27%, #4d96a4 0, #286476 55%, #153443 100%) !important;
+    box-shadow: inset 0 0 0 2px rgba(12, 47, 58, 0.42), 0 0 10px rgba(74, 168, 184, 0.55), 0 2px 6px rgba(0, 0, 0, 0.62) !important;
+    text-shadow: 0 1px 2px #102f3d, 0 0 5px rgba(208, 248, 242, 0.72) !important;
+}
+
+body.wmb-ui-optimized .player .identity.wmb-identity-red > div,
+body.wmb-ui-optimized .player .identity.wmb-identity-blue > div {
+    color: inherit !important;
+    font-family: inherit !important;
+    font-size: 30px !important;
+    font-weight: inherit !important;
+    line-height: 30px !important;
+    position: static !important;
+    transform: translate(-1px, -1px) !important;
+    text-shadow: inherit !important;
+}
+
+body.wmb-ui-optimized .player .marks,
+body.wmb-ui-optimized .player .count {
+    filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.7));
+}
+
+/* 多目标选择：青玉候选、暗金选中、朱砂顺序。 */
+body.wmb-ui-optimized #arena.selecting .player:not(.selectable):not(.selected) {
+    filter: brightness(.78) saturate(.68) !important;
+    opacity: .86;
+}
+
+body.wmb-ui-optimized #arena.selecting .player.selectable:not(.selected) {
+    outline: 2px solid rgba(126, 178, 164, .9) !important;
+    outline-offset: 2px;
+    box-shadow: 0 0 0 1px rgba(225, 239, 211, .42),
+        0 0 14px rgba(111, 185, 169, .76), var(--wmb-shadow) !important;
+    animation: wmb-target-candidate 1.45s ease-in-out infinite;
+}
+
+body.wmb-ui-optimized #arena.selecting .player.selectable:not(.selected):hover {
+    filter: brightness(1.13) saturate(1.08) !important;
+    transform: translateY(-2px) scale(1.015);
+    outline-color: #bde6d4 !important;
+    box-shadow: 0 0 0 2px rgba(232, 243, 215, .58),
+        0 0 20px rgba(111, 199, 181, .92), var(--wmb-shadow) !important;
+}
+
+/* 横置由本体通过 linked 的旋转实现，悬停反馈不能覆盖该 transform。 */
+body.wmb-ui-optimized #arena.selecting .player.linked.selectable:not(.selected):hover {
+    transform: rotate(-90deg);
+}
+
+body.wmb-ui-optimized #arena.selecting .player.selected {
+    outline: 3px solid var(--wmb-gold-light) !important;
+    outline-offset: 2px;
+    filter: brightness(1.1) saturate(1.08) !important;
+    box-shadow: 0 0 0 2px rgba(255, 239, 193, .5),
+        0 0 21px rgba(224, 183, 99, .94), var(--wmb-shadow) !important;
+}
+
+body.wmb-ui-optimized .player > .wmb-target-order {
+    position: absolute;
+    z-index: 32;
+    top: 38px;
+    right: -11px;
+    width: 31px;
+    height: 31px;
+    box-sizing: border-box;
+    pointer-events: none;
+    color: #fff1d0;
+    font: 900 19px/29px "STKaiti", "KaiTi", serif;
+    text-align: center;
+    border: 1px solid #f0c986;
+    border-radius: 50% 44% 50% 45%;
+    background: radial-gradient(circle at 35% 27%, #d85d4c, #9a2927 62%, #55151a);
+    box-shadow: inset 0 0 0 2px rgba(83, 18, 21, .42),
+        0 0 11px rgba(224, 73, 58, .72), 0 3px 7px rgba(0, 0, 0, .7);
+    text-shadow: 0 1px 2px #571116, 0 0 5px rgba(255, 224, 168, .7);
+    animation: wmb-target-order-in 180ms ease-out;
+}
+
+body.wmb-ui-optimized .wmb-target-counter {
+    position: fixed;
+    z-index: 121;
+    left: 50%;
+    top: calc(24% - 48px);
+    min-width: 116px;
+    padding: 6px 18px;
+    pointer-events: none;
+    color: #f1dfb5;
+    font: 800 17px/1.2 "STKaiti", "KaiTi", serif;
+    letter-spacing: 2px;
+    text-align: center;
+    border: 1px solid rgba(224, 197, 141, .72);
+    border-radius: 3px 10px 3px 10px;
+    background: linear-gradient(90deg, rgba(13, 29, 26, .9), rgba(35, 51, 44, .96), rgba(13, 29, 26, .9));
+    box-shadow: 0 4px 14px rgba(0, 0, 0, .58), inset 0 1px rgba(255, 255, 255, .08);
+    text-shadow: 0 1px 3px #000;
+    transform: translateX(-50%);
+}
+
+/* 技能释放提示：青玉卷轴、云纹端饰与水墨展开。 */
+body.wmb-ui-optimized .wmb-xj-skill-banner {
+    position: fixed;
+    z-index: 120;
+    left: 50%;
+    top: calc(24% + var(--wmb-skill-offset, 0px));
+    min-width: 224px;
+    box-sizing: border-box;
+    padding: 12px 46px 11px;
+    color: var(--wmb-gold-light);
+    font: 800 23px/1.25 "STKaiti", "KaiTi", "Microsoft YaHei", serif;
+    letter-spacing: 5px;
+    text-align: center;
+    white-space: nowrap;
+    pointer-events: none;
+    border: 1px solid currentColor;
+    border-radius: 3px 14px 3px 14px;
+    background:
+        linear-gradient(90deg, transparent 0, rgba(12, 27, 25, .96) 15% 85%, transparent 100%),
+        repeating-linear-gradient(100deg, rgba(255,255,255,.025) 0 2px, transparent 2px 7px);
+    box-shadow: inset 0 1px rgba(255,255,255,.12), inset 0 -1px rgba(3,10,9,.8),
+        0 5px 17px rgba(1,8,7,.66), 0 0 14px rgba(111,169,154,.45);
+    text-shadow: 0 2px 3px #06100e, 0 0 7px currentColor;
+    transform: translateX(-50%);
+    transition: top 180ms ease-out;
+}
+
+body.wmb-ui-optimized .wmb-xj-skill-banner::before,
+body.wmb-ui-optimized .wmb-xj-skill-banner::after {
+    content: "◆";
+    position: absolute;
+    top: 50%;
+    width: 34px;
+    height: 34px;
+    color: currentColor;
+    font: 18px/34px "STKaiti", serif;
+    border: 1px solid currentColor;
+    background: radial-gradient(circle, rgba(168,210,189,.54), rgba(16,36,32,.95) 58%, rgba(5,15,13,.96));
+    box-shadow: inset 0 0 0 3px rgba(184,148,88,.2), 0 0 9px currentColor;
+    transform: translateY(-50%) rotate(45deg);
+}
+
+body.wmb-ui-optimized .wmb-xj-skill-banner::before { left: -10px; }
+body.wmb-ui-optimized .wmb-xj-skill-banner::after { right: -10px; }
+
+body.wmb-ui-optimized .wmb-xj-skill-passive {
+    color: #e2c58c;
+    animation: wmb-xj-skill-unfold 1.55s ease-out forwards;
+}
+
+body.wmb-ui-optimized .wmb-xj-skill-response {
+    color: #8bd6d1;
+    animation: wmb-xj-skill-sweep 1.55s cubic-bezier(.2,.8,.2,1) forwards;
+}
+
+body.wmb-ui-optimized .wmb-xj-skill-spell {
+    color: #b7a7e6;
+    animation: wmb-xj-skill-cloud 1.55s ease-out forwards;
+}
+
+body.wmb-ui-optimized .wmb-xj-skill-source {
+    animation: wmb-xj-source-pulse 1.55s ease-out;
+}
+
+body.wmb-ui-optimized .wmb-xj-skill-source-passive {
+    box-shadow: 0 0 0 3px rgba(224,197,141,.5), 0 0 17px rgba(224,197,141,.42), var(--wmb-shadow) !important;
+}
+
+body.wmb-ui-optimized .wmb-xj-skill-source-response {
+    box-shadow: 0 0 0 3px rgba(111,201,194,.56), 0 0 17px rgba(111,201,194,.48), var(--wmb-shadow) !important;
+}
+
+body.wmb-ui-optimized .wmb-xj-skill-source-spell {
+    box-shadow: 0 0 0 3px rgba(167,145,220,.58), 0 0 19px rgba(167,145,220,.5), var(--wmb-shadow) !important;
+}
+
+/* 攻击指向：直接附着本体指示线；非默认指示线使用同坐标静态底光。 */
+body.wmb-ui-optimized .linexy.wmb-xj-attack-line {
+    z-index: 4 !important;
+    box-shadow:
+        0 0 0 2px var(--wmb-xj-line-border, #17332f),
+        0 0 8px 4px var(--wmb-xj-line-color),
+        0 0 17px 7px var(--wmb-xj-line-color) !important;
+}
+
+body.wmb-ui-optimized .wmb-xj-attack-fallback {
+    position: absolute;
+    z-index: 3;
+    width: 10px;
+    box-sizing: border-box;
+    transform-origin: top center;
+    pointer-events: none;
+    border: 2px solid var(--wmb-xj-line-border, #17332f);
+    border-radius: 7px;
+    background: linear-gradient(90deg, transparent, var(--wmb-xj-line-color), #f4e5b9 52%, var(--wmb-xj-line-color), transparent);
+    box-shadow: 0 0 5px rgba(3,12,10,.9), 0 0 13px var(--wmb-xj-line-color);
+}
+
+body.wmb-ui-optimized .wmb-xj-line-shui,
+body.wmb-ui-optimized .wmb-xj-hit-shui { --wmb-xj-line-color:#70cbd1; --wmb-xj-line-border:#205863; }
+body.wmb-ui-optimized .wmb-xj-line-huo,
+body.wmb-ui-optimized .wmb-xj-hit-huo { --wmb-xj-line-color:#d86e4c; --wmb-xj-line-border:#662b20; }
+body.wmb-ui-optimized .wmb-xj-line-feng,
+body.wmb-ui-optimized .wmb-xj-hit-feng { --wmb-xj-line-color:#76b997; --wmb-xj-line-border:#285947; }
+body.wmb-ui-optimized .wmb-xj-line-lei,
+body.wmb-ui-optimized .wmb-xj-hit-lei { --wmb-xj-line-color:#9d87d8; --wmb-xj-line-border:#493c72; }
+body.wmb-ui-optimized .wmb-xj-line-di,
+body.wmb-ui-optimized .wmb-xj-hit-di { --wmb-xj-line-color:#c29b5b; --wmb-xj-line-border:#604a25; }
+body.wmb-ui-optimized .wmb-xj-line-guang,
+body.wmb-ui-optimized .wmb-xj-hit-guang { --wmb-xj-line-color:#ead79a; --wmb-xj-line-border:#7d682d; }
+body.wmb-ui-optimized .wmb-xj-line-an,
+body.wmb-ui-optimized .wmb-xj-hit-an { --wmb-xj-line-color:#70558f; --wmb-xj-line-border:#30213e; }
+body.wmb-ui-optimized .wmb-xj-line-default,
+body.wmb-ui-optimized .wmb-xj-hit-default { --wmb-xj-line-color:#9cc7b7; --wmb-xj-line-border:#365c51; }
+
+body.wmb-ui-optimized .wmb-xj-hit-fx {
+    position: fixed;
+    z-index: 110;
+    box-sizing: border-box;
+    width: 48px;
+    height: 48px;
+    margin: -24px;
+    pointer-events: none;
+    border: 6px double var(--wmb-xj-line-color);
+    border-radius: 50%;
+    box-shadow:
+        0 0 8px 3px var(--wmb-xj-line-color),
+        0 0 22px 7px var(--wmb-xj-line-color),
+        inset 0 0 13px 2px var(--wmb-xj-line-color);
+    animation: wmb-xj-hit .8s ease-out forwards;
+}
+
+/* 操作按钮与技能栏。 */
+body.wmb-ui-optimized .control,
+body.wmb-ui-optimized .dialog .textbutton,
+body.wmb-ui-optimized #skill-control,
+body.wmb-ui-optimized .skill-control {
+    background: var(--wmb-panel-soft) !important;
+    border: 1px solid var(--wmb-line) !important;
+    border-radius: 4px 12px 4px 12px !important;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4), inset 0 1px rgba(255, 255, 255, 0.05) !important;
+    backdrop-filter: blur(var(--wmb-blur));
+    -webkit-backdrop-filter: blur(var(--wmb-blur));
+}
+
+body.wmb-ui-optimized .control > div,
+body.wmb-ui-optimized .dialog .textbutton,
+body.wmb-ui-optimized .skill-control .skillitem,
+body.wmb-ui-optimized #skill-control .skillitem {
+    color: var(--wmb-text) !important;
+    font-family: "STKaiti", "KaiTi", "Microsoft YaHei", serif;
+    letter-spacing: 1px;
+    text-shadow: 0 1px 3px #000 !important;
+    transition: transform 140ms ease, background-color 140ms ease, color 140ms ease;
+}
+
+body.wmb-ui-optimized .control > div,
+body.wmb-ui-optimized .skill-control .skillitem,
+body.wmb-ui-optimized #skill-control .skillitem {
+    border-radius: 3px 9px 3px 9px !important;
+}
+
+body.wmb-ui-optimized .control > div:hover,
+body.wmb-ui-optimized .dialog .textbutton.selectable:hover,
+body.wmb-ui-optimized .dialog .textbutton.selectable:active,
+body.wmb-ui-optimized .dialog .textbutton.selectable.selected,
+body.wmb-ui-optimized .skill-control .skillitem:hover,
+body.wmb-ui-optimized #skill-control .skillitem:hover {
+    color: #fff7dd !important;
+    background: linear-gradient(90deg, rgba(184, 148, 88, 0.22), rgba(111, 169, 154, 0.15)) !important;
+    transform: translateY(-1px);
+}
+
+body.wmb-ui-optimized .control > div.disabled,
+body.wmb-ui-optimized .skillitem.disabled {
+    color: #717b87 !important;
+    filter: saturate(0.45);
+}
+
+/* 左上角系统按钮不是操作区的 .control，单独覆盖其真实容器。 */
+body.wmb-ui-optimized #system1 > .wmb-system-button,
+body.wmb-ui-optimized #system2 > .wmb-system-button {
+    color: var(--wmb-text) !important;
+    background: linear-gradient(135deg, rgba(38, 53, 47, 0.94), rgba(14, 25, 23, 0.9)) !important;
+    border: 1px solid var(--wmb-line) !important;
+    border-radius: 3px 9px 3px 9px !important;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.42), inset 0 1px rgba(255, 255, 255, 0.06) !important;
+    font-family: "STKaiti", "KaiTi", "Microsoft YaHei", serif !important;
+    text-shadow: 0 1px 3px #000 !important;
+    transition: transform 140ms ease, color 140ms ease, border-color 140ms ease;
+}
+
+body.wmb-ui-optimized #system1 > .wmb-system-button:hover,
+body.wmb-ui-optimized #system2 > .wmb-system-button:hover,
+body.wmb-ui-optimized #system1 > .wmb-system-button.glow,
+body.wmb-ui-optimized #system2 > .wmb-system-button.glow {
+    color: #fff7dd !important;
+    border-color: var(--wmb-gold-light) !important;
+    transform: translateY(-1px);
+}
+
+/* 手牌与场上牌保持原卡面，增加统一的金属边线和选中反馈。 */
+body.wmb-ui-optimized .card {
+    border-radius: 5px 9px 5px 9px !important;
+    box-shadow: 0 0 0 1px rgba(232, 216, 176, 0.27), 0 5px 12px rgba(0, 0, 0, 0.48) !important;
+}
+
+body.wmb-ui-optimized .card.selectable {
+    box-shadow: 0 0 0 2px rgba(113, 201, 196, 0.76), 0 0 12px rgba(113, 201, 196, 0.38), 0 6px 14px rgba(0, 0, 0, 0.48) !important;
+}
+
+body.wmb-ui-optimized .card.selected {
+    box-shadow: 0 0 0 2px var(--wmb-gold-light), 0 0 18px rgba(216, 184, 114, 0.68), 0 8px 18px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* 正反面使用同一张无方向卡背；排除同样使用.card节点的专属指示物。 */
+body.wmb-ui-optimized .card:empty:not(.mark),
+body.wmb-ui-optimized .card.infohidden:not(.mark),
+body.wmb-ui-optimized .card.infohidden:not(.infoflip):not(.mark) {
+    background-image: url("image/cardback_xianxia.png") !important;
+    background-size: 100% 100% !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+}
+
+/* 选择框、技能说明、历史记录。 */
+body.wmb-ui-optimized .dialog,
+body.wmb-ui-optimized .popup-container > .popup,
+body.wmb-ui-optimized .menu-container > .menu,
+body.wmb-ui-optimized #window .dialog {
+    color: var(--wmb-text) !important;
+    background: var(--wmb-panel) !important;
+    border: 1px solid var(--wmb-line) !important;
+    border-radius: 5px 15px 5px 15px !important;
+    box-shadow: var(--wmb-shadow), inset 0 1px rgba(255, 255, 255, 0.06) !important;
+    backdrop-filter: blur(var(--wmb-blur));
+    -webkit-backdrop-filter: blur(var(--wmb-blur));
+}
+
+/* 长文本仅调整排版，外观与反馈共用上方操作按钮规则。 */
+body.wmb-ui-optimized .dialog .textbutton {
+    box-sizing: border-box;
+    margin: 6px 0 !important;
+    padding: 10px 12px !important;
+    font-size: 18px;
+    white-space: normal;
+    overflow-wrap: anywhere;
+}
+
+/* 人物点击详情：普通简介与完整角色卡采用两套核心节点。 */
+body.wmb-ui-optimized .dialog.popped.wmb-detail-panel,
+body.wmb-ui-optimized .menubg.charactercard.wmb-detail-panel {
+    color: var(--wmb-text) !important;
+    background:
+        radial-gradient(circle at 92% 5%, rgba(111, 169, 154, 0.16), transparent 36%),
+        linear-gradient(145deg, rgba(224, 197, 141, 0.09), transparent 31%),
+        var(--wmb-panel) !important;
+    border: 1px solid var(--wmb-line) !important;
+    border-radius: 5px 15px 5px 15px !important;
+    box-shadow: var(--wmb-shadow), inset 0 1px rgba(255, 255, 255, 0.07) !important;
+    backdrop-filter: blur(var(--wmb-blur));
+    -webkit-backdrop-filter: blur(var(--wmb-blur));
+}
+
+body.wmb-ui-optimized .wmb-detail-panel .caption,
+body.wmb-ui-optimized .wmb-detail-panel .name,
+body.wmb-ui-optimized .wmb-detail-panel .skillname {
+    color: var(--wmb-gold-light) !important;
+    text-shadow: 0 1px 3px #000 !important;
+}
+
+body.wmb-ui-optimized .charactercard .menubutton {
+    color: var(--wmb-text) !important;
+    border-color: var(--wmb-line) !important;
+    background-color: var(--wmb-panel-soft) !important;
+}
+
+/* 联机等待房：玩家席位和房间操作按钮均位于 arena 之外。 */
+body.wmb-ui-optimized .player.connect.wmb-connect-player {
+    border: 1px solid rgba(216, 184, 114, 0.52) !important;
+    border-radius: 4px 12px 4px 12px !important;
+    background-color: rgba(16, 26, 25, 0.72) !important;
+    box-shadow: 0 0 0 1px rgba(111, 169, 154, 0.2), var(--wmb-shadow) !important;
+}
+
+body.wmb-ui-optimized .connectbutton.wmb-connect-button {
+    color: var(--wmb-text) !important;
+    background: linear-gradient(135deg, rgba(184, 148, 88, 0.32), rgba(38, 75, 67, 0.88)) !important;
+    border: 1px solid var(--wmb-gold) !important;
+    border-radius: 4px 12px 4px 12px !important;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45) !important;
+    font-family: "STKaiti", "KaiTi", "Microsoft YaHei", serif !important;
+    letter-spacing: 2px;
+    text-shadow: 0 1px 3px #000 !important;
+}
+
+body.wmb-ui-optimized .wmb-room-list .popup.text {
+    color: var(--wmb-text) !important;
+    background: linear-gradient(90deg, rgba(38, 53, 47, 0.84), rgba(16, 26, 25, 0.72)) !important;
+    border: 1px solid rgba(184, 148, 88, 0.38) !important;
+    border-radius: 3px 10px 3px 10px !important;
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.04) !important;
+}
+
+body.wmb-ui-optimized .wmb-room-list .popup.text:hover {
+    color: #fff7dd !important;
+    border-color: var(--wmb-gold-light) !important;
+    background: linear-gradient(90deg, rgba(184, 148, 88, 0.23), rgba(111, 169, 154, 0.17)) !important;
+}
+
+body.wmb-ui-optimized .connectevents.wmb-connect-hall-button {
+    color: var(--wmb-text) !important;
+    background-color: var(--wmb-panel-soft) !important;
+    border: 1px solid var(--wmb-line) !important;
+    border-radius: 3px 9px 3px 9px !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.42) !important;
+}
+
+body.wmb-ui-optimized .dialog .caption,
+body.wmb-ui-optimized .dialog .content > div:first-child {
+    color: var(--wmb-gold-light) !important;
+    font-family: "STKaiti", "KaiTi", "Microsoft YaHei", serif;
+    letter-spacing: 2px;
+}
+
+body.wmb-ui-optimized #historybar,
+body.wmb-ui-optimized #sidebar,
+body.wmb-ui-optimized .logv {
+    color: var(--wmb-text) !important;
+    text-shadow: 0 1px 3px #000 !important;
+}
+
+body.wmb-ui-optimized #historybar > div {
+    border-color: rgba(216, 184, 114, 0.34) !important;
+    background-color: rgba(8, 14, 24, 0.68) !important;
+}
+
+body.wmb-ui-optimized .tiaoJian {
+    color: var(--wmb-jade-light) !important;
+}
+
+body.wmb-ui-optimized .hong {
+    color: #ff958e !important;
+}
+
+body.wmb-ui-optimized .lan {
+    color: #8fcaff !important;
+}
+
+body.wmb-ui-compact .control,
+body.wmb-ui-compact #skill-control,
+body.wmb-ui-compact .skill-control {
+    padding: 2px 5px !important;
+}
+
+body.wmb-ui-compact .dialog {
+    line-height: 1.35;
+}
+
+@keyframes wmb-current-breathe {
+    0%, 100% {
+        filter: brightness(1) drop-shadow(0 0 2px rgba(231, 189, 90, 0.5));
+    }
+    50% {
+        filter: brightness(1.12) drop-shadow(0 0 7px rgba(255, 224, 132, 0.9));
+    }
+}
+
+@keyframes wmb-target-candidate {
+    0%, 100% { outline-color: rgba(126, 178, 164, .68); }
+    50% { outline-color: rgba(190, 230, 211, 1); }
+}
+
+@keyframes wmb-target-order-in {
+    0% { opacity: 0; transform: scale(.45) rotate(-18deg); }
+    100% { opacity: 1; transform: scale(1) rotate(0); }
+}
+
+@keyframes wmb-xj-skill-unfold {
+    0% { opacity: 0; transform: translateX(-50%) scaleX(.22); filter: blur(5px); }
+    24%, 72% { opacity: 1; transform: translateX(-50%) scaleX(1); filter: blur(0); }
+    100% { opacity: 0; transform: translateX(-50%) translateY(-9px); }
+}
+
+@keyframes wmb-xj-skill-sweep {
+    0% { opacity: 0; transform: translateX(-68%) skewX(-9deg); }
+    24%, 72% { opacity: 1; transform: translateX(-50%) skewX(0); }
+    100% { opacity: 0; transform: translateX(-34%) skewX(7deg); }
+}
+
+@keyframes wmb-xj-skill-cloud {
+    0% { opacity: 0; transform: translateX(-50%) scale(.72); filter: blur(9px); }
+    30%, 70% { opacity: 1; transform: translateX(-50%) scale(1.04); filter: blur(0); }
+    100% { opacity: 0; transform: translateX(-50%) scale(1.14); filter: blur(5px); }
+}
+
+@keyframes wmb-xj-source-pulse {
+    0%, 100% { filter: brightness(1); }
+    45% { filter: brightness(1.3); }
+}
+
+@keyframes wmb-xj-hit {
+    0% { opacity: 1; transform: scale(.25) rotate(0); }
+    55% { opacity: .9; transform: scale(2) rotate(120deg); }
+    100% { opacity: 0; transform: scale(3) rotate(200deg); }
+}
+
+body.wmb-ui-optimized:not(.wmb-ui-no-motion) .player.current_action > .wmb-xj-turn-label,
+body.wmb-ui-optimized:not(.wmb-ui-no-motion) .player.glow_phase > .wmb-xj-turn-label {
+    animation: wmb-current-breathe 2.6s ease-in-out infinite;
+}
+
+body.wmb-ui-no-motion .player.current_action,
+body.wmb-ui-no-motion .player.glow_phase,
+body.wmb-ui-no-motion .wmb-system-button,
+body.wmb-ui-no-motion .control,
+body.wmb-ui-no-motion .skill-control .skillitem,
+body.wmb-ui-no-motion #skill-control .skillitem,
+body.wmb-ui-no-motion .wmb-xj-skill-banner,
+body.wmb-ui-no-motion .wmb-xj-skill-source,
+body.wmb-ui-no-motion .wmb-xj-attack-line,
+body.wmb-ui-no-motion .wmb-xj-attack-fallback,
+body.wmb-ui-no-motion .wmb-xj-hit-fx,
+body.wmb-ui-no-motion #arena.selecting .player.selectable,
+body.wmb-ui-no-motion .wmb-target-order {
+    animation: none !important;
+    transition: none !important;
+}
+
+@media (max-width: 1050px), (max-height: 720px) {
+    body.wmb-ui-optimized .wmb-bgm-panel {
+        padding: 6px 7px 7px;
+    }
+
+    body.wmb-ui-optimized .wmb-scoreboard {
+        width: 238px !important;
+        transform: scale(0.92);
+        transform-origin: right bottom;
+    }
+
+    body.wmb-ui-optimized .wmb-scoreboard td:nth-child(2) {
+        width: 112px !important;
+    }
+}
+
+/* The core scales body on phones. Use its visible logical size, not vw/vh. */
+body.wmb-ui-optimized .wmb-stone-summary { display: none; }
+
+body.wmb-ui-optimized.wmb-ui-small-screen .wmb-scoreboard {
+    box-sizing: border-box;
+    width: 280px !important;
+    width: min(280px, calc(var(--wmb-layout-width) - 16px)) !important;
+    min-height: 0;
+    padding: 3px 5px !important;
+    font-size: 14px;
+    line-height: 1.2;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    transform: none;
+}
+
+body.wmb-ui-optimized.wmb-ui-small-screen .wmb-scoreboard::before,
+body.wmb-ui-optimized.wmb-ui-small-screen .wmb-scoreboard::after,
+body.wmb-ui-optimized.wmb-ui-small-screen .wmb-scoreboard tr:first-child { display: none; }
+body.wmb-ui-optimized.wmb-ui-small-screen .wmb-scoreboard.bottom-center { transform: translateX(-50%); }
+body.wmb-ui-optimized.wmb-ui-small-screen .wmb-scoreboard table { border-spacing: 1px; }
+body.wmb-ui-optimized.wmb-ui-small-screen .wmb-scoreboard tr:not(:first-child) td {
+    height: 24px;
+    padding: 1px 2px;
+}
+body.wmb-ui-optimized.wmb-ui-small-screen .wmb-scoreboard td:nth-child(2) { width: 108px !important; }
+body.wmb-ui-optimized.wmb-ui-small-screen .wmb-scoreboard td:first-child::before { content: "士气 "; }
+body.wmb-ui-optimized.wmb-ui-small-screen .wmb-scoreboard td:last-child::before { content: "星杯 "; }
+body.wmb-ui-optimized.wmb-ui-small-screen .wmb-scoreboard td::before { font-size: 12px; color: var(--wmb-muted); }
+body.wmb-ui-optimized.wmb-ui-small-screen .wmb-scoreboard tr:not(:first-child) td:first-child span,
+body.wmb-ui-optimized.wmb-ui-small-screen .wmb-scoreboard tr:not(:first-child) td:last-child span { font-size: 18px; }
+body.wmb-ui-optimized.wmb-ui-small-screen .wmb-scoreboard .wmb-starstone { width: 16px !important; height: 16px !important; }
+body.wmb-ui-optimized.wmb-ui-small-screen .wmb-scoreboard td:nth-child(2) > img { display: none; }
+body.wmb-ui-optimized.wmb-ui-small-screen .wmb-stone-summary {
+    display: inline-flex;
+    gap: 6px;
+    align-items: center;
+    font: 14px/22px "Microsoft YaHei", sans-serif;
+    color: var(--wmb-text);
+}
+body.wmb-ui-optimized.wmb-ui-small-screen .wmb-stone-summary > span { display: inline-flex; align-items: center; }
+body.wmb-ui-optimized.wmb-ui-small-screen .wmb-stone-summary img { width: 16px; height: 16px; }
+
+/* Replace the core's single absolute-positioned control row only on small screens. */
+body.wmb-ui-optimized.wmb-ui-small-screen #arena #control {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 6px;
+    box-sizing: border-box;
+    left: 8px;
+    width: calc(100% - 16px);
+    top: auto !important;
+    bottom: 150px;
+    height: auto;
+    max-height: calc(var(--wmb-layout-height) * .28);
+    overflow-y: auto;
+    pointer-events: auto;
+}
+body.wmb-ui-optimized.wmb-ui-small-screen #arena #control > .control {
+    position: relative !important;
+    left: auto !important;
+    transform: none !important;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    box-sizing: border-box;
+    max-width: 100%;
+    white-space: normal;
+    flex-shrink: 0;
+}
+body.wmb-ui-optimized.wmb-ui-small-screen.wmb-ui-has-scoreboard #arena #control {
+    width: calc(100% - 304px);
+}
+body.wmb-ui-optimized.wmb-ui-small-screen #control > .control > div {
+    box-sizing: border-box;
+    max-width: 100%;
+    min-height: 32px;
+    padding: 5px 7px;
+    white-space: normal;
+    overflow-wrap: anywhere;
+}
+body.wmb-ui-optimized.wmb-ui-small-screen #arena.choose-character #control,
+body.wmb-ui-optimized.wmb-ui-small-screen #arena.choose-to-move #control,
+body.wmb-ui-optimized.wmb-ui-small-screen #arena.discard-player-card #control,
+body.wmb-ui-optimized.wmb-ui-small-screen #arena.gain-player-card #control,
+body.wmb-ui-optimized.wmb-ui-small-screen #arena.choose-player-card #control { bottom: calc(18px + var(--wmb-arena-overflow, 0px)); }
+
+body.wmb-ui-optimized.wmb-ui-small-screen #window > .dialog.popped:not(.static),
+body.wmb-ui-optimized.wmb-ui-small-screen .menubg.charactercard {
+    box-sizing: border-box;
+    max-width: calc(var(--wmb-layout-width) - 24px);
+    max-height: calc(var(--wmb-layout-height) - 24px);
+    overflow-y: auto;
+}
+body.wmb-ui-optimized.wmb-ui-small-screen .dialog .textbutton {
+    max-width: 100%;
+    margin: 4px 0 !important;
+    padding: 7px 9px !important;
+    font-size: 16px;
+}
+body.wmb-ui-optimized.wmb-ui-small-screen .wmb-xj-skill-banner {
+    min-width: 0;
+    max-width: calc(var(--wmb-layout-width) - 48px);
+    padding: 8px 24px;
+    font-size: 19px;
+    letter-spacing: 2px;
+    white-space: normal;
+    overflow-wrap: anywhere;
+}
+body.wmb-ui-optimized.wmb-ui-small-screen .wmb-target-counter {
+    box-sizing: border-box;
+    min-width: 0;
+    max-width: calc(var(--wmb-layout-width) - 24px);
+    padding: 5px 10px;
+    font-size: 15px;
+}
+body.wmb-ui-optimized.wmb-ui-small-screen .wmb-bgm-controls button,
+body.wmb-ui-optimized.wmb-ui-small-screen .wmb-bgm-restore { height: 32px !important; }
