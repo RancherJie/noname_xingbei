@@ -3,21 +3,6 @@
 import { game } from "../game/index.js";
 import { lib, Library } from "../library/index.js";
 
-const bundledExtensionNames = new Set([
-	"无名杯UI优化包",
-	"百年战争·序章",
-	"十周年-噩梦人机",
-	"十周年-AI优化版",
-	"宿命挽歌",
-	"创世纪",
-	"电啸龙吟",
-	"轮回遗梦",
-	"十周年语音包",
-	"峡谷幻音",
-	"永夜残响",
-]);
-const bundledExtensionSourceVersion = "local-2026-11-13-v23";
-
 /**
  * @param {string} name - 卡牌包名
  * @returns {Promise<void>}
@@ -68,18 +53,13 @@ function generateImportFunction(type, pathParser) {
 			}
 		}
 		let path = pathParser(name);
-		const getImportPath = () => {
-			return type === "extension" && bundledExtensionNames.has(name)
-				? `${path}?bundled=${bundledExtensionSourceVersion}`
-				: path;
-		};
 		// 通过浏览器自带的script标签导入可直接获取报错信息，且不会影响JS运行
 		// 此时代码内容也将缓存在浏览器中，故再次import后将不会重新执行代码内容（测试下来如此）
 		const [status, script] = await new Promise(resolve => {
 			const createScript = () => {
 				const script = document.createElement("script");
 				script.type = "module";
-				script.src = `${lib.assetURL}noname/init/${getImportPath()}`;
+				script.src = `${lib.assetURL}noname/init/${path}`;
 				script.onload = () => resolve(["ok", script]);
 				return script;
 			};

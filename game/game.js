@@ -147,7 +147,7 @@
 	// 设置该 <script> 元素为模块脚本
 	script.type = "module";
 	// 设置 <script> 元素的 src 属性,指向 entry.js 文件
-	script.src = `${assetURL}game/entry.js?bundled=local-2026-11-13-v22`;
+	script.src = `${assetURL}game/entry.js`;
 	// 设置该脚本为异步加载
 	script.async = true;
 	// 为 <script> 元素设置 onerror 事件处理程序

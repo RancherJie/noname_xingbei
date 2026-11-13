@@ -8,7 +8,7 @@ import { gnc } from "../gnc/index.js";
 import { userAgentLowerCase, nonameInitialized, AsyncFunction, device, leaveCompatibleEnvironment } from "../util/index.js";
 import * as config from "../util/config.js";
 import { promiseErrorHandlerMap } from "../util/browser.js";
-import { importCardPack, importCharacterPack, importExtension, importMode } from "./import.js?bundled=local-2026-11-13-v22";
+import { importCardPack, importCharacterPack, importExtension, importMode } from "./import.js";
 import { initializeSandboxRealms } from "../util/initRealms.js";
 import { ErrorManager } from "../util/error.js";
 import { rootURL } from "../../noname.js";

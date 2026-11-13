@@ -99,13 +99,16 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 
     function configureDefaultStarryBackground() {
         var marker = "extension_" + extensionName + "_starryBackgroundDefaultsV1";
-        if (lib.config[marker]) return;
-        if (!lib.config.image_background || lib.config.image_background === "default") {
-            game.saveConfig("image_background", "xingbei_starry");
+        var backgroundPath = "ext:" + extensionName + "/image/background/xingbei_starry.jpg";
+        var currentBackground = lib.config.image_background;
+        if (currentBackground === "xingbei_starry" || (!lib.config[marker] && (!currentBackground || currentBackground === "default"))) {
+            game.saveConfig("image_background", backgroundPath);
         }
-        game.saveConfig("image_background_blur", true);
-        game.saveConfig(marker, true);
-        if (ui.background && game.updateBackground) game.updateBackground();
+        if (!lib.config[marker]) {
+            game.saveConfig("image_background_blur", true);
+            game.saveConfig(marker, true);
+        }
+        if (lib.config.image_background === backgroundPath && ui.background && game.updateBackground) game.updateBackground();
     }
 
     function installExtensionIdentityCompatibility() {
@@ -1377,7 +1380,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             skill: []
         },
         background: {
-            xingbei_starry: "星空·蓝紫"
+            ["ext:" + extensionName + "/image/background/xingbei_starry.jpg"]: "星空·蓝紫"
         }
     };
 });
