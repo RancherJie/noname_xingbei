@@ -1596,6 +1596,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 check:function (event,player){
                     return player.countCards('h')>=3;
+                },
+                ai:{
+                    shuiJing:true,
                 }
             },
             yuYan:{
