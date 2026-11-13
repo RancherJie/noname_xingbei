@@ -99,6 +99,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 
     function configureDefaultStarryBackground() {
         var marker = "extension_" + extensionName + "_starryBackgroundDefaultsV1";
+        if (currentTheme() !== "starry") return;
         var backgroundPath = "ext:" + extensionName + "/image/background/xingbei_starry.jpg";
         var currentBackground = lib.config.image_background;
         if (currentBackground === "xingbei_starry" || (!lib.config[marker] && (!currentBackground || currentBackground === "default"))) {
@@ -332,11 +333,11 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
         });
     }
     function currentTheme() {
-        return "xianjian";
+        return configValue("uiTheme", "starry");
     }
 
     function isXianJianTheme() {
-        return currentTheme() === "xianjian";
+        return currentTheme() === "xianjian" || currentTheme() === "starry";
     }
 
     function isWaterbearTheme() {
@@ -344,7 +345,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
     }
 
     function isCustomTheme() {
-        return true;
+        return isXianJianTheme() || isWaterbearTheme();
     }
 
     function toggleClass(node, name, enabled) {
@@ -1288,10 +1289,9 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
         if (!isCustomTheme()) return;
         if (document.querySelector('link[data-wmb-ui-style="base"]')) return;
         var styleRoot = lib.assetURL + "extension/" + extensionName + "/";
-        [
-            ["extension.css?rev=2.22", "base"],
-            ["starry.css?rev=2.52", "theme"],
-        ].forEach(function (item) {
+        var styles = [["extension.css?rev=2.22", "base"]];
+        if (currentTheme() === "starry") styles.push(["starry.css?rev=2.52", "theme"]);
+        styles.forEach(function (item) {
             var style = document.createElement("link");
             style.rel = "stylesheet";
             style.href = styleRoot + item[0];
@@ -1302,7 +1302,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 
     return {
         name: extensionName,
-        version: "2.52",
+        version: "2.53",
         editable: false,
         precontent: function () {
             configureDefaultStarryBackground();
@@ -1335,6 +1335,15 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             if (document.body) decorateArena();
         },
         config: {
+            uiTheme: {
+                name: "界面风格",
+                init: "starry",
+                item: {
+                    starry: "星空风",
+                    xianjian: "仙剑版"
+                },
+                intro: "默认使用蓝紫色星空风；可切换为原有青绿色仙剑配色。切换后重新启动游戏。"
+            },
             compactLayout: {
                 name: "紧凑角色与操作面板",
                 init: false,
@@ -1365,14 +1374,14 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             }
         },
         help: {
-            "无名杯UI优化包": "独立优化无名杯对局界面。采用水墨青黛、旧宣纸、青玉、暗金铜饰与云气剑纹，覆盖战况面板、角色框、手牌、行动按钮、技能栏、选择弹窗与日志显示，不修改游戏规则或核心文件。"
+            "无名杯UI优化包": "独立优化无名杯对局界面，提供蓝紫色星空风与青绿色仙剑版配色；覆盖战况面板、角色框、手牌、行动按钮、技能栏、选择弹窗与日志显示，不修改游戏规则或核心文件。"
         },
         package: {
-            intro: "优化无名杯对局UI：重绘战况面板视觉，统一角色框、行动按钮、技能栏、卡牌、弹窗与日志的美术语言。",
+            intro: "优化无名杯对局UI：重绘战况面板视觉，统一角色框、行动按钮、技能栏、卡牌、弹窗与日志；提供星空风与仙剑配色切换。",
             author: "蒙牛 / Codex",
             diskURL: "",
             forumURL: "",
-            version: "2.52"
+            version: "2.53"
         },
         files: {
             character: [],
