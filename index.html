@@ -5,22 +5,6 @@
 	<meta name="format-detection" content="telephone=no" />
 	<meta name="apple-mobile-web-app-capable" content="yes" />
 	<meta name="viewport" content="user-scalable=no, viewport-fit=cover" />
-	<script>
-		// Bundled extension files are authoritative; discard stale downloaded source overrides.
-		const bundledExtensionCacheSuffixes = [
-			"extension_无名杯UI优化包",
-			"extension_百年战争·序章",
-			"extension_十周年-噩梦人机",
-			"extension_十周年-AI优化版",
-			"extension_宿命挽歌",
-		];
-		for (let index = localStorage.length - 1; index >= 0; index--) {
-			const key = localStorage.key(index);
-			if (key && bundledExtensionCacheSuffixes.some(suffix => key.endsWith(suffix))) {
-				localStorage.removeItem(key);
-			}
-		}
-	</script>
 	<title>AsteriatedGrail星杯传说</title>
 	<script>
 		if (

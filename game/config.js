@@ -82,7 +82,7 @@ window.config = {
 	hp_style: "xingBei",
 
 	image_character: "default",
-	image_background: "xingbei_starry",
+	image_background: "default",
 
 	asset_image: true,
 	asset_font: true,
@@ -135,7 +135,7 @@ window.config = {
 	connect_characters: ['yiDuanYeHuo','shenZiChuangLin','sanBan','siBan','zhongMoDaoZhu','teDian','poXiao','boss'],//默认关闭的角色包
 	connect_cards: [],
 	plays: [],
-	extensions: ['无名杯UI优化包','百年战争·序章','十周年-噩梦人机','十周年-AI优化版','宿命挽歌'],
+	extensions: [],
 	banned: [],
 	bannedcards: [],
 	forbidlist: [//互斥角色组合

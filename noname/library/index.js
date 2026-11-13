@@ -1711,7 +1711,7 @@ export class Library {
 				},
 				image_background: {
 					name: "游戏背景",
-					init: "xingbei_starry",
+					init: "default",
 					item: {},
 					visualBar: function (node, item, create) {
 						if (node.created) {
@@ -1864,7 +1864,7 @@ export class Library {
 				},
 				image_background_blur: {
 					name: "背景模糊",
-					init: true,
+					init: false,
 					onclick(bool) {
 						game.saveConfig("image_background_blur", bool);
 						if (lib.config.image_background_blur) {
