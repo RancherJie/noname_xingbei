@@ -1505,7 +1505,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.showHiddenCards(card);
                     var xiBie2=get.xiBie(card);
                     if(xiBie==xiBie2){
-                        await player.discard(card,'yuYan');
+                        await player.loseToDiscardpile(card);
                         await player.addZhanJi('baoShi');
                         await event.trigger('xianJi');
                     }
@@ -1540,7 +1540,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         else return 1;
                     }).forResultControl();
                     await player.draw(num);
-                    await player.discard(player.getGaiPai('yuYan'));
+                    await player.loseToDiscardpile(player.getGaiPai('yuYan'));
                     player.removeSkill('yuYan_zero');
 
                     list=[];
@@ -1673,7 +1673,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 onremove:function(player, skill) {
                     const cards = player.getExpansions('yuYan');
-                    if (cards.length) player.discard(cards);
+                    if (cards.length) player.loseToDiscardpile(cards);
                 },
                 markimage:'image/card/zhuanShu/moRiYuYan.png',
                 trigger:{global:'gainBefore'},
