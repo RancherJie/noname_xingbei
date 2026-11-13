@@ -6607,6 +6607,7 @@ const pack_skills = {
         markimage: 'image/card/zhuanShu/yongHengYueZhang.png',
         subSkill: {
             jiAngKuangXiangQu: {
+                priority: -1,
                 trigger: { player: 'phaseBegin' },
                 filter: function (event, player) {
                     return player.hasZhiShiWu('yongHengYueZhang');

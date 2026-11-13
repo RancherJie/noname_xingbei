@@ -1009,6 +1009,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
             },
             yingFeng:{
+                priority:-0.5,
                 trigger:{global:'phaseBegin'},
                 filter:function(event,player){
                     return event.player.hasZhiShiWu('fengXueX')&&player.countZhiShiWu('mi')>0;;
