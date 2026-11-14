@@ -640,7 +640,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     content: "mark",
                 },
                 onremove: "storage",
-                markimage: "image/card/zhiShiWu/hong.png",
+                markimage: "image/card/zhiShiWu/hong.webp",
             },
 
             // 游击士
@@ -1506,7 +1506,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
             },
             yuanChu_shengHuangHuiGuangPao:{
-                markimage:'image/card/zhuanShu/yuanChu_shengHuangHuiGuangPao.png',
+                markimage:'image/card/zhuanShu/yuanChu_shengHuangHuiGuangPao.webp',
                 intro:{
                     content:`<span class='tiaoJian'>(仅【圣煌形态】下可发动，移除4点</span><span class='hong'>【信仰】</span><span class='tiaoJian'>，然后移除等同我方落后士气的</span><span class='hong'>【信仰】</span><span class='tiaoJian'>数)</span>所有角色将手牌调整为4张，我方【星杯区】+1[星杯]，然后将一方[士气]调整与另一方相同,我方所有角色各+1[治疗]，你额外+1[攻击行动]或[法术行动]并将【圣煌辉光炮】翻面。`,
                     nocount:true,
@@ -1586,7 +1586,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 }
             },
             yuanChu_shengHuangYuHui:{
-                markimage:'image/card/zhuanShu/yuanChu_shengHuangYuHui.png',
+                markimage:'image/card/zhuanShu/yuanChu_shengHuangYuHui.webp',
                 intro:{
                     content:`<span class='tiaoJian'>(仅【圣煌形态】下可发动，移除4点</span><span class='hong'>【信仰】</span><span class='tiaoJian'>，然后移除等同我方落后士气的</span><span class='hong'>【信仰】</span><span class='tiaoJian'>数)</span>所有角色将手牌调整为4张，我方【星杯区】+1[星杯]，然后将一方[士气]调整与另一方相同，然后移除【圣煌余辉】。`,
                     nocount:true,
@@ -2668,7 +2668,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     max: 3,
                 },
                 onremove: "storage",
-                markimage: "image/card/zhiShiWu/hong.png",
+                markimage: "image/card/zhiShiWu/hong.webp",
             },
 
             //怠惰少女
@@ -3323,7 +3323,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                     `;
                             },
                         },
-                        markimage: 'image/card/zhuanShu/tianPing_zuo.png',
+                        markimage: 'image/card/zhuanShu/tianPing_zuo.webp',
                         trigger:{player:'addToExpansionAfter'},
                         forced:true,
                         filter:function(event,player){
@@ -3357,7 +3357,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                     `;
                             },
                         },
-                        markimage: 'image/card/zhuanShu/tianPing_you.png',
+                        markimage: 'image/card/zhuanShu/tianPing_you.webp',
                         trigger:{player:'discard'},
                         forced:true,
                         filter:function(event,player){
@@ -3577,7 +3577,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     content:'mark',
                 },
                 onremove: "storage",
-                markimage: 'image/card/zhiShiWu/hong.png',
+                markimage: 'image/card/zhiShiWu/hong.webp',
             },
 
             //乐团首席

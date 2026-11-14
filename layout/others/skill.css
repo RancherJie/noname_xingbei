@@ -17,13 +17,13 @@
     height: 50px;
     width: 50px;
     /* background: yellow; */
-    background: url(../../image/card/yiwu_click.png) center/100% no-repeat;
+    background: url(../../image/card/yiwu_click.webp) center/100% no-repeat;
     left: 50%;
     transform: translate(-50%, -50%);
     top: 14%;
 }
 .dialog.dclieqiong>.position.selected_cp {
-    background-image: url(../../image/card/yiwu_click_chosen.png);
+    background-image: url(../../image/card/yiwu_click_chosen.webp);
 }
 .dialog.dclieqiong>.position.selected_cp::before {
     content: var(--info, "");

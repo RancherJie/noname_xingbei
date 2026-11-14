@@ -25,8 +25,8 @@ export class UI {
 		}
 		var hongZhanJi_str='';
 		var lanZhanJi_str='';
-		var baoShi=lib.assetURL+'image/card/xingShi/baoShi.png';  // 根据颜色选择不同图片
-		var shuiJing=lib.assetURL+'image/card/xingShi/shuiJing.png';
+		var baoShi=lib.assetURL+'image/card/xingShi/baoShi.webp';  // 根据颜色选择不同图片
+		var shuiJing=lib.assetURL+'image/card/xingShi/shuiJing.webp';
 
 		var keysSorted = Object.keys(hongZhanJi).sort();  // 获取键数组并排序
 		keysSorted.forEach(function(key) {

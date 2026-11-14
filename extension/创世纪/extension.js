@@ -245,7 +245,7 @@ game.import("extension", function(lib, game, ui, get, ai, _status) {
                         ],
                         [
                             "des:以泰拉科技重塑自身的贝亚娜斗神，兼具贤者智慧与战神之力。她收集多系炫纹强化攻势，并在变身后以暗之力量压制全场。",
-                            "ext:创世纪/beiyanadopushen.png",
+                            "ext:创世纪/beiyanadopushen.webp",
                             "die:ext:创世纪/audio/die/beiyanadopushen.mp3",
                         ],
                     ],
@@ -263,7 +263,7 @@ game.import("extension", function(lib, game, ui, get, ai, _status) {
                         ],
                         [
                             "des:以念气淬炼身心的气功宗师，拳掌之间亦有守护之意。她在法术与援护中积蓄念气，并以念之奥义连续施展法术。",
-                            "ext:创世纪/baiHuaLiaoLuan.png",
+                            "ext:创世纪/baiHuaLiaoLuan.webp",
                         ],
                     ],
                     "luMiYa": [
@@ -287,7 +287,7 @@ game.import("extension", function(lib, game, ui, get, ai, _status) {
                         ],
                         [
                             "des:沉迷危险实验的魔道学者，把每份材料都视作新发现的起点。她以研究修正随机结果，在魔弹、扫把、药剂与装置之间灵活应变。",
-                            "ext:创世纪/luMiYa.png",
+                            "ext:创世纪/luMiYa.webp",
                         ],
                     ],
                     "xiLuFei": [
@@ -311,7 +311,7 @@ game.import("extension", function(lib, game, ui, get, ai, _status) {
                         ],
                         [
                             "des:以火、水、光、暗四枚圣灵符文切换元素法术的希露菲。点亮符文后施展对应高阶法术，并以魔法秀延续攻势。",
-                            "ext:创世纪/xiLuFei.png",
+                            "ext:创世纪/xiLuFei.webp",
                         ],
                     ],
                     "tianQiZhe": [
@@ -333,7 +333,7 @@ game.import("extension", function(lib, game, ui, get, ai, _status) {
                         ],
                         [
                             "des:聆听神谕的圣职者，以治疗与祝福庇护同伴。她将四重恩赐分予队友，并借天启之珠把被触发的祝福化作最终审判。",
-                            "ext:创世纪/tianQiZhe.png",
+                            "ext:创世纪/tianQiZhe.webp",
                         ],
                     ],
                     "yuXueMoShen": [
@@ -352,7 +352,7 @@ game.import("extension", function(lib, game, ui, get, ai, _status) {
                         ],
                         [
                             "des:主动解开鬼神束缚的浴血狂战，让伤痛化作沸腾血气。他以嗜血追击压迫战场，并将积蓄的力量凝为魔剑，宣告狱血魔神降临。",
-                            "ext:创世纪/yuXueMoShen.png",
+                            "ext:创世纪/yuXueMoShen.webp",
                         ],
                     ],
                 },
@@ -375,28 +375,28 @@ game.import("extension", function(lib, game, ui, get, ai, _status) {
                         "type": "special",
                         "enable": false,
                         "fullskin": true,
-                        "image": "ext:创世纪/mark_rongYuZhuFu.png",
+                        "image": "ext:创世纪/mark_rongYuZhuFu.webp",
                     },
                     "tianQiZheShouHuHuiZhangKa": {
                         "hidden": true,
                         "type": "special",
                         "enable": false,
                         "fullskin": true,
-                        "image": "ext:创世纪/mark_shouHuHuiZhang.png",
+                        "image": "ext:创世纪/mark_shouHuHuiZhang.webp",
                     },
                     "tianQiZheWuQiZhuFuKa": {
                         "hidden": true,
                         "type": "special",
                         "enable": false,
                         "fullskin": true,
-                        "image": "ext:创世纪/mark_wuQiZhuFu.png",
+                        "image": "ext:创世纪/mark_wuQiZhuFu.webp",
                     },
                     "tianQiZheTianShiZhuFuKa": {
                         "hidden": true,
                         "type": "special",
                         "enable": false,
                         "fullskin": true,
-                        "image": "ext:创世纪/mark_tianShiZhuFu.png",
+                        "image": "ext:创世纪/mark_tianShiZhuFu.webp",
                     },
                 },
                 "translate": {
@@ -1030,7 +1030,7 @@ game.import("extension", function(lib, game, ui, get, ai, _status) {
                             "max": 8,
                         },
                         "onremove": "storage",
-                        "markimage": "extension/创世纪/mark_nianQi.png",
+                        "markimage": "extension/创世纪/mark_nianQi.webp",
                         "addNianQi": async function(player, num) {
                     if(!player ||
                         player.hasSkill('nianZhiAoYi_effect')) return;
@@ -1995,7 +1995,7 @@ game.import("extension", function(lib, game, ui, get, ai, _status) {
                             "content": "mark",
                             "max": 3,
                         },
-                        "markimage": "extension/创世纪/mark_luMiYaYanJiu.png",
+                        "markimage": "extension/创世纪/mark_luMiYaYanJiu.webp",
                     },
                     "nianZhiAoYi_effect": {
                         "charlotte": true,
@@ -2473,7 +2473,7 @@ game.import("extension", function(lib, game, ui, get, ai, _status) {
                         "type": "qiDong",
                         "mark": true,
                         "marktext": "启",
-                        "markimage": "extension/创世纪/mark_tianQiZhiZhu.png",
+                        "markimage": "extension/创世纪/mark_tianQiZhiZhu.webp",
                         "intro": {
                             "content": function(storage, player) {
                         if(!player.storage.tianQiZhiZhuToken) {
@@ -2729,7 +2729,7 @@ game.import("extension", function(lib, game, ui, get, ai, _status) {
                     },
                     "rongYuZhuFu": {
                         "charlotte": true,
-                        "markimage": "extension/创世纪/mark_rongYuZhuFu.png",
+                        "markimage": "extension/创世纪/mark_rongYuZhuFu.webp",
                         "trigger": { source: 'zaoChengShangHai' },
                         "forced": true,
                         "filter": function(event, player) {
@@ -2756,7 +2756,7 @@ game.import("extension", function(lib, game, ui, get, ai, _status) {
                     },
                     "shouHuHuiZhang": {
                         "charlotte": true,
-                        "markimage": "extension/创世纪/mark_shouHuHuiZhang.png",
+                        "markimage": "extension/创世纪/mark_shouHuHuiZhang.webp",
                         "trigger": {
                             "global": "gongJiMingZhong",
                         },
@@ -2796,7 +2796,7 @@ game.import("extension", function(lib, game, ui, get, ai, _status) {
                     },
                     "wuQiZhuFu": {
                         "charlotte": true,
-                        "markimage": "extension/创世纪/mark_wuQiZhuFu.png",
+                        "markimage": "extension/创世纪/mark_wuQiZhuFu.webp",
                         "trigger": {
                             "global": "gongJiMingZhong",
                         },
@@ -2830,7 +2830,7 @@ game.import("extension", function(lib, game, ui, get, ai, _status) {
                     },
                     "tianQiZheTianShiZhuFu": {
                         "charlotte": true,
-                        "markimage": "extension/创世纪/mark_tianShiZhuFu.png",
+                        "markimage": "extension/创世纪/mark_tianShiZhuFu.webp",
                         "intro": {
                             "name": "天使祝福",
                             "content": "expansion",
@@ -3121,7 +3121,7 @@ game.import("extension", function(lib, game, ui, get, ai, _status) {
                             "name": "血刹形态",
                             "content": "不能获得【治疗】；任意角色每次承受实际伤害后，你+1【血气】。持续至你的下下个回合开始并结算终结效果。",
                         },
-                        "markimage": "extension/创世纪/mark_xueShaXingTai.png",
+                        "markimage": "extension/创世纪/mark_xueShaXingTai.webp",
                         "group": [
                             "xueShaXingTai_xueQi",
                             "xueShaXingTai_jieSuan",
@@ -3239,7 +3239,7 @@ game.import("extension", function(lib, game, ui, get, ai, _status) {
                             "max": 8,
                         },
                         "onremove": "storage",
-                        "markimage": "extension/创世纪/mark_xueQi.png",
+                        "markimage": "extension/创世纪/mark_xueQi.webp",
                     },
                     "xiLuFeiShengLingFuWen": {
                         "audio": false,
@@ -3247,32 +3247,32 @@ game.import("extension", function(lib, game, ui, get, ai, _status) {
                             "huo": {
                                 "mark": "xiLuFeiHuoZhiFuWen",
                                 "displayName": "火之符文",
-                                "litImage": "extension/创世纪/mark_huoZhiFuWen.png",
-                                "dimImage": "extension/创世纪/mark_huoZhiFuWen_dim.png",
+                                "litImage": "extension/创世纪/mark_huoZhiFuWen.webp",
+                                "dimImage": "extension/创世纪/mark_huoZhiFuWen_dim.webp",
                                 "low": "xiLuFeiJieKeBaoDan",
                                 "high": "xiLuFeiJieKeJiangLin",
                             },
                             "shui": {
                                 "mark": "xiLuFeiShuiZhiFuWen",
                                 "displayName": "水之符文",
-                                "litImage": "extension/创世纪/mark_shuiZhiFuWen.png",
-                                "dimImage": "extension/创世纪/mark_shuiZhiFuWen_dim.png",
+                                "litImage": "extension/创世纪/mark_shuiZhiFuWen.webp",
+                                "dimImage": "extension/创世纪/mark_shuiZhiFuWen_dim.webp",
                                 "low": "xiLuFeiBingShuangXueRen",
                                 "high": "xiLuFeiJiBingShengYan",
                             },
                             "guang": {
                                 "mark": "xiLuFeiGuangZhiFuWen",
                                 "displayName": "光之符文",
-                                "litImage": "extension/创世纪/mark_guangZhiFuWen.png",
-                                "dimImage": "extension/创世纪/mark_guangZhiFuWen_dim.png",
+                                "litImage": "extension/创世纪/mark_guangZhiFuWen.webp",
+                                "dimImage": "extension/创世纪/mark_guangZhiFuWen_dim.webp",
                                 "low": "xiLuFeiGuangDianMan",
                                 "high": "xiLuFeiTianLei",
                             },
                             "an": {
                                 "mark": "xiLuFeiAnZhiFuWen",
                                 "displayName": "暗之符文",
-                                "litImage": "extension/创世纪/mark_anZhiFuWen.png",
-                                "dimImage": "extension/创世纪/mark_anZhiFuWen_dim.png",
+                                "litImage": "extension/创世纪/mark_anZhiFuWen.webp",
+                                "dimImage": "extension/创世纪/mark_anZhiFuWen_dim.webp",
                                 "low": "xiLuFeiAnYingYeMao",
                                 "high": "xiLuFeiYanMieHeiDong",
                             },
@@ -4083,7 +4083,7 @@ game.import("extension", function(lib, game, ui, get, ai, _status) {
                         "charlotte": true,
                         "mark": true,
                         "marktext": "火",
-                        "markimage": "extension/创世纪/mark_huoZhiFuWen.png",
+                        "markimage": "extension/创世纪/mark_huoZhiFuWen.webp",
                         "intro": {
                             "name": "火之符文",
                             "content": function(storage, player) {
@@ -4099,7 +4099,7 @@ game.import("extension", function(lib, game, ui, get, ai, _status) {
                         "charlotte": true,
                         "mark": true,
                         "marktext": "水",
-                        "markimage": "extension/创世纪/mark_shuiZhiFuWen.png",
+                        "markimage": "extension/创世纪/mark_shuiZhiFuWen.webp",
                         "intro": {
                             "name": "水之符文",
                             "content": function(storage, player) {
@@ -4115,7 +4115,7 @@ game.import("extension", function(lib, game, ui, get, ai, _status) {
                         "charlotte": true,
                         "mark": true,
                         "marktext": "光",
-                        "markimage": "extension/创世纪/mark_guangZhiFuWen.png",
+                        "markimage": "extension/创世纪/mark_guangZhiFuWen.webp",
                         "intro": {
                             "name": "光之符文",
                             "content": function(storage, player) {
@@ -4131,7 +4131,7 @@ game.import("extension", function(lib, game, ui, get, ai, _status) {
                         "charlotte": true,
                         "mark": true,
                         "marktext": "暗",
-                        "markimage": "extension/创世纪/mark_anZhiFuWen.png",
+                        "markimage": "extension/创世纪/mark_anZhiFuWen.webp",
                         "intro": {
                             "name": "暗之符文",
                             "content": function(storage, player) {
@@ -4282,33 +4282,33 @@ game.import("extension", function(lib, game, ui, get, ai, _status) {
         },
         "files": {
             "character": [
-                "beiyanadopushen.png",
-                "baiHuaLiaoLuan.png",
-                "luMiYa.png",
-                "tianQiZhe.png",
-                "yuXueMoShen.png",
-                "xiLuFei.png",
+                "beiyanadopushen.webp",
+                "baiHuaLiaoLuan.webp",
+                "luMiYa.webp",
+                "tianQiZhe.webp",
+                "yuXueMoShen.webp",
+                "xiLuFei.webp",
             ],
             "card": [
-                "mark_rongYuZhuFu.png",
-                "mark_shouHuHuiZhang.png",
-                "mark_wuQiZhuFu.png",
-                "mark_tianShiZhuFu.png",
-                "mark_tianQiZhiZhu.png",
+                "mark_rongYuZhuFu.webp",
+                "mark_shouHuHuiZhang.webp",
+                "mark_wuQiZhuFu.webp",
+                "mark_tianShiZhuFu.webp",
+                "mark_tianQiZhiZhu.webp",
             ],
             "skill": [
-                "mark_nianQi.png",
-                "mark_luMiYaYanJiu.png",
-                "mark_xueQi.png",
-                "mark_xueShaXingTai.png",
-                "mark_huoZhiFuWen.png",
-                "mark_huoZhiFuWen_dim.png",
-                "mark_shuiZhiFuWen.png",
-                "mark_shuiZhiFuWen_dim.png",
-                "mark_guangZhiFuWen.png",
-                "mark_guangZhiFuWen_dim.png",
-                "mark_anZhiFuWen.png",
-                "mark_anZhiFuWen_dim.png",
+                "mark_nianQi.webp",
+                "mark_luMiYaYanJiu.webp",
+                "mark_xueQi.webp",
+                "mark_xueShaXingTai.webp",
+                "mark_huoZhiFuWen.webp",
+                "mark_huoZhiFuWen_dim.webp",
+                "mark_shuiZhiFuWen.webp",
+                "mark_shuiZhiFuWen_dim.webp",
+                "mark_guangZhiFuWen.webp",
+                "mark_guangZhiFuWen_dim.webp",
+                "mark_anZhiFuWen.webp",
+                "mark_anZhiFuWen_dim.webp",
             ],
             "audio": [
                 "audio/skill/baiHuaLiaoLuan/nianQiHuanRao.mp3",

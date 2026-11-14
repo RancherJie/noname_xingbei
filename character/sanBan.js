@@ -825,7 +825,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     content:'mark',
                 },
                 onremove:'storage',
-                markimage:'image/card/zhiShiWu/hong.png'
+                markimage:'image/card/zhiShiWu/hong.webp'
             },
             san_yongHengYueZhangX:{},
             san_yongHengYueZhang:{
@@ -836,7 +836,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 group:['san_yongHengYueZhang_jiAngKuangXiangQu','san_yongHengYueZhang_shengLiJiaoXiangShi'],
                 onremove:'storage',
-                markimage:'image/card/zhuanShu/yongHengYueZhang.png',
+                markimage:'image/card/zhuanShu/yongHengYueZhang.webp',
                 subSkill:{
                     jiAngKuangXiangQu:{
                         trigger:{player:'phaseBegin'},

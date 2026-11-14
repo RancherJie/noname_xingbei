@@ -611,7 +611,7 @@ export const optionsMenu = function (connectMenu) {
 									fonts.push(file);
 								else if (
 									directory.startsWith("image") &&
-									(fileExtension == ".jpg" || fileExtension == ".png")
+									(fileExtension == ".jpg" || fileExtension == ".webp")
 								)
 									images.push(file);
 								else return;

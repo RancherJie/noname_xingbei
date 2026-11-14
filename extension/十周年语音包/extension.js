@@ -431,7 +431,26 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
         xiangSiBing: "jiDuShaoNv/xiangSiBing.mp3",
         jiDuZhuiFang: "jiDuShaoNv/jiDuZhuiFang.mp3",
         shenFengShi: "moGongEX/shenFengShi.mp3",
-        jiFengZhuiShe: "moGongEX/jiFengZhuiShe.mp3"
+        jiFengZhuiShe: "moGongEX/jiFengZhuiShe.mp3",
+        shenDeDaiXing: "daZuiSiJiao/shenDeDaiXing.mp3",
+        shenYiZhiYin: "daZuiSiJiao/shenYiZhiYin.mp3",
+        xinYangZhiJia: "daZuiSiJiao/xinYangZhiJia.mp3",
+        sheZui: "daZuiSiJiao/sheZui.mp3",
+        shenYu: "daZuiSiJiao/shenYu.mp3",
+        fuYin: "daZuiSiJiao/fuYin.mp3",
+        daZuiLuBiaoX: "daZuiSiJiao/daZuiLuBiaoX.mp3",
+        shuLingQuanBing: "daZuiSiJiao/shuLingQuanBing.mp3",
+        shengCanLi: "daZuiSiJiao/shengCanLi.mp3",
+        guShenJieLv: "guShenJiSi/guShenJieLv.mp3",
+        niuQuLianJie: "guShenJiSi/niuQuLianJie.mp3",
+        tianQi: "guShenJiSi/tianQi.mp3",
+        moRiMengZhao: "guShenJiSi/moRiMengZhao.mp3",
+        mengZhao_jiLeMengJing: "guShenJiSi/jiLeMengJing.mp3",
+        mengZhao_hongLieLieHuo: "guShenJiSi/hongLieLieHuo.mp3",
+        mengZhao_diDongNuTao: "guShenJiSi/diDongNuTao.mp3",
+        mengZhao_mengJingPoSui: "guShenJiSi/mengJingPoSui.mp3",
+        ruMeng: "guShenJiSi/ruMeng.mp3",
+        zhiPei: "guShenJiSi/zhiPei.mp3",
     };
 
     var characterSkillAudio = {
@@ -978,7 +997,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 
     return {
         name: extensionName,
-        version: "6.9",
+        version: "6.10",
         connect: true,
         editable: false,
         config: {
@@ -992,10 +1011,10 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
         content: installSkillAudio,
         arenaReady: installSkillAudio,
         help: {
-            "十周年语音包": "为十周年角色补充技能语音。当前已实装风之剑圣、狂战士、神箭手、封印师、暗杀者、圣女、守护天使、魔法少女、魔剑士、圣枪骑士、元素师、冒险家、瘟疫法师、仲裁者、神官、祈祷师、贤者、灵符师、格斗家、剑帝、灵魂术士、勇者、血之巫女、蝶舞者、女武神、魔弓、红莲骑士、英灵人形、魔枪、吟游诗人、苍炎魔女、精灵射手、血色剑灵、阴阳师、月之女神、兽灵武士、圣殿骑士、圣庭检察士、圣弓、原初之弓、星坠女巫、战斗法师、猎巫人、女仆长、矜贵之女、染污者、噬神者与结界师的全部技能语音。"
+            "十周年语音包": "为十周年角色补充技能语音。当前已实装风之剑圣、狂战士、神箭手、封印师、暗杀者、圣女、守护天使、魔法少女、魔剑士、圣枪骑士、元素师、冒险家、瘟疫法师、仲裁者、神官、祈祷师、贤者、灵符师、格斗家、剑帝、灵魂术士、勇者、血之巫女、蝶舞者、女武神、魔弓、红莲骑士、英灵人形、魔枪、吟游诗人、苍炎魔女、精灵射手、血色剑灵、阴阳师、月之女神、兽灵武士、圣殿骑士、圣庭检察士、圣弓、原初之弓、星坠女巫、战斗法师、猎巫人、女仆长、矜贵之女、染污者、噬神者、结界师、大罪司教与古神祭祀的全部技能语音。"
         },
         package: {
-            intro: "十周年角色技能语音扩展。当前收录风之剑圣、狂战士、神箭手、封印师、暗杀者、圣女、守护天使、魔法少女、魔剑士、圣枪骑士、元素师、冒险家、瘟疫法师、仲裁者、神官、祈祷师、贤者、灵符师、格斗家、剑帝、灵魂术士、勇者、血之巫女、蝶舞者、女武神、魔弓、红莲骑士、英灵人形、魔枪、吟游诗人、苍炎魔女、精灵射手、血色剑灵、阴阳师、月之女神、兽灵武士、圣殿骑士、圣庭检察士、圣弓、原初之弓、星坠女巫、战斗法师、猎巫人、女仆长、矜贵之女、染污者、噬神者与结界师的全部技能语音。",
+            intro: "十周年角色技能语音扩展。当前收录风之剑圣、狂战士、神箭手、封印师、暗杀者、圣女、守护天使、魔法少女、魔剑士、圣枪骑士、元素师、冒险家、瘟疫法师、仲裁者、神官、祈祷师、贤者、灵符师、格斗家、剑帝、灵魂术士、勇者、血之巫女、蝶舞者、女武神、魔弓、红莲骑士、英灵人形、魔枪、吟游诗人、苍炎魔女、精灵射手、血色剑灵、阴阳师、月之女神、兽灵武士、圣殿骑士、圣庭检察士、圣弓、原初之弓、星坠女巫、战斗法师、猎巫人、女仆长、矜贵之女、染污者、噬神者、结界师、大罪司教与古神祭祀的全部技能语音。",
             author: "蒙牛 / Codex",
             diskURL: "",
             forumURL: "",
@@ -1620,7 +1639,32 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 "audio/action/zhouFuShi/tiLian.mp3",
                 "audio/action/zhuLvZhe/gouMai.mp3",
                 "audio/action/zhuLvZhe/heCheng.mp3",
-                "audio/action/zhuLvZhe/tiLian.mp3"
+                "audio/action/zhuLvZhe/tiLian.mp3",
+                "audio/skill/daZuiSiJiao/shenYiZhiYin.mp3",
+                "audio/skill/daZuiSiJiao/daZuiLuBiaoX.mp3",
+                "audio/skill/daZuiSiJiao/sheZui.mp3",
+                "audio/skill/daZuiSiJiao/xinYangZhiJia.mp3",
+                "audio/skill/daZuiSiJiao/fuYin.mp3",
+                "audio/skill/daZuiSiJiao/shenYu.mp3",
+                "audio/skill/daZuiSiJiao/shuLingQuanBing.mp3",
+                "audio/skill/daZuiSiJiao/shenDeDaiXing.mp3",
+                "audio/skill/daZuiSiJiao/shengCanLi.mp3",
+                "audio/action/daZuiSiJiao/heCheng.mp3",
+                "audio/action/daZuiSiJiao/gouMai.mp3",
+                "audio/action/daZuiSiJiao/tiLian.mp3",
+                "audio/skill/guShenJiSi/guShenJieLv.mp3",
+                "audio/skill/guShenJiSi/niuQuLianJie.mp3",
+                "audio/skill/guShenJiSi/tianQi.mp3",
+                "audio/skill/guShenJiSi/moRiMengZhao.mp3",
+                "audio/skill/guShenJiSi/jiLeMengJing.mp3",
+                "audio/skill/guShenJiSi/hongLieLieHuo.mp3",
+                "audio/skill/guShenJiSi/diDongNuTao.mp3",
+                "audio/skill/guShenJiSi/mengJingPoSui.mp3",
+                "audio/skill/guShenJiSi/ruMeng.mp3",
+                "audio/skill/guShenJiSi/zhiPei.mp3",
+                "audio/action/guShenJiSi/heCheng.mp3",
+                "audio/action/guShenJiSi/tiLian.mp3",
+                "audio/action/guShenJiSi/gouMai.mp3",
             ]
         }
     };

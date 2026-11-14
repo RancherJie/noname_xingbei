@@ -1403,7 +1403,7 @@ export const extensionMenu = function (connectMenu) {
 							var file;
 							var fullskin = page.content.pack.card[i].fullskin ? true : false;
 							if (fullskin) {
-								file = i + ".png";
+								file = i + ".webp";
 							} else {
 								file = i + ".jpg";
 							}
@@ -1742,7 +1742,7 @@ export const extensionMenu = function (connectMenu) {
 								}
 								var extname;
 								if (currentButton.classList.contains("fullskin")) {
-									extname = ".png";
+									extname = ".webp";
 								} else {
 									extname = ".jpg";
 								}
@@ -1764,11 +1764,11 @@ export const extensionMenu = function (connectMenu) {
 						}
 						if (fakeme.image) {
 							if (fakeme.classList.contains("fullskin")) {
-								page.content.image[name + ".png"] = fakeme.image;
+								page.content.image[name + ".webp"] = fakeme.image;
 								delete page.content.image[name + ".jpg"];
 							} else {
 								page.content.image[name + ".jpg"] = fakeme.image;
-								delete page.content.image[name + ".png"];
+								delete page.content.image[name + ".webp"];
 							}
 						} else if (!fakeme.classList.contains("inited")) {
 							alert("请选择一个卡牌背景");

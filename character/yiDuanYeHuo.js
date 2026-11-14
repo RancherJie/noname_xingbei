@@ -307,7 +307,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     max:2,
                 },
                 onremove:'storage',
-                markimage:'image/card/zhiShiWu/hong.png',
+                markimage:'image/card/zhiShiWu/hong.webp',
             },
 
             //圣庭监察士
@@ -641,7 +641,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 onremove:'storage',
                 mark:true,
-                markimage:'image/card/zhuanShu/yiDuanCaiJueSuo.png',
+                markimage:'image/card/zhuanShu/yiDuanCaiJueSuo.webp',
                 addZhiLiao:function(player,num){
                     var current=player.storage.yiDuanCaiJueSuo;
                     var max=4;
@@ -674,7 +674,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     max:3,
                 },
                 onremove:'storage',
-                markimage:'image/card/zhiShiWu/hong.png',
+                markimage:'image/card/zhiShiWu/hong.webp',
             },
 
             //战斗法师
@@ -1115,7 +1115,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     nocount:true,
                 },
                 onremove:'storage',
-                markimage:'image/card/zhuanShu/fanXing.png',
+                markimage:'image/card/zhuanShu/fanXing.webp',
                 trigger:{player:'yiChuLuEn'},
                 filter:function(event,player){
                     if(!player.hasZhiShiWu('fanXing')) return false;
@@ -1174,7 +1174,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     nocount:true,
                 },
                 onremove:'storage',
-                markimage:'image/card/zhuanShu/yingYue.png',
+                markimage:'image/card/zhuanShu/yingYue.webp',
                 trigger:{player:'yiChuLuEn'},
                 filter:function(event,player){
                     if(!player.hasZhiShiWu('yingYue')) return false;
@@ -1289,7 +1289,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     nocount:true,
                 },
                 onremove:'storage',
-                markimage:'image/card/zhuanShu/shiRi.png',
+                markimage:'image/card/zhuanShu/shiRi.webp',
                 trigger:{player:'yiChuLuEn'},
                 filter:function(event,player){
                     if(!player.hasZhiShiWu('shiRi')) return false;

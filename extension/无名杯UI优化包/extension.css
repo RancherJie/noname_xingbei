@@ -305,17 +305,17 @@ body.wmb-ui-optimized .wmb-scoreboard tr.highlight td {
 
 /* 治疗槽：保留原版蓝色法阵与白色治疗星构图，统一为仙剑式绘制。 */
 body.wmb-ui-optimized .hp:not(.text):not(.actcount):not(.treasure):not([data-condition="xing"]) > div:not(.lost) {
-    background-image: url("image/zhiLiao_xianxia.png") !important;
+    background-image: url("image/zhiLiao_xianxia.webp") !important;
     background-size: 100% 100% !important;
 }
 
 body.wmb-ui-optimized .hp:not(.text):not(.actcount):not(.treasure):not([data-condition="xing"]) > .lost {
-    background-image: url("image/zhiLiaoCao_xianxia.png") !important;
+    background-image: url("image/zhiLiaoCao_xianxia.webp") !important;
     background-size: 100% 100% !important;
 }
 
 body.wmb-ui-optimized .hp:not(.text):not(.actcount):not(.treasure)[data-condition="xing"] > div {
-    background-image: url("image/xingJi_xianxia.png") !important;
+    background-image: url("image/xingJi_xianxia.webp") !important;
     background-position: center !important;
     background-repeat: no-repeat !important;
     background-size: 100% 100% !important;
@@ -769,7 +769,7 @@ body.wmb-ui-optimized .card.selected {
 body.wmb-ui-optimized .card:empty:not(.mark),
 body.wmb-ui-optimized .card.infohidden:not(.mark),
 body.wmb-ui-optimized .card.infohidden:not(.infoflip):not(.mark) {
-    background-image: url("image/cardback_xianxia.png") !important;
+    background-image: url("image/cardback_xianxia.webp") !important;
     background-size: 100% 100% !important;
     background-position: center !important;
     background-repeat: no-repeat !important;

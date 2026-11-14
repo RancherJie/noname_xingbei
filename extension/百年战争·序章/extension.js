@@ -3,8 +3,8 @@ game.import('extension', function (lib, game, ui, get, ai, _status) {
     'use strict';
 
     const bnzzQi_assetStem = id => String(id).replace(/^bnzz_qi_/, '');
-    const bnzzQi_characterImage = id => 'ext:百年战争·序章/bnzz_' + bnzzQi_assetStem(id) + '.png';
-    const bnzzQi_markImage = id => 'extension/百年战争·序章/mark_bnzz_' + bnzzQi_assetStem(id) + '.png';
+    const bnzzQi_characterImage = id => 'ext:百年战争·序章/bnzz_' + bnzzQi_assetStem(id) + '.webp';
+    const bnzzQi_markImage = id => 'extension/百年战争·序章/mark_bnzz_' + bnzzQi_assetStem(id) + '.webp';
 
     const bnzzQiVoiceSkillPaths = {
         bnzz_qi_gongFangZhiRen: 'ext:百年战争·序章/audio/skill/bingShuangJianZong/gongFangZhiRen.mp3',
@@ -1426,12 +1426,12 @@ game.import('extension', function (lib, game, ui, get, ai, _status) {
                     "bnzz_qi_xuLi": {
                         intro: { name: '蓄力', content: 'mark', max: 3 },
                         onremove: 'storage',
-                        markimage: 'extension/百年战争·序章/mark_bnzz_xuLi.png'
+                        markimage: 'extension/百年战争·序章/mark_bnzz_xuLi.webp'
                     },
                     "bnzz_qi_renNai": {
                         intro: { name: '忍耐', content: 'mark', max: 2 },
                         onremove: 'storage',
-                        markimage: 'extension/百年战争·序章/mark_bnzz_renNai.png'
+                        markimage: 'extension/百年战争·序章/mark_bnzz_renNai.webp'
                     },
 
                     // 近卫枪手·伽纳
@@ -1592,7 +1592,7 @@ game.import('extension', function (lib, game, ui, get, ai, _status) {
                     "bnzz_qi_miaoZhunXingTai": {
                         audio: false,
                         mark: true,
-                        markimage: 'extension/百年战争·序章/mark_bnzz_miaoZhunXingTai.png',
+                        markimage: 'extension/百年战争·序章/mark_bnzz_miaoZhunXingTai.webp',
                         intro: { name: '瞄准形态', content: '受到主动攻击的伤害额外+1；（主动攻击命中时）发动双发射击并重置。', nocount: true },
                         trigger: { player: 'shouDaoShangHai' },
                         forced: true,
@@ -1614,7 +1614,7 @@ game.import('extension', function (lib, game, ui, get, ai, _status) {
                     "bnzz_qi_zhouFuZhiChui": {
                         audio: 'ext:百年战争·序章/audio/skill/fangZhuQiShi/zhouFuZhiChui.mp3',
                         type: 'qiDong', trigger: { player: 'qiDong' },
-                        markimage: 'extension/百年战争·序章/mark_bnzz_zhouFuZhiChui.png',
+                        markimage: 'extension/百年战争·序章/mark_bnzz_zhouFuZhiChui.webp',
                         intro: { name: '咒赋之锤', content(storage, player) { return zhakesi_used(player).join('；') || '本回合尚未发动咒赋效果'; } },
                         filter(event, player) { return get.zhanJi(player.side).length > 0 && zhakesi_available(player).length > 0; },
                         async cost(event, trigger, player) {
@@ -2378,11 +2378,11 @@ game.import('extension', function (lib, game, ui, get, ai, _status) {
                     },
                     "bnzz_qi_yuanLi": {
                         intro: { name: '元力', content: 'mark', max: 3 },
-                        onremove: 'storage', markimage: 'extension/百年战争·序章/mark_bnzz_yuanLi.png'
+                        onremove: 'storage', markimage: 'extension/百年战争·序章/mark_bnzz_yuanLi.webp'
                     },
                     "bnzz_qi_zhenYanXingTai": {
                         nopop: true,
-                        mark: true, markimage: 'extension/百年战争·序章/mark_bnzz_zhenYanXingTai.png',
+                        mark: true, markimage: 'extension/百年战争·序章/mark_bnzz_zhenYanXingTai.webp',
                         intro: { name: '阵眼形态', content: '不能发动神速符、天火符；所有攻击伤害+1。（特殊行动时）重置并移除所有元力；（手牌或元力为0时）触发元力反噬。', nocount: true },
                         group: [jiumeng_formation + '_special', jiumeng_formation + '_reset'],
                         subSkill: {
@@ -2550,7 +2550,7 @@ game.import('extension', function (lib, game, ui, get, ai, _status) {
                         async content(event, trigger, player) { lib.skill[luoke_pool].install(player); luoke_setPool(player, luoke_values(player)); }
                     },
                     "bnzz_qi_xuNengChi": {
-                        audio: false, mark: true, markimage: 'extension/百年战争·序章/mark_bnzz_xuNengChi.png',
+                        audio: false, mark: true, markimage: 'extension/百年战争·序章/mark_bnzz_xuNengChi.webp',
                         intro: {
                             name: '蓄能池', markcount(storage) { return (storage || []).length; },
                             content(storage) { const list = storage || []; return '专属【蓄能池】<br>宝石：' + list.filter(x => x === 'baoShi').length + '　水晶：' + list.filter(x => x === 'shuiJing').length + '<br>星石总数：' + list.length + '/4'; }
@@ -2997,7 +2997,7 @@ game.import('extension', function (lib, game, ui, get, ai, _status) {
                         ai: { baoShi: true, order: 4, result: { target(player, target) { return get.damageEffect2(target, player, 2); } } }
                     },
                     "bnzz_qi_yueLv": {
-                        mark: true, markimage: 'extension/百年战争·序章/mark_bnzz_yueLv.png',
+                        mark: true, markimage: 'extension/百年战争·序章/mark_bnzz_yueLv.webp',
                         intro: { name: '乐律', content: 'mark', max: 3 }
                     },
 
@@ -3211,7 +3211,7 @@ game.import('extension', function (lib, game, ui, get, ai, _status) {
                     "bnzz_qi_shanXian": {
                         intro: { name: '闪现', content: 'mark', max: 3 },
                         onremove: 'storage',
-                        markimage: 'extension/百年战争·序章/mark_bnzz_shanXian.png'
+                        markimage: 'extension/百年战争·序章/mark_bnzz_shanXian.webp'
                     },
 
                     // 翎羽骑士·洛肯·煌
@@ -3789,12 +3789,12 @@ game.import('extension', function (lib, game, ui, get, ai, _status) {
                     "bnzz_qi_xueShang": {
                         intro: { name: '血殇', content: 'mark', max: 3 },
                         onremove: 'storage',
-                        markimage: 'extension/百年战争·序章/mark_bnzz_xueShang.png'
+                        markimage: 'extension/百年战争·序章/mark_bnzz_xueShang.webp'
                     },
                     "bnzz_qi_zhanHun": {
                         intro: { name: '战魂', content: 'mark', max: 4 },
                         onremove: 'storage',
-                        markimage: 'extension/百年战争·序章/mark_bnzz_zhanHun.png'
+                        markimage: 'extension/百年战争·序章/mark_bnzz_zhanHun.webp'
                     },
 
                     // 灼焰舞者·炙霞
@@ -4014,12 +4014,12 @@ game.import('extension', function (lib, game, ui, get, ai, _status) {
                     "bnzz_qi_youHuo": {
                         intro: { name: '幽火', content: 'mark', max: 3 },
                         onremove: 'storage',
-                        markimage: 'extension/百年战争·序章/mark_bnzz_youHuo.png'
+                        markimage: 'extension/百年战争·序章/mark_bnzz_youHuo.webp'
                     },
                     "bnzz_qi_huoWuXingTai": {
                         audio: false,
                         mark: true,
-                        markimage: 'extension/百年战争·序章/mark_bnzz_huoWuXingTai.png',
+                        markimage: 'extension/百年战争·序章/mark_bnzz_huoWuXingTai.webp',
                         intro: {
                             name: '火舞形态',
                             content: '你对自己造成的伤害-1；白焰弹不对自己造成伤害。（你的回合结束时）重置并脱离此形态。',
@@ -4202,7 +4202,7 @@ game.import('extension', function (lib, game, ui, get, ai, _status) {
                         ai: { shuiJing: true }
                     },
                     "bnzz_qi_zhiGanXingTai": {
-                        audio: false, charlotte: true, mark: true, markimage: 'extension/百年战争·序章/mark_bnzz_zhiGanXingTai.png',
+                        audio: false, charlotte: true, mark: true, markimage: 'extension/百年战争·序章/mark_bnzz_zhiGanXingTai.webp',
                         intro: { name: '直感形态', content: '对其他角色造成的法术伤害+1；（下个行动阶段开始前）重置并退出。', nocount: true },
                         forced: true,
                         trigger: { source: 'zaoChengShangHai' },
@@ -4264,7 +4264,7 @@ game.import('extension', function (lib, game, ui, get, ai, _status) {
                         }
                     },
                     "bnzz_qi_shuFu": {
-                        mark: true, markimage: 'extension/百年战争·序章/mark_bnzz_shuFu.png',
+                        mark: true, markimage: 'extension/百年战争·序章/mark_bnzz_shuFu.webp',
                         intro: { name: '束缚', content: 'mark', max: 5 }
                     },
                     // Read-only exclusive entries, matching the core 风穴 presentation.
@@ -4555,8 +4555,8 @@ game.import('extension', function (lib, game, ui, get, ai, _status) {
             card: {
                 card: {
                     // 织魔者·蕾乌
-                    "bnzz_qi_guangWang_card": { type: 'special', enable: false, fullskin: true, image: 'ext:百年战争·序章/mark_bnzz_guangWang.png' },
-                    "bnzz_qi_anWang_card": { type: 'special', enable: false, fullskin: true, image: 'ext:百年战争·序章/mark_bnzz_anWang.png' }
+                    "bnzz_qi_guangWang_card": { type: 'special', enable: false, fullskin: true, image: 'ext:百年战争·序章/mark_bnzz_guangWang.webp' },
+                    "bnzz_qi_anWang_card": { type: 'special', enable: false, fullskin: true, image: 'ext:百年战争·序章/mark_bnzz_anWang.webp' }
                 },
                 translate: {
                     // 织魔者·蕾乌
@@ -4570,44 +4570,44 @@ game.import('extension', function (lib, game, ui, get, ai, _status) {
         },
         files: {
             "character": [
-                "bnzz_bingShuangJianZong.png",
-                "bnzz_buSiZhe.png",
-                "bnzz_fangZhuQiShi.png",
-                "bnzz_fengYunZhiLing.png",
-                "bnzz_gongNengJiShi.png",
-                "bnzz_haiShenJiSi.png",
-                "bnzz_huiXiangYueShi.png",
-                "bnzz_jingLingChiHou.png",
-                "bnzz_jinWeiQiangShou.png",
-                "bnzz_juJiShou.png",
-                "bnzz_lingYuQiShi.png",
-                "bnzz_qiuDaoZhe.png",
-                "bnzz_yaoJiXueZhe.png",
-                "bnzz_zhiMoZhe.png",
-                "bnzz_zhuoYanWuZhe.png"
+                "bnzz_bingShuangJianZong.webp",
+                "bnzz_buSiZhe.webp",
+                "bnzz_fangZhuQiShi.webp",
+                "bnzz_fengYunZhiLing.webp",
+                "bnzz_gongNengJiShi.webp",
+                "bnzz_haiShenJiSi.webp",
+                "bnzz_huiXiangYueShi.webp",
+                "bnzz_jingLingChiHou.webp",
+                "bnzz_jinWeiQiangShou.webp",
+                "bnzz_juJiShou.webp",
+                "bnzz_lingYuQiShi.webp",
+                "bnzz_qiuDaoZhe.webp",
+                "bnzz_yaoJiXueZhe.webp",
+                "bnzz_zhiMoZhe.webp",
+                "bnzz_zhuoYanWuZhe.webp"
             ],
             "skill": [
-                "mark_bnzz_xuLi.png",
-                "mark_bnzz_renNai.png",
-                "mark_bnzz_miaoZhunXingTai.png",
-                "mark_bnzz_qiangDan.png",
-                "mark_bnzz_xunMiZhanJi_block.png",
-                "mark_bnzz_zhouFuZhiChui.png",
-                "mark_bnzz_yuanLi.png",
-                "mark_bnzz_zhenYanXingTai.png",
-                "mark_bnzz_xuNengChi.png",
-                "mark_bnzz_yueLv.png",
-                "mark_bnzz_wanQiQiMing_effect.png",
-                "mark_bnzz_shanXian.png",
-                "mark_bnzz_xueShang.png",
-                "mark_bnzz_zhanHun.png",
-                "mark_bnzz_youHuo.png",
-                "mark_bnzz_huoWuXingTai.png",
-                "mark_bnzz_shuFu.png",
-                "mark_bnzz_zhiGanXingTai.png",
-                "mark_bnzz_guangWang.png",
-                "mark_bnzz_anWang.png",
-                "mark_bnzz_siWangLangYong_blocked.png"
+                "mark_bnzz_xuLi.webp",
+                "mark_bnzz_renNai.webp",
+                "mark_bnzz_miaoZhunXingTai.webp",
+                "mark_bnzz_qiangDan.webp",
+                "mark_bnzz_xunMiZhanJi_block.webp",
+                "mark_bnzz_zhouFuZhiChui.webp",
+                "mark_bnzz_yuanLi.webp",
+                "mark_bnzz_zhenYanXingTai.webp",
+                "mark_bnzz_xuNengChi.webp",
+                "mark_bnzz_yueLv.webp",
+                "mark_bnzz_wanQiQiMing_effect.webp",
+                "mark_bnzz_shanXian.webp",
+                "mark_bnzz_xueShang.webp",
+                "mark_bnzz_zhanHun.webp",
+                "mark_bnzz_youHuo.webp",
+                "mark_bnzz_huoWuXingTai.webp",
+                "mark_bnzz_shuFu.webp",
+                "mark_bnzz_zhiGanXingTai.webp",
+                "mark_bnzz_guangWang.webp",
+                "mark_bnzz_anWang.webp",
+                "mark_bnzz_siWangLangYong_blocked.webp"
             ],
             "card": [],
             "audio": [

@@ -35,13 +35,13 @@ body.wmb-ui-optimized .hp[data-wmb-character-star-rating="true"] > .wmb-characte
 }
 
 body.wmb-ui-optimized .hp[data-wmb-character-star-rating="true"] > .wmb-character-star.is-filled {
-    background-image: url("image/xingJi_xianxia.png") !important;
+    background-image: url("image/xingJi_xianxia.webp") !important;
     filter: drop-shadow(0 0 2px rgba(171, 142, 255, 0.55)) !important;
 }
 
 body.wmb-ui-optimized .hp[data-wmb-character-star-rating="true"] > .wmb-character-star.is-half,
 body.wmb-ui-optimized .hp[data-wmb-character-star-rating="true"] > .wmb-character-star.is-empty {
-    background-image: url("image/xingJi_outline_xianxia.png") !important;
+    background-image: url("image/xingJi_outline_xianxia.webp") !important;
     filter: drop-shadow(0 0 2px rgba(171, 142, 255, 0.42)) !important;
 }
 
@@ -186,7 +186,7 @@ body.wmb-ui-optimized #arena .card.selected {
 body.wmb-ui-optimized .card:empty:not(.mark),
 body.wmb-ui-optimized .card.infohidden:not(.mark),
 body.wmb-ui-optimized .card.infohidden:not(.infoflip):not(.mark) {
-    background-image: url("image/cardback_xianxia.png?rev=2.20") !important;
+    background-image: url("image/cardback_xianxia.webp?rev=2.20") !important;
     background-size: 100% 100% !important;
     background-position: center !important;
     background-repeat: no-repeat !important;

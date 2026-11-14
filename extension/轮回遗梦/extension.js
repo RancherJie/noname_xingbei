@@ -690,7 +690,7 @@ game.import('extension', function(lib, game, ui, get, ai, _status) {
                 if(!player.hasSkill('lhym_sword')) player.addSkill('lhym_sword');
                 // 路线技能由“魔剑/镇妖剑”专属剑容器通过 group 承载，
                 // 不再逐个 addSkill 到角色技能列表，避免角色面板重复显示。
-                if(weapon === '镇妖剑') H.setPortrait(player, 'jingTian_zhenYaoJian.png');
+                if(weapon === '镇妖剑') H.setPortrait(player, 'jingTian_zhenYaoJian.webp');
                 H.sync(player);
             },
         },
@@ -844,7 +844,7 @@ game.import('extension', function(lib, game, ui, get, ai, _status) {
         },
         lhym_longJing:{
             charlotte:true,mark:true,
-            markimage:'extension/轮回遗梦/mark_longJingShi.png',
+            markimage:'extension/轮回遗梦/mark_longJingShi.webp',
             intro:{name:'龙精石',content:'持有#枚龙精石（上限4）',max:4}
         },
         lhym_sword:{charlotte:true,init:p=>H.syncMarks(p)},
@@ -895,7 +895,7 @@ game.import('extension', function(lib, game, ui, get, ai, _status) {
         },
         lhym_soul:{
             charlotte:true,
-            markimage:'extension/轮回遗梦/mark_jianHun.png',
+            markimage:'extension/轮回遗梦/mark_jianHun.webp',
             intro:{name:'剑魂',markcount:'gaiPai',mark:function(dialog,storage,owner){
                 const cards=H.souls(owner);
                 const isJingTian=[owner.name,owner.name1,owner.name2].includes('jingTian');
@@ -1109,17 +1109,17 @@ game.import('extension', function(lib, game, ui, get, ai, _status) {
             },
         },
         lhym_moRoute:{
-            charlotte:true,mark:true,markimage:'extension/轮回遗梦/mark_route_moJian.png',intro:{content:()=>H.recipes.map(r=>"<span class='greentext'>法术【"+r[0]+"】</span><br>（"+r[1].map(x=>H.labels[x]).join('、')+'）：'+colorResourceKeywords(r[2])).join('<br>')}},
+            charlotte:true,mark:true,markimage:'extension/轮回遗梦/mark_route_moJian.webp',intro:{content:()=>H.recipes.map(r=>"<span class='greentext'>法术【"+r[0]+"】</span><br>（"+r[1].map(x=>H.labels[x]).join('、')+'）：'+colorResourceKeywords(r[2])).join('<br>')}},
         lhym_zhenRoute:{
-            charlotte:true,mark:true,markimage:'extension/轮回遗梦/mark_route_zhenYaoJian.png',intro:{content:()=>H.branches.map((bs,i)=>'<b>'+['续接剑身','重铸剑锋','神剑复明'][i]+'</b>：'+[1,1,2][i]+'龙精石＋'+(i+1)+'雷系手牌。二选一：<br>'+bs.map(x=>H.skillText(x,get.translation(x))).join('<br>')).join('<br><br>')}},
+            charlotte:true,mark:true,markimage:'extension/轮回遗梦/mark_route_zhenYaoJian.webp',intro:{content:()=>H.branches.map((bs,i)=>'<b>'+['续接剑身','重铸剑锋','神剑复明'][i]+'</b>：'+[1,1,2][i]+'龙精石＋'+(i+1)+'雷系手牌。二选一：<br>'+bs.map(x=>H.skillText(x,get.translation(x))).join('<br>')).join('<br><br>')}},
     };
     skill.lhym_moJianMark={
-        charlotte:true,mark:true,markimage:'extension/轮回遗梦/mark_moJian.png',
+        charlotte:true,mark:true,markimage:'extension/轮回遗梦/mark_moJian.webp',
         group:['lhym_soul','lhym_renJian','lhym_jingHua','lhym_moJianJi','lhym_canYing','lhym_yinYang','lhym_jianPo','lhym_qianNianGongMing'],
         intro:{name:'专属【魔剑】',content:(s,p)=>H.routeText(p)}
     };
     skill.lhym_zhenYaoJianMark={
-        charlotte:true,mark:true,markimage:'extension/轮回遗梦/mark_zhenYaoJian.png',
+        charlotte:true,mark:true,markimage:'extension/轮回遗梦/mark_zhenYaoJian.webp',
         group:['lhym_zhaoDan','lhym_chongZhu','lhym_fengMang','lhym_houFa','lhym_poZhen','lhym_lianZhan','lhym_leiDong','lhym_baHuang','lhym_shenShuZhaoDan'],
         intro:{name:'专属【镇妖剑】',content:(s,p)=>H.routeText(p)}
     };
@@ -1128,7 +1128,7 @@ game.import('extension', function(lib, game, ui, get, ai, _status) {
         skill['lhym_wuLing_'+element+'_'+status]={
             charlotte:true,
             mark:true,
-            markimage:'extension/轮回遗梦/mark_wuLing_'+lampFileElement[element]+'_'+status+'.png',
+            markimage:'extension/轮回遗梦/mark_wuLing_'+lampFileElement[element]+'_'+status+'.webp',
             intro:{name:H.labels[element]+'灵阴阳灯',content:(s,p)=>H.lampText(p,element)},
         };
     }
@@ -1225,7 +1225,7 @@ game.import('extension', function(lib, game, ui, get, ai, _status) {
             const switching=typeof p.storage.lhym_red==='boolean'&&p.storage.lhym_red!==red;
             p.storage.lhym_red=red;p.syncStorage('lhym_red');
             if(p.marks?.lhym_jianZhongRen)p.unmarkSkill('lhym_jianZhongRen');
-            H.setPortrait(p,red?'longKui_red.png':'longKui_blue.png','longKui',switching);
+            H.setPortrait(p,red?'longKui_red.webp':'longKui_blue.webp','longKui',switching);
             C.refreshBond(p);
         },
         holder(p){return game.players.find(t=>t.playerid===p.storage.lhym_flowerHolder)||p;},
@@ -1529,7 +1529,7 @@ game.import('extension', function(lib, game, ui, get, ai, _status) {
         lhym_xieNian:{
             mark:true,
             marktext:'邪',
-            markimage:'extension/轮回遗梦/mark_xieNian.png',
+            markimage:'extension/轮回遗梦/mark_xieNian.webp',
             intro:{
                 name:'专属【邪念】',
                 max:99,
@@ -1736,7 +1736,7 @@ game.import('extension', function(lib, game, ui, get, ai, _status) {
             derivation:['lhym_huaLu','lhym_huaYingEnd'],
             mark:true,
             marktext:'楹',
-            markimage:'extension/轮回遗梦/mark_huaYing.png',
+            markimage:'extension/轮回遗梦/mark_huaYing.webp',
             intro:{
                 name:'花楹',
                 markcount:function(storage,owner){
@@ -1839,7 +1839,7 @@ game.import('extension', function(lib, game, ui, get, ai, _status) {
             trigger:{global:'gameStart'},forced:true,content:async function(event,trigger,player){ V.say(player,'longKui/start_blue',event);C.form(player,false);},group:['lhym_canYingPai','lhym_longKuiBondWatch']},
         lhym_longKuiBondWatch:{charlotte:true,trigger:{global:['dieAfter','phaseBefore']},forced:true,popup:false,lastDo:true,
             filter:(e,p)=>p.isIn(),content:async function(event,trigger,player){C.refreshBond(player);}},
-        lhym_canYingPai:{marktext:'影',markimage:'extension/轮回遗梦/mark_canYing.png',intro:{name:'剑中残影',content:'gaiPai',markcount:'gaiPai'},
+        lhym_canYingPai:{marktext:'影',markimage:'extension/轮回遗梦/mark_canYing.webp',intro:{name:'剑中残影',content:'gaiPai',markcount:'gaiPai'},
             onremove:p=>{const cards=C.shadows(p);if(cards.length)p.loseToDiscardpile(cards);}},
         lhym_cangFeng:{trigger:{player:'gongJiEnd'},direct:true,
             filter:(e,p)=>!C.red(p)&&!e.target&&!e.lhym_shadow&&!e.lhym_borrowed&&!e.getParent?.('useCard',true)?.lhym_shadow&&C.shadows(p).length<4&&e.cards?.some(c=>get.type(c)==='gongJi'&&['o','d'].includes(get.position(c,true))),
@@ -1965,11 +1965,11 @@ game.import('extension', function(lib, game, ui, get, ai, _status) {
     }
     for(const s of Object.values(skill)) if(s.audio===undefined) s.audio=false;
     const markFiles=[
-        'mark_moJian.png','mark_longJingShi.png','mark_jianHun.png','mark_zhenYaoJian.png',
-        'mark_route_moJian.png','mark_route_zhenYaoJian.png','mark_huaYing.png','mark_canYing.png','mark_xieNian.png',
+        'mark_moJian.webp','mark_longJingShi.webp','mark_jianHun.webp','mark_zhenYaoJian.webp',
+        'mark_route_moJian.webp','mark_route_zhenYaoJian.webp','mark_huaYing.webp','mark_canYing.webp','mark_xieNian.webp',
     ];
     for(const element of ['shui','huo','lei','feng','tu']) for(const status of ['empty','yin','yang','both']) {
-        markFiles.push('mark_wuLing_'+element+'_'+status+'.png');
+        markFiles.push('mark_wuLing_'+element+'_'+status+'.webp');
     }
     // 转移跳过本体的普通士气触发；仅补发侵体专用事件，不改变其他技能规则。
     function installQinTiTransferHook(){
@@ -1992,14 +1992,14 @@ game.import('extension', function(lib, game, ui, get, ai, _status) {
         precontent:function(){
             installDiyFormPreview([["xieJianXian","xieLing"]], {
                 jingTian: [
-                    {name:'魔剑', image:'jingTian_moJian.png', content:function() {
+                    {name:'魔剑', image:'jingTian_moJian.webp', content:function() {
                         return '<b>专属【魔剑】</b><br><br>' +
                             get.translation('lhym_longJing') + '：' + get.translation('lhym_longJing_info') + '<br><br>' +
                             get.translation('lhym_soul') + '：' + get.translation('lhym_soul_info') + '<br><br>' +
                             H.routeText({storage:{lhym_sword:{weapon:'魔剑',faces:[],stage:0,branches:[]}}}) +
                             '<br><br><b>魔剑技配方与效果</b><br>' + skill.lhym_moRoute.intro.content();
                     }},
-                    {name:'镇妖剑', image:'jingTian_zhenYaoJian.png', content:function() {
+                    {name:'镇妖剑', image:'jingTian_zhenYaoJian.webp', content:function() {
                         return '<b>专属【镇妖剑】</b><br><br>' +
                             get.translation('lhym_longJing') + '：' + get.translation('lhym_longJing_info') + '<br><br>' +
                             ['lhym_zhaoDan','lhym_chongZhu','lhym_shenShuZhaoDan'].map(id=>H.skillText(id)).join('<br><br>') +
@@ -2075,7 +2075,7 @@ game.import('extension', function(lib, game, ui, get, ai, _status) {
                         name:'lunHuiYiMeng',
                         connect:true,
                         character:{
-                            xieJianXian:[null,'jiGroup',4.5,['lhym_wuXieJuXing','lhym_liuJieZhiWai','lhym_xieLingChuQiao','lhym_xieQiLiHun','lhym_xieJianZhan','lhym_sheXinShu','lhym_xieLingMiTian','lhym_xieNian'],['des:蜀山五长老排出的邪念聚合体，士气低落时脱壳化为邪灵。','ext:轮回遗梦/xieJianXian.png']],
+                            xieJianXian:[null,'jiGroup',4.5,['lhym_wuXieJuXing','lhym_liuJieZhiWai','lhym_xieLingChuQiao','lhym_xieQiLiHun','lhym_xieJianZhan','lhym_sheXinShu','lhym_xieLingMiTian','lhym_xieNian'],['des:蜀山五长老排出的邪念聚合体，士气低落时脱壳化为邪灵。','ext:轮回遗梦/xieJianXian.webp']],
                             xieLing:[null,'jiGroup',4.5,[
                                 'lhym_wuXingWuZhi',
                                 'lhym_xieLingQinTi',
@@ -2084,15 +2084,15 @@ game.import('extension', function(lib, game, ui, get, ai, _status) {
                                 'lhym_sheXinShu',
                                 'lhym_xieLingMiTian',
                                 'lhym_xieNian'
-                            ],['unseen','forbidai','des:邪剑仙的脱壳形态，只能由【邪灵出壳】转化。','ext:轮回遗梦/xieLing.png']],
-                            xueJian:[null,'jiGroup',4.5,['lhym_huaYing','lhym_huZhu','lhym_wuDuGuiYuan','lhym_lvBo','lhym_tianLing','lhym_shenShu'],['des:出身唐门却向往江湖的任性千金，与五毒兽花楹彼此守护。她收集花露化解爆牌，以毒珠、绿波和天灵千裂破反制强敌，并能助景天重铸镇妖剑。','ext:轮回遗梦/xueJian.png']],
-                            longKui:[null,'huanGroup',4.5,['lhym_jianZhongRen','lhym_cangFeng','lhym_moJianHuTi','lhym_daiJun','lhym_buYuan','lhym_shuangSheng','lhym_huanGui','lhym_qianNian','lhym_youLan','lhym_hongYing','lhym_canYingPai'],['des:守候魔剑千年的姜国公主，以蓝葵的温柔与红葵的决绝守护王兄。她收纳攻击为剑中残影，在双形态间切换，并与魔剑路线的景天共鸣。','ext:轮回遗梦/longKui_blue.png']],
+                            ],['unseen','forbidai','des:邪剑仙的脱壳形态，只能由【邪灵出壳】转化。','ext:轮回遗梦/xieLing.webp']],
+                            xueJian:[null,'jiGroup',4.5,['lhym_huaYing','lhym_huZhu','lhym_wuDuGuiYuan','lhym_lvBo','lhym_tianLing','lhym_shenShu'],['des:出身唐门却向往江湖的任性千金，与五毒兽花楹彼此守护。她收集花露化解爆牌，以毒珠、绿波和天灵千裂破反制强敌，并能助景天重铸镇妖剑。','ext:轮回遗梦/xueJian.webp']],
+                            longKui:[null,'huanGroup',4.5,['lhym_jianZhongRen','lhym_cangFeng','lhym_moJianHuTi','lhym_daiJun','lhym_buYuan','lhym_shuangSheng','lhym_huanGui','lhym_qianNian','lhym_youLan','lhym_hongYing','lhym_canYingPai'],['des:守候魔剑千年的姜国公主，以蓝葵的温柔与红葵的决绝守护王兄。她收纳攻击为剑中残影，在双形态间切换，并与魔剑路线的景天共鸣。','ext:轮回遗梦/longKui_blue.webp']],
                             jingTian:[
                                 null,
                                 'huanGroup',
                                 5,
                                 ['lhym_shuangJian','lhym_yongAn','lhym_dianDang','lhym_feiLong','lhym_zhuJian','lhym_huiYan','lhym_yinDan','lhym_suYuan'],
-                                ['des:永安当里梦想成为大侠的少年，因双剑宿缘卷入六界纷争。开局选择魔剑或镇妖剑，收集龙精石、剑魂与五灵材料，走向不同的永久成长路线。','ext:轮回遗梦/jingTian_moJian.png']
+                                ['des:永安当里梦想成为大侠的少年，因双剑宿缘卷入六界纷争。开局选择魔剑或镇妖剑，收集龙精石、剑魂与五灵材料，走向不同的永久成长路线。','ext:轮回遗梦/jingTian_moJian.webp']
                             ],
                         },
                         translate:{
@@ -2126,6 +2126,6 @@ game.import('extension', function(lib, game, ui, get, ai, _status) {
             card:{card:{},translate:{},list:[]},skill:{skill,translate},
             intro:'仙剑奇侠传三主题角色包：景天、雪见、龙葵、邪剑仙。',author:'蒙牛',version:'1.3',diskURL:'',forumURL:'',
         },
-        files:{character:['jingTian_moJian.png','jingTian_zhenYaoJian.png','xueJian.png','longKui_blue.png','longKui_red.png','xieJianXian.png','xieLing.png'],card:[],skill:markFiles,audio:V.files.concat(['audio/bgm/yuJianJiangHu.mp3','audio/bgm/yuManTang.mp3','audio/bgm/qingYuAn.mp3','audio/bgm/zhuShaBian.mp3','audio/bgm/huanHunCao.mp3','audio/bgm/linWei.mp3','audio/bgm/linWeiBianDiao.mp3'])},
+        files:{character:['jingTian_moJian.webp','jingTian_zhenYaoJian.webp','xueJian.webp','longKui_blue.webp','longKui_red.webp','xieJianXian.webp','xieLing.webp'],card:[],skill:markFiles,audio:V.files.concat(['audio/bgm/yuJianJiangHu.mp3','audio/bgm/yuManTang.mp3','audio/bgm/qingYuAn.mp3','audio/bgm/zhuShaBian.mp3','audio/bgm/huanHunCao.mp3','audio/bgm/linWei.mp3','audio/bgm/linWeiBianDiao.mp3'])},
     };
 });

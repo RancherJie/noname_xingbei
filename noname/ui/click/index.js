@@ -3963,11 +3963,11 @@ export class Click {
 					const imageName = `sex_${characterSex}`,
 						information = lib.card[imageName];
 					if (!information) {
-						resolve(`${lib.assetURL}image/card/${imageName}.png`);
+						resolve(`${lib.assetURL}image/card/${imageName}.webp`);
 						return;
 					}
 					const image = information.image;
-					if (!image) resolve(`${lib.assetURL}image/card/${imageName}.png`);
+					if (!image) resolve(`${lib.assetURL}image/card/${imageName}.webp`);
 					else if (image.startsWith("db:"))
 						game.getDB("image", image.slice(3)).then(resolve, reject);
 					else if (image.startsWith("ext:"))
@@ -3993,9 +3993,9 @@ export class Click {
 							Promise.resolve().then(async () => {
 								const imageName = `group_${characterGroup}`,
 									information = lib.card[imageName];
-								if (!information) return `${lib.assetURL}image/card/${imageName}.png`;
+								if (!information) return `${lib.assetURL}image/card/${imageName}.webp`;
 								const image = information.image;
-								if (!image) return `${lib.assetURL}image/card/${imageName}.png`;
+								if (!image) return `${lib.assetURL}image/card/${imageName}.webp`;
 								if (image.startsWith("db:")) return await game.getDB("image", image.slice(3));
 								if (image.startsWith("ext:")) return `${lib.assetURL}${image.replace(/^ext:/, "extension/")}`;
 								return `${lib.assetURL}${image}`;
@@ -4026,9 +4026,9 @@ export class Click {
 					Promise.resolve().then(async () => {
 						const imageName = `group_${characterGroup}`,
 							information = lib.card[imageName];
-						if (!information) return `${lib.assetURL}image/card/${imageName}.png`;
+						if (!information) return `${lib.assetURL}image/card/${imageName}.webp`;
 						const image = information.image;
-						if (!image) return `${lib.assetURL}image/card/${imageName}.png`;
+						if (!image) return `${lib.assetURL}image/card/${imageName}.webp`;
 						if (image.startsWith("db:")) return await game.getDB("image", image.slice(3));
 						if (image.startsWith("ext:")) return `${lib.assetURL}${image.replace(/^ext:/, "extension/")}`;
 						return `${lib.assetURL}${image}`;

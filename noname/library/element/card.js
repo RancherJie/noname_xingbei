@@ -161,7 +161,7 @@ export class Card extends HTMLDivElement {
 					break;
 				}
 			}
-			this.node.image.setBackgroundImage("image/card/" + name + ".png");
+			this.node.image.setBackgroundImage("image/card/" + name + ".webp");
 		} while (0);
 		return this.nature;
 	}
@@ -184,7 +184,7 @@ export class Card extends HTMLDivElement {
 					break;
 				}
 			}
-			this.node.image.setBackgroundImage("image/card/" + name + ".png");
+			this.node.image.setBackgroundImage("image/card/" + name + ".webp");
 		} while (0);
 		return this.nature;
 	}
@@ -358,7 +358,7 @@ export class Card extends HTMLDivElement {
 				}
 			} else {
 				if (lib.card[bg].modeimage) {
-					this.node.image.setBackgroundImage("image/mode/" + lib.card[bg].modeimage + "/card/" + bg + ".png");
+					this.node.image.setBackgroundImage("image/mode/" + lib.card[bg].modeimage + "/card/" + bg + ".webp");
 				} else {
 					do {
 						let nature = card[3];
@@ -371,7 +371,7 @@ export class Card extends HTMLDivElement {
 								break;
 							}
 						}
-						this.node.image.setBackgroundImage("image/card/" + bg + ".png");
+						this.node.image.setBackgroundImage("image/card/" + bg + ".webp");
 					} while (0);
 				}
 			}

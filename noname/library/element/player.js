@@ -100,7 +100,7 @@ export class Player extends HTMLDivElement {
 			mark: get.linkintro,
 		});
 		// @ts-ignore
-		node.link.firstChild.setBackgroundImage("image/card/tiesuo_mark.png");
+		node.link.firstChild.setBackgroundImage("image/card/tiesuo_mark.webp");
 		// @ts-ignore
 		node.link.firstChild.style.backgroundSize = "cover";
 		ui.create.div(node.identity);
@@ -2021,7 +2021,7 @@ export class Player extends HTMLDivElement {
 			return player.getLeft() + player.offsetWidth / 2;
 		};
 		var player = this;
-		var emotion = ui.create.div("", '<div style="text-align:center"> <img src="' + lib.assetURL + "image/emotion/throw_emotion/" + name + '1.png"> </div>', game.chess ? ui.chess : ui.window);
+		var emotion = ui.create.div("", '<div style="text-align:center"> <img src="' + lib.assetURL + "image/emotion/throw_emotion/" + name + '1.webp"> </div>', game.chess ? ui.chess : ui.window);
 		emotion.style.width = "60px";
 		emotion.style.height = "60px";
 		var width = emotion.offsetWidth / 2;
@@ -2048,7 +2048,7 @@ export class Player extends HTMLDivElement {
 		if (["egg", "flower", "shoe"].includes(name) || rotate) emotion.firstElementChild.style.transform = "rotate(1440deg)";
 		if (lib.config.background_audio) game.playAudio("effect", "throw_" + name + get.rand(1, 2));
 		setTimeout(function () {
-			emotion.innerHTML = '<div style="text-align:center"> <img src="' + lib.assetURL + "image/emotion/throw_emotion/" + name + '2.png"> </div>';
+			emotion.innerHTML = '<div style="text-align:center"> <img src="' + lib.assetURL + "image/emotion/throw_emotion/" + name + '2.webp"> </div>';
 			setTimeout(function () {
 				emotion.delete();
 			}, 1200);
@@ -8127,7 +8127,7 @@ export class Player extends HTMLDivElement {
 			} else {
 				node = ui.create.div(".card.mark.drawinghidden");
 				//将能量和红蓝灯放到单独的marks2里显示
-				if(lib.config.separateEnergyAndMarkers&&(name=='_tiLian_baoShi'||name=='_tiLian_shuiJing'||(lib.skill[name] &&(lib.skill[name].markimage=='image/card/zhiShiWu/hong.png'||lib.skill[name].markimage=='image/card/zhiShiWu/lan.png')))){
+				if(lib.config.separateEnergyAndMarkers&&(name=='_tiLian_baoShi'||name=='_tiLian_shuiJing'||(lib.skill[name] &&(lib.skill[name].markimage=='image/card/zhiShiWu/hong.webp'||lib.skill[name].markimage=='image/card/zhiShiWu/lan.webp')))){
 					this.node.marks2.appendChild(node);
 				}else this.node.marks.insertBefore(node, this.node.marks.childNodes[1]);
 				if (lib.skill[name] && lib.skill[name].markimage) {
@@ -11440,7 +11440,7 @@ export class Player extends HTMLDivElement {
 		for(var i=0;i<skills.length;i++){
 			var skill=skills[i];
 			var info=get.info(skill);
-			if(info.intro&&info.markimage=='image/card/zhiShiWu/hong.png'){
+			if(info.intro&&info.markimage=='image/card/zhiShiWu/hong.webp'){
 				return this.changeZhiShiWu(skill,num,max);
 			}
 		}
@@ -11451,7 +11451,7 @@ export class Player extends HTMLDivElement {
 		for(var i=0;i<skills.length;i++){
 			var skill=skills[i];
 			var info=get.info(skill);
-			if(info.intro&&info.markimage=='image/card/zhiShiWu/lan.png'){
+			if(info.intro&&info.markimage=='image/card/zhiShiWu/lan.webp'){
 				return this.changeZhiShiWu(skill,num,max);
 			}
 		}
@@ -11480,7 +11480,7 @@ export class Player extends HTMLDivElement {
 		for(var i=0;i<skills.length;i++){
 			let skill=skills[i];
 			let info=get.info(skill);
-			if(info.markimage=='image/card/zhiShiWu/hong.png'){
+			if(info.markimage=='image/card/zhiShiWu/hong.webp'){
 				num+=this.countMark(skill);
 				break;
 			}
@@ -11493,7 +11493,7 @@ export class Player extends HTMLDivElement {
 		for(var i=0;i<skills.length;i++){
 			let skill=skills[i];
 			let info=get.info(skill);
-			if(info.markimage=='image/card/zhiShiWu/lan.png'){
+			if(info.markimage=='image/card/zhiShiWu/lan.webp'){
 				num+=this.countMark(skill);
 				break;
 			}
