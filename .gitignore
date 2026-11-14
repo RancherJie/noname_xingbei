@@ -35,6 +35,7 @@ deno.lock
 pnpm-lock.yaml
 game/*.zip  
 *.zip 
+_dev
 
 downloadExtension.html
 update.html
