@@ -1992,20 +1992,20 @@ export class Library {
 								break;
 							}
 							case "new":
-								node.setBackgroundImage("theme/style/card/image/new.png");
+								node.setBackgroundImage("theme/style/card/image/new.webp");
 								break;
 							case "ol":
-								node.setBackgroundImage("theme/style/card/image/ol.png");
+								node.setBackgroundImage("theme/style/card/image/ol.webp");
 								break;
 							case "wood":
 								node.setBackgroundImage("theme/woodden/wood.jpg");
 								node.style.backgroundSize = "initial";
 								break;
 							case "music":
-								node.setBackgroundImage("theme/music/wood3.png");
+								node.setBackgroundImage("theme/music/wood3.webp");
 								break;
 							case "simple":
-								node.setBackgroundImage("theme/simple/card.png");
+								node.setBackgroundImage("theme/simple/card.webp");
 								break;
 						}
 						if (link == "custom") {
@@ -2130,23 +2130,23 @@ export class Library {
 							}/*
 							case "new":
 								node.className = "button character";
-								node.setBackgroundImage("theme/style/cardback/image/new.png");
+								node.setBackgroundImage("theme/style/cardback/image/new.webp");
 								break;
 							case "feicheng":
 								node.className = "button character";
-								node.setBackgroundImage("theme/style/cardback/image/feicheng.png");
+								node.setBackgroundImage("theme/style/cardback/image/feicheng.webp");
 								break;
 							case "official":
 								node.className = "button character";
-								node.setBackgroundImage("theme/style/cardback/image/official.png");
+								node.setBackgroundImage("theme/style/cardback/image/official.webp");
 								break;
 							case "liusha":
 								node.className = "button character";
-								node.setBackgroundImage("theme/style/cardback/image/liusha.png");
+								node.setBackgroundImage("theme/style/cardback/image/liusha.webp");
 								break;
 							case "ol":
 								node.className = "button character";
-								node.setBackgroundImage("theme/style/cardback/image/ol.png");
+								node.setBackgroundImage("theme/style/cardback/image/ol.webp");
 								break;
 							case "wood":
 								node.className = "button card fullskin";
@@ -2155,12 +2155,12 @@ export class Library {
 								break;
 							case "music":
 								node.className = "button card fullskin";
-								node.setBackgroundImage("theme/music/wood3.png");
+								node.setBackgroundImage("theme/music/wood3.webp");
 								break;
 							*/
 							case "xingBei":
 								node.className = "button card fullskin";
-								node.setBackgroundImage("theme/style/cardback/image/xingBei1.png");
+								node.setBackgroundImage("theme/style/cardback/image/xingBei1.webp");
 								break;
 						}
 						if (link == "custom") {
@@ -2305,7 +2305,7 @@ export class Library {
 							if (link == "default") {
 								ui.create.div(div);
 							} else if (link != "custom") {
-								div.setBackgroundImage("theme/style/hp/image/" + link + i + ".png");
+								div.setBackgroundImage("theme/style/hp/image/" + link + i + ".webp");
 							}
 							if (i == 4) {
 								div.style.webkitFilter = "grayscale(1)";
@@ -2647,9 +2647,9 @@ export class Library {
 								node.dataset.decoration = link;
 							}
 							if(link == "side") {
-								node.setBackgroundImage("theme/style/player/" + 'red' + "1.png");
+								node.setBackgroundImage("theme/style/player/" + 'red' + "1.webp");
 							}else{
-								node.setBackgroundImage("theme/style/player/" + link + "1.png");
+								node.setBackgroundImage("theme/style/player/" + link + "1.webp");
 							}
 							node.style.backgroundSize = "100% 100%";
 						}
@@ -2698,8 +2698,8 @@ export class Library {
 							} else {
 								ui.arena.dataset.framedecoration = "";
 							}
-							ui.css.border_stylesheet.sheet.insertRule('#window .player>.framebg,#window #arena.long.mobile:not(.fewplayer) .player[data-position="0"]>.framebg{display:block;background-image:url("' + lib.assetURL + "theme/style/player/" + layout + '1.png")}', 0);
-							ui.css.border_stylesheet.sheet.insertRule('#window #arena.long:not(.fewplayer) .player>.framebg, #arena.oldlayout .player>.framebg{background-image:url("' + lib.assetURL + "theme/style/player/" + layout + '3.png")}', 0);
+							ui.css.border_stylesheet.sheet.insertRule('#window .player>.framebg,#window #arena.long.mobile:not(.fewplayer) .player[data-position="0"]>.framebg{display:block;background-image:url("' + lib.assetURL + "theme/style/player/" + layout + '1.webp")}', 0);
+							ui.css.border_stylesheet.sheet.insertRule('#window #arena.long:not(.fewplayer) .player>.framebg, #arena.oldlayout .player>.framebg{background-image:url("' + lib.assetURL + "theme/style/player/" + layout + '3.webp")}', 0);
 							ui.css.border_stylesheet.sheet.insertRule(".player>.count{z-index: 3 !important;border-radius: 2px !important;text-align: center !important;}", 0);
 						}
 					},
@@ -2831,7 +2831,7 @@ export class Library {
 								break;
 							}
 							case "wood":
-								node.setBackgroundImage("theme/woodden/wood2.png");
+								node.setBackgroundImage("theme/woodden/wood2.webp");
 								break;
 							case "music":
 								node.style.backgroundImage = "linear-gradient(#4b4b4b, #464646)";
@@ -2878,7 +2878,7 @@ export class Library {
 							var str = "";
 							switch (layout) {
 								case "wood":
-									str = 'url("' + lib.assetURL + 'theme/woodden/wood2.png")';
+									str = 'url("' + lib.assetURL + 'theme/woodden/wood2.webp")';
 									break;
 								case "music":
 									str = "linear-gradient(#4b4b4b, #464646);color:white;text-shadow:black 0 0 2px";
@@ -8820,7 +8820,7 @@ export class Library {
 			},
 		},
 		expandedSlots: {
-			markimage: "image/card/expandedSlots.png",
+			markimage: "image/card/expandedSlots.webp",
 			intro: {
 				markcount: function (storage, player) {
 					var all = 0,
@@ -8854,7 +8854,7 @@ export class Library {
 			},
 		},
 		charge: {
-			markimage: "image/card/charge.png",
+			markimage: "image/card/charge.webp",
 			intro: {
 				content(storage, player) {
 					const max = player.getMaxCharge();
@@ -9773,7 +9773,7 @@ export class Library {
 					return "已有" + get.cnNumber(player.hujia) + "点护甲值";
 				},
 			},
-			markimage: "image/card/shield.png",
+			markimage: "image/card/shield.webp",
 		},
 		*/
 		counttrigger: {
@@ -10587,14 +10587,14 @@ export class Library {
 						name:'宝石',
 						content:'你有拥有#个宝石能量',
 					},
-					markimage:'image/card/xingShi/baoShi.png',
+					markimage:'image/card/xingShi/baoShi.webp',
 				},
 				shuiJing:{
 					intro:{
 						name:'水晶',
 						content:'你有拥有#个水晶能量',
 					},
-					markimage:'image/card/xingShi/shuiJing.png',
+					markimage:'image/card/xingShi/shuiJing.webp',
 				},
 			},
 			enable:'xingDong',
@@ -10728,7 +10728,7 @@ export class Library {
 			trigger:{player:'xingDongBefore'},
 			forced:true,
 			//marktext:"虚",
-			markimage:'image/card/xuRuo.png',
+			markimage:'image/card/xuRuo.webp',
 			intro:{
 				content:'jiChuXiaoGuo',
 			},
@@ -10779,7 +10779,7 @@ export class Library {
 		_zhongDu:{
 			priority:3,
 			//marktext:"毒",
-			markimage:'image/card/zhongDu.png',
+			markimage:'image/card/zhongDu.webp',
 			intro:{
 				content:'jiChuXiaoGuo',
 				markcount:'expansion',
@@ -10809,7 +10809,7 @@ export class Library {
 		},
 		_shengDun:{
 			//marktext:"盾",
-			markimage:'image/card/shengDun.png',
+			markimage:'image/card/shengDun.webp',
 			intro:{
 				content:'jiChuXiaoGuo',
 			},
@@ -10952,7 +10952,7 @@ export class Library {
 				name:'已魔弹',
 				nocount:true,
 			},
-			markimage:'image/card/moDan.png',
+			markimage:'image/card/moDan.webp',
 			trigger:{target:'shouDaoMoDan'},
 			direct:true,
 			content:async function(event,trigger,player){
@@ -12371,7 +12371,7 @@ export class Library {
 		},
 	};
 	linked = ["fire", "thunder", "kami", "ice"];
-	natureBg = new Map([["stab", "image/card/cisha.png"]]);
+	natureBg = new Map([["stab", "image/card/cisha.webp"]]);
 	natureSeparator = "|";
 	namePrefix = new Map([
 		[

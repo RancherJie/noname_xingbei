@@ -9,7 +9,7 @@
   "after_bytes": 11921314,
   "files": [
     {
-      "path": "十周年-噩梦人机/image/character/chibi/default/chuanJiaoShi.png",
+      "path": "十周年-噩梦人机/image/character/chibi/default/chuanJiaoShi.webp",
       "before_size": [
         1099,
         1431
@@ -31,7 +31,7 @@
       "after_sha256": "b1043d3b35089b8421102ed0dd58db1ec159f1ee79b131ad4c1ddfa706ef43f1"
     },
     {
-      "path": "十周年-噩梦人机/image/character/chibi/default/jingLingSheShou.png",
+      "path": "十周年-噩梦人机/image/character/chibi/default/jingLingSheShou.webp",
       "before_size": [
         1099,
         1431
@@ -53,7 +53,7 @@
       "after_sha256": "0775f486ff301a3d16dfaf5b1969a33afb879d5e12f0bc7d9d77f8d08f98704c"
     },
     {
-      "path": "十周年-噩梦人机/image/character/chibi/default/lingXiZhiChao.png",
+      "path": "十周年-噩梦人机/image/character/chibi/default/lingXiZhiChao.webp",
       "before_size": [
         1099,
         1431
@@ -75,7 +75,7 @@
       "after_sha256": "cfcf8d3fd5680b32dbf65516bc3ad8c656711a126eb84acf43e05e61f03a1ba8"
     },
     {
-      "path": "十周年-噩梦人机/image/character/chibi/default/nvWuShen.png",
+      "path": "十周年-噩梦人机/image/character/chibi/default/nvWuShen.webp",
       "before_size": [
         1099,
         1431
@@ -97,7 +97,7 @@
       "after_sha256": "a9acbf30601d4ae2ca531cd1b717b393bab5ffc76cdf213edf3804f0de3dc23d"
     },
     {
-      "path": "十周年-噩梦人机/image/character/chibi/default/sheng_zhongCaiZhe.png",
+      "path": "十周年-噩梦人机/image/character/chibi/default/sheng_zhongCaiZhe.webp",
       "before_size": [
         1099,
         1431
@@ -119,7 +119,7 @@
       "after_sha256": "420939d53abd66e8f91acb00c2d1e66ab93007a0fb803b40931c6177d16ac18c"
     },
     {
-      "path": "十周年-噩梦人机/image/character/chibi/default/shengDianQiShi.png",
+      "path": "十周年-噩梦人机/image/character/chibi/default/shengDianQiShi.webp",
       "before_size": [
         1099,
         1431
@@ -141,7 +141,7 @@
       "after_sha256": "41d49b8de6f761c57dedaa9bd2f436a61b5e0e9b89fc9724fd5690b0015113ae"
     },
     {
-      "path": "十周年-噩梦人机/image/character/chibi/default/shengQiangQiShi.png",
+      "path": "十周年-噩梦人机/image/character/chibi/default/shengQiangQiShi.webp",
       "before_size": [
         1099,
         1431
@@ -163,7 +163,7 @@
       "after_sha256": "67cdfcdb38c45a4ee5aa766abef369d913be4a69e0fe013b558db4fb83aaf2a8"
     },
     {
-      "path": "十周年-噩梦人机/image/character/chibi/default/shengTingJianChaShi.png",
+      "path": "十周年-噩梦人机/image/character/chibi/default/shengTingJianChaShi.webp",
       "before_size": [
         1099,
         1431
@@ -185,7 +185,7 @@
       "after_sha256": "969a877169cd6799684430c473b92806cc419d2d724263c85593a9575f9e1cfa"
     },
     {
-      "path": "十周年-噩梦人机/image/character/chibi/default/tianShi.png",
+      "path": "十周年-噩梦人机/image/character/chibi/default/tianShi.webp",
       "before_size": [
         1099,
         1431
@@ -207,7 +207,7 @@
       "after_sha256": "f7b271315fdc878f7dea3e62744d6d06245d950e517dda3a0313ffd617b20c17"
     },
     {
-      "path": "十周年-噩梦人机/image/character/chibi/default/xingZhuiNvWu.png",
+      "path": "十周年-噩梦人机/image/character/chibi/default/xingZhuiNvWu.webp",
       "before_size": [
         1100,
         1430
@@ -229,7 +229,7 @@
       "after_sha256": "898c2d61a9820f4cf7cc5a01faab17522415871d697369b824006d39a2fa9ac1"
     },
     {
-      "path": "十周年-噩梦人机/image/character/chibi/default/yingLingRenXing.png",
+      "path": "十周年-噩梦人机/image/character/chibi/default/yingLingRenXing.webp",
       "before_size": [
         1099,
         1431
@@ -251,7 +251,7 @@
       "after_sha256": "90ca3807dd5988f77cc67727e8eb7e8066d26b295dd64689c857b0284884f473"
     },
     {
-      "path": "十周年-噩梦人机/image/character/chibi/default/yuanChuZhiGong.png",
+      "path": "十周年-噩梦人机/image/character/chibi/default/yuanChuZhiGong.webp",
       "before_size": [
         1099,
         1431
@@ -273,7 +273,7 @@
       "after_sha256": "8540ac2ae63403f1cec81f9ccec2ac9498f095f61d0019bca605d2d664edfdf2"
     },
     {
-      "path": "十周年-噩梦人机/image/character/chibi/nightmare/chuanJiaoShi.png",
+      "path": "十周年-噩梦人机/image/character/chibi/nightmare/chuanJiaoShi.webp",
       "before_size": [
         1099,
         1431
@@ -295,7 +295,7 @@
       "after_sha256": "15b83467fc4c5184936da195e7ff8440b3a70c97f3b6008d1903f332079f397e"
     },
     {
-      "path": "十周年-噩梦人机/image/character/chibi/nightmare/jingLingSheShou.png",
+      "path": "十周年-噩梦人机/image/character/chibi/nightmare/jingLingSheShou.webp",
       "before_size": [
         1099,
         1431
@@ -317,7 +317,7 @@
       "after_sha256": "88b8f159724bbae6d4d27280a7eb04c275b667e7292c5a1f591337d1706045f8"
     },
     {
-      "path": "十周年-噩梦人机/image/character/chibi/nightmare/lingXiZhiChao.png",
+      "path": "十周年-噩梦人机/image/character/chibi/nightmare/lingXiZhiChao.webp",
       "before_size": [
         1100,
         1430
@@ -339,7 +339,7 @@
       "after_sha256": "b33b6739a9be59fce25e84bc97f7f301a7bd155d9b9bdff9276c41777cb96e06"
     },
     {
-      "path": "十周年-噩梦人机/image/character/chibi/nightmare/nvWuShen.png",
+      "path": "十周年-噩梦人机/image/character/chibi/nightmare/nvWuShen.webp",
       "before_size": [
         1099,
         1431
@@ -361,7 +361,7 @@
       "after_sha256": "d28b9823b09bdb9b495584749fa4e3de43f39c33e9a3430bcc95072f8edf97b0"
     },
     {
-      "path": "十周年-噩梦人机/image/character/chibi/nightmare/sheng_zhongCaiZhe.png",
+      "path": "十周年-噩梦人机/image/character/chibi/nightmare/sheng_zhongCaiZhe.webp",
       "before_size": [
         1099,
         1431
@@ -383,7 +383,7 @@
       "after_sha256": "7838c748005604731b205966d4a34ee2b2644461f63acaebfecb205c63c4f9bd"
     },
     {
-      "path": "十周年-噩梦人机/image/character/chibi/nightmare/shengDianQiShi.png",
+      "path": "十周年-噩梦人机/image/character/chibi/nightmare/shengDianQiShi.webp",
       "before_size": [
         1099,
         1431
@@ -405,7 +405,7 @@
       "after_sha256": "82193ad75453e28d3be4dfe85c718393eb69a29ea30d6ba917a6c2c602cdc1cc"
     },
     {
-      "path": "十周年-噩梦人机/image/character/chibi/nightmare/shengQiangQiShi.png",
+      "path": "十周年-噩梦人机/image/character/chibi/nightmare/shengQiangQiShi.webp",
       "before_size": [
         1100,
         1430
@@ -427,7 +427,7 @@
       "after_sha256": "f0a434a1a7bb87e70786a94c2764a40e000e9aefb7e90f401d9581462f8358cd"
     },
     {
-      "path": "十周年-噩梦人机/image/character/chibi/nightmare/shengTingJianChaShi.png",
+      "path": "十周年-噩梦人机/image/character/chibi/nightmare/shengTingJianChaShi.webp",
       "before_size": [
         1100,
         1430
@@ -449,7 +449,7 @@
       "after_sha256": "d2381bae0007adc1ec15a3c0f255131d4f203eddc7736b7c552bf7ac93764518"
     },
     {
-      "path": "十周年-噩梦人机/image/character/chibi/nightmare/tianShi.png",
+      "path": "十周年-噩梦人机/image/character/chibi/nightmare/tianShi.webp",
       "before_size": [
         1099,
         1431
@@ -471,7 +471,7 @@
       "after_sha256": "303fb3eda111c45e75a4c120f7acb34e15b984390439ac7f11bc560c57e9f4ed"
     },
     {
-      "path": "十周年-噩梦人机/image/character/chibi/nightmare/xingZhuiNvWu.png",
+      "path": "十周年-噩梦人机/image/character/chibi/nightmare/xingZhuiNvWu.webp",
       "before_size": [
         1100,
         1430
@@ -493,7 +493,7 @@
       "after_sha256": "134a5c59b38d0781aa7bb54f9552798c0abd9dd4eb44142de1d7acc94cb65635"
     },
     {
-      "path": "十周年-噩梦人机/image/character/chibi/nightmare/yingLingRenXing.png",
+      "path": "十周年-噩梦人机/image/character/chibi/nightmare/yingLingRenXing.webp",
       "before_size": [
         1100,
         1430
@@ -515,7 +515,7 @@
       "after_sha256": "1ba8a9e2be7db028b7413d15b0e462edf3bb0812b2e51942c6001fd81a0e17ec"
     },
     {
-      "path": "十周年-噩梦人机/image/character/chibi/nightmare/yuanChuZhiGong.png",
+      "path": "十周年-噩梦人机/image/character/chibi/nightmare/yuanChuZhiGong.webp",
       "before_size": [
         1099,
         1431

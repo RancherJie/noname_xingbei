@@ -508,7 +508,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     max:3,
                     content:'mark',
                 },
-                markimage:'image/card/zhiShiWu/hong.png',
+                markimage:'image/card/zhiShiWu/hong.webp',
                 onremove:'storage',
             },
 
@@ -767,7 +767,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             content:'expansion',
                             nocount:true,
                         },
-                        markimage:'image/card/zhuanShu/wangQuanBaoZhu.png',
+                        markimage:'image/card/zhuanShu/wangQuanBaoZhu.webp',
                     },
                     shengLvWeiYa:{
                         trigger:{player:'wangQuanBaoZhuAfter'},
@@ -909,7 +909,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         player.markSkill(skill);
                     }
                 },
-                markimage:'image/card/zhiShiWu/lan.png',
+                markimage:'image/card/zhiShiWu/lan.webp',
             },
             yinZhiZiDan:{
                 intro:{
@@ -923,7 +923,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         player.markSkill(skill);
                     }
                 },
-                markimage:'image/card/zhiShiWu/hong.png',
+                markimage:'image/card/zhiShiWu/hong.webp',
             },
 
             shengYueYinQi:{
@@ -1273,7 +1273,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     <span class='tiaoJian'>(此卡被转移至你面前时，你摸2张牌[强制])</span>我方【战绩区】+1[水晶]，然后将此卡转移至你左手边最近的角色面前，传教士弃1张牌。
                     `,
                 },
-                markimage:'image/card/zhuanShu/luBiao.png',
+                markimage:'image/card/zhuanShu/luBiao.webp',
                 trigger:{player:'changeZhiShiWuEnd'},
                 filter:function (event,player){
                     return event.zhiShiWu=='luBiaoX'&&event.type=='zhuanYi'&&event.gaoJieShi!=true;
@@ -1380,7 +1380,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     max:4,
                     content:'mark',
                 },
-                markimage:'image/card/zhiShiWu/hong.png',
+                markimage:'image/card/zhiShiWu/hong.webp',
             },
 
             yiDuanXieShuo:{
@@ -1664,7 +1664,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     const cards = player.getExpansions('yuYan');
                     if (cards.length) player.discard(cards);
                 },
-                markimage:'image/card/zhuanShu/moRiYuYan.png',
+                markimage:'image/card/zhuanShu/moRiYuYan.webp',
                 trigger:{global:'gainBefore'},
                 forced:true,
                 filter:function (event,player){
@@ -1703,7 +1703,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             <span class='tiaoJian'>(异教徒的回合开始时)</span>移除此卡。`,
                             nocount:true,
                         },
-                        markimage:'image/card/zhuanShu/tianLeiJieHuo.png',
+                        markimage:'image/card/zhuanShu/tianLeiJieHuo.webp',
                         forced:true,
                         trigger:{player:'changeZhiShiWuAfter'},
                         filter:function (event,player){
@@ -1782,7 +1782,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             <span class='tiaoJian'>(异教徒的回合开始时)</span>移除此卡。`,
                             nocount:true,
                         },
-                        markimage:'image/card/zhuanShu/diLieBoTao.png',
+                        markimage:'image/card/zhuanShu/diLieBoTao.webp',
                         forced:true,
                         trigger:{player:'changeZhiShiWuAfter'},
                         filter:function (event,player){

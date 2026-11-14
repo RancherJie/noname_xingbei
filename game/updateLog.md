@@ -241,7 +241,7 @@ new myWorker4();
 url: 返回资源的 URL 而不是文件内容
 
 ```js
-import logoUrl from 'logo.png?url';
+import logoUrl from 'logo.webp?url';
 img.src = logoUrl;
 ```
 

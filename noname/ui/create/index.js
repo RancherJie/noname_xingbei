@@ -387,10 +387,10 @@ export class Create {
 					}
 				} else {
 					if (lib.card[cardName].modeimage) {
-						bg.setBackgroundImage("image/mode/" + lib.card[cardName].modeimage + "/card/" + cardName + ".png");
+						bg.setBackgroundImage("image/mode/" + lib.card[cardName].modeimage + "/card/" + cardName + ".webp");
 					} else {
-						if (cardName == "sha" && cardNature == "stab") bg.setBackgroundImage("image/card/cisha.png");
-						else bg.setBackgroundImage("image/card/" + cardName + ".png");
+						if (cardName == "sha" && cardNature == "stab") bg.setBackgroundImage("image/card/cisha.webp");
+						else bg.setBackgroundImage("image/card/" + cardName + ".webp");
 					}
 				}
 			} else if (get.dynamicVariable(lib.card[cardName].image, card) == "background") {

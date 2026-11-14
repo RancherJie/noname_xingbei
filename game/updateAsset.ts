@@ -10,7 +10,7 @@ const __dirname: string = dirname(__filename);
 
 const assetListPath: string = join(__dirname, "./asset.js");
 const supportAudioSuffix = [".mp3", ".ogg", ".wav"];
-const supportImageSuffix = [".jpg", ".jpeg", ".png", ".webp"];
+const supportImageSuffix = [".jpg", ".jpeg", ".webp", ".webp"];
 const supportFontSuffix = [".woff2"];
 const assetSuffixFilter: Record<string, string[]> = {
 	audio: supportAudioSuffix,

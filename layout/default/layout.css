@@ -2701,52 +2701,52 @@ div:not(.handcards) > .card > .info > span,
 #window .player > .framebg[data-auto="gold"],
 #window #arena.long.mobile:not(.fewplayer) .player[data-position="0"] > .framebg[data-auto="gold"] {
 	display: block;
-	background-image: url("../../theme/style/player/gold1.png");
+	background-image: url("../../theme/style/player/gold1.webp");
 }
 #window #arena.long:not(.fewplayer) .player > .framebg[data-auto="gold"],
 #arena.oldlayout .player > .framebg[data-auto="gold"] {
 	display: block;
-	background-image: url("../../theme/style/player/gold3.png");
+	background-image: url("../../theme/style/player/gold3.webp");
 }
 #window .player > .framebg[data-auto="silver"],
 #window #arena.long.mobile:not(.fewplayer) .player[data-position="0"] > .framebg[data-auto="silver"] {
 	display: block;
-	background-image: url("../../theme/style/player/silver1.png");
+	background-image: url("../../theme/style/player/silver1.webp");
 }
 #window #arena.long:not(.fewplayer) .player > .framebg[data-auto="silver"],
 #arena.oldlayout .player > .framebg[data-auto="silver"] {
 	display: block;
-	background-image: url("../../theme/style/player/silver3.png");
+	background-image: url("../../theme/style/player/silver3.webp");
 }
 #window .player > .framebg[data-auto="bronze"],
 #window #arena.long.mobile:not(.fewplayer) .player[data-position="0"] > .framebg[data-auto="bronze"] {
 	display: block;
-	background-image: url("../../theme/style/player/bronze1.png");
+	background-image: url("../../theme/style/player/bronze1.webp");
 }
 #window #arena.long:not(.fewplayer) .player > .framebg[data-auto="bronze"],
 #arena.oldlayout .player > .framebg[data-auto="bronze"] {
 	display: block;
-	background-image: url("../../theme/style/player/bronze3.png");
+	background-image: url("../../theme/style/player/bronze3.webp");
 }
 #window .player > .framebg[data-auto="true"],
 #window #arena.long.mobile:not(.fewplayer) .player[data-position="0"] > .framebg[data-auto="true"] {
 	display: block;
-	background-image: url("../../theme/style/player/red1.png");
+	background-image: url("../../theme/style/player/red1.webp");
 }
 #window #arena.long:not(.fewplayer) .player > .framebg[data-auto="true"],
 #arena.oldlayout .player > .framebg[data-auto="true"] {
 	display: block;
-	background-image: url("../../theme/style/player/red3.png");
+	background-image: url("../../theme/style/player/red3.webp");
 }
 #window .player > .framebg[data-auto="false"],
 #window #arena.long.mobile:not(.fewplayer) .player[data-position="0"] > .framebg[data-auto="false"] {
 	display: block;
-	background-image: url("../../theme/style/player/blue1.png");
+	background-image: url("../../theme/style/player/blue1.webp");
 }
 #window #arena.long:not(.fewplayer) .player > .framebg[data-auto="false"],
 #arena.oldlayout .player > .framebg[data-auto="false"] {
 	display: block;
-	background-image: url("../../theme/style/player/blue3.png");
+	background-image: url("../../theme/style/player/blue3.webp");
 }
 
 .avatar {
@@ -3039,7 +3039,7 @@ div:not(.handcards) > .card > .info > span,
 
 /*xingBei星级*/
 .hp:not(.text):not(.actcount):not(.treasure)[data-condition="xing"]>div:not(.lost){
-    background: url('../../theme/style/hp/image/xing.png') no-repeat center;
+    background: url('../../theme/style/hp/image/xing.webp') no-repeat center;
     box-shadow: none;
     border: none;
     background-size: 90% 90%;
@@ -3049,7 +3049,7 @@ div:not(.handcards) > .card > .info > span,
 }
 
 .hp[data-condition="hidden"] > div:not(.lost):not(.shield) {
-	background-image: url("../../theme/style/hp/image/hidden_hp.png") !important;
+	background-image: url("../../theme/style/hp/image/hidden_hp.webp") !important;
 	width: 12px;
 	height: 12px;
 	background-size: 100% 100%;
@@ -4017,7 +4017,7 @@ div:not(.handcards) > .card > .info > span,
 }
 
 #arena.hidden_handcard .handcards > .card {
-	background:url('../../theme/style/cardback/image/xingBei1.png');
+	background:url('../../theme/style/cardback/image/xingBei1.webp');
 	background-size: contain;
 }
 
@@ -4605,7 +4605,7 @@ div[data-decoration="gold"]::before,
 #arena:not(.autoframe)[data-framedecoration="gold"] .player > .framebg::before {
 	content: "";
 	position: absolute;
-	background-image: url("../../theme/style/player/gold_d1.png");
+	background-image: url("../../theme/style/player/gold_d1.webp");
 	background-size: 100% 100%;
 	width: 41px;
 	height: 80px;
@@ -4619,7 +4619,7 @@ div[data-decoration="gold"]::after,
 #arena:not(.autoframe)[data-framedecoration="gold"] .player > .framebg::after {
 	content: "";
 	position: absolute;
-	background-image: url("../../theme/style/player/gold_d2.png");
+	background-image: url("../../theme/style/player/gold_d2.webp");
 	background-size: 100% 100%;
 	width: 75px;
 	height: 32px;
@@ -4636,7 +4636,7 @@ div[data-decoration="silver"]::before,
 #arena:not(.autoframe)[data-framedecoration="silver"] .player > .framebg::before {
 	content: "";
 	position: absolute;
-	background-image: url("../../theme/style/player/silver_d1.png");
+	background-image: url("../../theme/style/player/silver_d1.webp");
 	background-size: 100% 100%;
 	width: 41px;
 	height: 61px;
@@ -4650,7 +4650,7 @@ div[data-decoration="silver"]::after,
 #arena:not(.autoframe)[data-framedecoration="silver"] .player > .framebg::after {
 	content: "";
 	position: absolute;
-	background-image: url("../../theme/style/player/silver_d2.png");
+	background-image: url("../../theme/style/player/silver_d2.webp");
 	background-size: 100% 100%;
 	width: 69px;
 	height: 21px;
@@ -4667,7 +4667,7 @@ div[data-decoration="bronze"]::before,
 #arena:not(.autoframe)[data-framedecoration="bronze"] .player > .framebg::before {
 	content: "";
 	position: absolute;
-	background-image: url("../../theme/style/player/bronze_d1.png");
+	background-image: url("../../theme/style/player/bronze_d1.webp");
 	background-size: 100% 100%;
 	width: 40px;
 	height: 80px;
@@ -4681,7 +4681,7 @@ div[data-decoration="bronze"]::after,
 #arena:not(.autoframe)[data-framedecoration="bronze"] .player > .framebg::after {
 	content: "";
 	position: absolute;
-	background-image: url("../../theme/style/player/bronze_d2.png");
+	background-image: url("../../theme/style/player/bronze_d2.webp");
 	background-size: 100% 100%;
 	width: 69px;
 	height: 21px;
@@ -5059,7 +5059,7 @@ div[data-decoration="bronze"]::after {
 	left: 2px;
 	width: calc(100% - 4px);
 	height: 25px;
-	background-image: url("../../image/card/cardtempname_bg.png");
+	background-image: url("../../image/card/cardtempname_bg.webp");
 	background-size: 100% 100%;
 	text-align: right;
 	writing-mode: horizontal-tb;

@@ -1,7 +1,7 @@
 html {
 	color: white;
 	text-shadow: black 0 0 2px;
-	background: url("grid.png"), linear-gradient(#333333, #222222) fixed;
+	background: url("grid.webp"), linear-gradient(#333333, #222222) fixed;
 }
 #system > div > div,
 #mebg,
@@ -51,7 +51,7 @@ body[data-background_color_music="blue"] #arena.mobile:not(.chess) .player[data-
 }
 
 .marks > .card.fullskin > .markcount.menubutton {
-	background: url("wood3.png");
+	background: url("wood3.webp");
 }
 
 /*.player.current_action{
@@ -79,7 +79,7 @@ body[data-background_color_music="blue"] #arena.mobile:not(.chess) .player[data-
 
 .player,
 #mebg {
-	/*background:url('wood.png') left repeat-y,url('wood.png') right repeat-y,linear-gradient(#4b4b4b, #464646);*/
+	/*background:url('wood.webp') left repeat-y,url('wood.webp') right repeat-y,linear-gradient(#4b4b4b, #464646);*/
 }
 .card {
 	color: white;
@@ -91,7 +91,7 @@ body[data-background_color_music="blue"] #arena.mobile:not(.chess) .player[data-
 .cardbg {
 	color: rgb(77, 60, 51);
 	text-shadow: none;
-	background: url("wood3.png");
+	background: url("wood3.webp");
 }
 
 .marks2 > .card:not(.fullskin),
@@ -144,7 +144,7 @@ body[data-background_color_music="blue"] #arena.mobile:not(.chess) .player[data-
 	text-shadow: none !important;
 }
 .woodbg .menubutton.large {
-	background: url("wood3.png") !important;
+	background: url("wood3.webp") !important;
 	box-shadow: rgba(0, 0, 0, 0.3) 0 0 0 1px, rgba(0, 0, 0, 0.3) 0 0 5px !important;
 }
 

@@ -36,8 +36,8 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             var original = splash.handle;
             if(typeof original != 'function') return;
             splash.handle = function(mode) {
-                if(mode == 'boss') return 'extension/' + extensionFolder + '/image/splash/xieLing.png';
-                if(portraits[mode]) return 'extension/' + extensionFolder + '/image/character/chibi/default/' + portraits[mode] + '.png';
+                if(mode == 'boss') return 'extension/' + extensionFolder + '/image/splash/xieLing.webp';
+                if(portraits[mode]) return 'extension/' + extensionFolder + '/image/character/chibi/default/' + portraits[mode] + '.webp';
                 return original.apply(this, arguments);
             };
             splash._nightmarePortraits = true;
@@ -52,7 +52,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
         "yuHunLiuJuHeShi", "lingHunLianJie", "lingHunZengFu", "xueZhiAiShang"
     ];
 
-    // 70名角色均提供默认版与噩梦版头像；键名同时作为图片文件名。
+    // 72名角色均提供默认版与噩梦版头像；键名同时作为图片文件名。
     var nightmareCharacterImageIds = [
         "fengZhiJianSheng", "kuangZhanShi", "shenJianShou", "fengYinShi", "anShaZhe",
         "shengNv", "tianShi", "moFaShaoNv", "moJianShi", "shengQiangQiShi", "yuanSuShi",
@@ -67,7 +67,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
         "yiJiaoTu", "nong_baoShiShaoNv", "youJiShi", "jianZhiMoNv", "jieRiMoDao",
         "luoLiFanZhang", "tanLanShaoNv", "lingXiZhiChao", "jianXiZhiPian", "daoDanLuoLi",
         "yueTuanShouXi", "zhouFuShi", "sheng_zhongCaiZhe", "daiDuoShaoNv", "jiDuShaoNv",
-        "jianZhiZi", "moGongEX"
+        "jianZhiZi", "moGongEX", "daZuiSiJiao", "guShenJiSi"
     ];
     // 兼容角色包给角色ID增加前缀或使用别名的情况。角色职业名与上方图片ID一一对应，
     // 运行时优先按真实ID匹配，匹配不到时再用翻译名找到应使用的图片文件。
@@ -80,7 +80,8 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
         "战斗法师", "猎巫人", "女仆长", "矜贵之女", "噬神者", "染污者", "结界师", "神秘学者",
         "红衣主教", "铸律者", "记录者", "传教士", "异教徒", "爆食少女", "游击士", "剑之魔女",
         "节日魔导", "萝莉番长", "贪婪少女", "灵熙之潮", "见习制片", "捣蛋萝莉", "乐团首席",
-        "咒符师", "圣仲裁者", "怠惰少女", "忌妒少女", "剑之子", "EX魔弓"
+        "咒符师", "圣仲裁者", "怠惰少女", "忌妒少女", "剑之子", "EX魔弓",
+        "大罪司教", "古神祭祀"
     ];
     var nightmareCharacterImageSet = Object.create(null);
     nightmareCharacterImageIds.forEach(function (id) { nightmareCharacterImageSet[id] = true; });
@@ -369,7 +370,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 if (typeof tags[i] == "string" && tags[i].indexOf("ext:" + extensionFolder + "/image/character/") == 0) tags.splice(i, 1);
             }
             var folder = "chibi/default";
-            tags.unshift("ext:" + extensionFolder + "/image/character/" + folder + "/" + imageId + ".png");
+            tags.unshift("ext:" + extensionFolder + "/image/character/" + folder + "/" + imageId + ".webp");
         };
         // 角色包预载后、正式合并前只存在于 lib.imported.character；先改这份源数据，
         // 才能让后续生成的选将候选从一开始就使用当前客户端选择的头像。
@@ -418,7 +419,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             var folder = "chibi/default";
             node.setBackgroundImage(
                 "extension/" + extensionFolder + "/image/character/" +
-                folder + "/" + imageId + ".png"
+                folder + "/" + imageId + ".webp"
             );
         };
 
@@ -478,7 +479,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
         var imageAlreadyApplied = slots.every(function (entry) {
             var node = player.node[entry[0]];
             if (!node) return false;
-            return String(node.style.backgroundImage || "").includes("/" + folder + "/" + entry[2] + ".png");
+            return String(node.style.backgroundImage || "").includes("/" + folder + "/" + entry[2] + ".webp");
         });
         if (player.storage && player.storage.xingBeiNightmareCharacterImage == signature && imageAlreadyApplied) return;
         if (!player.storage) player.storage = {};
@@ -491,7 +492,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 var node = target.node[entry[0]];
                 if (!node) return;
                 if (typeof node.setBackgroundImage == "function") {
-                    node.setBackgroundImage("extension/" + name + "/image/character/" + folder + "/" + entry[2] + ".png");
+                    node.setBackgroundImage("extension/" + name + "/image/character/" + folder + "/" + entry[2] + ".webp");
                 }
             });
             if (target == game.me && ui.fakeme && target.node.avatar) {
@@ -10903,7 +10904,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
     function registerPveMode() {
         if (lib.mode && lib.mode.nightmarePve) return;
         game.addMode("nightmarePve", {
-            splash: "ext:十周年-噩梦人机/image/character/chibi/nightmare/yongZhe.png",
+            splash: "ext:十周年-噩梦人机/image/character/chibi/nightmare/yongZhe.webp",
             start: function () {
                 "step 0";
                 _status.mode = "coop";

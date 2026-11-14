@@ -1,5 +1,5 @@
 .hp:not(.text):not(.actcount):not(.treasure)>div:not(.lost){
-    background: url('image/xingBei1.png');
+    background: url('image/xingBei1.webp');
     box-shadow: none;
     border: none;
     background-size: 100% 100%;
@@ -9,7 +9,7 @@
 }
 
 .hp:not(.text):not(.actcount):not(.treasure)>.lost{
-    background: url('image/xingBei4.png');
+    background: url('image/xingBei4.webp');
     box-shadow: none;
     border: none;
     background-size: 100% 100%;

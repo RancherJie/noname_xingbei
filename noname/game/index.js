@@ -4901,7 +4901,7 @@ export class Game extends GameCompatible {
 					var type_frame1 = 0;
 					var type_frame = ".jpg";
 					var num_frame = 1;
-					type_frame = ".png";
+					type_frame = ".webp";
 					num_frame = 8;
 					var folder_frame = lib.assetURL + "image/pointer/" + animation.image + "/";
 					var div1 = ui.create.div();
@@ -5007,7 +5007,7 @@ export class Game extends GameCompatible {
 				if (src != undefined && animation.image.indexOf(".") == -1) {
 					div2.style.backgroundSize = "100% 100%";
 					div2.style.opacity = "0.7";
-					div2.setBackgroundImage("image/pointer/" + animation.image + "/line.png");
+					div2.setBackgroundImage("image/pointer/" + animation.image + "/line.webp");
 				} else {
 					div2.style.background = "#ffffff";
 				}
@@ -5343,9 +5343,9 @@ export class Game extends GameCompatible {
 		if (!info.image || typeof info.image !== "string") {
 			if (info.fullskin) {
 				if (_status.evaluatingExtension) {
-					info.image = "db:extension-" + extname + ":" + name + ".png";
+					info.image = "db:extension-" + extname + ":" + name + ".webp";
 				} else {
-					info.image = "ext:" + extname + "/" + name + ".png";
+					info.image = "ext:" + extname + "/" + name + ".webp";
 				}
 			} else if (info.fullimage) {
 				if (_status.evaluatingExtension) {
@@ -5403,9 +5403,9 @@ export class Game extends GameCompatible {
 					if (!pack[i][j].image) {
 						if (pack[i][j].fullskin) {
 							if (_status.evaluatingExtension) {
-								pack[i][j].image = "db:extension-" + extname + ":" + j + ".png";
+								pack[i][j].image = "db:extension-" + extname + ":" + j + ".webp";
 							} else {
-								pack[i][j].image = "ext:" + extname + "/" + j + ".png";
+								pack[i][j].image = "ext:" + extname + "/" + j + ".webp";
 							}
 						} else if (pack[i][j].fullimage) {
 							if (_status.evaluatingExtension) {

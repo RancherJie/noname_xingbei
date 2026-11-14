@@ -118,7 +118,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     ·我方【战绩区】+1[宝石]；<br>
                     ·我方【战绩区】+2[水晶]。`,
                 },
-                markimage:'image/mode/boss/mark/buff_A.png',
+                markimage:'image/mode/boss/mark/buff_A.webp',
             },
             buff_B:{
                 mark:true,
@@ -131,7 +131,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     <span class='tiaoJian'>(本体进入【破防形态】时)</span>我方+1【士气】。
                     `,
                 },
-                markimage:'image/mode/boss/mark/buff_B.png',
+                markimage:'image/mode/boss/mark/buff_B.webp',
                 group:['buff_B_shengJie','buff_B_zhenFen'],
                 subSkill:{
                     shengJie:{
@@ -173,7 +173,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     <br><span class='tiaoJian'>(本体因承受法术伤害导致【瘴气】减为0的回合结束时)</span>本回合本体不会增加【瘴气】。
                     `,
                 },
-                markimage:'image/mode/boss/mark/buff_C.png',
+                markimage:'image/mode/boss/mark/buff_C.webp',
                 group:['buff_C_xianQu','buff_C_faLi'],
                 subSkill:{
                     xianQu:{
@@ -233,7 +233,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     <br><span class="greentext">[被动]勇气之心</span>
                     <br><span class='tiaoJian'>(本体因承受攻击伤害导致【瘴气】减为0的回合结束时)</span>本回合本体不会增加【瘴气】。`,
                 },
-                markimage:'image/mode/boss/mark/buff_D.png',
+                markimage:'image/mode/boss/mark/buff_D.webp',
                 group:['buff_D_gongJi','buff_D_yongQi'],
                 subSkill:{
                     gongJi:{
@@ -290,7 +290,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     name:'[被动]刻之咒符',
                     content:`左拳或右拳发动【潜影转换】时，选择的目标角色手牌数需与其自身手牌数具有相同奇偶性；本体无法发动【御衡】。`,
                 },
-                markimage:'image/mode/boss/mark/buff_E.png',
+                markimage:'image/mode/boss/mark/buff_E.webp',
                 init:function(player){
                     _status.boss.tempBanSkill('yuHeng','forever');
                 },
@@ -421,7 +421,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             name:'弱点-火',
                             content:`<span class='tiaoJian'>(承受火系的攻击造成的攻击伤害⑥后)</span>移除X点<span class='hong'>【瘴气】</span>，X与本次伤害相同`,
                         },
-                        markimage:'image/mode/boss/mark/huo.png',
+                        markimage:'image/mode/boss/mark/huo.webp',
                         mod:{
                             aiValue(player, card, num) {
                                 if (get.xiBie(card)=='huo') return num + 1;
@@ -434,7 +434,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             name:'弱点-水',
                             content:`<span class='tiaoJian'>(承受水系的攻击造成的攻击伤害⑥后)</span>移除X点<span class='hong'>【瘴气】</span>，X与本次伤害相同`,
                         },
-                        markimage:'image/mode/boss/mark/shui.png',
+                        markimage:'image/mode/boss/mark/shui.webp',
                         mod:{
                             aiValue(player, card, num) {
                                 if (get.xiBie(card)=='shui') return num + 1;
@@ -447,7 +447,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             name:'弱点-风',
                             content:`<span class='tiaoJian'>(承受风系的攻击造成的攻击伤害⑥后)</span>移除X点<span class='hong'>【瘴气】</span>，X与本次伤害相同`,
                         },
-                        markimage:'image/mode/boss/mark/feng.png',
+                        markimage:'image/mode/boss/mark/feng.webp',
                         mod:{
                             aiValue(player, card, num) {
                                 if (get.xiBie(card)=='feng') return num + 1;
@@ -460,7 +460,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             name:'弱点-雷',
                             content:`<span class='tiaoJian'>(承受雷系的攻击造成的攻击伤害⑥后)</span>移除X点<span class='hong'>【瘴气】</span>，X与本次伤害相同`,
                         },
-                        markimage:'image/mode/boss/mark/lei.png',
+                        markimage:'image/mode/boss/mark/lei.webp',
                         mod:{
                             aiValue(player, card, num) {
                                 if (get.xiBie(card)=='lei') return num + 1;
@@ -474,7 +474,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             name:'弱点-地',
                             content:`<span class='tiaoJian'>(承受地系的攻击造成的攻击伤害⑥后)</span>移除X点<span class='hong'>【瘴气】</span>，X与本次伤害相同`,
                         },
-                        markimage:'image/mode/boss/mark/di.png',
+                        markimage:'image/mode/boss/mark/di.webp',
                         mod:{
                             aiValue(player, card, num) {
                                 if (get.xiBie(card)=='di') return num + 1;
@@ -790,7 +790,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         player.markSkill(skill);
                     }
                 },
-                markimage:'image/card/zhiShiWu/hong.png'
+                markimage:'image/card/zhiShiWu/hong.webp'
             },
             hunZhiLi:{
                 intro:{
@@ -807,7 +807,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         player.markSkill(skill);
                     }
                 },
-                markimage:'image/card/zhiShiWu/lan.png'
+                markimage:'image/card/zhiShiWu/lan.webp'
             },
             xueMaiFengYin:{
                 mod:{

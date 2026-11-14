@@ -35,7 +35,7 @@ var get = function (dir, callback) {
 					var stat = fs.statSync(url);
 					if (stat.isFile()) {
 						if (
-							[".jpg", ".png", ".mp3", ".ttf"].indexOf(
+							[".jpg", ".webp", ".mp3", ".ttf"].indexOf(
 								path.extname(url)
 							) != -1
 						) {

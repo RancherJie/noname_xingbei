@@ -1,7 +1,7 @@
 html {
 	color: white;
 	text-shadow: black 0 0 2px;
-	background: url("grid.png"), linear-gradient(#6c7989, #434b55) fixed;
+	background: url("grid.webp"), linear-gradient(#6c7989, #434b55) fixed;
 }
 #system > div > div,
 #mebg,
@@ -44,7 +44,7 @@ html {
 #window > .dialog.popped,
 .menu,
 .menubg {
-	background: url("wood2.png");
+	background: url("wood2.webp");
 	color: rgba(77, 60, 51, 0.8);
 	text-shadow: none;
 }
@@ -57,14 +57,14 @@ html {
 	background-size: initial !important;
 }
 #splash > div {
-	background: url("wood2.png");
+	background: url("wood2.webp");
 }
 
 #arena:not(.long).mobile:not(.oldlayout) .player.unseen:not([data-position="0"]) .equips:not(*:empty),
 #arena:not(.long):not(.mobile):not(.oldlayout) .player.unseen .equips:not(*:empty),
 #arena.long.mobile:not(.oldlayout) .player.unseen2:not([data-position="0"]) .equips:not(*:empty),
 #arena.long:not(.mobile):not(.oldlayout) .player.unseen2 .equips:not(*:empty) {
-	background: url("wood.png");
+	background: url("wood.webp");
 	border-radius: 4px;
 	overflow: hidden;
 	box-shadow: rgba(0, 0, 0, 0.2) 0 0 0 1px, rgba(0, 0, 0, 0.2) 0 2px 10px;
@@ -125,7 +125,7 @@ html {
 	background: url("wood.jpg");
 }
 .cardbg.button {
-	background: url("wood.png");
+	background: url("wood.webp");
 }
 #arena.hidden_handcard .handcards > .card {
 	background: url("wood.jpg") !important;
@@ -178,7 +178,7 @@ html {
 .menubutton.highlight,
 .menubutton.active,
 .mebg {
-	background: url("wood.png");
+	background: url("wood.webp");
 }
 .menubutton.large {
 	box-shadow: rgba(0, 0, 0, 0.3) 0 0 0 1px, rgba(0, 0, 0, 0.3) 0 0 5px !important;
@@ -203,7 +203,7 @@ html {
 	box-shadow: rgba(0, 0, 0, 0.45) 0 0 0 1px, rgba(0, 0, 0, 0.45) 0 3px 10px !important;
 }
 .config.toggle > div > div {
-	background: url("wood.png");
+	background: url("wood.webp");
 	box-shadow: rgba(151, 151, 151, 1) 0 0 0 1px, rgba(0, 0, 0, 0.2) 0 3px 10px;
 }
 .config.toggle.on > div {
@@ -273,7 +273,7 @@ html {
 }
 
 #roundmenu.clock > div:nth-of-type(15) {
-	background: url("wood2.png");
+	background: url("wood2.webp");
 	box-shadow: rgba(0, 0, 0, 0.5) 0 0 5px inset;
 }
 .menubg.charactercard > .ava > .avatar {

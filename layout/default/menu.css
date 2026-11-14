@@ -875,11 +875,11 @@
 }
 
 .themebutton.woodden {
-	background: url("../../theme/woodden/grid.png"), linear-gradient(#6c7989, #434b55) fixed;
+	background: url("../../theme/woodden/grid.webp"), linear-gradient(#6c7989, #434b55) fixed;
 }
 
 .themebutton.woodden > div:not(*:first-child) {
-	background: url("../../theme/woodden/wood2.png");
+	background: url("../../theme/woodden/wood2.webp");
 	box-shadow: rgba(0, 0, 0, 0.2) 0 0 0 1px, rgba(0, 0, 0, 0.45) 0 3px 10px;
 }
 
@@ -888,7 +888,7 @@
 }
 
 .themebutton.woodden > div > div {
-	background: url("../../theme/woodden/wood.png");
+	background: url("../../theme/woodden/wood.webp");
 }
 
 .themebutton.woodden > div > div.active {
@@ -896,7 +896,7 @@
 }
 
 .themebutton.music {
-	background: url("../../theme/music/grid.png"), linear-gradient(#333333, #222222) fixed;
+	background: url("../../theme/music/grid.webp"), linear-gradient(#333333, #222222) fixed;
 }
 
 .themebutton.music > div:not(*:first-child) {

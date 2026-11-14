@@ -1,7 +1,7 @@
 .card:not(*:empty) {
 	color: rgb(77, 60, 51);
 	text-shadow: none;
-	background: url("../../simple/card.png");
+	background: url("../../simple/card.webp");
 	background-size: 100% 100%;
 }
 #arena.mobile:not(.chess) .player[data-position="0"] > .equips > .equip5 {

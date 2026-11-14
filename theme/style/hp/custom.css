@@ -30,7 +30,7 @@
 	border-radius: 0px;
 }
 .hp:not(.text):not(.actcount):not(.treasure) > .shield {
-	background: url("image/shield.png");
+	background: url("image/shield.webp");
 	box-shadow: none;
 	border: none;
 	background-size: 100% 100%;

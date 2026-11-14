@@ -821,8 +821,8 @@ function initSheet(libConfig) {
 		if (bstyle.startsWith("dragon_")) {
 			bstyle = bstyle.slice(7);
 		}
-		Reflect.get(ui, "css").border_stylesheet.sheet.insertRule('#window .player>.framebg,#window #arena.long.mobile:not(.fewplayer) .player[data-position="0"]>.framebg{display:block;background-image:url("' + lib.assetURL + "theme/style/player/" + bstyle + '1.png")}', 0);
-		Reflect.get(ui, "css").border_stylesheet.sheet.insertRule('#window #arena.long:not(.fewplayer) .player>.framebg, #arena.oldlayout .player>.framebg{background-image:url("' + lib.assetURL + "theme/style/player/" + bstyle + '3.png")}', 0);
+		Reflect.get(ui, "css").border_stylesheet.sheet.insertRule('#window .player>.framebg,#window #arena.long.mobile:not(.fewplayer) .player[data-position="0"]>.framebg{display:block;background-image:url("' + lib.assetURL + "theme/style/player/" + bstyle + '1.webp")}', 0);
+		Reflect.get(ui, "css").border_stylesheet.sheet.insertRule('#window #arena.long:not(.fewplayer) .player>.framebg, #arena.oldlayout .player>.framebg{background-image:url("' + lib.assetURL + "theme/style/player/" + bstyle + '3.webp")}', 0);
 		Reflect.get(ui, "css").border_stylesheet.sheet.insertRule(".player>.count{z-index: 3 !important;border-radius: 2px !important;text-align: center !important;}", 0);
 	}
 	game.zsOriginLineXy = game.linexy;
@@ -858,7 +858,7 @@ function initSheet(libConfig) {
 		var str = "";
 		switch (libConfig.menu_style) {
 			case "wood":
-				str = 'url("' + lib.assetURL + 'theme/woodden/wood2.png")';
+				str = 'url("' + lib.assetURL + 'theme/woodden/wood2.webp")';
 				break;
 			case "music":
 				str = "linear-gradient(#4b4b4b, #464646);color:white;text-shadow:black 0 0 2px";

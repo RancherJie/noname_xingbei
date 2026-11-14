@@ -98,9 +98,9 @@
 
 发布尺寸更新：按用户最新要求，21张指示物／专属图统一为128×128；保留透明通道、原画与同名引用，角色肖像仍为530×690。光网、暗网实体卡继续复用对应图标，不另制竖版牌面。本次只统一像素尺寸，不改技能或资源规则。
 
-按用户要求，指示物与专属图参考 `宿命挽歌/mark_jianY.png`、`mark_lingLi.png`、`mark_fengMo.png` 等素材的金属圆框、中央徽记和手绘色块，再调整为百年战争的西式奇幻纹章、晶械与魔法丝网语言。保留清楚轮廓与少量材质阴影，减少云纹和细碎装饰；不画文字、数字或人物，缩至48像素仍须区分主体。
+按用户要求，指示物与专属图参考 `宿命挽歌/mark_jianY.webp`、`mark_lingLi.webp`、`mark_fengMo.webp` 等素材的金属圆框、中央徽记和手绘色块，再调整为百年战争的西式奇幻纹章、晶械与魔法丝网语言。保留清楚轮廓与少量材质阴影，减少云纹和细碎装饰；不画文字、数字或人物，缩至48像素仍须区分主体。
 
-- 方形标记统一为128×128 PNG，圆框外透明；资源、形态、专属状态各用独立文件，统一命名为 `mark_bnzz_<ID>.png`，直接置于扩展根目录。
+- 方形标记统一为128×128 PNG，圆框外透明；资源、形态、专属状态各用独立文件，统一命名为 `mark_bnzz_<ID>.webp`，直接置于扩展根目录。
 - 用户进一步确认：无名杯的专属也使用图标，不制作竖版牌面。光网、暗网与蓄能池一样使用128×128方形图标；光网、暗网的实体卡图像直接复用对应圆形徽记，牌名和说明由游戏显示。
 - 蓄能池沿用独立星石区域与专属标记实现，配方形晶械容器图；不因美术替换增加实体牌。光网、暗网保留原有实体牌、激发状态及全场效果。
 - 枪弹继续使用真实盖牌；不替换其牌背或暴露隐藏牌面，角色旁的枪弹数量改用独立图标。寻觅战机禁用、万器齐鸣增幅、死亡浪涌禁用三个短期状态改用图标，不再以“觅”“鸣”“禁”文字作为标记。
@@ -135,7 +135,7 @@
 
 ### 角色画风复核与制作标准（2026-10-17）
 
-用户补充的直接画风参考均位于 `十周年-噩梦人机/image/character/chibi/default/`：`fengZhiJianSheng.png`、`fengYinShi.png`、`jianDi.png`、`jiDuShaoNv.png`、`jinGuiZhiNv.png`、`luoLiFanZhang.png`、`jianXiZhiPian.png`、`moFaShaoNv.png`。文件名是定位依据；重绘时直接对照这些原图。
+用户补充的直接画风参考均位于 `十周年-噩梦人机/image/character/chibi/default/`：`fengZhiJianSheng.webp`、`fengYinShi.webp`、`jianDi.webp`、`jiDuShaoNv.webp`、`jinGuiZhiNv.webp`、`luoLiFanZhang.webp`、`jianXiZhiPian.webp`、`moFaShaoNv.webp`。文件名是定位依据；重绘时直接对照这些原图。
 
 重绘前复核发现：旧稿虽然使用Q版人物，但多数采用细密的头发、服装和装备刻画，多层材质高光、环境光及有景深的完整场景；承月、海神祭司等旧稿的身体比例也更修长。以上表现与用户要求的参考画风不符。散华旧稿同样存在偏差，因此本轮重绘不将其作为画风母版。历史提示词中的“approved Sanhua”等字样只记录当时的生成输入，不作为当前画风验收依据。
 
@@ -148,7 +148,7 @@
 - **参考分工**：原卡或旧稿仅用于辨认角色服饰、配色和道具；画风直接由用户给出的参考图决定。不得以现有百年战争画像替代直接画风参考。
 - **复核方式**：将新图缩至530×690，与上述参考并排检查比例、外轮廓、阴影层次和背景密度。仅有“大头、可爱、Q版”不足以判定画风一致。
 
-本轮重绘采用内置 image_gen，逐张直接引用 `fengZhiJianSheng.png`、`jianDi.png`、`jinGuiZhiNv.png` 作为画风参考；每张重绘前画像仅作角色身份参考。15张重绘图均已按角色文件名接入扩展根目录，角色ID与技能规则不变。最终尺寸采用高质量双三次重采样，完整保留画面，不裁掉人物与道具；逐张验证运行资源为530×690像素，并检查整组总览。
+本轮重绘采用内置 image_gen，逐张直接引用 `fengZhiJianSheng.webp`、`jianDi.webp`、`jinGuiZhiNv.webp` 作为画风参考；每张重绘前画像仅作角色身份参考。15张重绘图均已按角色文件名接入扩展根目录，角色ID与技能规则不变。最终尺寸采用高质量双三次重采样，完整保留画面，不裁掉人物与道具；逐张验证运行资源为530×690像素，并检查整组总览。
 
 ### 粗线简化画风确认与整组重绘（2026-10-18）
 
@@ -299,9 +299,9 @@
 
 来源位置：工作表“百年战争·序章”第1行起；状态：技能已接入，待集中验证。
 
-实现文件：[extension.js](extension.js)。角色图：[散华 Q版小女孩](bnzz_bingShuangJianZong.png)。
+实现文件：[extension.js](extension.js)。角色图：[散华 Q版小女孩](bnzz_bingShuangJianZong.webp)。
 
-角色图：[散华 Q 版角色图](bnzz_bingShuangJianZong.png)。保留白色短发、琥珀眼、青蓝围巾、灰棕外套、冰晶剑和原站姿；2026-11-01按用户反馈柔化面部与短发轮廓、收窄肩臂，并加入深蓝百褶裙，使小女孩形象更明确。
+角色图：[散华 Q 版角色图](bnzz_bingShuangJianZong.webp)。保留白色短发、琥珀眼、青蓝围巾、灰棕外套、冰晶剑和原站姿；2026-11-01按用户反馈柔化面部与短发轮廓、收窄肩臂，并加入深蓝百褶裙，使小女孩形象更明确。
 
 | 技能、专属卡或资源 | 当前规则说明 |
 | --- | --- |
@@ -319,8 +319,8 @@
 <details>
 <summary>实现映射与约束</summary>
 
-- 背景：见本节角色介绍。台词：见[技能与特殊行动台词](#技能与特殊行动台词)，每项两句。角色图片：`bnzz_bingShuangJianZong.png`，按原图的白发、琥珀眼、青蓝围巾、灰棕外套与冰晶剑绘制Q版小女孩，画风参考“十周年-噩梦人机”。死亡语音：待定。
-- 实现映射：`extension.js`；技能依次为 `bnzz_qi_gongFangZhiRen`、`bnzz_qi_jiHanJianRen`、`bnzz_qi_jiaoCuoLianZhan`、`bnzz_qi_yuJianJiDao`、`bnzz_qi_shouHuJianLing`、`bnzz_qi_wuJinHanLiu`；指示物为 `bnzz_qi_xuLi`（上限3）、`bnzz_qi_renNai`（上限2），图标为扩展根目录下 `mark_<指示物ID>.png`。
+- 背景：见本节角色介绍。台词：见[技能与特殊行动台词](#技能与特殊行动台词)，每项两句。角色图片：`bnzz_bingShuangJianZong.webp`，按原图的白发、琥珀眼、青蓝围巾、灰棕外套与冰晶剑绘制Q版小女孩，画风参考“十周年-噩梦人机”。死亡语音：待定。
+- 实现映射：`extension.js`；技能依次为 `bnzz_qi_gongFangZhiRen`、`bnzz_qi_jiHanJianRen`、`bnzz_qi_jiaoCuoLianZhan`、`bnzz_qi_yuJianJiDao`、`bnzz_qi_shouHuJianLing`、`bnzz_qi_wuJinHanLiu`；指示物为 `bnzz_qi_xuLi`（上限3）、`bnzz_qi_renNai`（上限2），图标为扩展根目录下 `mark_<指示物ID>.webp`。
 - 实现约束：费用和选择取消先行检查；回合限定由本体 `usable: 1` 管理。交错连斩的来源标记绑定独立额外攻击行动，不使用笼统的“下一次攻击”状态；无尽寒流的转换仅绑定发动过该技能的攻击行动结束，可选择不转换；无法应战不影响圣光和圣盾。守护剑灵在治疗前的 `shouDaoShangHai` 抵御；攻防之刃仅在实际承受正数伤害后的 `chengShouShangHaiAfter` 获得忍耐。
 
 </details>
@@ -334,7 +334,7 @@
 
 来源位置：工作表“百年战争·序章”第10行起；状态：技能已接入，待集中验证。
 
-实现文件：[extension.js](extension.js)。角色图：[伽纳 Q版小女孩](bnzz_jinWeiQiangShou.png)。
+实现文件：[extension.js](extension.js)。角色图：[伽纳 Q版小女孩](bnzz_jinWeiQiangShou.webp)。
 
 | 技能、专属卡或资源 | 当前规则说明 |
 | --- | --- |
@@ -347,8 +347,8 @@
 <details>
 <summary>实现映射与约束</summary>
 
-- 背景：见本节角色介绍。台词：见[技能与特殊行动台词](#技能与特殊行动台词)，每项两句。角色图片：`bnzz_jinWeiQiangShou.png`。死亡语音：待定。
-- 实现映射：`extension.js`；技能 ID 为 `bnzz_qi_baoPoDanYao`、`bnzz_qi_shangTang`、`bnzz_qi_shuangFaSheJi`、`bnzz_qi_huWeiJiDong`、`bnzz_qi_teZhuangDanYao`；形态 ID 为 `bnzz_qi_miaoZhunXingTai`，形态图标已接入 `mark_bnzz_miaoZhunXingTai.png`。
+- 背景：见本节角色介绍。台词：见[技能与特殊行动台词](#技能与特殊行动台词)，每项两句。角色图片：`bnzz_jinWeiQiangShou.webp`。死亡语音：待定。
+- 实现映射：`extension.js`；技能 ID 为 `bnzz_qi_baoPoDanYao`、`bnzz_qi_shangTang`、`bnzz_qi_shuangFaSheJi`、`bnzz_qi_huWeiJiDong`、`bnzz_qi_teZhuangDanYao`；形态 ID 为 `bnzz_qi_miaoZhunXingTai`，形态图标已接入 `mark_bnzz_miaoZhunXingTai.webp`。
 - 实现约束：爆破状态绑定本次主动攻击，普通爆破记录实际弃牌是否为法术牌；特装选择爆破只支付【水晶】，无需同系手牌或弃牌，并视为该攻击已发动爆破，不能重复发动同一爆破。特装没有弃牌，未命中时对双方各造成1点攻击伤害，不适用法术弃牌加伤。护卫在队友被主动攻击命中②时发动。瞄准形态在重置时移除；附加攻击伤害与主动攻击伤害分别识别，不把所有攻击类型的技能伤害都算作主动攻击。
 - 响应与隐藏信息：护卫机动、普通爆破弹药的触发入口只判断公开的时机、目标、次数及本次攻击是否已发动爆破，不以隐藏手牌的系别过滤响应。无风系牌、无同系牌或空手时，也进入同样的可取消选牌询问；没有符合系别要求的费用牌只能取消，不扣费用、不消耗回合次数、不执行效果。实际支付时仍复核牌所在区域与系别。
 - 2026-11-06调整验证：`脚本测试/近卫枪手.test.cjs` 的10项定向检查通过，覆盖特装无手牌爆破、普通爆破的弃牌与法术加伤、取消与结算前费用失效、贯穿分支、重复发动、攻击间状态隔离、隐藏手牌不影响响应入口及护卫支付／退出形态；调用当前本体的`chooseCard`构造与自动选择判断，验证空手、无合法牌、有合法牌均保留非强制响应选择。采用脚本选择测试已注册技能，尚未进行本次规则的完整实机对局或联机验证。DIY表格C10至C14已由用户改为本版文案，逐项核对一致，仅刷新本角色同步基线。
@@ -364,7 +364,7 @@
 
 来源位置：工作表“百年战争·序章”第16行起；状态：技能已接入，待集中验证。
 
-实现文件：[extension.js](extension.js)。角色图：[扎克斯 Q版重甲骑士](bnzz_fangZhuQiShi.png)。
+实现文件：[extension.js](extension.js)。角色图：[扎克斯 Q版重甲骑士](bnzz_fangZhuQiShi.webp)。
 
 画像调整（2026-11-07）：用户指出扎克斯现图过于女性化，要求修改画风。本次将外观调整为更中性、英气的Q版重甲骑士：短发更利落，减弱外翘长鬓发、睫毛与圆润脸型，眉眼更沉稳，肩部与腰身轮廓更扎实；保留粗描边、简洁色块、琥珀眼与棕色短发，以及双角黑金头盔、战锤、红披风、原站姿与持锤动作。调整针对视觉表现，沿用本系列少女形态设定，不据此修改角色性别代码、剧情或技能。仅替换现有同名PNG，保持530×690，原图先独立备份；当前状态：制作并复核。
 
@@ -383,7 +383,7 @@
 <details>
 <summary>实现映射与约束</summary>
 
-- 背景：见本节角色介绍。角色图片：`bnzz_fangZhuQiShi.png`，沿用系列Q版形态，按2026-11-07用户反馈采用中性英气、轮廓扎实的重甲骑士外观，保留原姿势与标志性装备。死亡语音：待定。
+- 背景：见本节角色介绍。角色图片：`bnzz_fangZhuQiShi.webp`，沿用系列Q版形态，按2026-11-07用户反馈采用中性英气、轮廓扎实的重甲骑士外观，保留原姿势与标志性装备。死亡语音：待定。
 - 实现映射：`extension.js`；技能依次为 `bnzz_qi_zhouFuZhiChui`、`bnzz_qi_jingJiMiYi`、`bnzz_qi_hongLianYeHuo`、`bnzz_qi_fuWenZuDuan`、`bnzz_qi_chiSeJiMie`。咒赋效果和首次主动攻击记录随当前回合清理；未释义◉保留，不附加额外规则。
 - 配音（2026-11-07用户确认）：Fish Audio社区音色“项羽”，音色参考 ID `8fa88da26a4542fb8947909b0a4c56bd`，生成模型 `s2.1-pro-free`。采用普通话、干声近讲和低沉克制的威慑语气；【赤色寂灭】加强宣判感与尾句重音，不喊破音，台词原文不变。API记录未标注授权（`licensed=false`），当前素材仅用于本机游戏安装与试听，公开分发前需更换为已授权音色。技能音频位于 `audio/skill/fangZhuQiShi/`，行动音频位于 `audio/action/fangZhuQiShi/`，响度统一约为 −12 LUFS。
 
@@ -398,7 +398,7 @@
 
 来源位置：工作表“百年战争·序章”第22行起；状态：技能已接入，待集中验证。
 
-实现文件：[extension.js](extension.js)。角色图：[莎娜 Q版小女孩](bnzz_yaoJiXueZhe.png)。
+实现文件：[extension.js](extension.js)。角色图：[莎娜 Q版小女孩](bnzz_yaoJiXueZhe.webp)。
 
 | 技能、专属卡或资源 | 当前规则说明 |
 | --- | --- |
@@ -411,8 +411,8 @@
 <details>
 <summary>实现映射与约束</summary>
 
-- 背景：见本节角色介绍。台词：见[技能与特殊行动台词](#技能与特殊行动台词)，每项采用用户指定的一句。角色图片：bnzz_yaoJiXueZhe.png（Q版小女孩）。死亡语音：待定。
-- 实现映射：`extension.js`；姓名翻译 ID `bnzz_qi_shaNa_name`；恢复制剂 `bnzz_qi_huiFuZhiJi`、叮当爆炸 `bnzz_qi_dingDangBaoZha`、毒性引爆 `bnzz_qi_duXingYinBao`（回收子技能 `bnzz_qi_duXingYinBao_recover`）、应急处理 `bnzz_qi_yingJiChuLi`、毒爆制剂 `bnzz_qi_duBaoZhiJi`。无专属指示物、状态或专属卡；角色图片路径 `bnzz_yaoJiXueZhe.png`（已制作，Q版小女孩），音频已制作并接入。
+- 背景：见本节角色介绍。台词：见[技能与特殊行动台词](#技能与特殊行动台词)，每项采用用户指定的一句。角色图片：bnzz_yaoJiXueZhe.webp（Q版小女孩）。死亡语音：待定。
+- 实现映射：`extension.js`；姓名翻译 ID `bnzz_qi_shaNa_name`；恢复制剂 `bnzz_qi_huiFuZhiJi`、叮当爆炸 `bnzz_qi_dingDangBaoZha`、毒性引爆 `bnzz_qi_duXingYinBao`（回收子技能 `bnzz_qi_duXingYinBao_recover`）、应急处理 `bnzz_qi_yingJiChuLi`、毒爆制剂 `bnzz_qi_duBaoZhiJi`。无专属指示物、状态或专属卡；角色图片路径 `bnzz_yaoJiXueZhe.webp`（已制作，Q版小女孩），音频已制作并接入。
 - 音色确认（2026-11-01）：用户选定 Fish Audio 社区“可莉”中文角色音色，`reference_id` 为 `0b8449eb752c4f888f463fc5d2c0db65`。采用免费 `s2.1-pro-free` 逐句生成下列8条用户原稿；恢复制剂与毒爆制剂依用户稿使用相同台词，各保留独立音频文件。技能音频放在 `audio/skill/shaNa/`，购买、提炼、合成放在 `audio/action/shaNa/`，并登记在扩展两处安装清单中。以 `bigcowcow/audio/action/` 18条 MP3 的平均电平中位数（-16.05 dB）为响度基准，莎娜音频处理后约为 -16.3 至 -16.6 dB，峰值低于 -1.8 dBFS；保持干声、不添加混响。
 - 实现时点：毒性引爆只修改核心 `_zhongDu` 直接生成的本次伤害，回收资格绑定该 `_zhongDu` 事件的 `indexedData` 实体牌，进入弃牌堆后可选获得，不另建伤害；应急处理在 `chengShouShangHai` 阶段、实际结算前抵御1点伤害；毒爆制剂先支付【水晶】，再可选从我方一名角色额外移除1【能量】，对两名对手按座次依次结算。
 
@@ -427,7 +427,7 @@
 
 来源位置：工作表“百年战争·序章”第28行起；状态：技能已接入，待集中验证。
 
-实现文件：[extension.js](extension.js)。角色图：[承月 Q版小女孩](bnzz_fengYunZhiLing.png)。
+实现文件：[extension.js](extension.js)。角色图：[承月 Q版小女孩](bnzz_fengYunZhiLing.webp)。
 
 | 技能、专属卡或资源 | 当前规则说明 |
 | --- | --- |
@@ -441,8 +441,8 @@
 <details>
 <summary>实现映射与约束</summary>
 
-- 背景：见本节角色介绍。台词：见[技能与特殊行动台词](#技能与特殊行动台词)，每项采用本次确认的单句。角色图片：bnzz_fengYunZhiLing.png（Q版小女孩）。死亡语音：待定。
-- 实现映射：`extension.js`；姓名翻译 ID `bnzz_qi_chengYue_name`；自然变幻 `bnzz_qi_ziRanBianHuan`、风之眼 `bnzz_qi_fengZhiYan`、风色法典 `bnzz_qi_fengSeFaDian`、风流环绕 `bnzz_qi_fengLiuHuanRao`、异风激化 `bnzz_qi_yiFengJiHua`（星石奖励子技能 `_reward`）、风云咒法 `bnzz_qi_fengYunZhouFa`。无专属指示物或专属卡；角色图片路径 `bnzz_fengYunZhiLing.png`（已制作，Q版小女孩）；语音存于 `audio/skill/chengYue/` 与 `audio/action/chengYue/`，由“百年战争角色语音”开关控制。
+- 背景：见本节角色介绍。台词：见[技能与特殊行动台词](#技能与特殊行动台词)，每项采用本次确认的单句。角色图片：bnzz_fengYunZhiLing.webp（Q版小女孩）。死亡语音：待定。
+- 实现映射：`extension.js`；姓名翻译 ID `bnzz_qi_chengYue_name`；自然变幻 `bnzz_qi_ziRanBianHuan`、风之眼 `bnzz_qi_fengZhiYan`、风色法典 `bnzz_qi_fengSeFaDian`、风流环绕 `bnzz_qi_fengLiuHuanRao`、异风激化 `bnzz_qi_yiFengJiHua`（星石奖励子技能 `_reward`）、风云咒法 `bnzz_qi_fengYunZhouFa`。无专属指示物或专属卡；角色图片路径 `bnzz_fengYunZhiLing.webp`（已制作，Q版小女孩）；语音存于 `audio/skill/chengYue/` 与 `audio/action/chengYue/`，由“百年战争角色语音”开关控制。
 - 当前实现口径：风色法典先选1～4张真实风系牌，少于4张时可额外支付1【水晶】并弃1张非风系牌计入本次风牌费用数量；不能零张风牌单独发动法典。普通用牌的风云咒法创建独立虚拟牌，只改本次用牌系别；法典额外牌不永久改变实体牌印刷系别。三张分支的补满/全弃由承月选择；四张分支略过承月对自己交牌的无净效果操作。风流环绕在弃牌展示事件按法术牌逐张可选响应，法典只记录本次费用展示中实际发动的响应；异风激化优先于核心命中奖励，仅改同次 `_gongJiXingShi` 奖励事件的星石类型。
 
 </details>
@@ -456,7 +456,7 @@
 
 来源位置：工作表“百年战争·序章”第35行起；状态：技能已接入，待集中验证。
 
-实现文件：[extension.js](extension.js)。角色图：[九萌 Q版小女孩](bnzz_qiuDaoZhe.png)。
+实现文件：[extension.js](extension.js)。角色图：[九萌 Q版小女孩](bnzz_qiuDaoZhe.webp)。
 
 | 技能、专属卡或资源 | 当前规则说明 |
 | --- | --- |
@@ -472,8 +472,8 @@
 <details>
 <summary>实现映射与约束</summary>
 
-- 背景：见本节角色介绍。台词：见[技能与特殊行动台词](#技能与特殊行动台词)，每项采用本次确认的单句。角色图片：bnzz_qiuDaoZhe.png（Q版小女孩）。死亡语音：待定。
-- 实现映射：`extension.js`；姓名翻译 ID `bnzz_qi_jiuMeng_name`；神速符 `bnzz_qi_shenSuFu`、天火符 `bnzz_qi_tianHuoFu`、结阵·八门天地法 `bnzz_qi_jieZhenBaMenTianDiFa`、天地剑 `bnzz_qi_tianDiJian`、阵门雷击 `bnzz_qi_zhenMenLeiJi`、元力反噬 `bnzz_qi_yuanLiFanShi`、无量天雷 `bnzz_qi_wuLiangTianLei`；元力指示物 `bnzz_qi_yuanLi`（上限3），阵眼状态 `bnzz_qi_zhenYanXingTai`（特殊行动/外部重置清理子技能 `_special`、`_reset`）。角色图片路径 `bnzz_qiuDaoZhe.png`（已制作，Q版小女孩）；元力与阵眼已分别接入 `mark_bnzz_yuanLi.png`、`mark_bnzz_zhenYanXingTai.png`；7条技能语音存于 `audio/skill/qiuDaoZhe/`，购买、提炼、合成语音存于 `audio/action/qiuDaoZhe/`，由“百年战争角色语音”开关控制。使用 Fish Audio 音色“雷电将军”（reference ID `f6ce6be14f7e46cdbde6e755860ae9b8`，TTS `s2.1-pro-free`，资料标记 `licensed=false`，限本地使用）；按技能语义添加语气标签。百年战争语音基准约 `−12 LUFS`；九萌本批按听感反馈提高至约 `−10 LUFS`，真峰值低于 `0 dBTP`。
+- 背景：见本节角色介绍。台词：见[技能与特殊行动台词](#技能与特殊行动台词)，每项采用本次确认的单句。角色图片：bnzz_qiuDaoZhe.webp（Q版小女孩）。死亡语音：待定。
+- 实现映射：`extension.js`；姓名翻译 ID `bnzz_qi_jiuMeng_name`；神速符 `bnzz_qi_shenSuFu`、天火符 `bnzz_qi_tianHuoFu`、结阵·八门天地法 `bnzz_qi_jieZhenBaMenTianDiFa`、天地剑 `bnzz_qi_tianDiJian`、阵门雷击 `bnzz_qi_zhenMenLeiJi`、元力反噬 `bnzz_qi_yuanLiFanShi`、无量天雷 `bnzz_qi_wuLiangTianLei`；元力指示物 `bnzz_qi_yuanLi`（上限3），阵眼状态 `bnzz_qi_zhenYanXingTai`（特殊行动/外部重置清理子技能 `_special`、`_reset`）。角色图片路径 `bnzz_qiuDaoZhe.webp`（已制作，Q版小女孩）；元力与阵眼已分别接入 `mark_bnzz_yuanLi.webp`、`mark_bnzz_zhenYanXingTai.webp`；7条技能语音存于 `audio/skill/qiuDaoZhe/`，购买、提炼、合成语音存于 `audio/action/qiuDaoZhe/`，由“百年战争角色语音”开关控制。使用 Fish Audio 音色“雷电将军”（reference ID `f6ce6be14f7e46cdbde6e755860ae9b8`，TTS `s2.1-pro-free`，资料标记 `licensed=false`，限本地使用）；按技能语义添加语气标签。百年战争语音基准约 `−12 LUFS`；九萌本批按听感反馈提高至约 `−10 LUFS`，真峰值低于 `0 dBTP`。
 - 当前实现口径：神速符、天火符的 X 为1～2。无量天雷的 X 固定为支付前元力数，弃等量手牌、支付宝石及移除全部元力视为一组费用，支付完成后按最终手牌/元力判定一次反噬；支付前元力为0不得发动。反噬仅在阵眼存在时生效，先移除阵眼状态再重置、清理元力与结算自伤，避免重入；特殊行动清理同样先退出阵眼。
 - 展示约定：形态的符术限制及特殊行动退出规则集中写在【结阵·八门天地法】；内部阵眼状态不在角色技能列表中另列说明，保留场上形态标记及提示。攻击增伤、反噬仍分别由【天地剑】、【元力反噬】说明，不在启动技能中重复。回合开始本身不会退出阵眼。
 
@@ -488,7 +488,7 @@
 
 来源位置：工作表“百年战争·序章”第44行起；状态：技能已接入，待集中验证。
 
-实现文件：[extension.js](extension.js)。角色图：[兰卡 Q版小女孩](bnzz_juJiShou.png)。
+实现文件：[extension.js](extension.js)。角色图：[兰卡 Q版小女孩](bnzz_juJiShou.webp)。
 
 | 技能、专属卡或资源 | 当前规则说明 |
 | --- | --- |
@@ -502,7 +502,7 @@
 <details>
 <summary>实现映射与约束</summary>
 
-- 背景：见本节角色介绍。台词：见[技能与特殊行动台词](#技能与特殊行动台词)。角色图片：bnzz_juJiShou.png（Q版小女孩）。死亡语音：待定。
+- 背景：见本节角色介绍。台词：见[技能与特殊行动台词](#技能与特殊行动台词)。角色图片：bnzz_juJiShou.webp（Q版小女孩）。死亡语音：待定。
 - 实现映射：`extension.js`；技能为 `bnzz_qi_xunMiZhanJi`、`bnzz_qi_zhuangTian`、`bnzz_qi_zhiYuanSheJi`、`bnzz_qi_kuaiSuZhuangTian`、`bnzz_qi_niZongJuJi`；盖牌为 `bnzz_qi_qiangDan`。装填直接从手牌进入盖牌区，不弃置；快速装填可超过2张上限，X按正整数且不超过现有枪弹数选择，至少移除1个枪弹；寻觅战机的禁止匿踪效果在当前回合结束时清理。
 - 快速装填的选牌操作：选定的X等于当前全部枪弹数时，直接移除全部枪弹，跳过逐张选择枪弹的界面；X小于枪弹数时仍选择具体移除的牌。之后补充枪弹与可选的手牌交换照常处理。
 - 配音（2026-11-07）：用户选定 Fish Audio 社区音色“夜兰”，`reference_id` 为 `5943b6213dfe43ed95353436e8be29c1`，使用 `s2.1-pro-free`。平台资料标记普通话、`licensed=false`；素材仅限本地安装和试听，公开分发前需取得授权或更换许可音色。采用用户提供的8句原文，不改词；5条技能语音放在 `audio/skill/juJiShou/`，购买、提炼、合成语音放在 `audio/action/juJiShou/`，由“百年战争角色语音”开关控制并受本体“武将配音”总开关控制。按用户反馈提高至约 `−10 LUFS`；重编码实测为 `−10.7` 至 `−9.8 LUFS`，峰值为 `−0.8` 至 `−0.2 dBFS`。
@@ -518,7 +518,7 @@
 
 来源位置：工作表“百年战争·序章”第51行起；状态：技能已接入，待集中验证。
 
-实现文件：[extension.js](extension.js)。角色图：[萝可 Q版小女孩](bnzz_gongNengJiShi.png)。
+实现文件：[extension.js](extension.js)。角色图：[萝可 Q版小女孩](bnzz_gongNengJiShi.webp)。
 
 | 技能、专属卡或资源 | 当前规则说明 |
 | --- | --- |
@@ -533,7 +533,7 @@
 <details>
 <summary>实现映射与约束</summary>
 
-- 背景：见本节角色介绍。台词：见[技能与特殊行动台词](#技能与特殊行动台词)，每项采用本次确认的单句。角色图片：bnzz_gongNengJiShi.png（Q版小女孩）。死亡语音：待定。
+- 背景：见本节角色介绍。台词：见[技能与特殊行动台词](#技能与特殊行动台词)，每项采用本次确认的单句。角色图片：bnzz_gongNengJiShi.webp（Q版小女孩）。死亡语音：待定。
 - 实现映射：`extension.js`；技能为 `bnzz_qi_nengYuanWeiHu`、`bnzz_qi_ceLiuChongNeng`、`bnzz_qi_xingNengZhuanHuan`、`bnzz_qi_jiaoHuShuNiu`、`bnzz_qi_nengJiFenLiu`、`bnzz_qi_gaoNengShuSong`；专属为 `bnzz_qi_xuNengChi`。独立池按星石类型存储，总上限4，不修改普通能量上限；扩展在运行时对持有者的正向能量事件及提炼入口作限定适配，不修改本体文件。精准射击资格绑定交互枢纽的独立额外攻击；能级分流按本体应战合法目标发动虚拟应战，并保留原攻击未命中触发。7条技能语音存于 `audio/skill/luoKe/`，购买、提炼、合成语音存于 `audio/action/luoKe/`，由“百年战争角色语音”开关控制；蓄能机构语音只在普通获得星石使蓄能池增加时播放一次，提炼与星能转换导致的增加只播放对应行动或技能语音。音色使用 Fish Audio“原神-多莉”（ID `153d50c0f1b744c6985ebcb319816142`，TTS `s2.1-pro-free`，资料标记 Mandarin、`licensed=false`，仅本地使用），按每句情境使用简短情绪标签；根据最新听感反馈，本批目标响度约 `−10 LUFS`。
 - 当前实现口径：获得多枚星石时逐枚放入，只有放入时仍为空池的宝石转换为2水晶；星能转换的“转移”保留敌方星石原种类，不视为个人能量获得。交互枢纽允许的精准射击采用本体“强制命中、伤害-1”效果；上述为实现记录，不追加为用户已确认事项。
 - 蓄能池支付水晶费用沿用本体的宝石替付规则：1宝石可以代替1水晶。【交互枢纽】【能级分流】【高能输送】均可用2水晶、1水晶与1宝石或2宝石支付。池内星石在现有消耗中等价，统一自动优先扣水晶、不足时扣宝石，不询问支付组合；【星能转换】移除池内星石时也采用同样处理，仍保留转移或移除数量的效果选择。旧实现只统计和扣除水晶，导致池中宝石无法替付，按此修正；支付不触发空池获得宝石时的转换。
@@ -550,7 +550,7 @@
 
 来源位置：工作表“百年战争·序章”第59行起；状态：技能已接入，待集中验证。
 
-实现文件：[extension.js](extension.js)。角色图：[恩普洛斯 Q版小女孩](bnzz_huiXiangYueShi.png)。
+实现文件：[extension.js](extension.js)。角色图：[恩普洛斯 Q版小女孩](bnzz_huiXiangYueShi.webp)。
 
 | 技能、专属卡或资源 | 当前规则说明 |
 | --- | --- |
@@ -565,8 +565,8 @@
 <details>
 <summary>实现映射与约束</summary>
 
-- 背景：见本节角色介绍。台词：见[技能与特殊行动台词](#技能与特殊行动台词)，每项采用本次确认的单句。角色图片：`bnzz_huiXiangYueShi.png`。技能6条、行动3条语音分别存于 `audio/skill/huiXiangYueShi/` 与 `audio/action/huiXiangYueShi/`；音色为 Fish Audio“神里绫华”（reference ID `931fad22448d4bd4a6052e84e788f9a1`，TTS `s2.1-pro-free`，资料标注普通话，`licensed=false`，仅本地使用），使用简短情绪标签。按用户反馈，九条成品在上一版基础上统一增加 `+2 dB`，实测响度约 `−8 LUFS`，峰值保持在 `0 dBTP` 以下。死亡语音：待定。
-- 实现映射：`extension.js`；技能为 `bnzz_qi_huiGuangYueLv`、`bnzz_qi_yinLvZhiBi`、`bnzz_qi_jiDangYinFu`、`bnzz_qi_ciDiJianZou`、`bnzz_qi_wanQiQiMing`、`bnzz_qi_gongMingBeiYue`；乐律为 `bnzz_qi_yueLv`（上限3），回合增幅状态为 `bnzz_qi_wanQiQiMing_effect`。乐律图标已接入 `mark_bnzz_yueLv.png`。
+- 背景：见本节角色介绍。台词：见[技能与特殊行动台词](#技能与特殊行动台词)，每项采用本次确认的单句。角色图片：`bnzz_huiXiangYueShi.webp`。技能6条、行动3条语音分别存于 `audio/skill/huiXiangYueShi/` 与 `audio/action/huiXiangYueShi/`；音色为 Fish Audio“神里绫华”（reference ID `931fad22448d4bd4a6052e84e788f9a1`，TTS `s2.1-pro-free`，资料标注普通话，`licensed=false`，仅本地使用），使用简短情绪标签。按用户反馈，九条成品在上一版基础上统一增加 `+2 dB`，实测响度约 `−8 LUFS`，峰值保持在 `0 dBTP` 以下。死亡语音：待定。
+- 实现映射：`extension.js`；技能为 `bnzz_qi_huiGuangYueLv`、`bnzz_qi_yinLvZhiBi`、`bnzz_qi_jiDangYinFu`、`bnzz_qi_ciDiJianZou`、`bnzz_qi_wanQiQiMing`、`bnzz_qi_gongMingBeiYue`；乐律为 `bnzz_qi_yueLv`（上限3），回合增幅状态为 `bnzz_qi_wanQiQiMing_effect`。乐律图标已接入 `mark_bnzz_yueLv.webp`。
 - 实现约束：辉光按造成伤害③记录、承受伤害⑥结算战绩；音律之壁在其他基础效果触发前可逐次阻止，以圣盾实体牌移出扩展区为移除依据，其他基础效果按实际移除牌张数计算自伤。次第记录发动前乐律与是否达到上限，所有分支均先自伤1；其技能通过动态备用技能发动，备用对象按“百年战争角色语音”开关复用次第语音。万器增加其他目标所受伤害及次第弃牌数，不增加人数、费用、自伤或自身资源。共鸣的天使之墙沿用本体规则，使用手中实际带有该独有技的牌作为圣盾，不生成免费实体牌。
 
 </details>
@@ -580,7 +580,7 @@
 
 来源位置：工作表“百年战争·序章”第67行起；状态：技能已接入，待集中验证。
 
-实现文件：[extension.js](extension.js)。角色图：[阿芙洛蒂亚 Q版小女孩](bnzz_jingLingChiHou.png)。
+实现文件：[extension.js](extension.js)。角色图：[阿芙洛蒂亚 Q版小女孩](bnzz_jingLingChiHou.webp)。
 
 画像局部修正（2026-10-17，已接入）：用户指出首轮重绘的手部有误；已局部修正持弓握法、拉弦手与前臂的连接、袖口及箭尾与拉弦点的对齐，保留本轮Q版画风、角色服饰配色、弓箭与装饰背景。
 
@@ -596,8 +596,8 @@
 <details>
 <summary>实现映射与约束</summary>
 
-- 背景：见本节角色介绍。台词：见[技能与特殊行动台词](#技能与特殊行动台词)，本次采用用户提供的单句版本。角色图片：`bnzz_jingLingChiHou.png`。死亡语音：待定。
-- 实现映射：`extension.js`；技能为 `bnzz_qi_shanShuoZhiGuang`、`bnzz_qi_xianXingZhenCha`、`bnzz_qi_jiSuMoSha`、`bnzz_qi_zhanShuCheTui`、`bnzz_qi_jieJieSheJi`；指示物为 `bnzz_qi_shanXian`（上限3），图标已接入 `mark_bnzz_shanXian.png`。
+- 背景：见本节角色介绍。台词：见[技能与特殊行动台词](#技能与特殊行动台词)，本次采用用户提供的单句版本。角色图片：`bnzz_jingLingChiHou.webp`。死亡语音：待定。
+- 实现映射：`extension.js`；技能为 `bnzz_qi_shanShuoZhiGuang`、`bnzz_qi_xianXingZhenCha`、`bnzz_qi_jiSuMoSha`、`bnzz_qi_zhanShuCheTui`、`bnzz_qi_jieJieSheJi`；指示物为 `bnzz_qi_shanXian`（上限3），图标已接入 `mark_bnzz_shanXian.webp`。
 - 配音（2026-11-07）：用户选定 Fish Audio 社区“原神-琳妮特”音色（`reference_id`：`8438e1b028684f8bb8f5e6d33c2f4a5a`，`s2.1-pro-free`）；按用户反馈改为自信、果断，同时保持游侠的轻快机敏，台词原文不改。音色资料标记普通话、`licensed=false`，仅本地使用与试听，公开分发前需取得授权或更换许可音色。5条技能语音存于 `audio/skill/jingLingChiHou/`，购买、提炼、合成存于 `audio/action/jingLingChiHou/`，由“百年战争角色语音”开关控制并受本体“武将配音”总开关控制；响度目标约 `−10 LUFS`，重编码实测 `−10.3` 至 `−9.7 LUFS`，峰值 `−0.7` 至 `−0.4 dBFS`。
 - 2026-11-06触发修复：【闪烁之光】的“使用法术牌”规则保持不变，接入当前星杯核心的`daChuPai`时机；使用【圣盾】等法术牌时增加1【闪现】，每次出牌只结算一次。旧实现监听核心不再发出的`useCard`时机，导致实际使用圣盾时不触发。独立配置的真实引擎定向验证通过：闪现从0开始，使用圣盾后为1且圣盾正常放置，使用虚弱后为2，攻击后仍为2，使用中毒后为3，满3再使用圣盾仍为3；无运行时错误。本次未覆盖双端联机。
 - 实现约束：先行侦查自己受攻击时包含应战且不支付闪现，队友仅主动受攻击时可支付1闪现；牌库顶牌按本体同语义移出牌堆展示，不混为玩家弃牌。战术撤退只响应真实的负向治疗变化并使用本体回合限定计数，自身发放的治疗单独标记。结界射击命中与未命中共用同一回合限定和水晶费用，命中分支仅禁止对应攻击伤害使用治疗抵御。
@@ -613,7 +613,7 @@
 
 来源位置：工作表“百年战争·序章”第74行起；状态：技能已接入，待集中验证。
 
-实现文件：[extension.js](extension.js)。角色图：[洛肯·煌 Q版小女孩](bnzz_lingYuQiShi.png)。
+实现文件：[extension.js](extension.js)。角色图：[洛肯·煌 Q版小女孩](bnzz_lingYuQiShi.webp)。
 
 | 技能、专属卡或资源 | 当前规则说明 |
 | --- | --- |
@@ -626,7 +626,7 @@
 <details>
 <summary>实现映射与约束</summary>
 
-- 背景：见本节角色介绍。台词：见[技能与特殊行动台词](#技能与特殊行动台词)，每项采用本轮确认的单句。角色图片：`bnzz_lingYuQiShi.png`，按系列要求绘制Q版小女孩。技能5条、行动3条语音分别存于 `audio/skill/lingYuQiShi/` 与 `audio/action/lingYuQiShi/`；音色为 Fish Audio“迪卢克”（reference ID `fc5e808e1eb345ec9acdf0ff96105950`，TTS `s2.1-pro-free`，资料标注普通话，`licensed=false`，仅本地使用），使用简短情绪标签，常规目标响度约 `−10 LUFS`；根据音量反馈，整组8条统一增加约1.3 dB并限制峰值。死亡语音：待定。
+- 背景：见本节角色介绍。台词：见[技能与特殊行动台词](#技能与特殊行动台词)，每项采用本轮确认的单句。角色图片：`bnzz_lingYuQiShi.webp`，按系列要求绘制Q版小女孩。技能5条、行动3条语音分别存于 `audio/skill/lingYuQiShi/` 与 `audio/action/lingYuQiShi/`；音色为 Fish Audio“迪卢克”（reference ID `fc5e808e1eb345ec9acdf0ff96105950`，TTS `s2.1-pro-free`，资料标注普通话，`licensed=false`，仅本地使用），使用简短情绪标签，常规目标响度约 `−10 LUFS`；根据音量反馈，整组8条统一增加约1.3 dB并限制峰值。死亡语音：待定。
 - 实现映射：`extension.js`；技能依次为 `bnzz_qi_dunJi`、`bnzz_qi_zhuangBeiJianCha`、`bnzz_qi_zhanShuChongFeng`、`bnzz_qi_lvJiJingShen`、`bnzz_qi_zhanShiXiuZheng`。复用本体圣盾基础效果，不新增专属指示物。
 
 </details>
@@ -640,7 +640,7 @@
 
 来源位置：工作表“百年战争·序章”第80行起；状态：技能已接入，待集中验证。
 
-实现文件：[extension.js](extension.js)。角色图：[让·梅莎拉 Q版小女孩](bnzz_haiShenJiSi.png)。
+实现文件：[extension.js](extension.js)。角色图：[让·梅莎拉 Q版小女孩](bnzz_haiShenJiSi.webp)。
 
 | 技能、专属卡或资源 | 当前规则说明 |
 | --- | --- |
@@ -654,7 +654,7 @@
 <details>
 <summary>实现映射与约束</summary>
 
-- 背景：见本节角色介绍。台词：见[技能与特殊行动台词](#技能与特殊行动台词)，每项采用用户确认的单句。角色图片：`bnzz_haiShenJiSi.png`。技能6条、行动3条语音分别存于 `audio/skill/haiShenJiSi/` 与 `audio/action/haiShenJiSi/`；音色为 Fish Audio“珊瑚宫心海”（reference ID `c86d6d74844a4aa296dc04962da70f3e`，TTS `s2.1-pro-free`，资料标记 Chinese、public、`licensed=false`，仅本地使用），使用简短情绪标签，目标响度约 `−10 LUFS`。死亡语音：待定。
+- 背景：见本节角色介绍。台词：见[技能与特殊行动台词](#技能与特殊行动台词)，每项采用用户确认的单句。角色图片：`bnzz_haiShenJiSi.webp`。技能6条、行动3条语音分别存于 `audio/skill/haiShenJiSi/` 与 `audio/action/haiShenJiSi/`；音色为 Fish Audio“珊瑚宫心海”（reference ID `c86d6d74844a4aa296dc04962da70f3e`，TTS `s2.1-pro-free`，资料标记 Chinese、public、`licensed=false`，仅本地使用），使用简短情绪标签，目标响度约 `−10 LUFS`。死亡语音：待定。
 - 实现映射：`extension.js`；技能为 `bnzz_qi_daHaiZhuFu`、`bnzz_qi_shenLiCiFu`、`bnzz_qi_juLangTaoTian`、`bnzz_qi_shengMingChaoXi`、`bnzz_qi_siWangLangYong`、`bnzz_qi_haiShenQingYu`；复用本体治疗，不新增专属指示物。
 - 2026-11-06触发修复：【大海祝福】接入当前星杯核心实际出牌时机`daChuPai`，修复旧`useCard`监听导致使用圣盾等法术牌不增加治疗的问题。每次使用法术牌增加1治疗、治疗上限+1的规则不变，攻击牌及无出牌的法术技能不因此增加治疗。独立配置的真实引擎验证通过：基础治疗上限2，带技能后为3；治疗从0开始，依次使用圣盾后为1、虚弱后为2、攻击后仍为2、中毒后为3，满上限再使用圣盾及虚弱仍为3，圣盾正常放置，无运行时错误。未覆盖双端联机。
 - 实现约束：死亡浪涌仅在自己的回合结束时发动，并记录本回合实际承受过自己正数伤害的对手。巨浪滔天按先支付弃牌费用再结算效果的顺序，在选择阶段按弃牌后的预计手牌数判断目标、支付后再核实；多目标合并结算，费用只支付一次。生命潮汐通过动态备用技能发动，备用对象按“百年战争角色语音”开关复用技能语音。海神轻语未弃水牌时的禁用状态仅持续当前回合。
@@ -671,7 +671,7 @@
 
 来源位置：工作表“百年战争·序章”第87行起；状态：技能已接入，待集中验证。
 
-实现文件：[extension.js](extension.js)。角色图：[帕丁 Q版小女孩](bnzz_buSiZhe.png)。
+实现文件：[extension.js](extension.js)。角色图：[帕丁 Q版小女孩](bnzz_buSiZhe.webp)。
 
 | 技能、专属卡或资源 | 当前规则说明 |
 | --- | --- |
@@ -687,8 +687,8 @@
 <details>
 <summary>实现映射与约束</summary>
 
-- 背景：见本节角色介绍。台词：见[技能与特殊行动台词](#技能与特殊行动台词)，采用用户提供的单句版本。角色图片：`bnzz_buSiZhe.png`。死亡语音：待定。
-- 实现映射：`extension.js`；技能 ID 为 `bnzz_qi_zhanYiRanShao`、`bnzz_qi_huiXuanJi`、`bnzz_qi_xueYueHuGuang`、`bnzz_qi_lingHunZhenLie`、`bnzz_qi_xueSeJingJi`、`bnzz_qi_qianRenSaoDang`；指示物为 `bnzz_qi_xueShang`（上限3）、`bnzz_qi_zhanHun`（上限4），图标已分别接入 `mark_bnzz_xueShang.png`、`mark_bnzz_zhanHun.png`。
+- 背景：见本节角色介绍。台词：见[技能与特殊行动台词](#技能与特殊行动台词)，采用用户提供的单句版本。角色图片：`bnzz_buSiZhe.webp`。死亡语音：待定。
+- 实现映射：`extension.js`；技能 ID 为 `bnzz_qi_zhanYiRanShao`、`bnzz_qi_huiXuanJi`、`bnzz_qi_xueYueHuGuang`、`bnzz_qi_lingHunZhenLie`、`bnzz_qi_xueSeJingJi`、`bnzz_qi_qianRenSaoDang`；指示物为 `bnzz_qi_xueShang`（上限3）、`bnzz_qi_zhanHun`（上限4），图标已分别接入 `mark_bnzz_xueShang.webp`、`mark_bnzz_zhanHun.webp`。
 - 配音（2026-11-07）：用户选定 Fish Audio 社区音色“原神-迪希雅”（`reference_id`：`b60da494fa0c46aebc84529063ff65e5`，`s2.1-pro-free`）；按本轮台词要求加饱满情绪，分别体现战斗兴奋、强硬反击、挑衅和得意，台词逐字使用用户新稿。战意燃烧主技能在攻击行动结束获得战魂后，延后至该次攻击的触发流程结束再播放语音；若同次攻击结束时发动【回旋击】或【血月弧光】，则跳过这一遍战意燃烧语音，资源结算不变。实际受伤后获得血殇仍播放该句语音。音色资料标记中文、`licensed=false`，仅本地使用与试听，公开分发前需取得授权或更换许可音色。技能语音存于 `audio/skill/buSiZhe/`，购买、提炼、合成存于 `audio/action/buSiZhe/`，由“百年战争角色语音”开关控制并受本体“武将配音”总开关控制；响度按帕丁其余7段语音校准，参考均值 `−10.17 LUFS`、中位数 `−10.2 LUFS`；当前9段实测为 `−10.8` 至 `−9.8 LUFS`，真峰值 `−0.7` 至 `−0.1 dBTP`。
 - 实现约束：血月额外攻击绑定独立行动载荷，无法应战，结束时不因战意燃烧增加战魂，不扩大为整个回合禁止获得资源。血色荆棘仅为其自身生成的两次伤害添加排除标记，不使这些伤害触发战意燃烧。2026-10-17用户确认：灵魂振裂X至少1；血色荆棘X为1～2、Y至少1。
 
@@ -703,7 +703,7 @@
 
 来源位置：工作表“百年战争·序章”第96行起；状态：技能已接入，待集中验证。
 
-实现文件：[extension.js](extension.js)。角色图：[炙霞 Q版小女孩](bnzz_zhuoYanWuZhe.png)。
+实现文件：[extension.js](extension.js)。角色图：[炙霞 Q版小女孩](bnzz_zhuoYanWuZhe.webp)。
 
 | 技能、专属卡或资源 | 当前规则说明 |
 | --- | --- |
@@ -718,8 +718,8 @@
 <details>
 <summary>实现映射与约束</summary>
 
-- 背景：见本节角色介绍。台词：见[技能与特殊行动台词](#技能与特殊行动台词)，采用用户本次指定的单句。角色图片：bnzz_zhuoYanWuZhe.png（Q版小女孩）。死亡语音：待定。
-- 实现映射：`extension.js`；姓名翻译 ID `bnzz_qi_zhiXia_name`；夜之幽火 `bnzz_qi_yeZhiYouHuo`、白焰弹 `bnzz_qi_baiYanDan`、燃烧殆尽 `bnzz_qi_ranShaoDaiJin`、弧光散射 `bnzz_qi_huGuangSanShe`（命中/未命中子技能 `_hit`、`_miss`）、魂魄汲取 `bnzz_qi_hunPoJiQu`、九转扇舞 `bnzz_qi_jiuZhuanShanWu`；幽火指示物 `bnzz_qi_youHuo`（上限3），火舞状态 `bnzz_qi_huoWuXingTai`（回合结束/重置清理子技能 `_end`、`_reset`）。角色图片路径 `bnzz_zhuoYanWuZhe.png`（已制作，Q版小女孩）；幽火与火舞已分别接入 `mark_bnzz_youHuo.png`、`mark_bnzz_huoWuXingTai.png`；技能6条、行动3条语音分别存于 `audio/skill/zhuoYanWuZhe/` 与 `audio/action/zhuoYanWuZhe/`；音色为 Fish Audio“三月七”（reference ID `cd1270d717244c10a5a3a02582c72265`，TTS `s2.1-pro-free`，资料标记 Mandarin Chinese、public、`licensed=false`，仅本地使用），使用简短情绪标签，目标响度约 `−10 LUFS`。
+- 背景：见本节角色介绍。台词：见[技能与特殊行动台词](#技能与特殊行动台词)，采用用户本次指定的单句。角色图片：bnzz_zhuoYanWuZhe.webp（Q版小女孩）。死亡语音：待定。
+- 实现映射：`extension.js`；姓名翻译 ID `bnzz_qi_zhiXia_name`；夜之幽火 `bnzz_qi_yeZhiYouHuo`、白焰弹 `bnzz_qi_baiYanDan`、燃烧殆尽 `bnzz_qi_ranShaoDaiJin`、弧光散射 `bnzz_qi_huGuangSanShe`（命中/未命中子技能 `_hit`、`_miss`）、魂魄汲取 `bnzz_qi_hunPoJiQu`、九转扇舞 `bnzz_qi_jiuZhuanShanWu`；幽火指示物 `bnzz_qi_youHuo`（上限3），火舞状态 `bnzz_qi_huoWuXingTai`（回合结束/重置清理子技能 `_end`、`_reset`）。角色图片路径 `bnzz_zhuoYanWuZhe.webp`（已制作，Q版小女孩）；幽火与火舞已分别接入 `mark_bnzz_youHuo.webp`、`mark_bnzz_huoWuXingTai.webp`；技能6条、行动3条语音分别存于 `audio/skill/zhuoYanWuZhe/` 与 `audio/action/zhuoYanWuZhe/`；音色为 Fish Audio“三月七”（reference ID `cd1270d717244c10a5a3a02582c72265`，TTS `s2.1-pro-free`，资料标记 Mandarin Chinese、public、`licensed=false`，仅本地使用），使用简短情绪标签，目标响度约 `−10 LUFS`。
 - 实现口径：夜之幽火在 `shouDaoShangHai` 响应法术伤害；白焰弹用 `source:gongJiWeiMingZhong` 读取真实攻击目标。燃烧殆尽以独立虚拟牌改变本次攻击系别，不修改实体牌，转换后按火系执行无法应战；弧光散射在攻击事件 `customArgs` 中保存单次结算记录。魂魄汲取的 X、Y 均为可支付的正整数，且必须满足 X+Y＞2，至少弃置1张法术牌并移除1【幽火】；火舞减伤仅作用于自身为来源和目标的伤害，自己的回合结束时重置、外部重置时亦清理状态。【九转扇舞】完整介绍形态独有的自伤减免、【白焰弹】例外及自身回合结束时退出的规则；其他常驻技能已有的形态联动不重复展开，临时形态标记仍保留完整说明。此次仅补充展示，不改变形态效果或退出时机。语音并发规则：火舞形态下同一次主动攻击同时触发【弧光散射】与【燃烧殆尽】时，仅播放【弧光散射】语音；【白焰弹】造成的法术伤害连带触发【夜之幽火】时，仅播放【白焰弹】语音。只抑制重叠语音，不改变技能触发与结算。
 
 </details>
@@ -733,7 +733,7 @@
 
 来源位置：工作表“百年战争·序章”第104行起；状态：技能已接入，待集中验证。
 
-实现文件：[extension.js](extension.js)。角色图：[蕾乌 Q版小女孩](bnzz_zhiMoZhe.png)。
+实现文件：[extension.js](extension.js)。角色图：[蕾乌 Q版小女孩](bnzz_zhiMoZhe.webp)。
 
 | 技能、专属卡或资源 | 当前规则说明 |
 | --- | --- |
@@ -750,8 +750,8 @@
 <details>
 <summary>实现映射与约束</summary>
 
-- 背景：见本节角色介绍。台词：见[技能与特殊行动台词](#技能与特殊行动台词)，按本轮用户稿每项采用单句。音色使用 Fish Audio「八重神子」，`reference_id`：`5a9fc65e513245698fe1f9f77617b849`，`s2.1-pro-free` 中文音色；模型标记为未授权公开下载，音频仅在本地游戏使用，不随扩展发布。角色图片：`bnzz_zhiMoZhe.png`。死亡语音：待定。
-- 实现映射：`extension.js`；技能为 `bnzz_qi_hunLiJiQu`、`bnzz_qi_buWang`、`bnzz_qi_xianZhen`、`bnzz_qi_xiuQi`、`bnzz_qi_kuangLuanShuFu`、`bnzz_qi_zhiGanZhiYan`；形态为 `bnzz_qi_zhiGanXingTai`，束缚为 `bnzz_qi_shuFu`（上限5）。实体专属牌为 `bnzz_qi_guangWang_card`、`bnzz_qi_anWang_card`，效果标记为对应不含 `_card` 的 ID，共享导魔为 `bnzz_qi_daoMo`。束缚、直感、光网、暗网已分别接入 `mark_bnzz_shuFu.png`、`mark_bnzz_zhiGanXingTai.png`、`mark_bnzz_guangWang.png`、`mark_bnzz_anWang.png`；两张实体专属卡复用对应方形图标。
+- 背景：见本节角色介绍。台词：见[技能与特殊行动台词](#技能与特殊行动台词)，按本轮用户稿每项采用单句。音色使用 Fish Audio「八重神子」，`reference_id`：`5a9fc65e513245698fe1f9f77617b849`，`s2.1-pro-free` 中文音色；模型标记为未授权公开下载，音频仅在本地游戏使用，不随扩展发布。角色图片：`bnzz_zhiMoZhe.webp`。死亡语音：待定。
+- 实现映射：`extension.js`；技能为 `bnzz_qi_hunLiJiQu`、`bnzz_qi_buWang`、`bnzz_qi_xianZhen`、`bnzz_qi_xiuQi`、`bnzz_qi_kuangLuanShuFu`、`bnzz_qi_zhiGanZhiYan`；形态为 `bnzz_qi_zhiGanXingTai`，束缚为 `bnzz_qi_shuFu`（上限5）。实体专属牌为 `bnzz_qi_guangWang_card`、`bnzz_qi_anWang_card`，效果标记为对应不含 `_card` 的 ID，共享导魔为 `bnzz_qi_daoMo`。束缚、直感、光网、暗网已分别接入 `mark_bnzz_shuFu.webp`、`mark_bnzz_zhiGanXingTai.webp`、`mark_bnzz_guangWang.webp`、`mark_bnzz_anWang.webp`；两张实体专属卡复用对应方形图标。
 - 展示口径：参照女仆长【风穴】及供能技师【蓄能池】，在角色技能列表中独立列出“专属【光网】”“专属【暗网】”，各自完整展开【导魔】【诱捕】【破网】，附带技能标题使用绿色。【布网】仅说明放网操作。展示条目 `bnzz_qi_guangWang_description`、`bnzz_qi_anWang_description` 为空技能，不授予网的运行效果或产生标记；原网标记、全场触发及实体牌保持原样。标记说明复用对应展示条目的文案。
 - 实现约束：魂力汲取在造成伤害③响应，不改为实际承伤⑥；布网/休憩均仅自己的回合结束。线振以其他当前回合角色完成的实际行动为单位计数，额外行动也计入，应战及技能内额外用牌不重复计数；增减束缚事件禁止其他角色响应，但本人的狂乱束缚可正常响应本次移除。光/暗网各自全场唯一，放在织魔者自己的扩展区，移除到场外而非普通弃牌堆，激发状态独立于角色横置。导魔仅由织魔者队友在其自己的回合造成法术伤害时触发，并由织魔者本人决定是否发动；两网对同一次伤害共用一次触发锁，返噬伤害禁止再次导魔；诱捕只响应对手从手牌实际打出的对应系牌，费用弃牌及展示不视为打出。直感在下个行动阶段开始前重置退出；休憩立即重置退出，形态增幅不影响自伤。
 

@@ -1177,7 +1177,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     `,
                     nocount:true,
                 },
-                markimage:'image/card/zhuanShu/fengXue.png',
+                markimage:'image/card/zhuanShu/fengXue.webp',
                 onremove:'storage',
                 group:['fengXueX_yingZhiFeng1_1','fengXueX_yingZhiFeng1_2','fengXueX_yingZhiFeng2','fengXueX_fengZhi'],
                 subSkill:{
@@ -1327,7 +1327,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     max:4,
                 },
                 onremove:'storage',
-                markimage:'image/card/zhiShiWu/hong.png',
+                markimage:'image/card/zhiShiWu/hong.webp',
             },
 
             //结界师
@@ -1505,7 +1505,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     <span class="greentext">[被动]虚空境</span><br>
                     <span class='tiaoJian'>(若你拥有【绝界】)</span>你拥有的基础效果无法触发。`,
                 },
-                markimage:'image/card/zhuanShu/juejie.png',
+                markimage:'image/card/zhuanShu/juejie.webp',
                 onremove:'storage',
                 group:['jueJieX_zero','jueJieX_remove','jueJieX_attack','jueJieX_wuFa'],
                 subSkill:{
@@ -1664,7 +1664,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     max:3,
                 },
                 onremove:'storage',
-                markimage:'image/card/zhiShiWu/hong.png',
+                markimage:'image/card/zhiShiWu/hong.webp',
             },
 
             //神秘学者
@@ -1938,7 +1938,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     max:4,
                 },
                 onremove:'storage',
-                markimage:'image/card/zhiShiWu/hong.png',
+                markimage:'image/card/zhiShiWu/hong.webp',
             },
 
             //染污者
@@ -2164,7 +2164,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     max:2,
                 },
                 onremove:'storage',
-                markimage:'image/card/zhiShiWu/hong.png',
+                markimage:'image/card/zhiShiWu/hong.webp',
             },
 
         },

@@ -289,11 +289,11 @@ game.import("extension", function(lib, game, ui, get, ai, _status) {
         },
         muLing: {
             intro: {name: '木灵', content: 'mark', max: 3},
-            markimage: 'extension/峡谷幻音/mark_baDeMuLing.png', onremove: 'storage',
+            markimage: 'extension/峡谷幻音/mark_baDeMuLing.webp', onremove: 'storage',
         },
-        youShenShengTanInfo: {markimage: 'extension/峡谷幻音/mark_baDeYouShenShengTan.png'},
-        shenQiLvChengInfo: {markimage: 'extension/峡谷幻音/mark_baDeShenQiLvCheng.png'},
-        baDeNingZhiInfo: {markimage: 'extension/峡谷幻音/mark_baDeNingZhi.png'},
+        youShenShengTanInfo: {markimage: 'extension/峡谷幻音/mark_baDeYouShenShengTan.webp'},
+        shenQiLvChengInfo: {markimage: 'extension/峡谷幻音/mark_baDeShenQiLvCheng.webp'},
+        baDeNingZhiInfo: {markimage: 'extension/峡谷幻音/mark_baDeNingZhi.webp'},
         lvZheDeZhaoHuan: {
             audio: 'ext:峡谷幻音/audio/skill/baDe/lvZheDeZhaoHuan.mp3',
             trigger: {global: 'gameStart', player: 'faShuEnd'}, forced: true,
@@ -474,7 +474,7 @@ game.import("extension", function(lib, game, ui, get, ai, _status) {
             ai: {baoShi: true, order: 4.5, result: {target: (player, target) => target.side === player.side ? 0.5 : -1}},
         },
         baDeNingZhi: {
-            charlotte: true, mark: true, markimage: 'extension/峡谷幻音/mark_baDeNingZhi.png', marktext: '滞',
+            charlotte: true, mark: true, markimage: 'extension/峡谷幻音/mark_baDeNingZhi.webp', marktext: '滞',
             intro: {content: '受到的伤害恒为0；行动阶段只能执行特殊行动，否则跳过。巴德回合开始时移除。'},
             onremove: function(player) { delete player.storage.baDeNingZhiOwners; },
             mod: {cardEnabled: function(card, player) {
@@ -822,7 +822,7 @@ game.import("extension", function(lib, game, ui, get, ai, _status) {
                     "suoNaYingYongYuYin": {
                         "charlotte": true,
                         "mark": true,
-                        "markimage": "extension/峡谷幻音/mark_suoNaYingYongYuYin.png",
+                        "markimage": "extension/峡谷幻音/mark_suoNaYingYongYuYin.webp",
                         "marktext": "勇",
                         "intro": { "content": "攻击命中时，本次攻击伤害额外+1，随后移除。" },
                         "trigger": { "source": "gongJiMingZhong" },
@@ -835,7 +835,7 @@ game.import("extension", function(lib, game, ui, get, ai, _status) {
                     "suoNaJianYiYuYin": {
                         "charlotte": true,
                         "mark": true,
-                        "markimage": "extension/峡谷幻音/mark_suoNaJianYiYuYin.png",
+                        "markimage": "extension/峡谷幻音/mark_suoNaJianYiYuYin.webp",
                         "marktext": "毅",
                         "intro": { "content": "承受伤害时，该伤害-1，随后移除。" },
                         "trigger": { "player": "chengShouShangHaiBefore" },
@@ -851,7 +851,7 @@ game.import("extension", function(lib, game, ui, get, ai, _status) {
                     "suoNaXunJieYuYin": {
                         "charlotte": true,
                         "mark": true,
-                        "markimage": "extension/峡谷幻音/mark_suoNaXunJieYuYin.png",
+                        "markimage": "extension/峡谷幻音/mark_suoNaXunJieYuYin.webp",
                         "marktext": "迅",
                         "intro": { "content": "执行【特殊行动】后，弃置1张牌，随后移除。" },
                         "trigger": { "player": "teShuEnd" },
@@ -877,7 +877,7 @@ game.import("extension", function(lib, game, ui, get, ai, _status) {
                     "suoNaHeXian": {
                         "charlotte": true,
                         "intro": { "content": "当前有#点【和弦】。", "max": 3 },
-                        "markimage": "extension/峡谷幻音/mark_suoNaHeXian.png",
+                        "markimage": "extension/峡谷幻音/mark_suoNaHeXian.webp",
                     },
                     "kuangWuZhongLeZhang": {
                         "audio": "ext:峡谷幻音/audio/skill/suoNa/kuangWuZhongYueZhang.mp3",
@@ -1386,7 +1386,7 @@ game.import("extension", function(lib, game, ui, get, ai, _status) {
                             '个【蘑菇】；打出或展示同系牌时触发。';
                     },
                         },
-                        "markimage": "extension/峡谷幻音/mark_tiMoZhongMoGuKa.png",
+                        "markimage": "extension/峡谷幻音/mark_tiMoZhongMoGuKa.webp",
                         "getMatchingCards": function(event, player) {
                     if(!event) return [];
                     var xiBies = [];
@@ -1927,7 +1927,7 @@ game.import("extension", function(lib, game, ui, get, ai, _status) {
                             "max": 3,
                         },
                         "onremove": "storage",
-                        "markimage": "extension/峡谷幻音/mark_xueRen.png",
+                        "markimage": "extension/峡谷幻音/mark_xueRen.webp",
                     },
                     "xueJi": {
                         "intro": {
@@ -1936,7 +1936,7 @@ game.import("extension", function(lib, game, ui, get, ai, _status) {
                             "max": 2,
                         },
                         "onremove": "storage",
-                        "markimage": "extension/峡谷幻音/mark_xueJi.png",
+                        "markimage": "extension/峡谷幻音/mark_xueJi.webp",
                     },
                     "tiMoYinXing": {
                         "mark": true,
@@ -2093,7 +2093,7 @@ game.import("extension", function(lib, game, ui, get, ai, _status) {
                             "content": "应战攻击伤害-1；拥有者回合结束时移除。",
                             "max": 1,
                         },
-                        "markimage": "extension/峡谷幻音/mark_eHuoShuLianKa.png",
+                        "markimage": "extension/峡谷幻音/mark_eHuoShuLianKa.webp",
                         "group": [
                             "eHuoShuLianKa_yingZhan",
                             "eHuoShuLianKa_qingChu",
@@ -2278,18 +2278,18 @@ game.import("extension", function(lib, game, ui, get, ai, _status) {
             ],
             "card": [],
             "skill": [
-                "mark_baDeMuLing.png",
-                "mark_baDeYouShenShengTan.png",
-                "mark_baDeShenQiLvCheng.png",
-                "mark_baDeNingZhi.png",
-                "mark_tiMoZhongMoGuKa.png",
-                "mark_suoNaHeXian.png",
-                "mark_suoNaYingYongYuYin.png",
-                "mark_suoNaJianYiYuYin.png",
-                "mark_suoNaXunJieYuYin.png",
-                "mark_xueRen.png",
-                "mark_xueJi.png",
-                "mark_eHuoShuLianKa.png",
+                "mark_baDeMuLing.webp",
+                "mark_baDeYouShenShengTan.webp",
+                "mark_baDeShenQiLvCheng.webp",
+                "mark_baDeNingZhi.webp",
+                "mark_tiMoZhongMoGuKa.webp",
+                "mark_suoNaHeXian.webp",
+                "mark_suoNaYingYongYuYin.webp",
+                "mark_suoNaJianYiYuYin.webp",
+                "mark_suoNaXunJieYuYin.webp",
+                "mark_xueRen.webp",
+                "mark_xueJi.webp",
+                "mark_eHuoShuLianKa.webp",
             ],
             "audio": [
                 "audio/skill/baDe/lvZheDeZhaoHuan.mp3",

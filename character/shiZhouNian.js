@@ -1005,7 +1005,7 @@ const pack_skills = {
                 priority: 2,
                 trigger: { player: 'xingDongBefore' },
                 forced: true,
-                markimage: 'image/card/zhuanShu/wuXiShuFu.png',
+                markimage: 'image/card/zhuanShu/wuXiShuFu.webp',
                 intro: {
                     content: `<span class='tiaoJian'>(将【五系束缚】放置于目标对手面前)</span>该对手跳过其下个行动阶段。在其下个行动阶段开始前他可以选择摸(2+X)张牌来取消【五系束缚】的效果。X为场上封印的数量，X最高为2。无论效果是否发动，触发后移除此牌。`,
                     nocount: true,
@@ -2109,7 +2109,7 @@ const pack_skills = {
             max: 3,
         },
         onremove: 'storage',
-        markimage: 'image/card/zhiShiWu/hong.png',
+        markimage: 'image/card/zhiShiWu/hong.webp',
     },
     //月之女神
     xinYueBiHu: {
@@ -2357,7 +2357,7 @@ const pack_skills = {
             max: 2,
         },
         onremove: 'storage',
-        markimage: 'image/card/zhiShiWu/hong.png',
+        markimage: 'image/card/zhiShiWu/hong.webp',
     },
     shiHua: {
         intro: {
@@ -2366,7 +2366,7 @@ const pack_skills = {
             max: 3,
         },
         onremove: 'storage',
-        markimage: 'image/card/zhiShiWu/lan.png',
+        markimage: 'image/card/zhiShiWu/lan.webp',
     },
     anYue: {
         intro: {
@@ -2548,7 +2548,7 @@ const pack_skills = {
             max: 4,
         },
         onremove: 'storage',
-        markimage: 'image/card/zhiShiWu/hong.png',
+        markimage: 'image/card/zhiShiWu/hong.webp',
     },
     //冒险家
     qiZha: {
@@ -3719,7 +3719,7 @@ const pack_skills = {
             nocount: true,
         },
         onremove: 'storage',
-        markimage: 'image/card/zhuanShu/xueQiangWeiTingYuan.png',
+        markimage: 'image/card/zhuanShu/xueQiangWeiTingYuan.webp',
         trigger: { global: 'zhiLiao' },
         filter: function (event, player) {
             return player.hasZhiShiWu('xueQiangWeiTingYuan');
@@ -3791,7 +3791,7 @@ const pack_skills = {
             max: 3,
         },
         onremove: 'storage',
-        markimage: 'image/card/zhiShiWu/hong.png',
+        markimage: 'image/card/zhiShiWu/hong.webp',
     },
     //祈祷师
     guangHuiXinYang: {
@@ -4060,7 +4060,7 @@ const pack_skills = {
             max: 3,
         },
         onremove: 'storage',
-        markimage: 'image/card/zhiShiWu/hong.png',
+        markimage: 'image/card/zhiShiWu/hong.webp',
     },
     //红莲骑士
     xingHongShengYue: {
@@ -4293,7 +4293,7 @@ const pack_skills = {
             max: 2,
         },
         onremove: 'storage',
-        markimage: 'image/card/zhiShiWu/hong.png',
+        markimage: 'image/card/zhiShiWu/hong.webp',
     },
     //英灵人形
     zhanWenZhangWo: {
@@ -4531,7 +4531,7 @@ const pack_skills = {
             content: 'mark',
         },
         onremove: 'storage',
-        markimage: 'image/card/zhuanShu/zhanWen.png',
+        markimage: 'image/card/zhuanShu/zhanWen.webp',
     },
     moWen: {
         intro: {
@@ -4539,7 +4539,7 @@ const pack_skills = {
             content: 'mark',
         },
         onremove: 'storage',
-        markimage: 'image/card/zhuanShu/moWen.png',
+        markimage: 'image/card/zhuanShu/moWen.webp',
     },
     //神官
     shenShengQiShi: {
@@ -5090,7 +5090,7 @@ const pack_skills = {
             max: 3,
         },
         onremove: 'storage',
-        markimage: 'image/card/zhiShiWu/hong.png',
+        markimage: 'image/card/zhiShiWu/hong.webp',
     },
     //苍炎魔女
     cangYanFaDian: {
@@ -5371,7 +5371,7 @@ const pack_skills = {
             max: 4,
         },
         onremove: 'storage',
-        markimage: 'image/card/zhiShiWu/hong.png',
+        markimage: 'image/card/zhiShiWu/hong.webp',
 
     },
     //贤者
@@ -6558,7 +6558,7 @@ const pack_skills = {
             content: 'mark',
         },
         onremove: 'storage',
-        markimage: 'image/card/zhiShiWu/hong.png'
+        markimage: 'image/card/zhiShiWu/hong.webp'
     },
     yongHengYueZhangX: {},
     yongHengYueZhang: {
@@ -6569,7 +6569,7 @@ const pack_skills = {
         },
         onremove: 'storage',
         group: ['yongHengYueZhang_jiAngKuangXiangQu', 'yongHengYueZhang_shengLiJiaoXiangShi'],
-        markimage: 'image/card/zhuanShu/yongHengYueZhang.png',
+        markimage: 'image/card/zhuanShu/yongHengYueZhang.webp',
         subSkill: {
             jiAngKuangXiangQu: {
                 trigger: { player: 'phaseBegin' },
@@ -6782,7 +6782,7 @@ const pack_skills = {
             nocount: true,
         },
         onremove: 'storage',
-        markimage: 'image/card/zhuanShu/tiaoXin.png',
+        markimage: 'image/card/zhuanShu/tiaoXin.webp',
 
         filterx: function (event, player, num) {
             //无可启动技，跳过启动前后挑衅
@@ -7005,7 +7005,7 @@ const pack_skills = {
             content: 'mark',
         },
         onremove: 'storage',
-        markimage: 'image/card/zhiShiWu/hong.png',
+        markimage: 'image/card/zhiShiWu/hong.webp',
     },
     zhiXing: {
         intro: {
@@ -7013,7 +7013,7 @@ const pack_skills = {
             content: 'mark',
         },
         onremove: 'storage',
-        markimage: 'image/card/zhiShiWu/lan.png',
+        markimage: 'image/card/zhiShiWu/lan.webp',
     },
     //格斗家
     nianQiLiChang: {
@@ -7247,7 +7247,7 @@ const pack_skills = {
             max: 6,
         },
         onremove: 'storage',
-        markimage: 'image/card/zhiShiWu/hong.png',
+        markimage: 'image/card/zhiShiWu/hong.webp',
     },
     //圣弓
     tianZhiGong: {
@@ -7778,7 +7778,7 @@ const pack_skills = {
             max: 10,
         },
         onremove: 'storage',
-        markimage: 'image/card/zhiShiWu/hong.png',
+        markimage: 'image/card/zhiShiWu/hong.webp',
     },
     shengHuangHuiGuangPaoX: {
         intro: {
@@ -7787,7 +7787,7 @@ const pack_skills = {
             nocount: true,
         },
         onremove: 'storage',
-        markimage: 'image/card/zhiShiWu/lan.png',
+        markimage: 'image/card/zhiShiWu/lan.webp',
     },
     //剑帝
     jianHunShouHu: {
@@ -7986,7 +7986,7 @@ const pack_skills = {
             max: 5,
         },
         onremove: 'storage',
-        markimage: 'image/card/zhiShiWu/hong.png',
+        markimage: 'image/card/zhiShiWu/hong.webp',
     },
     //兽灵武士
     wuZheCanXin: {
@@ -8259,7 +8259,7 @@ const pack_skills = {
             max: 2,
         },
         onremove: 'storage',
-        markimage: 'image/card/zhiShiWu/lan.png',
+        markimage: 'image/card/zhiShiWu/lan.webp',
     },
     canXin: {
         intro: {
@@ -8267,7 +8267,7 @@ const pack_skills = {
             max: 4,
         },
         onremove: 'storage',
-        markimage: 'image/card/zhiShiWu/hong.png',
+        markimage: 'image/card/zhiShiWu/hong.webp',
     },
     //灵魂术士
     lingHunTunShi: {
@@ -8468,7 +8468,7 @@ const pack_skills = {
             nocount: true,
         },
         onremove: 'storage',
-        markimage: 'image/card/zhuanShu/lingHunLianJie.png',
+        markimage: 'image/card/zhuanShu/lingHunLianJie.webp',
         group: 'lingHunLianJie_xiaoGuo',
         subSkill: {
             xiaoGuo: {
@@ -8596,7 +8596,7 @@ const pack_skills = {
             max: 6
         },
         onremove: 'storage',
-        markimage: 'image/card/zhiShiWu/hong.png',
+        markimage: 'image/card/zhiShiWu/hong.webp',
     },
     lanSeLingHun: {
         intro: {
@@ -8604,7 +8604,7 @@ const pack_skills = {
             max: 6
         },
         onremove: 'storage',
-        markimage: 'image/card/zhiShiWu/lan.png',
+        markimage: 'image/card/zhiShiWu/lan.webp',
     },
     //血之巫女
     xueZhiAiShang: {
@@ -8810,7 +8810,7 @@ const pack_skills = {
                     nocount: true,
                 },
                 onremove: 'storage',
-                markimage: 'image/card/zhuanShu/tongShengGongSi.png',
+                markimage: 'image/card/zhuanShu/tongShengGongSi.webp',
             },
             jiangDi: {
                 mod: {
@@ -9190,7 +9190,7 @@ const pack_skills = {
             content: 'mark',
         },
         onremove: 'storage',
-        markimage: 'image/card/zhiShiWu/hong.png'
+        markimage: 'image/card/zhiShiWu/hong.webp'
     },
 }
 const pack_translate = {
