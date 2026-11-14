@@ -4429,7 +4429,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     const cards = player.getExpansions('mengZhao');
                     if (cards.length) player.loseToDiscardpile(cards);
                 },
-                group:['mengZhao_hongLieLieHuo','mengZhao_diDongNuTao','mengZhao_mengJingPoSui'],
+                group:['mengZhao_hongLeiLieHuo','mengZhao_diDongNuTao','mengZhao_mengJingPoSui'],
                 markimage:'image/card/zhuanShu/jiLeMengJing.png',
                 subSkill:{
                     jiLeMengJing:{
@@ -4445,7 +4445,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             await player.addZhiShiWu(player.storage.mengJing);
                         }
                     },
-                    hongLieLieHuo:{
+                    hongLeiLieHuo:{
                         intro:{
                             name:'轰雷烈火',
                             content:`<span class="greentext">[被动]轰雷烈火</span><br>
@@ -4460,7 +4460,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         forced:true,
                         trigger:{player:'phaseBegin'},
                         filter:function (event,player){
-                            return player.hasZhiShiWu('mengZhao_hongLieLieHuo');
+                            return player.hasZhiShiWu('mengZhao_hongLeiLieHuo');
                         },
                         content:async function (event,trigger,player){
 
@@ -4603,13 +4603,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         }
                     },
                     mengJingPoSui:{
-                        trigger:{player:['mengZhao_hongLieLieHuoEnd','mengZhao_diDongNuTaoEnd']},
+                        trigger:{player:['mengZhao_hongLeiLieHuoEnd','mengZhao_diDongNuTaoEnd']},
                         forced:true,
                         filter:function (event,player){
-                            return player.hasZhiShiWu('mengZhao_hongLieLieHuo')||player.hasZhiShiWu('mengZhao_diDongNuTao');
+                            return player.hasZhiShiWu('mengZhao_hongLeiLieHuo')||player.hasZhiShiWu('mengZhao_diDongNuTao');
                         },
                         content:async function (event,trigger,player){
-                            if(player.hasZhiShiWu('mengZhao_hongLieLieHuo')) await player.removeZhiShiWu('mengZhao_hongLieLieHuo');
+                            if(player.hasZhiShiWu('mengZhao_hongLeiLieHuo')) await player.removeZhiShiWu('mengZhao_hongLeiLieHuo');
                             if(player.hasZhiShiWu('mengZhao_diDongNuTao')) await player.removeZhiShiWu('mengZhao_diDongNuTao');
                         }
                     }
@@ -4630,7 +4630,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.addSkill('mengZhao_jiLeMengJing');
 
                     var list=[];
-                    if(!player.hasZhiShiWu('mengZhao_hongLieLieHuo')) list.push('mengZhao_hongLieLieHuo');
+                    if(!player.hasZhiShiWu('mengZhao_hongLeiLieHuo')) list.push('mengZhao_hongLeiLieHuo');
                     if(!player.hasZhiShiWu('mengZhao_diDongNuTao')) list.push('mengZhao_diDongNuTao');
                     if(list.length==0) return;
                     var moRi=await player.chooseControl(list).set('prompt',`选择1个【梦境】放置到场上`).forResultControl();
@@ -4672,7 +4672,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
             },
             zhiPei:{
-                trigger:{player:['mengZhao_hongLieLieHuoBegin','mengZhao_diDongNuTaoBegin']},
+                trigger:{player:['mengZhao_hongLeiLieHuoBegin','mengZhao_diDongNuTaoBegin']},
                 filter:function (event,player){
                     return player.canBiShaShuiJing();
                 },
@@ -5072,7 +5072,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             <span class='tiaoJian'>(【天雷劫火】或【地裂波涛】结束后)</span>移除此卡。
             `,
             mengZhao_jiLeMengJing:"[被动]极乐梦境",
-            mengZhao_hongLieLieHuo:"[被动]轰雷烈火",
+            mengZhao_hongLeiLieHuo:"[被动]轰雷烈火",
             mengZhao_diDongNuTao:"[被动]地裂怒涛",
             mengZhao_mengJingPoSui:"[被动]梦境破碎",
             ruMeng:"[法术]入梦",
