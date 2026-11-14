@@ -6312,8 +6312,7 @@ const pack_skills = {
     },
     //吟游诗人
     chenLunXieZouQu: {
-        trigger: { global: 'damageAfter' },//该时机不会因为治疗而被抵消
-        priority: -1,
+        trigger: { global: 'zaoChengShangHai' },//该时机不会因为治疗而被抵消
         filter: function (event, player) {
             if (player.isHengZhi()) return false;
             if (event.faShu != true) return false;
@@ -6362,6 +6361,7 @@ const pack_skills = {
         group: ['chenLunXieZouQu_jiShu'],
         subSkill: {
             jiShu: {
+                priority:1,
                 trigger: { global: 'zaoChengShangHai' },
                 filter: function (event, player) {
                     if (event.faShu != true) return false;
@@ -6522,9 +6522,9 @@ const pack_skills = {
         subSkill: {
             shengLiJiaoXiangShi: {
                 forced: true,
-                trigger: { player: 'yongHengYueZhang_shengLiJiaoXiangShiBefore' },
+                trigger: { global: 'yongHengYueZhang_shengLiJiaoXiangShiBefore' },
                 filter: function (event, player) {
-                    return player.isHengZhi();
+                    return player.isHengZhi()&&event.player!=player;
                 },
                 content: async function (event, trigger, player) {
                     await player.addZhiLiao();
@@ -9730,7 +9730,7 @@ const pack_translate = {
 
     //吟游诗人
     chenLunXieZouQu: "[响应]沉沦协奏曲[回合限定]",
-    chenLunXieZouQu_info: "<span class='tiaoJian'>(仅【普通形态】下，一回合内我方对至少2名对手造成法术伤害③且结算之后，弃2张同系牌[展示])</span>你+1<span class='hong'>【灵感】</span>。<span class='tiaoJian'>(若弃牌中有法术牌)</span>对目标对手造成1点法术伤害③。",
+    chenLunXieZouQu_info: "<span class='tiaoJian'>(仅【普通形态】下，一回合内我方对至少2名对手造成法术伤害③时，弃2张同系牌[展示])</span>你+1<span class='hong'>【灵感】</span>。<span class='tiaoJian'>(若弃牌中有法术牌)</span>对目标对手造成1点法术伤害③。",
     buXieHeXian: "[法术]不谐和弦",
     buXieHeXian_backup: "[法术]不谐和弦",
     buXieHeXian_info: "<span class='tiaoJian'>(移除X点</span><span class='hong'>【灵感】</span><span class='tiaoJian'>，X>1)</span>你选择以下一项发动：<br>·你和目标角色各摸(X-1)张牌[强制]。<br>·你和目标角色各弃(X-1)张牌。<br><span class='tiaoJian'>(若你处于【永恒囚徒形态】)</span>[重置]脱离【永恒囚徒形态】。",

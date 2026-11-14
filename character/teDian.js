@@ -3875,7 +3875,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 trigger:{global:'phaseOver'},
                 forced:true,
                 filter:function (event,player){
-                    return player.storage.luBiaoTarget&&event.player==player.storage.luBiaoTarget;
+                    return player.storage.daZuiLuBiaoTarget&&event.player==player.storage.daZuiLuBiaoTarget;
                 },
                 content:function (){
                     player.insertPhase('shenDeDaiXing');
@@ -3886,7 +3886,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         trigger:{player:'phaseSkip'},
                         direct:true,
                         filter:function (event,player){
-                            return player.storage.luBiaoTarget&&event.skill!='shenDeDaiXing';
+                            return player.storage.daZuiLuBiaoTarget&&event.skill!='shenDeDaiXing';
                         },
                         content:function (){
                             trigger.cancel()
@@ -3922,9 +3922,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     var target=lib.skill.shenDeDaiXing.getPrevious(player);
                     game.addGlobalSkill('daZuiLuBiaoX');
                     for(var current of game.players){
-                        current.storage.luBiaoPlayer=player;
+                        current.storage.daZuiLuBiaoPlayer=player;
                     }
-                    player.storage.luBiaoTarget=target;
+                    player.storage.daZuiLuBiaoTarget=target;
                     await target.addZhiShiWu('daZuiLuBiaoX').set('type','fangZhi');
                 },
             },
@@ -3932,7 +3932,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 type:'faShu',
                 enable:'faShu',
                 filter:function(event,player){
-                    if(!player.storage.luBiaoTarget) return false;
+                    if(!player.storage.daZuiLuBiaoTarget) return false;
                     if(event.getParent('xingDong').xinYangZhiJia===false) return false;
                     return player.countCards('h',card=>get.mingGe(card)=='sheng')>0;
                 },
@@ -3944,9 +3944,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 content:async function (event,trigger,player){
                     await event.trigger('daZuiLuBiaoXZhuanYi');
 
-                    await player.storage.luBiaoTarget.removeZhiShiWu('daZuiLuBiaoX');
-                    var target=lib.skill.shenDeMenTu.getPrevious(player.storage.luBiaoTarget);
-                    player.storage.luBiaoTarget=target;
+                    await player.storage.daZuiLuBiaoTarget.removeZhiShiWu('daZuiLuBiaoX');
+                    var target=lib.skill.shenDeMenTu.getPrevious(player.storage.daZuiLuBiaoTarget);
+                    player.storage.daZuiLuBiaoTarget=target;
                     await target.addZhiShiWu('daZuiLuBiaoX').set('type','zhuanYi');
                 },
                 ai: {
@@ -4015,7 +4015,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             fuYin:{
                 trigger:{global:'discardAfter'},
                 filter:function (event,player){
-                    if(!player.storage.luBiaoTarget) return false;
+                    if(!player.storage.daZuiLuBiaoTarget) return false;
                     if(player.zhiLiao<1) return false;
                     let par=event.getParent();
                     if(par.name!='useSkill'&&par.name!='chooseToDiscard') return false;
@@ -4043,7 +4043,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         });
 
                     await player.changeZhiLiao(-1);
-                    await player.storage.luBiaoTarget.gain(trigger.cards,'log','gain');
+                    await player.storage.daZuiLuBiaoTarget.gain(trigger.cards,'log','gain');
                     
                     if(player.storage.faYunShiQi===false){
                         let targets=await player.chooseTarget('福音：除你之外目标角色+1[治疗]',lib.filter.notMe).set('ai',function(target){
@@ -4054,7 +4054,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                 },
                 check:function (event,player){
-                    return get.attitude(player.storage.luBiaoTarget,player)<0;
+                    return get.attitude(player.storage.daZuiLuBiaoTarget,player)<0;
                 },
             },
             daZuiLuBiao:{},
@@ -4079,10 +4079,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     if(event.zhuanYi!=false){
                         await player.removeZhiShiWu('daZuiLuBiaoX');
                         var target=lib.skill.shenDeMenTu.getPrevious(player);
-                        player.storage.luBiaoPlayer.storage.luBiaoTarget=target;
+                        player.storage.daZuiLuBiaoPlayer.storage.daZuiLuBiaoTarget=target;
                         await target.addZhiShiWu('daZuiLuBiaoX').set('type','zhuanYi').set('chanHuiShi',true);
                     }
-                    await player.storage.luBiaoPlayer.chooseToDiscard('h',1,true,'忏悔式：弃1张牌');
+                    await player.storage.daZuiLuBiaoPlayer.chooseToDiscard('h',1,true,'忏悔式：弃1张牌');
                 },
                 check:function (event,player){
                     if(get.emptyZhanJi(player.side)<1) return false;
@@ -4095,16 +4095,16 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 enable:'faShu',
                 usable:1,
                 filter:function(event,player){
-                    if(!player.storage.luBiaoTarget) return false;
+                    if(!player.storage.daZuiLuBiaoTarget) return false;
                     return player.canBiShaShuiJing();
                 },
                 content:async function(event, trigger, player) {
                     await player.removeBiShaShuiJing();
 
                     await event.trigger('daZuiLuBiaoXZhuanYi');
-                    await player.storage.luBiaoTarget.removeZhiShiWu('daZuiLuBiaoX');
-                    var target=lib.skill.shenDeMenTu.getPrevious(player.storage.luBiaoTarget);
-                    player.storage.luBiaoTarget=target;
+                    await player.storage.daZuiLuBiaoTarget.removeZhiShiWu('daZuiLuBiaoX');
+                    var target=lib.skill.shenDeMenTu.getPrevious(player.storage.daZuiLuBiaoTarget);
+                    player.storage.daZuiLuBiaoTarget=target;
                     await target.addZhiShiWu('daZuiLuBiaoX').set('type','zhuanYi');
 
                     player.addFaShu();
@@ -4122,7 +4122,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             shengCanLi:{
                 trigger:{global:'changeZhiShiWuAfter'},
                 filter:function (event,player){
-                    if(!player.storage.luBiaoTarget) return false;
+                    if(!player.storage.daZuiLuBiaoTarget) return false;
                     return event.zhiShiWu=='daZuiLuBiaoX'&&(event.type=='fangZhi'||event.type=='zhuanYi')&&player.canBiShaShuiJing()&&event.player.hasZhiShiWu('daZuiLuBiaoX');
                 },
                 logTarget:'player',
@@ -4131,12 +4131,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     await player.addZhiShiWu('daZuiQianCheng',1);
                     var choiceList=["弃1张牌[展示]。<span class='tiaoJian'>(若盖牌为【虚弱】、【中毒】或【中毒】)</span>将该牌放置在拥有【路标】的角色面前作为基础效果","·<span class='tiaoJian'>(将拥有【路标】的角色面前一张基础效果牌收入自己手中)</span>你+2<span class='hong'>【虔诚】</span>"];
                     var list=['选项一'];
-                    if(player.storage.luBiaoTarget.hasJiChuXiaoGuo()) list.push('选项二');
+                    if(player.storage.daZuiLuBiaoTarget.hasJiChuXiaoGuo()) list.push('选项二');
                     var next=player.chooseControl(list);
                     next.set('choiceList',choiceList);
                     next.set('ai',function(){
                         var player=_status.event.player;
-                        var target=player.storage.luBiaoTarget;
+                        var target=player.storage.daZuiLuBiaoTarget;
                         if(player.countCards('h')+1>=player.getHandcardLimit()) return '选项一';
                         if(target.hasJiChuXiaoGuo()){
                             if(player.side==target.side){
@@ -4155,7 +4155,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         if(player.countCards('h')==0) return;
                         var cards=await player.chooseToDiscard('h','showCards',1,true).set('ai',function(card){
                             var player=_status.event.player;
-                            if(player.side==player.storage.luBiaoTarget.side){
+                            if(player.side==player.storage.daZuiLuBiaoTarget.side){
                                 if(get.name(card)=='shengDun') return 1;
                                 else if(get.name(card)=='xuRuo'||get.name(card)=='zhongDu') return 0.2;
                                 else return 0.5;
@@ -4168,13 +4168,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         if(get.position(cards[0], true) === "d"){
                             var name=get.name(cards[0]);
 
-                            if((((name=='xuRuo'||name=='shengDun')&&player.storage.luBiaoTarget.getJiChuXiaoGuo("_"+name).length==0)||name=='zhongDu')&&player.canUse(name,player.storage.luBiaoTarget)){
-                                await player.storage.luBiaoTarget.addJiChuXiaoGuo("_"+name,cards);
-                                if(name=='zhongDu') player.storage.luBiaoTarget.storage.zhongDu.push(player);
+                            if((((name=='xuRuo'||name=='shengDun')&&player.storage.daZuiLuBiaoTarget.getJiChuXiaoGuo("_"+name).length==0)||name=='zhongDu')&&player.canUse(name,player.storage.daZuiLuBiaoTarget)){
+                                await player.storage.daZuiLuBiaoTarget.addJiChuXiaoGuo("_"+name,cards);
+                                if(name=='zhongDu') player.storage.daZuiLuBiaoTarget.storage.zhongDu.push(player);
                             }
                         }
                     }else if(control=='选项二'){
-                        await player.gainJiChuXiaoGuo(player.storage.luBiaoTarget);
+                        await player.gainJiChuXiaoGuo(player.storage.daZuiLuBiaoTarget);
                         await player.addZhiShiWu('daZuiQianCheng',2);
                     }
                 },
@@ -4429,7 +4429,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     const cards = player.getExpansions('mengZhao');
                     if (cards.length) player.loseToDiscardpile(cards);
                 },
-                group:['mengZhao_hongLieLieHuo','mengZhao_diDongNuTao','mengZhao_mengJingPoSui'],
+                group:['mengZhao_hongLeiLieHuo','mengZhao_diDongNuTao','mengZhao_mengJingPoSui'],
                 markimage:'image/card/zhuanShu/jiLeMengJing.png',
                 subSkill:{
                     jiLeMengJing:{
@@ -4445,7 +4445,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             await player.addZhiShiWu(player.storage.mengJing);
                         }
                     },
-                    hongLieLieHuo:{
+                    hongLeiLieHuo:{
                         intro:{
                             name:'轰雷烈火',
                             content:`<span class="greentext">[被动]轰雷烈火</span><br>
@@ -4460,7 +4460,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         forced:true,
                         trigger:{player:'phaseBegin'},
                         filter:function (event,player){
-                            return player.hasZhiShiWu('mengZhao_hongLieLieHuo');
+                            return player.hasZhiShiWu('mengZhao_hongLeiLieHuo');
                         },
                         content:async function (event,trigger,player){
 
@@ -4603,14 +4603,14 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         }
                     },
                     mengJingPoSui:{
-                        trigger:{player:['mengZhao_hongLieLieHuoEnd','mengZhao_diDongNuTaoEnd']},
+                        trigger:{player:['mengZhao_hongLeiLieHuoEnd','mengZhao_diDongNuTaoEnd']},
                         forced:true,
                         filter:function (event,player){
-                            return player.hasZhiShiWu('mengZhao_hongLieLieHuo')||player.hasZhiShiWu('mengZhao_diDongNuTao');
+                            return player.hasZhiShiWu('mengZhao_hongLeiLieHuo')||player.hasZhiShiWu('mengZhao_diDongNuTao');
                         },
                         content:async function (event,trigger,player){
-                            if(player.hasZhiShiWu('mengZhao_hongLieLieHuo')) await player.removeZhiShiWu('mengZhao_hongLieLieHuo');
-                            if(player.hasZhiShiWu('mengZhao_diDongNuTao')) await player.removeZhiShiWu('mengZhao_diDongNuTao');
+                            if(trigger.name=='mengZhao_hongLeiLieHuo') await player.removeZhiShiWu('mengZhao_hongLeiLieHuo');
+                            if(trigger.name=='mengZhao_diDongNuTao') await player.removeZhiShiWu('mengZhao_diDongNuTao');
                         }
                     }
                 },
@@ -4630,7 +4630,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.addSkill('mengZhao_jiLeMengJing');
 
                     var list=[];
-                    if(!player.hasZhiShiWu('mengZhao_hongLieLieHuo')) list.push('mengZhao_hongLieLieHuo');
+                    if(!player.hasZhiShiWu('mengZhao_hongLeiLieHuo')) list.push('mengZhao_hongLeiLieHuo');
                     if(!player.hasZhiShiWu('mengZhao_diDongNuTao')) list.push('mengZhao_diDongNuTao');
                     if(list.length==0) return;
                     var moRi=await player.chooseControl(list).set('prompt',`选择1个【梦境】放置到场上`).forResultControl();
@@ -4672,7 +4672,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
             },
             zhiPei:{
-                trigger:{player:['mengZhao_hongLieLieHuoBegin','mengZhao_diDongNuTaoBegin']},
+                trigger:{player:['mengZhao_hongLeiLieHuoBegin','mengZhao_diDongNuTaoBegin']},
                 filter:function (event,player){
                     return player.canBiShaShuiJing();
                 },
@@ -5023,6 +5023,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 
             //大罪司教
             shenDeDaiXing: "[被动]神的代行",
+            shenDeDaiXing_info: "你无法成为【路标】的目标[恒定]，你的行动顺序改为拥有【路标】的角色之后。2V2中此技能无效。",
             shenYiZhiYin: "[被动]神意指引",
             shenYiZhiYin_info: "<span class='tiaoJian'>(你的第一回合开始时)</span>将【路标】放置在你左手边最近的角色面前。",
             xinYangZhiJia: "[法术]信仰之枷",
@@ -5071,7 +5072,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             <span class='tiaoJian'>(【天雷劫火】或【地裂波涛】结束后)</span>移除此卡。
             `,
             mengZhao_jiLeMengJing:"[被动]极乐梦境",
-            mengZhao_hongLieLieHuo:"[被动]轰雷烈火",
+            mengZhao_hongLeiLieHuo:"[被动]轰雷烈火",
             mengZhao_diDongNuTao:"[被动]地裂怒涛",
             mengZhao_mengJingPoSui:"[被动]梦境破碎",
             ruMeng:"[法术]入梦",
