@@ -227,9 +227,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             'step 1'
                             player.chooseTarget(function(card,player,target){
                                 return target.side!=player.side;
-                            },true,'对目标对手造成1点法术伤害③')
+                            },true,'对目标对手造成2点法术伤害③')
                             'step 2'
-                            result.targets[0].faShuDamage(1,player);
+                            result.targets[0].faShuDamage(2,player);
                         }
                     },
                     chongZhiShangHai:{
@@ -261,6 +261,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.removeBiShaShuiJing();
                     'step 1'
                     player.addZhiShiWu('shengYin',2,4);
+                    'step 2'
+                    player.chooseToDiscard(1,'弃0-1张牌');
                     player.addGongJi();
                     event.getParent('xingDong').shenWei=false;
                 },
@@ -1425,9 +1427,22 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         }
                         return false;
                     }
-
-                    return player.countCards('h',function(card){
-                        return card.name!='shengGuang'&&get.type(card)=='faShu'&&event.filterCard?event.filterCard(card,player,event):false;;
+                    return player.countCards('h',function(x){
+                        let type=get.type(x);
+                        if(type!='faShu') return false;
+                        if(x.name=='shengGuang') return false;
+                        let xiBie=get.xiBie(x);
+                        let name;
+                        switch(xiBie){
+                            case 'shui':name='shuiLianZhan';break;
+                            case 'huo':name='huoYanZhan';break;
+                            case 'feng':name='fengShenZhan';break;
+                            case 'lei':name='leiGuangZhan';break;
+                            case 'di':name='diLieZhan';break;
+                        }
+                        let mingGe=get.mingGe(x);
+                        let card=get.autoViewAs({name:name,xiBie:xiBie,mingGe:mingGe},x);
+                        return event.filterCard?event.filterCard(card,player,event):false;;
                     });
                 },
                 filterCard:function(card,player,event){
@@ -1657,8 +1672,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             shenWei_info:"<span class='tiaoJian'>(主动攻击前①，移除2点</span><span class='hong'>【圣印】</span><span class='tiaoJian'>)</span>本次攻击对手无法应战；<span class='tiaoJian'>(若攻击牌为圣类命格)</span>本次攻击伤害额外+1。本回合你与攻击目标无法获得[治疗]。",
             shengCai_info:"<span class='tiaoJian'>(主动攻击前①，移除X点</span><span class='hong'>【圣印】</span><span class='tiaoJian'>)</span>对攻击目标造成1点法术伤害③。本次攻击伤害额外+(X-1)。",
             shengYu_info:"<span class='tiaoJian'>(移除X点</span><span class='hong'>【圣印】</span><span class='tiaoJian'>)</span>目标队友+X[治疗]，你弃1张牌，额外+1[攻击行动]。",
-            shenZhiZi_info:"<span class='tiaoJian'>(当你</span><span class='hong'>【圣印】</span><span class='tiaoJian'>增加时)</span>[横置]移除你的所有[治疗]，持续到你的下个回合结束时，你都处于【圣炎形态】，此形态下我方士气最少为1[强制]。 【神之子】的效果结束时[重置]，脱离【圣炎形态】，然后对目标对手造成1点法术伤害③。 <span class='tiaoJian'>(当【圣炎形态】下你受到伤害时③)</span>抵御本次伤害，改为承受1点来自自身的法术伤害⑥，然后[重置]脱离【圣炎形态】。",
-            shenLinShengQi_info:"[水晶]无视你的<span class='hong'>【圣印】</span>上限为你+2<span class='hong'>【圣印】</span>，但你的<span class='hong'>【圣印】</span>最高为4，额外+1[攻击行动]；本回合你不能发动[神威]。",
+            shenZhiZi_info:"<span class='tiaoJian'>(当你</span><span class='hong'>【圣印】</span><span class='tiaoJian'>增加时)</span>[横置]移除你的所有[治疗]，持续到你的下个回合结束时，你都处于【圣炎形态】，此形态下我方士气最少为1[强制]。 【神之子】的效果结束时[重置]，脱离【圣炎形态】，然后对目标对手造成2点法术伤害③。 <span class='tiaoJian'>(当【圣炎形态】下你受到伤害时③)</span>抵御本次伤害，改为承受1点来自自身的法术伤害⑥，然后[重置]脱离【圣炎形态】。",
+            shenLinShengQi_info:"[水晶]无视你的<span class='hong'>【圣印】</span>上限为你+2<span class='hong'>【圣印】</span>，但你的<span class='hong'>【圣印】</span>最高为4，你弃0-1张牌，额外+1[攻击行动]；本回合你不能发动[神威]。",
             shengYanQiYuan_info:"[水晶]<span class='tiaoJian'>([重置]脱离【圣炎形态】时)</span>目标角色+2[治疗]。",
             shengYin_info:"<span class='hong'>【圣印】</span>为圣殿骑士专有指示物，上限为2。",
             

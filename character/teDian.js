@@ -117,6 +117,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 4,
                 ['baSiKeZhiFa', 'moXingXuanLv', 'xinYueZhang', 'baLieTaNiXiaoDiao', 'puLuoWangSiXieZouQu', 'naBuLeSiDuZou','yinFu'],
             ],
+            daZuiSiJiao:["chuanJiaoShi_name",'shengGroup','4/5',['shenDeDaiXing','shenYiZhiYin','xinYangZhiJia','sheZui','shenYu','fuYin','daZuiLuBiao','shuLingQuanBing','shengCanLi','daZuiQianCheng']],
+            guShenJiSi:["yiJiaoTu_name",'huanGroup',4,['guShenJieLv','niuQuLianJie','tianQi','moRiMengZhao','mengZhao','ruMeng','zhiPei']],
         },
         card: {
             tricky: {
@@ -176,16 +178,18 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 
                     var discarded = result.cards[0];
 
-                    if (get.type(discarded) == 'gongJi') {
-                        var list=['是','否'];
-                        var control = await player.chooseControl(list).set('prompt','是否获得攻击牌')
-                        .set('ai', function() {
-                            var player = _status.event.player;
-                            if(player.countCards('h', card => get.type(card) == 'gongJi') > 1)return '否';
-                            else return '是';
-                        }).forResult('control');
-                        if (control =='是') {
-                            await player.gain(discarded);
+                    if (get.type(discarded,trigger.target) == 'gongJi') {
+                        if(!discarded.destroyed){
+                            var list=['是','否'];
+                            var control = await player.chooseControl(list).set('prompt','是否获得攻击牌')
+                            .set('ai', function() {
+                                var player = _status.event.player;
+                                if(player.countCards('h', card => get.type(card) == 'gongJi') > 1)return '否';
+                                else return '是';
+                            }).forResult('control');
+                            if (control =='是') {
+                                await player.gain(discarded);
+                            }
                         }
                         player.addGongJi();
                     } else if (get.type(discarded) == 'faShu') {
@@ -1956,6 +1960,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 async content(event, trigger, player) {
                     await player.removeBiShaShuiJing();
                     player.addTempSkill("suprise_sheZhi", { player: "phaseEndBefore" });
+                    player.update();//用于及时更新手牌上限
                     var cards=[];
                     var players = game.filterPlayer(function (current) {
                         return current.hasJiChuXiaoGuo("tricky_xiaoGuo");
@@ -1975,11 +1980,17 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         return lib.filter.targetEnabled({ name: "tricky" }, player, current);
                     });
 
-                    while (player.countCards("h") > 0 && bool) {
+                    var selectedCards=[];
+                    var selectedTargets=[];
+
+                    while (player.countCards("h") > selectedCards.length && bool) {
                         var result = await player
                             .chooseCardTarget({
-                                filterCard:true,
+                                filterCard:function(card, player){
+                                    return !selectedCards.includes(card);
+                                },
                                 filterTarget:function (card, player, target) {
+                                    if(_status.event.selectedTargets.includes(target)) return false;
                                     return lib.filter.targetEnabled({ name: "tricky" }, player, target);
                                 },
                                 prompt:"选择1名目标角色，将1张手牌作为基础效果【Tricky】放置",
@@ -1991,22 +2002,39 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                     if(player.side == target.side) return 0.1;
                                     else return 1;
                                 },
+                                selectedCards: selectedCards,
+                                selectedTargets: selectedTargets,
                             }).forResult();
 
-                        if (!result.bool) {
+                        if(result.bool) {
+                            selectedCards.push(result.cards[0]);
+                            selectedTargets.push(result.targets[0]);
+                        }else{
                             break;
                         }
-                        var target = result.targets[0];
-                        var cards = result.cards;
 
-                        if (!target.hasSkill("tricky_xiaoGuo")) {
-                            target.addSkill("tricky_xiaoGuo");
-                        }
-                        await target.addJiChuXiaoGuo('tricky_xiaoGuo', player, cards).set('animate','draw');
                         bool=game.hasPlayer(function(current){
+                            if(selectedTargets.includes(current)) return false;
                             return lib.filter.targetEnabled({ name: "tricky" }, player, current);
                         });
                     }
+
+                    if(selectedCards.length>0){
+                        //game.cardsGotoOrdering(selectedCards);
+                        await player.lose(selectedCards,ui.ordering);
+                        while(selectedCards.length>0){
+                            let card=selectedCards.shift();
+                            let target=selectedTargets.shift();
+                            if (!target.hasSkill("tricky_xiaoGuo")) {
+                                target.addSkill("tricky_xiaoGuo");
+                            }
+                            await target.addJiChuXiaoGuo('tricky_xiaoGuo', player, [card]).set('animate','draw');
+                            bool=game.hasPlayer(function(current){
+                                return lib.filter.targetEnabled({ name: "tricky" }, player, current);
+                            });
+                        }
+                    }
+
                 },
                 subSkill: {
                     sheZhi: {
@@ -2014,6 +2042,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             maxHandcard: function (player, num) {
                                 return num + 5;
                             },
+                        },
+                        onremove: function (player, skill) {
+                            player.update();//用于及时更新手牌上限
                         },
                     },
                 },
@@ -3031,8 +3062,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         return value;
                     }).forResult();
                     if(result.bool){
-                        game.log(player,'获得了',result.links);
-                        await player.gain(result.links);
+                        await player.gain(result.links,'gain2','log');
                     }
                     var bool=false;
                     for(var card of cards){
@@ -3322,7 +3352,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                 var cards=player.getExpansions('tianPing_you');
                                 if(cards.length>0) dialog.addAuto(cards);
                                 return `<span class='greentext'>[被动]圣方之右</span><br>
-                                    <span class='tiaoJian'>(每当本卡上的牌被弃掉且弃牌数>1)</span>你+1[治疗]。<br>
+                                    <span class='tiaoJian'>(每当本卡上的牌被移除且移除牌数>1)</span>你+1[治疗]。<br>
                                     【天平·右】上的牌上限为3；达到上限则无法被再放置新牌。
                                     `;
                             },
@@ -3831,6 +3861,832 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     if (cards.length) player.loseToDiscardpile(cards);
                 },
             },
+
+            //大罪司教
+            shenDeDaiXing:{
+                getPrevious:function (player){
+                    var target=player;
+                    for (var i = 0; i < game.players.length - 1; i++) {
+                        target=target.getPrevious();
+                        if(!target.hasSkillTag('noLuBiao')) return target;
+                    }
+                    return null;
+                },
+                trigger:{global:'phaseOver'},
+                forced:true,
+                filter:function (event,player){
+                    return player.storage.luBiaoTarget&&event.player==player.storage.luBiaoTarget;
+                },
+                content:function (){
+                    player.insertPhase('shenDeDaiXing');
+                },
+                group:['shenDeDaiXing_phaseBefore','shenDeDaiXing_ban'],
+                subSkill:{
+                    phaseBefore:{
+                        trigger:{player:'phaseSkip'},
+                        direct:true,
+                        filter:function (event,player){
+                            return player.storage.luBiaoTarget&&event.skill!='shenDeDaiXing';
+                        },
+                        content:function (){
+                            trigger.cancel()
+                        }
+                    },
+                    ban:{
+                        trigger:{global:'gameStart'},
+                        direct:true,
+                        filter:function (event,player){
+                            return game.players.length==4;
+                        },
+                        content:function (){
+                            player.tempBanSkill('shenDeDaiXing','forever');
+                        }
+                    }
+                },
+                ai:{
+                    noLuBiao:true,
+                    skillTagFilter:function (player,tag){
+                        if(tag=='noLuBiao'&&game.players.length==4){
+                            return false;
+                        }
+                    }
+                }
+            },
+            shenYiZhiYin:{
+                trigger:{player:'phaseBegin'},
+                forced:true,
+                filter:function (event,player){
+                    return player.phaseNumber == 1;
+                },
+                content:async function (event,trigger,player){
+                    var target=lib.skill.shenDeDaiXing.getPrevious(player);
+                    game.addGlobalSkill('daZuiLuBiaoX');
+                    for(var current of game.players){
+                        current.storage.luBiaoPlayer=player;
+                    }
+                    player.storage.luBiaoTarget=target;
+                    await target.addZhiShiWu('daZuiLuBiaoX').set('type','fangZhi');
+                },
+            },
+            xinYangZhiJia:{
+                type:'faShu',
+                enable:'faShu',
+                filter:function(event,player){
+                    if(!player.storage.luBiaoTarget) return false;
+                    if(event.getParent('xingDong').xinYangZhiJia===false) return false;
+                    return player.countCards('h',card=>get.mingGe(card)=='sheng')>0;
+                },
+                showCards:true,
+                selectCard:1,
+                filterCard:function(card,player){
+                    return get.mingGe(card)=='sheng';
+                },
+                content:async function (event,trigger,player){
+                    await event.trigger('daZuiLuBiaoXZhuanYi');
+
+                    await player.storage.luBiaoTarget.removeZhiShiWu('daZuiLuBiaoX');
+                    var target=lib.skill.shenDeMenTu.getPrevious(player.storage.luBiaoTarget);
+                    player.storage.luBiaoTarget=target;
+                    await target.addZhiShiWu('daZuiLuBiaoX').set('type','zhuanYi');
+                },
+                ai: {
+                    order:3.3,
+                    result:{
+                        player:1,
+                    }
+                },
+                check: function(card) {
+                    return 5-get.value(card);
+                },
+            },
+            sheZui:{
+                trigger:{player:['gongJiMingZhongAfter','faShuEnd']},
+                filter:function (event,player){
+                    if(event.yingZhan) return false;
+                    return game.hasPlayer(function(current){
+                        if(current==player) return false;
+                        return current.countCards('h')>0;
+                    });
+                },
+                cost:async function (event,trigger,player){
+                    let next=player.chooseTarget(function(card,player,target){
+                        return target!=player&&target.countCards('h')>0;
+                    }).set('ai',function(target){
+                        let player=_status.event.player;
+                        let att=get.attitude(player,target);
+                        if(att<0) return false;
+                        else return target.countCards('h');
+                    });
+                    next.set('prompt',get.prompt('sheZui'));
+                    next.set('prompt2','选择除你外目标角色弃1张手牌[展示]');
+                    event.result = await next.forResult();
+                },
+                content:async function (event,trigger,player){
+                    let cards=await event.targets[0].chooseToDiscard('h',1,true,'showCards','赦罪：弃1张手牌[展示]').forResultCards();
+                    await player.addZhiShiWu('daZuiQianCheng');
+
+                    let card=cards[0];
+                    if(!card.destroyed&&get.position(card, true) === "d"){
+                        let bool=await player.chooseBool('是否获得'+get.translation(card)).set('ai',function(){
+                            return get.value(_status.event.card)>5;
+                        }).set('card',card).forResultBool();
+                        if(bool){
+                            await player.gain(card,'log','gain2');
+                            await player.addZhiLiao();
+                        }
+                    }
+                },
+            },
+            shenYu:{
+                usable:1,
+                trigger:{global:'daZuiLuBiaoXZhuanYi'},
+                filter:function (event,player){
+                    return player.countZhiShiWu('daZuiQianCheng')>=3;
+                },
+                content:async function (event,trigger,player){
+                    await player.removeZhiShiWu('daZuiQianCheng',3);
+                    game.log(player,'立即执行一次[攻击行动]');
+                    await player.gongJi().set('action',true).set('prompt','攻击行动');
+                },
+                check:function (event,player){
+                    return player.canGongJi();
+                },
+            },
+            fuYin:{
+                trigger:{global:'discardAfter'},
+                filter:function (event,player){
+                    if(!player.storage.luBiaoTarget) return false;
+                    if(player.zhiLiao<1) return false;
+                    let par=event.getParent();
+                    if(par.name!='useSkill'&&par.name!='chooseToDiscard') return false;
+                    let skill;
+                    if(par.name=='chooseToDiscard'){
+                        par=par.getParent();
+                        skill=par.name
+                    }else skill=par.skill;
+                    
+                    let skills=player.getSkills();
+                    skills.push('daZuiLuBiaoX');
+                    if(skills.includes(skill)) return get.position(event.cards[0], true) === "d"&& !event.cards[0].destroyed;
+                    else return false;
+                },
+                content:async function (event,trigger,player){
+                    player.storage.faYunShiQi=false;
+                    player.when({ global: 'changeShiQiAfter' })
+                        .filter(function (evt, player) {
+                            if(evt.num>=0) return false;
+                            let gain=evt.getParent(3);
+                            if(!gain||gain.name!='gain') return false;
+                            return gain.getParent()==event;
+                        }).step(async function (event, trigger, player) {
+                            player.storage.faYunShiQi = true;
+                        });
+
+                    await player.changeZhiLiao(-1);
+                    await player.storage.luBiaoTarget.gain(trigger.cards,'log','gain');
+                    
+                    if(player.storage.faYunShiQi===false){
+                        let targets=await player.chooseTarget('福音：除你之外目标角色+1[治疗]',lib.filter.notMe).set('ai',function(target){
+                            return get.zhiLiaoEffect2(target,_status.event.player,1);
+                        }).forResultTargets();
+                        let target=targets[0];
+                        await target.addZhiLiao(1);
+                    }
+                },
+                check:function (event,player){
+                    return get.attitude(player.storage.luBiaoTarget,player)<0;
+                },
+            },
+            daZuiLuBiao:{},
+            daZuiLuBiaoX:{
+                intro:{
+                    name:'(专)路标',
+                    nocount:true,
+                    content:`
+                    <span class="greentext">[响应]忏悔式[回合限定]</span><br>
+                    <span class='tiaoJian'>(此卡被转移至你面前时，你摸2张牌[强制])</span>我方【战绩区】+1[水晶]，然后将此卡转移至你左手边最近的角色面前，大罪司教弃1张牌。
+                    `,
+                },
+                markimage:'image/card/zhuanShu/luBiao.png',
+                trigger:{player:'changeZhiShiWuEnd'},
+                filter:function (event,player){
+                    return event.zhiShiWu=='daZuiLuBiaoX'&&event.type=='zhuanYi'&&event.chanHuiShi!=true;
+                },
+                content:async function (event,trigger,player){
+                    await player.draw(2);
+                    await player.addZhanJi('shuiJing',1);
+                    await event.trigger('daZuiLuBiaoXZhuanYi');
+                    if(event.zhuanYi!=false){
+                        await player.removeZhiShiWu('daZuiLuBiaoX');
+                        var target=lib.skill.shenDeMenTu.getPrevious(player);
+                        player.storage.luBiaoPlayer.storage.luBiaoTarget=target;
+                        await target.addZhiShiWu('daZuiLuBiaoX').set('type','zhuanYi').set('chanHuiShi',true);
+                    }
+                    await player.storage.luBiaoPlayer.chooseToDiscard('h',1,true,'忏悔式：弃1张牌');
+                },
+                check:function (event,player){
+                    if(get.emptyZhanJi(player.side)<1) return false;
+                    if(player.countCards('h')+2>player.getHandcardLimit()) return false;
+                    else return true;
+                }
+            },
+            shuLingQuanBing:{
+                type:'faShu',
+                enable:'faShu',
+                usable:1,
+                filter:function(event,player){
+                    if(!player.storage.luBiaoTarget) return false;
+                    return player.canBiShaShuiJing();
+                },
+                content:async function(event, trigger, player) {
+                    await player.removeBiShaShuiJing();
+
+                    await event.trigger('daZuiLuBiaoXZhuanYi');
+                    await player.storage.luBiaoTarget.removeZhiShiWu('daZuiLuBiaoX');
+                    var target=lib.skill.shenDeMenTu.getPrevious(player.storage.luBiaoTarget);
+                    player.storage.luBiaoTarget=target;
+                    await target.addZhiShiWu('daZuiLuBiaoX').set('type','zhuanYi');
+
+                    player.addFaShu();
+
+                    event.getParent('xingDong').xinYangZhiJia=false;
+                },
+                ai: {
+                    shuiJing:true,
+                    order: 3.3,
+                    result: {
+                        player: 1,
+                    },
+                }
+            },
+            shengCanLi:{
+                trigger:{global:'changeZhiShiWuAfter'},
+                filter:function (event,player){
+                    if(!player.storage.luBiaoTarget) return false;
+                    return event.zhiShiWu=='daZuiLuBiaoX'&&(event.type=='fangZhi'||event.type=='zhuanYi')&&player.canBiShaShuiJing()&&event.player.hasZhiShiWu('daZuiLuBiaoX');
+                },
+                logTarget:'player',
+                content:async function (event,trigger,player){
+                    await player.removeBiShaShuiJing();
+                    await player.addZhiShiWu('daZuiQianCheng',1);
+                    var choiceList=["弃1张牌[展示]。<span class='tiaoJian'>(若盖牌为【虚弱】、【中毒】或【中毒】)</span>将该牌放置在拥有【路标】的角色面前作为基础效果","·<span class='tiaoJian'>(将拥有【路标】的角色面前一张基础效果牌收入自己手中)</span>你+2<span class='hong'>【虔诚】</span>"];
+                    var list=['选项一'];
+                    if(player.storage.luBiaoTarget.hasJiChuXiaoGuo()) list.push('选项二');
+                    var next=player.chooseControl(list);
+                    next.set('choiceList',choiceList);
+                    next.set('ai',function(){
+                        var player=_status.event.player;
+                        var target=player.storage.luBiaoTarget;
+                        if(player.countCards('h')+1>=player.getHandcardLimit()) return '选项一';
+                        if(target.hasJiChuXiaoGuo()){
+                            if(player.side==target.side){
+                                var effect=-get.jiChuXiaoGuoEffect(target);
+                            }else{
+                                var effect=get.jiChuXiaoGuoEffect(target);
+                            }
+                            if(effect>0) return '选项一';
+                            else if(effect<0) return '选项二';
+                        }else{
+                            return '选项一';
+                        }
+                    });
+                    var control=await next.forResultControl();
+                    if(control=='选项一'){
+                        if(player.countCards('h')==0) return;
+                        var cards=await player.chooseToDiscard('h','showCards',1,true).set('ai',function(card){
+                            var player=_status.event.player;
+                            if(player.side==player.storage.luBiaoTarget.side){
+                                if(get.name(card)=='shengDun') return 1;
+                                else if(get.name(card)=='xuRuo'||get.name(card)=='zhongDu') return 0.2;
+                                else return 0.5;
+                            }else{
+                                if(get.name(card)=='xuRuo'||get.name(card)=='zhongDu') return 1;
+                                else return 0.5;
+                            }
+                        }).forResultCards();
+
+                        if(get.position(cards[0], true) === "d"){
+                            var name=get.name(cards[0]);
+
+                            if((((name=='xuRuo'||name=='shengDun')&&player.storage.luBiaoTarget.getJiChuXiaoGuo("_"+name).length==0)||name=='zhongDu')&&player.canUse(name,player.storage.luBiaoTarget)){
+                                await player.storage.luBiaoTarget.addJiChuXiaoGuo("_"+name,cards);
+                                if(name=='zhongDu') player.storage.luBiaoTarget.storage.zhongDu.push(player);
+                            }
+                        }
+                    }else if(control=='选项二'){
+                        await player.gainJiChuXiaoGuo(player.storage.luBiaoTarget);
+                        await player.addZhiShiWu('daZuiQianCheng',2);
+                    }
+                },
+                check:function (event,player){
+                    return player.countCards('h')>=3
+                },
+                ai:{
+                    shuiJing:true,
+                }
+            },
+            daZuiQianCheng:{
+                inherit:'qianCheng',
+            },
+
+            //古神祭祀
+            guShenJieLv:{
+                mod:{
+                    maxHandcardFinal:function (player,num){
+                        var n=num;
+                        if(player.hasSkill('mengZhao_jiLeMengJing')) n=n-1;
+                        if (n <= 3) {
+                            return 3;
+                        } else {
+                            return n
+                        }
+                    }
+                }
+            },
+            niuQuLianJie:{
+                trigger:{player:'phaseEnd'},
+                filter:function (event,player){
+                    return player.storage.niuQuLianJie.length>0;
+                },
+                cost:async function (event,trigger,player){
+                    var next=player.chooseTarget(function(card,player,target){
+                        return player.storage.niuQuLianJie.includes(target);
+                    });
+                    next.set('prompt',get.prompt('niuQuLianJie'));
+                    next.set('prompt2',lib.translate.niuQuLianJie_info);
+                    next.set('ai',function(target){
+                        var player=_status.event.player;
+                        if(player.countCards('h',card=>get.value(card)<3.5)>0) return target.countCards('h');
+                        else return 0;
+                    });
+                    event.result=await next.forResult();
+                },
+                content:async function (event,trigger,player){
+                    var players=game.filterPlayer(function(current){
+                        return player.side==current.side;
+                    })
+                    players.sortBySeat();
+                    var cards=[];
+                    for(let current of players){
+                        let card=await current.chooseToDiscard('h',true,1,'showCards').forResultCards();
+                        if(card.length>0&&!card[0].destroyed){
+                            cards.push(card[0]);
+                        }
+                    }
+                    for(let current of players){
+                        await current.draw();
+                    }
+                    var name=get.colorName(event.targets[0]);
+                    if(cards.length>0){
+                        let card=await player.chooseCardButton(cards,true,`选择1张弃牌加入${name}的手牌`).set('ai',function(button){
+                            return 6-get.value(button.link);
+                        }).forResultLinks();
+                        //game.log(event.targets[0],'获得了1张牌');
+                        await event.targets[0].gain(card,'draw2','log');
+                        cards.remove(card[0]);
+                    }
+                    if(player.getGaiPai('mengZhao').length>=6) return;
+                    if(player.hasGaiPai('mengZhao')&&cards.length>0){
+                        cards.randomSort();
+                        if(cards.length+player.countGaiPai('mengZhao')>6){
+                            cards=cards.randomGets(6-player.getGaiPai('mengZhao').length);
+                        }
+                        await lib.skill.mengZhao.add(player,cards);
+                    }
+                    
+                },
+                group:['niuQuLianJie_chongZhi','niuQuLianJie_zaoChengShangHai'],
+                subSkill:{
+                    chongZhi:{
+                        trigger:{player:'phaseBefore'},
+                        direct:true,
+                        priority:1,
+                        content:function (){
+                            player.storage.niuQuLianJie=[];
+                        }
+                    },
+                    zaoChengShangHai:{
+                        trigger:{source:'zaoChengShangHai'},
+                        direct:true,
+                        filter:function (event,player){
+                            return event.player.side!=player.side&&Array.isArray(player.storage.niuQuLianJie);
+                        },
+                        content:function (){
+                            player.storage.niuQuLianJie.push(trigger.player);
+                        }
+                    }
+                }
+            },
+            tianQi:{
+                type:'qiDong',
+                trigger:{player:'qiDong'},
+                filter:function (event,player){
+                    return player.hasGaiPai('mengZhao');
+                },
+                content:async function (event,trigger,player){
+                    var list=lib.xiBie.slice();
+                    var xiBie=await player.chooseControl(list).set('prompt',`指定1个系别，与【梦兆】堆顶的牌比较`).set('ai',function(){
+                        var num=Math.random();
+                        if(num>0.1){
+                            var player=_status.event.player;
+                            var cards=player.getGaiPai('mengZhao');
+                            var card=cards[cards.length-1];
+                            return get.xiBie(card);
+                        }else{
+                            var list=lib.xiBie.slice();
+                            return list.randomGet();
+                        }
+                    }).forResultControl();
+                    game.log(player,`指定了${get.translation(xiBie)}系`);
+                    player.popup(get.translation(xiBie));
+                    var mengZhao=player.getGaiPai('mengZhao');
+                    var card=player.getGaiPai('mengZhao')[mengZhao.length-1];
+                    player.showHiddenCards(card);
+                    var xiBie2=get.xiBie(card);
+                    if(xiBie==xiBie2){
+                        let zhanJi=get.zhanJi(player);
+                        if(zhanJi.length>0){
+                            let list=[];
+                            if(zhanJi.includes('baoShi')) list.push(['baoShi','宝石']);
+                            if(zhanJi.includes('shuiJing')) list.push(['shuiJing','水晶']);
+                            let remove=await player.chooseButton(['梦兆：请选择要移除的1个星石',[list,'tdnodes']],1,true).set('ai',function(button){
+                                switch(button.link){
+                                    case 'shuiJing':{
+                                        return 2;
+                                    }
+                                    case 'baoShi':{
+                                        return 1;
+                                    }
+                                }
+                            }).forResultLinks();
+
+                            await player.loseToDiscardpile(card);
+                            await event.trigger('mengZhaoCheck');
+
+                            await player.removeZhanJi(remove[0]);
+                            await player.addNengLiang('shuiJing');
+                        }                        
+                    }else{
+                        await player.gain(mengZhao,'log','draw');
+                        await event.trigger('mengZhaoCheck');
+                    }
+                },
+                check:function (event,player){
+                    return player.countEmptyCards()>=player.getGaiPai('mengZhao').length&&(player.canFaShu()||player.canGongJi());
+                }
+            },
+            moRiMengZhao:{
+                trigger:{global:'damageAfter'},
+                priority:-1,
+                filter:function (event,player){
+                    return player.hasGaiPai('mengZhao')&&player.hasSkill('mengZhao_jiLeMengJing')&&event.player.hasHistory('damage',evt=>evt==event);
+                },
+                logTarget:'player',
+                content:async function (event,trigger,player){
+                    await trigger.player.chooseToDiscard('h',1,true,'梦兆：弃1张牌');
+
+                    var mengZhao=player.getGaiPai('mengZhao');
+                    var card=player.getGaiPai('mengZhao')[mengZhao.length-1];
+
+                    game.log(trigger.player,`获得了【梦兆】堆顶的牌`);
+                    await trigger.player.gain(card,'draw').set('log',false);
+
+                    await event.trigger('mengZhaoCheck');
+                },
+            },
+            mengZhao:{
+                add:async function(player,cards){
+                    game.log(player,`将${cards.length}张牌作为`,`#g【梦兆】`);
+                    var next=game.createEvent('mengZhaoAdd',false);
+                    next.setContent('addToExpansion');
+                    next.set('player',player);
+                    next.set('cards',cards);
+                    next.set('log',false);
+                    next.set('gaintag',["mengZhao"]);
+                    next.set('animate','draw');
+                    next.getd = function (player, key, position) {
+                        if (!position) position = ui.discardPile;
+                        if (!key) key = "cards";
+                        var cards = [],
+                            event = this;
+                        game.checkGlobalHistory("cardMove", function (evt) {
+                            if (evt.name != "lose" || evt.position != position || evt.getParent() != event) return;
+                            if (player && player != evt.player) return;
+                            cards.addArray(evt[key]);
+                        });
+                        return cards;
+                    };
+                    next.getl = function (player) {
+                        const that = this;
+                        const map = {
+                            player: player,
+                            hs: [],
+                            es: [],
+                            js: [],
+                            ss: [],
+                            xs: [],
+                            cards: [],
+                            cards2: [],
+                            gaintag_map: {},
+                            vcard_map: new Map(),
+                        };
+                        player.checkHistory("lose", function (evt) {
+                            if (evt.parent == that) {
+                                map.hs.addArray(evt.hs);
+                                map.es.addArray(evt.es);
+                                map.js.addArray(evt.js);
+                                map.ss.addArray(evt.ss);
+                                map.xs.addArray(evt.xs);
+                                map.cards.addArray(evt.cards);
+                                map.cards2.addArray(evt.cards2);
+                                for (let key in evt.gaintag_map) {
+                                    if (!map.gaintag_map[key]) map.gaintag_map[key] = [];
+                                    map.gaintag_map[key].addArray(evt.gaintag_map[key]);
+                                }
+                                evt.vcard_map.forEach((value, key) => {
+                                    map.vcard_map.set(key, value);
+                                });
+                            }
+                        });
+                        return map;
+                    };
+                    return next;
+                },
+                intro:{
+                    name:'梦兆',
+                    mark:function(dialog,storage,player){
+						var cards=player.getExpansions('mengZhao');
+                        if(!cards||!cards.length) return;
+						if(player.isUnderControl(true)) dialog.addAuto(get.translation(player.storage.mengJing));
+                        dialog.addText(`
+                            <span class="greentext">[被动]极乐梦境</span><br>
+                            <span class='tiaoJian'>(若此卡上没有【梦兆】)</span>将此卡翻面。【极乐梦境】的【梦兆】上限为6。`,false);
+						return '共有'+cards.length+'张牌';
+					},
+                    markcount:'expansion',
+                },
+                onremove:function(player, skill) {
+                    const cards = player.getExpansions('mengZhao');
+                    if (cards.length) player.loseToDiscardpile(cards);
+                },
+                group:['mengZhao_hongLieLieHuo','mengZhao_diDongNuTao','mengZhao_mengJingPoSui'],
+                markimage:'image/card/zhuanShu/jiLeMengJing.png',
+                subSkill:{
+                    jiLeMengJing:{
+                        trigger:{player:'mengZhaoCheck'},
+                        forced:true,
+                        priority:-2,
+                        filter:function (event,player){
+                            return !player.hasExpansions('mengZhao');
+                        },
+                        content:async function (event,trigger,player){
+                            player.removeSkill('mengZhao_jiLeMengJing');
+                            await player.unmarkSkill('mengZhao');
+                            await player.addZhiShiWu(player.storage.mengJing);
+                        }
+                    },
+                    hongLieLieHuo:{
+                        intro:{
+                            name:'轰雷烈火',
+                            content:`<span class="greentext">[被动]轰雷烈火</span><br>
+                            <span class='tiaoJian'>(古神祭祀的回合开始时)</span>选择以下一项发动：<br>
+                            ·弃X张雷系牌[展示]，摸X张牌[强制]，X最高为3；目标对手弃Y张雷系牌[展示]，然后你对他造成(X+1)点法术伤害③。<br>
+                            ·弃X张火系牌[展示]，摸X张牌[强制]，X最高为3；目标对手弃Y张火系牌[展示]，然后你对他造成(X+1)点法术伤害③。<br>
+                            <span class="greentext">[被动]梦境破碎</span><br>
+                            <span class='tiaoJian'>(【轰雷烈火】结束后)</span>移除此卡。`,
+                            nocount:true,
+                        },
+                        markimage:'image/card/zhuanShu/tianLeiJieHuo.png',
+                        forced:true,
+                        trigger:{player:'phaseBegin'},
+                        filter:function (event,player){
+                            return player.hasZhiShiWu('mengZhao_hongLieLieHuo');
+                        },
+                        content:async function (event,trigger,player){
+
+                            var choiceList=["弃X张雷系牌[展示]，摸X张牌[强制]，X最高为3；目标对手弃Y张雷系牌[展示]，然后你对他造成(X+1)点法术伤害③","弃X张火系牌[展示]，摸X张牌[强制]，X最高为3；目标对手弃Y张火系牌[展示]，然后你对他造成(X+1)点法术伤害③"];
+                            var list=['选项一','选项二'];
+                            var next=player.chooseControl(list);
+                            next.set('choiceList',choiceList);
+                            next.set('ai',function(){
+                                var player=_status.event.player;
+                                var num1=player.countCards('h',card=>get.xiBie(card)=='lei');
+                                var num2=player.countCards('h',card=>get.xiBie(card)=='huo');
+                                if(num1>num2){
+                                    return '选项一';
+                                }else{
+                                    return '选项二';
+                                }
+                            });
+                            if(event.bool){
+                                next.set('prompt',`选择先发动的选项`);
+                            }else{
+                                next.set('prompt',`选择以下一项发动`);
+                            }
+                            var control=await next.forResultControl();
+                            if(control=='选项一'){
+                                var xiBieList=['lei'];
+                                if(event.bool) xiBieList.push('huo');
+                            }else{
+                                var xiBieList=['huo'];
+                                if(event.bool) xiBieList.push('lei');
+                            }
+                            
+                            for(var xiBie of xiBieList){
+                                var xiBieName=get.translation(xiBie);
+                                var result=await player.chooseCardTarget({
+                                    forced:true,
+                                    xiBie:xiBie,
+                                    filterCard:card=>get.xiBie(card)==_status.event.xiBie,
+                                    selectCard:[0,3],
+                                    filterTarget:lib.filter.opponent,
+                                    selectTarget:1,
+                                    prompt:`弃X张${xiBieName}系牌[展示]，摸X张牌，X最大为3，目标对手弃Y张${xiBieName}系牌[展示]，然后你对他造成(X+1)点法术伤害③`,
+                                    ai1:function(card){
+                                        return 1;
+                                    },
+                                    ai2:function(target){
+                                        var player=_status.event.player;
+                                        return get.damageEffect2(target,player,ui.selected.cards.length+1);
+                                    }
+                                }).forResult();
+
+                                var num=result.cards.length;
+                                if(num>0){
+                                    await player.discard(result.cards,'showCards');
+                                    await player.draw(num);
+                                }
+                                var target=result.targets[0];
+                                await target.chooseToDiscard('h',true,[0,Infinity],'showCards',card=>get.xiBie(card)==_status.event.xiBie,`弃Y张${xiBieName}系牌[展示]`).set('ai',function(card){
+                                    return 1;
+                                }).set('xiBie',xiBie);
+                                await target.faShuDamage(num+1,player);
+                            }
+                        }
+                    },
+                    diDongNuTao:{
+                        intro:{
+                            name:'地动怒涛',
+                            content:`<span class="greentext">[被动]地动怒涛</span><br>
+                           <span class='tiaoJian'>(古神祭祀的回合开始时)</span>选择以下一项发动：<br>
+                            ·弃X张地系牌[展示]，摸X张牌[强制]，X最高为3；目标对手弃Y张系地牌[展示]，然后你对他造成(X+1)点法术伤害③。<br>
+                            ·弃X张水系牌[展示]，摸X张牌[强制]，X最高为3；目标对手弃Y张系水牌[展示]，然后你对他造成(X+1)点法术伤害③。<br>
+                            <span class="greentext">[被动]梦境破碎</span><br>
+                            <span class='tiaoJian'>(【地动怒涛】结束后)</span>移除此卡。`,
+                            nocount:true,
+                        },
+                        markimage:'image/card/zhuanShu/diLieBoTao.png',
+                        forced:true,
+                        trigger:{player:'phaseBegin'},
+                        filter:function (event,player){
+                            return player.hasZhiShiWu('mengZhao_diDongNuTao');
+                        },
+                        content:async function (event,trigger,player){
+                            var choiceList=["弃X张地系牌[展示]，摸X张牌[强制]，X最高为3；目标对手弃Y张地系牌[展示]，然后你对他造成(X+1)点法术伤害③","弃X张水系牌[展示]，摸X张牌[强制]，X最高为3；目标对手弃Y张水系牌[展示]，然后你对他造成(X+1)点法术伤害③"];
+                            var list=['选项一','选项二'];
+                            var next=player.chooseControl(list);
+                            next.set('choiceList',choiceList);
+                            next.set('ai',function(){
+                                var player=_status.event.player;
+                                var num1=player.countCards('h',card=>get.xiBie(card)=='lei');
+                                var num2=player.countCards('h',card=>get.xiBie(card)=='huo');
+                                if(num1>num2){
+                                    return '选项一';
+                                }else{
+                                    return '选项二';
+                                }
+                            });
+                            if(event.bool){
+                                next.set('prompt',`选择先发动的选项`);
+                            }else{
+                                next.set('prompt',`选择以下一项发动`);
+                            }
+                            var control=await next.forResultControl();
+                            if(control=='选项一'){
+                                var xiBieList=['di'];
+                                if(event.bool) xiBieList.push('shui');
+                            }else{
+                                var xiBieList=['shui'];
+                                if(event.bool) xiBieList.push('di');
+                            }
+                            
+                            for(var xiBie of xiBieList){
+                                var xiBieName=get.translation(xiBie);
+                                var result=await player.chooseCardTarget({
+                                    forced:true,
+                                    xiBie:xiBie,
+                                    filterCard:card=>get.xiBie(card)==_status.event.xiBie,
+                                    selectCard:[0,3],
+                                    filterTarget:lib.filter.opponent,
+                                    selectTarget:1,
+                                    prompt:`弃X张${xiBieName}系牌[展示]，摸X张牌，X最大为3，目标对手弃Y张${xiBieName}系牌[展示]，然后你对他造成(X+1)点法术伤害③`,
+                                    ai1:function(card){
+                                        return 1;
+                                    },
+                                    ai2:function(target){
+                                        var player=_status.event.player;
+                                        return get.damageEffect2(target,player,ui.selected.cards.length+1);
+                                    }
+                                }).forResult();
+
+                                var num=result.cards.length;
+                                if(num>0){
+                                    await player.discard(result.cards,'showCards');
+                                    await player.draw(num);
+                                }
+                                var target=result.targets[0];
+                                await target.chooseToDiscard('h',true,[0,Infinity],'showCards',card=>get.xiBie(card)==_status.event.xiBie,`弃Y张${xiBieName}系牌[展示]`).set('ai',function(card){
+                                    return 1;
+                                }).set('xiBie',xiBie);
+                                await target.faShuDamage(num+1,player);
+                            }
+                        }
+                    },
+                    mengJingPoSui:{
+                        trigger:{player:['mengZhao_hongLieLieHuoEnd','mengZhao_diDongNuTaoEnd']},
+                        forced:true,
+                        filter:function (event,player){
+                            return player.hasZhiShiWu('mengZhao_hongLieLieHuo')||player.hasZhiShiWu('mengZhao_diDongNuTao');
+                        },
+                        content:async function (event,trigger,player){
+                            if(player.hasZhiShiWu('mengZhao_hongLieLieHuo')) await player.removeZhiShiWu('mengZhao_hongLieLieHuo');
+                            if(player.hasZhiShiWu('mengZhao_diDongNuTao')) await player.removeZhiShiWu('mengZhao_diDongNuTao');
+                        }
+                    }
+                },
+            },
+            ruMeng:{
+                type:'faShu',
+                enable:'faShu',
+                usable:1,
+                filter:function (event,player){
+                    return player.canBiShaShuiJing()&&!player.hasSkill('mengZhao_jiLeMengJing');
+                },
+                content:async function (event,trigger,player){
+                    await player.removeBiShaShuiJing();
+                    player.addSkill('ruMeng_wuXian');
+
+                    await player.draw(6);
+                    player.addSkill('mengZhao_jiLeMengJing');
+
+                    var list=[];
+                    if(!player.hasZhiShiWu('mengZhao_hongLieLieHuo')) list.push('mengZhao_hongLieLieHuo');
+                    if(!player.hasZhiShiWu('mengZhao_diDongNuTao')) list.push('mengZhao_diDongNuTao');
+                    if(list.length==0) return;
+                    var moRi=await player.chooseControl(list).set('prompt',`选择1个【梦境】放置到场上`).forResultControl();
+                    player.storage.mengJing=moRi;
+                    player.addSkill('mengZhao_zero');
+                    player.markSkill('mengZhao');
+                    var cards=await player.chooseCard('h',true,6,'将6张手牌面朝下洗混放置到【末日预言】上作为【预言】',card=>lib.inpile.includes(card.name)).set('ai',function(card){
+                        return 8-get.value(card);
+                    }).forResultCards();
+                    cards=cards.randomSort();
+                    await lib.skill.mengZhao.add(player,cards);
+
+                    player.addGongJiOrFaShu();
+                    player.removeSkill('ruMeng_wuXian');
+                },
+                subSkill:{
+                    wuXian:{
+                        mod:{
+                            maxHandcardWuShi:function(player,num){
+                                return Infinity;
+                            },
+                        }
+                    },
+                },
+                ai:{
+                    shuiJing:true,
+                    order:function(item,player){
+                        if(!player.hasGaiPai('mengZhao')) return 4;
+                        else return 3;
+                    },
+                    result:{
+                        player:1,
+                    }
+                },
+                mod:{
+                    aiOrder:function(player,item,num){
+                        if(item=='_tiLian'&&player.hasExpansions('mengZhao')<=1&&player.countNengLiang()<1) return num+1;
+                    }
+                },
+            },
+            zhiPei:{
+                trigger:{player:['mengZhao_hongLieLieHuoBegin','mengZhao_diDongNuTaoBegin']},
+                filter:function (event,player){
+                    return player.canBiShaShuiJing();
+                },
+                content:async function (event,trigger,player){
+                    await player.removeBiShaShuiJing();
+                    trigger.bool=true;
+                },
+                check:function (event,player){
+                    return player.countCards('h')>=3;
+                },
+                ai:{
+                    shuiJing:true,
+                }
+            },
         },
         
         translate:{
@@ -3859,6 +4715,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             moGongEX: "魔弓EX",
             sheng_zhongCaiZhe:'圣仲裁者',
             yueTuanShouXi: "乐团首席",
+            daZuiSiJiao: "大罪司教",
+            guShenJiSi: "古神祭祀",
 
             jianZhiMoNv_name:"席拉",
             lingXiZhiChao_name: "濯香姬",
@@ -4162,6 +5020,64 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             naBuLeSiDuZou_info:"[水晶]<span class='tiaoJian'>(【音符】将被放置时发动)</span>移除该牌，改为将1张手牌面朝上[展示]放置在你的角色旁，作为【音符】。持续到本回合结束时，你的【音符】无法增加。",
             yinFu:"音符",
             yinFu_info:"【音符】为乐团首席专有展示盖牌，上限为3。",
+
+            //大罪司教
+            shenDeDaiXing: "[被动]神的代行",
+            shenYiZhiYin: "[被动]神意指引",
+            shenYiZhiYin_info: "<span class='tiaoJian'>(你的第一回合开始时)</span>将【路标】放置在你左手边最近的角色面前。",
+            xinYangZhiJia: "[法术]信仰之枷",
+            xinYangZhiJia_info: "<span class='tiaoJian'>(弃1张圣类命格的牌[展示])</span>将【路标】转移到拥有者左手边最近的角色面前。",
+            sheZui: "[响应]赦罪",
+            sheZui_info: "<span class='tiaoJian'>(主动攻击命中后②或[法术行动]结束时发动，指定除你外目标角色弃1张牌[展示])</span>你+1<span class='hong'>【虔诚】</span>。<span class='tiaoJian'>(若你将该弃牌加入手牌[强制])</span>你+1[治疗]。",
+            shenYu: "[响应]神谕[回合限定]",
+            shenYu_info: "<span class='tiaoJian'>(【路标】转移前，移除3点</span><span class='hong'>【虔诚】</span><span class='tiaoJian'>)</span>立即执行一次[攻击行动]。",
+            fuYin: "[响应]福音",
+            fuYin_info: "<span class='tiaoJian'>(目标角色因你的技能弃的置入弃牌堆时，移除你1[治疗])</span>将该弃牌加入拥有【路标】的角色手牌[强制]。<span class='tiaoJian'>(若为因此造成对方士气下降)</span>指定除你外的目标角色+1[治疗]。",
+            daZuiLuBiao:"(专)路标",
+            daZuiLuBiao_info: `
+            <span class="greentext">[响应]忏悔式[回合限定]</span><br>
+            <span class='tiaoJian'>(此卡被转移至你面前时，你摸2张牌[强制])</span>我方【战绩区】+1[水晶]，然后将此卡转移至你左手边最近的角色面前，大罪司教弃1张牌。
+            `,
+            daZuiLuBiaoX: "[响应]忏悔式[回合限定]",
+            daZuiLuBiaoX_info: "<span class='tiaoJian'>(此卡被转移至你面前时，你摸2张牌[强制])</span>我方【战绩区】+1[水晶]，然后将此卡转移至你左手边最近的角色面前，大罪司教弃1张牌。",
+            shuLingQuanBing: "[法术]属灵权柄[回合限定]",
+            shuLingQuanBing_info: "[水晶]将【路标】转移到拥有者左手边最近的角色面前，你额外+1[法术行动]。本回合你不能再发动【信仰之枷】。",
+            shengCanLi: "[响应]圣餐礼",
+            shengCanLi_info: "[水晶]<span class='tiaoJian'>(【路标】转移或放置后)</span>你+1<span class='hong'>【虔诚】</span>，选择以下一项：<br>·弃1张牌[展示]。<span class='tiaoJian'>(若弃牌为【虚弱】、【中毒】或【圣盾】)</span>将盖牌放置在拥有【路标】的角色面前作为基础效果。<br>·<span class='tiaoJian'>(将拥有【路标】的角色面前一张基础效果牌收入自己手中)</span>你+2<span class='hong'>【虔诚】</span>。",
+            daZuiQianCheng_info: "<span class='hong'>【虔诚】</span>为大罪司教专有指示物，上限为4。",
+
+            //古神祭祀
+            guShenJieLv:"[被动]古神戒律",
+            guShenJieLv_info:"<span class='tiaoJian'>(【极乐梦境】在场时)</span>你的手牌上限-1，但至少为3[恒定]。",
+            niuQuLianJie:"[响应]扭曲链接",
+            niuQuLianJie_info:"<span class='tiaoJian'>(你的回合结束时，若本回合你对目标对手造成伤害③)</span>我方所有角色各弃1张牌[展示]，然后各摸1张牌[强制]，你将其中1张弃牌加入该对手手牌[强制]。<span class='tiaoJian'>(若【极乐梦境】在场)</span>将其余弃牌面朝下洗混放置到【极乐梦境】的【梦兆】堆顶部，作为【梦兆】。",
+            tianQi:"[启动]天启",
+            tianQi_info:"<span class='tiaoJian'>(仅【极乐梦境】在场时，指定1种系别)</span>展示【梦兆】堆顶部1张【梦兆】[展示]；<span class='tiaoJian'>(若该【梦兆】与你指定的系别相同，移除我方【战绩区】1星石)</span>移除该【梦兆】，你+1[水晶]；<span class='tiaoJian'>(若不同)</span>将所有【梦兆】加入你手牌[强制]。",
+            moRiMengZhao:"[响应]末日梦兆",
+            moRiMengZhao_info:"<span class='tiaoJian'>(仅【极乐梦境】在场时，目标角色承受伤害⑥且结算后发动)</span>该角色弃1张牌，并从【极乐梦境】上获得1个【梦兆】[强制]。",
+            mengZhao:"(专)极乐梦境",
+            mengZhao_info:`
+            <span class="greentext">[被动]极乐梦境</span><br>
+            <span class='tiaoJian'>(若此卡上没有【梦兆】)</span>将此卡翻面。【极乐梦境】的【梦兆】上限为6。<br>
+            <span class="greentext">[被动]轰雷烈火</span><br>
+            <span class='tiaoJian'>(古神祭祀的回合开始时)</span>选择以下一项发动：<br>
+            ·弃X张雷系牌[展示]，摸X张牌[强制]，X最高为3；目标对手弃Y张雷系牌[展示]，然后你对他造成(X+1)点法术伤害③。<br>
+            ·弃X张火系牌[展示]，摸X张牌[强制]，X最高为3；目标对手弃Y张火系牌[展示]，然后你对他造成(X+1)点法术伤害③。<br>
+            <span class="greentext">[被动]地动怒涛</span><br>
+            <span class='tiaoJian'>(古神祭祀的回合开始时)</span>选择以下一项发动：<br>
+            ·弃X张地系牌[展示]，摸X张牌[强制]，X最高为3；目标对手弃Y张地系牌[展示]，然后你对他造成(X+1)点法术伤害③。<br>
+            ·弃X张水系牌[展示]，摸X张牌[强制]，X最高为3；目标对手弃Y张水系牌[展示]，然后你对他造成(X+1)点法术伤害③。<br>
+            <span class="greentext">[被动]梦境破碎</span><br>
+            <span class='tiaoJian'>(【天雷劫火】或【地裂波涛】结束后)</span>移除此卡。
+            `,
+            mengZhao_jiLeMengJing:"[被动]极乐梦境",
+            mengZhao_hongLieLieHuo:"[被动]轰雷烈火",
+            mengZhao_diDongNuTao:"[被动]地裂怒涛",
+            mengZhao_mengJingPoSui:"[被动]梦境破碎",
+            ruMeng:"[法术]入梦",
+            ruMeng_info:"[水晶]<span class='tiaoJian'>(仅【极乐梦境】不在场时发动，无视你的手牌上限摸6张牌[强制])</span>将1个【极乐梦境】放置入场，然后将手牌中6张基本牌面朝下洗混放置到【极乐梦境】上作为【梦兆】，额外+1[攻击行动]或[法术行动]。",
+            zhiPei:"[响应]支配",
+            zhiPei_info:"[水晶]<span class='tiaoJian'>(与【天雷劫火】或【地裂波涛】同时发动)</span>将“选择以下一项发动”改为“发动以下项目，顺序由你决定”。",
         },
     };
 });

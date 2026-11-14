@@ -12,7 +12,7 @@ const pack_characters = {
     fengZhiJianSheng: ['fengZhiJianSheng_name', 'jiGroup', 3, ['fengNuZhuiJi', 'shengJian', 'lieFengJi', 'jiFengJi', 'jianYing'],],
     kuangZhanShi: ['kuangZhanShi_name', 'xueGroup', 3, ['kuangHua', 'xueYingKuangDao', 'xueXingPaoXiao', 'siLie'],],
     shenJianShou: ['shenJianShou_name', 'jiGroup', 3, ['shanDianJian', 'guanChuanSheJi', 'shanGuangXianJing', 'jingZhunSheJi', 'juJi'],],
-    fengYinShi: ['fengYinShi_name', 'huanGroup', 3, ['faShuJiDang', 'diZhiFengYin', 'shuiZhiFengYin', 'huoZhiFengYin', 'fengZhiFengYin', 'leiZhiFengYin', 'wuXiShuFu', 'fengYinPoSui'],],
+    fengYinShi: ['fengYinShi_name', 'huanGroup', 3, ['faShuJiDang', 'diZhiFengYin', 'shuiZhiFengYin', 'huoZhiFengYin', 'fengZhiFengYin', 'leiZhiFengYin', 'wuXiShuFu','shuFuZhiLi' ,'fengYinPoSui'],],
     anShaZhe: ['anShaZhe_name', 'jiGroup', 3, ['fanShi', 'shuiYing', 'qianXing'],],
     shengNv: ['shengNv_name', 'shengGroup', 3, ['bingShuangDaoYan', 'zhiLiaoShu', 'zhiYuZhiGuang', 'lianMin', 'shengLiao'],],
     tianShi: ['tianShi_name', 'shengGroup', 3, ['fengZhiJieJing', 'tianShiZhuFu', 'tianShiJiBan', 'tianShiZhiQiang', 'tianShiZhiGe', 'shenZhiBiHu'],],
@@ -29,9 +29,9 @@ const pack_characters = {
     lingFuShi: ['lingFuShi_name', 'yongGroup', 4, ['lingFu_leiMing', 'lingFu_fengXing', 'nianZhou', 'baiGuiYeXing', 'lingLiBengJie', 'yaoLi'],],
     jianDi: ['jianDi_name', 'jiGroup', '4/5', ['jianHunShouHu', 'yangGong', 'jianQiZhan', 'tianShiZhiHun', 'eMoZhiHun', 'buQuYiZhi', 'jianHun', 'jianQi'],],
     geDouJia: ['geDouJia_name', 'jiGroup', '4/5', ['nianQiLiChang', 'xuLiYiji', 'nianDan', 'baiShiHuanLongQuan', 'qiJueBengJi', 'douShenTianQu', 'douQi'],],
-    yongZhe: ['yongZhe_name', 'xueGroup', '4/5', ['yongZheZhiXin', 'nuHou', 'jinPiLiJin', 'mingJingZhiShui', 'tiaoXin', 'jinDuanZhiLi', 'siDou', 'nuQi', 'zhiXing'],],
-    lingHunShuShi: ['lingHunShuShi_name', 'huanGroup', '4/5', ["lingHunTunShi", "lingHunZhaoHuan", 'lingHunZhuanHuan', "lingHunJingXiang", "lingHunZhenBao", "lingHunFuYu", "lingHunLianJie", "lingHunZengFu", "huangSeLingHun", "lanSeLingHun"],],
-    xueZhiWuNv: ['xueZhiWuNv_name', 'xueGroup', 5, ['xueZhiAiShang', 'liuXue', 'niLiu', 'xueZhiBeiMing', 'tongShengGongSi', 'xueZhiZuZhou'],],
+    yongZhe: ['yongZhe_name', 'xueGroup', '4/5', ['yongZheZhiXin', 'nuHou', 'jinPiLiJin', 'mingJingZhiShui', 'tiaoXin','fenNu', 'jinDuanZhiLi', 'siDou', 'nuQi', 'zhiXing'],],
+    lingHunShuShi: ['lingHunShuShi_name', 'huanGroup', '4/5', ["lingHunTunShi", "lingHunZhaoHuan", 'lingHunZhuanHuan', "lingHunJingXiang",'lingHunQiYue','lingHunDaoYin', "lingHunZhenBao", "lingHunFuYu", "lingHunLianJie", "lingHunZengFu", "huangSeLingHun", "lanSeLingHun"],],
+    xueZhiWuNv: ['xueZhiWuNv_name', 'xueGroup', 5, ['tongShengZhiXie','xueZhiAiShang', 'liuXue', 'niLiu', 'xueZhiBeiMing', 'tongShengGongSi', 'xueZhiZuZhou'],],
     dieWuZhe: ['dieWuZhe_name', 'yongGroup', 5, ['shengMingZhiHuo', 'wuDong', 'duFen', 'chaoSheng', 'jingHuaShuiYue', 'diaoLing', 'yongHua', 'daoNiZhiDie', 'jian', 'DWZyong'],],
     nvWuShen: ['nvWuShen_name', 'shengGroup', '3/4', ['shenShengZhuiJi', 'zhiXuZhiYin', 'hePingXingZhe', 'junShenWeiGuang', 'yingLingZhaoHuan'],],
     moGong: ['moGong_name', 'huanGroup', 4, ['moGuanChongJi', 'leiGuangSanShe', 'duoChongSheJi', 'chongNeng', 'moYan', 'chongNengPai'],],
@@ -39,7 +39,7 @@ const pack_characters = {
     yingLingRenXing: ['yingLingRenXing_name', 'yongGroup', 4, ['zhanWenZhangWo', 'nuHuoYaZhi', 'zhanWenSuiJi', 'moWenRongHe', 'fuWenGaiZao', 'shuangChongHuiXiang', 'zhanWen', 'moWen'],],
     moQiang: ['moQiang_name', 'huanGroup', 4, ['anZhiJieFang', 'huanYingXingChen', 'heiAnShuFu', 'anZhiZhangBi', 'chongYing', 'qiHeiZhiQiang'],],
     cangYanMoNv: ['cangYanMoNv_name', 'xueGroup', 4, ['cangYanFaDian', 'tianHuoDuanKong', 'moNvZhiNu', 'tiShenWanOu', 'yongShengYinShiJi', 'tongKuLianJie', 'moNengFanZhuan', 'chongSheng'],],
-    yinYouShiRen: ['yinYouShiRen_name', 'huanGroup', '4/5', ['chenLunXieZouQu', 'buXieHeXian', 'jinJiShiPian', 'yongHengYueZhangX', 'xiWangFuGeQu', 'lingGan'],],
+    yinYouShiRen: ['yinYouShiRen_name', 'huanGroup', '4/5', ['chenLunXieZouQu', 'buXieHeXian', 'jinJiShiPian','yongHengQiuTuXingTai', 'yongHengYueZhangX', 'xiWangFuGeQu', 'lingGan'],],
     jingLingSheShou: ['jingLingSheShou_name', 'jiGroup', '3/4', ['yuanSuSheJi', 'dongWuHuoBan', 'jingLingMiYi', 'chongWuQiangHua', 'zhuFu'],],
     yinYangShi: ['yinYangShi_name', 'huanGroup', 4, ['shiShenJiangLin', 'yinYangZhanHuan', 'shiShenZhuanHuan', 'heiAnJiLi', 'shiShenZhouShu', 'shengMingJieJie', 'guiHuo'],],
     xueSeJianLing: ['xueSeJianLing_name', 'xueGroup', 4, ['xueSeJingJi', 'chiSeYiShan', 'xueRanQiangWei', 'xueQiPingZhang', 'xueQiangWeiTingYuan', 'sanHuaLunWu', 'xianXue'],],
@@ -976,14 +976,14 @@ const pack_skills = {
             }
         }
     },
-    wuXiShuFu: {
+    shuFuZhiLi: {
         type: 'faShu',
         enable: 'faShu',
         filter: function (event, player) {
             if (player.storage.wuXiShuFu) return false;
             var bool1 = player.canBiShaShuiJing();
             var bool2 = game.hasPlayer(function (current) {
-                return lib.skill.wuXiShuFu.filterTarget('', player, current);
+                return lib.skill.shuFuZhiLi.filterTarget('', player, current);
             });
             return bool1 && bool2
         },
@@ -1000,6 +1000,8 @@ const pack_skills = {
             'step 2'
             target.addMark('wuXiShuFu_xiaoGuo');
         },
+    },
+    wuXiShuFu: {
         subSkill: {
             xiaoGuo: {
                 priority: 2,
@@ -1007,7 +1009,7 @@ const pack_skills = {
                 forced: true,
                 markimage: 'image/card/zhuanShu/wuXiShuFu.png',
                 intro: {
-                    content: `<span class='tiaoJian'>(将【五系束缚】放置于目标对手面前)</span>该对手跳过其下个行动阶段。在其下个行动阶段开始前他可以选择摸(2+X)张牌来取消【五系束缚】的效果。X为场上封印的数量，X最高为2。无论效果是否发动，触发后移除此牌。`,
+                    content: `<span class='tiaoJian'>(若你拥有【五系束缚】)</span>你的行动阶段开始前选择以下一项执行：<br>·摸(2+X)张牌[强制]，X为场上封印的数量但X最高为2<br>跳过你的行动阶段。<br>·触发后移除此卡。`,
                     nocount: true,
                 },
                 onremove: 'storage',
@@ -2120,11 +2122,17 @@ const pack_skills = {
             if (event.num >= 0) return false;
             if (event.cause != 'damage') return false;
             if (!event.cards) return false;
+            if(event.cards.length==0) return false;
             return true;
         },
         content: function () {
             'step 0'
-            player.hengZhi();
+            //目前特殊处理刃和史书，避免单弃时横置
+            var list=[];
+            trigger.cards.forEach(function(card){
+                if(!get.info(card).noGaiPai) list.push(card);
+            });
+            if(list.length > 0) player.hengZhi();
             'step 1'
             var cards = trigger.cards;
             if (cards) {
@@ -4949,6 +4957,7 @@ const pack_skills = {
                     next.set('forced', true);
                     next.set('selectButton', 2);
                     next.set('filterOk', function () {
+                        if(ui.selected.buttons.length != 2) return false;
                         for (var i in ui.selected.buttons) {
                             if (ui.selected.buttons[i].link == 'baoShi') return true;
                         }
@@ -5207,8 +5216,9 @@ const pack_skills = {
                             return num + player.countZhiShiWu('chongSheng') - 2;
                         }
                     },
-                    cardXiBie: function (card, player, xiBie) {
+                    cardXiBie: function (card, player) {
                         if (get.type(card) != 'gongJi' || !player.isHengZhi()) return;
+                        let xiBie = get.xiBie(card, false);
                         if (xiBie == 'an' || xiBie == 'shui') return;
                         return 'huo';
                     }
@@ -6057,7 +6067,7 @@ const pack_skills = {
             }
             'step 1'
             if (result.bool) {
-                if ((get.type(result.cards[0]) == 'faShu' || get.xiBie(result.cards[0]) == 'lei') && target != player) {
+                if ((get.type(result.cards[0], player) == 'faShu' || get.xiBie(result.cards[0], player) == 'lei') && target != player) {//获取牌信息加player是为了避免苍炎魔女魔女之怒形态下手牌离手无法将牌视为火系
                     player.storage.chongYing += 1;
                 }
             }
@@ -6422,7 +6432,6 @@ const pack_skills = {
                                 break
                             }
                         }
-                        if (player.isHengZhi()) await player.chongZhi();
                         await player.removeZhiShiWu('lingGan', num);
                     },
                     content: async function (event, trigger, player) {
@@ -6441,6 +6450,9 @@ const pack_skills = {
                             await player.chooseToDiscard('h', num, true);
                             await event.target.chooseToDiscard('h', num, true);
                         }
+                    },
+                    contentAfter: async function (event, trigger, player) {
+                        if (player.isHengZhi()) await player.chongZhi();
                     },
                     ai: {
                         result: {
@@ -6496,6 +6508,29 @@ const pack_skills = {
                 await player.hengZhi();
             }
         }
+    },
+    yongHengQiuTuXingTai: {
+        forced: true,
+        trigger: { player: 'chengShouShangHaiBegin' },
+        filter: function (event, player) {
+            return player.isHengZhi()&&event.num > 0;
+        },
+        content: async function (event, trigger, player) {
+            trigger.changeDamageNum(-1);
+        },
+        group: ['yongHengQiuTuXingTai_shengLiJiaoXiangShi'],
+        subSkill: {
+            shengLiJiaoXiangShi: {
+                forced: true,
+                trigger: { player: 'yongHengYueZhang_shengLiJiaoXiangShiBefore' },
+                filter: function (event, player) {
+                    return player.isHengZhi();
+                },
+                content: async function (event, trigger, player) {
+                    await player.addZhiLiao();
+                },
+            },
+        },
     },
     xiWangFuGeQu: {
         type: 'qiDong',
@@ -6564,7 +6599,7 @@ const pack_skills = {
     yongHengYueZhang: {
         intro: {
             name: '(专)永恒乐章',
-            content: "[响应]激昂狂想曲：<span class='tiaoJian'>(回合开始时若你拥有【永恒乐章】)</span>选择以下一项执行：<br>·吟游诗人对2名目标对手各造成1点法术伤害③。 <br>·你弃2张牌。<br>[响应]胜利交响诗：<span class='tiaoJian'>(回合结束时若你拥有【永恒乐章】)</span>选择以下一项执行<br>·将我方【战绩区】的1个星石提炼成为你的能量。<br>·为我方【战绩区】+1[宝石]，你+1[治疗]。",
+            content: "[响应]激昂狂想曲：<span class='tiaoJian'>(回合开始时若你拥有【永恒乐章】)</span>选择以下一项执行：<br>·吟游诗人对2名目标对手各造成1点法术伤害③。 <br>·你弃2张牌。<br>[响应]胜利交响诗：<span class='tiaoJian'>(回合结束时若你拥有【永恒乐章】)</span>选择以下一项执行<br>·<span class='tiaoJian'>(移除我方【战绩区】1星石)</span>你+1[宝石]。<br>·为我方【战绩区】+1[宝石]，你+1[治疗]。",
             nocount: true,
         },
         onremove: 'storage',
@@ -6572,6 +6607,7 @@ const pack_skills = {
         markimage: 'image/card/zhuanShu/yongHengYueZhang.png',
         subSkill: {
             jiAngKuangXiangQu: {
+                priority: -1,
                 trigger: { player: 'phaseBegin' },
                 filter: function (event, player) {
                     return player.hasZhiShiWu('yongHengYueZhang');
@@ -6609,18 +6645,19 @@ const pack_skills = {
             },
             shengLiJiaoXiangShi: {
                 trigger: { player: 'phaseEnd' },
+                priority: -1,
                 filter: function (event, player) {
                     return player.hasZhiShiWu('yongHengYueZhang');
                 },
                 content: async function (event, trigger, player) {
                     var zhanJi = get.zhanJi(player.side);
-                    if (zhanJi.length > 0 && player.countEmptyNengLiang() > 0) {
+                    if (zhanJi.length > 0) {
                         var list = [];
                         for (var i = 0; i < zhanJi.length; i++) {
                             list.push([zhanJi[i], get.translation(zhanJi[i])]);
                         }
                         var result = await player.chooseButton([
-                            '提炼我方【战绩区】的1个星石或者为我方【战绩区】+1[宝石]、你+1[治疗]',
+                            `<span class='tiaoJian'>(移除我方【战绩区】1星石)</span>你+1[宝石]或者为我方【战绩区】+1[宝石]、你+1[治疗]`,
                             [list, 'tdnodes'],
                         ]).set('selectButton', [1, 1]).set('ai', function (button) {
                             var player = _status.event.player;
@@ -6643,7 +6680,7 @@ const pack_skills = {
 
                     if (result.bool) {
                         await player.changeZhanJi(result.links[0], -1);
-                        await player.addNengLiang(result.links[0], 1);
+                        await player.addNengLiang('baoShi', 1);
                     } else {
                         await player.addZhanJi('baoShi');
                         await player.changeZhiLiao(1);
@@ -6775,10 +6812,11 @@ const pack_skills = {
             }
         }
     },
+    fenNu:{},
     tiaoXinX: {
         intro: {
-            name: "(专)[法术]挑衅",
-            content: '你在下个行动阶段必须且只能主动攻击勇者，否则你跳过该行动阶段，触发后移除此牌。',
+            name: "(专)[被动]挑衅",
+            content: '<span class="tiaoJian">(若你拥有【愤怒】)</span>你的行动阶段只能主动攻击勇者，否则你跳过该行动阶段。<br>触发后移除此牌。',
             nocount: true,
         },
         onremove: 'storage',
@@ -7018,9 +7056,11 @@ const pack_skills = {
     //格斗家
     nianQiLiChang: {
         trigger: { player: "zaoChengShangHai" },
+        /*改为默认生效避免因发动顺序导致没限制成
         filter: function (event, player) {
             return event.num > 4;
-        },
+        },*/
+        firstDo:true,
         forced: true,
         content: function () {
             trigger.zaoChengShangHaiMax = 4
@@ -7795,6 +7835,8 @@ const pack_skills = {
         filter: function (event, player) {
             if (event.customArgs.tianShiZhiHun) return false;
             if (event.customArgs.eMoZhiHun) return false;
+            if(event.card.cards.length == 0) return false;
+            if(event.card.cards[0].destroyed) return false;
             return event.yingZhan != true && player.getGaiPai('jianHun').length < lib.skill.jianHun.intro.max;
         },
         forced: true,
@@ -8444,6 +8486,14 @@ const pack_skills = {
         },
     },
     lingHunLianJie: {
+        intro: {
+            content: "<span class='tiaoJian'>(若你拥有【灵魂链接】)</span>你成为【灵魂链接】的目标角色。",
+            nocount: true,
+        },
+        markimage: 'image/card/zhuanShu/lingHunLianJie.png',
+
+    },
+    lingHunQiYue: {
         type: 'qiDong',
         trigger: { player: 'qiDong' },
         filter: function (event, player) {
@@ -8454,7 +8504,7 @@ const pack_skills = {
         content: async function (event, trigger, player) {
             await player.removeZhiShiWu('huangSeLingHun');
             await player.removeZhiShiWu('lanSeLingHun');
-            var target = await player.chooseTarget('将【灵魂链接】放置于一名队友面前', true, function (card, player, target) {
+            var target = await player.chooseTarget('将【灵魂链接】放置于目标队友面前', true, function (card, player, target) {
                 return target != player && target.side == player.side;
             }).forResultTargets();
             target = target[0];
@@ -8462,112 +8512,102 @@ const pack_skills = {
             player.storage.lingHunLianJieTarget = target;
             await target.addZhiShiWu('lingHunLianJie', true);
         },
-        intro: {
-            name: '[专属]灵魂链接',
-            content: "<span class='tiaoJian'>(每当你们之间有人承受伤害时⑥，移除X点</span><span class='lan'>【蓝色灵魂】</span><span class='tiaoJian'>)</span>将X点伤害转移给另1人，转移后的伤害为法术伤害⑥。",
-            nocount: true,
-        },
-        onremove: 'storage',
-        markimage: 'image/card/zhuanShu/lingHunLianJie.png',
-        group: 'lingHunLianJie_xiaoGuo',
-        subSkill: {
-            xiaoGuo: {
-                trigger: { global: 'chengShouShangHai' },
-                filter: function (event, player) {
-                    if (event.lingHunLianJie) return false;
-                    if (!player.storage.lingHunLianJieTarget) return false;
-                    if (!(event.player == player.storage.lingHunLianJieTarget || event.player == player)) return false;
-                    return player.hasZhiShiWu('lanSeLingHun');
-                },
-                async cost(event, trigger, player) {
-                    var num = player.countZhiShiWu('lanSeLingHun');
-                    var list = [];
-                    for (var i = 1; i <= num; i++) {
-                        if (i > trigger.num) break;
-                        list.push(i);
-                    }
-                    list.push('cancel2');
-                    //计算移除量
-                    var num1 = player.getHandcardLimit() - player.countCards('h');
-                    var num2 = player.storage.lingHunLianJieTarget.getHandcardLimit() - player.storage.lingHunLianJieTarget.countCards('h');
-                    if (trigger.player == player) {
-                        var yiChu = trigger.num - num1;
-                        yiChu = Math.min(yiChu, list.length - 1);
-                        yiChu = Math.min(yiChu, num2);
-                    } else {
-                        var yiChu = trigger.num - num2;
-                        yiChu = Math.min(yiChu, list.length - 1);
-                        yiChu = Math.min(yiChu, num1);
-                    }
-                    yiChu = Math.max(yiChu, 1);
-
-                    if (event.player.name == 'xianZhe' && event.faShu == true) {
-                        if (event.num == 1 || event.num == 4) yiChu = 'cancel2';
-                    }
-                    var num1 = player.getHandcardLimit() - player.countCards('h');
-                    var num2 = player.storage.lingHunLianJieTarget.getHandcardLimit() - player.storage.lingHunLianJieTarget.countCards('h');
-                    if (event.player == player) {
-                        if (event.num <= num1) yiChu = 'cancel2';
-                    } else {
-                        if (event.num <= num2) yiChu = 'cancel2';
-                    }
-
-
-                    var name = get.translation(trigger.player);
-                    var str = `<br>${name}承受了${trigger.num}点伤害`;
-                    var control = await player.chooseControl(list)
-                        .set('prompt', get.prompt('lingHunLianJie') + str)
-                        .set('prompt2', lib.translate.lingHunLianJie_info)
-                        .set('ai', function (player) {
-                            var yiChu = _status.event.yiChu;
-                            if (yiChu == 'cancel2') return 'cancel2';
-                            else return yiChu - 1;
-                        })
-                        .set('yiChu', yiChu)
-                        .forResultControl();
-                    event.result = {
-                        bool: control != 'cancel2',
-                        cost_data: control,
-                    }
-                },
-                content: function () {
-                    'step 0'
-                    event.num = event.cost_data;
-                    player.removeZhiShiWu('lanSeLingHun', event.num)
-                    trigger.num -= event.num;
-                    'step 1'
-                    var list = [player, player.storage.lingHunLianJieTarget];
-                    list.sortBySeat(_status.currentPhase);
-                    if (list[0] == player) {
-                        if (trigger.player == player) {
-                            trigger.insertAfter(function () {
-                                player.faShuDamage(num, source).set('step', 5).set('lingHunLianJie', true);
-                            }, {
-                                player: player.storage.lingHunLianJieTarget,
-                                num: event.num,
-                                source: player,
-                            });
-                        } else {
-                            player.faShuDamage(event.num, player).set('step', 5).set('lingHunLianJie', true);
-                        }
-                    } else {
-                        if (trigger.player == player) {
-                            player.storage.lingHunLianJieTarget.faShuDamage(event.num, player).set('step', 5).set('lingHunLianJie', true);
-                        } else {
-                            trigger.insertAfter(function () {
-                                player.faShuDamage(num, player).set('step', 5).set('lingHunLianJie', true);
-                            }, {
-                                player: player,
-                                num: event.num,
-                            })
-                        }
-                    }
-                },
-            }
-        },
         check: function (event, player) {
             return player.canGongJi() || player.canFaShu();
         }
+    },
+    lingHunDaoYin:{
+        trigger: { global: 'chengShouShangHai' },
+        filter: function (event, player) {
+            if (event.lingHunLianJie) return false;
+            if (!player.storage.lingHunLianJieTarget) return false;
+            if (!(event.player == player.storage.lingHunLianJieTarget || event.player == player)) return false;
+            return player.hasZhiShiWu('lanSeLingHun');
+        },
+        async cost(event, trigger, player) {
+            var num = player.countZhiShiWu('lanSeLingHun');
+            var list = [];
+            for (var i = 1; i <= num; i++) {
+                if (i > trigger.num) break;
+                list.push(i);
+            }
+            list.push('cancel2');
+            //计算移除量
+            var num1 = player.getHandcardLimit() - player.countCards('h');
+            var num2 = player.storage.lingHunLianJieTarget.getHandcardLimit() - player.storage.lingHunLianJieTarget.countCards('h');
+            if (trigger.player == player) {
+                var yiChu = trigger.num - num1;
+                yiChu = Math.min(yiChu, list.length - 1);
+                yiChu = Math.min(yiChu, num2);
+            } else {
+                var yiChu = trigger.num - num2;
+                yiChu = Math.min(yiChu, list.length - 1);
+                yiChu = Math.min(yiChu, num1);
+            }
+            yiChu = Math.max(yiChu, 1);
+
+            if (event.player.name == 'xianZhe' && event.faShu == true) {
+                if (event.num == 1 || event.num == 4) yiChu = 'cancel2';
+            }
+            var num1 = player.getHandcardLimit() - player.countCards('h');
+            var num2 = player.storage.lingHunLianJieTarget.getHandcardLimit() - player.storage.lingHunLianJieTarget.countCards('h');
+            if (event.player == player) {
+                if (event.num <= num1) yiChu = 'cancel2';
+            } else {
+                if (event.num <= num2) yiChu = 'cancel2';
+            }
+
+
+            var name = get.translation(trigger.player);
+            var str = `<br>${name}承受了${trigger.num}点伤害`;
+            var control = await player.chooseControl(list)
+                .set('prompt', get.prompt('lingHunLianJie') + str)
+                .set('prompt2', lib.translate.lingHunLianJie_info)
+                .set('ai', function (player) {
+                    var yiChu = _status.event.yiChu;
+                    if (yiChu == 'cancel2') return 'cancel2';
+                    else return yiChu - 1;
+                })
+                .set('yiChu', yiChu)
+                .forResultControl();
+            event.result = {
+                bool: control != 'cancel2',
+                cost_data: control,
+            }
+        },
+        content: function () {
+            'step 0'
+            event.num = event.cost_data;
+            player.removeZhiShiWu('lanSeLingHun', event.num)
+            trigger.num -= event.num;
+            'step 1'
+            var list = [player, player.storage.lingHunLianJieTarget];
+            list.sortBySeat(_status.currentPhase);
+            if (list[0] == player) {
+                if (trigger.player == player) {
+                    trigger.insertAfter(function () {
+                        player.faShuDamage(num, source).set('step', 6).set('lingHunLianJie', true);
+                    }, {
+                        player: player.storage.lingHunLianJieTarget,
+                        num: event.num,
+                        source: player,
+                    });
+                } else {
+                    player.faShuDamage(event.num, player).set('step', 6).set('lingHunLianJie', true);
+                }
+            } else {
+                if (trigger.player == player) {
+                    player.storage.lingHunLianJieTarget.faShuDamage(event.num, player).set('step', 6).set('lingHunLianJie', true);
+                } else {
+                    trigger.insertAfter(function () {
+                        player.faShuDamage(num, player).set('step', 6).set('lingHunLianJie', true);
+                    }, {
+                        player: player,
+                        num: event.num,
+                    })
+                }
+            }
+        },
     },
     lingHunZengFu: {
         type: 'qiDong',
@@ -8607,6 +8647,25 @@ const pack_skills = {
         markimage: 'image/card/zhiShiWu/lan.png',
     },
     //血之巫女
+    tongShengZhiXie: {
+        type: 'faShu',
+        enable: ['faShu'],
+        filter: function (event, player) {
+            return !player.storage.tongShengGongSi_use;
+        },
+        selectTarget: 1,
+        filterTarget: true,
+        content: function () {
+            'step 0'
+            player.draw(2);
+            'step 1'
+            player.storage.tongShengGongSi_use = true;
+            player.storage.tongShengGongSi_target = target;
+
+            lib.skill.tongShengGongSi.addTongShengGongSiSkill(player, target);
+            target.addZhiShiWu('tongShengGongSi_xiaoGuo');
+        },
+    },
     xueZhiAiShang: {
         type: 'qiDong',
         trigger: { player: 'qiDong' },
@@ -8765,23 +8824,6 @@ const pack_skills = {
         },
     },
     tongShengGongSi: {
-        type: 'faShu',
-        enable: ['faShu'],
-        filter: function (event, player) {
-            return !player.storage.tongShengGongSi_use;
-        },
-        selectTarget: 1,
-        filterTarget: true,
-        content: function () {
-            'step 0'
-            player.draw(2);
-            'step 1'
-            player.storage.tongShengGongSi_use = true;
-            player.storage.tongShengGongSi_target = target;
-
-            lib.skill.tongShengGongSi.addTongShengGongSiSkill(player, target);
-            target.addZhiShiWu('tongShengGongSi_xiaoGuo');
-        },
         global: 'tongShengGongSi_xiaoGuo',
         group: 'tongShengGongSi_hengZhiChongZhi',
         subSkill: {
@@ -8803,10 +8845,9 @@ const pack_skills = {
 
                 }
             },
-
             xiaoGuo: {
                 intro: {
-                    content: "<span class='tiaoJian'>(在【普通形态】下)</span>你和他手牌上限各-2。 <span class='tiaoJian'>(在【流血形态】下)</span>你和他手牌上限各+1。",
+                    content: "<span class='tiaoJian'>(若你拥有【同生共死】)</span><br>·在巫女【普通形态】下，巫女和你手牌上限各-2。<br>·在巫女【流血形态】下，巫女和你手牌上限各+1。",
                     nocount: true,
                 },
                 onremove: 'storage',
@@ -9320,22 +9361,24 @@ const pack_translate = {
     faShuJiDang_info: "<span class='tiaoJian'>([法术行动]结束后发动)</span>额外+1[攻击行动]。",
     diZhiFengYin: "(独)[法术]地之封印",
     diZhiFengYin_xiaoGuo: '地之封印',
-    diZhiFengYin_info: "<span class='tiaoJian'>(将【地之封印】放置于目标对手面前)</span>该对手获得(直到他从手中打出或展示出地系牌时强制触发)：对他造成3点法术伤害③，触发后移除此牌。",
+    diZhiFengYin_info: "<span class='tiaoJian'>(将【地之封印】放置于目标对手面前)</span>该对手获得(直到他从手中打出或展示地系牌时强制触发)：对他造成3点法术伤害③，触发后移除此牌。",
     shuiZhiFengYin: "(独)[法术]水之封印",
     shuiZhiFengYin_xiaoGuo: "水之封印",
-    shuiZhiFengYin_info: "<span class='tiaoJian'>(将【水之封印】放置于目标对手面前)</span>该对手获得(直到他从手中打出或展示出水系牌时强制触发)：对他造成3点法术伤害③，触发后移除此牌。",
+    shuiZhiFengYin_info: "<span class='tiaoJian'>(将【水之封印】放置于目标对手面前)</span>该对手获得(直到他从手中打出或展示水系牌时强制触发)：对他造成3点法术伤害③，触发后移除此牌。",
     huoZhiFengYin: "(独)[法术]火之封印",
     huoZhiFengYin_xiaoGuo: "火之封印",
-    huoZhiFengYin_info: "<span class='tiaoJian'>(将【火之封印】放置于目标对手面前)</span>该对手获得(直到他从手中打出或展示出火系牌时强制触发)：对他造成3点法术伤害③，触发后移除此牌。",
+    huoZhiFengYin_info: "<span class='tiaoJian'>(将【火之封印】放置于目标对手面前)</span>该对手获得(直到他从手中打出或展示火系牌时强制触发)：对他造成3点法术伤害③，触发后移除此牌。",
     fengZhiFengYin: "(独)[法术]风之封印",
     fengZhiFengYin_xiaoGuo: '风之封印',
-    fengZhiFengYin_info: "<span class='tiaoJian'>(将【风之封印】放置于目标对手面前)</span>该对手获得(直到他从手中打出或展示出风系牌时强制触发)：对他造成3点法术伤害③，触发后移除此牌。",
+    fengZhiFengYin_info: "<span class='tiaoJian'>(将【风之封印】放置于目标对手面前)</span>该对手获得(直到他从手中打出或展示风系牌时强制触发)：对他造成3点法术伤害③，触发后移除此牌。",
     leiZhiFengYin: "(独)[法术]雷之封印",
     leiZhiFengYin_xiaoGuo: '雷之封印',
-    leiZhiFengYin_info: "<span class='tiaoJian'>(将【雷之封印】放置于目标对手面前)</span>该对手获得(直到他从手中打出或展示出雷系牌时强制触发)：对他造成3点法术伤害③，触发后移除此牌。",
-    wuXiShuFu: "(专)[法术]五系束缚",
-    wuXiShuFu_xiaoGuo: "五系束缚",
-    wuXiShuFu_info: "[水晶]<span class='tiaoJian'>(将【五系束缚】放置于目标对手面前)</span>该对手跳过其下个行动阶段。在其下个行动阶段开始前他可以选择摸(2+X)张牌来取消【五系束缚】的效果。X为场上封印的数量，X最高为2。无论效果是否发动，触发后移除此牌。",
+    leiZhiFengYin_info: "<span class='tiaoJian'>(将【雷之封印】放置于目标对手面前)</span>该对手获得(直到他从手中打出或展示雷系牌时强制触发)：对他造成3点法术伤害③，触发后移除此牌。",
+    wuXiShuFu: "(专)[被动]五系束缚",
+    wuXiShuFu_xiaoGuo: "(专)[被动]五系束缚",
+    wuXiShuFu_info: "<span class='tiaoJian'>(若你拥有【五系束缚】)</span>你的行动阶段开始前选择以下一项执行：<br>·摸(2+X)张牌[强制]，X为场上封印的数量但X最高为2<br>跳过你的行动阶段。<br>·触发后移除此卡。",
+    shuFuZhiLi: "[法术]束缚之力",
+    shuFuZhiLi_info: "[水晶]将【五系束缚】放置于目标对手面前。",
     fengYinPoSui: "[法术]封印破碎",
     fengYinPoSui_info: "[水晶]将场上任意一张基础效果牌收入自己手中。",
 
@@ -9690,15 +9733,17 @@ const pack_translate = {
     chenLunXieZouQu_info: "<span class='tiaoJian'>(仅【普通形态】下，一回合内我方对至少2名对手造成法术伤害③且结算之后，弃2张同系牌[展示])</span>你+1<span class='hong'>【灵感】</span>。<span class='tiaoJian'>(若弃牌中有法术牌)</span>对目标对手造成1点法术伤害③。",
     buXieHeXian: "[法术]不谐和弦",
     buXieHeXian_backup: "[法术]不谐和弦",
-    buXieHeXian_info: "<span class='tiaoJian'>(移除X点</span><span class='hong'>【灵感】</span><span class='tiaoJian'>，X>1)(若你处于【永恒囚徒形态】，[重置]脱离【永恒囚徒形态】)</span>你选择以下一项发动：<br>·你和目标角色各摸(X-1)张牌[强制]。<br>·你和目标角色各弃(X-1)张牌。",
+    buXieHeXian_info: "<span class='tiaoJian'>(移除X点</span><span class='hong'>【灵感】</span><span class='tiaoJian'>，X>1)</span>你选择以下一项发动：<br>·你和目标角色各摸(X-1)张牌[强制]。<br>·你和目标角色各弃(X-1)张牌。<br><span class='tiaoJian'>(若你处于【永恒囚徒形态】)</span>[重置]脱离【永恒囚徒形态】。",
     jinJiShiPian: "[被动]禁忌诗篇",
-    jinJiShiPian_info: "<span class='tiaoJian'>(【激昂狂想曲】或【胜利交响诗】的效果结算完后)</span>根据<span class='hong'>【灵感】</span>数量：<br>·(<span class='hong'>【灵感】</span>未达上限)你+1<span class='hong'>【灵感】</span>，移除【永恒乐章】。<br> ·(<span class='hong'>【灵感】</span>已达上限)对自己造成3点法术伤害③。<span class='tiaoJian'>(若你处于【普通形态】)</span>[横置]转为【永恒囚徒形态】。",
+    jinJiShiPian_info: "<span class='tiaoJian'>(【激昂狂想曲】或【胜利交响诗】的效果结算完后)</span>根据<span class='hong'>【灵感】</span>数量：<br>·(<span class='hong'>【灵感】</span>未达上限)你+1<span class='hong'>【灵感】</span>，移除【永恒乐章】。<br> ·(<span class='hong'>【灵感】</span>已达上限)对自己造成3点法术伤害③；<span class='tiaoJian'>(若你处于【普通形态】)</span>[横置]转为【永恒囚徒形态】[持续]。",
+    yongHengQiuTuXingTai: "[被动]永恒囚徒形态",
+    yongHengQiuTuXingTai_info: "在此形态下，你承受的法术伤害-1⑥。<span class='tiaoJian'>(当目标队友发动【胜利交响诗】前)</span>，你+1[治疗]。",
     yongHengYueZhangX: "(专)永恒乐章",
     yongHengYueZhangX_info: `
             <span class="greentext">[响应]激昂狂想曲</span><br>
-            <span class='tiaoJian'><span class='tiaoJian'>(回合开始时若你拥有【永恒乐章】)</span>选择以下一项执行：<br>·吟游诗人对2名目标对手各造成1点法术伤害③。 <br>·你弃2张牌。<br>
+            <span class='tiaoJian'>(回合开始时若你拥有【永恒乐章】)</span>选择以下一项执行：<br>·吟游诗人对2名目标对手各造成1点法术伤害③。 <br>·你弃2张牌。<br>
             <span class="greentext">[响应]胜利交响诗</span><br>
-            <span class='tiaoJian'><span class='tiaoJian'>(回合结束时若你拥有【永恒乐章】)</span>选择以下一项执行<br>·将我方【战绩区】的1个星石提炼成为你的能量。<br>·为我方【战绩区】+1[宝石]，你+1[治疗]。
+            <span class='tiaoJian'>(回合结束时若你拥有【永恒乐章】)</span>选择以下一项执行<br>·<span class='tiaoJian'>(移除我方【战绩区】1星石)</span>你+1[宝石]。<br>·为我方【战绩区】+1[宝石]，你+1[治疗]。
             `,
     yongHengYueZhang_jiAngKuangXiangQu: "[响应]激昂狂想曲",
     yongHengYueZhang_shengLiJiaoXiangShi: "[响应]胜利交响诗",
@@ -9712,11 +9757,12 @@ const pack_translate = {
     nuHou: "[响应]怒吼",
     jinPiLiJin: "[被动]精疲力竭",
     mingJingZhiShui: "[响应]明镜止水",
-    tiaoXin: "(专)[法术]挑衅",
-    tiaoXinX: "挑衅-结束回合",
-    tiaoXinX_kaiShi: "挑衅-开始",
-    tiaoXinX_qiDongQian: "挑衅-启动前",
-    tiaoXinX_qiDongHou: "挑衅-启动后",
+    tiaoXin: "[法术]挑衅",
+    fenNu: "(专)[被动]愤怒",
+    tiaoXinX: "愤怒-结束回合",
+    tiaoXinX_kaiShi: "愤怒-开始",
+    tiaoXinX_qiDongQian: "愤怒-启动前",
+    tiaoXinX_qiDongHou: "愤怒-启动后",
     jinDuanZhiLi: "[响应]禁断之力",
     siDou: "[响应]死斗",
     nuQi: "怒气",
@@ -9725,7 +9771,8 @@ const pack_translate = {
     nuHou_info: "<span class='tiaoJian'>(主动攻击前发动①，移除1点</span><span class='hong'>【怒气】</span><span class='tiaoJian'>)</span>你可以摸1张牌，本次攻击伤害额外+2；<span class='tiaoJian'>(若未命中②)</span>你+1<span class='lan'>【知性】</span>。",
     jinPiLiJin_info: "<span class='tiaoJian'>(发动【禁断之力】后强制触发[强制])</span>[横置]额外+1[攻击行动]；持续到你的下个行动阶段开始，你的手牌上限恒定为4[恒定]。 【精疲力竭】的效果结束时[重置]，并对自己造成3点法术伤害③。",
     mingJingZhiShui_info: "<span class='tiaoJian'>(主动攻击前发动①，移除4点</span><span class='lan'>【知性】</span><span class='tiaoJian'>)</span>本次攻击对手无法应战。<span class='tiaoJian'>(本次攻击结束时)</span>你+1[水晶]。",
-    tiaoXin_info: "<span class='tiaoJian'>(移除1点</span><span class='hong'>【怒气】</span><span class='tiaoJian'>)</span>将【挑衅】放置于目标对手面前，你+1<span class='lan'>【知性】</span>；该对手在其下个行动阶段必须且只能主动攻击你，否则他跳过该行动阶段，触发后移除此牌。",
+    tiaoXin_info: "<span class='tiaoJian'>(移除1点</span><span class='hong'>【怒气】</span><span class='tiaoJian'>将【愤怒】放置于目标对手面前)</span>你+1<span class='lan'>【知性】</span>。",
+    fenNu_info: "<span class='tiaoJian'>(若你拥有【愤怒】)</span>你的行动阶段只能主动攻击勇者，否则你跳过该行动阶段。<br>触发后移除此牌。",
     jinDuanZhiLi_info: "[水晶]<span class='tiaoJian'>(主动攻击命中或未命中后发动②)</span>弃掉你所有手牌[展示]，其中每有1张法术牌，你+1<span class='hong'>【怒气】</span>；<span class='tiaoJian'>(若未命中②)</span>其中每有1张水系牌，你+1<span class='lan'>【知性】</span>；<span class='tiaoJian'>(若命中②)</span>其中每有1张火系牌，本次攻击伤害额外+1，并对自己造成等同于火系牌数量的法术伤害③。",
     siDou_info: "[宝石](每当你承受法术伤害时发动⑥)你+3<span class='hong'>【怒气】</span>；<span class='tiaoJian'>(若此伤害造成士气实际下降)</span>本次的士气下降值恒定为1[强制]。",
     nuQi_info: "<span class='hong'>【怒气】</span>为勇者专有指示物，上限为4。",
@@ -9818,36 +9865,41 @@ const pack_translate = {
     lingHunJingXiang: "[法术]灵魂镜像",
     lingHunZhenBao: "(独)[法术]灵魂震爆",
     lingHunFuYu: "(独)[法术]灵魂赋予",
-    lingHunLianJie: "(专)[启动]灵魂链接",
-    lingHunLianJie_xiaoGuo: "(专)灵魂链接",
+    lingHunLianJie: "(专)[被动]灵魂链接",
     lingHunZengFu: "[启动]灵魂增幅",
     huangSeLingHun: "黄色灵魂",
     lanSeLingHun: "蓝色灵魂",
+    lingHunDaoYin: "[响应]灵魂导引",
+    lingHunQiYue:'[启动]灵魂契约',
 
     lingHunTunShi_info: "<span class='tiaoJian'>(我方每有1点士气下降)</span>你+1<span class='hong'>【黄色灵魂】</span>。",
     lingHunZhaoHuan_info: "<span class='tiaoJian'>(弃X张法术牌[展示])</span>你+X点<span class='lan'>【蓝色灵魂】</span>。",
-    lingHunZhuanHuan_info: "<span class='tiaoJian'>(你每发动1次主动攻击①)</span>可转换1点你拥有的[灵魂]的颜色。",
-    lingHunJingXiang_info: "<span class='tiaoJian'>(移除2点</span><span class='hong'>【黄色灵魂】</span><span class='tiaoJian'>)</span>你弃2张牌，目标角色摸2张牌[强制]，但最多补到其手牌上限。",
+    lingHunZhuanHuan_info: "<span class='tiaoJian'>(你每发动1次主动攻击①)</span>可转换1点你拥有的【灵魂】的颜色。",
+    lingHunJingXiang_info: "<span class='tiaoJian'>(移除2点</span><span class='hong'>【黄色灵魂】</span><span class='tiaoJian'>)</span>你弃2张牌，目标角色摸2张牌[强制](但最多补到其手牌上限)。",
     lingHunZhenBao_info: "<span class='tiaoJian'>(移除3点</span><span class='hong'>【黄色灵魂】</span><span class='tiaoJian'>)</span>对目标角色造成3点法术伤害③，若他手牌<3且手牌上限>5，则本次伤害额外+2。",
     lingHunFuYu_info: "<span class='tiaoJian'>(移除3点</span><span class='lan'>【蓝色灵魂】</span><span class='tiaoJian'>)</span>目标角色+2[宝石]。",
-    lingHunLianJie_info: "<span class='tiaoJian'>(若你队友数>1时可发动,移除1点</span><span class='hong'>【黄色灵魂】</span><span class='tiaoJian'>和1点【蓝色灵魂】)</span>将【灵魂链接】放置于一名队友面前，<span class='tiaoJian'>(每当你们之间有人承受伤害时⑥，移除X点</span><span class='lan'>【蓝色灵魂】</span><span class='tiaoJian'>)</span>将X点伤害转移给另1人，转移后的伤害为法术伤害⑥。",
+    lingHunQiYue_info: "<span class='tiaoJian'>(仅当</span><span class='hong'>【黄色灵魂】</span><span class='tiaoJian'>和</span><span class='lan'>【蓝色灵魂】</span><span class='tiaoJian'>都存在时可发动,移除1点</span><span class='hong'>【黄色灵魂】</span><span class='tiaoJian'>和1点</span><span class='lan'>【蓝色灵魂】</span><span class='tiaoJian'>)</span>将【灵魂链接】放置于目标队友面前。",
+    lingHunDaoYin_info: "<span class='tiaoJian'>(若【灵魂链接】在场，当你或【灵魂链接】的目标角色将承受伤害前⑥，移除X点</span><span class='lan'>【蓝色灵魂】</span><span class='tiaoJian'>)</span>将X点伤害转移给另一方，转移后的伤害为法术伤害⑥。",
+    lingHunLianJie_info:"<span class='tiaoJian'>(若你拥有【灵魂链接】)</span>你成为【灵魂链接】的目标角色。",
     lingHunZengFu_info: "[宝石]你+2<span class='hong'>【黄色灵魂】</span>和2<span class='lan'>【蓝色灵魂】</span>。",
     huangSeLingHun_info: "<span class='hong'>【黄色灵魂】</span>为灵魂术士专有指示物，上限为6。",
     lanSeLingHun_info: "<span class='lan'>【蓝色灵魂】</span>为灵魂术士专有指示物，上限为6。",
 
     //血之巫女
+    tongShengZhiXie: "[法术]同生之楔",
     xueZhiAiShang: "[启动]血之哀伤",
     liuXue: "[被动]流血[持续]",
     niLiu: "[法术]逆流",
     xueZhiBeiMing: "(独)[法术]血之悲鸣",
-    tongShengGongSi: "(专)[法术]同生共死",
+    tongShengGongSi: "(专)[被动]同生共死",
     xueZhiZuZhou: "[法术]血之诅咒",
 
+    tongShengZhiXie_info: "你摸2张牌[强制]，将【同生共死】放置于目标角色面前。",
     xueZhiAiShang_info: "<span class='tiaoJian'>(对自己造成2点法术伤害③)</span>转移同生共死的目标或是移除【同生共死】。",
     liuXue_info: "[持续]<span class='tiaoJian'>(当你在【普通形态】下，因承受伤害而导致我方士气减少时强制发动[强制])</span>[横置]转为【流血形态】，你+1[治疗]。此形态下在你的每次回合开始时，对自己造成1点法术伤害③。 <span class='tiaoJian'>(自身手牌<3时强制发动[强制])</span>[重置]脱离【流血形态】。",
     niLiu_info: "<span class='tiaoJian'>(仅【流血形态】下发动)</span>你弃2张牌，你+1[治疗]。",
     xueZhiBeiMing_info: "<span class='tiaoJian'>(仅【流血形态】下发动)</span>对目标角色和自己各造成(X+1)点法术伤害③，X<3。",
-    tongShengGongSi_info: "<span class='tiaoJian'>(你摸2张牌[强制])</span>将【同生共死】放置于目标角色面前。<span class='tiaoJian'>(在【普通形态】下)</span>你和他手牌上限各-2。<span class='tiaoJian'>(在【流血形态】下)</span>你和他手牌上限各+1。",
+    tongShengGongSi_info: "<span class='tiaoJian'>(若你拥有【同生共死】)</span><br>·在巫女【普通形态】下，巫女和你手牌上限各-2。<br>·在巫女【流血形态】下，巫女和你手牌上限各+1。",
     xueZhiZuZhou_info: "[宝石]对目标角色造成2点法术伤害③，你弃3张牌。",
 
     //蝶舞者

@@ -564,8 +564,7 @@ export class Player extends HTMLDivElement {
 				if (errVars.includes(key)) {
 					throw new Error(`Variable '${key}' should not be referenced by vars objects`);
 				}
-				varstr += `var ${key}=lib.skill['${skillName}'].vars['${key}'];
-	`;
+				varstr += `var ${key}=lib.skill['${skillName}'].vars['${key}'];`;
 			}
 			const originals = [];
 			const contents = [];
@@ -588,9 +587,7 @@ export class Player extends HTMLDivElement {
 				if (!scope) {
 					compiled = new Function(...params, body);
 				} else {
-					compiled = scope(`(function (${params.join(", ")}) {
-	${body}
-	})`);
+					compiled = scope(`(function (${params.join(", ")}) {${body}})`);
 				}
 				originals.push(compiled);
 				contents.push(function (event, trigger2, player2) {
@@ -8204,7 +8201,8 @@ export class Player extends HTMLDivElement {
 		}
 	}
 	viewHandcard(){
-		const allShown = this.isUnderControl() || (!game.observe && game.me && game.me.hasSkillTag("viewHandcard", null, this, true) && this != game.me);
+		if(game.debugMode) var allShown = true;//debug模式下所有手牌可见
+		else var allShown = this.isUnderControl() || (!game.observe && game.me && game.me.hasSkillTag("viewHandcard", null, this, true) && this != game.me);
 		let cards=this.getCards("h");
 		if(allShown&&cards.length){
 			this.node.viewHandcard.show();
@@ -10089,6 +10087,7 @@ export class Player extends HTMLDivElement {
 		}
 		//加个me&&可解决多控重新入局报错
 		if (that === me ||  (me&&this == me._trueMe)) return true;
+		if(game.debugMode) return true;//debug模式下可以查看其他角色牌
 		//if (_status.connectMode) return false;
 		//if (lib.config.mode == "versus") {
 		if(_status.connectMode){
@@ -13295,7 +13294,7 @@ export class Player extends HTMLDivElement {
 		}
 		return player;
 	}
-	$gain(card, log, init) {
+	$gain(card, log, init, first=true) {
 		if (init !== false) {
 			game.broadcast(
 				function (player, card, init) {
@@ -13329,9 +13328,9 @@ export class Player extends HTMLDivElement {
 					this.$gain(card[i], false, false);
 				}
 			}
-		} else if (typeof card == "number" && card > 1) {
+		} else if (typeof card == "number" && init !== false) {
 			if (log != false && !_status.video) {
-				game.log(this, "获得了" + get.cnNumber(card) + "张牌");
+				game.log(this, "获得了" + card + "张牌");
 			}
 			if (this.$gainmod) {
 				this.$gainmod(card);

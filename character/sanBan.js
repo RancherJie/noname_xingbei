@@ -840,6 +840,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 subSkill:{
                     jiAngKuangXiangQu:{
                         trigger:{player:'phaseBegin'},
+                        priority:-1,
                         filter:function(event,player){
                             if(!player.hasZhiShiWu('san_yongHengYueZhang')) return false;
                             if(player.storage.yongHengYueZhang_player==player){
@@ -918,6 +919,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         }
                     },
                     shengLiJiaoXiangShi:{
+                        priority:-1,
                         trigger:{player:'phaseEnd'},
                         filter:function(event,player){
                             return player.hasZhiShiWu('san_yongHengYueZhang');
