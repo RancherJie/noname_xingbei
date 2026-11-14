@@ -724,6 +724,10 @@ body.wmb-ui-optimized #splash > div[link="illustration"] > .avatar {
     background-position: center 28% !important;
 }
 
+body.wmb-ui-optimized #splash > div[link="nightmarePve"] > .avatar {
+    background-position: center 43% !important;
+}
+
 body.wmb-ui-optimized #splash > div::after {
     content: "";
     position: absolute;
@@ -832,4 +836,33 @@ body.wmb-ui-optimized #splash > div.clicked {
     body.wmb-ui-optimized #splash > div:nth-child(6n + 5) { grid-column: span 1; grid-row: span 2; }
     body.wmb-ui-optimized #splash > div > .splashtext { bottom: 10px; padding: 6px 9px 7px; font-size: clamp(15px, 4vw, 19px); }
     body.wmb-ui-optimized #splash > div::before { top: 7px; left: 7px; min-width: 27px; font-size: 10px; }
+}
+
+/* Give the online room more visual weight and compact the tutorial panel. */
+body.wmb-ui-optimized #splash > div[link="connect"] {
+    grid-column: span 4;
+    grid-row: span 2;
+}
+
+body.wmb-ui-optimized #splash > div[link="tutorial"] {
+    grid-column: span 2;
+    grid-row: span 2;
+}
+
+@media (max-width: 560px) {
+    body.wmb-ui-optimized #splash > div[link="connect"] { grid-column: span 2; grid-row: span 2; }
+    body.wmb-ui-optimized #splash > div[link="tutorial"] { grid-column: span 1; grid-row: span 2; }
+}
+
+/* Arrange the desktop splash as three aligned comic-page bands. */
+@media (min-width: 901px) {
+    body.wmb-ui-optimized #splash { grid-template-columns: repeat(10, minmax(0, 1fr)); }
+    body.wmb-ui-optimized #splash > div[link="xingBei"] { grid-column: 1 / span 4; grid-row: 1 / span 3; }
+    body.wmb-ui-optimized #splash > div[link="boss"] { grid-column: 5 / span 2; grid-row: 1 / span 3; }
+    body.wmb-ui-optimized #splash > div[link="connect"] { grid-column: 7 / span 4; grid-row: 1 / span 3; }
+    body.wmb-ui-optimized #splash > div[link="offlineChoose"] { grid-column: 2 / span 2; grid-row: 4 / span 2; }
+    body.wmb-ui-optimized #splash > div[link="illustration"] { grid-column: 4 / span 4; grid-row: 4 / span 2; }
+    body.wmb-ui-optimized #splash > div[link="leaderboard"] { grid-column: 8 / span 2; grid-row: 4 / span 2; }
+    body.wmb-ui-optimized #splash > div[link="tutorial"] { grid-column: 4 / span 2; grid-row: 6 / span 2; }
+    body.wmb-ui-optimized #splash > div[link="nightmarePve"] { grid-column: 6 / span 2; grid-row: 6 / span 2; }
 }
