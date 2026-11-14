@@ -102,7 +102,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
         if (currentTheme() !== "starry") return;
         var backgroundPath = "ext:" + extensionName + "/image/background/xingbei_starry.jpg";
         var currentBackground = lib.config.image_background;
-        if (currentBackground === "xingbei_starry" || (!lib.config[marker] && (!currentBackground || currentBackground === "default"))) {
+        if (currentBackground === "xingbei_starry" || !currentBackground || currentBackground === "default") {
             game.saveConfig("image_background", backgroundPath);
         }
         if (!lib.config[marker]) {
@@ -110,6 +110,21 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             game.saveConfig(marker, true);
         }
         if (lib.config.image_background === backgroundPath && ui.background && game.updateBackground) game.updateBackground();
+    }
+
+    function migrateStarryThemeDefault() {
+        var marker = "extension_" + extensionName + "_starryThemeDefaultMigrationV1";
+        if (lib.config[marker]) return;
+        var key = "extension_" + extensionName + "_uiTheme";
+        if (lib.config[key] === "xianjian") {
+            game.saveConfig(key, "starry");
+            var background = lib.config.image_background;
+            if (!background || background === "default" || background === "xingbei_starry") {
+                game.saveConfig("image_background", "ext:" + extensionName + "/image/background/xingbei_starry.jpg");
+                game.saveConfig("image_background_blur", true);
+            }
+        }
+        game.saveConfig(marker, true);
     }
 
     function installExtensionIdentityCompatibility() {
@@ -1302,9 +1317,10 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 
     return {
         name: extensionName,
-        version: "2.59",
+        version: "2.60",
         editable: false,
         precontent: function () {
+            migrateStarryThemeDefault();
             configureDefaultStarryBackground();
             migrateExtensionIdentityConfigs();
             installExtensionIdentityCompatibility();
@@ -1326,6 +1342,8 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             decorateArena();
         },
         content: function () {
+            // precontent 在游戏创建背景层前运行；此处再应用一次才能正确解析 ext: 图片路径。
+            configureDefaultStarryBackground();
             applyExtensionListSort();
             installPlayerSlotIndicators();
             refreshPlayerSlotIndicators();
