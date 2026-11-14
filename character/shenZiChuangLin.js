@@ -1572,6 +1572,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         filter:function(event,player){
                             return get.is.gongJiXingDong(event)&&player.hasZhiShiWu('jueJieX');
                         },
+                        priority:-1,
                         content:function(){
                             'step 0'
                             player.storage.jueJie_player.addZhiShiWu('jiX');
