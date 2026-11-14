@@ -5023,6 +5023,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 
             //大罪司教
             shenDeDaiXing: "[被动]神的代行",
+            shenDeDaiXing_info: "你无法成为【路标】的目标[恒定]，你的行动顺序改为拥有【路标】的角色之后。2V2中此技能无效。",
             shenYiZhiYin: "[被动]神意指引",
             shenYiZhiYin_info: "<span class='tiaoJian'>(你的第一回合开始时)</span>将【路标】放置在你左手边最近的角色面前。",
             xinYangZhiJia: "[法术]信仰之枷",
