@@ -327,6 +327,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     },
                     yinJiBianJian:{
                         priority:0.1,
+                        prompt2:'指定攻击目标将1张手牌加入【遗迹】，然后将你手上X张牌与X个【遗迹】交换，X<3。',
                         trigger:{player:'gongJiShi'},
                         filter:function (event,player){
                             return get.name(event.card)=='shiShuCard'&&event.yingZhan!=true;
