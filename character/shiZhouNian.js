@@ -6522,9 +6522,9 @@ const pack_skills = {
         subSkill: {
             shengLiJiaoXiangShi: {
                 forced: true,
-                trigger: { player: 'yongHengYueZhang_shengLiJiaoXiangShiBefore' },
+                trigger: { global: 'yongHengYueZhang_shengLiJiaoXiangShiBefore' },
                 filter: function (event, player) {
-                    return player.isHengZhi();
+                    return player.isHengZhi()&&event.player!=player;
                 },
                 content: async function (event, trigger, player) {
                     await player.addZhiLiao();
