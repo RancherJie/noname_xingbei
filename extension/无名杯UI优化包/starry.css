@@ -1,0 +1,868 @@
+/* Character star ratings use one glyph per full, half, or unfilled star. */
+body.wmb-ui-optimized .hp[data-wmb-character-star-rating="true"] {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    gap: 0 !important;
+    width: auto !important;
+    min-width: 0 !important;
+    height: auto !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    line-height: 1 !important;
+    text-align: right !important;
+    white-space: nowrap !important;
+    transform: none !important;
+}
+
+body.wmb-ui-optimized .hp[data-wmb-character-star-rating="true"] > .wmb-character-star {
+    display: inline-block !important;
+    flex: 0 0 var(--wmb-character-star-size, 14px) !important;
+    width: var(--wmb-character-star-size, 14px) !important;
+    height: var(--wmb-character-star-size, 14px) !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    background-color: transparent !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+    background-size: contain !important;
+    box-shadow: none !important;
+    font-size: 0 !important;
+    transform: none !important;
+    filter: none !important;
+}
+
+body.wmb-ui-optimized .hp[data-wmb-character-star-rating="true"] > .wmb-character-star.is-filled {
+    background-image: url("image/xingJi_xianxia.png") !important;
+    filter: drop-shadow(0 0 2px rgba(171, 142, 255, 0.55)) !important;
+}
+
+body.wmb-ui-optimized .hp[data-wmb-character-star-rating="true"] > .wmb-character-star.is-half,
+body.wmb-ui-optimized .hp[data-wmb-character-star-rating="true"] > .wmb-character-star.is-empty {
+    background-image: url("image/xingJi_outline_xianxia.png") !important;
+    filter: drop-shadow(0 0 2px rgba(171, 142, 255, 0.42)) !important;
+}
+
+body.wmb-ui-optimized .hp[data-wmb-character-star-rating="true"] > .wmb-character-star.is-empty {
+    opacity: 0.55;
+}
+
+/* Theme layer for the bundled NiuNiu Xianjian UI. */
+body.wmb-ui-optimized {
+    --wmb-ink: #0a1025;
+    --wmb-panel: rgba(18, 24, 48, 0.98);
+    --wmb-panel-soft: rgba(25, 32, 66, 0.96);
+    --wmb-paper: #d4d9f5;
+    --wmb-paper-light: #eff1ff;
+    --wmb-jade: #748cf0;
+    --wmb-jade-light: #b0c2ff;
+    --wmb-gold: #9180df;
+    --wmb-gold-light: #c8c2ff;
+    --wmb-blue: #526fd1;
+    --wmb-blue-bright: #a7b9ff;
+    --wmb-cyan: #8bc8ff;
+    --wmb-text: #e9eaff;
+    --wmb-muted: #b6c0e1;
+    --wmb-line: rgba(145, 160, 235, 0.62);
+    --wmb-shadow: none;
+    --wmb-blur: 0px;
+}
+
+body.wmb-ui-optimized.wmb-ui-strong-glass {
+    --wmb-panel: rgba(14, 20, 44, 0.99);
+    --wmb-panel-soft: rgba(21, 28, 60, 0.98);
+}
+
+body.wmb-ui-optimized > .background::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.42;
+    background:
+        radial-gradient(1px 1px at 8% 16%, rgba(235, 240, 255, .9) 0 1px, transparent 1.6px),
+        radial-gradient(1px 1px at 22% 71%, rgba(189, 201, 255, .8) 0 1px, transparent 1.6px),
+        radial-gradient(1px 1px at 38% 33%, rgba(255, 255, 255, .8) 0 1px, transparent 1.6px),
+        radial-gradient(1px 1px at 61% 18%, rgba(222, 211, 255, .85) 0 1px, transparent 1.6px),
+        radial-gradient(1px 1px at 78% 58%, rgba(221, 231, 255, .8) 0 1px, transparent 1.6px),
+        radial-gradient(2px 2px at 91% 28%, rgba(176, 196, 255, .72) 0 1px, transparent 2px),
+        radial-gradient(ellipse at 18% 22%, rgba(67, 91, 196, .16), transparent 48%),
+        radial-gradient(ellipse at 83% 72%, rgba(112, 68, 195, .16), transparent 45%);
+    mix-blend-mode: screen;
+}
+
+body.wmb-ui-optimized #arena::before {
+    background:
+        radial-gradient(1px 1px at 13% 22%, rgba(240, 243, 255, .72) 0 1px, transparent 1.6px),
+        radial-gradient(1px 1px at 39% 77%, rgba(197, 211, 255, .64) 0 1px, transparent 1.6px),
+        radial-gradient(2px 2px at 73% 31%, rgba(234, 223, 255, .68) 0 1px, transparent 2px),
+        radial-gradient(1px 1px at 88% 68%, rgba(255, 255, 255, .66) 0 1px, transparent 1.6px) !important;
+    box-shadow: none !important;
+}
+
+body.wmb-ui-optimized .wmb-scoreboard,
+body.wmb-ui-optimized .wmb-bgm-panel,
+body.wmb-ui-optimized .dialog,
+body.wmb-ui-optimized .popup-container > .popup,
+body.wmb-ui-optimized .menu-container > .menu,
+body.wmb-ui-optimized #window .dialog,
+body.wmb-ui-optimized .control,
+body.wmb-ui-optimized #skill-control,
+body.wmb-ui-optimized .skill-control,
+body.wmb-ui-optimized .player.connect.wmb-connect-player,
+body.wmb-ui-optimized .connectbutton.wmb-connect-button,
+body.wmb-ui-optimized .connectevents.wmb-connect-hall-button,
+body.wmb-ui-optimized .wmb-room-list .popup.text {
+    border-radius: 8px !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
+body.wmb-ui-optimized .dialog,
+body.wmb-ui-optimized .popup-container > .popup,
+body.wmb-ui-optimized .menu-container > .menu,
+body.wmb-ui-optimized #window .dialog,
+body.wmb-ui-optimized .wmb-scoreboard,
+body.wmb-ui-optimized .wmb-bgm-panel {
+    background-color: var(--wmb-panel) !important;
+    background-image: none !important;
+}
+
+body.wmb-ui-optimized .control > div,
+body.wmb-ui-optimized .dialog .textbutton,
+body.wmb-ui-optimized .skill-control .skillitem,
+body.wmb-ui-optimized #skill-control .skillitem,
+body.wmb-ui-optimized #system1 > .wmb-system-button,
+body.wmb-ui-optimized #system2 > .wmb-system-button,
+body.wmb-ui-optimized .charactercard .menubutton,
+body.wmb-ui-optimized .connectbutton.wmb-connect-button,
+body.wmb-ui-optimized .connectevents.wmb-connect-hall-button,
+body.wmb-ui-optimized .wmb-room-list .popup.text {
+    border-radius: 6px !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+    background-image: none !important;
+    transition: background-color 140ms ease, border-color 140ms ease, color 140ms ease !important;
+}
+
+body.wmb-ui-optimized .control > div:hover,
+body.wmb-ui-optimized .dialog .textbutton.selectable:hover,
+body.wmb-ui-optimized .dialog .textbutton.selectable:active,
+body.wmb-ui-optimized .dialog .textbutton.selectable.selected,
+body.wmb-ui-optimized .skill-control .skillitem:hover,
+body.wmb-ui-optimized #skill-control .skillitem:hover,
+body.wmb-ui-optimized #system1 > .wmb-system-button:hover,
+body.wmb-ui-optimized #system2 > .wmb-system-button:hover,
+body.wmb-ui-optimized .wmb-room-list .popup.text:hover {
+    background: rgba(83, 96, 174, 0.46) !important;
+    border-color: rgba(172, 184, 255, 0.72) !important;
+    transform: none !important;
+}
+
+body.wmb-ui-optimized .card,
+body.wmb-ui-optimized #arena .card {
+    border-radius: 3px !important;
+    box-shadow: none !important;
+    filter: none !important;
+}
+
+body.wmb-ui-optimized .card.selectable,
+body.wmb-ui-optimized #arena .card.selectable {
+    outline: 1px solid rgba(132, 185, 255, 0.9) !important;
+    outline-offset: 0 !important;
+}
+
+body.wmb-ui-optimized .card.selected,
+body.wmb-ui-optimized #arena .card.selected {
+    outline: 2px solid #c5baff !important;
+    outline-offset: 0 !important;
+}
+
+/* Use the simplified starfield back even when an older stylesheet is cached. */
+body.wmb-ui-optimized .card:empty:not(.mark),
+body.wmb-ui-optimized .card.infohidden:not(.mark),
+body.wmb-ui-optimized .card.infohidden:not(.infoflip):not(.mark) {
+    background-image: url("image/cardback_xianxia.png?rev=2.20") !important;
+    background-size: 100% 100% !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+}
+
+/* Skill activation banner: slim starlight frame with star nodes at each end. */
+body.wmb-ui-optimized .wmb-xj-skill-banner {
+    color: #d9d2ff !important;
+    border: 1px solid rgba(176, 172, 255, 0.92) !important;
+    border-radius: 5px !important;
+    background:
+        radial-gradient(1px 1px at 18% 50%, rgba(255, 255, 255, .85) 0 1px, transparent 1.8px),
+        radial-gradient(1px 1px at 82% 50%, rgba(210, 220, 255, .8) 0 1px, transparent 1.8px),
+        linear-gradient(90deg, rgba(13, 18, 48, .98), rgba(31, 31, 83, .98) 50%, rgba(13, 18, 48, .98)) !important;
+    box-shadow: 0 0 12px rgba(132, 145, 255, .44), inset 0 1px rgba(235, 237, 255, .2) !important;
+    text-shadow: 0 0 7px rgba(186, 177, 255, .8), 0 1px 3px #080b22 !important;
+}
+
+body.wmb-ui-optimized .wmb-xj-skill-banner::before,
+body.wmb-ui-optimized .wmb-xj-skill-banner::after {
+    content: "" !important;
+    display: block !important;
+    top: 50% !important;
+    width: 28px !important;
+    height: 28px !important;
+    box-sizing: border-box !important;
+    border: 1px solid rgba(177, 174, 255, .9) !important;
+    border-radius: 50% !important;
+    background: radial-gradient(circle, rgba(113, 99, 223, .58), rgba(16, 21, 57, .98) 72%) !important;
+    box-shadow: 0 0 9px rgba(147, 142, 255, .72), inset 0 0 5px rgba(220, 224, 255, .22) !important;
+    transform: translateY(-50%) !important;
+}
+
+body.wmb-ui-optimized .wmb-xj-skill-banner::before { left: -15px !important; }
+body.wmb-ui-optimized .wmb-xj-skill-banner::after { right: -15px !important; }
+
+body.wmb-ui-optimized .wmb-xj-skill-star {
+    position: absolute !important;
+    z-index: 1;
+    top: 50% !important;
+    width: 11px;
+    height: 11px;
+    pointer-events: none;
+    background: linear-gradient(135deg, #ffffff 5%, #d9d3ff 58%, #9bdfff 100%);
+    clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%);
+    filter: drop-shadow(0 0 3px rgba(219, 216, 255, .95));
+    transform: translate(-50%, -50%);
+}
+
+body.wmb-ui-optimized .wmb-xj-skill-star-left { left: -1px; }
+body.wmb-ui-optimized .wmb-xj-skill-star-right {
+    right: -1px;
+    transform: translate(50%, -50%);
+}
+body.wmb-ui-optimized .wmb-xj-skill-passive { color: #e0d4ff !important; }
+body.wmb-ui-optimized .wmb-xj-skill-response { color: #9fe4ff !important; }
+body.wmb-ui-optimized .wmb-xj-skill-spell { color: #ffdc91 !important; }
+
+/* Remove the scoreboard caption and reclaim the space reserved for it. */
+body.wmb-ui-optimized .wmb-scoreboard::before {
+    content: none !important;
+    display: none !important;
+}
+
+body.wmb-ui-optimized .wmb-scoreboard {
+    padding: 7px 8px !important;
+}
+
+/* Make rule conditions distinct from ordinary skill copy and skill-type labels. */
+body.wmb-ui-optimized .wmb-detail-panel .tiaoJian,
+body.wmb-ui-optimized .dialog .tiaoJian,
+body.wmb-ui-optimized .menubg.charactercard .tiaoJian {
+    color: #ffd783 !important;
+    font-weight: 700 !important;
+    background: transparent !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+    text-shadow: 0 0 6px rgba(193, 158, 255, .55), 0 1px 2px #080b22 !important;
+}
+
+body.wmb-ui-optimized .wmb-detail-panel .greentext,
+body.wmb-ui-optimized .dialog .greentext,
+body.wmb-ui-optimized .menubg.charactercard .greentext {
+    color: #8ff0ca !important;
+    font-weight: 700;
+    text-shadow: 0 0 5px rgba(73, 224, 191, .38), 0 1px 2px #080b22;
+}
+
+body.wmb-ui-optimized .wmb-detail-panel .bluetext,
+body.wmb-ui-optimized .dialog .bluetext,
+body.wmb-ui-optimized .menubg.charactercard .bluetext {
+    color: #9fc6ff !important;
+    font-weight: 700;
+}
+
+/* Let extension names and option labels fit narrow settings panes. */
+body.wmb-ui-optimized .menu.main > .menu-content > div > .left.pane {
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+}
+
+body.wmb-ui-optimized .menu.main > .menu-content > div > .left.pane > div {
+    box-sizing: border-box;
+    width: calc(100% - 16px) !important;
+    height: auto !important;
+    min-height: 26px;
+    padding: 3px 5px;
+    font-size: clamp(14px, calc(1.5vw + 9px), 26px) !important;
+    line-height: 1.15 !important;
+    white-space: normal !important;
+    overflow-wrap: anywhere;
+}
+
+body.wmb-ui-optimized .menu.main > .menu-content > div > .right.pane {
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+}
+
+body.wmb-ui-optimized .menu.main > .menu-content > div > .right.pane > div > .config {
+    box-sizing: border-box;
+    width: calc(100% - 10px) !important;
+    font-size: clamp(14px, calc(1.2vw + 10px), 22px) !important;
+    line-height: 1.25 !important;
+    white-space: normal !important;
+    overflow-wrap: anywhere;
+}
+
+body.wmb-ui-optimized .menu.main > .menu-content > div > .right.pane > div > .config.toggle {
+    min-height: 32px;
+    padding-right: 66px;
+    white-space: normal !important;
+}
+
+body.wmb-ui-optimized .menu.main > .menu-content > div > .right.pane > div > .config.toggle > div {
+    right: 2px;
+    top: 0;
+    transform: scale(.82);
+    transform-origin: top right;
+}
+/* Slightly reduce faction labels in character choice and the illustrated archive. */
+body.wmb-ui-optimized .dialog .buttons > .button.character > .identity,
+body.wmb-ui-optimized .dialog .buttons > .button.character > .identity > div,
+body.wmb-ui-optimized .popup-container > .menu.visual > .button.character > .identity,
+body.wmb-ui-optimized .popup-container > .menu.visual > .button.character > .identity > div {
+    font-size: 0.9em !important;
+
+}
+
+/* Restore clear press and hover feedback in character detail controls. */
+body.wmb-ui-optimized .menubg.charactercard .menubutton,
+body.wmb-ui-optimized .dialog.popped.wmb-detail-panel .menubutton {
+    touch-action: manipulation;
+    transition: transform 120ms ease, background-color 120ms ease, border-color 120ms ease, color 120ms ease !important;
+}
+@media (hover: hover) {
+    body.wmb-ui-optimized .menubg.charactercard .menubutton:hover,
+    body.wmb-ui-optimized .dialog.popped.wmb-detail-panel .menubutton:hover {
+        color: #fff !important;
+        background: rgba(91, 105, 195, 0.58) !important;
+        border-color: rgba(194, 190, 255, 0.92) !important;
+    }
+}
+body.wmb-ui-optimized .menubg.charactercard .menubutton:active,
+body.wmb-ui-optimized .dialog.popped.wmb-detail-panel .menubutton:active {
+    color: #fff !important;
+    background: linear-gradient(135deg, rgba(104, 105, 220, 0.82), rgba(66, 128, 196, 0.76)) !important;
+    border-color: rgba(213, 211, 255, 0.98) !important;
+    box-shadow: inset 0 1px 4px rgba(9, 12, 38, 0.48), 0 0 8px rgba(157, 162, 255, 0.42) !important;
+    transform: translateY(1px) scale(0.97) !important;
+}
+body.wmb-ui-optimized .dialog .buttons > .button.character:active,
+body.wmb-ui-optimized .popup-container > .menu.visual > .button.character:active {
+    filter: brightness(1.1) saturate(1.08);
+    outline: 2px solid rgba(198, 190, 255, 0.98) !important;
+    outline-offset: 1px !important;
+}
+/* Persistent selected states for detail actions, archive filters, and character cards. */
+body.wmb-ui-optimized .menubg.charactercard > .menubutton.active,
+body.wmb-ui-optimized .dialog.popped.wmb-detail-panel .menubutton.active,
+body.wmb-ui-optimized .popup-container > .menu.visual .menubutton.active,
+body.wmb-ui-optimized .dialog .tdnode.thundertext,
+body.wmb-ui-optimized .popup-container > .menu.visual .tdnode.thundertext,
+body.wmb-ui-optimized .dialog .tdnodes.selected,
+body.wmb-ui-optimized .popup-container > .menu.visual .tdnodes.selected {
+    color: #fff !important;
+    background: linear-gradient(135deg, rgba(105, 104, 220, 0.9), rgba(64, 126, 194, 0.86)) !important;
+    border-color: rgba(214, 211, 255, 0.98) !important;
+    box-shadow: inset 0 1px 5px rgba(9, 12, 38, 0.42), 0 0 9px rgba(157, 162, 255, 0.5) !important;
+    text-shadow: 0 1px 3px rgba(5, 8, 28, 0.95) !important;
+}
+body.wmb-ui-optimized .dialog .buttons > .button.character.selected,
+body.wmb-ui-optimized .popup-container > .menu.visual > .button.character.selected {
+    outline: 2px solid rgba(198, 190, 255, 0.98) !important;
+    outline-offset: 1px !important;
+    filter: brightness(1.1) saturate(1.08);
+}
+/* Touch feedback for controls that previously had hover feedback only. */
+@media (hover: hover) {
+    body.wmb-ui-optimized .connectbutton.wmb-connect-button:hover,
+    body.wmb-ui-optimized .connectevents.wmb-connect-hall-button:hover,
+    body.wmb-ui-optimized .menubg.charactercard > .ava > .avatars > div:hover {
+        color: #fff !important;
+        border-color: rgba(194, 190, 255, 0.92) !important;
+        filter: brightness(1.08);
+    }
+}
+body.wmb-ui-optimized .control > div:not(.disabled):active,
+body.wmb-ui-optimized .dialog .textbutton.selectable:active,
+body.wmb-ui-optimized .skill-control .skillitem:not(.disabled):active,
+body.wmb-ui-optimized #skill-control .skillitem:not(.disabled):active,
+body.wmb-ui-optimized #system1 > .wmb-system-button:active,
+body.wmb-ui-optimized #system2 > .wmb-system-button:active,
+body.wmb-ui-optimized .connectbutton.wmb-connect-button:active,
+body.wmb-ui-optimized .connectevents.wmb-connect-hall-button:active,
+body.wmb-ui-optimized .wmb-room-list .popup.text:active,
+body.wmb-ui-optimized .wmb-bgm-controls button:active,
+body.wmb-ui-optimized .wmb-bgm-restore:active {
+    color: #fff !important;
+    background: linear-gradient(135deg, rgba(105, 104, 220, 0.9), rgba(64, 126, 194, 0.86)) !important;
+    border-color: rgba(214, 211, 255, 0.98) !important;
+    box-shadow: inset 0 1px 5px rgba(9, 12, 38, 0.42), 0 0 9px rgba(157, 162, 255, 0.5) !important;
+    transform: translateY(1px) scale(0.98) !important;
+}
+body.wmb-ui-optimized #arena.selecting .player.selectable:not(.selected):active {
+    outline: 2px solid rgba(198, 190, 255, 0.98) !important;
+    outline-offset: 2px !important;
+    filter: brightness(1.13) saturate(1.08) !important;
+}
+body.wmb-ui-optimized .card.selectable:active {
+    outline: 2px solid rgba(198, 190, 255, 0.98) !important;
+    outline-offset: 1px !important;
+}
+
+/* Respect the reduced-motion setting after theme transition rules load. */
+body.wmb-ui-optimized.wmb-ui-no-motion .control > div,
+body.wmb-ui-optimized.wmb-ui-no-motion .dialog .textbutton,
+body.wmb-ui-optimized.wmb-ui-no-motion .skill-control .skillitem,
+body.wmb-ui-optimized.wmb-ui-no-motion #skill-control .skillitem,
+body.wmb-ui-optimized.wmb-ui-no-motion #system1 > .wmb-system-button,
+body.wmb-ui-optimized.wmb-ui-no-motion #system2 > .wmb-system-button,
+body.wmb-ui-optimized.wmb-ui-no-motion .charactercard .menubutton,
+body.wmb-ui-optimized.wmb-ui-no-motion .connectbutton.wmb-connect-button,
+body.wmb-ui-optimized.wmb-ui-no-motion .connectevents.wmb-connect-hall-button,
+body.wmb-ui-optimized.wmb-ui-no-motion .wmb-room-list .popup.text,
+body.wmb-ui-optimized.wmb-ui-no-motion .wmb-bgm-controls button,
+body.wmb-ui-optimized.wmb-ui-no-motion .wmb-bgm-restore {
+    animation: none !important;
+    transition: none !important;
+}
+body.wmb-ui-optimized .menubg.charactercard > .ava > .avatars > div:active {
+    filter: brightness(1.16) saturate(1.08);
+    outline: 2px solid rgba(198, 190, 255, 0.98) !important;
+    outline-offset: 1px !important;
+}
+/* Character-pack tabs are .dialogbutton.menubuttons and persist .active. */
+body.wmb-ui-optimized .dialog .menubutton {
+    transition: transform 120ms ease, background-color 120ms ease, border-color 120ms ease, color 120ms ease !important;
+}
+@media (hover: hover) {
+    body.wmb-ui-optimized .dialog .menubutton:hover {
+        color: #fff !important;
+        background: rgba(91, 105, 195, 0.58) !important;
+        border-color: rgba(194, 190, 255, 0.92) !important;
+    }
+}
+body.wmb-ui-optimized .dialog .menubutton:active {
+    color: #fff !important;
+    background: linear-gradient(135deg, rgba(105, 104, 220, 0.9), rgba(64, 126, 194, 0.86)) !important;
+    border-color: rgba(214, 211, 255, 0.98) !important;
+    box-shadow: inset 0 1px 5px rgba(9, 12, 38, 0.42), 0 0 9px rgba(157, 162, 255, 0.5) !important;
+    transform: translateY(1px) scale(0.98) !important;
+}
+body.wmb-ui-optimized .dialog .menubutton.active {
+    color: #fff !important;
+    background: linear-gradient(135deg, rgba(105, 104, 220, 0.9), rgba(64, 126, 194, 0.86)) !important;
+    border-color: rgba(214, 211, 255, 0.98) !important;
+    box-shadow: inset 0 1px 5px rgba(9, 12, 38, 0.42), 0 0 9px rgba(157, 162, 255, 0.5) !important;
+    text-shadow: 0 1px 3px rgba(5, 8, 28, 0.95) !important;
+}
+body.wmb-ui-optimized.wmb-ui-no-motion .dialog .menubutton {
+    animation: none !important;
+    transition: none !important;
+}
+/* Persistent selected state for the skill currently shown in the character detail panel. */
+body.wmb-ui-optimized .menubg.charactercard > .characterskill > .menubutton.active {
+    color: #fff !important;
+    background: linear-gradient(135deg, rgba(112, 105, 226, 0.96), rgba(67, 127, 198, 0.94)) !important;
+    outline: 1px solid rgba(215, 211, 255, 0.98) !important;
+    outline-offset: -1px !important;
+    box-shadow: inset 0 1px 5px rgba(9, 12, 38, 0.48), 0 0 10px rgba(157, 162, 255, 0.54) !important;
+    text-shadow: 0 1px 3px rgba(5, 8, 28, 0.95) !important;
+}
+/* Character status: enlarged hand-limit slots on the lower frame, treatment stars directly above. */
+body.wmb-ui-optimized .player > .count.wmb-card-slots {
+    position: absolute !important;
+    top: auto !important;
+    right: auto !important;
+    bottom: -2px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    width: max-content !important;
+    max-width: none !important;
+    min-width: 0 !important;
+    height: 22px;
+    box-sizing: border-box;
+    padding: 2px 4px !important;
+    border: 1px solid rgba(185, 194, 237, 1) !important;
+    border-radius: 4px !important;
+    background: rgba(10, 15, 38, 1) !important;
+    box-shadow: none !important;
+    color: transparent !important;
+    font-size: 0 !important;
+    line-height: 0 !important;
+    text-shadow: none !important;
+    filter: none !important;
+    overflow: visible;
+}
+
+body.wmb-ui-optimized .player > .count.wmb-card-slots > .wmb-card-slot {
+    display: block;
+    flex: 0 0 18px;
+    width: 18px;
+    min-width: 18px;
+    max-width: 18px;
+    height: 10px;
+    box-sizing: border-box;
+    border: 1px solid rgba(164, 180, 225, 1);
+    border-radius: 3px;
+    background: rgba(164, 180, 225, 1);
+}
+
+body.wmb-ui-optimized .player > .count.wmb-card-slots[data-wmb-hand-state="green"] > .wmb-card-slot.is-filled {
+    border-color: rgba(166, 242, 199, 1);
+    background: rgba(57, 184, 120, 1);
+}
+body.wmb-ui-optimized .player > .count.wmb-card-slots[data-wmb-hand-state="green"] > .wmb-card-slot.is-empty {
+    border-color: rgba(164, 180, 225, .38);
+    background: rgba(164, 180, 225, .12);
+}
+body.wmb-ui-optimized .player > .count.wmb-card-slots[data-wmb-hand-state="blue"] > .wmb-card-slot.is-filled {
+    border-color: rgba(184, 217, 255, 1);
+    background: rgba(77, 143, 224, 1);
+}
+body.wmb-ui-optimized .player > .count.wmb-card-slots[data-wmb-hand-state="blue"] > .wmb-card-slot.is-empty {
+    border-color: rgba(164, 180, 225, .38);
+    background: rgba(164, 180, 225, .12);
+}
+body.wmb-ui-optimized .player > .count.wmb-card-slots[data-wmb-hand-state="yellow"] > .wmb-card-slot.is-filled {
+    border-color: rgba(255, 240, 163, 1);
+    background: rgba(215, 174, 61, 1);
+}
+body.wmb-ui-optimized .player > .count.wmb-card-slots[data-wmb-hand-state="yellow"] > .wmb-card-slot.is-empty {
+    border-color: rgba(164, 180, 225, .38);
+    background: rgba(164, 180, 225, .12);
+}
+body.wmb-ui-optimized .player > .count.wmb-card-slots > .wmb-card-slot.is-overflow {
+    border-color: rgba(255, 192, 197, 1);
+    background: rgba(226, 77, 91, 1);
+}
+
+body.wmb-ui-optimized .player > .hp.wmb-treatment-slots {
+    position: absolute !important;
+    top: auto !important;
+    right: 5px !important;
+    bottom: 21px !important;
+    left: auto !important;
+    transform: none !important;
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 1px;
+    width: max-content !important;
+    max-width: calc(100% - 8px) !important;
+    height: 22px !important;
+    box-sizing: border-box;
+    line-height: 0 !important;
+    z-index: 6 !important;
+    pointer-events: none;
+}
+
+body.wmb-ui-optimized .player > .hp.wmb-treatment-slots > .wmb-treatment-slot {
+    display: block;
+    flex: 0 0 22px;
+    width: 22px !important;
+    min-width: 22px;
+    max-width: 22px;
+    height: 22px !important;
+    box-sizing: border-box;
+    margin: 0 !important;
+    border: 0 !important;
+    border-radius: 3px;
+    background-color: transparent !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+    background-size: 22px 22px !important;
+    box-shadow: none !important;
+    filter: none !important;
+    transform: none !important;
+    opacity: 1;
+}
+
+body.wmb-ui-optimized .player > .hp.wmb-treatment-slots:not(.text):not(.actcount):not(.treasure) > .wmb-treatment-slot.is-active {
+    background-image: url("image/treatment-star-square-active.svg") !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+    background-size: 22px 22px !important;
+    filter: drop-shadow(0 0 1.5px rgba(61, 199, 255, .95)) !important;
+    transform: none !important;
+    opacity: 1 !important;
+}
+
+body.wmb-ui-optimized .player > .hp.wmb-treatment-slots:not(.text):not(.actcount):not(.treasure) > .wmb-treatment-slot.lost,
+body.wmb-ui-optimized .player > .hp.wmb-treatment-slots:not(.text):not(.actcount):not(.treasure) > .wmb-treatment-slot.is-empty {
+    background-image: url("image/treatment-star-square-empty.svg") !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+    background-size: 22px 22px !important;
+    filter: none !important;
+    transform: none !important;
+    opacity: .6 !important;
+}
+
+/* Comic-panel treatment for the mode selection screen. */
+body.wmb-ui-optimized #splash {
+    --wmb-comic-ink: #11152d;
+    --wmb-comic-paper: #f3efff;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: min(1180px, calc(100vw - 48px));
+    height: 100%;
+    box-sizing: border-box;
+    display: grid;
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+    grid-auto-rows: clamp(72px, 9vh, 105px);
+    grid-auto-flow: row;
+    align-content: start;
+    justify-content: center;
+    gap: clamp(10px, 1.15vw, 16px);
+    padding: 78px 10px 30px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    white-space: normal;
+    text-align: left;
+    transform: translateX(-50%);
+    scrollbar-width: thin;
+    scrollbar-color: rgba(177, 161, 255, .65) transparent;
+    counter-reset: wmb-comic-panel;
+}
+
+body.wmb-ui-optimized #splash::before {
+    position: absolute;
+    left: 50%;
+    z-index: 20;
+    width: max-content;
+    max-width: calc(100% - 24px);
+    box-sizing: border-box;
+    transform: translateX(-50%);
+    pointer-events: none;
+    text-align: center;
+}
+
+body.wmb-ui-optimized #splash::before {
+    content: "星杯传说";
+    top: 18px;
+    padding: 5px 22px 7px;
+    border: 2px solid var(--wmb-comic-paper);
+    background: rgba(15, 19, 46, .94);
+    box-shadow: 4px 4px 0 rgba(133, 112, 220, .92);
+    color: #fff;
+    font-size: clamp(22px, 2.3vw, 32px);
+    font-weight: 900;
+    letter-spacing: .25em;
+    line-height: 1.15;
+    text-shadow: 2px 2px 0 #66539d;
+    clip-path: polygon(5px 0, 100% 0, calc(100% - 5px) 100%, 0 100%);
+}
+
+body.wmb-ui-optimized #splash > div {
+    position: relative;
+    top: auto;
+    width: auto;
+    height: auto;
+    min-width: 0;
+    min-height: 0;
+    margin: 0;
+    grid-column: span 2;
+    grid-row: span 2;
+    overflow: hidden;
+    border: 3px solid var(--wmb-comic-paper);
+    border-radius: 2px;
+    outline: 1px solid rgba(255, 255, 255, .78);
+    outline-offset: -7px;
+    background: var(--wmb-comic-ink);
+    box-shadow: 0 0 0 2px rgba(12, 15, 35, .96), 5px 6px 0 rgba(128, 105, 201, .92), 0 14px 26px rgba(6, 8, 24, .4);
+    isolation: isolate;
+    counter-increment: wmb-comic-panel;
+    transition: transform .24s ease, rotate .24s ease, box-shadow .24s ease, opacity .3s ease;
+}
+
+body.wmb-ui-optimized #splash > div:nth-child(6n + 1) {
+    grid-column: span 4;
+    grid-row: span 3;
+}
+
+body.wmb-ui-optimized #splash > div:nth-child(6n + 5) {
+    grid-column: span 4;
+    grid-row: span 2;
+}
+
+body.wmb-ui-optimized #splash > div:nth-child(6n + 1) { rotate: -.35deg; }
+body.wmb-ui-optimized #splash > div:nth-child(6n + 3) { rotate: .3deg; }
+body.wmb-ui-optimized #splash > div:nth-child(6n + 5) { rotate: -.25deg; }
+
+body.wmb-ui-optimized #splash > div > .avatar {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    width: 100%;
+    height: 100%;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    filter: saturate(.9) contrast(1.04);
+    transition: transform .35s ease, filter .35s ease;
+}
+
+body.wmb-ui-optimized #splash > div[link="illustration"] > .avatar {
+    background-position: center 28% !important;
+}
+
+body.wmb-ui-optimized #splash > div[link="nightmarePve"] > .avatar {
+    background-position: center 43% !important;
+}
+
+body.wmb-ui-optimized #splash > div::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background-image:
+        linear-gradient(0deg, rgba(10, 12, 31, .9) 0%, rgba(12, 14, 35, .48) 28%, transparent 68%),
+        radial-gradient(rgba(239, 235, 255, .18) .7px, transparent .9px);
+    background-size: 100% 100%, 8px 8px;
+    background-position: center, top right;
+}
+
+body.wmb-ui-optimized #splash > div::before {
+    content: counter(wmb-comic-panel, decimal-leading-zero);
+    position: absolute;
+    top: 9px;
+    left: 9px;
+    z-index: 3;
+    min-width: 32px;
+    padding: 3px 6px 2px;
+    border: 2px solid var(--wmb-comic-ink);
+    background: var(--wmb-comic-paper);
+    box-shadow: 2px 2px 0 rgba(137, 117, 218, .95);
+    color: #201a3b;
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    font-weight: 900;
+    line-height: 1;
+    text-align: center;
+    transform: rotate(-4deg);
+}
+
+body.wmb-ui-optimized #splash > div > .splashtext {
+    position: absolute;
+    right: auto;
+    bottom: 13px;
+    left: -3px;
+    z-index: 4;
+    display: block;
+    box-sizing: border-box;
+    max-width: calc(100% - 8px);
+    padding: 7px 14px 8px 12px;
+    border: 2px solid var(--wmb-comic-paper);
+    background: rgba(15, 19, 46, .92);
+    box-shadow: 3px 4px 0 rgba(111, 91, 181, .96);
+    color: #fff;
+    font-family: inherit;
+    font-size: clamp(16px, 1.8vw, 24px);
+    font-weight: 900;
+    letter-spacing: .04em;
+    line-height: 1.15;
+    text-align: center;
+    text-shadow: 2px 2px 0 rgba(73, 57, 124, .95);
+    white-space: normal;
+    writing-mode: horizontal-tb;
+    -webkit-writing-mode: horizontal-tb;
+    overflow-wrap: anywhere;
+    clip-path: polygon(0 0, calc(100% - 9px) 0, 100% 100%, 7px 100%);
+}
+
+body.wmb-ui-optimized #splash:not(.touch) > div:hover:not(.clicked) {
+    z-index: 5;
+    transform: translateY(-5px) scale(1.025);
+    rotate: 0deg;
+    box-shadow: 0 0 0 2px rgba(12, 15, 35, .98), 7px 9px 0 rgba(153, 128, 232, .98), 0 18px 30px rgba(6, 8, 24, .5);
+}
+
+body.wmb-ui-optimized #splash:not(.touch) > div:hover:not(.clicked) > .avatar,
+body.wmb-ui-optimized #splash > div.glow > .avatar {
+    transform: scale(1.035);
+    filter: saturate(1.04) contrast(1.05);
+}
+
+body.wmb-ui-optimized #splash > div.clicked {
+    transform: translateY(-8px) scale(1.06);
+    rotate: 0deg;
+    opacity: 0;
+}
+
+@media (max-width: 900px) {
+    body.wmb-ui-optimized #splash {
+        width: calc(100vw - 32px);
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        grid-auto-rows: clamp(64px, 10vh, 100px);
+        gap: 11px;
+        padding-top: 72px;
+    }
+
+    body.wmb-ui-optimized #splash > div:nth-child(6n + 1) { grid-column: span 4; }
+    body.wmb-ui-optimized #splash > div:nth-child(6n + 5) { grid-column: span 2; }
+}
+
+@media (max-width: 560px) {
+    body.wmb-ui-optimized #splash {
+        width: calc(100vw - 20px);
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-auto-rows: clamp(76px, 13vh, 110px);
+        gap: 10px;
+        padding: 65px 4px 24px;
+    }
+
+    body.wmb-ui-optimized #splash::before { top: 12px; font-size: 22px; }
+    body.wmb-ui-optimized #splash > div { grid-column: span 1; }
+    body.wmb-ui-optimized #splash > div:nth-child(6n + 1) { grid-column: span 2; grid-row: span 2; }
+    body.wmb-ui-optimized #splash > div:nth-child(6n + 5) { grid-column: span 1; grid-row: span 2; }
+    body.wmb-ui-optimized #splash > div > .splashtext { bottom: 10px; padding: 6px 9px 7px; font-size: clamp(15px, 4vw, 19px); }
+    body.wmb-ui-optimized #splash > div::before { top: 7px; left: 7px; min-width: 27px; font-size: 10px; }
+}
+
+/* Give the online room more visual weight and compact the tutorial panel. */
+body.wmb-ui-optimized #splash > div[link="connect"] {
+    grid-column: span 4;
+    grid-row: span 2;
+}
+
+body.wmb-ui-optimized #splash > div[link="tutorial"] {
+    grid-column: span 2;
+    grid-row: span 2;
+}
+
+@media (max-width: 560px) {
+    body.wmb-ui-optimized #splash > div[link="connect"] { grid-column: span 2; grid-row: span 2; }
+    body.wmb-ui-optimized #splash > div[link="tutorial"] { grid-column: span 1; grid-row: span 2; }
+}
+
+/* Arrange the desktop splash as three aligned comic-page bands. */
+@media (min-width: 901px) {
+    body.wmb-ui-optimized #splash { grid-template-columns: repeat(10, minmax(0, 1fr)); }
+    body.wmb-ui-optimized #splash > div[link="xingBei"] { grid-column: 1 / span 4; grid-row: 1 / span 3; }
+    body.wmb-ui-optimized #splash > div[link="boss"] { grid-column: 5 / span 2; grid-row: 1 / span 3; }
+    body.wmb-ui-optimized #splash > div[link="connect"] { grid-column: 7 / span 4; grid-row: 1 / span 3; }
+    body.wmb-ui-optimized #splash > div[link="offlineChoose"] { grid-column: 2 / span 2; grid-row: 4 / span 2; }
+    body.wmb-ui-optimized #splash > div[link="illustration"] { grid-column: 4 / span 4; grid-row: 4 / span 2; }
+    body.wmb-ui-optimized #splash > div[link="leaderboard"] { grid-column: 8 / span 2; grid-row: 4 / span 2; }
+    body.wmb-ui-optimized #splash > div[link="tutorial"] { grid-column: 4 / span 2; grid-row: 6 / span 2; }
+    body.wmb-ui-optimized #splash > div[link="nightmarePve"] { grid-column: 6 / span 2; grid-row: 6 / span 2; }
+}

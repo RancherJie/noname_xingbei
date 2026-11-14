@@ -1,0 +1,540 @@
+{
+  "date": "2026-10-18",
+  "scope": "仅统一24张现有Q版肖像的发布像素尺寸",
+  "backup_directory": "C:\\Users\\x1334\\.codex\\backups\\star-cow-history-clean-20261018\\portrait-size-normalization",
+  "changed_images": 24,
+  "other_116_chibi_unchanged": true,
+  "all_other_images_unchanged": true,
+  "before_bytes": 44832558,
+  "after_bytes": 11921314,
+  "files": [
+    {
+      "path": "十周年-噩梦人机/image/character/chibi/default/chuanJiaoShi.png",
+      "before_size": [
+        1099,
+        1431
+      ],
+      "after_size": [
+        530,
+        690
+      ],
+      "source_crop_box": [
+        0.0,
+        0.11320754716984993,
+        1099.0,
+        1430.8867924528302
+      ],
+      "method": "Lanczos aspect-preserving downscale with sub-2-pixel centered source-edge crop",
+      "before_bytes": 1788244,
+      "after_bytes": 471572,
+      "before_sha256": "b74ef5a434e6dc7a48ff27a8563c176aed229e282768f3a8a4560927b505ea38",
+      "after_sha256": "b1043d3b35089b8421102ed0dd58db1ec159f1ee79b131ad4c1ddfa706ef43f1"
+    },
+    {
+      "path": "十周年-噩梦人机/image/character/chibi/default/jingLingSheShou.png",
+      "before_size": [
+        1099,
+        1431
+      ],
+      "after_size": [
+        530,
+        690
+      ],
+      "source_crop_box": [
+        0.0,
+        0.11320754716984993,
+        1099.0,
+        1430.8867924528302
+      ],
+      "method": "Lanczos aspect-preserving downscale with sub-2-pixel centered source-edge crop",
+      "before_bytes": 1750842,
+      "after_bytes": 460459,
+      "before_sha256": "64f5bcd38107e4b511282d24cfa15bad126f3ff0821f285dd7a4a21d9aa6ae54",
+      "after_sha256": "0775f486ff301a3d16dfaf5b1969a33afb879d5e12f0bc7d9d77f8d08f98704c"
+    },
+    {
+      "path": "十周年-噩梦人机/image/character/chibi/default/lingXiZhiChao.png",
+      "before_size": [
+        1099,
+        1431
+      ],
+      "after_size": [
+        530,
+        690
+      ],
+      "source_crop_box": [
+        0.0,
+        0.11320754716984993,
+        1099.0,
+        1430.8867924528302
+      ],
+      "method": "Lanczos aspect-preserving downscale with sub-2-pixel centered source-edge crop",
+      "before_bytes": 1805812,
+      "after_bytes": 480589,
+      "before_sha256": "49b9b781126c276daabec2183c05a01ba6aad0835f17e16e0a38e1b09bd10745",
+      "after_sha256": "cfcf8d3fd5680b32dbf65516bc3ad8c656711a126eb84acf43e05e61f03a1ba8"
+    },
+    {
+      "path": "十周年-噩梦人机/image/character/chibi/default/nvWuShen.png",
+      "before_size": [
+        1099,
+        1431
+      ],
+      "after_size": [
+        530,
+        690
+      ],
+      "source_crop_box": [
+        0.0,
+        0.11320754716984993,
+        1099.0,
+        1430.8867924528302
+      ],
+      "method": "Lanczos aspect-preserving downscale with sub-2-pixel centered source-edge crop",
+      "before_bytes": 1731850,
+      "after_bytes": 456748,
+      "before_sha256": "cbe8164b872532aa2dc371eda9e0cc2c495f4f456005731a39c46d764387fd90",
+      "after_sha256": "a9acbf30601d4ae2ca531cd1b717b393bab5ffc76cdf213edf3804f0de3dc23d"
+    },
+    {
+      "path": "十周年-噩梦人机/image/character/chibi/default/sheng_zhongCaiZhe.png",
+      "before_size": [
+        1099,
+        1431
+      ],
+      "after_size": [
+        530,
+        690
+      ],
+      "source_crop_box": [
+        0.0,
+        0.11320754716984993,
+        1099.0,
+        1430.8867924528302
+      ],
+      "method": "Lanczos aspect-preserving downscale with sub-2-pixel centered source-edge crop",
+      "before_bytes": 1879727,
+      "after_bytes": 505937,
+      "before_sha256": "fbf718b5b729119e6d67f05735f7b9cceff8daa27537123c30c15466b7271c64",
+      "after_sha256": "420939d53abd66e8f91acb00c2d1e66ab93007a0fb803b40931c6177d16ac18c"
+    },
+    {
+      "path": "十周年-噩梦人机/image/character/chibi/default/shengDianQiShi.png",
+      "before_size": [
+        1099,
+        1431
+      ],
+      "after_size": [
+        530,
+        690
+      ],
+      "source_crop_box": [
+        0.0,
+        0.11320754716984993,
+        1099.0,
+        1430.8867924528302
+      ],
+      "method": "Lanczos aspect-preserving downscale with sub-2-pixel centered source-edge crop",
+      "before_bytes": 1880558,
+      "after_bytes": 504229,
+      "before_sha256": "e8b146872db14e1093de53390dc379f9a133c6a8409ecec956a360e053ca0d8d",
+      "after_sha256": "41d49b8de6f761c57dedaa9bd2f436a61b5e0e9b89fc9724fd5690b0015113ae"
+    },
+    {
+      "path": "十周年-噩梦人机/image/character/chibi/default/shengQiangQiShi.png",
+      "before_size": [
+        1099,
+        1431
+      ],
+      "after_size": [
+        530,
+        690
+      ],
+      "source_crop_box": [
+        0.0,
+        0.11320754716984993,
+        1099.0,
+        1430.8867924528302
+      ],
+      "method": "Lanczos aspect-preserving downscale with sub-2-pixel centered source-edge crop",
+      "before_bytes": 1726073,
+      "after_bytes": 461293,
+      "before_sha256": "c05132190e6725dd799bfa3abeefbde8c3a5289445a72f69568e4870a4784140",
+      "after_sha256": "67cdfcdb38c45a4ee5aa766abef369d913be4a69e0fe013b558db4fb83aaf2a8"
+    },
+    {
+      "path": "十周年-噩梦人机/image/character/chibi/default/shengTingJianChaShi.png",
+      "before_size": [
+        1099,
+        1431
+      ],
+      "after_size": [
+        530,
+        690
+      ],
+      "source_crop_box": [
+        0.0,
+        0.11320754716984993,
+        1099.0,
+        1430.8867924528302
+      ],
+      "method": "Lanczos aspect-preserving downscale with sub-2-pixel centered source-edge crop",
+      "before_bytes": 1780772,
+      "after_bytes": 453320,
+      "before_sha256": "269c6dbe5d2adfec64ec1c4412a62de9050c208d5a0a3fd3f16c52e1c983e133",
+      "after_sha256": "969a877169cd6799684430c473b92806cc419d2d724263c85593a9575f9e1cfa"
+    },
+    {
+      "path": "十周年-噩梦人机/image/character/chibi/default/tianShi.png",
+      "before_size": [
+        1099,
+        1431
+      ],
+      "after_size": [
+        530,
+        690
+      ],
+      "source_crop_box": [
+        0.0,
+        0.11320754716984993,
+        1099.0,
+        1430.8867924528302
+      ],
+      "method": "Lanczos aspect-preserving downscale with sub-2-pixel centered source-edge crop",
+      "before_bytes": 1836274,
+      "after_bytes": 495748,
+      "before_sha256": "5174176517941d703e2188ef0a463897709199262ce004bac656f244ef68d77e",
+      "after_sha256": "f7b271315fdc878f7dea3e62744d6d06245d950e517dda3a0313ffd617b20c17"
+    },
+    {
+      "path": "十周年-噩梦人机/image/character/chibi/default/xingZhuiNvWu.png",
+      "before_size": [
+        1100,
+        1430
+      ],
+      "after_size": [
+        530,
+        690
+      ],
+      "source_crop_box": [
+        0.7971014492753739,
+        0.0,
+        1099.2028985507245,
+        1430.0
+      ],
+      "method": "Lanczos aspect-preserving downscale with sub-2-pixel centered source-edge crop",
+      "before_bytes": 1769120,
+      "after_bytes": 467972,
+      "before_sha256": "2f42009be5ff860805d30928ddec665a7eb20e63b0d3bf75cde274ce2671152e",
+      "after_sha256": "898c2d61a9820f4cf7cc5a01faab17522415871d697369b824006d39a2fa9ac1"
+    },
+    {
+      "path": "十周年-噩梦人机/image/character/chibi/default/yingLingRenXing.png",
+      "before_size": [
+        1099,
+        1431
+      ],
+      "after_size": [
+        530,
+        690
+      ],
+      "source_crop_box": [
+        0.0,
+        0.11320754716984993,
+        1099.0,
+        1430.8867924528302
+      ],
+      "method": "Lanczos aspect-preserving downscale with sub-2-pixel centered source-edge crop",
+      "before_bytes": 1904439,
+      "after_bytes": 510365,
+      "before_sha256": "c32228bc0117fa4ad42ac5fc7e1adf5ab9702bbca98d1966468ab16b9ffa91cc",
+      "after_sha256": "90ca3807dd5988f77cc67727e8eb7e8066d26b295dd64689c857b0284884f473"
+    },
+    {
+      "path": "十周年-噩梦人机/image/character/chibi/default/yuanChuZhiGong.png",
+      "before_size": [
+        1099,
+        1431
+      ],
+      "after_size": [
+        530,
+        690
+      ],
+      "source_crop_box": [
+        0.0,
+        0.11320754716984993,
+        1099.0,
+        1430.8867924528302
+      ],
+      "method": "Lanczos aspect-preserving downscale with sub-2-pixel centered source-edge crop",
+      "before_bytes": 1906233,
+      "after_bytes": 515514,
+      "before_sha256": "4e5bb28fd55b6c24acc5635e195540bb31e386e230ab4b18e9a8957a70546f32",
+      "after_sha256": "8540ac2ae63403f1cec81f9ccec2ac9498f095f61d0019bca605d2d664edfdf2"
+    },
+    {
+      "path": "十周年-噩梦人机/image/character/chibi/nightmare/chuanJiaoShi.png",
+      "before_size": [
+        1099,
+        1431
+      ],
+      "after_size": [
+        530,
+        690
+      ],
+      "source_crop_box": [
+        0.0,
+        0.11320754716984993,
+        1099.0,
+        1430.8867924528302
+      ],
+      "method": "Lanczos aspect-preserving downscale with sub-2-pixel centered source-edge crop",
+      "before_bytes": 1905082,
+      "after_bytes": 502771,
+      "before_sha256": "24e4fe28224244bb0b72187fba23f3c250569e91a64045b27e0c85db315745ca",
+      "after_sha256": "15b83467fc4c5184936da195e7ff8440b3a70c97f3b6008d1903f332079f397e"
+    },
+    {
+      "path": "十周年-噩梦人机/image/character/chibi/nightmare/jingLingSheShou.png",
+      "before_size": [
+        1099,
+        1431
+      ],
+      "after_size": [
+        530,
+        690
+      ],
+      "source_crop_box": [
+        0.0,
+        0.11320754716984993,
+        1099.0,
+        1430.8867924528302
+      ],
+      "method": "Lanczos aspect-preserving downscale with sub-2-pixel centered source-edge crop",
+      "before_bytes": 1871994,
+      "after_bytes": 487678,
+      "before_sha256": "55a5c3b556896423d533f17da906065d165f4f3c295ff8053d65234a721ecdbb",
+      "after_sha256": "88b8f159724bbae6d4d27280a7eb04c275b667e7292c5a1f591337d1706045f8"
+    },
+    {
+      "path": "十周年-噩梦人机/image/character/chibi/nightmare/lingXiZhiChao.png",
+      "before_size": [
+        1100,
+        1430
+      ],
+      "after_size": [
+        530,
+        690
+      ],
+      "source_crop_box": [
+        0.7971014492753739,
+        0.0,
+        1099.2028985507245,
+        1430.0
+      ],
+      "method": "Lanczos aspect-preserving downscale with sub-2-pixel centered source-edge crop",
+      "before_bytes": 1925120,
+      "after_bytes": 519903,
+      "before_sha256": "939418a4b09af11595ec8fd9c0cdc0066c8100ee1d89c3e4b741d5b559ff32a5",
+      "after_sha256": "b33b6739a9be59fce25e84bc97f7f301a7bd155d9b9bdff9276c41777cb96e06"
+    },
+    {
+      "path": "十周年-噩梦人机/image/character/chibi/nightmare/nvWuShen.png",
+      "before_size": [
+        1099,
+        1431
+      ],
+      "after_size": [
+        530,
+        690
+      ],
+      "source_crop_box": [
+        0.0,
+        0.11320754716984993,
+        1099.0,
+        1430.8867924528302
+      ],
+      "method": "Lanczos aspect-preserving downscale with sub-2-pixel centered source-edge crop",
+      "before_bytes": 1761716,
+      "after_bytes": 460790,
+      "before_sha256": "fa28e9a58aa7508b225acdffa02bf6569870c22a92535ba6680ffa48b5b1a191",
+      "after_sha256": "d28b9823b09bdb9b495584749fa4e3de43f39c33e9a3430bcc95072f8edf97b0"
+    },
+    {
+      "path": "十周年-噩梦人机/image/character/chibi/nightmare/sheng_zhongCaiZhe.png",
+      "before_size": [
+        1099,
+        1431
+      ],
+      "after_size": [
+        530,
+        690
+      ],
+      "source_crop_box": [
+        0.0,
+        0.11320754716984993,
+        1099.0,
+        1430.8867924528302
+      ],
+      "method": "Lanczos aspect-preserving downscale with sub-2-pixel centered source-edge crop",
+      "before_bytes": 2030568,
+      "after_bytes": 535731,
+      "before_sha256": "31cd38b07293c1718d98b5dd6522399cd1a2ddf32704cef692604bce0c6b1e8f",
+      "after_sha256": "7838c748005604731b205966d4a34ee2b2644461f63acaebfecb205c63c4f9bd"
+    },
+    {
+      "path": "十周年-噩梦人机/image/character/chibi/nightmare/shengDianQiShi.png",
+      "before_size": [
+        1099,
+        1431
+      ],
+      "after_size": [
+        530,
+        690
+      ],
+      "source_crop_box": [
+        0.0,
+        0.11320754716984993,
+        1099.0,
+        1430.8867924528302
+      ],
+      "method": "Lanczos aspect-preserving downscale with sub-2-pixel centered source-edge crop",
+      "before_bytes": 2043288,
+      "after_bytes": 555488,
+      "before_sha256": "2c09622c4ad20354a31332ddf5d01299dcb8def8593f6e9ba5dbc0e49dd84655",
+      "after_sha256": "82193ad75453e28d3be4dfe85c718393eb69a29ea30d6ba917a6c2c602cdc1cc"
+    },
+    {
+      "path": "十周年-噩梦人机/image/character/chibi/nightmare/shengQiangQiShi.png",
+      "before_size": [
+        1100,
+        1430
+      ],
+      "after_size": [
+        530,
+        690
+      ],
+      "source_crop_box": [
+        0.7971014492753739,
+        0.0,
+        1099.2028985507245,
+        1430.0
+      ],
+      "method": "Lanczos aspect-preserving downscale with sub-2-pixel centered source-edge crop",
+      "before_bytes": 1781788,
+      "after_bytes": 468542,
+      "before_sha256": "0bd570d0e8234d1d7b549d05acdb331e507ee862bc89f0e75dc223b686b8ae05",
+      "after_sha256": "f0a434a1a7bb87e70786a94c2764a40e000e9aefb7e90f401d9581462f8358cd"
+    },
+    {
+      "path": "十周年-噩梦人机/image/character/chibi/nightmare/shengTingJianChaShi.png",
+      "before_size": [
+        1100,
+        1430
+      ],
+      "after_size": [
+        530,
+        690
+      ],
+      "source_crop_box": [
+        0.7971014492753739,
+        0.0,
+        1099.2028985507245,
+        1430.0
+      ],
+      "method": "Lanczos aspect-preserving downscale with sub-2-pixel centered source-edge crop",
+      "before_bytes": 1818664,
+      "after_bytes": 470864,
+      "before_sha256": "8f143621708a38172a8341c2e3c651faa62a1aa2005a2b2a76d95dd7c255a4e7",
+      "after_sha256": "d2381bae0007adc1ec15a3c0f255131d4f203eddc7736b7c552bf7ac93764518"
+    },
+    {
+      "path": "十周年-噩梦人机/image/character/chibi/nightmare/tianShi.png",
+      "before_size": [
+        1099,
+        1431
+      ],
+      "after_size": [
+        530,
+        690
+      ],
+      "source_crop_box": [
+        0.0,
+        0.11320754716984993,
+        1099.0,
+        1430.8867924528302
+      ],
+      "method": "Lanczos aspect-preserving downscale with sub-2-pixel centered source-edge crop",
+      "before_bytes": 2025952,
+      "after_bytes": 541365,
+      "before_sha256": "62647acab4ea0dbaa38cfdfa07c9c67b1fc7b102cdd44939e789f0453959aaf9",
+      "after_sha256": "303fb3eda111c45e75a4c120f7acb34e15b984390439ac7f11bc560c57e9f4ed"
+    },
+    {
+      "path": "十周年-噩梦人机/image/character/chibi/nightmare/xingZhuiNvWu.png",
+      "before_size": [
+        1100,
+        1430
+      ],
+      "after_size": [
+        530,
+        690
+      ],
+      "source_crop_box": [
+        0.7971014492753739,
+        0.0,
+        1099.2028985507245,
+        1430.0
+      ],
+      "method": "Lanczos aspect-preserving downscale with sub-2-pixel centered source-edge crop",
+      "before_bytes": 1880172,
+      "after_bytes": 504459,
+      "before_sha256": "9d153719faf252dfc86c23351f856eb7f6057693998bf7fe19b6e76db9889714",
+      "after_sha256": "134a5c59b38d0781aa7bb54f9552798c0abd9dd4eb44142de1d7acc94cb65635"
+    },
+    {
+      "path": "十周年-噩梦人机/image/character/chibi/nightmare/yingLingRenXing.png",
+      "before_size": [
+        1100,
+        1430
+      ],
+      "after_size": [
+        530,
+        690
+      ],
+      "source_crop_box": [
+        0.7971014492753739,
+        0.0,
+        1099.2028985507245,
+        1430.0
+      ],
+      "method": "Lanczos aspect-preserving downscale with sub-2-pixel centered source-edge crop",
+      "before_bytes": 2033247,
+      "after_bytes": 547619,
+      "before_sha256": "1ab2133f21da7c960fa884ccf453928e8c05ac883650453165743c1e3db6d415",
+      "after_sha256": "1ba8a9e2be7db028b7413d15b0e462edf3bb0812b2e51942c6001fd81a0e17ec"
+    },
+    {
+      "path": "十周年-噩梦人机/image/character/chibi/nightmare/yuanChuZhiGong.png",
+      "before_size": [
+        1099,
+        1431
+      ],
+      "after_size": [
+        530,
+        690
+      ],
+      "source_crop_box": [
+        0.0,
+        0.11320754716984993,
+        1099.0,
+        1430.8867924528302
+      ],
+      "method": "Lanczos aspect-preserving downscale with sub-2-pixel centered source-edge crop",
+      "before_bytes": 1995023,
+      "after_bytes": 542358,
+      "before_sha256": "17c276416208756af2f5f6fefb3d8ad9143f3d1a66932579755a75dbb56948f6",
+      "after_sha256": "1af5d0a8d882e685a26ae17d85841e97f18a73161426cf227502cdec38abdc21"
+    }
+  ]
+}
