@@ -4609,8 +4609,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             return player.hasZhiShiWu('mengZhao_hongLeiLieHuo')||player.hasZhiShiWu('mengZhao_diDongNuTao');
                         },
                         content:async function (event,trigger,player){
-                            if(player.hasZhiShiWu('mengZhao_hongLeiLieHuo')) await player.removeZhiShiWu('mengZhao_hongLeiLieHuo');
-                            if(player.hasZhiShiWu('mengZhao_diDongNuTao')) await player.removeZhiShiWu('mengZhao_diDongNuTao');
+                            if(trigger.name=='mengZhao_hongLeiLieHuo') await player.removeZhiShiWu('mengZhao_hongLeiLieHuo');
+                            if(trigger.name=='mengZhao_diDongNuTao') await player.removeZhiShiWu('mengZhao_diDongNuTao');
                         }
                     }
                 },
