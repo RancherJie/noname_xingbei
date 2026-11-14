@@ -100,7 +100,7 @@ function generateImportFunction(type, pathParser) {
 			}
 			return;
 		}
-		const modeContent = await import(getImportPath());
+		const modeContent = await import(path);
 		if (!modeContent.type) return;
 		if (modeContent.type !== type) throw new Error(`Loaded Content doesn't conform to "${type}" but "${modeContent.type}".`);
 		// @ts-ignore

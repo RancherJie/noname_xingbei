@@ -614,3 +614,222 @@ body.wmb-ui-optimized .player > .hp.wmb-treatment-slots:not(.text):not(.actcount
     transform: none !important;
     opacity: .6 !important;
 }
+
+/* Comic-panel treatment for the mode selection screen. */
+body.wmb-ui-optimized #splash {
+    --wmb-comic-ink: #11152d;
+    --wmb-comic-paper: #f3efff;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: min(1180px, calc(100vw - 48px));
+    height: 100%;
+    box-sizing: border-box;
+    display: grid;
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+    grid-auto-rows: clamp(72px, 9vh, 105px);
+    grid-auto-flow: row;
+    align-content: start;
+    justify-content: center;
+    gap: clamp(10px, 1.15vw, 16px);
+    padding: 78px 10px 30px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    white-space: normal;
+    text-align: left;
+    transform: translateX(-50%);
+    scrollbar-width: thin;
+    scrollbar-color: rgba(177, 161, 255, .65) transparent;
+    counter-reset: wmb-comic-panel;
+}
+
+body.wmb-ui-optimized #splash::before {
+    position: absolute;
+    left: 50%;
+    z-index: 20;
+    width: max-content;
+    max-width: calc(100% - 24px);
+    box-sizing: border-box;
+    transform: translateX(-50%);
+    pointer-events: none;
+    text-align: center;
+}
+
+body.wmb-ui-optimized #splash::before {
+    content: "星杯传说";
+    top: 18px;
+    padding: 5px 22px 7px;
+    border: 2px solid var(--wmb-comic-paper);
+    background: rgba(15, 19, 46, .94);
+    box-shadow: 4px 4px 0 rgba(133, 112, 220, .92);
+    color: #fff;
+    font-size: clamp(22px, 2.3vw, 32px);
+    font-weight: 900;
+    letter-spacing: .25em;
+    line-height: 1.15;
+    text-shadow: 2px 2px 0 #66539d;
+    clip-path: polygon(5px 0, 100% 0, calc(100% - 5px) 100%, 0 100%);
+}
+
+body.wmb-ui-optimized #splash > div {
+    position: relative;
+    top: auto;
+    width: auto;
+    height: auto;
+    min-width: 0;
+    min-height: 0;
+    margin: 0;
+    grid-column: span 2;
+    grid-row: span 2;
+    overflow: hidden;
+    border: 3px solid var(--wmb-comic-paper);
+    border-radius: 2px;
+    outline: 1px solid rgba(255, 255, 255, .78);
+    outline-offset: -7px;
+    background: var(--wmb-comic-ink);
+    box-shadow: 0 0 0 2px rgba(12, 15, 35, .96), 5px 6px 0 rgba(128, 105, 201, .92), 0 14px 26px rgba(6, 8, 24, .4);
+    isolation: isolate;
+    counter-increment: wmb-comic-panel;
+    transition: transform .24s ease, rotate .24s ease, box-shadow .24s ease, opacity .3s ease;
+}
+
+body.wmb-ui-optimized #splash > div:nth-child(6n + 1) {
+    grid-column: span 4;
+    grid-row: span 3;
+}
+
+body.wmb-ui-optimized #splash > div:nth-child(6n + 5) {
+    grid-column: span 4;
+    grid-row: span 2;
+}
+
+body.wmb-ui-optimized #splash > div:nth-child(6n + 1) { rotate: -.35deg; }
+body.wmb-ui-optimized #splash > div:nth-child(6n + 3) { rotate: .3deg; }
+body.wmb-ui-optimized #splash > div:nth-child(6n + 5) { rotate: -.25deg; }
+
+body.wmb-ui-optimized #splash > div > .avatar {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    width: 100%;
+    height: 100%;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    filter: saturate(.9) contrast(1.04);
+    transition: transform .35s ease, filter .35s ease;
+}
+
+body.wmb-ui-optimized #splash > div[link="illustration"] > .avatar {
+    background-position: center 28% !important;
+}
+
+body.wmb-ui-optimized #splash > div::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background-image:
+        linear-gradient(0deg, rgba(10, 12, 31, .9) 0%, rgba(12, 14, 35, .48) 28%, transparent 68%),
+        radial-gradient(rgba(239, 235, 255, .18) .7px, transparent .9px);
+    background-size: 100% 100%, 8px 8px;
+    background-position: center, top right;
+}
+
+body.wmb-ui-optimized #splash > div::before {
+    content: counter(wmb-comic-panel, decimal-leading-zero);
+    position: absolute;
+    top: 9px;
+    left: 9px;
+    z-index: 3;
+    min-width: 32px;
+    padding: 3px 6px 2px;
+    border: 2px solid var(--wmb-comic-ink);
+    background: var(--wmb-comic-paper);
+    box-shadow: 2px 2px 0 rgba(137, 117, 218, .95);
+    color: #201a3b;
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    font-weight: 900;
+    line-height: 1;
+    text-align: center;
+    transform: rotate(-4deg);
+}
+
+body.wmb-ui-optimized #splash > div > .splashtext {
+    position: absolute;
+    right: auto;
+    bottom: 13px;
+    left: -3px;
+    z-index: 4;
+    display: block;
+    box-sizing: border-box;
+    max-width: calc(100% - 8px);
+    padding: 7px 14px 8px 12px;
+    border: 2px solid var(--wmb-comic-paper);
+    background: rgba(15, 19, 46, .92);
+    box-shadow: 3px 4px 0 rgba(111, 91, 181, .96);
+    color: #fff;
+    font-family: inherit;
+    font-size: clamp(16px, 1.8vw, 24px);
+    font-weight: 900;
+    letter-spacing: .04em;
+    line-height: 1.15;
+    text-align: center;
+    text-shadow: 2px 2px 0 rgba(73, 57, 124, .95);
+    white-space: normal;
+    writing-mode: horizontal-tb;
+    -webkit-writing-mode: horizontal-tb;
+    overflow-wrap: anywhere;
+    clip-path: polygon(0 0, calc(100% - 9px) 0, 100% 100%, 7px 100%);
+}
+
+body.wmb-ui-optimized #splash:not(.touch) > div:hover:not(.clicked) {
+    z-index: 5;
+    transform: translateY(-5px) scale(1.025);
+    rotate: 0deg;
+    box-shadow: 0 0 0 2px rgba(12, 15, 35, .98), 7px 9px 0 rgba(153, 128, 232, .98), 0 18px 30px rgba(6, 8, 24, .5);
+}
+
+body.wmb-ui-optimized #splash:not(.touch) > div:hover:not(.clicked) > .avatar,
+body.wmb-ui-optimized #splash > div.glow > .avatar {
+    transform: scale(1.035);
+    filter: saturate(1.04) contrast(1.05);
+}
+
+body.wmb-ui-optimized #splash > div.clicked {
+    transform: translateY(-8px) scale(1.06);
+    rotate: 0deg;
+    opacity: 0;
+}
+
+@media (max-width: 900px) {
+    body.wmb-ui-optimized #splash {
+        width: calc(100vw - 32px);
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        grid-auto-rows: clamp(64px, 10vh, 100px);
+        gap: 11px;
+        padding-top: 72px;
+    }
+
+    body.wmb-ui-optimized #splash > div:nth-child(6n + 1) { grid-column: span 4; }
+    body.wmb-ui-optimized #splash > div:nth-child(6n + 5) { grid-column: span 2; }
+}
+
+@media (max-width: 560px) {
+    body.wmb-ui-optimized #splash {
+        width: calc(100vw - 20px);
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-auto-rows: clamp(76px, 13vh, 110px);
+        gap: 10px;
+        padding: 65px 4px 24px;
+    }
+
+    body.wmb-ui-optimized #splash::before { top: 12px; font-size: 22px; }
+    body.wmb-ui-optimized #splash > div { grid-column: span 1; }
+    body.wmb-ui-optimized #splash > div:nth-child(6n + 1) { grid-column: span 2; grid-row: span 2; }
+    body.wmb-ui-optimized #splash > div:nth-child(6n + 5) { grid-column: span 1; grid-row: span 2; }
+    body.wmb-ui-optimized #splash > div > .splashtext { bottom: 10px; padding: 6px 9px 7px; font-size: clamp(15px, 4vw, 19px); }
+    body.wmb-ui-optimized #splash > div::before { top: 7px; left: 7px; min-width: 27px; font-size: 10px; }
+}
