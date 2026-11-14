@@ -871,6 +871,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
         if (!body) return false;
         if (!isCustomTheme()) return false;
         toggleClass(body, "wmb-ui-waterbear", isWaterbearTheme());
+        toggleClass(body, "wmb-ui-separate-energy-markers", !!lib.config.separateEnergyAndMarkers);
         toggleClass(body, "wmb-ui-no-motion", !configValue("motion", true));
         if (isWaterbearTheme()) return true;
         body.classList.add("wmb-ui-optimized");
@@ -1304,7 +1305,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
         if (!isCustomTheme()) return;
         if (document.querySelector('link[data-wmb-ui-style="base"]')) return;
         var styleRoot = lib.assetURL + "extension/" + extensionName + "/";
-        var styles = [["extension.css?rev=2.23", "base"]];
+        var styles = [["extension.css?rev=2.24", "base"]];
         if (currentTheme() === "starry") styles.push(["starry.css?rev=2.60", "theme"]);
         styles.forEach(function (item) {
             var style = document.createElement("link");
@@ -1317,7 +1318,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 
     return {
         name: extensionName,
-        version: "2.60",
+        version: "2.61",
         editable: false,
         precontent: function () {
             migrateStarryThemeDefault();
@@ -1399,7 +1400,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             author: "蒙牛 / Codex",
             diskURL: "",
             forumURL: "",
-            version: "2.59"
+            version: "2.61"
         },
         files: {
             character: [],
