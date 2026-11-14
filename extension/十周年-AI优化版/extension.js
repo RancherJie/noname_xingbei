@@ -381,9 +381,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             if (!attitude) attitude = target.side == player.side ? 1 : -1;
             return value * (attitude > 0 ? 1 : -1);
         };
-        var skillId = Object.keys(lib.skill).find(function(id) { return lib.skill[id] === skill; });
-        if (skillId) skill.ai2 = new Function('target',
-            'return lib.skill[' + JSON.stringify(skillId) + '].onlinePhysicalCostScore(target);');
+        skill.ai2 = skill.onlinePhysicalCostScore;
     }
 
     function patchPhysicalCostTargetAi() {
@@ -3064,8 +3062,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 
                 return targetScore(_status.event.player, target, data.damage, name, data.suit);
             };
-            skill.ai2 = new Function('target',
-                'return lib.skill[' + JSON.stringify(name) + '].onlineElementTargetScore(target);');
+            skill.ai2 = skill.onlineElementTargetScore;
         });
 
         var moonlight = lib.skill && lib.skill.yueGuang;
@@ -3610,7 +3607,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
         }
     }
 
-    function patchLowHandActionSafety() {
+    function patchLowHandActionSafety(helper) {
         var speech = lib.skill && lib.skill.yanLingShu;
         if (!speech || !markPatched(speech, "lowHandReserve")) return;
         speech.ai = speech.ai || {};
@@ -7473,7 +7470,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
         patchYongZhe();
         patchShengGong(helper);
         patchProactiveDrawSkills(helper);
-        patchLowHandActionSafety();
+        patchLowHandActionSafety(helper);
         patchShenMiXueZheActionChain(helper);
         patchResidualChoiceSafety(helper);
         patchFengZhiJianSheng(helper);
@@ -7496,7 +7493,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 
     return {
         name: extensionName,
-        version: "1.9",
+        version: "1.10",
         editable: false,
         arenaReady: function () {
             applyShiZhouNianAiPatch();
