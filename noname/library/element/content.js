@@ -4208,6 +4208,8 @@ export const Content = {
 			player.getStat().isMe = true;
 		}
 		'step 2';
+		event.trigger("phaseSkip");
+		'step 3';
 		if(player==game.me){
 			game.playAudio('effect', 'phaseStart');	
 		}else{
@@ -4216,10 +4218,10 @@ export const Content = {
 			});
 		}
 		event.trigger("phaseBefore");
-		'step 3';
+		'step 4';
 		//回合开始后
 		event.trigger("phaseBeforeStart");//addTempSkill删除技能默认时机
-		"step 4";
+		"step 5";
 		//规则集中的“回合开始后⑥”，更新“当前回合角色”
 		while (ui.dialogs.length) {
 			ui.dialogs[0].close();
@@ -4256,19 +4258,19 @@ export const Content = {
 			game.addVideo("destroyLand");
 			ui.land.destroy();
 		}
-		"step 4";
-		event.trigger("phaseBegin");
-		"step 5";
-		player.xingDong();
 		"step 6";
+		event.trigger("phaseBegin");
+		"step 7";
+		player.xingDong();
+		"step 8";
 		//回合结束前
 		event.trigger("phaseEndBefore");
-		'step 7';
+		'step 9';
 		event.trigger("phaseEnd");
-		"step 8";
+		"step 10";
 		//回合结束后
 		event.trigger("phaseAfter");//addTempSkill删除技能默认时机
-		"step 9";
+		"step 11";
 		//删除当前回合角色 此时处于“不属于任何角色的回合”的阶段
 		game.broadcastAll(function (player) {
 			player.classList.remove("glow_phase");
@@ -9504,8 +9506,6 @@ export const Content = {
 			if(event.delay_time) next.set('delay_time',event.delay_time);
 		}
 		"step 2"
-		if(!event.sheQi) event.trigger('discard');
-		'step 3'
 		if(event.baoPai==true){
 			if(event.shiQiXiaJiang!=false){
 				var next=player.changeShiQi(-event.nun).set('baoPai',true).set('cards',cards);
@@ -9526,6 +9526,8 @@ export const Content = {
 				}
 			}
 		}
+		'step 3'
+		if(!event.sheQi) event.trigger('discard');
 	},
 	loseToDiscardpile:function(){
 		"step 0"
@@ -10254,7 +10256,10 @@ export const Content = {
 		if(event.animate=='draw'){
 			player.$draw(cards.length);
 			//if(event.log) game.log(player,'将',get.cnNumber(cards.length),'张牌置于了角色牌上');
-			if(event.log) game.log(player,'将',cards.length,'张',`【${get.translation(event.gaintag[0])}】`,'置于了角色牌上');
+			if(event.log){
+				if(event.source) game.log(event.source,'将',cards.length,'张',`【${get.translation(event.gaintag[0])}】`,'置于了',player,'角色牌上');
+				else game.log(player,'将',cards.length,'张',`【${get.translation(event.gaintag[0])}】`,'置于了角色牌上');
+			} 
 			game.pause();
 			setTimeout(function(){
 				player.$addToExpansion(cards,null,event.gaintag);
@@ -10842,8 +10847,10 @@ export const Content = {
 		}
 		event.trigger('chengShouShangHaiBefore');
 		"step 5"
-		event.trigger('chengShouShangHai');
+		event.trigger('chengShouShangHaiBegin');//目前只给诗人用于减伤，避免和其他时机技能重合
 		'step 6'
+		event.trigger('chengShouShangHai');
+		'step 7'
 		if(event.chengShouShangHaiMax<event.num){
 			num=event.chengShouShangHaiMax;
 			event.num=event.chengShouShangHaiMax;
@@ -10894,7 +10901,7 @@ export const Content = {
 			player.$damage(source);
 			player.$damagepop(num);
 		}
-		"step 7"
+		"step 8"
 		if(source&&lib.config.border_style=='auto'){
 			var dnum=0;
 			for(var j=0;j<source.stat.length;j++){
@@ -10935,9 +10942,9 @@ export const Content = {
 				}
 			}
 		}
-		"step 8"
+		"step 9"
 		event.trigger('chengShouShangHaiAfter');
-		'step 9'
+		'step 10'
 		event.trigger('shouDaoShangHaiAfter');
 	},
 	recover: function () {

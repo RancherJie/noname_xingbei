@@ -31,6 +31,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
         card: {
             moRen: {
                 //type: "none",
+                noGaiPai: true,//目前用于月之女神判断是否横置
                 enable: true,
                 selectTarget: 1,
                 filterTarget: function(card,player,target){
@@ -59,6 +60,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
             },
             yiRen: {
+                noGaiPai: true,//目前用于月之女神判断是否横置
                 //type: "none",
                 enable: true,
                 selectTarget: 1,
@@ -495,7 +497,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         },
                     },
                     gaiPai: {
-                        trigger: {player: "addGaiPaiEnd",},
+                        trigger: {player: ["addGaiPaiEnd"],source:'addJiChuXiaoGuoEnd'},//addJiChuXiaoGuoEnd给捣蛋萝莉大招用
                         getIndex(event, player) {
 							const cards = [];
 							for(let i = 0; i < event.cards.length; i++) {
@@ -530,6 +532,17 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                 card.destroyed = true;
                             },event.indexedData);
                             game.log(event.indexedData, "被移除了");
+                            'step 2'
+                            if(this.trigger.name=='addGaiPai'){
+                                if(player.countGaiPai(trigger.gaiPai)==0){
+                                    player.unmarkSkill(trigger.gaiPai);
+                                }
+                            }else{//目前算专有处理吧，捣蛋萝莉
+                                if(trigger.player.countJiChuXiaoGuo(trigger.jiChuXiaoGuo)==0){
+                                    trigger.player.unmarkSkill(trigger.jiChuXiaoGuo);
+                                }
+                            }
+                            
                         },
                     },
                     loseToDiscardpile:{
@@ -747,7 +760,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                 if(get.xiBie(card)=='shui') num++;
                                 return num;
                             }).forResultCards();
-                            if(card.length>0) cards.push(card[0]);
+                            if(card.length>0&&card[0].destroyed!==true) cards.push(card[0]);
                         }
                     }else{
                         let card=await player.draw().forResult();
@@ -949,7 +962,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             miShuMuYing:{
                 trigger:{source:'gongJiMingZhong'},
                 filter:function(event,player){
-                    return get.is.zhuDongGongJi(event)&&!player.usedSkill('shun')&&event.cards.length>0;
+                    return get.is.zhuDongGongJi(event)&&!player.usedSkill('shun')&&event.cards.filter(function(card){
+                        return card.destroyed!==true;
+                    }).length>0;
                 },
                 content:function(){
                     'step 0'
@@ -994,6 +1009,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
             },
             yingFeng:{
+                priority:-0.5,
                 trigger:{global:'phaseBegin'},
                 filter:function(event,player){
                     return event.player.hasZhiShiWu('fengXueX')&&player.countZhiShiWu('mi')>0;;
@@ -1022,7 +1038,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 1'
                     trigger.player.chooseToDiscard(true,event.num);
                     'step 2'
-                    event.cards=result.cards;
+                    event.cards=result.cards.filter(function(card){
+                        return get.info(card).noGaiPai!==true;
+                    });
+                    //获取xiBie给ai用，无关技能逻辑
                     var xiBies={};
                     var ying=player.getGaiPai('ying');
                     for(let card of ying){
@@ -1224,6 +1243,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         }
                     },
                     fengZhi:{
+                        priority:-1.5,
                         trigger:{player:'phaseEnd'},
                         filter:function(event,player){
                             return player.hasZhiShiWu('fengXueX');
@@ -1474,7 +1494,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         event.target.chooseToDiscard('h',true,'showCards',event).set('loseTo',ui.ordering);
                     }
                     'step 4'
-                    event.cards=result.cards;
+                    event.cards=result.cards.filter(function(card){
+                        return !card.destroyed;
+                    });
+                    if(event.cards.length==0) event.finish();
                     'step 5'
                     if(player.countGaiPai('jieJie')>=2){
                         event.finish();
@@ -1549,6 +1572,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         filter:function(event,player){
                             return get.is.gongJiXingDong(event)&&player.hasZhiShiWu('jueJieX');
                         },
+                        priority:-1,
                         content:function(){
                             'step 0'
                             player.storage.jueJie_player.addZhiShiWu('jiX');
@@ -1560,8 +1584,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                 event.finish();
                             }
                             'step 2'
-                            game.log(player,'获得了',result.links);
-                            player.gain(result.links,'draw').set('jieJie',true);
+                            player.gain(result.links,'gain2','log').set('jieJie',true);
                         }
                     },
                     wuFa:{
@@ -1764,52 +1787,61 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                     return cards.length>0;
                 },
-                content:function(){
-                    'step 0'
-                    var yanLing=player.getGaiPai('yanLing');
-                    player.chooseCardButton(yanLing,true,'选择1个除光系外的【言灵】视为手牌使用').set('ai',function(card){
-                        return Math.random();
-                    }).set('filterButton',function(button){
+                chooseButton:{
+                    dialog: function (event, player) {
+                        var dialog = ui.create.dialog('真言术：选择1个除光系外的【言灵】视为手牌使用', 'hidden');
+                        var cards = player.getGaiPai('yanLing');
+                        dialog.add(cards);
+                        return dialog;
+                    },
+                    filter: function (button, player) {
                         return get.xiBie(button)!='guang';
-                    });
-                    'step 1'
-                    player.storage.zhenYanShu=result.links[0];
-                    'step 2'
-                    player.chooseUseTarget(player.storage.zhenYanShu,true).set('action',true);
-                },
-                contentAfter:function(){
-                    'step 0'
-                    var card=player.storage.zhenYanShu;
-                    var type=get.type(card);
-                    var mingGe=get.mingGe(card);
-                    var bool=false;
-                    if(mingGe=='yong'||type=='faShu'){
-                        bool=true;
-                        event.bool=true;
+                    },
+                    backup: function (links, player) {
+                        return {
+                            card: links[0],
+                            type: 'faShu',
+                            selectTarget: 0,
+                            filterTarget:true,
+                            selectCard:0,
+                            filterCard:true,
+                            content: async function (event,trigger,player) {
+                                player.storage.zhenYanShu=lib.skill.zhenYanShu_backup.card;
+                                await player.chooseUseTarget(player.storage.zhenYanShu,true).set('action',true);
+                            },
+                            contentAfter: async function (event,trigger,player) {
+                                let card=player.storage.zhenYanShu;
+                                let type=get.type(card);
+                                let mingGe=get.mingGe(card);
+                                let bool=false;
+                                if(mingGe=='yong'||type=='faShu'){
+                                    bool=true;
+                                }
+                                let control;
+                                if(!bool&&player.countZhiShiWu('miShu')>0){
+                                    let list=['是','否'];
+                                    control=await player.chooseControl(list).set('prompt',`是否额外移除1点<span class='hong'>【秘术】</span>，对目标对手造成1点法术伤害③`).forResultControl();
+                                }else if(!bool){
+                                    return;
+                                }
+                                if(control=='是'){
+                                    await player.removeZhiShiWu('miShu');
+                                }
+                                if(bool||control=='是'){
+                                    let targets=await player.chooseTarget('对目标对手造成1点法术伤害③',true,function(card,player,target){
+                                        return player.side!=target.side;
+                                    }).set('ai',function(target){
+                                        var player=_status.event.player;
+                                        return get.damageEffect2(target,player,1);
+                                    }).forResultTargets();
+                                    targets[0].faShuDamage(1,player);
+                                }
+                            }
+                        }
+                    },
+                    check: function (button) {
+                        return Math.random();
                     }
-                    if(!bool&&player.countZhiShiWu('miShu')>0){
-                        var list=['是','否'];
-                        player.chooseControl(list).set('prompt',`是否额外移除1点<span class='hong'>【秘术】</span>，对目标对手造成1点法术伤害③`);
-                    }else if(!bool){
-                        event.finish();
-                    }
-                    'step 1'
-                    if(result.control=='是'){
-                        player.removeZhiShiWu('miShu');
-                    }
-                    if(event.bool||result.control=='是'){
-                        player.chooseTarget('对目标对手造成1点法术伤害③',true,function(card,player,target){
-                            return player.side!=target.side;
-                        }).set('ai',function(target){
-                            var player=_status.event.player;
-                            return get.damageEffect2(target,player,1);
-                        });
-                    }else{
-                        event.finish();
-                    }
-                    'step 2'
-                    var target=result.targets[0];
-                    target.faShuDamage(1,player);
                 },
                 ai:{
                     order:3.9,
@@ -1843,7 +1875,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             },
             yaoJingMiShu:{
                 usable:1,
-                trigger:{player:['zhenYanShuContentAfterAfter','zhenYanYaZhiAfter']},
+                trigger:{player:['zhenYanShu_backupContentAfterAfter','zhenYanYaZhiAfter']},
                 filter:function(event,player){
                     return !event.selected;
                 },
@@ -2315,13 +2347,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             shenQiZhiYi:"[被动]神弃之裔",
             shenQiZhiYi_info:"游戏初始时，你+1[水晶]。你的[治疗]上限为0[恒定]，你始终无法获得或使用[治疗]，你对拥有[治疗]的角色伤害额外+1。",
             liRuQuanYong:"[响应]戾如泉涌[回合限定]",
-            liRuQuanYong_info:"<span class='tiaoJian'>(仅【普通形态】下且你</span><span class='hong'>【戾气】</span></span class='tiaoJian'>数<2，[攻击行动]或[法术行动]结束后发动)</span>你+1<span class='hong'>【戾气】</span>，额外+1[攻击行动]。",
+            liRuQuanYong_info:"<span class='tiaoJian'>(仅【普通形态】下且你</span><span class='hong'>【戾气】</span><span class='tiaoJian'>数<2，[攻击行动]或[法术行动]结束后发动)</span>你+1<span class='hong'>【戾气】</span>，额外+1[攻击行动]。",
             kuangLiZhiXin:"[被动]狂戾之心[持续]",
-            kuangLiZhiXin_info:"<span class='tiaoJian'>(你的回合开始时或承受伤害后⑥，且</span><span class='hong'>【戾气】</span></span class='tiaoJian'>达到上限时)</span>你弃1张牌，指定目标角色移除2[治疗]，[横置]转为【狂戾形态】，此形态下你无法使用[圣光]，你造成的伤害额外+1。 <span class='tiaoJian'>(你的回合结束时若</span><span class='hong'>【戾气】</span></span class='tiaoJian'>数为0)</span>[转正]脱离【狂戾形态】，将你的1[水晶]转换为1[宝石]。",
+            kuangLiZhiXin_info:"<span class='tiaoJian'>(你的回合开始时或承受伤害后⑥，且</span><span class='hong'>【戾气】</span><span class='tiaoJian'>达到上限时)</span>你弃1张牌，指定目标角色移除2[治疗]，[横置]转为【狂戾形态】，此形态下你无法使用[圣光]，你造成的伤害额外+1。 <span class='tiaoJian'>(你的回合结束时若</span><span class='hong'>【戾气】</span><span class='tiaoJian'>数为0)</span>[转正]脱离【狂戾形态】，将你的1[水晶]转换为1[宝石]。",
             kuangLiZhiTi:"[被动]狂戾之体",
-            kuangLiZhiTi_info:"<span class='tiaoJian'>(仅【狂戾形态】下且你</span><span class='hong'>【戾气】</span></span class='tiaoJian'>数>0，目标角色对你造成伤害时③)</span>移除1点<span class='hong'>【戾气】</span>，本次伤害额外+1，但伤害最高为4。",
+            kuangLiZhiTi_info:"<span class='tiaoJian'>(仅【狂戾形态】下且你</span><span class='hong'>【戾气】</span><span class='tiaoJian'>数>0，目标角色对你造成伤害时③)</span>移除1点<span class='hong'>【戾气】</span>，本次伤害额外+1，但伤害最高为4。",
             shenZhiWuRan:"[响应]神智污染",
-            shenZhiWuRan_info:"<span class='tiaoJian'>(仅【狂戾形态】下，你对目标角色造成伤害时发动③，移除1点</span><span class='hong'>【戾气】</span></span class='tiaoJian'>)</span>本次伤害额外+1，本次你造成的伤害无法以[治疗]抵御。",
+            shenZhiWuRan_info:"<span class='tiaoJian'>(仅【狂戾形态】下，你对目标角色造成伤害时发动③，移除1点</span><span class='hong'>【戾气】</span><span class='tiaoJian'>)</span>本次伤害额外+1，本次你造成的伤害无法以[治疗]抵御。",
             niuQuZhiAi:"[启动]扭曲之爱",
             niuQuZhiAi_info:"[宝石]调整你的形态为【普通形态】或【狂戾形态】，你弃2张牌或摸2张牌[强制]，并任意调整你的<span class='hong'>【戾气】</span>数。",
             liQi:"戾气",

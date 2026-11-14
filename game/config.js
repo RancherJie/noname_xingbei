@@ -142,6 +142,8 @@ window.config = {
 		['hongLianQiShi','shengDianQiShi'],
 		['shengNv','jinGuiZhiNv'],
 		['fengZhiJianSheng','jianZhiZi'],
+		['daZuiSiJiao','chuanJiaoShi'],
+		['guShenJiSi','yiJiaoTu'],
 	],
 	bannedpile: {},
 	customcardpile: {},

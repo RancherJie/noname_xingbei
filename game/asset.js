@@ -1,6 +1,6 @@
 window.noname_asset_list=
 [
-	"v1.6.9",
+	"v1.7.0",
 	"audio/background/music_default.mp3",
 	"audio/card/default.mp3",
 	'audio/card/atk_an.mp3',
@@ -139,6 +139,7 @@ window.noname_asset_list=
 	'image/card/zhuanShu/tianPing_zuo.webp',
 	'image/card/zhuanShu/xiWangZhiGe.jpg',
 	'image/card/zhuanShu/zhouFu.jpg',
+	'image/card/zhuanShu/jiLeMengJing.jpg',
 
 	'image/card/zhiShiWu/baiWanLongYan.jpg',
 	'image/card/zhiShiWu/longKuangMiSuo.jpg',
@@ -269,6 +270,8 @@ window.noname_asset_list=
 	'image/character/zhenLongNvWang.jpg',
 	'image/character/zhoushushi.jpg',
 	'image/character/yueTuanShouXi.jpg',
+	'image/character/daZuiSiJiao.jpg',
+	'image/character/guShenJiSi.jpg',
 
 
 	"image/emotion/xingBei_emotion/1.gif",
