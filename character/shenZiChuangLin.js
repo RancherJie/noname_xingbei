@@ -1584,8 +1584,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                 event.finish();
                             }
                             'step 2'
-                            game.log(player,'获得了',result.links);
-                            player.gain(result.links,'draw').set('jieJie',true);
+                            player.gain(result.links,'gain2','log').set('jieJie',true);
                         }
                     },
                     wuFa:{

@@ -377,8 +377,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             await player.lose(pushs);
                             await player.lose(gains);
                             await player.addGaiPai(pushs,'yiJi');
-                            game.log(player,`获得了${gains.length}张牌`);
-                            await player.gain(gains, "draw");
+                            await player.gain(gains, "gain2",'log');
                         }
                     },
                     loseToDiscardpile:{
@@ -1513,8 +1512,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     else{
                         let cards=get.cards();
                         await lib.skill.yuYan.add(player,cards);
-                        game.log(player,`将1张牌加入手牌`);
-                        await player.gain(card);
+                        await player.gain(card,'gain2','log');
                     }
                 },
                 check:function (event,player){

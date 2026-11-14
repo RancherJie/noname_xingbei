@@ -3062,8 +3062,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         return value;
                     }).forResult();
                     if(result.bool){
-                        game.log(player,'获得了',result.links);
-                        await player.gain(result.links);
+                        await player.gain(result.links,'gain2','log');
                     }
                     var bool=false;
                     for(var card of cards){
