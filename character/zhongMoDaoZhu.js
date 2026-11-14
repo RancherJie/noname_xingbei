@@ -1603,12 +1603,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             },
             yuYan:{
                 add:async function(player,cards){
-                    //game.log(player,`将${cards.length}张牌加入`,`#g【预言】`);
+                    game.log(player,`将${cards.length}张牌作为`,`#g【预言】`);
                     var next=game.createEvent('yuYanAdd',false);
                     next.setContent('addToExpansion');
                     next.set('player',player);
                     next.set('cards',cards);
-                    next.set('log',true);
+                    next.set('log',false);
                     next.set('gaintag',["yuYan"]);
                     next.set('animate','draw');
                     next.getd = function (player, key, position) {
