@@ -1115,3 +1115,9 @@ body.wmb-ui-optimized.wmb-ui-small-screen .wmb-target-counter {
 }
 body.wmb-ui-optimized.wmb-ui-small-screen .wmb-bgm-controls button,
 body.wmb-ui-optimized.wmb-ui-small-screen .wmb-bgm-restore { height: 32px !important; }
+body.wmb-ui-separate-energy-markers .player > .marks2 {
+    top: 5px !important;
+    right: 5px !important;
+    bottom: auto !important;
+    left: auto !important;
+}
