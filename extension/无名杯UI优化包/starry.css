@@ -868,6 +868,15 @@ body.wmb-ui-optimized #splash > div[link="tutorial"] {
     body.wmb-ui-optimized #splash > div[link="nightmarePve"] { grid-column: 6 / span 2; grid-row: 6 / span 2; }
 }
 
+/* 主菜单采用明亮Q版角色配图，沿用项目中的默认角色原型。 */
+body.wmb-ui-optimized #splash > div[link="xingBei"] > .avatar { background-image: url("image/splash_xingbei.webp") !important; }
+body.wmb-ui-optimized #splash > div[link="boss"] > .avatar { background-image: url("image/splash_boss.webp") !important; }
+body.wmb-ui-optimized #splash > div[link="connect"] > .avatar { background-image: url("image/splash_connect.webp") !important; }
+body.wmb-ui-optimized #splash > div[link="offlineChoose"] > .avatar { background-image: url("image/splash_offline.webp") !important; }
+body.wmb-ui-optimized #splash > div[link="illustration"] > .avatar { background-image: url("image/splash_gallery.webp") !important; }
+body.wmb-ui-optimized #splash > div[link="leaderboard"] > .avatar { background-image: url("image/splash_leaderboard.webp") !important; }
+body.wmb-ui-optimized #splash > div[link="tutorial"] > .avatar { background-image: url("image/splash_tutorial.webp") !important; }
+
 /* 联机大厅按钮沿用核心的 left/left2 横向偏移；反馈状态不能覆盖它。 */
 body.wmb-ui-optimized .connectevents.wmb-connect-hall-button.left {
     transform: translateX(-85px) !important;

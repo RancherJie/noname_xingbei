@@ -1315,7 +1315,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
         if (document.querySelector('link[data-wmb-ui-style="base"]')) return;
         var styleRoot = lib.assetURL + "extension/" + extensionName + "/";
         var styles = [["extension.css?rev=2.24", "base"]];
-        if (currentTheme() === "starry") styles.push(["starry.css?rev=2.60", "theme"]);
+        if (currentTheme() === "starry") styles.push(["starry.css?rev=2.62", "theme"]);
         styles.forEach(function (item) {
             var style = document.createElement("link");
             style.rel = "stylesheet";
@@ -1327,7 +1327,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 
     return {
         name: extensionName,
-        version: "2.61",
+        version: "2.62",
         editable: false,
         precontent: function () {
             migrateStarryThemeDefault();
@@ -1409,7 +1409,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             author: "蒙牛 / Codex",
             diskURL: "",
             forumURL: "",
-            version: "2.61"
+            version: "2.62"
         },
         files: {
             character: [],
