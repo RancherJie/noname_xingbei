@@ -3887,18 +3887,26 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
         }
     }
 
-    function patchLingHunLianJie() {
+    function patchLingHunLianJie(helper) {
         var skill = lib.skill && lib.skill.lingHunLianJie;
         if (!skill || !markPatched(skill, "target")) return;
+        var originalFilter = skill.filter;
+        skill.filter = function (event, player) {
+            if (typeof originalFilter == "function" && !originalFilter.apply(this, arguments)) return false;
+            return game.hasPlayer(function (target) {
+                return target != player && target.side == player.side && helper.handRoom(target) > 0;
+            });
+        };
         skill.content = async function (event, trigger, player) {
             await player.removeZhiShiWu("huangSeLingHun");
             await player.removeZhiShiWu("lanSeLingHun");
             var targets = (await player.chooseTarget("将【灵魂链接】放置于一名队友面前", true, function (card, player, target) {
-                return target != player && target.side == player.side;
+                return target != player && target.side == player.side && helper.handRoom(target) > 0;
             }).set("ai", function (target) {
                         var player = _status.event["online_202780_player"];
 
                 var room = target.getHandcardLimit() - target.countCards("h");
+                if (room <= 0) return -100;
                 return get.attitude(player, target) + (target.zhiLiao || 0) * 0.8 + Math.max(0, room) * 0.35;
             }).set("online_202780_player", player).forResultTargets() || []);
             if (!targets || !targets.length) return;
@@ -3906,6 +3914,22 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             player.storage.lingHunLianJieTarget = target;
             await target.addZhiShiWu("lingHunLianJie", true);
         };
+        var link = skill.subSkill && skill.subSkill.xiaoGuo;
+        if (link && markPatched(link, "safeTransfer")) {
+            var originalCost = link.cost;
+            link.cost = async function (event, trigger, player) {
+                var linked = player.storage && player.storage.lingHunLianJieTarget;
+                var source = trigger && trigger.player;
+                var other = source == player ? linked : player;
+                var sourceRoom = helper.handRoom(source);
+                var otherRoom = helper.handRoom(other);
+                if (!linked || !source || !other || !trigger || (source != player && source != linked) || trigger.num <= sourceRoom || otherRoom <= 0) {
+                    event.result = { bool: false, cost_data: "cancel2" };
+                    return;
+                }
+                return originalCost.apply(this, arguments);
+            };
+        }
     }
 
     function patchLingHunShuShi(helper) {
@@ -3913,6 +3937,11 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
         if (mirror && markPatched(mirror, "friendlyDraw")) {
             if (!mirror.ai) mirror.ai = {};
             mirror.ai.order = function (item, player) {
+                if (player.countCards("h") < 2) return 0;
+                var hasEnemyRoom = game.hasPlayer(function (target) {
+                    return target.side != player.side && helper.handRoom(target) > 0;
+                });
+                if (!hasEnemyRoom) return 0;
                 return player.countCards("h") >= player.getHandcardLimit() ? 5.2 : 2.8;
             };
             if (!mirror.ai.result) mirror.ai.result = {};
@@ -3920,9 +3949,10 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 return player.countCards("h") >= 2 ? 1.2 : -5;
             };
             mirror.ai.result.target = function (player, target) {
-                if (target.side != player.side) return 100;
+                if (target.side == player.side) return -100;
                 var room = helper.handRoom(target);
-                return room >= 2 ? 2.5 : room == 1 ? 0.8 : 0;
+                if (room <= 0) return 0;
+                return -(0.8 + Math.min(2, room) * 0.9);
             };
         }
 
@@ -6840,6 +6870,10 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 var base = typeof event.damageNum == "number" ? event.damageNum : 2;
                 var gain = helper.damagePressure(target, player, base + 2) - helper.damagePressure(target, player, base);
                 var self = selfDamagePlan(player, 4, 0, 0, player.isHengZhi());
+                // 【热血沸腾】下自伤不会造成士气损失，直接发动【杀戮盛宴】。
+                if (player.isHengZhi()) return true;
+                // 普通形态下，只要用现有【治疗】后最多爆1张牌，就值得换取额外伤害。
+                if (self.overflow <= 1) return true;
                 if (self.moraleLoss >= get.shiQi(player.side) && self.moraleLoss > 0) return false;
                 var formValue = !player.isHengZhi() && self.moraleLoss > 0 ? 0.65 : 0;
                 var sealCost = player.countZhiShiWu("xueYin") >= 2 ? 0.55 : 0.9;
@@ -10854,7 +10888,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
         patchYueDu();
         patchYueZhiLunHui();
         patchYueZhiNvShenActionChain(helper);
-        patchLingHunLianJie();
+        patchLingHunLianJie(helper);
         patchLingHunShuShi(helper);
         patchLingFuShi(helper);
         patchJianDi(helper);
