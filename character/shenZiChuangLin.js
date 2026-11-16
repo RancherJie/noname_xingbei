@@ -1906,7 +1906,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 }
             },
             zhenYanYaZhi:{
-                trigger:{player:'zhenYanShuContentAfterAfter'},
+                trigger:{player:'zhenYanShu_backupContentAfterAfter'},
                 filter:function(event,player){
                     if(!player.canBiShaShuiJing()) return false;
                     if(event.selected) return false;
@@ -1929,15 +1929,15 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     for(var i=0;i<yanLing.length;i++){
                         if(get.xiBie(yanLing[i])!='guang') cards.push(yanLing[i]);
                     }
-                    var list=['是','否'];
+                    
                     if(cards.length>0){
-                        player.chooseControl(list).set('prompt','是否立即执行一次【真言术】');
+                        player.chooseCardButton(yanLing,1,'是否立即执行一次【真言术】');
                     }else{
                         event.finish();
                     }
                     'step 3'
-                    if(result.control=='是'){
-                        player.useSkill('zhenYanShu');
+                    if(result.bool){
+                        player.useSkillBackup('zhenYanShu',result,player);
                     }
                 }
             },
