@@ -4067,7 +4067,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     <span class='tiaoJian'>(此卡被转移至你面前时，你摸2张牌[强制])</span>我方【战绩区】+1[水晶]，然后将此卡转移至你左手边最近的角色面前，大罪司教弃1张牌。
                     `,
                 },
-                markimage:'image/card/zhuanShu/luBiao.png',
+                markimage:'image/card/zhuanShu/luBiao.webp',
                 trigger:{player:'changeZhiShiWuEnd'},
                 filter:function (event,player){
                     return event.zhiShiWu=='daZuiLuBiaoX'&&event.type=='zhuanYi'&&event.chanHuiShi!=true;
