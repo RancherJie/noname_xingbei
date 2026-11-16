@@ -906,6 +906,9 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
         document.querySelectorAll(".connectevents").forEach(function (button) {
             button.classList.add("wmb-connect-hall-button");
         });
+        if (ui.iptext) ui.iptext.classList.add("wmb-connect-title");
+        if (ui.ipnode) ui.ipnode.classList.add("wmb-connect-address");
+        if (ui.ipbutton) ui.ipbutton.classList.add("wmb-connect-submit");
     }
 
     function decorateFactionFrames() {

@@ -867,3 +867,112 @@ body.wmb-ui-optimized #splash > div[link="tutorial"] {
     body.wmb-ui-optimized #splash > div[link="tutorial"] { grid-column: 4 / span 2; grid-row: 6 / span 2; }
     body.wmb-ui-optimized #splash > div[link="nightmarePve"] { grid-column: 6 / span 2; grid-row: 6 / span 2; }
 }
+
+/* 联机大厅按钮沿用核心的 left/left2 横向偏移；反馈状态不能覆盖它。 */
+body.wmb-ui-optimized .connectevents.wmb-connect-hall-button.left {
+    transform: translateX(-85px) !important;
+}
+
+body.wmb-ui-optimized .connectevents.wmb-connect-hall-button.left2 {
+    transform: translateX(-170px) !important;
+}
+
+body.wmb-ui-optimized .connectevents.wmb-connect-hall-button:not(.left):not(.left2) {
+    transform: none !important;
+}
+
+/* 联机地址面板：复用主界面按钮的蓝紫边框和反馈，不沿用核心红色按钮。 */
+body.wmb-ui-optimized .wmb-connect-title {
+    box-sizing: border-box !important;
+    left: 50% !important;
+    width: auto !important;
+    height: auto !important;
+    padding: 7px 18px 9px !important;
+    color: #f4f1ff !important;
+    background: transparent !important;
+    font-family: "STKaiti", "KaiTi", "Microsoft YaHei", serif !important;
+    font-size: clamp(20px, 2.4vw, 30px) !important;
+    font-weight: 700 !important;
+    letter-spacing: 4px !important;
+    line-height: 1.25 !important;
+    text-shadow: 0 1px 5px rgba(9, 11, 36, .95) !important;
+    white-space: nowrap !important;
+    transform: translateX(-50%) !important;
+}
+
+body.wmb-ui-optimized .wmb-connect-address {
+    box-sizing: border-box !important;
+    left: 50% !important;
+    width: min(460px, calc(100vw - 48px)) !important;
+    height: 54px !important;
+    padding: 8px 16px !important;
+    color: #f7f4ff !important;
+    background: rgba(16, 21, 54, .88) !important;
+    border: 1px solid rgba(177, 161, 255, .78) !important;
+    border-radius: 8px !important;
+    box-shadow: 0 0 0 1px rgba(91, 125, 218, .26), 0 8px 22px rgba(4, 6, 23, .5), inset 0 1px rgba(255, 255, 255, .08) !important;
+    font-family: "STKaiti", "KaiTi", "Microsoft YaHei", serif !important;
+    font-size: clamp(20px, 2.5vw, 30px) !important;
+    line-height: 36px !important;
+    text-align: center !important;
+    text-shadow: 0 1px 3px rgba(8, 10, 28, .9) !important;
+    transform: translateX(-50%) !important;
+    outline: none !important;
+}
+
+body.wmb-ui-optimized .wmb-connect-address:focus {
+    border-color: #c9c1ff !important;
+    box-shadow: 0 0 0 2px rgba(150, 178, 255, .3), 0 8px 22px rgba(4, 6, 23, .5) !important;
+}
+
+body.wmb-ui-optimized .wmb-connect-submit {
+    box-sizing: border-box !important;
+    left: 50% !important;
+    width: auto !important;
+    min-width: 108px !important;
+    height: 42px !important;
+    padding: 6px 20px !important;
+    color: #f7f4ff !important;
+    background: linear-gradient(135deg, rgba(67, 82, 177, .92), rgba(81, 126, 204, .82)) !important;
+    border: 1px solid rgba(194, 190, 255, .92) !important;
+    border-radius: 7px !important;
+    box-shadow: 0 5px 14px rgba(5, 7, 28, .46), inset 0 1px rgba(255, 255, 255, .12) !important;
+    font-family: "STKaiti", "KaiTi", "Microsoft YaHei", serif !important;
+    font-size: 20px !important;
+    font-weight: 700 !important;
+    letter-spacing: 3px !important;
+    line-height: 28px !important;
+    text-shadow: 0 1px 3px rgba(8, 10, 28, .9) !important;
+    transform: translateX(-50%) !important;
+    transition: background-color 140ms ease, border-color 140ms ease, color 140ms ease, transform 120ms ease !important;
+}
+
+@media (hover: hover) {
+    body.wmb-ui-optimized .wmb-connect-submit:hover {
+        color: #fff !important;
+        background: linear-gradient(135deg, rgba(91, 105, 195, .98), rgba(99, 148, 222, .9)) !important;
+        border-color: #e0dcff !important;
+        filter: brightness(1.06) !important;
+    }
+}
+
+body.wmb-ui-optimized .wmb-connect-submit:active {
+    color: #fff !important;
+    background: linear-gradient(135deg, rgba(105, 104, 220, .96), rgba(64, 126, 194, .9)) !important;
+    border-color: #e0dcff !important;
+    box-shadow: inset 0 1px 5px rgba(9, 12, 38, .42), 0 0 9px rgba(157, 162, 255, .5) !important;
+    transform: translateX(-50%) translateY(1px) scale(.98) !important;
+}
+
+@media (max-width: 560px) {
+    body.wmb-ui-optimized .wmb-connect-address {
+        width: calc(100vw - 28px) !important;
+        font-size: clamp(17px, 5vw, 24px) !important;
+    }
+
+    body.wmb-ui-optimized .wmb-connect-title {
+        max-width: calc(100vw - 28px) !important;
+        font-size: clamp(18px, 5vw, 24px) !important;
+        letter-spacing: 2px !important;
+    }
+}
