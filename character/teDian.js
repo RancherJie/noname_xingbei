@@ -5035,7 +5035,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             shenYu: "[响应]神谕[回合限定]",
             shenYu_info: "<span class='tiaoJian'>(【路标】转移前，移除3点</span><span class='hong'>【虔诚】</span><span class='tiaoJian'>)</span>立即执行一次[攻击行动]。",
             fuYin: "[响应]福音",
-            fuYin_info: "<span class='tiaoJian'>(目标角色因你的技能弃的置入弃牌堆时，移除你1[治疗])</span>将该弃牌加入拥有【路标】的角色手牌[强制]。<span class='tiaoJian'>(若为因此造成对方士气下降)</span>指定除你外的目标角色+1[治疗]。",
+            fuYin_info: "<span class='tiaoJian'>(目标角色因你的技能弃的牌置入弃牌堆时，移除你1[治疗])</span>将该弃牌加入拥有【路标】的角色手牌[强制]。<span class='tiaoJian'>(若为因此造成对方士气下降)</span>指定除你外的目标角色+1[治疗]。",
             daZuiLuBiao:"(专)路标",
             daZuiLuBiao_info: `
             <span class="greentext">[响应]忏悔式[回合限定]</span><br>
