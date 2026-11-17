@@ -2166,7 +2166,7 @@ const pack_skills = {
             return anYue.length > 0;
         },
         async cost(event, trigger, player) {
-            var result = await player.chooseCardButton(player.getGaiPai('anYue'), '是否发动【美杜莎之眼】<br>' + `(移除1个与攻击牌系别相应的【暗月】)+1[治疗]，+1<span class='lan'>【石化】</span>。<span class='tiaoJian'>(【暗月】为法术牌)</span>弃1张牌，对目标对手造成1点法术伤害③`)
+            var result = await player.chooseCardButton(player.getGaiPai('anYue'), '是否发动【美杜莎之眼】<br>' + `<span class='tiaoJian'>(移除1个与攻击牌系别相应的【暗月】)</span>+1[治疗]，+1<span class='lan'>【石化】</span>。<span class='tiaoJian'>(【暗月】为法术牌)</span>弃1张牌，对目标对手造成1点法术伤害③`)
                 .set('filterButton', function (button) {
                     return get.xiBie(button.link) == _status.event.xiBie;
                 })
