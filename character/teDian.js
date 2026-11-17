@@ -505,7 +505,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 trigger: {global: "triggerAfter",},
                 forced: true,
                 filter: function (event, player) {
+                    if(!event.skill) return false;
                     var skill = get.info(event.skill);
+                    if(!skill) return false;
                     if (skill.tag && skill.tag.jiChuXiaoGuo) return true;
                     return false;
                 },
