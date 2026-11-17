@@ -6612,6 +6612,7 @@ const pack_skills = {
                 filter: function (event, player) {
                     return player.hasZhiShiWu('yongHengYueZhang');
                 },
+                prompt2: '选择以下一项执行：<br>·吟游诗人对2名目标对手各造成1点法术伤害③。 <br>·你弃2张牌。',
                 content: function () {
                     'step 0'
                     var choiceList = ['吟游诗人对2名目标对手各造成1点法术伤害③', '你弃2张牌'];
@@ -6649,6 +6650,7 @@ const pack_skills = {
                 filter: function (event, player) {
                     return player.hasZhiShiWu('yongHengYueZhang');
                 },
+                prompt2: '选择以下一项执行<br>·<span class="tiaoJian">(移除我方【战绩区】1星石)</span>你+1[宝石]。<br>·为我方【战绩区】+1[宝石]，你+1[治疗]。',
                 content: async function (event, trigger, player) {
                     var zhanJi = get.zhanJi(player.side);
                     if (zhanJi.length > 0) {
