@@ -3984,11 +3984,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     event.result = await next.forResult();
                 },
                 content:async function (event,trigger,player){
+                    delete player.storage.fuYinCard;//清除记录避免可能的bug
+
                     let cards=await event.targets[0].chooseToDiscard('h',1,true,'showCards','赦罪：弃1张手牌[展示]').forResultCards();
                     await player.addZhiShiWu('daZuiQianCheng');
-
+                    
                     let card=cards[0];
-                    if(!card.destroyed&&get.position(card, true) === "d"){
+                    if(!card.destroyed&&get.position(card, true) === "d"&&player.storage.fuYinCard!=card){
                         let bool=await player.chooseBool('是否获得'+get.translation(card)).set('ai',function(){
                             return get.value(_status.event.card)>5;
                         }).set('card',card).forResultBool();
@@ -4045,7 +4047,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         });
 
                     await player.changeZhiLiao(-1);
-                    await player.storage.daZuiLuBiaoTarget.gain(trigger.cards,'log','gain');
+                    player.storage.fuYinCard=trigger.cards[0];//用于记录避免爆牌弃牌赦罪可以获得牌
+                    await player.storage.daZuiLuBiaoTarget.gain(trigger.cards,'log','gain');  
                     
                     if(player.storage.faYunShiQi===false){
                         let targets=await player.chooseTarget('福音：除你之外目标角色+1[治疗]',lib.filter.notMe).set('ai',function(target){
