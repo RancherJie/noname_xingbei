@@ -6050,6 +6050,29 @@ export class Player extends HTMLDivElement {
 		return next;
 	}
 	/**
+	 * 令玩家使用某个chooseButton技能
+	 * 	@param { string } skill 技能名
+	 * 	@param { Object } result 选择结果
+	 */
+	useSkillBackup(skill,result) {
+		var info = get.info(skill).chooseButton;
+		lib.skill[skill + "_backup"] = info.backup(info.chooseControl ? result : result.links, this);
+		lib.skill[skill + "_backup"].sourceSkill = skill;
+		if (game.online) {
+			event._sendskill = [skill + "_backup", lib.skill[skill + "_backup"]];
+		} else {
+			game.broadcast(
+				(skill, audio) => {
+					if (!lib.skill[skill]) lib.skill[skill] = {};
+					lib.skill[skill].audio = audio;
+				},
+				skill + "_backup",
+				lib.skill[skill + "_backup"].audio
+			);
+		}
+		this.useSkill(skill + "_backup", result.cards, result.targets);
+	}
+	/**
 	 * 令玩家摸牌摸至指定值
 	 * @param { number } num
 	 * @param { * } args
