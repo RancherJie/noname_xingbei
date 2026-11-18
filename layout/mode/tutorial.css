@@ -3,7 +3,8 @@
 	z-index: 6;
 	top: 85px;
 	left: 22%;
-	width: 56%;
+	width: max-content;
+	max-width: min(62%, 440px);
 	box-sizing: border-box;
 	padding: 10px 14px;
 	border: 1px solid #c9af70;
@@ -14,6 +15,11 @@
 	line-height: 1.5;
 	text-align: left;
 	pointer-events: none;
+}
+.tutorial-battle-hint strong {
+	display: block;
+	font-size: .78em;
+	color: #d8b774;
 }
 .tutorial-focus {
 	outline: 3px solid #ffdc85 !important;

@@ -1,5 +1,5 @@
 import { lib, game, ui, get, ai, _status } from "../noname.js";
-import { startRuleTutorial } from "./tutorial-scene.js";
+import { resumeRuleTutorial, startRuleTutorial } from "./tutorial-scene.js";
 import xingBeiMode from "./xingBei.js";
 export const type = "mode";
 /**
@@ -10,7 +10,7 @@ export default () => {
 	return {
 		...battle,
 		name:'tutorial',
-		game: { ...battle.game, startRuleTutorial },
+		game: { ...battle.game, resumeRuleTutorial, startRuleTutorial },
 		start:function(){
 			"step 0"
 			if (!lib.config.new_tutorial) {
@@ -33,6 +33,12 @@ export default () => {
 					ui.auto.show();
 					ui.arena.classList.remove("only_dialog");
 				};
+				if (game.resumeRuleTutorial()) {
+					clear2();
+					_status.new_tutorial = false;
+					event.finish();
+					return;
+				}
 				var finish=function () {
 					clear();
 					clear2();
