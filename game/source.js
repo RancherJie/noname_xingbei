@@ -152,6 +152,7 @@ window.noname_source_list = [
 	"layout/mode/chess.css",
 	"layout/mode/stone.css",
 	"layout/mode/tafang.css",
+	"layout/mode/tutorial.css",
 	"layout/newlayout/equip.css",
 	"layout/newlayout/global.css",
 	"layout/newlayout/layout.css",
@@ -163,6 +164,7 @@ window.noname_source_list = [
 	"mode/leaderboard.js",
 	"mode/offlineChoose.js",
 	"mode/tutorial.js",
+	"mode/tutorial-scene.js",
 
 	"theme/music/grid.webp",
 	"theme/music/style.css",

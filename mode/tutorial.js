@@ -1,11 +1,16 @@
 import { lib, game, ui, get, ai, _status } from "../noname.js";
+import { resumeRuleTutorial, startRuleTutorial } from "./tutorial-scene.js";
+import xingBeiMode from "./xingBei.js";
 export const type = "mode";
 /**
  * @type { () => importModeConfig }
  */
 export default () => {
+	const battle = xingBeiMode();
 	return {
+		...battle,
 		name:'tutorial',
+		game: { ...battle.game, resumeRuleTutorial, startRuleTutorial },
 		start:function(){
 			"step 0"
 			if (!lib.config.new_tutorial) {
@@ -16,25 +21,41 @@ export default () => {
                 game.delay();
             }
 			"step 2"
-            if (!lib.config.new_tutorial) {
+            {
 				_status.new_tutorial = true;
 				lib.init.onfree();
 				game.saveConfig("version", lib.version);
 				var clear = function () {
-					ui.dialog.close();
+					if (ui.dialog) ui.dialog.close();
 					while (ui.controls.length) ui.controls[0].close();
 				};
 				var clear2 = function () {
 					ui.auto.show();
 					ui.arena.classList.remove("only_dialog");
 				};
+				if (game.resumeRuleTutorial()) {
+					clear2();
+					_status.new_tutorial = false;
+					event.finish();
+					return;
+				}
 				var finish=function () {
 					clear();
 					clear2();
 					game.saveConfig('mode','xingBei');
 					game.reload();
 				};
+				var training = function () {
+					clear();
+					clear2();
+					game.saveConfig("new_tutorial", true);
+					_status.new_tutorial = false;
+					game.startRuleTutorial();
+					event.finish();
+					game.resume();
+				};
 				var step1 = function () {
+					clear();
 					ui.create.dialog("欢迎来到无名星杯，是否进入新手向导？");
 					game.saveConfig("new_tutorial", true);
 					ui.dialog.add('<div class="text center">跳过后，你可以在选项-其它中重置新手向导');
@@ -43,6 +64,7 @@ export default () => {
 						finish();
 					});
 					ui.create.control("继续", step2);
+					ui.create.control("规则实战教学", training);
 				};
 				var step2 = function () {
 					if (lib.config.touchscreen) {
@@ -89,11 +111,18 @@ export default () => {
 					ui.create.control("完成", function () {
 						finish();
 					});
+					ui.create.control("规则实战教学", training);
 				};
 				game.pause();
-				step1();
-			} else {
-				game.showChangeLog();
+				if (lib.config.new_tutorial) {
+					ui.create.dialog("新手教学", "选择规则实战教学，或重新查看界面向导。");
+					ui.auto.hide();
+					ui.create.control("规则实战教学", training);
+					ui.create.control("界面向导", step1);
+					ui.create.control("返回星杯传说", finish);
+				} else {
+					step1();
+				}
 			}
 			"step 3"
 			game.saveConfig('mode','xingBei');

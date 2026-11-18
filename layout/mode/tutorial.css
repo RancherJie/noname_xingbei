@@ -1,0 +1,28 @@
+.tutorial-battle-hint {
+	position: absolute;
+	z-index: 6;
+	top: 85px;
+	left: 22%;
+	width: max-content;
+	max-width: min(62%, 440px);
+	box-sizing: border-box;
+	padding: 10px 14px;
+	border: 1px solid #c9af70;
+	border-radius: 7px;
+	background: rgba(15, 23, 42, .94);
+	color: #ffebba;
+	font-size: 19px;
+	line-height: 1.5;
+	text-align: left;
+	pointer-events: none;
+}
+.tutorial-battle-hint strong {
+	display: block;
+	font-size: .78em;
+	color: #d8b774;
+}
+.tutorial-focus {
+	outline: 3px solid #ffdc85 !important;
+	outline-offset: 4px;
+	box-shadow: 0 0 16px #ffe4a0 !important;
+}
