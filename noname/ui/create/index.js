@@ -2968,6 +2968,17 @@ export class Create {
 
 		ui.replay = ui.create.system("重来", game.reload, true);
 		ui.replay.id = "restartbutton";
+		ui.create.system("主页", function () {
+			if (_status.reloading) return;
+			sessionStorage.setItem(lib.configprefix + "returnToHome", true);
+			game.reload();
+		});
+		ui.create.system("联机", function () {
+			if (lib.config.mode == "connect" || _status.reloading) return;
+			game.saveConfig("mode", "connect");
+			localStorage.setItem(lib.configprefix + "directstart", true);
+			game.reload();
+		});
 		ui.config2 = ui.create.system("选项", ui.click.config);
 		ui.pause = ui.create.system("暂停", ui.click.pause);
 		ui.pause.id = "pausebutton";

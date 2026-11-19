@@ -693,8 +693,12 @@ export async function boot() {
 
 	const toLoad = [];
 
-	if (localStorage.getItem(`${lib.configprefix}playback`)) toLoad.push(importMode(config.get("mode")));
-	else if ((localStorage.getItem(`${lib.configprefix}directstart`) || !show_splash) && config.get("all").mode.includes(config.get("mode"))) toLoad.push(importMode(config.get("mode")));
+	const returnToHome = sessionStorage.getItem(`${lib.configprefix}returnToHome`);
+	sessionStorage.removeItem(`${lib.configprefix}returnToHome`);
+	if (!returnToHome) {
+		if (localStorage.getItem(`${lib.configprefix}playback`)) toLoad.push(importMode(config.get("mode")));
+		else if ((localStorage.getItem(`${lib.configprefix}directstart`) || !show_splash) && config.get("all").mode.includes(config.get("mode"))) toLoad.push(importMode(config.get("mode")));
+	}
 
 	for (const cardPack of config.get("all").cards) {
 		toLoad.push(importCardPack(cardPack));
