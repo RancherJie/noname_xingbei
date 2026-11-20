@@ -5656,6 +5656,8 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
         var suppression = lib.skill && lib.skill.zhenYanYaZhi;
         if (!suppression || !markPatched(suppression, "overflowResponsePriority")) return;
 
+        // 新本体将【真言术】的结算移到选牌生成的备用技能，兼容两种结算时机。
+        suppression.trigger = { player: ["zhenYanShuContentAfterAfter", "zhenYanShu_backupContentAfterAfter"] };
         // 【真言压制】和【妖精秘术】共用 trigger.selected。提高前者的响应优先级，
         // 让AI先判断能否压迫接近满手的对手；若放弃，后续仍可正常选择【妖精秘术】。
         suppression.priority = Math.max(typeof suppression.priority == "number" ? suppression.priority : 0, 1);
@@ -5695,7 +5697,29 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 event.finish();
             }
             "step 3"
-            if (result.control == '是') player.useSkill('zhenYanShu');
+            if (result.control != '是') {
+                event.finish();
+                return;
+            }
+            var speech = lib.skill.zhenYanShu;
+            if (speech.content) {
+                player.useSkill('zhenYanShu');
+                event.finish();
+                return;
+            }
+            var choice = speech.chooseButton;
+            player.chooseButton(choice.dialog(event, player), true)
+                .set('filterButton', choice.filter)
+                .set('ai', choice.check)
+                .set('selectButton', choice.select || 1);
+            "step 4"
+            if (!result.bool) {
+                event.finish();
+                return;
+            }
+            lib.skill.zhenYanShu_backup = lib.skill.zhenYanShu.chooseButton.backup(result.links, player);
+            lib.skill.zhenYanShu_backup.sourceSkill = 'zhenYanShu';
+            player.useSkill('zhenYanShu_backup');
         };
     }
 
@@ -9663,7 +9687,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             content: function () { player.addFaShu(); }
         });
         addSkill("nightmare_wanYanTongXiao", {
-            trigger: { player: "zhenYanShuContentAfterAfter" }, forced: true,
+            trigger: { player: ["zhenYanShuContentAfterAfter", "zhenYanShu_backupContentAfterAfter"] }, forced: true,
             content: function () { player.addNengLiang("shuiJing", 1); }
         });
         register("shenMiXueZhe", ["nightmare_miShuHuiXiang", "nightmare_wanYanTongXiao"]);
