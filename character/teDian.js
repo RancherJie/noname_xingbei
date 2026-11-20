@@ -31,6 +31,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             “听我的吹奏吧，这是我昨天想到的曲调哦~”<br>
                             “偷偷溜出来玩的时间怎么这么快就过完了，这次学会了新的颤音呢~”<br>
                             “呜呜呜，忘了后面怎么吹奏了o(╥﹏╥)o”`,
+            guShenJiSi:`她所追寻的，是凡人不应触及的古老神明与禁忌力量`,
+            daZuiSiJiao:`她知道神可能是虚假的，却选择利用神的名义统治世人`,
         },
         character:{
             jianZhiMoNv: ["jianZhiMoNv_name", "jiGroup", '3/4', ["jiZhiJianYi", "yiXiangJian", "mengXiangJian", "jianYingDuanNian"], ],
