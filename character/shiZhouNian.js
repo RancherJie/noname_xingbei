@@ -6323,11 +6323,6 @@ const pack_skills = {
         },
         usable: 1,
         async cost(event, trigger, player) {
-            if (trigger.getParent().name == 'yongHengYueZhang_jiAngKuangXiangQu') {
-                await event.trigger('yongHengYueZhang');
-                trigger.getParent().bool = true;
-                if (player.isHengZhi()) return event.result = { bool: false };
-            }
             event.result = await player.chooseCard('h', 2)
                 .set('complexCard', true)
                 .set('filterCard', function (card) { return get.xuanZeTongXiPai(card) })
