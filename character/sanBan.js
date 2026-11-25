@@ -841,6 +841,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     jiAngKuangXiangQu:{
                         trigger:{player:'phaseBegin'},
                         priority:-1,
+                        prompt2:'选择以下一项执行：<br>·对2名目标对手各造成1点法术伤害③。 <br>·你弃2张牌。',
                         filter:function(event,player){
                             if(!player.hasZhiShiWu('san_yongHengYueZhang')) return false;
                             if(player.storage.yongHengYueZhang_player==player){
@@ -919,6 +920,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         }
                     },
                     shengLiJiaoXiangShi:{
+                        prompt2:'选择以下一项执行：<br>·将我方【战绩区】的1个星石提炼成为你的能量。<br>·为我方【战绩区】+1[宝石]，你+1[治疗]。',
                         priority:-1,
                         trigger:{player:'phaseEnd'},
                         filter:function(event,player){

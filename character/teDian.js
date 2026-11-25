@@ -31,6 +31,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             “听我的吹奏吧，这是我昨天想到的曲调哦~”<br>
                             “偷偷溜出来玩的时间怎么这么快就过完了，这次学会了新的颤音呢~”<br>
                             “呜呜呜，忘了后面怎么吹奏了o(╥﹏╥)o”`,
+            guShenJiSi:`她所追寻的，是凡人不应触及的古老神明与禁忌力量`,
+            daZuiSiJiao:`她知道神可能是虚假的，却选择利用神的名义统治世人`,
         },
         character:{
             jianZhiMoNv: ["jianZhiMoNv_name", "jiGroup", '3/4', ["jiZhiJianYi", "yiXiangJian", "mengXiangJian", "jianYingDuanNian"], ],
@@ -3984,11 +3986,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     event.result = await next.forResult();
                 },
                 content:async function (event,trigger,player){
+                    delete player.storage.fuYinCard;//清除记录避免可能的bug
+
                     let cards=await event.targets[0].chooseToDiscard('h',1,true,'showCards','赦罪：弃1张手牌[展示]').forResultCards();
                     await player.addZhiShiWu('daZuiQianCheng');
-
+                    
                     let card=cards[0];
-                    if(!card.destroyed&&get.position(card, true) === "d"){
+                    if(!card.destroyed&&get.position(card, true) === "d"&&player.storage.fuYinCard!=card){
                         let bool=await player.chooseBool('是否获得'+get.translation(card)).set('ai',function(){
                             return get.value(_status.event.card)>5;
                         }).set('card',card).forResultBool();
@@ -4045,7 +4049,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         });
 
                     await player.changeZhiLiao(-1);
-                    await player.storage.daZuiLuBiaoTarget.gain(trigger.cards,'log','gain');
+                    player.storage.fuYinCard=trigger.cards[0];//用于记录避免爆牌弃牌赦罪可以获得牌
+                    await player.storage.daZuiLuBiaoTarget.gain(trigger.cards,'log','gain');  
                     
                     if(player.storage.faYunShiQi===false){
                         let targets=await player.chooseTarget('福音：除你之外目标角色+1[治疗]',lib.filter.notMe).set('ai',function(target){
@@ -5035,7 +5040,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             shenYu: "[响应]神谕[回合限定]",
             shenYu_info: "<span class='tiaoJian'>(【路标】转移前，移除3点</span><span class='hong'>【虔诚】</span><span class='tiaoJian'>)</span>立即执行一次[攻击行动]。",
             fuYin: "[响应]福音",
-            fuYin_info: "<span class='tiaoJian'>(目标角色因你的技能弃的置入弃牌堆时，移除你1[治疗])</span>将该弃牌加入拥有【路标】的角色手牌[强制]。<span class='tiaoJian'>(若为因此造成对方士气下降)</span>指定除你外的目标角色+1[治疗]。",
+            fuYin_info: "<span class='tiaoJian'>(目标角色因你的技能弃的牌置入弃牌堆时，移除你1[治疗])</span>将该弃牌加入拥有【路标】的角色手牌[强制]。<span class='tiaoJian'>(若为因此造成对方士气下降)</span>指定除你外的目标角色+1[治疗]。",
             daZuiLuBiao:"(专)路标",
             daZuiLuBiao_info: `
             <span class="greentext">[响应]忏悔式[回合限定]</span><br>
