@@ -2166,7 +2166,7 @@ const pack_skills = {
             return anYue.length > 0;
         },
         async cost(event, trigger, player) {
-            var result = await player.chooseCardButton(player.getGaiPai('anYue'), '是否发动【美杜莎之眼】<br>' + `(移除1个与攻击牌系别相应的【暗月】)+1[治疗]，+1<span class='lan'>【石化】</span>。<span class='tiaoJian'>(【暗月】为法术牌)</span>弃1张牌，对目标对手造成1点法术伤害③`)
+            var result = await player.chooseCardButton(player.getGaiPai('anYue'), '是否发动【美杜莎之眼】<br>' + `<span class='tiaoJian'>(移除1个与攻击牌系别相应的【暗月】)</span>+1[治疗]，+1<span class='lan'>【石化】</span>。<span class='tiaoJian'>(【暗月】为法术牌)</span>弃1张牌，对目标对手造成1点法术伤害③`)
                 .set('filterButton', function (button) {
                     return get.xiBie(button.link) == _status.event.xiBie;
                 })
@@ -6323,11 +6323,6 @@ const pack_skills = {
         },
         usable: 1,
         async cost(event, trigger, player) {
-            if (trigger.getParent().name == 'yongHengYueZhang_jiAngKuangXiangQu') {
-                await event.trigger('yongHengYueZhang');
-                trigger.getParent().bool = true;
-                if (player.isHengZhi()) return event.result = { bool: false };
-            }
             event.result = await player.chooseCard('h', 2)
                 .set('complexCard', true)
                 .set('filterCard', function (card) { return get.xuanZeTongXiPai(card) })
@@ -6612,6 +6607,7 @@ const pack_skills = {
                 filter: function (event, player) {
                     return player.hasZhiShiWu('yongHengYueZhang');
                 },
+                prompt2: '选择以下一项执行：<br>·吟游诗人对2名目标对手各造成1点法术伤害③。 <br>·你弃2张牌。',
                 content: function () {
                     'step 0'
                     var choiceList = ['吟游诗人对2名目标对手各造成1点法术伤害③', '你弃2张牌'];
@@ -6649,6 +6645,7 @@ const pack_skills = {
                 filter: function (event, player) {
                     return player.hasZhiShiWu('yongHengYueZhang');
                 },
+                prompt2: '选择以下一项执行<br>·<span class="tiaoJian">(移除我方【战绩区】1星石)</span>你+1[宝石]。<br>·为我方【战绩区】+1[宝石]，你+1[治疗]。',
                 content: async function (event, trigger, player) {
                     var zhanJi = get.zhanJi(player.side);
                     if (zhanJi.length > 0) {
